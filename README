@@ -1,0 +1,26 @@
+CellularSharing2DImgMaker
+------------------------
+
+Simple console app that generates images from the Cellular Sharing automaton in two dimensions. 
+Generates an image for each step of the automaton with a hue color map. 
+The images show only a non-symmetric 'slice' of the grid.
+
+Parameters:
+
+1st) Initial value for the automaton (mandatory)
+
+2nd) Image folder path (optional)
+	default: "./"
+	The following sub-folder structure will be created at this location: 
+	'/CellularSharing2D/<initial value>/<Color map>/slice/<numbered folder>'
+	Each numbered folder will contain up to 10000 images. 
+	
+3rd) Initial step (optional)
+	The app will skip ahead to this step without generating images.
+	
+
+Tor run using the .bat file, edit the .bat file with a text editor and replace the parameters with the desired values.
+Save and double click on the .bat.
+
+	
+Author: Jaume Ribas r.ribas.jaume@gmail.com	2017
