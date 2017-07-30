@@ -1,4 +1,4 @@
-/* CellularSharing2DImgMaker -- console app to generate images from the Cellular Sharing 2D cellular automaton
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
@@ -97,10 +97,14 @@ public abstract class LongGrid2D implements Grid2D, LongGrid {
 	}
 	
 	public LongGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
-		if (minX < getMinX() || minX > getMaxX() 
+		return subGrid(minX, maxX, minY, maxY, false);
+	}
+	
+	public LongGrid2D subGrid(int minX, int maxX, int minY, int maxY, boolean allowOverflow) {
+		if (!allowOverflow && (minX < getMinX() || minX > getMaxX() 
 				|| maxX < getMinX() || maxX > getMaxX()
 				|| minY < getMinY() || minY > getMaxY() 
-				|| maxY < getMinY() || maxY > getMaxY())
+				|| maxY < getMinY() || maxY > getMaxY()))
 			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
 		if (minX > maxX || minY > maxY)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");

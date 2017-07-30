@@ -1,4 +1,4 @@
-/* CellularSharing2DImgMaker -- console app to generate images from the Cellular Sharing 2D cellular automaton
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
@@ -17,11 +17,8 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import java.math.BigInteger;
 
-import cellularautomata.grid.BigIntegerGrid2D;
 import cellularautomata.grid.LongGrid2D;
-import cellularautomata.grid.SymmetricBigIntegerGrid2D;
 import cellularautomata.grid.SymmetricLongGrid2D;
 
 public class HueMapper extends ColorMapper {
@@ -34,24 +31,10 @@ public class HueMapper extends ColorMapper {
 	}
 
 	@Override
-	protected ColorGrid2D getMappedGrid(BigIntegerGrid2D grid) {
-		BigInteger[] minAndMax = grid.getMinAndMaxValue();
-		BigIntegerHueMap colorMap = new BigIntegerHueMap(minAndMax[0], minAndMax[1]);
-		return new ColorMappedBigIntegerGrid2DWithBackground(grid, colorMap, BigInteger.ZERO, Color.BLACK);
-	}
-
-	@Override
 	protected SymmetricColorGrid2D getMappedGrid(SymmetricLongGrid2D grid) {
 		long[] minAndMax = grid.getMinAndMaxValue();
 		LongHueMap colorMap = new LongHueMap(minAndMax[0], minAndMax[1]);
 		return new ColorMappedSymmetricLongGrid2DWithBackground(grid, colorMap, 0, Color.BLACK);
-	}
-
-	@Override
-	protected SymmetricColorGrid2D getMappedGrid(SymmetricBigIntegerGrid2D grid) {
-		BigInteger[] minAndMax = grid.getMinAndMaxValue();
-		BigIntegerHueMap colorMap = new BigIntegerHueMap(minAndMax[0], minAndMax[1]);
-		return new ColorMappedSymmetricBigIntegerGrid2DWithBackground(grid, colorMap, BigInteger.ZERO, Color.BLACK);
 	}
 
 }

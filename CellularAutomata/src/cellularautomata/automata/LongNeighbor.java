@@ -1,4 +1,4 @@
-/* CellularSharing2DImgMaker -- console app to generate images from the Cellular Sharing 2D cellular automaton
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@ package cellularautomata.automata;
 public class LongNeighbor {
 	
 	private long value;
+
 	private byte direction;
 	
 	public LongNeighbor(byte direction, long value) {
@@ -28,6 +29,10 @@ public class LongNeighbor {
 	
 	public long getValue() {
 		return value;
+	}
+	
+	public void setValue(long value) {
+		this.value = value;
 	}
 	
 	public byte getDirection() {

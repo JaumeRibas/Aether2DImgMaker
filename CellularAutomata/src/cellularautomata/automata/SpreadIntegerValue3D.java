@@ -1,4 +1,4 @@
-/* CellularSharing2DImgMaker -- console app to generate images from the Cellular Sharing 2D cellular automaton
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
@@ -281,5 +281,11 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 	 */
 	public long getIntialValue() {
 		return initialValue;
+	}
+
+	@Override
+	public CustomSymmetricLongCA3DData getData() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

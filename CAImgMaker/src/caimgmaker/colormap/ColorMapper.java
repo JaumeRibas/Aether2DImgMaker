@@ -1,4 +1,4 @@
-/* CellularSharing2DImgMaker -- console app to generate images from the Cellular Sharing 2D cellular automaton
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
@@ -16,30 +16,22 @@
  */
 package caimgmaker.colormap;
 
-import cellularautomata.grid.BigIntegerGrid2D;
 import cellularautomata.grid.Grid2D;
 import cellularautomata.grid.LongGrid2D;
-import cellularautomata.grid.SymmetricBigIntegerGrid2D;
 import cellularautomata.grid.SymmetricGrid2D;
 import cellularautomata.grid.SymmetricLongGrid2D;
 
 public abstract class ColorMapper {
 		
 	protected abstract ColorGrid2D getMappedGrid(LongGrid2D grid);
-	protected abstract ColorGrid2D getMappedGrid(BigIntegerGrid2D grid);
 	protected abstract SymmetricColorGrid2D getMappedGrid(SymmetricLongGrid2D grid);
-	protected abstract SymmetricColorGrid2D getMappedGrid(SymmetricBigIntegerGrid2D grid);
 	
 	public ColorGrid2D getMappedGrid(Grid2D grid) {
 		ColorGrid2D mappedGrid = null;
 		if (grid instanceof LongGrid2D) {
 			mappedGrid = getMappedGrid((LongGrid2D)grid);
-		} else if (grid instanceof BigIntegerGrid2D) {
-			mappedGrid = getMappedGrid((BigIntegerGrid2D)grid);
 		} else if (grid instanceof SymmetricLongGrid2D) {
 			mappedGrid = getMappedGrid((SymmetricLongGrid2D)grid);
-		} else if (grid instanceof SymmetricBigIntegerGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricBigIntegerGrid2D)grid);
 		} else {
 			throw new IllegalArgumentException(
 					"Missing else if branch for Grid2D subtype " 
@@ -52,8 +44,6 @@ public abstract class ColorMapper {
 		SymmetricColorGrid2D mappedGrid = null;
 		if (grid instanceof SymmetricLongGrid2D) {
 			mappedGrid = getMappedGrid((SymmetricLongGrid2D)grid);
-		} else if (grid instanceof SymmetricBigIntegerGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricBigIntegerGrid2D)grid);
 		} else {
 			throw new IllegalArgumentException(
 					"Missing else if branch for SymmetricGrid2D subtype " 

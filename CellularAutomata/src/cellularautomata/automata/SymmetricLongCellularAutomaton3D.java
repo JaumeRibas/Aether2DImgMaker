@@ -1,4 +1,4 @@
-/* CellularSharing2DImgMaker -- console app to generate images from the Cellular Sharing 2D cellular automaton
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
@@ -19,5 +19,6 @@ package cellularautomata.automata;
 import cellularautomata.grid.SymmetricLongGrid3D;
 
 public abstract class SymmetricLongCellularAutomaton3D extends SymmetricLongGrid3D implements CellularAutomaton {
-
+	
+	public abstract CustomSymmetricLongCA3DData getData();
 }

@@ -1,4 +1,4 @@
-/* CellularSharing2DImgMaker -- console app to generate images from the Cellular Sharing 2D cellular automaton
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
@@ -110,5 +110,9 @@ public abstract class LongGrid3D implements Grid3D, LongGrid {
 		if (minX > maxX || minY > maxY || minZ > maxZ)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new LongSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	public LongGrid2D crossSection(int z) {
+		return new LongGrid3DXSection(this, z);
 	}
 }
