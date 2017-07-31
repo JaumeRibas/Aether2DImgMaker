@@ -126,7 +126,7 @@ Definition:
 		8. The list is empty
 		
 
-	For all other positions with value 20 the actions will be equivalent those above, only changing the direction of the neighbors.
+	For all other positions with value 20 the actions will be equivalent to those above, only changing the direction of the neighbors.
 
 
 	Center position with value 21:
