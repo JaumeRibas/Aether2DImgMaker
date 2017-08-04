@@ -245,7 +245,7 @@ Definition:
 		8(II). The list is empty
 
 
-	Perform the actions for all other neighbors to get the next step's configuration:
+	Perform the actions for all other positions to get the next step's configuration:
 	
 
 	step 3
