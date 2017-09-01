@@ -1,4 +1,4 @@
-Aether - Cellular automaton in which every position in the grid has a non-negative integer value. 
+Aether - Cellular automaton in which every position in the grid has an integer value. 
 		This value is exchanged between neighboring positions (von Neumann) following a set of rules. 
 		The total value of the grid is always conserved. 
 
