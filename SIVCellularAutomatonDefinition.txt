@@ -2,7 +2,6 @@ Spread Integer Value - Cellular automaton that spreads an integer value over a g
 
 Description:
 
-It starts off with an infinite grid padded with zeros and a nonzero integer value at one position.
 Every step, the value of each position is divided between itself and its von Neumann neighbors.
 This division is an integer division, and its remainder is left at that given position.
 The values that collide are added up.
@@ -25,7 +24,7 @@ step 0
 	|   |   |   |   |   |
 	+---+---+---+---+---+
 
-We start off with an initial value of 32.
+We start off with a single value of 32 in a grid padded with zeros.
 
 
 step 1
