@@ -31,7 +31,6 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 	private long[][][] grid;
 	
 	private long initialValue;
-	private long backgroundValue;
 	private long currentStep;
 	
 	private int maxY;
@@ -47,24 +46,21 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
-	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public Aether3D(long initialValue, long backgroundValue) {
-		if (backgroundValue > initialValue) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(BigInteger.valueOf(backgroundValue)
-					.subtract(BigInteger.valueOf(initialValue)).divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(6)));
+	public Aether3D(long initialValue) {
+		if (initialValue < 0) {
+			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
+					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(6)));
 			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE 
-						+ "). Consider using a different implementation or a smaller backgroundValue/initialValue ratio.");
+						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
 			}
 		}
 		this.initialValue = initialValue;
-		this.backgroundValue = backgroundValue;
 		grid = new long[3][][];
-		grid[0] = buildGridBlock(0, backgroundValue);
-		grid[1] = buildGridBlock(1, backgroundValue);
-		grid[2] = buildGridBlock(2, backgroundValue);
+		grid[0] = buildGridBlock(0);
+		grid[1] = buildGridBlock(1);
+		grid[2] = buildGridBlock(2);
 		grid[0][0][0] = this.initialValue;
 		maxY = 0;
 		maxZ = 0;
@@ -78,8 +74,10 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 	 * @param data an instance of {@link CustomSymmetricLongCA3DData}
 	 */
 	public Aether3D(CustomSymmetricLongCA3DData data) {
+		if (data.getBackgroundValue() != 0)
+			throw new UnsupportedOperationException(
+					"Only background value 0 is suported. Subtract background value from all grid to get same relative values with background value 0");
 		initialValue = data.getInitialValue();
-		backgroundValue = data.getBackgroundValue();
 		grid = data.getGrid();
 		maxY = data.getMaxY();
 		maxZ = data.getMaxZ();
@@ -103,98 +101,94 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 		}
 		maxXMinusOne = newGrid.length - 2;
 		changed = false;
-		newGrid[0] = buildGridBlock(0, 0);
+		newGrid[0] = buildGridBlock(0);
 		boolean first = true;
 		long[] neighborValues = new long[6];
 		byte[] neighborDirections = new byte[6];
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, first = false) {
-			if (nextX < grid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, 0);
-			} else if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, backgroundValue);
+			if (nextX < newGrid.length) {
+				newGrid[nextX] = buildGridBlock(nextX);
 			}
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {
 					long value = grid[x][y][z];
-					if (value != 0) {
-						int relevantNeighborCount = 0;
-						long neighborValue;
-						neighborValue = getValueAt(x + 1, y, z);
-						if (neighborValue < value) {
-							neighborValues[relevantNeighborCount] = neighborValue;
-							neighborDirections[relevantNeighborCount] = RIGHT;
-							relevantNeighborCount++;
-						}
-						neighborValue = getValueAt(x - 1, y, z);
-						if (neighborValue < value) {
-							neighborValues[relevantNeighborCount] = neighborValue;
-							neighborDirections[relevantNeighborCount] = LEFT;
-							relevantNeighborCount++;
-						}
-						neighborValue = getValueAt(x, y + 1, z);
-						if (neighborValue < value) {
-							neighborValues[relevantNeighborCount] = neighborValue;
-							neighborDirections[relevantNeighborCount] = UP;
-							relevantNeighborCount++;
-						}
-						neighborValue = getValueAt(x, y - 1, z);
-						if (neighborValue < value) {
-							neighborValues[relevantNeighborCount] = neighborValue;
-							neighborDirections[relevantNeighborCount] = DOWN;
-							relevantNeighborCount++;
-						}
-						neighborValue = getValueAt(x, y, z + 1);
-						if (neighborValue < value) {
-							neighborValues[relevantNeighborCount] = neighborValue;
-							neighborDirections[relevantNeighborCount] = FRONT;
-							relevantNeighborCount++;
-						}
-						neighborValue = getValueAt(x, y, z - 1);
-						if (neighborValue < value) {
-							neighborValues[relevantNeighborCount] = neighborValue;
-							neighborDirections[relevantNeighborCount] = BACK;
-							relevantNeighborCount++;
-						}
-						
-						if (relevantNeighborCount > 0) {
-							//sort
-							boolean sorted = false;
-							while (!sorted) {
-								sorted = true;
-								for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-									if (neighborValues[i] < neighborValues[i+1]) {
-										sorted = false;
-										long valSwap = neighborValues[i];
-										neighborValues[i] = neighborValues[i+1];
-										neighborValues[i+1] = valSwap;
-										byte dirSwap = neighborDirections[i];
-										neighborDirections[i] = neighborDirections[i+1];
-										neighborDirections[i+1] = dirSwap;
-									}
+					int relevantNeighborCount = 0;
+					long neighborValue;
+					neighborValue = getValueAt(x + 1, y, z);
+					if (neighborValue < value) {
+						neighborValues[relevantNeighborCount] = neighborValue;
+						neighborDirections[relevantNeighborCount] = RIGHT;
+						relevantNeighborCount++;
+					}
+					neighborValue = getValueAt(x - 1, y, z);
+					if (neighborValue < value) {
+						neighborValues[relevantNeighborCount] = neighborValue;
+						neighborDirections[relevantNeighborCount] = LEFT;
+						relevantNeighborCount++;
+					}
+					neighborValue = getValueAt(x, y + 1, z);
+					if (neighborValue < value) {
+						neighborValues[relevantNeighborCount] = neighborValue;
+						neighborDirections[relevantNeighborCount] = UP;
+						relevantNeighborCount++;
+					}
+					neighborValue = getValueAt(x, y - 1, z);
+					if (neighborValue < value) {
+						neighborValues[relevantNeighborCount] = neighborValue;
+						neighborDirections[relevantNeighborCount] = DOWN;
+						relevantNeighborCount++;
+					}
+					neighborValue = getValueAt(x, y, z + 1);
+					if (neighborValue < value) {
+						neighborValues[relevantNeighborCount] = neighborValue;
+						neighborDirections[relevantNeighborCount] = FRONT;
+						relevantNeighborCount++;
+					}
+					neighborValue = getValueAt(x, y, z - 1);
+					if (neighborValue < value) {
+						neighborValues[relevantNeighborCount] = neighborValue;
+						neighborDirections[relevantNeighborCount] = BACK;
+						relevantNeighborCount++;
+					}
+					
+					if (relevantNeighborCount > 0) {
+						//sort
+						boolean sorted = false;
+						while (!sorted) {
+							sorted = true;
+							for (int i = relevantNeighborCount - 2; i >= 0; i--) {
+								if (neighborValues[i] < neighborValues[i+1]) {
+									sorted = false;
+									long valSwap = neighborValues[i];
+									neighborValues[i] = neighborValues[i+1];
+									neighborValues[i+1] = valSwap;
+									byte dirSwap = neighborDirections[i];
+									neighborDirections[i] = neighborDirections[i+1];
+									neighborDirections[i+1] = dirSwap;
 								}
 							}
-							//divide
-							boolean isFirstNeighbor = true;
-							long previousNeighborValue = 0;
-							for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-								neighborValue = neighborValues[i];
-								if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-									int shareCount = relevantNeighborCount - i + 1;
-									long toShare = value - neighborValue;
-									long share = toShare/shareCount;
-									if (share != 0) {
-										changed = true;
-										value = value - toShare + toShare%shareCount + share;
-										for (int j = i; j < relevantNeighborCount; j++) {
-											addToNeighbor(newGrid, x, y, z, neighborDirections[j], share);
-										}
+						}
+						//divide
+						boolean isFirstNeighbor = true;
+						long previousNeighborValue = 0;
+						for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
+							neighborValue = neighborValues[i];
+							if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+								int shareCount = relevantNeighborCount - i + 1;
+								long toShare = value - neighborValue;
+								long share = toShare/shareCount;
+								if (share != 0) {
+									changed = true;
+									value = value - toShare + toShare%shareCount + share;
+									for (int j = i; j < relevantNeighborCount; j++) {
+										addToNeighbor(newGrid, x, y, z, neighborDirections[j], share);
 									}
-									previousNeighborValue = neighborValue;
 								}
-							}	
-						}					
-						newGrid[x][y][z] += value;
-					}
+								previousNeighborValue = neighborValue;
+							}
+						}	
+					}					
+					newGrid[x][y][z] += value;
 				}
 			}
 			if (!first) {
@@ -307,15 +301,10 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 		}	
 	}
 	
-	private long[][] buildGridBlock(int x, long value) {
+	private long[][] buildGridBlock(int x) {
 		long[][] newGridBlock = new long[x + 1][];
 		for (int y = 0; y < newGridBlock.length; y++) {
 			newGridBlock[y] = new long[y + 1];
-			if (value != 0) {
-				for (int z = 0; z < newGridBlock[y].length; z++) {
-					newGridBlock[y][z] = value;
-				}
-			}
 		}
 		return newGridBlock;
 	}
@@ -346,7 +335,7 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 				&& z < grid[x][y].length) {
 			return grid[x][y][z];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -356,7 +345,7 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 				&& z < grid[x][y].length) {
 			return grid[x][y][z];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -440,12 +429,12 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 	
 	@Override
 	public CustomSymmetricLongCA3DData getData() {
-		return new CustomSymmetricLongCA3DData(grid, initialValue, backgroundValue, currentStep, boundsReached, maxY, maxZ);
+		return new CustomSymmetricLongCA3DData(grid, initialValue, 0, currentStep, boundsReached, maxY, maxZ);
 	}
 
 	@Override
 	public long getBackgroundValue() {
-		return backgroundValue;
+		return 0;
 	}
 
 	@Override
@@ -455,6 +444,6 @@ public class Aether3D extends SymmetricLongCellularAutomaton3D {
 	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + initialValue;
 	}
 }

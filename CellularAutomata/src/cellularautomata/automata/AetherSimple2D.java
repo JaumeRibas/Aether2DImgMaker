@@ -37,7 +37,6 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	private long[][] grid;
 	
 	private long initialValue;
-	private long backgroundValue;
 	private long currentStep;
 	
 	/** The indexes of the origin within the array */
@@ -51,32 +50,22 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
-	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public AetherSimple2D(long initialValue, long backgroundValue) {
-		if (backgroundValue > initialValue) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(BigInteger.valueOf(backgroundValue)
-					.subtract(BigInteger.valueOf(initialValue)).divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(4)));
+	public AetherSimple2D(long initialValue) {
+		if (initialValue < 0) {
+			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
+					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(4)));
 			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE 
-						+ "). Consider using a different implementation or a smaller backgroundValue/initialValue ratio.");
+						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
 			}
 		}
 		this.initialValue = initialValue;
-		this.backgroundValue = backgroundValue;
 		int side = 5;
 		grid = new long[side][side];
 		//The origin will be at the center of the array
 		xOriginIndex = (side - 1)/2;
 		yOriginIndex = xOriginIndex;
-		if (backgroundValue != 0) {
-			for (int x = 0; x < grid.length; x++) {
-				for (int y = 0; y < grid[x].length; y++) {
-					grid[x][y] = backgroundValue;
-				}
-			}
-		}
 		grid[xOriginIndex][yOriginIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
@@ -98,9 +87,6 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 		if (boundsReached) {
 			boundsReached = false;
 			newGrid = new long[grid.length + 2][grid[0].length + 2];
-			if (backgroundValue != 0) {
-				padEdges(newGrid, 1, backgroundValue);
-			}
 			indexOffset = 1;
 		} else {
 			newGrid = new long[grid.length][grid[0].length];
@@ -113,78 +99,75 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 				
 				//Get the position's value
 				long value = grid[x][y];
-				//If the value is bigger than zero 
-				if (value > 0) {
-					//Get a list of the neighbors whose value is smaller than the one at the current position
-					List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(4);						
-					long neighborValue;
-					if (x < grid.length - 1)
-						neighborValue = grid[x + 1][y];
-					else
-						neighborValue = backgroundValue;
-					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(RIGHT, neighborValue));
-					if (x > 0)
-						neighborValue = grid[x - 1][y];
-					else
-						neighborValue = backgroundValue;
-					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(LEFT, neighborValue));
-					if (y < grid[x].length - 1)
-						neighborValue = grid[x][y + 1];
-					else
-						neighborValue = backgroundValue;
-					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(UP, neighborValue));
-					if (y > 0)
-						neighborValue = grid[x][y - 1];
-					else
-						neighborValue = backgroundValue;
-					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(DOWN, neighborValue));
+				//Get a list of the neighbors whose value is smaller than the one at the current position
+				List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(4);						
+				long neighborValue;
+				if (x < grid.length - 1)
+					neighborValue = grid[x + 1][y];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new LongNeighbor(RIGHT, neighborValue));
+				if (x > 0)
+					neighborValue = grid[x - 1][y];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new LongNeighbor(LEFT, neighborValue));
+				if (y < grid[x].length - 1)
+					neighborValue = grid[x][y + 1];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new LongNeighbor(UP, neighborValue));
+				if (y > 0)
+					neighborValue = grid[x][y - 1];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new LongNeighbor(DOWN, neighborValue));
 
-					//If there are any
-					if (neighbors.size() > 0) {
-						//Sort them by value in ascending order
-						boolean sorted = false;
-						while (!sorted) {
-							sorted = true;
-							for (int i = neighbors.size() - 2; i >= 0; i--) {
-								LongNeighbor next = neighbors.get(i+1);
-								if (neighbors.get(i).getValue() > next.getValue()) {
-									sorted = false;
-									neighbors.remove(i+1);
-									neighbors.add(i, next);
-								}
+				//If there are any
+				if (neighbors.size() > 0) {
+					//Sort them by value in ascending order
+					boolean sorted = false;
+					while (!sorted) {
+						sorted = true;
+						for (int i = neighbors.size() - 2; i >= 0; i--) {
+							LongNeighbor next = neighbors.get(i+1);
+							if (neighbors.get(i).getValue() > next.getValue()) {
+								sorted = false;
+								neighbors.remove(i+1);
+								neighbors.add(i, next);
 							}
 						}
-						boolean isFirst = true;
-						long previousNeighborValue = 0;
-						//Apply the algorithm
-						for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
-							neighborValue = neighbors.get(i).getValue();
-							if (neighborValue != previousNeighborValue || isFirst) {
-								//add one for the center position
-								int shareCount = neighbors.size() + 1;
-								long toShare = value - neighborValue;
-								long share = toShare/shareCount;
-								if (share != 0) {
-									checkBoundsReached(x, y);
-									changed = true;
-									//the center keeps the remainder and one share
-									value = value - toShare + toShare%shareCount + share;
-									for (LongNeighbor n : neighbors) {
-										int[] nc = getNeighborCoordinates(x, y, n.getDirection());
-										newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
-									}
+					}
+					boolean isFirst = true;
+					long previousNeighborValue = 0;
+					//Apply the algorithm
+					for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
+						neighborValue = neighbors.get(i).getValue();
+						if (neighborValue != previousNeighborValue || isFirst) {
+							//add one for the center position
+							int shareCount = neighbors.size() + 1;
+							long toShare = value - neighborValue;
+							long share = toShare/shareCount;
+							if (share != 0) {
+								checkBoundsReached(x, y);
+								changed = true;
+								//the center keeps the remainder and one share
+								value = value - toShare + toShare%shareCount + share;
+								for (LongNeighbor n : neighbors) {
+									int[] nc = getNeighborCoordinates(x, y, n.getDirection());
+									newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
 								}
-								previousNeighborValue = neighborValue;
 							}
-							neighbors.remove(i);
-						}	
-					}					
-					newGrid[x + indexOffset][y + indexOffset] += value;
-				}
+							previousNeighborValue = neighborValue;
+						}
+						neighbors.remove(i);
+					}	
+				}					
+				newGrid[x + indexOffset][y + indexOffset] += value;
 			}
 		}
 		//Replace the old array with the new one
@@ -238,7 +221,7 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 		if (arrayX < 0 || arrayX > grid.length - 1 
 				|| arrayY < 0 || arrayY > grid[0].length - 1) {
 			//If the entered position is outside the array the value will be the backgroundValue
-			return backgroundValue;
+			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY];
@@ -351,37 +334,10 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	public long getNonSymmetricValueAt(int x, int y) {
 		return getValueAt(x, y);
 	}
-	
-	public static void padEdges(long[][] grid, int width, long value) {
-		//left
-		for (int x = 0; x < grid.length && x < width; x++) {
-			for (int y = 0; y < grid[x].length; y ++) {
-				grid[x][y] = value;
-			}
-		}
-		//right
-		for (int x = grid.length - width; x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y ++) {
-				grid[x][y] = value;
-			}
-		}
-		//up
-		for (int x = width; x < grid.length - width; x++) {
-			for (int y = 0; y < grid[x].length && y < width; y++) {
-				grid[x][y] = value;
-			}
-		}
-		//down
-		for (int x = width; x < grid.length - width; x++) {
-			for (int y = grid[x].length - width; y < grid[x].length; y++) {
-				grid[x][y] = value;
-			}
-		}
-	}
 
 	@Override
 	public long getBackgroundValue() {
-		return backgroundValue;
+		return 0;
 	}
 
 	@Override
@@ -391,6 +347,6 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + initialValue;
 	}
 }

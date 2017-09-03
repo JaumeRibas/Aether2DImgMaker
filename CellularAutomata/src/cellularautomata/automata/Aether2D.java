@@ -23,7 +23,6 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 	/** A 2D array representing the grid */
 	private long[][] grid;
 	
-	private long backgroundValue;
 	private long initialValue;
 	private long currentStep;
 	
@@ -40,24 +39,21 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 	 * Creates an instance with the given initial value.
 	 * 
 	 * @param initialValue the value at the origin at step 0
-	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public Aether2D(long initialValue, long backgroundValue) {
-		if (backgroundValue > initialValue) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(BigInteger.valueOf(backgroundValue)
-					.subtract(BigInteger.valueOf(initialValue)).divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(4)));
+	public Aether2D(long initialValue) {
+		if (initialValue < 0) {
+			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
+					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(4)));
 			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE 
-						+ "). Consider using a different implementation or a smaller backgroundValue/initialValue ratio.");
+						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
 			}
 		}
 		this.initialValue = initialValue;
-		this.backgroundValue = backgroundValue;
 		grid = new long[3][];
-		grid[0] = buildGridBlock(0, backgroundValue);
-		grid[1] = buildGridBlock(1, backgroundValue);
-		grid[2] = buildGridBlock(2, backgroundValue);
+		grid[0] = buildGridBlock(0);
+		grid[1] = buildGridBlock(1);
+		grid[2] = buildGridBlock(2);
 		grid[0][0] = initialValue;
 		maxY = 0;
 		boundsReached = false;
@@ -74,27 +70,23 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		}
 		maxXMinusOne = newGrid.length - 2;
 		changed = false;
-		newGrid[0] = buildGridBlock(0, 0);
+		newGrid[0] = buildGridBlock(0);
 		boolean isFirst = true;
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
-			if (nextX < grid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, 0);
-			} else if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, backgroundValue);
+			if (nextX < newGrid.length) {
+				newGrid[nextX] = buildGridBlock(nextX);
 			}
 			for (int y = 0; y <= x; y++) {
 				long value = this.grid[x][y];
-				if (value != 0) {
-					long up = getValueAt(x, y + 1);
-					long down = getValueAt(x, y - 1); 
-					long left = getValueAt(x - 1, y);
-					long right = getValueAt(x + 1, y);
-					
-					//the "aetherLogicMethod*" methods have been machine generated using the code in the AetherGen folder
-					value = aetherLogicMethod1(newGrid, value, right, left, up, down, x, y);
-					
-					newGrid[x][y] += value;
-				}
+				long up = getValueAt(x, y + 1);
+				long down = getValueAt(x, y - 1); 
+				long left = getValueAt(x - 1, y);
+				long right = getValueAt(x + 1, y);
+				
+				//the "aetherLogicMethod*" methods have been machine generated using the code in the AetherGen folder
+				value = aetherLogicMethod1(newGrid, value, right, left, up, down, x, y);
+				
+				newGrid[x][y] += value;
 			}
 			if (!isFirst) {
 				grid[x-1] = null;
@@ -5012,13 +5004,8 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		return value;
 	}
 	
-	private long[] buildGridBlock(int x, long value) {
+	private long[] buildGridBlock(int x) {
 		long[] newGridBlock = new long[x + 1];
-		if (value != 0) {
-			for (int y = 0; y < newGridBlock.length; y++) {
-				newGridBlock[y] = value;
-			}
-		}
 		return newGridBlock;
 	}
 	
@@ -5080,7 +5067,7 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 				&& y < grid[x].length) {
 			return grid[x][y];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -5089,7 +5076,7 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 				&& y < grid[x].length) {
 			return grid[x][y];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -5124,7 +5111,7 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 	 * @return the value padding all the grid but the origin at step 0
 	 */
 	public long getBackgroundValue() {
-		return backgroundValue;
+		return 0;
 	}
 
 	@Override
@@ -5159,6 +5146,6 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + initialValue;
 	}
 }

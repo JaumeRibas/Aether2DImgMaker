@@ -34,7 +34,6 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 	private long[][][][] grid;
 	
 	private long initialValue;
-	private long backgroundValue;
 	private long currentStep;
 	
 	/** The indexes of the origin within the array */
@@ -47,34 +46,20 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
-	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public AetherSimple4D(long initialValue, long backgroundValue) {
-		if (backgroundValue > initialValue) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(BigInteger.valueOf(backgroundValue)
-					.subtract(BigInteger.valueOf(initialValue)).divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(8)));
+	public AetherSimple4D(long initialValue) {
+		if (initialValue < 0) {
+			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
+					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(8)));
 			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE 
-						+ "). Consider using a different implementation or a smaller backgroundValue/initialValue ratio.");
+						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
 			}
 		}
 		this.initialValue = initialValue;
-		this.backgroundValue = backgroundValue;
 		int side = 5;
 		grid = new long[side][side][side][side];
 		originIndex = (side - 1)/2;
-		if (backgroundValue != 0) {
-			for (int w = 0; w < grid.length; w++) {
-				for (int x = 0; x < grid[w].length; x++) {
-					for (int y = 0; y < grid[w][x].length; y++) {
-						for (int z = 0; z < grid[w][x][y].length; z++) {
-							grid[w][x][y][z] = backgroundValue;
-						}
-					}
-				}
-			}
-		}
 		grid[originIndex][originIndex][originIndex][originIndex] = this.initialValue;
 		boundsReached = false;
 		//Set the current step to zero
@@ -95,9 +80,6 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 		if (boundsReached) {
 			boundsReached = false;
 			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2][grid[0][0][0].length + 2];
-			if (backgroundValue != 0) {
-				padEdges(newGrid, 1, backgroundValue);
-			}
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
@@ -110,97 +92,95 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 				for (int y = 0; y < grid[0][0].length; y++) {
 					for (int z = 0; z < grid[0][0][0].length; z++) {
 						long value = grid[w][x][y][z];
-						if (value != 0) {
-							List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(8);						
-							long neighborValue;
-							if (w < grid.length - 1)
-								neighborValue = grid[w + 1][x][y][z];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(W_POSITIVE, neighborValue));
-							if (w > 0)
-								neighborValue = grid[w - 1][x][y][z];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(W_NEGATIVE, neighborValue));
-							if (x < grid[w].length - 1)
-								neighborValue = grid[w][x + 1][y][z];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(X_POSITIVE, neighborValue));
-							if (x > 0)
-								neighborValue = grid[w][x - 1][y][z];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(X_NEGATIVE, neighborValue));
-							if (y < grid[w][x].length - 1)
-								neighborValue = grid[w][x][y + 1][z];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(Y_POSITIVE, neighborValue));
-							if (y > 0)
-								neighborValue = grid[w][x][y - 1][z];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(Y_NEGATIVE, neighborValue));
-							if (z < grid[w][x][y].length - 1)
-								neighborValue = grid[w][x][y][z + 1];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(Z_POSITIVE, neighborValue));
-							if (z > 0)
-								neighborValue = grid[w][x][y][z - 1];
-							else
-								neighborValue = backgroundValue;
-							if (neighborValue < value)
-								neighbors.add(new LongNeighbor(Z_NEGATIVE, neighborValue));
-							
-							if (neighbors.size() > 0) {
-								//sort
-								boolean sorted = false;
-								while (!sorted) {
-									sorted = true;
-									for (int i = neighbors.size() - 2; i >= 0; i--) {
-										LongNeighbor next = neighbors.get(i+1);
-										if (neighbors.get(i).getValue() > next.getValue()) {
-											sorted = false;
-											neighbors.remove(i+1);
-											neighbors.add(i, next);
-										}
+						List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(8);						
+						long neighborValue;
+						if (w < grid.length - 1)
+							neighborValue = grid[w + 1][x][y][z];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(W_POSITIVE, neighborValue));
+						if (w > 0)
+							neighborValue = grid[w - 1][x][y][z];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(W_NEGATIVE, neighborValue));
+						if (x < grid[w].length - 1)
+							neighborValue = grid[w][x + 1][y][z];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(X_POSITIVE, neighborValue));
+						if (x > 0)
+							neighborValue = grid[w][x - 1][y][z];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(X_NEGATIVE, neighborValue));
+						if (y < grid[w][x].length - 1)
+							neighborValue = grid[w][x][y + 1][z];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(Y_POSITIVE, neighborValue));
+						if (y > 0)
+							neighborValue = grid[w][x][y - 1][z];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(Y_NEGATIVE, neighborValue));
+						if (z < grid[w][x][y].length - 1)
+							neighborValue = grid[w][x][y][z + 1];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(Z_POSITIVE, neighborValue));
+						if (z > 0)
+							neighborValue = grid[w][x][y][z - 1];
+						else
+							neighborValue = 0;
+						if (neighborValue < value)
+							neighbors.add(new LongNeighbor(Z_NEGATIVE, neighborValue));
+						
+						if (neighbors.size() > 0) {
+							//sort
+							boolean sorted = false;
+							while (!sorted) {
+								sorted = true;
+								for (int i = neighbors.size() - 2; i >= 0; i--) {
+									LongNeighbor next = neighbors.get(i+1);
+									if (neighbors.get(i).getValue() > next.getValue()) {
+										sorted = false;
+										neighbors.remove(i+1);
+										neighbors.add(i, next);
 									}
 								}
-								//divide
-								boolean isFirst = true;
-								long previousNeighborValue = 0;
-								for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
-									neighborValue = neighbors.get(i).getValue();
-									if (neighborValue != previousNeighborValue || isFirst) {
-										int shareCount = neighbors.size() + 1;
-										long toShare = value - neighborValue;
-										long share = toShare/shareCount;
-										if (share != 0) {
-											checkBoundsReached(w, x, y, z);
-											changed = true;
-											value = value - toShare + toShare%shareCount + share;
-											for (LongNeighbor neighbor : neighbors) {
-												int[] nc = getNeighborCoordinates(w, x, y, z, neighbor.getDirection());
-												newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset][nc[3] + indexOffset] += share;
-											}
+							}
+							//divide
+							boolean isFirst = true;
+							long previousNeighborValue = 0;
+							for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
+								neighborValue = neighbors.get(i).getValue();
+								if (neighborValue != previousNeighborValue || isFirst) {
+									int shareCount = neighbors.size() + 1;
+									long toShare = value - neighborValue;
+									long share = toShare/shareCount;
+									if (share != 0) {
+										checkBoundsReached(w, x, y, z);
+										changed = true;
+										value = value - toShare + toShare%shareCount + share;
+										for (LongNeighbor neighbor : neighbors) {
+											int[] nc = getNeighborCoordinates(w, x, y, z, neighbor.getDirection());
+											newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset][nc[3] + indexOffset] += share;
 										}
-										previousNeighborValue = neighborValue;
 									}
-									neighbors.remove(i);
-								}	
-							}					
-							newGrid[w + indexOffset][x + indexOffset][y + indexOffset][z + indexOffset] += value;
-						}
+									previousNeighborValue = neighborValue;
+								}
+								neighbors.remove(i);
+							}	
+						}					
+						newGrid[w + indexOffset][x + indexOffset][y + indexOffset][z + indexOffset] += value;
 					}
 				}
 			}
@@ -266,7 +246,7 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 				|| arrayY < 0 || arrayY > grid[0].length - 1
 				|| arrayZ < 0 || arrayZ > grid[0][0].length - 1) {
 			//If the entered position is outside the array the value will be the background value
-			return backgroundValue;
+			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayW][arrayX][arrayY][arrayZ];
@@ -434,89 +414,6 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 	public long getNonSymmetricValueAt(int w, int x, int y, int z) {
 		return getValueAt(w, x, y, z);
 	}
-	
-	private static void padEdges(long[][][][] grid, int width, long value) {
-		//w+
-		for (int w = grid.length - width; w < grid.length; w++) {
-			for (int x = 0; x < grid[w].length; x++) {
-				for (int y = 0; y < grid[w][x].length; y++) {
-					for (int z = 0; z < grid[w][x][y].length; z++) {
-						grid[w][x][y][z] = value;
-					}
-				}
-			}
-		}
-		//w-
-		for (int w = 0; w < grid.length && w < width; w++) {
-			for (int x = 0; x < grid[w].length; x++) {
-				for (int y = 0; y < grid[w][x].length; y++) {
-					for (int z = 0; z < grid[w][x][y].length; z ++) {
-						grid[w][x][y][z] = value;				
-					}
-				}
-			}
-		}
-		//x+
-		for (int w = 0; w < grid.length; w++) {
-			for (int x = grid[w].length - width; x < grid[w].length; x++) {
-				for (int y = 0; y < grid[w][x].length; y++) {
-					for (int z = 0; z < grid[w][x][y].length; z++) {
-						grid[w][x][y][z] = value;
-					}
-				}
-			}
-		}
-		//x-
-		for (int w = 0; w < grid.length; w++) {
-			for (int x = 0; x < grid[w].length && x < width; x++) {
-				for (int y = 0; y < grid[w][x].length; y++) {
-					for (int z = 0; z < grid[w][x][y].length; z ++) {
-						grid[w][x][y][z] = value;				
-					}
-				}
-			}
-		}
-		//y+
-		for (int w = 0; w < grid.length; w++) {
-			for (int x = 0; x < grid[w].length; x++) {
-				for (int y = grid[w][x].length - width; y < grid[w][x].length; y++) {
-					for (int z = 0; z < grid[w][x][y].length; z++) {
-						grid[w][x][y][z] = value;
-					}
-				}
-			}
-		}
-		//y-
-		for (int w = 0; w < grid.length; w++) {
-			for (int x = 0; x < grid[w].length; x++) {
-				for (int y = 0; y < grid[w][x].length && y < width; y++) {
-					for (int z = 0; z < grid[w][x][y].length; z ++) {
-						grid[w][x][y][z] = value;				
-					}
-				}
-			}
-		}
-		//z+
-		for (int w = 0; w < grid.length; w++) {
-			for (int x = 0; x < grid[w].length; x++) {
-				for (int y = 0; y < grid[w][x].length; y++) {
-					for (int z = grid[w][x][y].length - width; z < grid[w][x][y].length; z++) {
-						grid[w][x][y][z] = value;
-					}
-				}
-			}
-		}
-		//z-
-		for (int w = 0; w < grid.length; w++) {
-			for (int x = 0; x < grid[w].length; x++) {
-				for (int y = 0; y < grid[w][x].length; y++) {
-					for (int z = 0; z < grid[w][x][y].length && z < width; z ++) {
-						grid[w][x][y][z] = value;				
-					}
-				}
-			}
-		}
-	}
 
 	@Override
 	public String getName() {
@@ -525,17 +422,17 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + initialValue;
 	}
 
 	@Override
 	public long getBackgroundValue() {
-		return backgroundValue;
+		return 0;
 	}
 
 	@Override
 	public CustomSymmetricLongCA4DData getData() {
-		return new CustomSymmetricLongCA4DData(grid, initialValue, backgroundValue, currentStep, boundsReached, getMaxX(), getMaxY(), getMaxZ());
+		return new CustomSymmetricLongCA4DData(grid, initialValue, 0, currentStep, boundsReached, getMaxX(), getMaxY(), getMaxZ());
 	}
 
 }

@@ -26,11 +26,10 @@ import cellularautomata.grid.ShortGrid2D;
 public class Test {
 	
 	public static void main(String[] args) {
-		long initialValue = -5, backgroundValue = 0;
-//		Aether2D ae1 = new Aether2D(initialValue, backgroundValue);
-		PolarAether2D ae2 = new PolarAether2D(initialValue, backgroundValue);
-//		compare(ae1, ae2);
-		stepByStep(ae2);
+		long initialValue = 100000;
+		Aether2D ae1 = new Aether2D(initialValue);
+		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
+		compare(ae1, ae2);
 	}
 	
 	public static void print3DEdgeCSectionAsGridSequence(SymmetricShortCellularAutomaton4D ca) {
@@ -45,17 +44,6 @@ public class Test {
 			e.printStackTrace();
 		}
 		System.out.println("Finished.");
-	}
-	
-	public static void compareAether4D() {
-		long initialValue = 100;
-		ShortAether4DMT ca1 = new ShortAether4DMT((short)0, (short)initialValue, 8);
-		Aether4D ca2 = new Aether4D(0, initialValue);
-		compare(ca1, ca2);
-		race(new CellularAutomaton[] {ca1, ca2});
-//		stepByStep(ca1);
-//		printMinAndMaxValues(ca1);
-		ca1.shutdownNow();
 	}
 	
 	public static void printMinAndMaxValues(SymmetricLongCellularAutomaton4D ca) {

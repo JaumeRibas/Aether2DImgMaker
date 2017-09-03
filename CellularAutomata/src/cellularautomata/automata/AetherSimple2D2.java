@@ -29,7 +29,6 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 	private long[][] grid;
 	
 	private long initialValue;
-	private long backgroundValue;
 	private long currentStep;
 	
 	/** Whether or not the values reached the bounds of the array */
@@ -45,24 +44,21 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
-	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public AetherSimple2D2(long initialValue, long backgroundValue) {
-		if (backgroundValue > initialValue) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(BigInteger.valueOf(backgroundValue)
-					.subtract(BigInteger.valueOf(initialValue)).divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(4)));
+	public AetherSimple2D2(long initialValue) {
+		if (initialValue < 0) {
+			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
+					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(4)));
 			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE 
-						+ "). Consider using a different implementation or a smaller backgroundValue/initialValue ratio.");
+						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
 			}
 		}
 		this.initialValue = initialValue;
-		this.backgroundValue = backgroundValue;
 		grid = new long[3][];
-		grid[0] = buildGridBlock(0, backgroundValue);
-		grid[1] = buildGridBlock(1, backgroundValue);
-		grid[2] = buildGridBlock(2, backgroundValue);
+		grid[0] = buildGridBlock(0);
+		grid[1] = buildGridBlock(1);
+		grid[2] = buildGridBlock(2);
 		grid[0][0] = initialValue;
 		maxY = 0;
 		boundsReached = false;
@@ -79,85 +75,81 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 		}
 		maxXMinusOne = newGrid.length - 2;
 		changed = false;
-		newGrid[0] = buildGridBlock(0, 0);
+		newGrid[0] = buildGridBlock(0);
 		boolean isFirstBlock = true;
 		long[] neighborValues = new long[4];
 		byte[] neighborDirections = new byte[4];
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirstBlock = false) {
-			if (nextX < grid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, 0);
-			} else if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, backgroundValue);
+			if (nextX < newGrid.length) {
+				newGrid[nextX] = buildGridBlock(nextX);
 			}
 			for (int y = 0; y <= x; y++) {
 				long value = this.grid[x][y];
-				if (value != 0) {
-					int relevantNeighborCount = 0;
-					long neighborValue;
-					neighborValue = getValueAt(x + 1, y);
-					if (neighborValue < value) {
-						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = RIGHT;
-						relevantNeighborCount++;
-					}
-					neighborValue = getValueAt(x - 1, y);
-					if (neighborValue < value) {
-						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = LEFT;
-						relevantNeighborCount++;
-					}
-					neighborValue = getValueAt(x, y + 1);
-					if (neighborValue < value) {
-						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = UP;
-						relevantNeighborCount++;
-					}
-					neighborValue = getValueAt(x, y - 1);
-					if (neighborValue < value) {
-						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = DOWN;
-						relevantNeighborCount++;
-					}
-					
-					if (relevantNeighborCount > 0) {
-						//sort
-						boolean sorted = false;
-						while (!sorted) {
-							sorted = true;
-							for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-								if (neighborValues[i] < neighborValues[i+1]) {
-									sorted = false;
-									long valSwap = neighborValues[i];
-									neighborValues[i] = neighborValues[i+1];
-									neighborValues[i+1] = valSwap;
-									byte dirSwap = neighborDirections[i];
-									neighborDirections[i] = neighborDirections[i+1];
-									neighborDirections[i+1] = dirSwap;
-								}
+				int relevantNeighborCount = 0;
+				long neighborValue;
+				neighborValue = getValueAt(x + 1, y);
+				if (neighborValue < value) {
+					neighborValues[relevantNeighborCount] = neighborValue;
+					neighborDirections[relevantNeighborCount] = RIGHT;
+					relevantNeighborCount++;
+				}
+				neighborValue = getValueAt(x - 1, y);
+				if (neighborValue < value) {
+					neighborValues[relevantNeighborCount] = neighborValue;
+					neighborDirections[relevantNeighborCount] = LEFT;
+					relevantNeighborCount++;
+				}
+				neighborValue = getValueAt(x, y + 1);
+				if (neighborValue < value) {
+					neighborValues[relevantNeighborCount] = neighborValue;
+					neighborDirections[relevantNeighborCount] = UP;
+					relevantNeighborCount++;
+				}
+				neighborValue = getValueAt(x, y - 1);
+				if (neighborValue < value) {
+					neighborValues[relevantNeighborCount] = neighborValue;
+					neighborDirections[relevantNeighborCount] = DOWN;
+					relevantNeighborCount++;
+				}
+				
+				if (relevantNeighborCount > 0) {
+					//sort
+					boolean sorted = false;
+					while (!sorted) {
+						sorted = true;
+						for (int i = relevantNeighborCount - 2; i >= 0; i--) {
+							if (neighborValues[i] < neighborValues[i+1]) {
+								sorted = false;
+								long valSwap = neighborValues[i];
+								neighborValues[i] = neighborValues[i+1];
+								neighborValues[i+1] = valSwap;
+								byte dirSwap = neighborDirections[i];
+								neighborDirections[i] = neighborDirections[i+1];
+								neighborDirections[i+1] = dirSwap;
 							}
 						}
-						//divide
-						boolean isFirstNeighbor = true;
-						long previousNeighborValue = 0;
-						for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-							neighborValue = neighborValues[i];
-							if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-								int shareCount = relevantNeighborCount - i + 1;
-								long toShare = value - neighborValue;
-								long share = toShare/shareCount;
-								if (share != 0) {
-									changed = true;
-									value = value - toShare + toShare%shareCount + share;
-									for (int j = i; j < relevantNeighborCount; j++) {
-										addToNeighbor(newGrid, x, y, neighborDirections[j], share);
-									}
+					}
+					//divide
+					boolean isFirstNeighbor = true;
+					long previousNeighborValue = 0;
+					for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
+						neighborValue = neighborValues[i];
+						if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+							int shareCount = relevantNeighborCount - i + 1;
+							long toShare = value - neighborValue;
+							long share = toShare/shareCount;
+							if (share != 0) {
+								changed = true;
+								value = value - toShare + toShare%shareCount + share;
+								for (int j = i; j < relevantNeighborCount; j++) {
+									addToNeighbor(newGrid, x, y, neighborDirections[j], share);
 								}
-								previousNeighborValue = neighborValue;
 							}
-						}	
-					}					
-					newGrid[x][y] += value;
-				}
+							previousNeighborValue = neighborValue;
+						}
+					}	
+				}					
+				newGrid[x][y] += value;
 			}
 			if (!isFirstBlock) {
 				grid[x-1] = null;
@@ -185,13 +177,8 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	private long[] buildGridBlock(int x, long value) {
+	private long[] buildGridBlock(int x) {
 		long[] newGridBlock = new long[x + 1];
-		if (value != 0) {
-			for (int y = 0; y < newGridBlock.length; y++) {
-				newGridBlock[y] = value;
-			}
-		}
 		return newGridBlock;
 	}
 	
@@ -253,7 +240,7 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 				&& y < grid[x].length) {
 			return grid[x][y];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -262,7 +249,7 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 				&& y < grid[x].length) {
 			return grid[x][y];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -318,7 +305,7 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 
 	@Override
 	public long getBackgroundValue() {
-		return backgroundValue;
+		return 0;
 	}
 
 	@Override
@@ -328,6 +315,6 @@ public class AetherSimple2D2 extends SymmetricLongCellularAutomaton2D {
 	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + initialValue;
 	}
 }

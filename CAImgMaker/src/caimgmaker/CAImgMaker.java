@@ -52,8 +52,8 @@ import cellularautomata.automata.CustomSymmetricShortCA4DData;
 import cellularautomata.automata.CustomSymmetricIntCA4DData;
 import cellularautomata.automata.IntAether4D;
 import cellularautomata.automata.IntAether4DMT;
-import cellularautomata.automata.PolarAether2D;
 import cellularautomata.automata.ShortAether4DMT;
+import cellularautomata.automata.SpreadIntegerValue2D;
 import cellularautomata.automata.SymmetricIntCellularAutomaton4D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton3D;
@@ -82,45 +82,22 @@ public class CAImgMaker {
 	private volatile boolean backupRequested = false;
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[] {"-4", "1", "D:/data/test"}; //debug
-		if (args.length < 1) {
-			System.err.println("You must specify at least one argument.");
+		args = new String[] {"1000", "D:/data/test"}; //debug
+		if (args.length == 0) {
+			System.err.println("You must specify an initial value.");
 		} else {
-			long initialValue, backgroundValue;
-			SymmetricLongCellularAutomaton2D ca;
-			int argsIndex = 0;
-//			try {
-				initialValue = Long.parseLong(args[argsIndex]);
-				argsIndex++;
-				if (args.length > argsIndex) {
-					backgroundValue = Long.parseLong(args[argsIndex]);
-					argsIndex++;
-				} else {
-					backgroundValue = 0;
-				}
-				ca = new PolarAether2D(initialValue, backgroundValue);
-//			} catch (NumberFormatException ex) {
-//				CustomSymmetricIntCA4DData data;
-//				Object restoredBackup = restore(args[argsIndex]);
-////				try {
-//					data = (CustomSymmetricIntCA4DData)restoredBackup;
-////				} catch (ClassCastException castEx) {
-////					data = new CustomSymmetricShortCA4DData((CustomSymmetricIntCA4DData)restoredBackup);		
-////				}
-//				ca = new IntAether4DMT(data, 8);
-//				argsIndex++;
-//			}
+			long initialValue = Long.parseLong(args[0]);
+			SymmetricLongCellularAutomaton2D ca = new Aether2D(initialValue);
 			String path;
 			int initialStep = 0;
-			if (args.length > argsIndex) {
-				path = args[argsIndex];
-				argsIndex++;
+			if (args.length > 1) {
+				path = args[1];
 				char lastCharacter = path.charAt(path.length() - 1); 
 				if (lastCharacter != '/' && lastCharacter != '\\') {
 					path += "/";
 				}
-				if (args.length > argsIndex) {
-					initialStep = Integer.parseInt(args[argsIndex]);
+				if (args.length > 2) {
+					initialStep = Integer.parseInt(args[2]);
 				}
 			} else {
 				path = "./";
@@ -131,7 +108,6 @@ public class CAImgMaker {
 				System.out.println("Current step: " + ca.getCurrentStep());
 			}
 			ColorMapper colorMapper = new HueWithBackgroundMapper(ca.getBackgroundValue(), Color.BLACK);
-//			ColorMapper colorMapper = new GrayscaleWithBackgroundMapper(55, ca.getBackgroundValue(), Color.BLACK);
 			path += ca.getSubFolderPath();	
 			CAImgMaker imgMaker = new CAImgMaker();
 			imgMaker.createSliceImages(ca, colorMapper, HD_WIDTH/2, HD_HEIGHT/2, path);

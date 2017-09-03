@@ -33,7 +33,6 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 	private int[][][][] grid;
 	
 	private int initialValue;
-	private int backgroundValue;
 	private long currentStep;
 	private int maxX;
 	private int maxY;
@@ -49,24 +48,21 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
-	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public IntAether4D(int initialValue, int backgroundValue) {
-		if (backgroundValue > initialValue) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(BigInteger.valueOf(backgroundValue)
-					.subtract(BigInteger.valueOf(initialValue)).divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(8)));
+	public IntAether4D(int initialValue) {
+		if (initialValue < 0) {
+			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
+					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(8)));
 			if (maxValue.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Integer.MAX_VALUE 
-						+ "). Consider using a different implementation or a smaller backgroundValue/initialValue ratio.");
+						+ " exceeds implementation's limit (" + Integer.MAX_VALUE + ").");
 			}
 		}
 		this.initialValue = initialValue;
-		this.backgroundValue = backgroundValue;
 		grid = new int[3][][][];
-		grid[0] = buildGridBlock(0, backgroundValue);
-		grid[1] = buildGridBlock(1, backgroundValue);
-		grid[2] = buildGridBlock(2, backgroundValue);
+		grid[0] = buildGridBlock(0);
+		grid[1] = buildGridBlock(1);
+		grid[2] = buildGridBlock(2);
 		grid[0][0][0][0] = this.initialValue;
 		maxX = 0;
 		maxY = 0;
@@ -81,8 +77,10 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 	 * @param data an instance of {@link CustomSymmetricIntCA4DData}
 	 */
 	public IntAether4D(CustomSymmetricIntCA4DData data) {
+		if (data.getBackgroundValue() != 0)
+			throw new UnsupportedOperationException(
+					"Only background value 0 is suported. Subtract background value from all grid to get same relative values with background value 0");
 		initialValue = data.getInitialValue();
-		backgroundValue = data.getBackgroundValue();
 		grid = data.getGrid();
 		maxY = data.getMaxY();
 		maxZ = data.getMaxZ();
@@ -106,111 +104,107 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 		}
 		maxWMinusOne = newGrid.length - 2;
 		changed = false;
-		newGrid[0] = buildGridBlock(0, 0);
+		newGrid[0] = buildGridBlock(0);
 		boolean first = true;
 		int[] neighborValues = new int[8];
 		byte[] neighborDirections = new byte[8];
 		for (int w = 0, nextW = 1; w < grid.length; w++, nextW++, first = false) {
-			if (nextW < grid.length) {
-				newGrid[nextW] = buildGridBlock(nextW, 0);
-			} else if (nextW < newGrid.length) {
-				newGrid[nextW] = buildGridBlock(nextW, backgroundValue);
+			if (nextW < newGrid.length) {
+				newGrid[nextW] = buildGridBlock(nextW);
 			}
 			for (int x = 0; x <= w; x++) {
 				for (int y = 0; y <= x; y++) {
 					for (int z = 0; z <= y; z++) {
 						int value = grid[w][x][y][z];
-						if (value != 0) {
-							int relevantNeighborCount = 0;
-							int neighborValue;
-							neighborValue = getValueAt(w + 1, x, y, z);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = W_POSITIVE;
-								relevantNeighborCount++;
-							}
-							neighborValue = getValueAt(w - 1, x, y, z);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = W_NEGATIVE;
-								relevantNeighborCount++;
-							}
-							neighborValue = getValueAt(w, x + 1, y, z);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = X_POSITIVE;
-								relevantNeighborCount++;
-							}
-							neighborValue = getValueAt(w, x - 1, y, z);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = X_NEGATIVE;
-								relevantNeighborCount++;
-							}
-							neighborValue = getValueAt(w, x, y + 1, z);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = Y_POSITIVE;
-								relevantNeighborCount++;
-							}
-							neighborValue = getValueAt(w, x, y - 1, z);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = Y_NEGATIVE;
-								relevantNeighborCount++;
-							}
-							neighborValue = getValueAt(w, x, y, z + 1);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = Z_POSITIVE;
-								relevantNeighborCount++;
-							}
-							neighborValue = getValueAt(w, x, y, z - 1);
-							if (neighborValue < value) {
-								neighborValues[relevantNeighborCount] = neighborValue;
-								neighborDirections[relevantNeighborCount] = Z_NEGATIVE;
-								relevantNeighborCount++;
-							}
-							
-							if (relevantNeighborCount > 0) {
-								//sort
-								boolean sorted = false;
-								while (!sorted) {
-									sorted = true;
-									for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-										if (neighborValues[i] < neighborValues[i+1]) {
-											sorted = false;
-											int valSwap = neighborValues[i];
-											neighborValues[i] = neighborValues[i+1];
-											neighborValues[i+1] = valSwap;
-											byte dirSwap = neighborDirections[i];
-											neighborDirections[i] = neighborDirections[i+1];
-											neighborDirections[i+1] = dirSwap;
-										}
+						int relevantNeighborCount = 0;
+						int neighborValue;
+						neighborValue = getValueAt(w + 1, x, y, z);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = W_POSITIVE;
+							relevantNeighborCount++;
+						}
+						neighborValue = getValueAt(w - 1, x, y, z);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = W_NEGATIVE;
+							relevantNeighborCount++;
+						}
+						neighborValue = getValueAt(w, x + 1, y, z);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = X_POSITIVE;
+							relevantNeighborCount++;
+						}
+						neighborValue = getValueAt(w, x - 1, y, z);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = X_NEGATIVE;
+							relevantNeighborCount++;
+						}
+						neighborValue = getValueAt(w, x, y + 1, z);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = Y_POSITIVE;
+							relevantNeighborCount++;
+						}
+						neighborValue = getValueAt(w, x, y - 1, z);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = Y_NEGATIVE;
+							relevantNeighborCount++;
+						}
+						neighborValue = getValueAt(w, x, y, z + 1);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = Z_POSITIVE;
+							relevantNeighborCount++;
+						}
+						neighborValue = getValueAt(w, x, y, z - 1);
+						if (neighborValue < value) {
+							neighborValues[relevantNeighborCount] = neighborValue;
+							neighborDirections[relevantNeighborCount] = Z_NEGATIVE;
+							relevantNeighborCount++;
+						}
+						
+						if (relevantNeighborCount > 0) {
+							//sort
+							boolean sorted = false;
+							while (!sorted) {
+								sorted = true;
+								for (int i = relevantNeighborCount - 2; i >= 0; i--) {
+									if (neighborValues[i] < neighborValues[i+1]) {
+										sorted = false;
+										int valSwap = neighborValues[i];
+										neighborValues[i] = neighborValues[i+1];
+										neighborValues[i+1] = valSwap;
+										byte dirSwap = neighborDirections[i];
+										neighborDirections[i] = neighborDirections[i+1];
+										neighborDirections[i+1] = dirSwap;
 									}
 								}
-								//divide
-								boolean isFirstNeighbor = true;
-								int previousNeighborValue = 0;
-								for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-									neighborValue = neighborValues[i];
-									if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-										int shareCount = relevantNeighborCount - i + 1;
-										int toShare = value - neighborValue;
-										int share = toShare/shareCount;
-										if (share != 0) {
-											changed = true;
-											value = value - toShare + toShare%shareCount + share;
-											for (int j = i; j < relevantNeighborCount; j++) {
-												addToNeighbor(newGrid, w, x, y, z, neighborDirections[j], share);
-											}
+							}
+							//divide
+							boolean isFirstNeighbor = true;
+							int previousNeighborValue = 0;
+							for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
+								neighborValue = neighborValues[i];
+								if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+									int shareCount = relevantNeighborCount - i + 1;
+									int toShare = value - neighborValue;
+									int share = toShare/shareCount;
+									if (share != 0) {
+										changed = true;
+										value = value - toShare + toShare%shareCount + share;
+										for (int j = i; j < relevantNeighborCount; j++) {
+											addToNeighbor(newGrid, w, x, y, z, neighborDirections[j], share);
 										}
-										previousNeighborValue = neighborValue;
 									}
-								}	
-							}					
-							newGrid[w][x][y][z] += value;
-						}
+									previousNeighborValue = neighborValue;
+								}
+							}	
+						}					
+						newGrid[w][x][y][z] += value;
 					}
 				}
 			}
@@ -368,17 +362,12 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 		}
 	}
 	
-	private int[][][] buildGridBlock(int w, int value) {
+	private int[][][] buildGridBlock(int w) {
 		int[][][] newGridBlock = new int[w + 1][][];
 		for (int x = 0; x < newGridBlock.length; x++) {
 			newGridBlock[x] = new int[x + 1][];
 			for (int y = 0; y < newGridBlock[x].length; y++) {
 				newGridBlock[x][y] = new int[y + 1];
-				if (value != 0) {
-					for (int z = 0; z < newGridBlock[x][y].length; z++) {
-						newGridBlock[x][y][z] = value;
-					}
-				}
 			}
 		}
 		return newGridBlock;
@@ -418,7 +407,7 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 				&& z < grid[w][x][y].length) {
 			return grid[w][x][y][z];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -429,7 +418,7 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 				&& z < grid[w][x][y].length) {
 			return grid[w][x][y][z];
 		} else {
-			return backgroundValue;
+			return 0;
 		}
 	}
 	
@@ -525,12 +514,12 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 	
 	@Override
 	public CustomSymmetricIntCA4DData getData() {
-		return new CustomSymmetricIntCA4DData(grid, initialValue, backgroundValue, currentStep, boundsReached, maxX, maxY, maxZ);
+		return new CustomSymmetricIntCA4DData(grid, initialValue, 0, currentStep, boundsReached, maxX, maxY, maxZ);
 	}
 
 	@Override
 	public int getBackgroundValue() {
-		return backgroundValue;
+		return 0;
 	}
 
 	@Override
@@ -540,6 +529,6 @@ public class IntAether4D extends SymmetricIntCellularAutomaton4D {
 	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + initialValue;
 	}
 }
