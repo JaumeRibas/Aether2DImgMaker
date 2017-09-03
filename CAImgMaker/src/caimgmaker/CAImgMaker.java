@@ -39,21 +39,9 @@ import javax.imageio.ImageIO;
 
 import caimgmaker.colormap.ColorGrid2D;
 import caimgmaker.colormap.ColorMapper;
-import caimgmaker.colormap.GrayscaleWithBackgroundMapper;
-import caimgmaker.colormap.HueMapper;
 import caimgmaker.colormap.HueWithBackgroundMapper;
 import caimgmaker.colormap.SymmetricColorGrid2D;
 import cellularautomata.automata.Aether2D;
-import cellularautomata.automata.Aether3D;
-import cellularautomata.automata.Aether4D;
-import cellularautomata.automata.CustomSymmetricLongCA3DData;
-import cellularautomata.automata.CustomSymmetricLongCA4DData;
-import cellularautomata.automata.CustomSymmetricShortCA4DData;
-import cellularautomata.automata.CustomSymmetricIntCA4DData;
-import cellularautomata.automata.IntAether4D;
-import cellularautomata.automata.IntAether4DMT;
-import cellularautomata.automata.ShortAether4DMT;
-import cellularautomata.automata.SpreadIntegerValue2D;
 import cellularautomata.automata.SymmetricIntCellularAutomaton4D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton3D;
@@ -70,7 +58,6 @@ import cellularautomata.grid.SymmetricGrid2D;
 import cellularautomata.grid.SymmetricIntGrid2D;
 import cellularautomata.grid.SymmetricLongGrid2D;
 import cellularautomata.grid.SymmetricShortGrid2D;
-import cellularautomata.grid.SymmetricShortGrid3D;
 
 public class CAImgMaker {
 	
