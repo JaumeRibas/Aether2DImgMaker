@@ -1,7 +1,7 @@
 Aether2DImgMaker
 ----------------
 
-Console app to generate images from the Aether automaton in two dimensions with an initial configuration of a single positive value. 
+Console app to generate images from the Aether automaton in two dimensions with an initial configuration of a single non-cero value in an empty grid. 
 Generates an image for each step of the automaton with a hue color map. 
 The images show only a non-symmetric 'slice' of the grid.
 
