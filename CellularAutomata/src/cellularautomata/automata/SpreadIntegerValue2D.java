@@ -17,7 +17,7 @@
 package cellularautomata.automata;
 
 /**
- * Optimized implementation of the SpreadIntegerValue2D cellular automaton.
+ * Optimized implementation of the SpreadIntegerValue cellular automaton in 2D.
  * 
  * @author Jaume
  *
@@ -27,6 +27,7 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 	private long[][] grid;
 	
 	private long initialValue;
+	private long backgroundValue;
 	private long currentStep;
 	
 	private int maxY;
@@ -38,12 +39,15 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
+	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public SpreadIntegerValue2D(long initialValue) {
+	public SpreadIntegerValue2D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
-		grid = new long[2][];
-		grid[0] = buildGridBlock(0);
-		grid[1] = buildGridBlock(1);
+		this.backgroundValue = backgroundValue;
+		grid = new long[3][];
+		grid[0] = buildGridBlock(0, backgroundValue);
+		grid[1] = buildGridBlock(1, backgroundValue);
+		grid[2] = buildGridBlock(2, backgroundValue);
 		grid[0][0] = this.initialValue;
 		maxY = 0;
 		xBoundReached = false;
@@ -66,70 +70,100 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 		}
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridBlock(0);
-		for (int x = 0; x < grid.length; x++) {
-			int nextX = x + 1;
-			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridBlock(nextX);
+		newGrid[0] = buildGridBlock(0, 0);
+		boolean isFirst = true;
+		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
+			if (nextX < grid.length) {
+				newGrid[nextX] = buildGridBlock(nextX, 0);
+			} else if (nextX < newGrid.length) {
+				newGrid[nextX] = buildGridBlock(nextX, backgroundValue);
 			}
 			for (int y = 0; y <= x; y++) {
 				long value = grid[x][y];
 				if (value != 0) {
-					//Divide its value by 5 (using integer division)
-					long quotient = value/5;
-					if (quotient != 0) {
-						//I assume that if any quotient is not zero the state changes
-						changed = true;
-						//Add the quotient to the neighboring positions
-						//x+
-						newGrid[x+1][y] += quotient;
-						//x-
-						if (x > y) {
-							long valueToAdd = quotient;
-							if (x == y + 1) {
-								valueToAdd += quotient;
-								if (x == 1) {
-									valueToAdd += 2*quotient;							
+					long up = getValueAt(x, y + 1);
+					long down = getValueAt(x, y - 1); 
+					long left = getValueAt(x - 1, y);
+					long right = getValueAt(x + 1, y);
+					boolean isUpEqual = value == up, isDownEqual = value == down, 
+							isRightEqual = value == right, isLeftEqual = value == left;
+					//if the current position is equal to its neighbors the algorithm has no effect
+					if (!(isUpEqual && isDownEqual && isRightEqual && isLeftEqual)) {
+						//Divide its value by 5 (using integer division)
+						long quotient = value/5;
+						if (quotient != 0) {
+							//I assume that if any quotient is not zero the state changes
+							changed = true;
+							//Add the quotient to the neighboring positions
+							//if the neighbor's value is equal to the current value, add the quotient to the current position instead
+							//x+
+							if (isRightEqual)
+								newGrid[x][y] += quotient;
+							else
+								newGrid[x+1][y] += quotient;
+							//x-
+							if (isLeftEqual)
+								newGrid[x][y] += quotient;
+							else if (x > y) {
+								long valueToAdd = quotient;
+								if (x == y + 1) {
+									valueToAdd += quotient;
+									if (x == 1) {
+										valueToAdd += 2*quotient;							
+									}
 								}
+								newGrid[x-1][y] += valueToAdd;
 							}
-							newGrid[x-1][y] += valueToAdd;
-						}
-						//y+
-						if (y < x) {
-							long valueToAdd = quotient;
-							if (y == x - 1) {
-								valueToAdd += quotient;
+							//y+
+							if (isUpEqual)
+								newGrid[x][y] += quotient;
+							else if (y < x) {
+								long valueToAdd = quotient;
+								if (y == x - 1) {
+									valueToAdd += quotient;
+								}
+								int yy = y+1;
+								newGrid[x][yy] += valueToAdd;
+								if (yy > maxY)
+									maxY = yy;
 							}
-							int yy = y+1;
-							newGrid[x][yy] += valueToAdd;
-							if (yy > maxY)
-								maxY = yy;
-						}
-						//y-
-						if (y > 0) {
-							long valueToAdd = quotient;
-							if (y == 1) {
-								valueToAdd += quotient;
+							//y-
+							if (isDownEqual)
+								newGrid[x][y] += quotient;
+							else if (y > 0) {
+								long valueToAdd = quotient;
+								if (y == 1) {
+									valueToAdd += quotient;
+								}
+								newGrid[x][y-1] += valueToAdd;
 							}
-							newGrid[x][y-1] += valueToAdd;
+							
+							if (x >= maxXMinusOne) {
+								xBoundReached = true;
+							}								
 						}
-						
-						if (x == maxXMinusOne) {
-							xBoundReached = true;
-						}								
+						newGrid[x][y] += value - 4*quotient;
+					} else {
+						newGrid[x][y] += value;
 					}
-					newGrid[x][y] += value - 4*quotient;
 				}
 			}
-			grid[x] = null;
+			if (!isFirst) {
+				grid[x-1] = null;
+			}
 		}
 		grid = newGrid;
 		currentStep++;
 		return changed;
 	}
 	
-	private long[] buildGridBlock(int x) {
+	private long[] buildGridBlock(int x, long value) {
 		long[] newGridBlock = new long[x + 1];
+		if (value != 0) {
+			for (int y = 0; y < newGridBlock.length; y++) {
+				newGridBlock[y] = value;
+			}
+		}
 		return newGridBlock;
 	}
 	
@@ -145,7 +179,7 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 				&& y < grid[x].length) {
 			return grid[x][y];
 		} else {
-			return 0;
+			return backgroundValue;
 		}
 	}
 	
@@ -154,7 +188,7 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 				&& y < grid[x].length) {
 			return grid[x][y];
 		} else {
-			return 0;
+			return backgroundValue;
 		}
 	}
 	
@@ -188,7 +222,7 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getIntialValue() {
+	public long getInitialValue() {
 		return initialValue;
 	}
 
@@ -210,5 +244,20 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 	@Override
 	public int getMaxY() {
 		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public long getBackgroundValue() {
+		return backgroundValue;
+	}
+
+	@Override
+	public String getName() {
+		return "SpreadIntegerValue2D";
+	}
+	
+	@Override
+	public String getSubFolderPath() {
+		return getName() + "/" + initialValue + "/" + backgroundValue;
 	}
 }

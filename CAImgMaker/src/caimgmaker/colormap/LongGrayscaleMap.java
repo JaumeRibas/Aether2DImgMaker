@@ -47,7 +47,11 @@ public class LongGrayscaleMap implements LongColorMap {
 	
 	private void computeColors() {
 		long lRange = maxValue - minValue + 1;
-		this.brightnessIncreasePerUnit = (double)(255 - minBrightness)/lRange;
+		if (lRange > 1) {
+			this.brightnessIncreasePerUnit = (double)(255 - minBrightness)/(lRange - 1);
+		} else {
+			this.brightnessIncreasePerUnit = 0;
+		}
 		if (lRange > MAX_COLOR_COUNT) {
 			colors = null;
 			return;
@@ -65,7 +69,7 @@ public class LongGrayscaleMap implements LongColorMap {
 	}
 	
 	private Color computeColor(long value) {
-		float brightness = (float) (((value - minValue + 1)*brightnessIncreasePerUnit + minBrightness)/255);
+		float brightness = (float) (((value - minValue)*brightnessIncreasePerUnit + minBrightness)/255);
 		Color color = new Color(Color.HSBtoRGB(0, 0, brightness));
 		return color;
 	}

@@ -16,9 +16,21 @@
  */
 package cellularautomata.automata;
 
+import cellularautomata.grid.LongGrid2D;
 import cellularautomata.grid.SymmetricLongGrid3D;
 
 public abstract class SymmetricLongCellularAutomaton3D extends SymmetricLongGrid3D implements CellularAutomaton {
 	
+	/**
+	 * Returns the background value
+	 * 
+	 * @return the value padding the most part of the grid
+	 */
+	public abstract long getBackgroundValue();
+	
 	public abstract CustomSymmetricLongCA3DData getData();
+	
+	public LongGrid2D projectedSurface() {
+		return this.projectedSurface(getBackgroundValue());
+	}
 }

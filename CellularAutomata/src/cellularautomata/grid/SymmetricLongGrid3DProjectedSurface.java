@@ -12,12 +12,12 @@ public class SymmetricLongGrid3DProjectedSurface extends LongGrid2D {
 
 	@Override
 	public int getMinX() {
-		return source.getNonSymmetricMinX();
+		return source.getNonSymmetricMinZ();
 	}
 
 	@Override
 	public int getMaxX() {
-		return source.getNonSymmetricMaxX();
+		return source.getNonSymmetricMaxZ();
 	}
 
 	@Override
@@ -32,12 +32,13 @@ public class SymmetricLongGrid3DProjectedSurface extends LongGrid2D {
 
 	@Override
 	public long getValueAt(int x, int y) {
-		int sourceX, sourceY, sourceZ;
+		int sourceX, sourceY, sourceZ, minX;
 		sourceY = y;
 		sourceZ = x;
 		sourceX = source.getMaxX();
+		minX = source.getMinX();
 		long value = source.getValueAt(sourceX, sourceY, sourceZ);
-		while (value == backgroundValue && sourceX > source.getMinX()) {
+		while (value == backgroundValue && sourceX > minX) {
 			sourceX--;
 			value = source.getValueAt(sourceX, sourceY, sourceZ);
 		}

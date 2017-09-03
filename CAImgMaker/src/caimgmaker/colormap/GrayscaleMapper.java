@@ -16,9 +16,12 @@
  */
 package caimgmaker.colormap;
 
-import java.awt.Color;
+import cellularautomata.grid.IntGrid2D;
 import cellularautomata.grid.LongGrid2D;
+import cellularautomata.grid.ShortGrid2D;
+import cellularautomata.grid.SymmetricIntGrid2D;
 import cellularautomata.grid.SymmetricLongGrid2D;
+import cellularautomata.grid.SymmetricShortGrid2D;
 
 public class GrayscaleMapper extends ColorMapper {
 
@@ -29,17 +32,39 @@ public class GrayscaleMapper extends ColorMapper {
 	}
 	
 	@Override
-	protected ColorGrid2D getMappedGrid(LongGrid2D grid) {
-		long[] minAndMax = grid.getMinAndMaxValue();
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minAndMax[0], minAndMax[1], minBrightness);
-		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, 0, Color.BLACK);
+	protected ColorGrid2D getMappedGrid(LongGrid2D grid, long minValue, long maxValue) {
+		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
+		return new ColorMappedLongGrid2D(grid, colorMap);
 	}
 
 	@Override
-	protected SymmetricColorGrid2D getMappedGrid(SymmetricLongGrid2D grid) {
-		long[] minAndMax = grid.getMinAndMaxValue();
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minAndMax[0], minAndMax[1], minBrightness);
-		return new ColorMappedSymmetricLongGrid2DWithBackground(grid, colorMap, 0, Color.BLACK);
+	protected SymmetricColorGrid2D getMappedGrid(SymmetricLongGrid2D grid, long minValue, long maxValue) {
+		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
+		return new ColorMappedSymmetricLongGrid2D(grid, colorMap);
+	}
+
+	@Override
+	protected ColorGrid2D getMappedGrid(IntGrid2D grid, int minValue, int maxValue) {
+		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
+		return new ColorMappedIntGrid2D(grid, colorMap);
+	}
+
+	@Override
+	protected SymmetricColorGrid2D getMappedGrid(SymmetricIntGrid2D grid, int minValue, int maxValue) {
+		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
+		return new ColorMappedSymmetricIntGrid2D(grid, colorMap);
+	}
+	
+	@Override
+	protected ColorGrid2D getMappedGrid(ShortGrid2D grid, short minValue, short maxValue) {
+		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
+		return new ColorMappedShortGrid2D(grid, colorMap);
+	}
+
+	@Override
+	protected SymmetricColorGrid2D getMappedGrid(SymmetricShortGrid2D grid, short minValue, short maxValue) {
+		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
+		return new ColorMappedSymmetricShortGrid2D(grid, colorMap);
 	}
 
 }

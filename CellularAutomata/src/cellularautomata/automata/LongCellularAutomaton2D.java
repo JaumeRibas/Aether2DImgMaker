@@ -19,5 +19,10 @@ package cellularautomata.automata;
 import cellularautomata.grid.LongGrid2D;
 
 public abstract class LongCellularAutomaton2D extends LongGrid2D implements CellularAutomaton {
-
+	/**
+	 * Returns the background value
+	 * 
+	 * @return the value padding the most part of the grid
+	 */
+	public abstract long getBackgroundValue();
 }

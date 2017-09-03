@@ -19,15 +19,54 @@ package cellularautomata.automata;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+import cellularautomata.grid.IntGrid2D;
 import cellularautomata.grid.LongGrid2D;
+import cellularautomata.grid.ShortGrid2D;
 
 public class Test {
 	
 	public static void main(String[] args) {
-		long initialValue = 1000000;
-		Aether2D ae = new Aether2D(initialValue);
-		AetherSimple2D aeSimple = new AetherSimple2D(initialValue);
-		compare(aeSimple, ae);
+		long initialValue = -5, backgroundValue = 0;
+//		Aether2D ae1 = new Aether2D(initialValue, backgroundValue);
+		PolarAether2D ae2 = new PolarAether2D(initialValue, backgroundValue);
+//		compare(ae1, ae2);
+		stepByStep(ae2);
+	}
+	
+	public static void print3DEdgeCSectionAsGridSequence(SymmetricShortCellularAutomaton4D ca) {
+		try {
+			do {
+				System.out.println("Step " + ca.getCurrentStep());
+				short[] minAndMaxValue = ca.getMinAndMaxValue();
+				System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+				printAsGrid(ca.projected3DEdge().crossSection(0), ca.getBackgroundValue());
+			} while (ca.nextStep());
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Finished.");
+	}
+	
+	public static void compareAether4D() {
+		long initialValue = 100;
+		ShortAether4DMT ca1 = new ShortAether4DMT((short)0, (short)initialValue, 8);
+		Aether4D ca2 = new Aether4D(0, initialValue);
+		compare(ca1, ca2);
+		race(new CellularAutomaton[] {ca1, ca2});
+//		stepByStep(ca1);
+//		printMinAndMaxValues(ca1);
+		ca1.shutdownNow();
+	}
+	
+	public static void printMinAndMaxValues(SymmetricLongCellularAutomaton4D ca) {
+		try {
+			do {
+				long[] minAndMax = ca.getMinAndMaxValue();
+				System.out.println("min: " + minAndMax[0] + "\t\tmax: " + minAndMax[1]);
+			} while(ca.nextStep());
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void checkValueConservation(SymmetricLongCellularAutomaton2D ca) {
@@ -53,7 +92,52 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getCurrentStep());
-				printAsGrid(ca);
+				printAsGrid(ca, 0);
+				System.out.println("totalValue " + ca.getTotalValue());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep3DEdgeSurface(SymmetricIntCellularAutomaton4D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step " + ca.getCurrentStep());
+				printAsGrid(ca.projected3DEdge().projectedSurfaceMaxX(ca.getBackgroundValue()), ca.getBackgroundValue());
+				System.out.println("totalValue " + ca.getTotalValue());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep(SymmetricLongCellularAutomaton3D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step " + ca.getCurrentStep());
+				printAsGrid(ca.crossSection(0), ca.getBackgroundValue());
+				System.out.println("totalValue " + ca.getTotalValue());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep(SymmetricLongCellularAutomaton4D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step " + ca.getCurrentStep());
+				printAsGrid(ca.crossSection(0,0), ca.getBackgroundValue());
 				System.out.println("totalValue " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -68,7 +152,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getCurrentStep());
-				printAsGrid(ca);
+				printAsGrid(ca, ca.getBackgroundValue());
 				System.out.println("totalValue " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -90,6 +174,38 @@ public class Test {
 						if (ca1.getValueAt(x, y) != ca2.getValueAt(x, y)) {
 							equal = false;
 							System.out.println("Different value at step " + ca1.getCurrentStep() + " (" + x + ", " + y + "): " 
+									+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAt(x, y) 
+									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAt(x, y));
+						}
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getCurrentStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compareAbs(SymmetricLongCellularAutomaton2D ca1, SymmetricLongCellularAutomaton2D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+					for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+						if (Math.abs(ca1.getValueAt(x, y)) != Math.abs(ca2.getValueAt(x, y))) {
+							equal = false;
+							System.out.println("Different absolute value at step " + ca1.getCurrentStep() + " (" + x + ", " + y + "): " 
 									+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAt(x, y) 
 									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAt(x, y));
 						}
@@ -144,6 +260,112 @@ public class Test {
 		}
 	}
 	
+	public static void compare(SymmetricLongCellularAutomaton3D ca1, SymmetricIntCellularAutomaton3D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+							if (ca1.getValueAt(x, y, z) != ca2.getValueAt(x, y, z)) {
+								equal = false;
+								System.out.println("Different value at step " + ca1.getCurrentStep() + " (" + x + ", " + y + "): " 
+										+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAt(x, y, z) 
+										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAt(x, y, z));
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getCurrentStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricLongCellularAutomaton4D ca1, SymmetricLongCellularAutomaton4D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+							for (int w = ca2.getMinW(); w <= ca2.getMaxW(); w++) {
+								if (ca1.getValueAt(w, x, y, z) != ca2.getValueAt(w, x, y, z)) {
+									equal = false;
+									System.out.println("Different value at step " + ca1.getCurrentStep() + " (" + w + ", " + x + ", " + y + "): " 
+											+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAt(w, x, y, z) 
+											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAt(w, x, y, z));
+								}
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getCurrentStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricShortCellularAutomaton4D ca1, SymmetricLongCellularAutomaton4D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+							for (int w = ca2.getMinW(); w <= ca2.getMaxW(); w++) {
+								if (ca1.getValueAt(w, x, y, z) != ca2.getValueAt(w, x, y, z)) {
+									equal = false;
+									System.out.println("Different value at step " + ca1.getCurrentStep() + " (" + w + ", " + x + ", " + y + "): " 
+											+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAt(w, x, y, z) 
+											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAt(w, x, y, z));
+								}
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getCurrentStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void race(CellularAutomaton[] cas) {
 		try {
 			long millis;
@@ -157,12 +379,22 @@ public class Test {
 		}
 	}
 	
-	public static void printAsGrid(LongGrid2D m) {
+	public static void printAsGrid(LongGrid2D m, long backgroundValue) {
 		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
-		printAsGrid(m, minX, maxX, minY, maxY);
+		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
 	}
 	
-	public static void printAsGrid(LongGrid2D m, int minX, int maxX, int minY, int maxY) {
+	public static void printAsGrid(IntGrid2D m, int backgroundValue) {
+		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
+		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
+	}
+	
+	public static void printAsGrid(ShortGrid2D m, short backgroundValue) {
+		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
+		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
+	}
+	
+	public static void printAsGrid(LongGrid2D m, int minX, int maxX, int minY, int maxY, long backgroundValue) {
 		int maxDigits = 3;
 		for (int y = maxY; y >= minY; y--) {
 			for (int x = minX; x <= maxX; x++) {
@@ -184,7 +416,71 @@ public class Test {
 			for (int x = minX; x <= maxX; x++) {
 				String strVal = " ";
 				long val = m.getValueAt(x, y);
-				if (val != 0) {
+				if (val != backgroundValue) {
+					strVal = val + "";
+				}
+				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(IntGrid2D m, int minX, int maxX, int minY, int maxY, int backgroundValue) {
+		int maxDigits = 3;
+		for (int y = maxY; y >= minY; y--) {
+			for (int x = minX; x <= maxX; x++) {
+				int digits = Long.toString(m.getValueAt(x, y)).length();
+				if (digits > maxDigits)
+					maxDigits = digits;
+			}
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxDigits; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			for (int x = minX; x <= maxX; x++) {
+				String strVal = " ";
+				int val = m.getValueAt(x, y);
+				if (val != backgroundValue) {
+					strVal = val + "";
+				}
+				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(ShortGrid2D m, int minX, int maxX, int minY, int maxY, short backgroundValue) {
+		int maxDigits = 3;
+		for (int y = maxY; y >= minY; y--) {
+			for (int x = minX; x <= maxX; x++) {
+				int digits = Long.toString(m.getValueAt(x, y)).length();
+				if (digits > maxDigits)
+					maxDigits = digits;
+			}
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxDigits; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			for (int x = minX; x <= maxX; x++) {
+				String strVal = " ";
+				long val = m.getValueAt(x, y);
+				if (val != backgroundValue) {
 					strVal = val + "";
 				}
 				System.out.print("|" + padLeft(strVal, ' ', maxDigits));

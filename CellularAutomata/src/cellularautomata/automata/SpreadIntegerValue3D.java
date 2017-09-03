@@ -279,13 +279,27 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getIntialValue() {
+	public long getInitialValue() {
 		return initialValue;
 	}
 
 	@Override
 	public CustomSymmetricLongCA3DData getData() {
-		// TODO Auto-generated method stub
-		return null;
+		return new CustomSymmetricLongCA3DData(grid, initialValue, 0, currentStep, xBoundReached, maxY, maxZ);
+	}
+
+	@Override
+	public long getBackgroundValue() {
+		return 0;
+	}
+
+	@Override
+	public String getName() {
+		return "SpreadIntegerValue3D";
+	}
+	
+	@Override
+	public String getSubFolderPath() {
+		return getName() + "/" + initialValue;
 	}
 }

@@ -45,7 +45,7 @@ public abstract class LongGrid2D implements Grid2D, LongGrid {
 	}
 	
 	/**
-	 * Get min ad max values excluding a backgroundValue
+	 * Get min and max values excluding a backgroundValue
 	 * 
 	 * @param backgroundValue
 	 * @return

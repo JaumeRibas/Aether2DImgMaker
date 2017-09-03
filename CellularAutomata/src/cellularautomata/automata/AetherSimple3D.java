@@ -16,10 +16,17 @@
  */
 package cellularautomata.automata;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AetherSimple3D extends LongCellularAutomaton3D {	
+/**
+ * A simplified implementation of the Aether cellular automaton for review and testing purposes
+ * 
+ * @author Jaume
+ *
+ */
+public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -31,6 +38,7 @@ public class AetherSimple3D extends LongCellularAutomaton3D {
 	private long[][][] grid;
 	
 	private long initialValue;
+	private long backgroundValue;
 	private long currentStep;
 	
 	/** The indexes of the origin within the array */
@@ -43,13 +51,33 @@ public class AetherSimple3D extends LongCellularAutomaton3D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
+	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public AetherSimple3D(long initialValue) {
+	public AetherSimple3D(long initialValue, long backgroundValue) {
+		if (backgroundValue > initialValue) {
+			BigInteger maxValue = BigInteger.valueOf(initialValue).add(BigInteger.valueOf(backgroundValue)
+					.subtract(BigInteger.valueOf(initialValue)).divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(6)));
+			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+				throw new IllegalArgumentException("Resulting max value " + maxValue 
+						+ " exceeds implementation's limit (" + Long.MAX_VALUE 
+						+ "). Consider using a different implementation or a smaller backgroundValue/initialValue ratio.");
+			}
+		}
 		this.initialValue = initialValue;
-		int side = 3;
+		this.backgroundValue = backgroundValue;
+		int side = 5;
 		grid = new long[side][side][side];
 		originIndex = (side - 1)/2;
-		grid[originIndex][originIndex][originIndex] = this.initialValue;
+		if (backgroundValue != 0) {
+			for (int x = 0; x < grid.length; x++) {
+				for (int y = 0; y < grid[x].length; y++) {
+					for (int z = 0; z < grid[x][y].length; z++) {
+						grid[x][y][z] = backgroundValue;
+					}
+				}
+			}
+		}
+		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
@@ -69,6 +97,9 @@ public class AetherSimple3D extends LongCellularAutomaton3D {
 		if (boundsReached) {
 			boundsReached = false;
 			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2];
+			if (backgroundValue != 0) {
+				padEdges(newGrid, 1, backgroundValue);
+			}
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
@@ -86,37 +117,37 @@ public class AetherSimple3D extends LongCellularAutomaton3D {
 						if (x < grid.length - 1)
 							neighborValue = grid[x + 1][y][z];
 						else
-							neighborValue = 0;
+							neighborValue = backgroundValue;
 						if (neighborValue < value)
 							neighbors.add(new LongNeighbor(RIGHT, neighborValue));
 						if (x > 0)
 							neighborValue = grid[x - 1][y][z];
 						else
-							neighborValue = 0;
+							neighborValue = backgroundValue;
 						if (neighborValue < value)
 							neighbors.add(new LongNeighbor(LEFT, neighborValue));
 						if (y < grid[x].length - 1)
 							neighborValue = grid[x][y + 1][z];
 						else
-							neighborValue = 0;
+							neighborValue = backgroundValue;
 						if (neighborValue < value)
 							neighbors.add(new LongNeighbor(UP, neighborValue));
 						if (y > 0)
 							neighborValue = grid[x][y - 1][z];
 						else
-							neighborValue = 0;
+							neighborValue = backgroundValue;
 						if (neighborValue < value)
 							neighbors.add(new LongNeighbor(DOWN, neighborValue));
 						if (z < grid[x][y].length - 1)
 							neighborValue = grid[x][y][z + 1];
 						else
-							neighborValue = 0;
+							neighborValue = backgroundValue;
 						if (neighborValue < value)
 							neighbors.add(new LongNeighbor(FRONT, neighborValue));
 						if (z > 0)
 							neighborValue = grid[x][y][z - 1];
 						else
-							neighborValue = 0;
+							neighborValue = backgroundValue;
 						if (neighborValue < value)
 							neighbors.add(new LongNeighbor(BACK, neighborValue));
 						
@@ -339,8 +370,78 @@ public class AetherSimple3D extends LongCellularAutomaton3D {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getIntialValue() {
+	public long getInitialValue() {
 		return initialValue;
 	}
+	
+	@Override
+	public long getBackgroundValue() {
+		return backgroundValue;
+	}
+	
+	public static void padEdges(long[][][] grid, int width, long value) {
+		//left
+		for (int x = 0; x < grid.length && x < width; x++) {
+			for (int y = 0; y < grid[x].length; y++) {
+				for (int z = 0; z < grid[x][y].length; z ++) {
+					grid[x][y][z] = value;				
+				}
+			}
+		}
+		//right
+		for (int x = grid.length - width; x < grid.length; x++) {
+			for (int y = 0; y < grid[x].length; y++) {
+				for (int z = 0; z < grid[x][y].length; z++) {
+					grid[x][y][z] = value;
+				}
+			}
+		}
+		//up
+		for (int x = width; x < grid.length - width; x++) {
+			for (int y = 0; y < grid[x].length && y < width; y++) {
+				for (int z = 0; z < grid[x][y].length; z++) {
+					grid[x][y][z] = value;
+				}
+			}
+		}
+		//down
+		for (int x = width; x < grid.length - width; x++) {
+			for (int y = grid[x].length - width; y < grid[x].length; y++) {
+				for (int z = 0; z < grid[x][y].length; z++) {
+					grid[x][y][z] = value;
+				}
+			}
+		}
+		//front
+		for (int x = width; x < grid.length - width; x++) {
+			for (int y = width; y < grid[x].length - width; y++) {
+				for (int z = 0; z < grid[x][y].length && z < width; z++) {
+					grid[x][y][z] = value;
+				}
+			}
+		}
+		//back
+		for (int x = width; x < grid.length - width; x++) {
+			for (int y = width; y < grid[x].length - width; y++) {
+				for (int z = grid[x][y].length - width; z < grid[x][y].length; z++) {
+					grid[x][y][z] = value;
+				}
+			}
+		}
+	}
 
+	@Override
+	public CustomSymmetricLongCA3DData getData() {
+		return new CustomSymmetricLongCA3DData(grid, initialValue, backgroundValue, currentStep, boundsReached, getMaxY(), getMaxZ());
+	}
+
+	@Override
+	public String getName() {
+		return "Aether3D";
+	}
+
+	@Override
+	public String getSubFolderPath() {
+		return getName() + "/" + initialValue + "/" + backgroundValue;
+	}
 }

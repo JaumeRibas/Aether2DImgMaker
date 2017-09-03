@@ -36,4 +36,19 @@ public interface CellularAutomaton {
 	 * @return the current step
 	 */
 	public long getCurrentStep();
+	
+	/**
+	 * Return the cellular automaton's name in a format that can be used in file names
+	 * 
+	 * @return the name
+	 */
+	public String getName();
+	
+	/**
+	 * Return the cellular automaton's name and configuration as a folder and sub-folder(s) path.
+	 * For example: "<Name>/<Initial value>"
+	 * 
+	 * @return the path
+	 */
+	public String getSubFolderPath();
 }

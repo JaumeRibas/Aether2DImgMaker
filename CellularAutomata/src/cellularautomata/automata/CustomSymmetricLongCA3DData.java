@@ -9,16 +9,18 @@ public class CustomSymmetricLongCA3DData implements Serializable {
 	 */
 	private static final long serialVersionUID = 7371404269731885957L;
 	private long initialValue;
+	private long backgroundValue;
 	private long step;
 	private boolean boundsReached;
 	private int maxY;
 	private int maxZ;
 	private long[][][] grid;
 	
-	public CustomSymmetricLongCA3DData(long[][][] grid, long initialValue, long step, boolean boundsReached, int maxY, int maxZ) {
-		this.initialValue = initialValue;
-		this.step = step;
+	public CustomSymmetricLongCA3DData(long[][][] grid, long initialValue, long backgroundValue, long step, boolean boundsReached, int maxY, int maxZ) {
 		this.grid = grid;
+		this.initialValue = initialValue;
+		this.backgroundValue = backgroundValue;
+		this.step = step;
 		this.boundsReached = boundsReached;
 		this.maxY = maxY;
 		this.maxZ = maxZ;
@@ -38,6 +40,10 @@ public class CustomSymmetricLongCA3DData implements Serializable {
 
 	public long getInitialValue() {
 		return initialValue;
+	}
+	
+	public long getBackgroundValue() {
+		return backgroundValue;
 	}
 
 	public long getStep() {

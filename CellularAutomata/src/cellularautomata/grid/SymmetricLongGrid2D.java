@@ -71,7 +71,7 @@ public abstract class SymmetricLongGrid2D extends LongGrid2D implements Symmetri
 	}
 	
 	@Override
-	public AbsSymmetricLongGrid2D absoluteGrid() {
+	public SymmetricLongGrid2D absoluteGrid() {
 		return new AbsSymmetricLongGrid2D(this);
 	}
 }

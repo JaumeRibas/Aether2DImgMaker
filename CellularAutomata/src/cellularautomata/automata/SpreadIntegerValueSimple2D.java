@@ -17,17 +17,16 @@
 package cellularautomata.automata;
 
 /**
- * <h1>Simple algorithm to spread an integer value over an infinite 2D grid.</h1>
+ * <h1>Cellular automaton that spreads an integer value over a grid.</h1>
  * 
  * <p>
- * It starts off with an infinite 2D grid padded with zeros and a nonzero integer value at one position.<br/>
- * Every step, the value of each position is divided between itself and its neighboring positions (up, down, left and right).<br/>
- * This division is an integer division, and its remainder is left at that given position.<br/>
- * The values that collide are added up.<br/>
- * The algorithm effectively ends once all positions have a value smaller than 5.
+ * Every step, the value of each position is divided between itself and its von Neumann neighbors.
+ * This division is an integer division, and its remainder is left at that given position.
+ * The values that collide are added up.
+ * The algorithm effectively ends once all positions have a value too small to divide.
  * </p>
  * 
- * <h2>Example:</h2>
+ * <h2>2D Example:</h2>
  * 
  * <h3>step 0</h3>
  * <br/>
@@ -39,7 +38,7 @@ package cellularautomata.automata;
  * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
  * </table>
  * 
- * <p>We start off with an initial value of 32.</p>
+ * <p>We start off with a grid padded with 0 and a single position with value of 32.</p>
  * <br/>
  *
  * <h3>step 1</h3>
@@ -100,12 +99,13 @@ package cellularautomata.automata;
  * @author Jaume Ribas
  *
  */
-public class SpreadIntegerValueSimple2D extends LongCellularAutomaton2D {	
+public class SpreadIntegerValueSimple2D extends SymmetricLongCellularAutomaton2D {	
 
 	/** A 2D array representing the grid */
 	private long[][] grid;
 	
 	private long initialValue;
+	private long backgroundValue;
 	private long currentStep;
 	
 	/** The indexes of the origin within the array */
@@ -119,15 +119,26 @@ public class SpreadIntegerValueSimple2D extends LongCellularAutomaton2D {
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
+	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public SpreadIntegerValueSimple2D(long initialValue) {
+	public SpreadIntegerValueSimple2D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
+		this.backgroundValue = backgroundValue;
 		//Create a 2D array to represent the grid. With the initial value at the origin.
-		//Make the array of size 3x3 so as to leave a margin of one position on each side
-		grid = new long[3][3];
-		xOriginIndex = 1;
-		yOriginIndex = 1;
-		grid[xOriginIndex][yOriginIndex] = this.initialValue;
+		//Make the array of size 5x5 so as to leave a margin of one position on each side
+		int side = 5;
+		grid = new long[side][side];
+		//The origin will be at the center of the array
+		xOriginIndex = (side - 1)/2;
+		yOriginIndex = xOriginIndex;
+		if (backgroundValue != 0) {
+			for (int x = 0; x < grid.length; x++) {
+				for (int y = 0; y < grid[x].length; y++) {
+					grid[x][y] = backgroundValue;
+				}
+			}
+		}
+		grid[xOriginIndex][yOriginIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
@@ -142,15 +153,18 @@ public class SpreadIntegerValueSimple2D extends LongCellularAutomaton2D {
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		long[][] newGrid = null;
+		//The offset between the indexes of the new and old array
 		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[this.grid.length + 2][this.grid[0].length + 2];
-			//The offset between the indexes of the new and old array
+			newGrid = new long[grid.length + 2][grid[0].length + 2];
+			if (backgroundValue != 0) {
+				padEdges(newGrid, 1, backgroundValue);
+			}
 			indexOffset = 1;
 		} else {
-			newGrid = new long[this.grid.length][this.grid[0].length];
+			newGrid = new long[grid.length][grid[0].length];
 		}
 		boolean changed = false;
 		//For every position
@@ -158,27 +172,67 @@ public class SpreadIntegerValueSimple2D extends LongCellularAutomaton2D {
 			for (int y = 0; y < this.grid[0].length; y++) {
 				long value = this.grid[x][y];
 				if (value != 0) {
-					//Divide its value by 5 (using integer division)
-					long quotient = value/5;
-					if (quotient != 0) {
-						//I assume that if any quotient is not zero the state changes
-						changed = true;
-						//Add the quotient and the remainder to the corresponding position in the new array
-						newGrid[x + indexOffset][y + indexOffset] += value%5 + quotient;
-						//Add the quotient to the neighboring positions
-						newGrid[x + indexOffset + 1][y + indexOffset] += quotient;
-						newGrid[x + indexOffset - 1][y + indexOffset] += quotient;
-						newGrid[x + indexOffset][y + indexOffset + 1] += quotient;
-						newGrid[x + indexOffset][y + indexOffset - 1] += quotient;
-						//Check whether or not we reached the edge of the array
-						if (x == 1 || x == this.grid.length - 2 || 
-							y == 1 || y == this.grid[0].length - 2) {
-							boundsReached = true;
+					long right;
+					if (x < grid.length - 1)
+						right = grid[x + 1][y];
+					else
+						right = backgroundValue;
+					long left;
+					if (x > 0)
+						left = grid[x - 1][y];
+					else
+						left = backgroundValue;
+					long up;
+					if (y < grid[x].length - 1)
+						up = grid[x][y + 1];
+					else
+						up = backgroundValue;
+					long down;
+					if (y > 0)
+						down = grid[x][y - 1];
+					else
+						down = backgroundValue;
+					boolean isUpEqual = value == up, isDownEqual = value == down, 
+							isRightEqual = value == right, isLeftEqual = value == left;
+					//if the current position is equal to its neighbors the algorithm has no effect
+					if (!(isUpEqual && isDownEqual && isRightEqual && isLeftEqual)) {
+						//Divide its value by 5 (using integer division)
+						long quotient = value/5;
+						if (quotient != 0) {
+							//I assume that if any quotient is not zero the state changes
+							changed = true;
+							//Add the quotient and the remainder to the corresponding position in the new array
+							newGrid[x + indexOffset][y + indexOffset] += value%5 + quotient;
+							//Add the quotient to the neighboring positions
+							//if the neighbor's value is equal to the current value, add the quotient to the current position instead
+							if (isRightEqual)
+								newGrid[x + indexOffset][y + indexOffset] += quotient;
+							else
+								newGrid[x + indexOffset + 1][y + indexOffset] += quotient;
+							if (isLeftEqual)
+								newGrid[x + indexOffset][y + indexOffset] += quotient;
+							else
+								newGrid[x + indexOffset - 1][y + indexOffset] += quotient;
+							if (isUpEqual)
+								newGrid[x + indexOffset][y + indexOffset] += quotient;
+							else
+								newGrid[x + indexOffset][y + indexOffset + 1] += quotient;
+							if (isDownEqual)
+								newGrid[x + indexOffset][y + indexOffset] += quotient;
+							else
+								newGrid[x + indexOffset][y + indexOffset - 1] += quotient;
+							//Check whether or not we reached the edge of the array
+							if (x == 1 || x == this.grid.length - 2 || 
+								y == 1 || y == this.grid[0].length - 2) {
+								boundsReached = true;
+							}
+						} else {
+							//if the quotient is zero, just add the value to the corresponding position in the new array
+							newGrid[x + indexOffset][y + indexOffset] += value;
 						}
 					} else {
-						//if the quotient is zero, just add the value to the corresponding position in the new array
 						newGrid[x + indexOffset][y + indexOffset] += value;
-					}						
+					}
 				}
 			}
 		}
@@ -206,11 +260,15 @@ public class SpreadIntegerValueSimple2D extends LongCellularAutomaton2D {
 		if (arrayX < 0 || arrayX > grid.length - 1 
 				|| arrayY < 0 || arrayY > grid[0].length - 1) {
 			//If the entered position is outside the array the value will be zero
-			return 0;
+			return backgroundValue;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY];
 		}
+	}
+	
+	public long getNonSymmetricValueAt(int x, int y){	
+		return getValueAt(x, y);
 	}
 	
 	/**
@@ -291,7 +349,69 @@ public class SpreadIntegerValueSimple2D extends LongCellularAutomaton2D {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getIntialValue() {
+	public long getInitialValue() {
 		return initialValue;
+	}
+
+	@Override
+	public int getNonSymmetricMinX() {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMaxX() {
+		return getMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMinY() {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMaxY() {
+		return getMaxY();
+	}
+
+	@Override
+	public long getBackgroundValue() {
+		return backgroundValue;
+	}
+	
+	public static void padEdges(long[][] grid, int width, long value) {
+		//left
+		for (int x = 0; x < grid.length && x < width; x++) {
+			for (int y = 0; y < grid[x].length; y ++) {
+				grid[x][y] = value;
+			}
+		}
+		//right
+		for (int x = grid.length - width; x < grid.length; x++) {
+			for (int y = 0; y < grid[x].length; y ++) {
+				grid[x][y] = value;
+			}
+		}
+		//up
+		for (int x = width; x < grid.length - width; x++) {
+			for (int y = 0; y < grid[x].length && y < width; y++) {
+				grid[x][y] = value;
+			}
+		}
+		//down
+		for (int x = width; x < grid.length - width; x++) {
+			for (int y = grid[x].length - width; y < grid[x].length; y++) {
+				grid[x][y] = value;
+			}
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "SpreadIntegerValue2D";
+	}
+	
+	@Override
+	public String getSubFolderPath() {
+		return getName() + "/" + initialValue + "/" + backgroundValue;
 	}
 }

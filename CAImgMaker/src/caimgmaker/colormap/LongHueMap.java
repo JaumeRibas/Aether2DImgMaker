@@ -35,7 +35,11 @@ public class LongHueMap implements LongColorMap {
 	
 	private void computeColors() {
 		long lRange = maxValue - minValue + 1;
-		this.hueIncreasePerUnit = (double)(HUE_RANGE /*- minBrightness*/)/lRange;
+		if (lRange > 1) {
+			this.hueIncreasePerUnit = (double)HUE_RANGE/(lRange - 1);
+		} else {
+			this.hueIncreasePerUnit = 0;
+		} 
 		if (lRange > MAX_COLOR_COUNT) {
 			colors = null;
 			return;
@@ -53,7 +57,7 @@ public class LongHueMap implements LongColorMap {
 	}
 	
 	private Color computeColor(long value) {
-		float hue = (float) (((value - minValue + 1)*hueIncreasePerUnit + HUE_MARGIN)/255);
+		float hue = (float) (((value - minValue)*hueIncreasePerUnit + HUE_MARGIN)/255);
 		hue = (hue + (float)1/6)%1;
 		hue = 1 - hue;
 		Color color = new Color(Color.HSBtoRGB(hue, 1, 1));
