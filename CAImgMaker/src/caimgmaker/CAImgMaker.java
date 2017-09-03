@@ -69,7 +69,6 @@ public class CAImgMaker {
 	private volatile boolean backupRequested = false;
 	
 	public static void main(String[] args) throws Exception {
-		args = new String[] {"1000", "D:/data/test"}; //debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
