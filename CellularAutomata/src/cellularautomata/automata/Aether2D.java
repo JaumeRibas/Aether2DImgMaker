@@ -41,14 +41,6 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public Aether2D(long initialValue) {
-		if (initialValue < 0) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
-					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(4)));
-			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
-			}
-		}
 		this.initialValue = initialValue;
 		grid = new long[3][];
 		grid[0] = buildGridBlock(0);
