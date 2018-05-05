@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,9 +27,7 @@ public abstract class SymmetricIntCellularAutomaton3D extends SymmetricIntGrid3D
 	 * @return the value padding the most part of the grid
 	 */
 	public abstract int getBackgroundValue();
-	
-	public abstract CustomSymmetricIntCA3DData getData();
-	
+		
 	public IntGrid2D projectedSurface() {
 		return this.projectedSurface(getBackgroundValue());
 	}

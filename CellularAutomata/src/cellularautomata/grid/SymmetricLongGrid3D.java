@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 package cellularautomata.grid;
 
 public abstract class SymmetricLongGrid3D extends LongGrid3D implements SymmetricGrid3D {
-
+	
 	/**
 	 * Returns the value at a given position
 	 * 
@@ -25,18 +25,23 @@ public abstract class SymmetricLongGrid3D extends LongGrid3D implements Symmetri
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
+	 * @throws Exception 
 	 */
-	public abstract long getNonSymmetricValueAt(int x, int y, int z);
+	public abstract long getNonSymmetricValue(int x, int y, int z) throws Exception;
 
-	public long[] getMinAndMaxValue() {
+	public long[] getMinAndMaxValue() throws Exception {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		long maxValue = getNonSymmetricValueAt(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getNonSymmetricMaxYAtX(minX), minY = getNonSymmetricMinYAtX(minX),
+				maxZ = getNonSymmetricMaxZ(minX, minY), minZ = getNonSymmetricMinZ(minX, minY);
+		long maxValue = getNonSymmetricValue(minX, minY, minZ), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getNonSymmetricMinYAtX(x);
+			maxY = getNonSymmetricMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					long value = getNonSymmetricValueAt(x, y, z);
+				minZ = getNonSymmetricMinZ(x, y);
+				maxZ = getNonSymmetricMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					long value = getNonSymmetricValue(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -47,15 +52,19 @@ public abstract class SymmetricLongGrid3D extends LongGrid3D implements Symmetri
 		return new long[]{ minValue, maxValue };
 	}
 	
-	public long[] getMinAndMaxValue(long backgroundValue) {
+	public long[] getMinAndMaxValue(int backgroundValue) throws Exception {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		long maxValue = getNonSymmetricValueAt(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getNonSymmetricMaxYAtX(minX), minY = getNonSymmetricMinYAtX(minX),
+				maxZ = getNonSymmetricMaxZ(minX, minY), minZ = getNonSymmetricMinZ(minX, minY);
+		long maxValue = getNonSymmetricValue(minX, minY, minZ), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getNonSymmetricMinYAtX(x);
+			maxY = getNonSymmetricMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					long value = getNonSymmetricValueAt(x, y, z);
+				minZ = getNonSymmetricMinZ(x, y);
+				maxZ = getNonSymmetricMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					long value = getNonSymmetricValue(x, y, z);
 					if (value != backgroundValue) {
 						if (value > maxValue)
 							maxValue = value;
@@ -74,7 +83,7 @@ public abstract class SymmetricLongGrid3D extends LongGrid3D implements Symmetri
 	}
 	
 	public SymmetricLongGrid2D crossSection(int z) {
-		return new SymmetricLongGrid3DXSection(this, z);
+		return new SymmetricLongGrid3DCrossSection(this, z);
 	}
 	
 	public LongGrid2D projectedSurface(long backgroundValue) {

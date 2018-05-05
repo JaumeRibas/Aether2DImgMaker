@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ public class ShortSubGrid2D extends ShortGrid2D {
 	}
 
 	@Override
-	public short getValueAt(int x, int y) {
-		return source.getValueAt(x, y);
+	public short getValue(int x, int y) {
+		return source.getValue(x, y);
 	}
 
 	@Override

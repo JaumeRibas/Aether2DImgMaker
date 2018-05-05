@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package cellularautomata.automata;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 	private static final byte FRONT = 4;
 	private static final byte BACK = 5;
 	
+	/** 3D array representing the grid **/
 	private long[][][] grid;
 	
 	private long initialValue;
@@ -48,10 +51,11 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 	
 	/**
 	 * Creates an instance with the given initial value
-	 * 
+	 *  
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public AetherSimple3D(long initialValue) {
+		//safety check to prevent exceeding the data type's max value
 		if (initialValue < 0) {
 			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
 					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(6)));
@@ -61,6 +65,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 			}
 		}
 		this.initialValue = initialValue;
+		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new long[side][side][side];
 		originIndex = (side - 1)/2;
@@ -95,6 +100,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 			for (int y = 0; y < grid[0].length; y++) {
 				for (int z = 0; z < grid[0][0].length; z++) {
 					long value = grid[x][y][z];
+					//make list of von Neumann neighbors with value smaller than current position's value
 					List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(6);						
 					long neighborValue;
 					if (x < grid.length - 1)
@@ -135,7 +141,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 						neighbors.add(new LongNeighbor(BACK, neighborValue));
 					
 					if (neighbors.size() > 0) {
-						//sort
+						//sort neighbors by value
 						boolean sorted = false;
 						while (!sorted) {
 							sorted = true;
@@ -148,7 +154,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 								}
 							}
 						}
-						//divide
+						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
 						long previousNeighborValue = 0;
 						for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
@@ -219,7 +225,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 		};
 	}
 	
-	public long getValueAt(int x, int y, int z){	
+	public long getValue(int x, int y, int z){	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
@@ -334,8 +340,8 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 		return getMaxZ();
 	}
 
-	public long getNonSymmetricValueAt(int x, int y, int z) {
-		return getValueAt(x, y, z);
+	public long getNonSymmetricValue(int x, int y, int z) {
+		return getValue(x, y, z);
 	}
 	
 	/**
@@ -343,7 +349,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 	 * 
 	 * @return the current step
 	 */
-	public long getCurrentStep() {
+	public long getStep() {
 		return currentStep;
 	}
 	
@@ -362,8 +368,9 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 	}
 	
 	@Override
-	public CustomSymmetricLongCA3DData getData() {
-		return new CustomSymmetricLongCA3DData(grid, initialValue, 0, currentStep, boundsReached, getMaxY(), getMaxZ());
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		CustomSymmetricLongCA3DData data = new CustomSymmetricLongCA3DData(grid, initialValue, 0, currentStep, boundsReached, getMaxY(), getMaxZ());
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 
 	@Override
@@ -374,5 +381,95 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
+	}
+	
+	@Override
+	public int getNonSymmetricMinXAtY(int y) {
+		return y;
+	}
+
+	@Override
+	public int getNonSymmetricMinXAtZ(int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y, int z) {
+		return Math.max(y, z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxXAtY(int y) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMaxXAtZ(int z) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y, int z) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMinYAtX(int x) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMinYAtZ(int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x, int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonSymmetricMaxYAtX(int x) {
+		return Math.min(getNonSymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxYAtZ(int z) {
+		return getNonSymmetricMaxY();
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x, int z) {
+		return Math.min(getNonSymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getNonSymmetricMinZAtX(int x) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMinZAtY(int y) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMinZ(int x, int y) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMaxZAtX(int x) {
+		return Math.min(getNonSymmetricMaxZ(), x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxZAtY(int y) {
+		return Math.min(getNonSymmetricMaxZ(), y);
+	}
+
+	@Override
+	public int getNonSymmetricMaxZ(int x, int y) {
+		return Math.min(getNonSymmetricMaxZ(), y);
 	}
 }

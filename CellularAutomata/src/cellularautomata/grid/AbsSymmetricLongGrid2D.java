@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@ public class AbsSymmetricLongGrid2D extends SymmetricLongGrid2D {
 	}
 
 	@Override
-	public long getValueAt(int x, int y) {
-		return Math.abs(source.getValueAt(x, y));
+	public long getValue(int x, int y) throws Exception {
+		return Math.abs(source.getValue(x, y));
 	}
 
 	@Override
@@ -70,8 +70,28 @@ public class AbsSymmetricLongGrid2D extends SymmetricLongGrid2D {
 	}
 
 	@Override
-	public long getNonSymmetricValueAt(int x, int y) {
-		return Math.abs(source.getNonSymmetricValueAt(x, y));
+	public long getNonSymmetricValue(int x, int y) throws Exception {
+		return Math.abs(source.getNonSymmetricValue(x, y));
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y) {
+		return source.getNonSymmetricMinX(y);
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y) {
+		return source.getNonSymmetricMaxX(y);
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x) {
+		return source.getNonSymmetricMinY(x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x) {
+		return source.getNonSymmetricMaxY(x);
 	}
 
 }

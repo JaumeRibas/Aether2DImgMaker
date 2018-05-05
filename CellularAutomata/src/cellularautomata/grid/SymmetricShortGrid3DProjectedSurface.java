@@ -1,3 +1,19 @@
+/* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
+    Copyright (C) 2017-2018 Jaume Ribas
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
 package cellularautomata.grid;
 
 public class SymmetricShortGrid3DProjectedSurface extends ShortGrid2D {
@@ -31,16 +47,16 @@ public class SymmetricShortGrid3DProjectedSurface extends ShortGrid2D {
 	}
 
 	@Override
-	public short getValueAt(int x, int y) {
+	public short getValue(int x, int y) {
 		int sourceX, sourceY, sourceZ, minX;
 		sourceY = y;
 		sourceZ = x;
 		sourceX = source.getMaxX();
 		minX = source.getMinX();
-		short value = source.getValueAt(sourceX, sourceY, sourceZ);
+		short value = source.getValue(sourceX, sourceY, sourceZ);
 		while (value == backgroundValue && sourceX > minX) {
 			sourceX--;
-			value = source.getValueAt(sourceX, sourceY, sourceZ);
+			value = source.getValue(sourceX, sourceY, sourceZ);
 		}
 		return value;
 	}

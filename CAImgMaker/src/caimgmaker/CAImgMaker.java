@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
  */
 package caimgmaker;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
@@ -26,22 +25,23 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
 import caimgmaker.colormap.ColorGrid2D;
+import caimgmaker.colormap.ColorMappedSymmetricIntGrid2D;
 import caimgmaker.colormap.ColorMapper;
-import caimgmaker.colormap.HueWithBackgroundMapper;
 import caimgmaker.colormap.SymmetricColorGrid2D;
-import cellularautomata.automata.Aether2D;
+import cellularautomata.automata.Aether3D;
+import cellularautomata.automata.LongCellularAutomaton2D;
+import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
 import cellularautomata.automata.SymmetricIntCellularAutomaton4D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton3D;
@@ -49,71 +49,40 @@ import cellularautomata.automata.SymmetricLongCellularAutomaton4D;
 import cellularautomata.automata.SymmetricShortCellularAutomaton4D;
 import cellularautomata.grid.Grid2D;
 import cellularautomata.grid.IntGrid2D;
+import cellularautomata.grid.IntGrid2DMinAndMaxProcessor;
 import cellularautomata.grid.IntGrid3D;
 import cellularautomata.grid.LongGrid2D;
 import cellularautomata.grid.LongGrid3D;
 import cellularautomata.grid.ShortGrid2D;
 import cellularautomata.grid.ShortGrid3D;
-import cellularautomata.grid.SymmetricGrid2D;
 import cellularautomata.grid.SymmetricIntGrid2D;
+import cellularautomata.grid.SymmetricIntGrid3DCrossSection;
 import cellularautomata.grid.SymmetricLongGrid2D;
 import cellularautomata.grid.SymmetricShortGrid2D;
 
 public class CAImgMaker {
 	
-	private static final int HD_WIDTH = 1920;
-	private static final int HD_HEIGHT = 1080;
-	
-	private long imgsPerFolder = 10000;	
-	private long backupLeap = 1000 * 60 * 60 * 3;
+	private long imgsPerFolder = 10000;
+	private long backupLeap = 1000 * 60 * 60 * 12;
+//	private long backupLeap = 1000 * 30;//debug
 	private volatile boolean backupRequested = false;
 	
-	public static void main(String[] args) throws Exception {
-		if (args.length == 0) {
-			System.err.println("You must specify an initial value.");
-		} else {
-			long initialValue = Long.parseLong(args[0]);
-			SymmetricLongCellularAutomaton2D ca = new Aether2D(initialValue);
-			String path;
-			int initialStep = 0;
-			if (args.length > 1) {
-				path = args[1];
-				char lastCharacter = path.charAt(path.length() - 1); 
-				if (lastCharacter != '/' && lastCharacter != '\\') {
-					path += "/";
-				}
-				if (args.length > 2) {
-					initialStep = Integer.parseInt(args[2]);
-				}
-			} else {
-				path = "./";
-			}
-			boolean finished = false;
-			while (ca.getCurrentStep() < initialStep && !finished) {
-				finished = !ca.nextStep();
-				System.out.println("Current step: " + ca.getCurrentStep());
-			}
-			ColorMapper colorMapper = new HueWithBackgroundMapper(ca.getBackgroundValue(), Color.BLACK);
-			path += ca.getSubFolderPath();	
-			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createSliceImages(ca, colorMapper, HD_WIDTH/2, HD_HEIGHT/2, path);
-		}		
-	}
 	
-	public void createSliceImages(SymmetricLongCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getCurrentStep();
+	
+	public void createNonSymmetricImages(SymmetricLongCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + "/slice/";
 		do {
 			System.out.println("Current step: " + currentStep);
-			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
 			long[] minAndMaxValue = ca.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(ca, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/slice/" + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -124,46 +93,140 @@ public class CAImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createCrossSectionSliceImages(SymmetricLongCellularAutomaton3D ca, int z, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getCurrentStep();
+	public void createCrossSectionNonSymmetricImages(SymmetricLongCellularAutomaton3D ca, int z, ColorMapper colorMapper, 
+			int minWidth, int minHeight, String path) throws Exception {	
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + "/cross-section-slice/z=" + z + "/";
 		do {
 			System.out.println("Current step: " + currentStep);
-			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
-			SymmetricLongGrid2D cSection = ca.crossSection(z);
-			long[] minAndMaxValue = cSection.getMinAndMaxValue();
+			SymmetricLongGrid2D xSection = ca.crossSection(z);
+			long[] minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(cSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/cross-section-slice/z=" + z + "/" + numberedFolder, ca.getName() + "_x-section_" + currentStep + ".png");
+			SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+					imgPath + numberedFolder, ca.getName() + "_x-section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
 			}			
 			currentStep++;
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+	}
+	
+	public void createValueScanCrossSectionNonSymmetricImages(SymmetricLongCellularAutomaton3D ca, int z, int valueRange, long scanSpeed, ColorMapper colorMapper, 
+			int minWidth, int minHeight, String path) throws Exception {	
+		if (valueRange < 1)
+			throw new IllegalArgumentException("Value range must be bigger than 0.");
+		if (scanSpeed == 0)
+			throw new IllegalArgumentException("Scan speed must be different from zero.");
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		long rangeMin = 0, rangeMax = 0;
+		boolean firstIteration = true;
+		String imgPath = path + "/cross-section-slice-value-scan/z=" + z + "/value-range=" + valueRange + "/scan-speed=" + scanSpeed + "/";
+		do {
+			System.out.println("Current step: " + currentStep);
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
+			SymmetricLongGrid2D xSection = ca.crossSection(z);
+			long[] minAndMaxValue = xSection.getMinAndMaxValue();
+			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			if (scanSpeed > 0 && (rangeMax > minAndMaxValue[1] || rangeMax < minAndMaxValue[0] || firstIteration)) {
+				rangeMin = minAndMaxValue[0];
+				rangeMax = rangeMin + valueRange - 1;
+			} else if (scanSpeed < 0 && (rangeMin < minAndMaxValue[0] || rangeMin > minAndMaxValue[1] || firstIteration)) {
+				rangeMax = minAndMaxValue[1];
+				rangeMin = rangeMax - valueRange + 1;
+			}
+			System.out.println("Range min value " + rangeMin + " Range max value " + rangeMax);
+			SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(xSection, rangeMin, rangeMax);
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_x-section_" + currentStep + ".png");
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}			
+			currentStep++;
+			rangeMin += scanSpeed;
+			rangeMax += scanSpeed;
+			firstIteration = false;
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+	}
+	
+	public void createValueRangesCrossSectionNonSymmetricImages(SymmetricLongCellularAutomaton3D ca, int z, int valueRange, long rangeLeap, ColorMapper colorMapper, 
+			int minWidth, int minHeight, String path) throws Exception {	
+		if (valueRange < 1)
+			throw new IllegalArgumentException("Value range must be bigger than 0.");
+		if (rangeLeap <= 0)
+			throw new IllegalArgumentException("Range leap must be bigger than zero.");
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		long firstRangeMin = 0, rangeMin = 0;
+		boolean firstIteration = true;
+		String imgPath = path + "/cross-section-slice-value-ranges/z=" + z + "/";
+		do {
+			System.out.println("Current step: " + currentStep);
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
+			SymmetricLongGrid2D xSection = ca.crossSection(z);
+			long[] minAndMaxValue = xSection.getMinAndMaxValue();
+			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			if (firstIteration) {
+				firstRangeMin = minAndMaxValue[0];
+			}
+			rangeMin = firstRangeMin;
+			int rangeId = 0;
+			while (rangeMin < minAndMaxValue[0]) {
+				rangeMin += rangeLeap;
+				rangeId++;
+			}
+			while (rangeMin <= minAndMaxValue[1]) {
+				long rangeMax = rangeMin + valueRange - 1;
+				System.out.println("Range " + rangeId + " min value " + rangeMin + " Range max value " + rangeMax);
+				SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(xSection, rangeMin, rangeMax);
+				createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+						imgPath + "/" + rangeId + "(minVal=" + rangeMin + "_maxVal=" + rangeMax + ")/" 
+						+ numberedFolder, ca.getName() + "_x-section_" + currentStep + ".png");
+				rangeMin += rangeLeap;
+				rangeId++;
+			}
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}			
+			currentStep++;
+			firstIteration = false;
 		} while (ca.nextStep());
 		System.out.println("Finished!");
 	}
 	
 	public void createSurfaceImages(SymmetricLongCellularAutomaton3D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + "/surface/";
 		do {
 			System.out.println("Current step: " + currentStep);
 			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
 			LongGrid2D surface = ca.projectedSurface();
 			long[] minAndMaxValue = surface.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/surface/" + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			ColorGrid2D colorGrid = colorMapper.getMappedLongGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
+			createSliceImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -175,19 +238,18 @@ public class CAImgMaker {
 	}
 	
 	public void createImages(SymmetricLongCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + "/";
 		do {
 			System.out.println("Current step: " + currentStep);
 			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
 			long[] minAndMaxValue = ca.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(ca, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/" + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			ColorGrid2D colorGrid = colorMapper.getMappedLongGrid(ca, minAndMaxValue[0], minAndMaxValue[1]);
+			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -198,45 +260,69 @@ public class CAImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createScanningSliceImages(SymmetricLongCellularAutomaton3D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
-		StdInRunnable stdIn = new StdInRunnable();
-		Thread inputThread = new Thread(stdIn);
-		inputThread.start();
-		long currentStep = ca.getCurrentStep();
+	public void createImages(LongCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		int scanZ = ca.getNonSymmetricMinZ();
+		String imgPath = path + "/";
 		do {
 			System.out.println("Current step: " + currentStep);
 			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
+			long[] minAndMaxValue = ca.getMinAndMaxValue();
+			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			ColorGrid2D colorGrid = colorMapper.getMappedLongGrid(ca, minAndMaxValue[0], minAndMaxValue[1]);
+			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}			
+			currentStep++;
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+	}
+	
+	public void createScanningNonSymmetricImages(SymmetricLongCellularAutomaton3D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		int scanZ = ca.getNonSymmetricMinZ();
+		String imgPath = path + "/scan-slice/";
+		do {
+			System.out.println("Current step: " + currentStep);
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
 			if (scanZ >= ca.getNonSymmetricMaxZ())
 				scanZ = ca.getNonSymmetricMinZ();
 			System.out.println("Scan z: " + scanZ);
-			SymmetricLongGrid2D cSection = ca.crossSection(scanZ);
-			long[] minAndMaxValue = cSection.getMinAndMaxValue();
+			SymmetricLongGrid2D xSection = ca.crossSection(scanZ);
+			long[] minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(cSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/scan-slice/" + numberedFolder, ca.getName() + "_x-section_" + currentStep + ".png");
+			SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+					imgPath + numberedFolder, ca.getName() + "_x-section_" + currentStep + ".png");
 			scanZ++;
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backup = System.currentTimeMillis() >= nextBckTime;
-			if (backup) {
+			boolean backUp = System.currentTimeMillis() >= nextBckTime;
+			if (backUp) {
 				nextBckTime += backupLeap;
 			}
 			if (backupRequested) {
-				backup = true;
+				backUp = true;
 				backupRequested = false;
 			}
-			if (backup) {
-				backup(ca.getData(), path + "/serialized", ca.getClass().getSimpleName() + "_" + currentStep + ".ser");					
+			if (backUp) {
+				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);					
 			}
 			currentStep++;
 		} while (ca.nextStep());
@@ -245,23 +331,70 @@ public class CAImgMaker {
 		inputThread.join();
 	}
 	
-	public void createScanningAndCrossSectionSliceImages(SymmetricLongCellularAutomaton3D ca, int crossSectionZ, 
+//	public void createAetherZeroLastStepsScanningSliceImages(ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
+//		int i = 1;
+//		while (true) {
+//			long initialValue = i*6;
+//			System.out.println("Current initial value: " + initialValue);
+//			SymmetricLongCellularAutomaton3D az = new AetherZero3D(initialValue);
+//			String imgPath = path + az.getSubFolderPath() + "/img/scan-slice/" 
+//					+ colorMapper.getClass().getSimpleName();
+//			while (az.nextStep());
+//			long step = az.getCurrentStep();
+//			System.out.println("Scanning last step: " + step);
+//			int maxZ = az.getNonSymmetricMaxZ();
+//			for (int scanZ = az.getNonSymmetricMinZ(); scanZ <= maxZ; scanZ++) {
+//				SymmetricLongGrid2D xSection = az.crossSection(scanZ);
+//				long[] minAndMaxValue = xSection.getMinAndMaxValue();
+//				System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+//				SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+//				createSliceImage(colorGrid, minWidth, minHeight, imgPath, az.getName() + "_x-section_" + step + "_" + scanZ + ".png");
+//			}
+//			i *= 10;
+//		}
+//	}
+//	
+	public void createAetherLastStepsCrossSectionImages(ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
+		int i = 0;
+		String imgPath = path + new Aether3D(0).getName() 
+				+ "/img/lats-steps/cross-section-slice/" + colorMapper.getClass().getSimpleName();
+		while (true) {
+			long initialValue = i;
+			System.out.println("Current initial value: " + initialValue);
+			SymmetricLongCellularAutomaton3D ae = new Aether3D(initialValue);
+			while (ae.nextStep());
+			long step = ae.getStep();
+			System.out.println("Last step: " + step);
+			SymmetricLongGrid2D xSection = ae.crossSection(ae.getNonSymmetricMinZ());
+			long[] minAndMaxValue = xSection.getMinAndMaxValue();
+			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			SymmetricColorGrid2D colorGrid = colorMapper.getMappedSymmetricGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			int minX = ae.getNonSymmetricMinX(), maxX = ae.getNonSymmetricMaxX(), 
+					minY = ae.getNonSymmetricMinY(), maxY = ae.getNonSymmetricMaxY();
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath, 
+					ae.getName() + "_x-section_" + initialValue + ".png");
+			i++;
+		}
+	}
+	
+	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricLongCellularAutomaton3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
 		int scanZ = ca.getNonSymmetricMinZ();
-		String imgPath = path + "/img/";
 		String caName = ca.getName();
-		String scanImgPath = imgPath + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
-		String crossSectionImgPath = imgPath + crossSectionColorMapper.getClass().getSimpleName() + "/cross-section-slice/";
+		String scanImgPath = path + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
+		String crossSectionImgPath = path + crossSectionColorMapper.getClass().getSimpleName() 
+				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		do {
 			System.out.println("Current step: " + currentStep);
-			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
 //			long[] minAndMaxValue = ca.getMinAndMaxValue();
 //			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
@@ -269,32 +402,33 @@ public class CAImgMaker {
 				scanZ = ca.getNonSymmetricMinZ();
 			System.out.println("Scan z: " + scanZ);
 			SymmetricLongGrid2D scan = ca.crossSection(scanZ);
-			long[] minAndMaxValue = scan.getMinAndMaxValue(ca.getBackgroundValue());
+			long[] minAndMaxValue = scan.getMinAndMaxValue();
 			System.out.println("Scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			SymmetricColorGrid2D colorGrid = scanningColorMapper.getMappedSymmetricGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, scanImgPath + numberedFolder, caName + "_x-section_" + currentStep + ".png");
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+					scanImgPath + numberedFolder, caName + "_x-section_" + currentStep + ".png");
 			scanZ++;
-			SymmetricLongGrid2D cSection = ca.crossSection(crossSectionZ);
-			minAndMaxValue = cSection.getMinAndMaxValue();
-			System.out.println("C-Section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			colorGrid = crossSectionColorMapper.getMappedSymmetricGrid(cSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, crossSectionImgPath + "z=" + crossSectionZ + "/" + numberedFolder, 
+			SymmetricLongGrid2D xSection = ca.crossSection(crossSectionZ);
+			minAndMaxValue = xSection.getMinAndMaxValue();
+			System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			colorGrid = crossSectionColorMapper.getMappedSymmetricGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
 					caName + "_x-section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backup = System.currentTimeMillis() >= nextBckTime;
-			if (backup) {
+			boolean backUp = System.currentTimeMillis() >= nextBckTime;
+			if (backUp) {
 				nextBckTime += backupLeap;
 			}
 			if (backupRequested) {
-				backup = true;
+				backUp = true;
 				backupRequested = false;
 			}
-			if (backup) {
-				backup(ca.getData(), path + "/serialized", ca.getClass().getSimpleName() + "_" + currentStep + ".ser");					
+			if (backUp) {
+				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);					
 			}
 			currentStep++;
 		} while (ca.nextStep());
@@ -303,47 +437,188 @@ public class CAImgMaker {
 		inputThread.join();
 	}
 	
+	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricIntCellularAutomaton3D ca, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
+			String imagesPath, String backupPath) throws Exception {
+		
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		int scanZ = ca.getNonSymmetricMinZ();
+		
+		String caName = ca.getName();
+		String scanImgPath = imagesPath + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
+		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
+				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
+		
+		SymmetricIntGrid3DCrossSection scan = new SymmetricIntGrid3DCrossSection(ca, scanZ);
+		SymmetricIntGrid3DCrossSection xSection = new SymmetricIntGrid3DCrossSection(ca, crossSectionZ);
+		
+		IntGrid2DMinAndMaxProcessor scanMinAndMaxProcessor = new IntGrid2DMinAndMaxProcessor();
+		IntGrid2DMinAndMaxProcessor xSectionMinAndMaxProcessor = new IntGrid2DMinAndMaxProcessor();
+		
+		scan.addProcessor(scanMinAndMaxProcessor);
+		xSection.addProcessor(xSectionMinAndMaxProcessor);
+		
+		ca.addProcessor(scan);
+		ca.addProcessor(xSection);
+		//get min and max for current step
+		ca.processGrid();
+		
+		do {
+			scan.removeProcessor(scanMinAndMaxProcessor);
+			xSection.removeProcessor(xSectionMinAndMaxProcessor);
+			System.out.println("Current step: " + currentStep);
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
+			System.out.println("Scan z: " + scanZ);
+			int[] scanMinAndMaxValue = scanMinAndMaxProcessor.getMinAndMaxValue();
+			int[] xSectionMinAndMaxValue = xSectionMinAndMaxProcessor.getMinAndMaxValue();
+			System.out.println("Scan: Min value " + scanMinAndMaxValue[0] + " Max value " + scanMinAndMaxValue[1]);
+			System.out.println("Cross section: Min value " + xSectionMinAndMaxValue[0] + " Max value " + xSectionMinAndMaxValue[1]);
+			
+			ColorMappedSymmetricIntGrid2D colorMappedScan = 
+					scanningColorMapper.getMappedIntGrid(scan, scanMinAndMaxValue[0], scanMinAndMaxValue[1]);
+			ColorMappedSymmetricIntGrid2D colorMappedCrossSection = 
+					crossSectionColorMapper.getMappedIntGrid(xSection, xSectionMinAndMaxValue[0], xSectionMinAndMaxValue[1]);
+			
+			ImageRenderingProcessor scanImageRenderer = 
+					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, 
+							scanImgPath + numberedFolder, caName + "_x-section_" + currentStep + ".png");
+			ImageRenderingProcessor xSectionImageRenderer = 
+					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
+							caName + "_x-section_" + currentStep + ".png");
+			
+			colorMappedScan.addProcessor(scanImageRenderer);
+			colorMappedCrossSection.addProcessor(xSectionImageRenderer);
+			
+			scan.addProcessor(colorMappedScan);
+			xSection.addProcessor(colorMappedCrossSection);
+			
+			//generate images
+			ca.processGrid();
+			
+			scan.removeProcessor(colorMappedScan);
+			xSection.removeProcessor(colorMappedCrossSection);
+			
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}		
+			boolean backUp = System.currentTimeMillis() >= nextBckTime;
+			if (backUp) {
+				nextBckTime += backupLeap;
+			}
+			if (backupRequested) {
+				backUp = true;
+				backupRequested = false;
+			}
+			if (backUp) {
+				String backupName = ca.getClass().getSimpleName() + "_" + currentStep;
+				System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
+				ca.backUp(backupPath, backupName);		
+				System.out.println("Backing up finished");
+			}
+			scanZ++;
+			if (scanZ >= ca.getNonSymmetricMaxZ())
+				scanZ = ca.getNonSymmetricMinZ();
+			scan.setZ(scanZ);
+			scan.addProcessor(scanMinAndMaxProcessor);
+			xSection.addProcessor(xSectionMinAndMaxProcessor);
+			currentStep++;
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
+	}
+	
+	public void createScanningAndCrossSectionNonSymmetricImagesNoBackUp(SymmetricLongCellularAutomaton3D ca, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path) throws Exception {
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		int scanZ = ca.getNonSymmetricMinZ();
+		String caName = ca.getName();
+		String scanImgPath = path + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
+		String crossSectionImgPath = path + crossSectionColorMapper.getClass().getSimpleName() 
+				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
+		do {
+			System.out.println("Current step: " + currentStep);
+			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
+					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
+			if (scanZ >= ca.getNonSymmetricMaxZ())
+				scanZ = ca.getNonSymmetricMinZ();
+			System.out.println("Scan z: " + scanZ);
+			SymmetricLongGrid2D scan = ca.crossSection(scanZ);
+			long[] minAndMaxValue = scan.getMinAndMaxValue();
+			System.out.println("Scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			SymmetricColorGrid2D colorGrid = scanningColorMapper.getMappedSymmetricGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, scanImgPath + numberedFolder, caName + "_x-section_" + currentStep + ".png");
+			scanZ++;
+			SymmetricLongGrid2D xSection = ca.crossSection(crossSectionZ);
+			minAndMaxValue = xSection.getMinAndMaxValue();
+			System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			colorGrid = crossSectionColorMapper.getMappedSymmetricGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createNonSymmetricImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
+					caName + "_x-section_" + currentStep + ".png");
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}		
+			currentStep++;
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+	}
+	
 	public void createScanning3DEdgeImages(SymmetricLongCellularAutomaton4D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
 		LongGrid3D edge = ca.projected3DEdge();
 		int scanZ = edge.getMinZ();
+		String imgPath = path + "/scan-3DEdge/";
 		do {
 			edge = ca.projected3DEdge();
 			System.out.println("Current step: " + currentStep);
 			int maxY = edge.getMaxY(), maxX = edge.getMaxX();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
 			if (scanZ >= edge.getMaxZ())
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
-			LongGrid2D cSection = edge.crossSection(scanZ);
-			long[] minAndMaxValue = cSection.getMinAndMaxValue(ca.getBackgroundValue());
+			LongGrid2D xSection = edge.crossSection(scanZ);
+			long[] minAndMaxValue = xSection.getMinAndMaxValue(ca.getBackgroundValue());
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(cSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/scan-3DEdge/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");			
+			ColorGrid2D colorGrid = colorMapper.getMappedLongGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createSliceImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");			
 			scanZ++;
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backup = System.currentTimeMillis() >= nextBckTime;
-			if (backup) {
+			boolean backUp = System.currentTimeMillis() >= nextBckTime;
+			if (backUp) {
 				nextBckTime += backupLeap;
 			}
 			if (backupRequested) {
-				backup = true;
+				backUp = true;
 				backupRequested = false;
 			}
-			if (backup) {
-				backup(ca.getData(), path + "/serialized", ca.getClass().getSimpleName() + "_" + currentStep + ".ser");					
+			if (backUp) {
+				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);				
 			}
 			currentStep++;
 		} while (ca.nextStep());
@@ -357,7 +632,7 @@ public class CAImgMaker {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
@@ -366,46 +641,48 @@ public class CAImgMaker {
 		do {
 			edge = ca.projected3DEdge();
 			System.out.println("Current step: " + currentStep);
-			int maxY = edge.getMaxY(), maxX = edge.getMaxX();
+			int maxY = edge.getMaxY(), maxX = edge.getMaxX(), minX, minY;
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
+			String imgPath = path + "/";
 			if (scanZ >= edge.getMaxZ())
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
 			LongGrid2D scan = edge.crossSection(scanZ);
 			long[] minAndMaxValue = scan.getMinAndMaxValue(ca.getBackgroundValue());
 			System.out.println("3DEdge scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
+			ColorGrid2D colorGrid = colorMapper.getMappedLongGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
 					+ "/scan-3DEdge/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");			
 			scanZ++;
-			LongGrid2D cSection = edge.crossSection(crossSectionZ);
-			minAndMaxValue = cSection.getMinAndMaxValue();
+			LongGrid2D xSection = edge.crossSection(crossSectionZ);
+			minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("3DEdge c-section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			colorGrid = colorMapper.getMappedGrid(cSection, minAndMaxValue[0], minAndMaxValue[1]);
+			colorGrid = colorMapper.getMappedLongGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
 			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
 					+ "/cross-section-3DEdge/z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");
-			SymmetricLongGrid2D cSection2 = ca.crossSection(crossSectionZ, crossSectionZ);
-			minAndMaxValue = cSection2.getMinAndMaxValue();
-			System.out.println("C-Section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			SymmetricColorGrid2D symmColorGrid = colorMapper.getMappedSymmetricGrid(cSection2, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(symmColorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
+			SymmetricLongGrid2D xSection2 = ca.crossSection(crossSectionZ, crossSectionZ);
+			minAndMaxValue = xSection2.getMinAndMaxValue();
+			System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			SymmetricColorGrid2D symmColorGrid = colorMapper.getMappedSymmetricGrid(xSection2, minAndMaxValue[0], minAndMaxValue[1]);
+			minX = ca.getNonSymmetricMinX(); maxX = ca.getNonSymmetricMaxX();
+			minY = ca.getNonSymmetricMinY(); maxY = ca.getNonSymmetricMaxY();
+			createNonSymmetricImage(symmColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
 					+ "/cross-section/y=" + crossSectionZ + "_z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backup = System.currentTimeMillis() >= nextBckTime;
-			if (backup) {
+			boolean backUp = System.currentTimeMillis() >= nextBckTime;
+			if (backUp) {
 				nextBckTime += backupLeap;
 			}
 			if (backupRequested) {
-				backup = true;
+				backUp = true;
 				backupRequested = false;
 			}
-			if (backup) {
-				backup(ca.getData(), path + "/serialized", ca.getClass().getSimpleName() + "_" + currentStep + ".ser");					
+			if (backUp) {
+				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);				
 			}
 			currentStep++;
 		} while (ca.nextStep());
@@ -419,7 +696,7 @@ public class CAImgMaker {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
@@ -428,46 +705,48 @@ public class CAImgMaker {
 		do {
 			edge = ca.projected3DEdge();
 			System.out.println("Current step: " + currentStep);
-			int maxY = edge.getMaxY(), maxX = edge.getMaxX();
+			int maxY = edge.getMaxY(), maxX = edge.getMaxX(), minX, minY;
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
+			String imgPath = path;
 			if (scanZ >= edge.getMaxZ())
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
 			IntGrid2D scan = edge.crossSection(scanZ);
 			int[] minAndMaxValue = scan.getMinAndMaxValue(ca.getBackgroundValue());
 			System.out.println("3DEdge scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
+			ColorGrid2D colorGrid = colorMapper.getMappedIntGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
+			createSliceImage(colorGrid, minWidth, minHeight, imgPath 
 					+ "/scan-3DEdge/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");			
 			scanZ++;
-			IntGrid2D cSection = edge.crossSection(crossSectionZ);
-			minAndMaxValue = cSection.getMinAndMaxValue();
+			IntGrid2D xSection = edge.crossSection(crossSectionZ);
+			minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("3DEdge c-section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			colorGrid = colorMapper.getMappedGrid(cSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
+			colorGrid = colorMapper.getMappedIntGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createSliceImage(colorGrid, minWidth, minHeight, imgPath
 					+ "/cross-section-3DEdge/z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");
-			SymmetricIntGrid2D cSection2 = ca.crossSection(crossSectionZ, crossSectionZ);
-			minAndMaxValue = cSection2.getMinAndMaxValue();
-			System.out.println("C-Section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			SymmetricColorGrid2D symmColorGrid = colorMapper.getMappedSymmetricGrid(cSection2, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(symmColorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
+			SymmetricIntGrid2D xSection2 = ca.crossSection(crossSectionZ, crossSectionZ);
+			minAndMaxValue = xSection2.getMinAndMaxValue();
+			System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			SymmetricColorGrid2D symmColorGrid = colorMapper.getMappedSymmetricGrid(xSection2, minAndMaxValue[0], minAndMaxValue[1]);
+			minX = ca.getNonSymmetricMinX(); maxX = ca.getNonSymmetricMaxX();
+			minY = ca.getNonSymmetricMinY(); maxY = ca.getNonSymmetricMaxY();
+			createNonSymmetricImage(symmColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath
 					+ "/cross-section/y=" + crossSectionZ + "_z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backup = System.currentTimeMillis() >= nextBckTime;
-			if (backup) {
+			boolean backUp = System.currentTimeMillis() >= nextBckTime;
+			if (backUp) {
 				nextBckTime += backupLeap;
 			}
 			if (backupRequested) {
-				backup = true;
+				backUp = true;
 				backupRequested = false;
 			}
-			if (backup) {
-				backup(ca.getData(), path + "/serialized", ca.getClass().getSimpleName() + "_" + currentStep + ".ser");					
+			if (backUp) {
+				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);				
 			}
 			currentStep++;
 		} while (ca.nextStep());
@@ -481,7 +760,7 @@ public class CAImgMaker {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
@@ -491,46 +770,48 @@ public class CAImgMaker {
 		do {
 			edge = ca.projected3DEdge();
 			System.out.println("Current step: " + currentStep);
-			int maxY = edge.getMaxY(), maxX = edge.getMaxX();
+			int maxY = edge.getMaxY(), maxX = edge.getMaxX(), minX, minY;
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
+			String imgPath = path;
 			if (scanZ >= edge.getMaxZ())
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
 			ShortGrid2D scan = edge.crossSection(scanZ);
 			short[] minAndMaxValue = scan.getMinAndMaxValue(ca.getBackgroundValue());
 			System.out.println("3DEdge scan: Min value " + historicMinAndMaxValue[0] + " Max value " + historicMinAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
+			ColorGrid2D colorGrid = colorMapper.getMappedShortGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
+			createSliceImage(colorGrid, minWidth, minHeight, imgPath 
 					+ "/scan-3DEdge/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");			
 			scanZ++;
-			ShortGrid2D cSection = edge.crossSection(crossSectionZ);
-			minAndMaxValue = cSection.getMinAndMaxValue();
+			ShortGrid2D xSection = edge.crossSection(crossSectionZ);
+			minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("3DEdge c-section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			colorGrid = colorMapper.getMappedGrid(cSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
+			colorGrid = colorMapper.getMappedShortGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createSliceImage(colorGrid, minWidth, minHeight, imgPath 
 					+ "/cross-section-3DEdge/z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");
-			SymmetricShortGrid2D cSection2 = ca.crossSection(crossSectionZ, crossSectionZ);
-			minAndMaxValue = cSection2.getMinAndMaxValue();
-			System.out.println("C-Section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			SymmetricColorGrid2D symmColorGrid = colorMapper.getMappedSymmetricGrid(cSection2, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(symmColorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
+			SymmetricShortGrid2D xSection2 = ca.crossSection(crossSectionZ, crossSectionZ);
+			minAndMaxValue = xSection2.getMinAndMaxValue();
+			System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			SymmetricColorGrid2D symmColorGrid = colorMapper.getMappedSymmetricGrid(xSection2, minAndMaxValue[0], minAndMaxValue[1]);
+			minX = ca.getNonSymmetricMinX(); maxX = ca.getNonSymmetricMaxX();
+			minY = ca.getNonSymmetricMinY(); maxY = ca.getNonSymmetricMaxY();
+			createNonSymmetricImage(symmColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath
 					+ "/cross-section/y=" + crossSectionZ + "_z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backup = System.currentTimeMillis() >= nextBckTime;
-			if (backup) {
+			boolean backUp = System.currentTimeMillis() >= nextBckTime;
+			if (backUp) {
 				nextBckTime += backupLeap;
 			}
 			if (backupRequested) {
-				backup = true;
+				backUp = true;
 				backupRequested = false;
 			}
-			if (backup) {
-				backup(ca.getData(), path + "/serialized", ca.getClass().getSimpleName() + "_" + currentStep + ".ser");					
+			if (backUp) {
+				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);				
 			}
 			currentStep++;
 		} while (ca.nextStep());
@@ -540,20 +821,19 @@ public class CAImgMaker {
 	}
 	
 	public void create3DEdgeSurfaceImages(SymmetricIntCellularAutomaton4D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + "/surface-3DEgde/";
 		do {
 			System.out.println("Current step: " + currentStep);
 			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
 			IntGrid2D surface = ca.projected3DEdge().projectedSurfaceMaxX(ca.getBackgroundValue());
 			int[] minAndMaxValue = surface.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/surface-3DEgde/" + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			ColorGrid2D colorGrid = colorMapper.getMappedIntGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
+			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -565,20 +845,19 @@ public class CAImgMaker {
 	}
 	
 	public void create3DEdgeSurfaceImages(SymmetricShortCellularAutomaton4D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getCurrentStep();
+		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + "/surface-3DEgde/";
 		do {
 			System.out.println("Current step: " + currentStep);
 			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			String imgPath = path + "/img/";
 			ShortGrid2D surface = ca.projected3DEdge().projectedSurfaceMaxX(ca.getBackgroundValue());
 			short[] minAndMaxValue = surface.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
-			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/surface-3DEgde/" + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			ColorGrid2D colorGrid = colorMapper.getMappedShortGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
+			createSliceImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -589,89 +868,194 @@ public class CAImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	private int getDotSize(SymmetricGrid2D grid, int preferredMaxWidth, int preferredMaxHeight) {
-		int yDotSize = 1;
-		int dataHeight = grid.getNonSymmetricMaxY() - grid.getNonSymmetricMinY() + 1;
-		if (dataHeight > 0) {
-			yDotSize = preferredMaxHeight/dataHeight;
+	public static int getGridPositionSize(int minX, int maxX, int minY, int maxY, int preferredMaxWidth, int preferredMaxHeight) {
+		int ySize = 1;
+		int height = maxY - minY + 1;
+		if (height > 0) {
+			ySize = preferredMaxHeight/height;
         }
-		if (yDotSize == 0) yDotSize = 1;
-		int xDotSize = 1;
-		int dataWidth = grid.getNonSymmetricMaxX() - grid.getNonSymmetricMinX() + 1;
-		if (dataWidth > 0) {
-			xDotSize = preferredMaxWidth/dataWidth;
+		if (ySize == 0) ySize = 1;
+		int xSize = 1;
+		int width = maxX - minX + 1;
+		if (width > 0) {
+			xSize = preferredMaxWidth/width;
         }
-		if (xDotSize == 0) xDotSize = 1;
-		return Math.min(xDotSize, yDotSize);
+		if (xSize == 0) xSize = 1;
+		return Math.min(xSize, ySize);
 	}
 	
-	private int getDotSize(Grid2D grid, int preferredMaxWidth, int preferredMaxHeight) {
-		int yDotSize = 1;
-		int dataHeight = grid.getMaxY() - grid.getMinY() + 1;
-		if (dataHeight > 0) {
-			yDotSize = preferredMaxHeight/dataHeight;
+	private int getGridPositionSize(Grid2D grid, int preferredMaxWidth, int preferredMaxHeight) {
+		int ySize = 1;
+		int gridHeight = grid.getMaxY() - grid.getMinY() + 1;
+		if (gridHeight > 0) {
+			ySize = preferredMaxHeight/gridHeight;
         }
-		if (yDotSize == 0) yDotSize = 1;
-		int xDotSize = 1;
-		int dataWidth = grid.getMaxX() - grid.getMinX() + 1;
-		if (dataWidth > 0) {
-			xDotSize = preferredMaxWidth/dataWidth;
+		if (ySize == 0) ySize = 1;
+		int xSize = 1;
+		int gridWidth = grid.getMaxX() - grid.getMinX() + 1;
+		if (gridWidth > 0) {
+			xSize = preferredMaxWidth/gridWidth;
         }
-		if (xDotSize == 0) xDotSize = 1;
-		return Math.min(xDotSize, yDotSize);
+		if (xSize == 0) xSize = 1;
+		return Math.min(xSize, ySize);
 	}
 	
-	public void createSliceImage(SymmetricColorGrid2D grid, int minWidth, int minHeight, String path, String name) 
+	public void createNonSymmetricImage(SymmetricColorGrid2D grid, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
-		int dotSize = getDotSize(grid, minWidth, minHeight);
-		createSliceImage(grid, dotSize, minWidth, minHeight, path, name);
+		int gridPositionSize = getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
+		createNonSymmetricImageLeftToRight(grid, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
 	}
 	
-	public void createSliceImage(SymmetricColorGrid2D grid, int dotSize, int minWidth, int minHeight, String path, String name) throws Exception {
-		int maxX = grid.getNonSymmetricMaxX(), minX = grid.getNonSymmetricMinX(),
-				maxY = grid.getNonSymmetricMaxY(), minY = grid.getNonSymmetricMinY();
-		int dataWidth = (maxX - minX + 1) * dotSize;
-		int dataHeight = (maxY - minY + 1) * dotSize;
-		int width = Math.max(dataWidth, minWidth);
+	public void createNonSymmetricImage(SymmetricColorGrid2D grid, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
+			int minWidth, int minHeight, String path, String name) throws Exception {
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
+		int width = Math.max(dataWidth, minWidth); //TODO: make separate images when grid overflows
 		int height = Math.max(dataHeight, minHeight);
 		long longByteCount = (long)width * height * 3;
 		if (longByteCount > Integer.MAX_VALUE)
 			throw new Exception("Integer max value exceeded");
 		int byteCount = (int)longByteCount;
 		byte[] pixelData = new byte[byteCount];
-		int topMargin = height - dataHeight;
-		int rightMargin = width - dataWidth;
-		int dataIndex = topMargin * width * 3;		
-		for (int y = maxY; y >= minY; y--) {
-			for (int i = 0; i < dotSize; i++) {
-				for (int x = minX; x <= maxX; x++) {
-					if (x >= y) {
-						java.awt.Color c = grid.getNonSymmetricColorAt(x, y);
-						for (int j = 0; j < dotSize; j++) {
-							pixelData[dataIndex++] = (byte) c.getRed();
-							pixelData[dataIndex++] = (byte) c.getGreen();
-							pixelData[dataIndex++] = (byte) c.getBlue();
-						}
-					} else
-						dataIndex += 3 * dotSize;					
+		int canvasTopMargin = height - dataHeight;
+		int canvasRightMargin = width - dataWidth;
+		int gridTopMargin = 0;
+		int framedGridMinY, framedGridMaxY;
+		int gridMaxY = grid.getNonSymmetricMaxY(), gridMinY = grid.getNonSymmetricMinY();
+		if (maxY > gridMaxY) {
+			gridTopMargin = (maxY - gridMaxY) * gridPositionSize;
+			framedGridMaxY = gridMaxY;
+		} else {
+			framedGridMaxY = maxY;
+		}
+		if (minY < gridMinY) {
+			framedGridMinY = gridMinY;
+		} else {
+			framedGridMinY = minY;
+		}
+		int dataIndex = (canvasTopMargin + gridTopMargin) * width * 3;
+		for (int y = framedGridMaxY; y >= framedGridMinY; y--) {
+			int gridMinXAtY = grid.getNonSymmetricMinX(y);
+			int gridMaxXAtY = grid.getNonSymmetricMaxX(y);
+			int gridLeftMargin = 0, gridRightMargin = 0;
+			int framedGridMinXAtY, framedGridMaxXAtY;
+			if (minX < gridMinXAtY) {
+				gridLeftMargin = (gridMinXAtY - minX) * gridPositionSize;
+				framedGridMinXAtY = gridMinXAtY;
+			} else {
+				framedGridMinXAtY = minX;
+			}
+			if (maxX > gridMaxXAtY) {
+				gridRightMargin = (maxX - gridMaxXAtY) * gridPositionSize;
+				framedGridMaxXAtY = gridMaxXAtY;
+			} else {
+				framedGridMaxXAtY = maxX;
+			}
+			for (int i = 0; i < gridPositionSize; i++) {
+				dataIndex += gridLeftMargin * 3;
+				for (int x = framedGridMinXAtY; x <= framedGridMaxXAtY; x++) {
+					java.awt.Color c = grid.getNonSymmetricColor(x, y);
+					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = r;
+						pixelData[dataIndex++] = g;
+						pixelData[dataIndex++] = b;
+					}				
 				}
-				dataIndex += 3 * rightMargin;
+				dataIndex += (canvasRightMargin + gridRightMargin) * 3;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
 	}
 	
+	public void createNonSymmetricImageLeftToRight(SymmetricColorGrid2D gridRegion, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
+			int minWidth, int minHeight, String path, String name) throws Exception {
+		
+		int framedGridWidth = maxX - minX + 1;
+		int framedGridHeight = maxY - minY + 1;
+		
+		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
+		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
+		
+		int imageWidth = Math.max(framedGridWidthInPixels, minWidth); //TODO: make separate images when grid overflows
+		int imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
+		
+		
+		long longByteCount = (long)imageWidth * imageHeight * 3;
+		if (longByteCount > Integer.MAX_VALUE)
+			throw new Exception("Integer max value exceeded");
+		int byteCount = (int)longByteCount;
+		byte[] pixelData = new byte[byteCount];	
+		
+		
+		int canvasTopMargin = imageHeight - framedGridHeightInPixels;
+//		int canvasRightMargin = imageWidth - framedGridWidthInPixels;
+		
+		
+		int regionMinX = gridRegion.getNonSymmetricMinX();
+		int regionMaxX = gridRegion.getNonSymmetricMaxX();
+		int framedRegionMinX, framedRegionMaxX;
+		if (minX < regionMinX) {
+			framedRegionMinX = regionMinX;
+		} else {
+			framedRegionMinX = minX;
+		}
+		if (maxX > regionMaxX) {
+			framedRegionMaxX = regionMaxX;
+		} else {
+			framedRegionMaxX = maxX;
+		}
+		
+		for (int x = framedRegionMinX, xx = x - minX; x <= framedRegionMaxX; x++, xx++) {
+			
+			int regionMaxY = gridRegion.getNonSymmetricMaxY(x);
+			int regionMinY = gridRegion.getNonSymmetricMinY(x);
+			int framedRegionMinYAtX, framedRegionMaxYAtX;
+			if (maxY > regionMaxY) {
+				framedRegionMaxYAtX = regionMaxY;
+			} else {
+				framedRegionMaxYAtX = maxY;
+			}
+			if (minY < regionMinY) {
+				framedRegionMinYAtX = regionMinY;
+			} else {
+				framedRegionMinYAtX = minY;
+			}
+					
+			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
+				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y++, yy++) {
+					java.awt.Color c = gridRegion.getNonSymmetricColor(x, y);
+					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
+					
+					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;
+					int dataIndex = (((framedGridSquentialIndex / framedGridWidth) * gridPositionSize * imageWidth)
+							+ ((framedGridSquentialIndex % framedGridWidth) * gridPositionSize) 
+							+ (hBandIndex * imageWidth)
+							+ (canvasTopMargin * imageWidth)) * 3;
+					
+					for (int vBandIndex = 0; vBandIndex < gridPositionSize; vBandIndex++) {
+						pixelData[dataIndex++] = r;
+						pixelData[dataIndex++] = g;
+						pixelData[dataIndex++] = b;
+					}				
+				}
+			}
+			
+		}
+		saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
+	}
+
 	public void createSliceImage(ColorGrid2D grid, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
-		int dotSize = getDotSize(grid, minWidth, minHeight);
-		createSliceImage(grid, dotSize, minWidth, minHeight, path, name);
+		int gridPositionSize = getGridPositionSize(grid, minWidth, minHeight);
+		createSliceImage(grid, gridPositionSize, minWidth, minHeight, path, name);
 	}
 	
-	public void createSliceImage(ColorGrid2D grid, int dotSize, int minWidth, int minHeight, String path, String name) throws Exception {
+	public void createSliceImage(ColorGrid2D grid, int gridPositionSize, int minWidth, int minHeight, String path, String name) throws Exception {
 		int maxX = grid.getMaxX(), minX = grid.getMinX(),
 				maxY = grid.getMaxY(), minY = grid.getMinY();
-		int dataWidth = (maxX - minX + 1) * dotSize;
-		int dataHeight = (maxY - minY + 1) * dotSize;
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
 		int width = Math.max(dataWidth, minWidth);
 		int height = Math.max(dataHeight, minHeight);
 		long longByteCount = (long)width * height * 3;
@@ -683,17 +1067,17 @@ public class CAImgMaker {
 		int rightMargin = width - dataWidth;
 		int dataIndex = topMargin * width * 3;		
 		for (int y = maxY, yy = maxY - minY; y >= minY; y--, yy--) {
-			for (int i = 0; i < dotSize; i++) {
+			for (int i = 0; i < gridPositionSize; i++) {
 				for (int x = minX, xx = 0; x <= maxX; x++, xx++) {
 					if (xx >= yy) {
-						java.awt.Color c = grid.getColorAt(x, y);
-						for (int j = 0; j < dotSize; j++) {
+						java.awt.Color c = grid.getColor(x, y);
+						for (int j = 0; j < gridPositionSize; j++) {
 							pixelData[dataIndex++] = (byte) c.getRed();
 							pixelData[dataIndex++] = (byte) c.getGreen();
 							pixelData[dataIndex++] = (byte) c.getBlue();
 						}
 					} else
-						dataIndex += 3 * dotSize;					
+						dataIndex += 3 * gridPositionSize;					
 				}
 				dataIndex += 3 * rightMargin;
 			}
@@ -703,14 +1087,14 @@ public class CAImgMaker {
 	
 	public void createImage(ColorGrid2D grid, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
-		int dotSize = getDotSize(grid, minWidth, minHeight);
-		createImage(grid, dotSize, minWidth, minHeight, path, name);
+		int gridPositionSize = getGridPositionSize(grid, minWidth, minHeight);
+		createImage(grid, gridPositionSize, minWidth, minHeight, path, name);
 	}
 	
-	public void createImage(ColorGrid2D grid, int dotSize, int minWidth, int minHeight, String path, String name) throws Exception {
+	public void createImage(ColorGrid2D grid, int gridPositionSize, int minWidth, int minHeight, String path, String name) throws Exception {
 		int maxX = grid.getMaxX(), minX = grid.getMinX(), maxY = grid.getMaxY(), minY = grid.getMinY();
-		int dataWidth = (maxX - minX + 1) * dotSize;
-		int dataHeight = (maxY - minY + 1) * dotSize;
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
 		int width = Math.max(dataWidth, minWidth);
 		int height = Math.max(dataHeight, minHeight);
 		long longByteCount = (long)width * height * 3;
@@ -722,10 +1106,10 @@ public class CAImgMaker {
 		int rightMargin = width - dataWidth;
 		int dataIndex = topMargin * width * 3;		
 		for (int y = maxY; y >= minY; y--) {
-			for (int i = 0; i < dotSize; i++) {
+			for (int i = 0; i < gridPositionSize; i++) {
 				for (int x = minX; x <= maxX; x++) {
-					java.awt.Color c = grid.getColorAt(x,y);
-					for (int j = 0; j < dotSize; j++) {
+					java.awt.Color c = grid.getColor(x,y);
+					for (int j = 0; j < gridPositionSize; j++) {
 						pixelData[dataIndex++] = (byte) c.getRed();
 						pixelData[dataIndex++] = (byte) c.getGreen();
 						pixelData[dataIndex++] = (byte) c.getBlue();
@@ -736,8 +1120,8 @@ public class CAImgMaker {
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
 	}
-	
-	public void saveAsPngImage(byte[] pixelData, int width, int height, String path, String name) throws IOException {
+
+	public static void saveAsPngImage(byte[] pixelData, int width, int height, String path, String name) throws IOException {
 		DataBuffer buffer = new DataBufferByte(pixelData, pixelData.length);
 		//3 bytes per pixel: red, green, blue
 		WritableRaster raster = Raster.createInterleavedRaster(buffer, width, height, 3 * width, 3, new int[] {0, 1, 2}, (Point)null);
@@ -751,23 +1135,44 @@ public class CAImgMaker {
 		ImageIO.write(image, "png", new File(pathName));
 	}
 	
-	private void backup(Object obj, String path, String name) throws FileNotFoundException, IOException {
-		String pathName = path + "/" + name;
-		System.out.println("Backing up instance at '" + pathName + "'");
-		File dir = new File(path);
-		if (!dir.exists())
-			dir.mkdirs();
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
-		out.writeObject(obj);
-		out.flush();
-		out.close();
-	}
-	
-	private static Object restore(String pathName) throws FileNotFoundException, IOException, ClassNotFoundException {
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(pathName));
-		Object obj = in.readObject();
-		in.close();
-		return obj;
+	public static long[][] parseCSVLong2DArray(String pathName) throws IOException {
+		long[][] array = null;
+		try(BufferedReader br = new BufferedReader(new FileReader(pathName))) {
+		    String line = br.readLine();
+		    if (line != null) {
+		    	List<long[]> rows = new ArrayList<long[]>();
+		    	int lineIndex = 1; 
+		    	String[] elements = line.split(",");
+		    	int colCount = elements.length;
+		    	long[] row = new long[colCount];
+		    	for (int i = 0; i < colCount; i++) {
+		    		row[i] = Long.parseLong(elements[i]);
+		    	}
+		    	rows.add(row);
+		    	line = br.readLine();
+		    	while (line != null) {
+		    		lineIndex++;
+		    		elements = line.split(",");
+		    		if (elements.length != colCount)
+		    			throw new IllegalArgumentException("Wrong number of elements at line " + lineIndex);
+		    		row = new long[colCount];
+			    	for (int i = 0; i < colCount; i++) {
+			    		row[i] = Long.parseLong(elements[i]);
+			    	}
+			    	rows.add(row);
+			        line = br.readLine();
+			    }
+		    	int rowCount = rows.size();
+		    	array = new long[colCount][rowCount];
+		    	for (int y = 0; y < rowCount; y++) {
+		    		row = rows.get(y);
+	    			for (int x = 0; x < colCount; x++) {
+	    				array[x][y] = row[x];
+			    	}
+		    	}
+		    }
+		}
+		return array;
 	}
 	
 	private class StdInRunnable implements Runnable {

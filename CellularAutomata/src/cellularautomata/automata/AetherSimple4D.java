@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package cellularautomata.automata;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -236,7 +238,7 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 		};
 	}
 	
-	public long getValueAt(int w, int x, int y, int z){
+	public long getValue(int w, int x, int y, int z){
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -366,7 +368,7 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the current step
 	 */
-	public long getCurrentStep() {
+	public long getStep() {
 		return currentStep;
 	}
 	
@@ -411,8 +413,8 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 		return getMaxZ();
 	}
 
-	public long getNonSymmetricValueAt(int w, int x, int y, int z) {
-		return getValueAt(w, x, y, z);
+	public long getNonSymmetricValue(int w, int x, int y, int z) {
+		return getValue(w, x, y, z);
 	}
 
 	@Override
@@ -429,10 +431,11 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 	public long getBackgroundValue() {
 		return 0;
 	}
-
+	
 	@Override
-	public CustomSymmetricLongCA4DData getData() {
-		return new CustomSymmetricLongCA4DData(grid, initialValue, 0, currentStep, boundsReached, getMaxX(), getMaxY(), getMaxZ());
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		CustomSymmetricLongCA4DData data = new CustomSymmetricLongCA4DData(grid, initialValue, 0, currentStep, 
+				boundsReached, getMaxX(), getMaxY(), getMaxZ());
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
-
 }

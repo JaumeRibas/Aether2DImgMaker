@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,10 +21,12 @@ public abstract class SymmetricIntGrid2D extends IntGrid2D implements SymmetricG
 	/**
 	 * <p>
 	 * Returns the value at a given position within the non symmetric section of the grid.
-	 * That is, where the x is larger or equal to {@link #getNonSymmetricMinX()} 
-	 * and smaller or equal to {@link #getNonSymmetricMaxX()}; 
-	 * and the y is is larger or equal to {@link #getNonSymmetricMinY()} 
-	 * and smaller or equal to {@link #getNonSymmetricMaxY()}.
+	 * That is, where the x-coordinate is inside the [{@link #getNonSymmetricMinX()}, {@link #getNonSymmetricMaxX()}] bounds 
+	 * and the y-coordinate is inside the [{@link #getNonSymmetricMinY(int x)}, {@link #getNonSymmetricMaxY(int x)}] bounds.
+	 * </p>
+	 * <p>
+	 * Or where the y-coordinate is inside the [{@link #getNonSymmetricMinY()}, {@link #getNonSymmetricMaxY()}] bounds 
+	 * and the x-coordinate is inside the [{@link #getNonSymmetricMinX(int y)}, {@link #getNonSymmetricMaxX(int y)}] bounds.
 	 * </p>
 	 * <p>
 	 * The result of getting the value of a position outside this bounds is undefined.
@@ -33,16 +35,19 @@ public abstract class SymmetricIntGrid2D extends IntGrid2D implements SymmetricG
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
 	 * @return the {@link long} value at (x,y)
+	 * @throws Exception 
 	 */
-	public abstract int getNonSymmetricValueAt(int x, int y);
+	public abstract int getNonSymmetricValue(int x, int y) throws Exception;
 	
-	public int[] getMinAndMaxValue() {
+	public int[] getMinAndMaxValue() throws Exception {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		int maxValue = getNonSymmetricValueAt(minX, minY), minValue = maxValue;
-		for (int y = minY; y <= maxY; y++) {
-			for (int x = minX; x <= maxX; x++) {
-				int value = getNonSymmetricValueAt(x, y);
+				maxY = getNonSymmetricMaxY(minX), minY = getNonSymmetricMinY(minX);
+		int maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getNonSymmetricMinY(x);
+			maxY = getNonSymmetricMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				int value = getNonSymmetricValue(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -52,13 +57,15 @@ public abstract class SymmetricIntGrid2D extends IntGrid2D implements SymmetricG
 		return new int[]{ minValue, maxValue };
 	}
 	
-	public int[] getMinAndMaxValue(int backgroundValue) {
+	public int[] getMinAndMaxValue(int backgroundValue) throws Exception {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		int maxValue = getNonSymmetricValueAt(minX, minY), minValue = maxValue;
-		for (int y = minY; y <= maxY; y++) {
-			for (int x = minX; x <= maxX; x++) {
-				int value = getNonSymmetricValueAt(x, y);
+				maxY = getNonSymmetricMaxY(minX), minY = getNonSymmetricMinY(minX);
+		int maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getNonSymmetricMinY(x);
+			maxY = getNonSymmetricMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				int value = getNonSymmetricValue(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;

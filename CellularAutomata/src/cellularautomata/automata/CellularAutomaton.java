@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package cellularautomata.automata;
 
-import java.util.concurrent.ExecutionException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public interface CellularAutomaton {	
 		
@@ -25,17 +26,16 @@ public interface CellularAutomaton {
 	 * or not the state changed. 
 	 *  
 	 * @return true if the state changed or false otherwise
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
-	public boolean nextStep() throws InterruptedException, ExecutionException;
+	public boolean nextStep() throws Exception;
 	
 	/**
 	 * Returns the current step
 	 * 
 	 * @return the current step
 	 */
-	public long getCurrentStep();
+	public long getStep();
 	
 	/**
 	 * Return the cellular automaton's name in a format that can be used in file names
@@ -51,4 +51,15 @@ public interface CellularAutomaton {
 	 * @return the path
 	 */
 	public String getSubFolderPath();
+
+	/**
+	 * Backs up the state of the automaton to a file or folder for future restoration.<br/>
+	 * The state can be restored passing a path to this file or folder to the constructor.<br/>
+	 * 
+	 * @param backupPath the storage location where the backup will be stored
+	 * @param backupName the name of the backup
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException;
 }

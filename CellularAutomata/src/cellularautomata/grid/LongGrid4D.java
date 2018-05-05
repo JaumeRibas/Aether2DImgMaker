@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,19 +27,19 @@ public abstract class LongGrid4D implements Grid4D, LongGrid {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (w,x,y,z)
 	 */
-	public abstract long getValueAt(int w, int x, int y, int z);
+	public abstract long getValue(int w, int x, int y, int z);
 
 	public long[] getMinAndMaxValue() {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		long maxValue = getValueAt(minW, minX, minY, minZ), minValue = maxValue;
+		long maxValue = getValue(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						long value = getValueAt(w, x, y, z);
+						long value = getValue(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -56,12 +56,12 @@ public abstract class LongGrid4D implements Grid4D, LongGrid {
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		long maxValue = getValueAt(minW, minX, minY, minZ), minValue = maxValue;
+		long maxValue = getValue(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						long value = getValueAt(w, x, y, z);
+						long value = getValue(w, x, y, z);
 						if (value != backgroundValue) {
 							if (value > maxValue)
 								maxValue = value;
@@ -85,7 +85,7 @@ public abstract class LongGrid4D implements Grid4D, LongGrid {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						total += getValueAt(w, x, y, z);
+						total += getValue(w, x, y, z);
 					}
 				}	
 			}	

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-
 import cellularautomata.grid.SymmetricLongGrid2D;
 
 public class ColorMappedSymmetricLongGrid2DWithBackground extends ColorMappedSymmetricLongGrid2D {
@@ -33,8 +32,8 @@ public class ColorMappedSymmetricLongGrid2DWithBackground extends ColorMappedSym
 	}
 
 	@Override
-	public Color getColorAt(int x, int y) {
-		long value = grid.getValueAt(x, y);
+	public Color getColor(int x, int y) throws Exception {
+		long value = source.getValue(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
@@ -42,8 +41,8 @@ public class ColorMappedSymmetricLongGrid2DWithBackground extends ColorMappedSym
 	}
 	
 	@Override
-	public Color getNonSymmetricColorAt(int x, int y) {
-		long value = grid.getNonSymmetricValueAt(x, y);
+	public Color getNonSymmetricColor(int x, int y) throws Exception {
+		long value = source.getNonSymmetricValue(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,6 +15,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 package cellularautomata.automata;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {	
 
@@ -38,8 +41,8 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 	public SpreadIntegerValue3D(long initialValue) {
 		this.initialValue = initialValue;
 		grid = new long[2][][];
-		grid[0] = buildGridBlock(0);
-		grid[1] = buildGridBlock(1);
+		grid[0] = buildGridSlice(0);
+		grid[1] = buildGridSlice(1);
 		grid[0][0][0] = this.initialValue;
 		maxY = 0;
 		maxZ = 0;
@@ -63,11 +66,11 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 		}
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridBlock(0);
+		newGrid[0] = buildGridSlice(0);
 		for (int x = 0; x < grid.length; x++) {
 			int nextX = x + 1;
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridBlock(nextX);
+				newGrid[nextX] = buildGridSlice(nextX);
 			}
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {
@@ -157,15 +160,15 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 		return changed;
 	}
 	
-	private long[][] buildGridBlock(int x) {
-		long[][] newGridBlock = new long[x + 1][];
-		for (int y = 0; y < newGridBlock.length; y++) {
-			newGridBlock[y] = new long[y + 1];
+	private long[][] buildGridSlice(int x) {
+		long[][] newGridSlice = new long[x + 1][];
+		for (int y = 0; y < newGridSlice.length; y++) {
+			newGridSlice[y] = new long[y + 1];
 		}
-		return newGridBlock;
+		return newGridSlice;
 	}
 	
-	public long getValueAt(int x, int y, int z){	
+	public long getValue(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -195,14 +198,8 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 		}
 	}
 	
-	public long getNonSymmetricValueAt(int x, int y, int z){	
-		if (x < grid.length 
-				&& y < grid[x].length 
-				&& z < grid[x][y].length) {
-			return grid[x][y][z];
-		} else {
-			return 0;
-		}
+	public long getNonSymmetricValue(int x, int y, int z){	
+		return grid[x][y][z];
 	}
 	
 	@Override
@@ -270,7 +267,7 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 	 * 
 	 * @return the current step
 	 */
-	public long getCurrentStep() {
+	public long getStep() {
 		return currentStep;
 	}
 	
@@ -282,10 +279,11 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 	public long getInitialValue() {
 		return initialValue;
 	}
-
+	
 	@Override
-	public CustomSymmetricLongCA3DData getData() {
-		return new CustomSymmetricLongCA3DData(grid, initialValue, 0, currentStep, xBoundReached, maxY, maxZ);
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		CustomSymmetricLongCA3DData data = new CustomSymmetricLongCA3DData(grid, initialValue, 0, currentStep, xBoundReached, maxY, maxZ);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 
 	@Override
@@ -301,5 +299,95 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
+	}
+	
+	@Override
+	public int getNonSymmetricMinXAtY(int y) {
+		return y;
+	}
+
+	@Override
+	public int getNonSymmetricMinXAtZ(int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y, int z) {
+		return Math.max(y, z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxXAtY(int y) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMaxXAtZ(int z) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y, int z) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMinYAtX(int x) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMinYAtZ(int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x, int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonSymmetricMaxYAtX(int x) {
+		return Math.min(getNonSymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxYAtZ(int z) {
+		return getNonSymmetricMaxY();
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x, int z) {
+		return Math.min(getNonSymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getNonSymmetricMinZAtX(int x) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMinZAtY(int y) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMinZ(int x, int y) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMaxZAtX(int x) {
+		return Math.min(getNonSymmetricMaxZ(), x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxZAtY(int y) {
+		return Math.min(getNonSymmetricMaxZ(), y);
+	}
+
+	@Override
+	public int getNonSymmetricMaxZ(int x, int y) {
+		return Math.min(getNonSymmetricMaxZ(), y);
 	}
 }

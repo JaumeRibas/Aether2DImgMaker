@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,37 +38,37 @@ public class GrayscaleWithBackgroundMapper extends ColorMapper {
 	}
 	
 	@Override
-	protected ColorGrid2D getMappedGrid(LongGrid2D grid, long minValue, long maxValue) {
+	public ColorMappedLongGrid2D getMappedLongGrid(LongGrid2D grid, long minValue, long maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, backgroundValue, backgroundColor);
 	}
 
 	@Override
-	protected SymmetricColorGrid2D getMappedGrid(SymmetricLongGrid2D grid, long minValue, long maxValue) {
+	public ColorMappedSymmetricLongGrid2D getMappedLongGrid(SymmetricLongGrid2D grid, long minValue, long maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedSymmetricLongGrid2DWithBackground(grid, colorMap, backgroundValue, backgroundColor);
 	}
 
 	@Override
-	protected ColorGrid2D getMappedGrid(IntGrid2D grid, int minValue, int maxValue) {
+	public ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (int) backgroundValue, backgroundColor);
 	}
 
 	@Override
-	protected SymmetricColorGrid2D getMappedGrid(SymmetricIntGrid2D grid, int minValue, int maxValue) {
+	public ColorMappedSymmetricIntGrid2D getMappedIntGrid(SymmetricIntGrid2D grid, int minValue, int maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedSymmetricIntGrid2DWithBackground(grid, colorMap, (int) backgroundValue, backgroundColor);
 	}
 	
 	@Override
-	protected ColorGrid2D getMappedGrid(ShortGrid2D grid, short minValue, short maxValue) {
+	public ColorMappedShortGrid2D getMappedShortGrid(ShortGrid2D grid, short minValue, short maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, (short) backgroundValue, backgroundColor);
 	}
 
 	@Override
-	protected SymmetricColorGrid2D getMappedGrid(SymmetricShortGrid2D grid, short minValue, short maxValue) {
+	public ColorMappedSymmetricShortGrid2D getMappedShortGrid(SymmetricShortGrid2D grid, short minValue, short maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedSymmetricShortGrid2DWithBackground(grid, colorMap, (short) backgroundValue, backgroundColor);
 	}

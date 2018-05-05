@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,27 +27,27 @@ import cellularautomata.grid.SymmetricShortGrid2D;
 
 public abstract class ColorMapper {
 		
-	protected abstract ColorGrid2D getMappedGrid(LongGrid2D grid, long minValue, long maxValue);
-	protected abstract ColorGrid2D getMappedGrid(IntGrid2D grid, int minValue, int maxValue);
-	protected abstract ColorGrid2D getMappedGrid(ShortGrid2D grid, short minValue, short maxValue);
-	protected abstract SymmetricColorGrid2D getMappedGrid(SymmetricLongGrid2D grid, long minValue, long maxValue);
-	protected abstract SymmetricColorGrid2D getMappedGrid(SymmetricIntGrid2D grid, int minValue, int maxValue);
-	protected abstract SymmetricColorGrid2D getMappedGrid(SymmetricShortGrid2D grid, short minValue, short maxValue);
+	public abstract ColorMappedLongGrid2D getMappedLongGrid(LongGrid2D grid, long minValue, long maxValue);
+	public abstract ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue);
+	public abstract ColorMappedShortGrid2D getMappedShortGrid(ShortGrid2D grid, short minValue, short maxValue);
+	public abstract ColorMappedSymmetricLongGrid2D getMappedLongGrid(SymmetricLongGrid2D grid, long minValue, long maxValue);
+	public abstract ColorMappedSymmetricIntGrid2D getMappedIntGrid(SymmetricIntGrid2D grid, int minValue, int maxValue);
+	public abstract ColorMappedSymmetricShortGrid2D getMappedShortGrid(SymmetricShortGrid2D grid, short minValue, short maxValue);
 	
 	public ColorGrid2D getMappedGrid(Grid2D grid, long minValue, long maxValue) {
 		ColorGrid2D mappedGrid = null;
 		if (grid instanceof LongGrid2D) {
-			mappedGrid = getMappedGrid((LongGrid2D)grid, minValue, maxValue);
+			mappedGrid = getMappedLongGrid((LongGrid2D)grid, minValue, maxValue);
 		} else if (grid instanceof SymmetricLongGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricLongGrid2D)grid, minValue, maxValue);
+			mappedGrid = getMappedLongGrid((SymmetricLongGrid2D)grid, minValue, maxValue);
 		} else if (grid instanceof IntGrid2D) {
-			mappedGrid = getMappedGrid((IntGrid2D)grid, (int)minValue, (int)maxValue);
+			mappedGrid = getMappedIntGrid((IntGrid2D)grid, (int)minValue, (int)maxValue);
 		} else if (grid instanceof SymmetricIntGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricIntGrid2D)grid, (int)minValue, (int)maxValue);
+			mappedGrid = getMappedIntGrid((SymmetricIntGrid2D)grid, (int)minValue, (int)maxValue);
 		} else if (grid instanceof ShortGrid2D) {
-			mappedGrid = getMappedGrid((ShortGrid2D)grid, (short)minValue, (short)maxValue);
+			mappedGrid = getMappedShortGrid((ShortGrid2D)grid, (short)minValue, (short)maxValue);
 		} else if (grid instanceof SymmetricShortGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricShortGrid2D)grid, (short)minValue, (short)maxValue);
+			mappedGrid = getMappedShortGrid((SymmetricShortGrid2D)grid, (short)minValue, (short)maxValue);
 		} else {
 			throw new IllegalArgumentException(
 					"Missing else if branch for Grid2D subtype " 
@@ -59,11 +59,11 @@ public abstract class ColorMapper {
 	public SymmetricColorGrid2D getMappedSymmetricGrid(SymmetricGrid2D grid, long minValue, long maxValue) {
 		SymmetricColorGrid2D mappedGrid = null;
 		if (grid instanceof SymmetricLongGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricLongGrid2D)grid, minValue, maxValue);
+			mappedGrid = getMappedLongGrid((SymmetricLongGrid2D)grid, minValue, maxValue);
 		} else if (grid instanceof SymmetricIntGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricIntGrid2D)grid, (int)minValue, (int)maxValue);
+			mappedGrid = getMappedIntGrid((SymmetricIntGrid2D)grid, (int)minValue, (int)maxValue);
 		} else if (grid instanceof SymmetricShortGrid2D) {
-			mappedGrid = getMappedGrid((SymmetricShortGrid2D)grid, (short)minValue, (short)maxValue);
+			mappedGrid = getMappedShortGrid((SymmetricShortGrid2D)grid, (short)minValue, (short)maxValue);
 		} else {
 			throw new IllegalArgumentException(
 					"Missing else if branch for SymmetricGrid2D subtype " 
@@ -71,4 +71,19 @@ public abstract class ColorMapper {
 		}
 		return mappedGrid;
 	}
+	
+//	/**
+//	 * Return the color mapper's name in a format that can be used in file names
+//	 * 
+//	 * @return the name
+//	 */
+//	public abstract String getName();
+//	
+//	/**
+//	 * Return the color mapper's name and configuration as a folder and sub-folder(s) path.
+//	 * For example: "<Name>/<backgroundValue>/<backgroundColor>"
+//	 * 
+//	 * @return the path
+//	 */
+//	public abstract String getSubFolderPath();
 }

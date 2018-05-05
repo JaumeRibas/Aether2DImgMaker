@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package cellularautomata.automata;
 
-import java.math.BigInteger;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -207,7 +208,7 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	 * @param y the position on the y-coordinate
 	 * @return the value at (x,y)
 	 */
-	public long getValueAt(int x, int y){	
+	public long getValue(int x, int y){	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 
@@ -289,7 +290,7 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	 * 
 	 * @return the current step
 	 */
-	public long getCurrentStep() {
+	public long getStep() {
 		return currentStep;
 	}
 	
@@ -323,8 +324,8 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public long getNonSymmetricValueAt(int x, int y) {
-		return getValueAt(x, y);
+	public long getNonSymmetricValue(int x, int y) {
+		return getValue(x, y);
 	}
 
 	@Override
@@ -340,5 +341,35 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
+	}
+
+	@Override
+	public LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY) {
+		return new SymmetricLongCASubGrid2D(this, minX, maxX, minY, maxY);
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y) {
+		return y;
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y) {
+		return getMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x) {
+		return Math.min(getNonSymmetricMaxY(), x);
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		throw new UnsupportedOperationException();
 	}
 }

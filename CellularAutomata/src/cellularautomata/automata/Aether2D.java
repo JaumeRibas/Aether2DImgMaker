@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  */
 package cellularautomata.automata;
 
-import java.math.BigInteger;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Aether2D extends SymmetricLongCellularAutomaton2D {
 
@@ -43,9 +44,9 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 	public Aether2D(long initialValue) {
 		this.initialValue = initialValue;
 		grid = new long[3][];
-		grid[0] = buildGridBlock(0);
-		grid[1] = buildGridBlock(1);
-		grid[2] = buildGridBlock(2);
+		grid[0] = buildGridSlice(0);
+		grid[1] = buildGridSlice(1);
+		grid[2] = buildGridSlice(2);
 		grid[0][0] = initialValue;
 		maxY = 0;
 		boundsReached = false;
@@ -62,18 +63,18 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		}
 		maxXMinusOne = newGrid.length - 2;
 		changed = false;
-		newGrid[0] = buildGridBlock(0);
+		newGrid[0] = buildGridSlice(0);
 		boolean isFirst = true;
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridBlock(nextX);
+				newGrid[nextX] = buildGridSlice(nextX);
 			}
 			for (int y = 0; y <= x; y++) {
 				long value = this.grid[x][y];
-				long up = getValueAt(x, y + 1);
-				long down = getValueAt(x, y - 1); 
-				long left = getValueAt(x - 1, y);
-				long right = getValueAt(x + 1, y);
+				long up = getValue(x, y + 1);
+				long down = getValue(x, y - 1); 
+				long left = getValue(x - 1, y);
+				long right = getValue(x + 1, y);
 				
 				//the "aetherLogicMethod*" methods have been machine generated using the code in the AetherGen folder
 				value = aetherLogicMethod1(newGrid, value, right, left, up, down, x, y);
@@ -4996,9 +4997,9 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		return value;
 	}
 	
-	private long[] buildGridBlock(int x) {
-		long[] newGridBlock = new long[x + 1];
-		return newGridBlock;
+	private long[] buildGridSlice(int x) {
+		long[] newGridSlice = new long[x + 1];
+		return newGridSlice;
 	}
 	
 	private void addRight(long[][] grid, int x, int y, long value) {
@@ -5047,7 +5048,7 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	public long getValueAt(int x, int y){	
+	public long getValue(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -5063,13 +5064,8 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	public long getNonSymmetricValueAt(int x, int y){	
-		if (x < grid.length 
-				&& y < grid[x].length) {
-			return grid[x][y];
-		} else {
-			return 0;
-		}
+	public long getNonSymmetricValue(int x, int y){	
+		return grid[x][y];
 	}
 	
 	public int getNonSymmetricMinX() {
@@ -5127,7 +5123,7 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public long getCurrentStep() {
+	public long getStep() {
 		return currentStep;
 	}
 
@@ -5139,5 +5135,35 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
+	}
+
+	@Override
+	public LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY) {
+		return new SymmetricLongCASubGrid2D(this, minX, maxX, minY, maxY);
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y) {
+		return y;
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x) {
+		return Math.min(getNonSymmetricMaxY(), x);
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		throw new UnsupportedOperationException();
 	}
 }

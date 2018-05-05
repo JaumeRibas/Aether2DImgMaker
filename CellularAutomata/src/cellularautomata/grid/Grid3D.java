@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,48 +16,270 @@
  */
 package cellularautomata.grid;
 
-public interface Grid3D {
+public interface Grid3D extends Grid {
 	
 	/**
-	 * Returns the smallest x-coordinate
+	 * Returns the smallest x-coordinate of the grid
 	 * 
 	 * @return the smallest x
 	 */
 	public int getMinX();
 	
 	/**
-	 * Returns the largest x-coordinate
+	 * Returns the smallest x-coordinate of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
+	 * or bigger than {@link #getMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the smallest x
+	 */
+	public default int getMinXAtY(int y) {
+		return getMinX();
+	}
+	
+	/**
+	 * Returns the smallest x-coordinate of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
+	 * or bigger than {@link #getMaxZ()}
+	 * 
+	 * @param z the z-coordinate
+	 * @return the smallest x
+	 */
+	public default int getMinXAtZ(int z) {
+		return getMinX();
+	}
+	
+	/**
+	 * Returns the smallest x-coordinate of the grid at (y,z).<br/>
+	 * It's not defined to call this method on a 'y' and 'z' coordinates outside the bounds of [{@link #getMinY()}, 
+	 * {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * 
+	 * @param y the y-coordinate
+	 * @param z the z-coordinate
+	 * @return the smallest x
+	 */
+	public default int getMinX(int y, int z) {
+		return getMinX();
+	}
+	
+	/**
+	 * Returns the largest x-coordinate of the grid
 	 * 
 	 * @return the largest x
 	 */
 	public int getMaxX();
 	
 	/**
-	 * Returns the smallest y-coordinate
+	 * Returns the largest x-coordinate of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
+	 * or bigger than {@link #getMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the largest x
+	 */
+	public default int getMaxXAtY(int y) {
+		return getMaxX();
+	}
+	
+	/**
+	 * Returns the largest x-coordinate of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
+	 * or bigger than {@link #getMaxZ()}
+	 * 
+	 * @param z the z-coordinate
+	 * @return the largest x
+	 */
+	public default int getMaxXAtZ(int z) {
+		return getMaxX();
+	}
+	
+	/**
+	 * Returns the largest x-coordinate of the grid at (y,z).<br/>
+	 * It's not defined to call this method on a 'y' and 'z' coordinates outside the bounds of [{@link #getMinY()}, 
+	 * {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * 
+	 * @param y the y-coordinate
+	 * @param z the z-coordinate
+	 * @return the largest x
+	 */
+	public default int getMaxX(int y, int z) {
+		return getMaxX();
+	}
+	
+	/**
+	 * Returns the smallest y-coordinate of the grid
 	 * 
 	 * @return the smallest y
 	 */
 	public int getMinY();
 	
 	/**
-	 * Returns the largest y-coordinate
+	 * Returns the smallest y-coordinate of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
+	 * or bigger than {@link #getMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the smallest y
+	 */
+	public default int getMinYAtX(int x) {
+		return getMinY();
+	}
+	
+	/**
+	 * Returns the smallest y-coordinate of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
+	 * or bigger than {@link #getMaxZ()}
+	 * 
+	 * @param z the z-coordinate
+	 * @return the smallest y
+	 */
+	public default int getMinYAtZ(int z) {
+		return getMinY();
+	}
+	
+	/**
+	 * Returns the smallest y-coordinate of the grid at (x,z).<br/>
+	 * It's not defined to call this method on a 'x' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
+	 * {@link #getMaxX()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * 
+	 * @param x the x-coordinate
+	 * @param z the z-coordinate
+	 * @return the smallest y
+	 */
+	public default int getMinY(int x, int z) {
+		return getMinY();
+	}
+
+	/**
+	 * Returns the largest y-coordinate of the grid
 	 * 
 	 * @return the largest y
 	 */
 	public int getMaxY();
 	
 	/**
-	 * Returns the smallest z-coordinate
+	 * Returns the largest y-coordinate of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
+	 * or bigger than {@link #getMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the largest y
+	 */
+	public default int getMaxYAtX(int x) {
+		return getMaxY();
+	}
+	
+	/**
+	 * Returns the largest y-coordinate of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
+	 * or bigger than {@link #getMaxZ()}
+	 * 
+	 * @param z the z-coordinate
+	 * @return the largest y
+	 */
+	public default int getMaxYAtZ(int z) {
+		return getMaxY();
+	}
+	
+	/**
+	 * Returns the largest y-coordinate of the grid at (x,z).<br/>
+	 * It's not defined to call this method on a 'x' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
+	 * {@link #getMaxX()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * 
+	 * @param x the x-coordinate
+	 * @param z the z-coordinate
+	 * @return the largest y
+	 */
+	public default int getMaxY(int x, int z) {
+		return getMaxY();
+	}
+	
+	/**
+	 * Returns the smallest z-coordinate of the grid
 	 * 
 	 * @return the smallest z
 	 */
 	public int getMinZ();
 	
 	/**
-	 * Returns the largest z-coordinate
+	 * Returns the smallest z-coordinate of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
+	 * or bigger than {@link #getMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the smallest z
+	 */
+	public default int getMinZAtX(int x) {
+		return getMinZ();
+	}
+	
+	/**
+	 * Returns the smallest z-coordinate of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
+	 * or bigger than {@link #getMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the smallest z
+	 */
+	public default int getMinZAtY(int y) {
+		return getMinZ();
+	}
+	
+	/**
+	 * Returns the smallest z-coordinate of the grid at (x,y).<br/>
+	 * It's not defined to call this method on a 'x' and 'y' coordinates outside the bounds of [{@link #getMinX()}, 
+	 * {@link #getMaxX()}] and [{@link #getMinY()}, {@link #getMaxY()}] 
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @return the smallest z
+	 */
+	public default int getMinZ(int x, int y) {
+		return getMinZ();
+	}
+	
+	/**
+	 * Returns the largest z-coordinate of the grid
 	 * 
 	 * @return the largest z
 	 */
 	public int getMaxZ();
+	
+	/**
+	 * Returns the largest z-coordinate of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
+	 * or bigger than {@link #getMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the largest z
+	 */
+	public default int getMaxZAtX(int x) {
+		return getMaxZ();
+	}
+	
+	/**
+	 * Returns the largest z-coordinate of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
+	 * or bigger than {@link #getMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the largest z
+	 */
+	public default int getMaxZAtY(int y) {
+		return getMaxZ();
+	}
+	
+	/**
+	 * Returns the largest z-coordinate of the grid at (x,y).<br/>
+	 * It's not defined to call this method on a 'x' and 'y' coordinates outside the bounds of [{@link #getMinX()}, 
+	 * {@link #getMaxX()}] and [{@link #getMinY()}, {@link #getMaxY()}] 
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @return the largest z
+	 */
+	public default int getMaxZ(int x, int y) {
+		return getMaxZ();
+	}
 
 }

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,19 +27,19 @@ public abstract class SymmetricIntGrid4D extends IntGrid4D implements SymmetricG
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	public abstract int getNonSymmetricValueAt(int w, int x, int y, int z);
+	public abstract int getNonSymmetricValue(int w, int x, int y, int z);
 
 	public int[] getMinAndMaxValue() {
 		int maxW = getNonSymmetricMaxW(), minW = getNonSymmetricMinW(), 
 				maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
 				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		int maxValue = getNonSymmetricValueAt(minW, minX, minY, minZ), minValue = maxValue;
+		int maxValue = getNonSymmetricValue(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						int value = getNonSymmetricValueAt(w, x, y, z);
+						int value = getNonSymmetricValue(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -56,12 +56,12 @@ public abstract class SymmetricIntGrid4D extends IntGrid4D implements SymmetricG
 				maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
 				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		int maxValue = getNonSymmetricValueAt(minW, minX, minY, minZ), minValue = maxValue;
+		int maxValue = getNonSymmetricValue(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						int value = getNonSymmetricValueAt(w, x, y, z);
+						int value = getNonSymmetricValue(w, x, y, z);
 						if (value != backgroundValue) {
 							if (value > maxValue)
 								maxValue = value;
@@ -81,7 +81,7 @@ public abstract class SymmetricIntGrid4D extends IntGrid4D implements SymmetricG
 	}
 	
 	public SymmetricIntGrid2D crossSection(int y, int z) {
-		return new SymmetricIntGrid4DXSection(this, y, z);
+		return new SymmetricIntGrid4DCrossSection(this, y, z);
 	}
 	
 	public IntGrid3D projected3DEdge(int backgroundValue) {

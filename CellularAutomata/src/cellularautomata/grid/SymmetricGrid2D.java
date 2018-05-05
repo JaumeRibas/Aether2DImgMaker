@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,11 +26,31 @@ public interface SymmetricGrid2D extends Grid2D {
 	public int getNonSymmetricMinX();
 	
 	/**
+	 * Returns the smallest x-coordinate of the non symmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonSymmetricMinY()} 
+	 * or bigger than {@link #getNonSymmetricMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the smallest x
+	 */
+	public int getNonSymmetricMinX(int y);
+	
+	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
 	public int getNonSymmetricMaxX();
+	
+	/**
+	 * Returns the largest x-coordinate of the non symmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonSymmetricMinY()}
+	 * or bigger than {@link #getNonSymmetricMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the largest x
+	 */
+	public int getNonSymmetricMaxX(int y);
 	
 	/**
 	 * Returns the smallest y-coordinate of the non symmetric section of the grid
@@ -40,10 +60,30 @@ public interface SymmetricGrid2D extends Grid2D {
 	public int getNonSymmetricMinY();
 	
 	/**
+	 * Returns the smallest y-coordinate of the non symmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonSymmetricMinX()}
+	 * or bigger than {@link #getNonSymmetricMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the smallest y
+	 */
+	public int getNonSymmetricMinY(int x);
+	
+	/**
 	 * Returns the largest y-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest y
 	 */
 	public int getNonSymmetricMaxY();
+	
+	/**
+	 * Returns the largest y-coordinate of the non symmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonSymmetricMinX()}
+	 * or bigger than {@link #getNonSymmetricMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the largest y
+	 */
+	public int getNonSymmetricMaxY(int x);
 
 }

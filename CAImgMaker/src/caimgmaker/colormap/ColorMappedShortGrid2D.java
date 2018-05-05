@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,36 +22,56 @@ import cellularautomata.grid.ShortGrid2D;
 
 public class ColorMappedShortGrid2D extends ColorGrid2D {
 
-	protected ShortGrid2D grid;
+	protected ShortGrid2D source;
 	protected LongColorMap colorMap;
 	
-	public ColorMappedShortGrid2D(ShortGrid2D grid, LongColorMap colorMap) {
-		this.grid = grid;
+	public ColorMappedShortGrid2D(ShortGrid2D source, LongColorMap colorMap) {
+		this.source = source;
 		this.colorMap = colorMap;
 	}
 		
 	@Override
 	public int getMinX() {
-		return grid.getMinX();
+		return source.getMinX();
 	}
-
+	
+	@Override
+	public int getMinX(int y) {
+		return source.getMinX(y);
+	}
+	
 	@Override
 	public int getMaxX() {
-		return grid.getMaxX();
+		return source.getMaxX();
 	}
-
+	
+	@Override
+	public int getMaxX(int y) {
+		return source.getMaxX(y);
+	}
+	
 	@Override
 	public int getMinY() {
-		return grid.getMinY();
+		return source.getMinY();
 	}
-
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinY(x);
+	}
+	
 	@Override
 	public int getMaxY() {
-		return grid.getMaxY();
+		return source.getMaxY();
+	}
+	
+	@Override
+	public int getMaxY(int x) {
+		return source.getMaxY(x);
 	}
 
 	@Override
-	public Color getColorAt(int x, int y) {
-		return colorMap.getColor(grid.getValueAt(x, y));
+	public Color getColor(int x, int y) throws Exception {
+		return colorMap.getColor(source.getValue(x, y));
 	}
 }

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,4 +25,6 @@ public abstract class SymmetricLongCellularAutomaton2D extends SymmetricLongGrid
 	 * @return the value padding the most part of the grid
 	 */
 	public abstract long getBackgroundValue();
+	
+	public abstract LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY);
 }

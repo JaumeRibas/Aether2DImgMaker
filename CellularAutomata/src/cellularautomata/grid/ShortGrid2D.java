@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,15 +26,15 @@ public abstract class ShortGrid2D implements Grid2D, ShortGrid {
 	 * @param y the position on the y-coordinate
 	 * @return the value at (x,y)
 	 */
-	public abstract short getValueAt(int x, int y);
+	public abstract short getValue(int x, int y);
 	
 	public short[] getMinAndMaxValue() {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		short maxValue = getValueAt(minX, minY), minValue = maxValue;
+		short maxValue = getValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				short value = getValueAt(x, y);
+				short value = getValue(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -53,10 +53,10 @@ public abstract class ShortGrid2D implements Grid2D, ShortGrid {
 	public short[] getMinAndMaxValue(short backgroundValue) {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		short maxValue = getValueAt(minX, minY), minValue = maxValue;
+		short maxValue = getValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				short value = getValueAt(x, y);
+				short value = getValue(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;
@@ -74,7 +74,7 @@ public abstract class ShortGrid2D implements Grid2D, ShortGrid {
 				maxY = getMaxY(), minY = getMinY();
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				total += getValueAt(x, y);
+				total += getValue(x, y);
 			}	
 		}
 		return total;

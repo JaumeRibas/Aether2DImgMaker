@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,16 +33,17 @@ public abstract class SymmetricLongGrid2D extends LongGrid2D implements Symmetri
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
 	 * @return the {@link long} value at (x,y)
+	 * @throws Exception 
 	 */
-	public abstract long getNonSymmetricValueAt(int x, int y);
+	public abstract long getNonSymmetricValue(int x, int y) throws Exception;
 	
-	public long[] getMinAndMaxValue() {
+	public long[] getMinAndMaxValue() throws Exception {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		long maxValue = getNonSymmetricValueAt(minX, minY), minValue = maxValue;
-		for (int y = minY; y <= maxY; y++) {
-			for (int x = minX; x <= maxX; x++) {
-				long value = getNonSymmetricValueAt(x, y);
+		long maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= x && y <= maxY; y++) {
+				long value = getNonSymmetricValue(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -52,13 +53,13 @@ public abstract class SymmetricLongGrid2D extends LongGrid2D implements Symmetri
 		return new long[]{ minValue, maxValue };
 	}
 	
-	public long[] getMinAndMaxValue(long backgroundValue) {
+	public long[] getMinAndMaxValue(long backgroundValue) throws Exception {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		long maxValue = getNonSymmetricValueAt(minX, minY), minValue = maxValue;
-		for (int y = minY; y <= maxY; y++) {
-			for (int x = minX; x <= maxX; x++) {
-				long value = getNonSymmetricValueAt(x, y);
+		long maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= x && y <= maxY; y++) {
+				long value = getNonSymmetricValue(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;

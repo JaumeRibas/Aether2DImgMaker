@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,12 +18,12 @@ package cellularautomata.grid;
 
 public interface IntGrid {
 
-	public int[] getMinAndMaxValue();
+	public int[] getMinAndMaxValue() throws Exception;
 	
-	public int[] getMinAndMaxValue(int backgroundValue);
+	public int[] getMinAndMaxValue(int backgroundValue) throws Exception;
 	
-	public int getTotalValue();
+	public int getTotalValue() throws Exception;
 	
-	public int getMaxAbsoluteValue();
+	public int getMaxAbsoluteValue() throws Exception;
 	
 }

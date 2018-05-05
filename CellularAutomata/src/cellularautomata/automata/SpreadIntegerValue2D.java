@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,6 +15,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 package cellularautomata.automata;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Optimized implementation of the SpreadIntegerValue cellular automaton in 2D.
@@ -45,9 +48,9 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		grid = new long[3][];
-		grid[0] = buildGridBlock(0, backgroundValue);
-		grid[1] = buildGridBlock(1, backgroundValue);
-		grid[2] = buildGridBlock(2, backgroundValue);
+		grid[0] = buildGridSlice(0, backgroundValue);
+		grid[1] = buildGridSlice(1, backgroundValue);
+		grid[2] = buildGridSlice(2, backgroundValue);
 		grid[0][0] = this.initialValue;
 		maxY = 0;
 		xBoundReached = false;
@@ -70,21 +73,21 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 		}
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridBlock(0, 0);
+		newGrid[0] = buildGridSlice(0, 0);
 		boolean isFirst = true;
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
 			if (nextX < grid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, 0);
+				newGrid[nextX] = buildGridSlice(nextX, 0);
 			} else if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridBlock(nextX, backgroundValue);
+				newGrid[nextX] = buildGridSlice(nextX, backgroundValue);
 			}
 			for (int y = 0; y <= x; y++) {
 				long value = grid[x][y];
 				if (value != 0) {
-					long up = getValueAt(x, y + 1);
-					long down = getValueAt(x, y - 1); 
-					long left = getValueAt(x - 1, y);
-					long right = getValueAt(x + 1, y);
+					long up = getValue(x, y + 1);
+					long down = getValue(x, y - 1); 
+					long left = getValue(x - 1, y);
+					long right = getValue(x + 1, y);
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
 					//if the current position is equal to its neighbors the algorithm has no effect
@@ -157,17 +160,17 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 		return changed;
 	}
 	
-	private long[] buildGridBlock(int x, long value) {
-		long[] newGridBlock = new long[x + 1];
+	private long[] buildGridSlice(int x, long value) {
+		long[] newGridSlice = new long[x + 1];
 		if (value != 0) {
-			for (int y = 0; y < newGridBlock.length; y++) {
-				newGridBlock[y] = value;
+			for (int y = 0; y < newGridSlice.length; y++) {
+				newGridSlice[y] = value;
 			}
 		}
-		return newGridBlock;
+		return newGridSlice;
 	}
 	
-	public long getValueAt(int x, int y){	
+	public long getValue(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -183,13 +186,8 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	public long getNonSymmetricValueAt(int x, int y){	
-		if (x < grid.length 
-				&& y < grid[x].length) {
-			return grid[x][y];
-		} else {
-			return backgroundValue;
-		}
+	public long getNonSymmetricValue(int x, int y){	
+		return grid[x][y];
 	}
 	
 	public int getNonSymmetricMinX() {
@@ -213,7 +211,7 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 	 * 
 	 * @return the current step
 	 */
-	public long getCurrentStep() {
+	public long getStep() {
 		return currentStep;
 	}
 	
@@ -259,5 +257,35 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue + "/" + backgroundValue;
+	}
+
+	@Override
+	public LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY) {
+		return new SymmetricLongCASubGrid2D(this, minX, maxX, minY, maxY);
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y) {
+		return y;
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y) {
+		return getNonSymmetricMaxX();
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x) {
+		return 0;
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x) {
+		return Math.min(getNonSymmetricMaxY(), x);
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		throw new UnsupportedOperationException();
 	}
 }

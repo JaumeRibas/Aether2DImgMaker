@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 package cellularautomata.automata;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigInteger;
 
 public class Aether4D extends SymmetricLongCellularAutomaton4D {
@@ -60,9 +62,9 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 		}
 		this.initialValue = initialValue;
 		grid = new long[3][][][];
-		grid[0] = buildGridBlock(0);
-		grid[1] = buildGridBlock(1);
-		grid[2] = buildGridBlock(2);
+		grid[0] = buildGridSlice(0);
+		grid[1] = buildGridSlice(1);
+		grid[2] = buildGridSlice(2);
 		grid[0][0][0][0] = this.initialValue;
 		maxX = 0;
 		maxY = 0;
@@ -72,11 +74,15 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 	}
 	
 	/**
-	 * Creates an instance using the passed data
+	 * Creates an instance restoring a backup
 	 * 
-	 * @param data an instance of {@link CustomSymmetricLongCA4DData}
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
 	 */
-	public Aether4D(CustomSymmetricLongCA4DData data) {
+	public Aether4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		CustomSymmetricLongCA4DData data = (CustomSymmetricLongCA4DData) Utils.deserializeFromFile(backupPath);
 		if (data.getBackgroundValue() != 0)
 			throw new UnsupportedOperationException(
 					"Only background value 0 is suported. Subtract background value from all grid to get same relative values with background value 0");
@@ -104,13 +110,13 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 		}
 		maxWMinusOne = newGrid.length - 2;
 		changed = false;
-		newGrid[0] = buildGridBlock(0);
+		newGrid[0] = buildGridSlice(0);
 		boolean first = true;
 		long[] neighborValues = new long[8];
 		byte[] neighborDirections = new byte[8];
 		for (int w = 0, nextW = 1; w < grid.length; w++, nextW++, first = false) {
 			if (nextW < newGrid.length) {
-				newGrid[nextW] = buildGridBlock(nextW);
+				newGrid[nextW] = buildGridSlice(nextW);
 			}
 			for (int x = 0; x <= w; x++) {
 				for (int y = 0; y <= x; y++) {
@@ -118,49 +124,49 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 						long value = grid[w][x][y][z];
 						int relevantNeighborCount = 0;
 						long neighborValue;
-						neighborValue = getValueAt(w + 1, x, y, z);
+						neighborValue = getValue(w + 1, x, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = W_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAt(w - 1, x, y, z);
+						neighborValue = getValue(w - 1, x, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = W_NEGATIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAt(w, x + 1, y, z);
+						neighborValue = getValue(w, x + 1, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = X_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAt(w, x - 1, y, z);
+						neighborValue = getValue(w, x - 1, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = X_NEGATIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAt(w, x, y + 1, z);
+						neighborValue = getValue(w, x, y + 1, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Y_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAt(w, x, y - 1, z);
+						neighborValue = getValue(w, x, y - 1, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Y_NEGATIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAt(w, x, y, z + 1);
+						neighborValue = getValue(w, x, y, z + 1);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Z_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAt(w, x, y, z - 1);
+						neighborValue = getValue(w, x, y, z - 1);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Z_NEGATIVE;
@@ -362,18 +368,18 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 		}
 	}
 	
-	private long[][][] buildGridBlock(int w) {
-		long[][][] newGridBlock = new long[w + 1][][];
-		for (int x = 0; x < newGridBlock.length; x++) {
-			newGridBlock[x] = new long[x + 1][];
-			for (int y = 0; y < newGridBlock[x].length; y++) {
-				newGridBlock[x][y] = new long[y + 1];
+	private long[][][] buildGridSlice(int w) {
+		long[][][] newGridSlice = new long[w + 1][][];
+		for (int x = 0; x < newGridSlice.length; x++) {
+			newGridSlice[x] = new long[x + 1][];
+			for (int y = 0; y < newGridSlice[x].length; y++) {
+				newGridSlice[x][y] = new long[y + 1];
 			}
 		}
-		return newGridBlock;
+		return newGridSlice;
 	}
 	
-	public long getValueAt(int w, int x, int y, int z){	
+	public long getValue(int w, int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -411,7 +417,7 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 		}
 	}
 	
-	public long getNonSymmetricValueAt(int w, int x, int y, int z){	
+	public long getNonSymmetricValue(int w, int x, int y, int z){	
 		if (w < grid.length 
 				&& x < grid[w].length 
 				&& y < grid[w][x].length 
@@ -499,7 +505,7 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the current step
 	 */
-	public long getCurrentStep() {
+	public long getStep() {
 		return currentStep;
 	}
 	
@@ -513,8 +519,9 @@ public class Aether4D extends SymmetricLongCellularAutomaton4D {
 	}
 	
 	@Override
-	public CustomSymmetricLongCA4DData getData() {
-		return new CustomSymmetricLongCA4DData(grid, initialValue, 0, currentStep, boundsReached, maxX, maxY, maxZ);
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		CustomSymmetricLongCA4DData data = new CustomSymmetricLongCA4DData(grid, initialValue, 0, currentStep, boundsReached, maxX, maxY, maxZ);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 
 	@Override

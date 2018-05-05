@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,61 +22,101 @@ import cellularautomata.grid.SymmetricShortGrid2D;
 
 public class ColorMappedSymmetricShortGrid2D extends SymmetricColorGrid2D {
 
-	protected SymmetricShortGrid2D grid;
+	protected SymmetricShortGrid2D source;
 	protected LongColorMap colorMap;
 	
-	public ColorMappedSymmetricShortGrid2D(SymmetricShortGrid2D grid, LongColorMap colorMap) {
-		this.grid = grid;
+	public ColorMappedSymmetricShortGrid2D(SymmetricShortGrid2D source, LongColorMap colorMap) {
+		this.source = source;
 		this.colorMap = colorMap;
 	}
 		
 	@Override
 	public int getMinX() {
-		return grid.getMinX();
+		return source.getMinX();
 	}
-
+	
+	@Override
+	public int getMinX(int y) {
+		return source.getMinX(y);
+	}
+	
 	@Override
 	public int getMaxX() {
-		return grid.getMaxX();
+		return source.getMaxX();
 	}
-
+	
+	@Override
+	public int getMaxX(int y) {
+		return source.getMaxX(y);
+	}
+	
 	@Override
 	public int getMinY() {
-		return grid.getMinY();
+		return source.getMinY();
 	}
-
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinY(x);
+	}
+	
 	@Override
 	public int getMaxY() {
-		return grid.getMaxY();
+		return source.getMaxY();
+	}
+	
+	@Override
+	public int getMaxY(int x) {
+		return source.getMaxY(x);
 	}
 
 	@Override
 	public int getNonSymmetricMinX() {
-		return grid.getNonSymmetricMinX();
+		return source.getNonSymmetricMinX();
 	}
 
 	@Override
 	public int getNonSymmetricMaxX() {
-		return grid.getNonSymmetricMaxX();
+		return source.getNonSymmetricMaxX();
 	}
 
 	@Override
 	public int getNonSymmetricMinY() {
-		return grid.getNonSymmetricMinY();
+		return source.getNonSymmetricMinY();
 	}
 
 	@Override
 	public int getNonSymmetricMaxY() {
-		return grid.getNonSymmetricMaxY();
-	}
-
-	@Override
-	public Color getNonSymmetricColorAt(int x, int y) {
-		return colorMap.getColor(grid.getNonSymmetricValueAt(x, y));
+		return source.getNonSymmetricMaxY();
 	}
 	
 	@Override
-	public Color getColorAt(int x, int y) {
-		return colorMap.getColor(grid.getValueAt(x, y));
+	public int getNonSymmetricMinX(int y) {
+		return source.getNonSymmetricMinX(y);
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y) {
+		return source.getNonSymmetricMaxX(y);
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x) {
+		return source.getNonSymmetricMinY(x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x) {
+		return source.getNonSymmetricMaxY(x);
+	}
+
+	@Override
+	public Color getNonSymmetricColor(int x, int y) throws Exception {
+		return colorMap.getColor(source.getNonSymmetricValue(x, y));
+	}
+	
+	@Override
+	public Color getColor(int x, int y) throws Exception {
+		return colorMap.getColor(source.getValue(x, y));
 	}
 }

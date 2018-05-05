@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,17 +26,17 @@ public abstract class SymmetricShortGrid3D extends ShortGrid3D implements Symmet
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	public abstract short getNonSymmetricValueAt(int x, int y, int z);
+	public abstract short getNonSymmetricValue(int x, int y, int z);
 
 	public short[] getMinAndMaxValue() {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
 				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		short maxValue = getNonSymmetricValueAt(minX, minY, minZ), minValue = maxValue;
+		short maxValue = getNonSymmetricValue(minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					short value = getNonSymmetricValueAt(x, y, z);
+					short value = getNonSymmetricValue(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -51,11 +51,11 @@ public abstract class SymmetricShortGrid3D extends ShortGrid3D implements Symmet
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
 				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		short maxValue = getNonSymmetricValueAt(minX, minY, minZ), minValue = maxValue;
+		short maxValue = getNonSymmetricValue(minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					short value = getNonSymmetricValueAt(x, y, z);
+					short value = getNonSymmetricValue(x, y, z);
 					if (value != backgroundValue) {
 						if (value > maxValue)
 							maxValue = value;
@@ -74,7 +74,7 @@ public abstract class SymmetricShortGrid3D extends ShortGrid3D implements Symmet
 	}
 	
 	public SymmetricShortGrid2D crossSection(int z) {
-		return new SymmetricShortGrid3DXSection(this, z);
+		return new SymmetricShortGrid3DCrossSection(this, z);
 	}
 	
 	public ShortGrid2D projectedSurface(short backgroundValue) {

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@ public class AbsSymmetricShortGrid3D extends SymmetricShortGrid3D {
 	}
 
 	@Override
-	public short getValueAt(int x, int y, int z) {
-		return (short) Math.abs(source.getValueAt(x, y, z));
+	public short getValue(int x, int y, int z) {
+		return (short) Math.abs(source.getValue(x, y, z));
 	}
 
 	@Override
@@ -90,8 +90,98 @@ public class AbsSymmetricShortGrid3D extends SymmetricShortGrid3D {
 	}
 
 	@Override
-	public short getNonSymmetricValueAt(int x, int y, int z) {
-		return (short) Math.abs(source.getNonSymmetricValueAt(x, y, z));
+	public short getNonSymmetricValue(int x, int y, int z) {
+		return (short) Math.abs(source.getNonSymmetricValue(x, y, z));
+	}
+	
+	@Override
+	public int getNonSymmetricMinXAtY(int y) {
+		return source.getNonSymmetricMinXAtY(y);
+	}
+
+	@Override
+	public int getNonSymmetricMinXAtZ(int z) {
+		return source.getNonSymmetricMinXAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y, int z) {
+		return source.getNonSymmetricMinX(y, z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxXAtY(int y) {
+		return source.getNonSymmetricMaxXAtY(y);
+	}
+
+	@Override
+	public int getNonSymmetricMaxXAtZ(int z) {
+		return source.getNonSymmetricMaxXAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y, int z) {
+		return source.getNonSymmetricMaxX(y, z);
+	}
+
+	@Override
+	public int getNonSymmetricMinYAtX(int x) {
+		return source.getNonSymmetricMinYAtX(x);
+	}
+
+	@Override
+	public int getNonSymmetricMinYAtZ(int z) {
+		return source.getNonSymmetricMinYAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x, int z) {
+		return source.getNonSymmetricMinY(x, z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxYAtX(int x) {
+		return source.getNonSymmetricMaxYAtX(x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxYAtZ(int z) {
+		return source.getNonSymmetricMaxYAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x, int z) {
+		return source.getNonSymmetricMaxY(x, z);
+	}
+
+	@Override
+	public int getNonSymmetricMinZAtX(int x) {
+		return source.getNonSymmetricMinZAtX(x);
+	}
+
+	@Override
+	public int getNonSymmetricMinZAtY(int y) {
+		return source.getNonSymmetricMinZAtY(y);
+	}
+
+	@Override
+	public int getNonSymmetricMinZ(int x, int y) {
+		return source.getNonSymmetricMinZ(x, y);
+	}
+
+	@Override
+	public int getNonSymmetricMaxZAtX(int x) {
+		return source.getNonSymmetricMaxZAtX(x);
+	}
+
+	@Override
+	public int getNonSymmetricMaxZAtY(int y) {
+		return source.getNonSymmetricMaxZAtY(y);
+	}
+
+	@Override
+	public int getNonSymmetricMaxZ(int x, int y) {
+		return source.getNonSymmetricMaxZ(x, y);
 	}
 
 }

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,12 @@
  */
 package cellularautomata.grid;
 
-public abstract class IntGrid3D implements Grid3D, IntGrid {
+import java.util.HashSet;
+import java.util.Set;
+
+public abstract class IntGrid3D implements Grid3D, IntGrid, ProcessableGrid<IntGrid3DProcessor> {
+	
+	protected Set<IntGrid3DProcessor> processors;
 	
 	/**
 	 * Returns the value at a given position
@@ -25,18 +30,23 @@ public abstract class IntGrid3D implements Grid3D, IntGrid {
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
+	 * @throws Exception 
 	 */
-	public abstract int getValueAt(int x, int y, int z);
+	public abstract int getValue(int x, int y, int z) throws Exception;
 
-	public int[] getMinAndMaxValue() {
+	public int[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		int maxValue = getValueAt(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
+				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
+		int maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinYAtX(x);
+			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					int value = getValueAt(x, y, z);
+				minZ = getMinZ(x, y);
+				maxZ = getMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					int value = getValue(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -47,15 +57,19 @@ public abstract class IntGrid3D implements Grid3D, IntGrid {
 		return new int[]{ minValue, maxValue };
 	}
 	
-	public int[] getMinAndMaxValue(int backgroundValue) {
+	public int[] getMinAndMaxValue(int backgroundValue) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		int maxValue = getValueAt(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
+				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
+		int maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinYAtX(x);
+			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					int value = getValueAt(x, y, z);
+				minZ = getMinZ(x, y);
+				maxZ = getMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					int value = getValue(x, y, z);
 					if (value != backgroundValue) {
 						if (value > maxValue)
 							maxValue = value;
@@ -68,22 +82,26 @@ public abstract class IntGrid3D implements Grid3D, IntGrid {
 		return new int[]{ minValue, maxValue };
 	}
 	
-	public int getTotalValue() {
+	public int getTotalValue() throws Exception {
 		int total = 0;
 		int maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(), 
-				maxZ = getMaxZ(), minZ = getMinZ();
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
+				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinYAtX(x);
+			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					total += getValueAt(x, y, z);
-				}	
-			}	
+				minZ = getMinZ(x, y);
+				maxZ = getMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					total += getValue(x, y, z);
+				}
+			}
 		}
 		return total;
 	}
 	
-	public int getMaxAbsoluteValue() {
+	public int getMaxAbsoluteValue() throws Exception {
 		int maxAbsoluteValue;
 		int[] minAndMax = getMinAndMaxValue();
 		if (minAndMax[0] < 0) {
@@ -113,10 +131,57 @@ public abstract class IntGrid3D implements Grid3D, IntGrid {
 	}
 	
 	public IntGrid2D crossSection(int z) {
-		return new IntGrid3DXSection(this, z);
+		return new IntGrid3DCrossSection(this, z);
 	}
 	
 	public IntGrid2D projectedSurfaceMaxX(int backgroundValue) {
 		return new IntGrid3DProjectedSurfaceMaxX(this, backgroundValue);
+	}
+	
+	@Override
+	public void processGrid() throws Exception {
+		triggerBeforeProcessing();
+		triggerProcessGridBlock(this);
+		triggerAfterProcessing();
+	}
+	
+	@Override
+	public void addProcessor(IntGrid3DProcessor processor) {
+		if (processors == null) {
+			processors = new HashSet<IntGrid3DProcessor>();
+		}
+		processors.add(processor);
+	}
+	
+	@Override
+	public boolean removeProcessor(IntGrid3DProcessor processor) {
+		if (processors != null) {
+			return processors.remove(processor);
+		}
+		return false;
+	}
+	
+	protected void triggerBeforeProcessing() throws Exception {
+		if (processors != null) {
+			for (IntGrid3DProcessor processor : processors) {
+				processor.beforeProcessing();
+			}
+		}
+	}
+	
+	protected void triggerProcessGridBlock(IntGrid3D gridBlock) throws Exception {
+		if (processors != null) {
+			for (IntGrid3DProcessor processor : processors) {
+				processor.processGridBlock(gridBlock);
+			}
+		}
+	}
+	
+	protected void triggerAfterProcessing() throws Exception {
+		if (processors != null) {
+			for (IntGrid3DProcessor processor : processors) {
+				processor.afterProcessing();
+			}
+		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,15 +34,15 @@ public abstract class SymmetricShortGrid2D extends ShortGrid2D implements Symmet
 	 * @param y the position on the y-coordinate
 	 * @return the {@link long} value at (x,y)
 	 */
-	public abstract short getNonSymmetricValueAt(int x, int y);
+	public abstract short getNonSymmetricValue(int x, int y);
 	
 	public short[] getMinAndMaxValue() {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		short maxValue = getNonSymmetricValueAt(minX, minY), minValue = maxValue;
+		short maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				short value = getNonSymmetricValueAt(x, y);
+				short value = getNonSymmetricValue(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -55,10 +55,10 @@ public abstract class SymmetricShortGrid2D extends ShortGrid2D implements Symmet
 	public short[] getMinAndMaxValue(short backgroundValue) {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
 				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		short maxValue = getNonSymmetricValueAt(minX, minY), minValue = maxValue;
+		short maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				short value = getNonSymmetricValueAt(x, y);
+				short value = getNonSymmetricValue(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,17 +26,17 @@ public abstract class ShortGrid3D implements Grid3D, ShortGrid {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	public abstract short getValueAt(int x, int y, int z);
+	public abstract short getValue(int x, int y, int z);
 
 	public short[] getMinAndMaxValue() {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValueAt(minX, minY, minZ), minValue = maxValue;
+		short maxValue = getValue(minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					short value = getValueAt(x, y, z);
+					short value = getValue(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -51,11 +51,11 @@ public abstract class ShortGrid3D implements Grid3D, ShortGrid {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValueAt(minX, minY, minZ), minValue = maxValue;
+		short maxValue = getValue(minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					short value = getValueAt(x, y, z);
+					short value = getValue(x, y, z);
 					if (value != backgroundValue) {
 						if (value > maxValue)
 							maxValue = value;
@@ -76,7 +76,7 @@ public abstract class ShortGrid3D implements Grid3D, ShortGrid {
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					total += getValueAt(x, y, z);
+					total += getValue(x, y, z);
 				}	
 			}	
 		}
@@ -113,7 +113,7 @@ public abstract class ShortGrid3D implements Grid3D, ShortGrid {
 	}
 	
 	public ShortGrid2D crossSection(int z) {
-		return new ShortGrid3DXSection(this, z);
+		return new ShortGrid3DCrossSection(this, z);
 	}
 	
 	public ShortGrid2D projectedSurfaceMaxX(short backgroundValue) {

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,12 @@
  */
 package cellularautomata.grid;
 
-public abstract class LongGrid3D implements Grid3D, LongGrid {
+import java.util.HashSet;
+import java.util.Set;
+
+public abstract class LongGrid3D implements Grid3D, LongGrid, ProcessableGrid<LongGrid3DProcessor> {
+	
+	protected Set<LongGrid3DProcessor> processors;
 	
 	/**
 	 * Returns the value at a given position
@@ -25,18 +30,23 @@ public abstract class LongGrid3D implements Grid3D, LongGrid {
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
+	 * @throws Exception 
 	 */
-	public abstract long getValueAt(int x, int y, int z);
+	public abstract long getValue(int x, int y, int z) throws Exception;
 
-	public long[] getMinAndMaxValue() {
+	public long[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		long maxValue = getValueAt(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
+				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
+		long maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinYAtX(x);
+			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					long value = getValueAt(x, y, z);
+				minZ = getMinZ(x, y);
+				maxZ = getMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					long value = getValue(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -47,15 +57,19 @@ public abstract class LongGrid3D implements Grid3D, LongGrid {
 		return new long[]{ minValue, maxValue };
 	}
 	
-	public long[] getMinAndMaxValue(long backgroundValue) {
+	public long[] getMinAndMaxValue(int backgroundValue) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		long maxValue = getValueAt(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
+				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
+		long maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinYAtX(x);
+			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					long value = getValueAt(x, y, z);
+				minZ = getMinZ(x, y);
+				maxZ = getMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					long value = getValue(x, y, z);
 					if (value != backgroundValue) {
 						if (value > maxValue)
 							maxValue = value;
@@ -68,22 +82,26 @@ public abstract class LongGrid3D implements Grid3D, LongGrid {
 		return new long[]{ minValue, maxValue };
 	}
 	
-	public long getTotalValue() {
+	public long getTotalValue() throws Exception {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(), 
-				maxZ = getMaxZ(), minZ = getMinZ();
-		for (int z = minZ; z <= maxZ; z++) {
+				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
+				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinYAtX(x);
+			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					total += getValueAt(x, y, z);
-				}	
-			}	
+				minZ = getMinZ(x, y);
+				maxZ = getMaxZ(x, y);
+				for (int z = minZ; z <= maxZ; z++) {
+					total += getValue(x, y, z);
+				}
+			}
 		}
 		return total;
 	}
 	
-	public long getMaxAbsoluteValue() {
+	public long getMaxAbsoluteValue() throws Exception {
 		long maxAbsoluteValue;
 		long[] minAndMax = getMinAndMaxValue();
 		if (minAndMax[0] < 0) {
@@ -113,6 +131,53 @@ public abstract class LongGrid3D implements Grid3D, LongGrid {
 	}
 	
 	public LongGrid2D crossSection(int z) {
-		return new LongGrid3DXSection(this, z);
+		return new LongGrid3DCrossSection(this, z);
+	}
+	
+	@Override
+	public void processGrid() throws Exception {
+		triggerBeforeProcessing();
+		triggerProcessGridBlock(this);
+		triggerAfterProcessing();
+	}
+	
+	@Override
+	public void addProcessor(LongGrid3DProcessor processor) {
+		if (processors == null) {
+			processors = new HashSet<LongGrid3DProcessor>();
+		}
+		processors.add(processor);
+	}
+	
+	@Override
+	public boolean removeProcessor(LongGrid3DProcessor processor) {
+		if (processors != null) {
+			return processors.remove(processor);
+		}
+		return false;
+	}
+	
+	protected void triggerBeforeProcessing() throws Exception {
+		if (processors != null) {
+			for (LongGrid3DProcessor processor : processors) {
+				processor.beforeProcessing();
+			}
+		}
+	}
+	
+	protected void triggerProcessGridBlock(LongGrid3D gridBlock) throws Exception {
+		if (processors != null) {
+			for (LongGrid3DProcessor processor : processors) {
+				processor.processGridBlock(gridBlock);
+			}
+		}
+	}
+	
+	protected void triggerAfterProcessing() throws Exception {
+		if (processors != null) {
+			for (LongGrid3DProcessor processor : processors) {
+				processor.afterProcessing();
+			}
+		}
 	}
 }

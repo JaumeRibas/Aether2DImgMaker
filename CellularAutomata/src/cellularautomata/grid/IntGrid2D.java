@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,8 +16,12 @@
  */
 package cellularautomata.grid;
 
+import java.util.HashSet;
+import java.util.Set;
 
-public abstract class IntGrid2D implements Grid2D, IntGrid {
+public abstract class IntGrid2D implements Grid2D, IntGrid, ProcessableGrid<IntGrid2DProcessor> {
+	
+	protected Set<IntGrid2DProcessor> processors;
 	
 	/**
 	 * Returns the value at a given position
@@ -25,16 +29,17 @@ public abstract class IntGrid2D implements Grid2D, IntGrid {
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
 	 * @return the value at (x,y)
+	 * @throws Exception 
 	 */
-	public abstract int getValueAt(int x, int y);
+	public abstract int getValue(int x, int y) throws Exception;
 	
-	public int[] getMinAndMaxValue() {
+	public int[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		int maxValue = getValueAt(minX, minY), minValue = maxValue;
+		int maxValue = getValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				int value = getValueAt(x, y);
+				int value = getValue(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -49,14 +54,15 @@ public abstract class IntGrid2D implements Grid2D, IntGrid {
 	 * 
 	 * @param backgroundValue
 	 * @return
+	 * @throws Exception 
 	 */
-	public int[] getMinAndMaxValue(int backgroundValue) {
+	public int[] getMinAndMaxValue(int backgroundValue) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		int maxValue = getValueAt(minX, minY), minValue = maxValue;
+		int maxValue = getValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				int value = getValueAt(x, y);
+				int value = getValue(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;
@@ -68,19 +74,19 @@ public abstract class IntGrid2D implements Grid2D, IntGrid {
 		return new int[]{ minValue, maxValue };
 	}
 	
-	public int getTotalValue() {
+	public int getTotalValue() throws Exception {
 		int total = 0;
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				total += getValueAt(x, y);
+				total += getValue(x, y);
 			}	
 		}
 		return total;
 	}
 	
-	public int getMaxAbsoluteValue() {
+	public int getMaxAbsoluteValue() throws Exception {
 		int maxAbsoluteValue;
 		int[] minAndMax = getMinAndMaxValue();
 		if (minAndMax[0] < 0) {
@@ -109,5 +115,52 @@ public abstract class IntGrid2D implements Grid2D, IntGrid {
 		if (minX > maxX || minY > maxY)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new IntSubGrid2D(this, minX, maxX, minY, maxY);
+	}
+	
+	@Override
+	public void processGrid() throws Exception {
+		triggerBeforeProcessing();
+		triggerProcessGridBlock(this);
+		triggerAfterProcessing();
+	}
+	
+	@Override
+	public void addProcessor(IntGrid2DProcessor processor) {
+		if (processors == null) {
+			processors = new HashSet<IntGrid2DProcessor>();
+		}
+		processors.add(processor);
+	}
+	
+	@Override
+	public boolean removeProcessor(IntGrid2DProcessor processor) {
+		if (processors != null) {
+			return processors.remove(processor);
+		}
+		return false;
+	}
+	
+	protected void triggerBeforeProcessing() throws Exception {
+		if (processors != null) {
+			for (IntGrid2DProcessor processor : processors) {
+				processor.beforeProcessing();
+			}
+		}
+	}
+	
+	protected void triggerProcessGridBlock(IntGrid2D gridBlock) throws Exception {
+		if (processors != null) {
+			for (IntGrid2DProcessor processor : processors) {
+				processor.processGridBlock(gridBlock);
+			}
+		}
+	}
+	
+	protected void triggerAfterProcessing() throws Exception {
+		if (processors != null) {
+			for (IntGrid2DProcessor processor : processors) {
+				processor.afterProcessing();
+			}
+		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017 Jaume Ribas
+    Copyright (C) 2017-2018 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,8 +16,12 @@
  */
 package cellularautomata.grid;
 
+import java.util.HashSet;
+import java.util.Set;
 
-public abstract class LongGrid2D implements Grid2D, LongGrid {
+public abstract class LongGrid2D implements Grid2D, LongGrid, ProcessableGrid<LongGrid2DProcessor> {
+	
+	protected Set<LongGrid2DProcessor> processors;
 	
 	/**
 	 * Returns the value at a given position
@@ -25,16 +29,17 @@ public abstract class LongGrid2D implements Grid2D, LongGrid {
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
 	 * @return the value at (x,y)
+	 * @throws Exception 
 	 */
-	public abstract long getValueAt(int x, int y);
+	public abstract long getValue(int x, int y) throws Exception;
 	
-	public long[] getMinAndMaxValue() {
+	public long[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		long maxValue = getValueAt(minX, minY), minValue = maxValue;
+		long maxValue = getValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				long value = getValueAt(x, y);
+				long value = getValue(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -49,14 +54,15 @@ public abstract class LongGrid2D implements Grid2D, LongGrid {
 	 * 
 	 * @param backgroundValue
 	 * @return
+	 * @throws Exception 
 	 */
-	public long[] getMinAndMaxValue(long backgroundValue) {
+	public long[] getMinAndMaxValue(long backgroundValue) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		long maxValue = getValueAt(minX, minY), minValue = maxValue;
+		long maxValue = getValue(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				long value = getValueAt(x, y);
+				long value = getValue(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;
@@ -68,19 +74,19 @@ public abstract class LongGrid2D implements Grid2D, LongGrid {
 		return new long[]{ minValue, maxValue };
 	}
 	
-	public long getTotalValue() {
+	public long getTotalValue() throws Exception {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				total += getValueAt(x, y);
+				total += getValue(x, y);
 			}	
 		}
 		return total;
 	}
 	
-	public long getMaxAbsoluteValue() {
+	public long getMaxAbsoluteValue() throws Exception {
 		long maxAbsoluteValue;
 		long[] minAndMax = getMinAndMaxValue();
 		if (minAndMax[0] < 0) {
@@ -109,5 +115,52 @@ public abstract class LongGrid2D implements Grid2D, LongGrid {
 		if (minX > maxX || minY > maxY)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new LongSubGrid2D(this, minX, maxX, minY, maxY);
+	}
+	
+	@Override
+	public void processGrid() throws Exception {
+		triggerBeforeProcessing();
+		triggerProcessGridBlock(this);
+		triggerAfterProcessing();
+	}
+	
+	@Override
+	public void addProcessor(LongGrid2DProcessor processor) {
+		if (processors == null) {
+			processors = new HashSet<LongGrid2DProcessor>();
+		}
+		processors.add(processor);
+	}
+	
+	@Override
+	public boolean removeProcessor(LongGrid2DProcessor processor) {
+		if (processors != null) {
+			return processors.remove(processor);
+		}
+		return false;
+	}
+	
+	protected void triggerBeforeProcessing() throws Exception {
+		if (processors != null) {
+			for (LongGrid2DProcessor processor : processors) {
+				processor.beforeProcessing();
+			}
+		}
+	}
+	
+	protected void triggerProcessGridBlock(LongGrid2D gridBlock) throws Exception {
+		if (processors != null) {
+			for (LongGrid2DProcessor processor : processors) {
+				processor.processGridBlock(gridBlock);
+			}
+		}
+	}
+	
+	protected void triggerAfterProcessing() throws Exception {
+		if (processors != null) {
+			for (LongGrid2DProcessor processor : processors) {
+				processor.afterProcessing();
+			}
+		}
 	}
 }
