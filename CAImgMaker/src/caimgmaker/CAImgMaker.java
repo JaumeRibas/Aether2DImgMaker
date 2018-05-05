@@ -73,7 +73,7 @@ public class CAImgMaker {
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		String imgPath = path + "/slice/";
+		String imgPath = path + colorMapper.getClass().getSimpleName() + "/slice/";
 		do {
 			System.out.println("Current step: " + currentStep);
 			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
