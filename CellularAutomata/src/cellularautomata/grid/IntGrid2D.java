@@ -31,15 +31,15 @@ public abstract class IntGrid2D implements Grid2D, IntGrid, ProcessableGrid<IntG
 	 * @return the value at (x,y)
 	 * @throws Exception 
 	 */
-	public abstract int getValue(int x, int y) throws Exception;
+	public abstract int getValueAtPosition(int x, int y) throws Exception;
 	
 	public int[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		int maxValue = getValue(minX, minY), minValue = maxValue;
+		int maxValue = getValueAtPosition(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				int value = getValue(x, y);
+				int value = getValueAtPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -59,10 +59,10 @@ public abstract class IntGrid2D implements Grid2D, IntGrid, ProcessableGrid<IntG
 	public int[] getMinAndMaxValue(int backgroundValue) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		int maxValue = getValue(minX, minY), minValue = maxValue;
+		int maxValue = getValueAtPosition(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				int value = getValue(x, y);
+				int value = getValueAtPosition(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;
@@ -80,7 +80,7 @@ public abstract class IntGrid2D implements Grid2D, IntGrid, ProcessableGrid<IntG
 				maxY = getMaxY(), minY = getMinY();
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				total += getValue(x, y);
+				total += getValueAtPosition(x, y);
 			}	
 		}
 		return total;

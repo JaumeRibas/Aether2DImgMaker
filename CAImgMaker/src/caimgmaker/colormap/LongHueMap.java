@@ -65,7 +65,7 @@ public class LongHueMap implements LongBoundedColorMap {
 
 	
 	@Override
-	public Color getColor(long value) throws IllegalArgumentException {
+	public Color getColorAtPosition(long value) throws IllegalArgumentException {
 		if (value < minValue || value > maxValue ) 
 			throw new IllegalArgumentException("Value " + value + " outside range (" + minValue + "-" + maxValue + ")");
 		float hue = (float) (((value - minValue)*hueIncreasePerUnit + HUE_MARGIN)/255);

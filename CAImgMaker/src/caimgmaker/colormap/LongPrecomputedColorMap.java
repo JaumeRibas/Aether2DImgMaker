@@ -46,19 +46,19 @@ public class LongPrecomputedColorMap implements LongBoundedColorMap {
 		this.colors = new Color[range];
 		int i = 0;
 		if (range == 1) {
-			colors[0] = colorMap.getColor(minValue);
+			colors[0] = colorMap.getColorAtPosition(minValue);
 		} else {
 			for (long value = minValue; value <= maxValue; value++, i++) {
-				colors[i] = colorMap.getColor(value);
+				colors[i] = colorMap.getColorAtPosition(value);
 			}
 		}
 	}
 	
-	public Color getColor(long value) throws Exception {
+	public Color getColorAtPosition(long value) throws Exception {
 		if (colors != null) {
 			return colors[(int)(value - colorMap.getMinValue())];
 		} else {
-			return colorMap.getColor(value);
+			return colorMap.getColorAtPosition(value);
 		}
 	}
 	

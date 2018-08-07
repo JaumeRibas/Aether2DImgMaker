@@ -257,7 +257,7 @@ public class SpreadIntegerValueSimple2D extends SymmetricLongCellularAutomaton2D
 	 * @param y the position on the y-coordinate
 	 * @return the value at (x,y)
 	 */
-	public long getValue(int x, int y){	
+	public long getValueAtPosition(int x, int y){	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 
@@ -271,7 +271,7 @@ public class SpreadIntegerValueSimple2D extends SymmetricLongCellularAutomaton2D
 	}
 	
 	public long getNonSymmetricValue(int x, int y){	
-		return getValue(x, y);
+		return getValueAtPosition(x, y);
 	}
 	
 	/**

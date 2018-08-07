@@ -35,7 +35,7 @@ public abstract class ColorGrid2D implements Grid2D, ProcessableGrid<ColorGrid2D
 	 * @return the {@link Color} at (x,y)
 	 * @throws Exception 
 	 */
-	public abstract Color getColor(int x, int y) throws Exception;
+	public abstract Color getColorAtPosition(int x, int y) throws Exception;
 	
 	@Override
 	public ColorGrid2D subGrid(int minX, int maxX, int minY, int maxY) {

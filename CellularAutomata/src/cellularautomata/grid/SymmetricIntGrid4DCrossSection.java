@@ -49,8 +49,8 @@ public class SymmetricIntGrid4DCrossSection extends SymmetricIntGrid2D {
 	}
 
 	@Override
-	public int getValue(int x, int y) {
-		return source.getValue(x, y, this.y, z);
+	public int getValueAtPosition(int x, int y) {
+		return source.getValueAtPosition(x, y, this.y, z);
 	}
 
 	@Override

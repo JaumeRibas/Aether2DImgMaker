@@ -67,8 +67,8 @@ public class LongGrid3DCrossSection extends LongGrid2D {
 	}
 
 	@Override
-	public long getValue(int x, int y) throws Exception {
-		return source.getValue(x, y, z);
+	public long getValueAtPosition(int x, int y) throws Exception {
+		return source.getValueAtPosition(x, y, z);
 	}
 
 }

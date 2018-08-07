@@ -33,8 +33,8 @@ public class LongSubGrid2D extends LongGrid2D {
 	}
 
 	@Override
-	public long getValue(int x, int y) throws Exception {
-		return source.getValue(x, y);
+	public long getValueAtPosition(int x, int y) throws Exception {
+		return source.getValueAtPosition(x, y);
 	}
 
 	@Override

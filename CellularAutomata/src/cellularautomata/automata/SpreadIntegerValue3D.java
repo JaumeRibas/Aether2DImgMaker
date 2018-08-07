@@ -168,7 +168,7 @@ public class SpreadIntegerValue3D extends SymmetricLongCellularAutomaton3D  {
 		return newGridSlice;
 	}
 	
-	public long getValue(int x, int y, int z){	
+	public long getValueAtPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;

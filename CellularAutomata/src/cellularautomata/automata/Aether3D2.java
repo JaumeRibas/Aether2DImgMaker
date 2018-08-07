@@ -64,7 +64,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 		grid[0] = new NonSymmetricLongGrid3DSlice(0);
 		grid[1] = new NonSymmetricLongGrid3DSlice(1);
 		grid[2] = new NonSymmetricLongGrid3DSlice(2);
-		grid[0].setValue(0, 0, this.initialValue);
+		grid[0].setValueAtPosition(0, 0, this.initialValue);
 		maxY = 0;
 		maxZ = 0;
 		boundsReached = false;
@@ -95,13 +95,13 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 			}
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {
-					long value = grid[x].getValue(y, z);
-					long rightValue = getValue(x + 1, y, z);
-					long leftValue = getValue(x - 1, y, z);
-					long upValue = getValue(x, y + 1, z);
-					long downValue = getValue(x, y - 1, z);
-					long frontValue = getValue(x, y, z + 1);
-					long backValue = getValue(x, y, z - 1);
+					long value = grid[x].getValueAtPosition(y, z);
+					long rightValue = getValueAtPosition(x + 1, y, z);
+					long leftValue = getValueAtPosition(x - 1, y, z);
+					long upValue = getValueAtPosition(x, y + 1, z);
+					long downValue = getValueAtPosition(x, y - 1, z);
+					long frontValue = getValueAtPosition(x, y, z + 1);
+					long backValue = getValueAtPosition(x, y, z - 1);
 					boolean positionChanged = computePosition(value,  rightValue, leftValue, upValue, downValue, frontValue, backValue, x, y, z, newGrid);
 					changed = changed || positionChanged;
 				}
@@ -188,7 +188,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 				}
 			}	
 		}					
-		newGrid[x].addValue(y, z, value);
+		newGrid[x].addValueAtPosition(y, z, value);
 		return changed;
 	}
 
@@ -216,7 +216,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 	}
 	
 	private void addRight(NonSymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, long value) {
-		newGrid[x+1].addValue(y, z, value);
+		newGrid[x+1].addValueAtPosition(y, z, value);
 		if (x >= maxXMinusOne) {
 			boundsReached = true;
 		}
@@ -234,7 +234,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 					}
 				}
 			}
-			newGrid[x-1].addValue(y, z, valueToAdd);
+			newGrid[x-1].addValueAtPosition(y, z, valueToAdd);
 		}
 		if (x >= maxXMinusOne) {
 			boundsReached = true;
@@ -248,7 +248,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 				valueToAdd += value;
 			}
 			int yy = y+1;
-			newGrid[x].addValue(yy, z, valueToAdd);
+			newGrid[x].addValueAtPosition(yy, z, valueToAdd);
 			if (yy > maxY)
 				maxY = yy;
 		}
@@ -263,7 +263,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 					valueToAdd += 2*value;
 				}
 			}
-			newGrid[x].addValue(y-1, z, valueToAdd);
+			newGrid[x].addValueAtPosition(y-1, z, valueToAdd);
 		}
 	}
 	
@@ -277,7 +277,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 				}
 			}
 			int zz = z+1;
-			newGrid[x].addValue(y, zz, valueToAdd);
+			newGrid[x].addValueAtPosition(y, zz, valueToAdd);
 			if (zz > maxZ)
 				maxZ = zz;
 		}
@@ -289,11 +289,11 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 			if (z == 1) {
 				valueToAdd += value;
 			}
-			newGrid[x].addValue(y, z-1, valueToAdd);
+			newGrid[x].addValueAtPosition(y, z-1, valueToAdd);
 		}	
 	}
 	
-	public long getValue(int x, int y, int z){	
+	public long getValueAtPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -315,14 +315,14 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 			}
 		} while (!sorted);
 		if (x < grid.length && y <= x && z <= y) {
-			return grid[x].getValue(y, z);
+			return grid[x].getValueAtPosition(y, z);
 		} else {
 			return 0;
 		}
 	}
 	
 	public long getNonSymmetricValue(int x, int y, int z){	
-		return grid[x].getValue(y, z);
+		return grid[x].getValueAtPosition(y, z);
 	}
 	
 	@Override

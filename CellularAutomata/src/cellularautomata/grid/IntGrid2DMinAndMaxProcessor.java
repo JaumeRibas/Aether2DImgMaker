@@ -32,7 +32,7 @@ public class IntGrid2DMinAndMaxProcessor implements IntGrid2DProcessor {
 			minY = gridBlock.getMinY(x);
 			maxY = gridBlock.getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				int value = gridBlock.getValue(x, y);
+				int value = gridBlock.getValueAtPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)

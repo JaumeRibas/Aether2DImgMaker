@@ -25,8 +25,8 @@ public class AbsSymmetricLongGrid1D extends SymmetricLongGrid1D {
 	}
 
 	@Override
-	public long getValue(int x) {
-		return Math.abs(source.getValue(x));
+	public long getValueAtPosition(int x) {
+		return Math.abs(source.getValueAtPosition(x));
 	}
 
 	@Override

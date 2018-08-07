@@ -25,8 +25,8 @@ public class AbsIntGrid3D extends IntGrid3D {
 	}
 
 	@Override
-	public int getValue(int x, int y, int z) throws Exception {
-		return Math.abs(source.getValue(x, y, z));
+	public int getValueAtPosition(int x, int y, int z) throws Exception {
+		return Math.abs(source.getValueAtPosition(x, y, z));
 	}
 
 	@Override

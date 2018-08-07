@@ -71,7 +71,7 @@ public class ColorMappedShortGrid2D extends ColorGrid2D {
 	}
 
 	@Override
-	public Color getColor(int x, int y) throws Exception {
-		return colorMap.getColor(source.getValue(x, y));
+	public Color getColorAtPosition(int x, int y) throws Exception {
+		return colorMap.getColorAtPosition(source.getValueAtPosition(x, y));
 	}
 }

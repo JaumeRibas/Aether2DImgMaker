@@ -75,7 +75,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
 		gridBlockA = new SizeLimitedNonSymmetricIntGrid3D(0, maxGridBlockSize);
-		gridBlockA.setValue(0, 0, 0, initialValue);
+		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
 		maxX = 1;//we leave a buffer of one position to account for 'negative growth'
 		maxY = 0;
 		maxZ = 0;
@@ -374,13 +374,13 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 		boolean anyPositionToppled = false;
 		for (int y = 0; y <= x; y++) {
 			for (int z = 0; z <= y; z++) {				
-				int value = centerGridBlock.getValue(x, y, z);
-				int rightValue = getValue(x, leftGridBlock, centerGridBlock, rightGridBlock, x + 1, y, z);
-				int leftValue = getValue(x, leftGridBlock, centerGridBlock, rightGridBlock, x - 1, y, z);
-				int upValue = getValue(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y + 1, z);
-				int downValue = getValue(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y - 1, z);
-				int frontValue = getValue(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z + 1);
-				int backValue = getValue(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z - 1);				
+				int value = centerGridBlock.getValueAtPosition(x, y, z);
+				int rightValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x + 1, y, z);
+				int leftValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x - 1, y, z);
+				int upValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y + 1, z);
+				int downValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y - 1, z);
+				int frontValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z + 1);
+				int backValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z - 1);				
 				boolean positionToppled = computePosition(value, rightValue, leftValue, upValue, downValue, frontValue, backValue, 
 						x, y, z, newGridSlices);
 				anyPositionToppled = anyPositionToppled || positionToppled;
@@ -389,7 +389,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 		return anyPositionToppled;
 	}
 	
-	private int getValue(int centerX, SizeLimitedNonSymmetricIntGrid3D leftGridBlock, SizeLimitedNonSymmetricIntGrid3D centerGridBlock, 
+	private int getValueAtPosition(int centerX, SizeLimitedNonSymmetricIntGrid3D leftGridBlock, SizeLimitedNonSymmetricIntGrid3D centerGridBlock, 
 			SizeLimitedNonSymmetricIntGrid3D rightGridBlock, int x, int y, int z) {
 		int[] nonSymmetricCoords = getNonSymmetricCoords(x, y, z);
 		x = nonSymmetricCoords[0];
@@ -397,11 +397,11 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 		z = nonSymmetricCoords[2];
 		int value;
 		if (x == centerX) {
-			value = centerGridBlock.getValue(x, y, z);
+			value = centerGridBlock.getValueAtPosition(x, y, z);
 		} else if (x < centerX) {
-			value = leftGridBlock.getValue(x, y, z);
+			value = leftGridBlock.getValueAtPosition(x, y, z);
 		} else {
-			value = rightGridBlock.getValue(x, y, z);
+			value = rightGridBlock.getValueAtPosition(x, y, z);
 		}
 		return value;
 	}
@@ -479,7 +479,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 				}
 			}	
 		}					
-		newGridSlices[CENTER].addValue(y, z, value);
+		newGridSlices[CENTER].addValueAtPosition(y, z, value);
 		return toppled;
 	}
 
@@ -507,7 +507,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 	}
 	
 	private void addRight(NonSymmetricIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
-		newGridSlices[RIGHT].addValue(y, z, value);
+		newGridSlices[RIGHT].addValueAtPosition(y, z, value);
 		if (x == maxX - 1) {
 			maxX++;
 		}
@@ -525,7 +525,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 					}
 				}
 			}
-			newGridSlices[LEFT].addValue(y, z, valueToAdd);
+			newGridSlices[LEFT].addValueAtPosition(y, z, valueToAdd);
 		}
 		if (x == maxX) {
 			maxX++;
@@ -539,7 +539,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 				valueToAdd += value;
 			}
 			int yy = y+1;
-			newGridSlices[CENTER].addValue(yy, z, valueToAdd);
+			newGridSlices[CENTER].addValueAtPosition(yy, z, valueToAdd);
 			if (yy > maxY)
 				maxY = yy;
 		}
@@ -554,7 +554,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 					valueToAdd += 2*value;
 				}
 			}
-			newGridSlices[CENTER].addValue(y - 1, z, valueToAdd);
+			newGridSlices[CENTER].addValueAtPosition(y - 1, z, valueToAdd);
 		}
 	}
 	
@@ -568,7 +568,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 				}
 			}
 			int zz = z+1;
-			newGridSlices[CENTER].addValue(y, zz, valueToAdd);
+			newGridSlices[CENTER].addValueAtPosition(y, zz, valueToAdd);
 			if (zz > maxZ)
 				maxZ = zz;
 		}
@@ -580,7 +580,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 			if (z == 1) {
 				valueToAdd += value;
 			}
-			newGridSlices[CENTER].addValue(y, z - 1, valueToAdd);
+			newGridSlices[CENTER].addValueAtPosition(y, z - 1, valueToAdd);
 		}	
 	}
 
@@ -664,20 +664,20 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 		int value;
 		//TODO: try to keep blocks contiguous
 		if (x == gridBlockA.minX || x == gridBlockA.maxX || x > gridBlockA.minX && x < gridBlockA.maxX) {
-			value = gridBlockA.getValue(x, y, z);
+			value = gridBlockA.getValueAtPosition(x, y, z);
 		} else if (gridBlockB != null && (x == gridBlockB.minX || x == gridBlockB.maxX || x > gridBlockB.minX && x < gridBlockB.maxX)) {
-			value = gridBlockB.getValue(x, y, z);
+			value = gridBlockB.getValueAtPosition(x, y, z);
 		} else {
 			saveGridBlock(gridBlockA);
 			gridBlockA = null;
 			gridBlockA = findGridBlock(x);
-			value = gridBlockA.getValue(x, y, z);
+			value = gridBlockA.getValueAtPosition(x, y, z);
 		}
 		return value;
 	}
 
 	@Override
-	public int getValue(int x, int y, int z) throws IOException, ClassNotFoundException {
+	public int getValueAtPosition(int x, int y, int z) throws IOException, ClassNotFoundException {
 		int[] nonSymmetricCoords = getNonSymmetricCoords(x, y, z);
 		x = nonSymmetricCoords[0];
 		y = nonSymmetricCoords[1];

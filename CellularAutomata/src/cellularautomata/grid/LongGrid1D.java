@@ -25,13 +25,13 @@ public abstract class LongGrid1D implements Grid1D, LongGrid {
 	 * @param x the position on the x-coordinate
 	 * @return the value at (x)
 	 */
-	public abstract long getValue(int x);
+	public abstract long getValueAtPosition(int x);
 	
 	public long[] getMinAndMaxValue() {
 		int maxX = getMaxX(), minX = getMinX();
-		long maxValue = getValue(minX), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
-			long value = getValue(x);
+			long value = getValueAtPosition(x);
 			if (value > maxValue)
 				maxValue = value;
 			if (value < minValue)
@@ -48,9 +48,9 @@ public abstract class LongGrid1D implements Grid1D, LongGrid {
 	 */
 	public long[] getMinAndMaxValue(long backgroundValue) {
 		int maxX = getMaxX(), minX = getMinX();
-		long maxValue = getValue(minX), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
-			long value = getValue(x);
+			long value = getValueAtPosition(x);
 			if (value != backgroundValue) {
 				if (value > maxValue)
 					maxValue = value;
@@ -65,7 +65,7 @@ public abstract class LongGrid1D implements Grid1D, LongGrid {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX();
 		for (int x = minX; x <= maxX; x++) {
-			total += getValue(x);
+			total += getValueAtPosition(x);
 		}
 		return total;
 	}

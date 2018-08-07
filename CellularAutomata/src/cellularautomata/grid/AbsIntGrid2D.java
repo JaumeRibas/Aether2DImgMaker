@@ -25,8 +25,8 @@ public class AbsIntGrid2D extends IntGrid2D {
 	}
 
 	@Override
-	public int getValue(int x, int y) throws Exception {
-		return Math.abs(source.getValue(x, y));
+	public int getValueAtPosition(int x, int y) throws Exception {
+		return Math.abs(source.getValueAtPosition(x, y));
 	}
 
 	@Override

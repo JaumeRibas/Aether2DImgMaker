@@ -20,9 +20,9 @@ public abstract class SymmetricLongGrid1D extends LongGrid1D implements Symmetri
 	
 	public long[] getMinAndMaxValue() {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = getValue(minX), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
-			long value = getValue(x);
+			long value = getValueAtPosition(x);
 			if (value > maxValue)
 				maxValue = value;
 			if (value < minValue)
@@ -33,9 +33,9 @@ public abstract class SymmetricLongGrid1D extends LongGrid1D implements Symmetri
 	
 	public long[] getMinAndMaxValue(long backgroundValue) {
 		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = getValue(minX), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
-			long value = getValue(x);
+			long value = getValueAtPosition(x);
 			if (value != backgroundValue) {
 				if (value > maxValue)
 					maxValue = value;

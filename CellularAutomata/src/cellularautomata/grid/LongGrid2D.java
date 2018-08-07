@@ -31,15 +31,15 @@ public abstract class LongGrid2D implements Grid2D, LongGrid, ProcessableGrid<Lo
 	 * @return the value at (x,y)
 	 * @throws Exception 
 	 */
-	public abstract long getValue(int x, int y) throws Exception;
+	public abstract long getValueAtPosition(int x, int y) throws Exception;
 	
 	public long[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		long maxValue = getValue(minX, minY), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				long value = getValue(x, y);
+				long value = getValueAtPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -59,10 +59,10 @@ public abstract class LongGrid2D implements Grid2D, LongGrid, ProcessableGrid<Lo
 	public long[] getMinAndMaxValue(long backgroundValue) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		long maxValue = getValue(minX, minY), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				long value = getValue(x, y);
+				long value = getValueAtPosition(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;
@@ -80,7 +80,7 @@ public abstract class LongGrid2D implements Grid2D, LongGrid, ProcessableGrid<Lo
 				maxY = getMaxY(), minY = getMinY();
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				total += getValue(x, y);
+				total += getValueAtPosition(x, y);
 			}	
 		}
 		return total;

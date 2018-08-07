@@ -29,8 +29,8 @@ public class LongSubGrid1D extends LongGrid1D {
 	}
 
 	@Override
-	public long getValue(int x) {
-		return source.getValue(x);
+	public long getValueAtPosition(int x) {
+		return source.getValueAtPosition(x);
 	}
 
 	@Override

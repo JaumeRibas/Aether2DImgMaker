@@ -49,8 +49,8 @@ public class SymmetricLongGrid4DCrossSection extends SymmetricLongGrid2D {
 	}
 
 	@Override
-	public long getValue(int x, int y) {
-		return source.getValue(x, y, this.y, z);
+	public long getValueAtPosition(int x, int y) {
+		return source.getValueAtPosition(x, y, this.y, z);
 	}
 
 	@Override

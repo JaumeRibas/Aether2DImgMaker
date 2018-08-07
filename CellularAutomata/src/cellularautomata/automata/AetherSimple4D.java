@@ -238,7 +238,7 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 		};
 	}
 	
-	public long getValue(int w, int x, int y, int z){
+	public long getValueAtPosition(int w, int x, int y, int z){
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -414,7 +414,7 @@ public class AetherSimple4D extends SymmetricLongCellularAutomaton4D {
 	}
 
 	public long getNonSymmetricValue(int w, int x, int y, int z) {
-		return getValue(w, x, y, z);
+		return getValueAtPosition(w, x, y, z);
 	}
 
 	@Override

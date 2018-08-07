@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import cellularautomata.grid.NonSymmetricLongGrid3DSlice;
 
-public class SizeLimitedNonSymmetricLongGrid3D extends LongGrid3D implements Serializable {
+public class SizeLimitedNonSymmetricLongSlicedGrid3D extends LongGrid3D implements Serializable {
 	
 	/**
 	 * 
@@ -33,47 +33,47 @@ public class SizeLimitedNonSymmetricLongGrid3D extends LongGrid3D implements Ser
 	public int minX;
 	private NonSymmetricLongGrid3DSlice[] slices;
 
-	public SizeLimitedNonSymmetricLongGrid3D(int minX, long maxBytes) {
+	public SizeLimitedNonSymmetricLongSlicedGrid3D(int minX, long maxBytes) {
 		this.minX = minX;
-		int blockLength = getMaxBlockLength(minX, maxBytes);
-		if (blockLength < 2) {
+		int xLength = getMaxXLength(minX, maxBytes);
+		if (xLength < 2) {
 			throw new OutOfMemoryError("Grid with minX=" + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
 		}
-		slices = new NonSymmetricLongGrid3DSlice[blockLength];
-		maxX = minX + blockLength - 1;
+		slices = new NonSymmetricLongGrid3DSlice[xLength];
+		maxX = minX + xLength - 1;
 		for (int x = minX, i = 0; x <= maxX; x++, i++) {
 			slices[i] = new NonSymmetricLongGrid3DSlice(x);
 		}
 	}
 
-	public void setValue(int x, int y, int z, long initialValue) {
-		slices[x - minX].setValue(y, z, initialValue);			
+	public void setValueAtPosition(int x, int y, int z, long initialValue) {
+		slices[x - minX].setValueAtPosition(y, z, initialValue);			
 	}
 
 	@Override
-	public long getValue(int x, int y, int z) {
-		return slices[x - minX].getValue(y, z);
+	public long getValueAtPosition(int x, int y, int z) {
+		return slices[x - minX].getValueAtPosition(y, z);
 	}
 
 	public void setSlice(int x, NonSymmetricLongGrid3DSlice slice) {
 		slices[x - minX] = slice;
 	}
 	
-	private int getMaxBlockLength(int minX, long maxBytes) {
-		long blockSize = Constants.ARRAY_SIZE_OVERHEAD;
-		int blockLength = 0;
+	private int getMaxXLength(int minX, long maxBytes) {
+		long size = Constants.ARRAY_SIZE_OVERHEAD;
+		int xLength = 0;
 		int x = minX;
 		//round up to 8 multiple
-		long reminder = blockSize % 8;
-		long roundedBlockSize = reminder > 0 ? blockSize + 8 - reminder: blockSize;
-		while (roundedBlockSize <= maxBytes) {
-			blockSize += NonSymmetricLongGrid3DSlice.getSliceSize(x) + Integer.BYTES;
-			reminder = blockSize % 8;
-			roundedBlockSize = reminder > 0 ? blockSize + 8 - reminder: blockSize;
+		long reminder = size % 8;
+		long roundedSize = reminder > 0 ? size + 8 - reminder: size;
+		while (roundedSize <= maxBytes) {
+			size += NonSymmetricLongGrid3DSlice.getSliceSize(x) + Integer.BYTES;
+			reminder = size % 8;
+			roundedSize = reminder > 0 ? size + 8 - reminder: size;
 			x++;
-			blockLength++;
+			xLength++;
 		}
-		return blockLength - 1;
+		return xLength - 1;
 	}
 
 	@Override

@@ -47,16 +47,16 @@ public class SymmetricLongGrid3DProjectedSurface extends LongGrid2D {
 	}
 
 	@Override
-	public long getValue(int x, int y) throws Exception {
+	public long getValueAtPosition(int x, int y) throws Exception {
 		int sourceX, sourceY, sourceZ, minX;
 		sourceY = y;
 		sourceZ = x;
 		sourceX = source.getMaxX();
 		minX = source.getMinX();
-		long value = source.getValue(sourceX, sourceY, sourceZ);
+		long value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
 		while (value == backgroundValue && sourceX > minX) {
 			sourceX--;
-			value = source.getValue(sourceX, sourceY, sourceZ);
+			value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
 		}
 		return value;
 	}

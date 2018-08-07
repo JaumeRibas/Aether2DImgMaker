@@ -67,8 +67,8 @@ public class SymmetricLongGrid3DCrossSection extends SymmetricLongGrid2D impleme
 	}
 
 	@Override
-	public long getValue(int x, int y) throws Exception {
-		return source.getValue(x, y, z);
+	public long getValueAtPosition(int x, int y) throws Exception {
+		return source.getValueAtPosition(x, y, z);
 	}
 
 	@Override

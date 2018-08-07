@@ -57,10 +57,10 @@ public class SymmetricIntGrid4DProjected3DEdge extends IntGrid3D {
 	}
 	
 	@Override
-	public int getValue(int x, int y, int z) {
+	public int getValueAtPosition(int x, int y, int z) {
 		int w = source.getNonSymmetricMaxW(), 
 				minW = source.getNonSymmetricMinW();
-		int value = source.getValue(w, x, y, z);
+		int value = source.getValueAtPosition(w, x, y, z);
 		while (value == backgroundValue && w > minW) {
 			w--;
 			value = source.getNonSymmetricValue(w, x, y, z);

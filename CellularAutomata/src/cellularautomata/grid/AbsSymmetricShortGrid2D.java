@@ -25,8 +25,8 @@ public class AbsSymmetricShortGrid2D extends SymmetricShortGrid2D {
 	}
 
 	@Override
-	public short getValue(int x, int y) {
-		return (short) Math.abs(source.getValue(x, y));
+	public short getValueAtPosition(int x, int y) {
+		return (short) Math.abs(source.getValueAtPosition(x, y));
 	}
 
 	@Override

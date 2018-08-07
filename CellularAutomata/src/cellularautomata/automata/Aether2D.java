@@ -80,25 +80,25 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 				long value = this.grid[x][y];
 				int relevantNeighborCount = 0;
 				long neighborValue;
-				neighborValue = getValue(x + 1, y);
+				neighborValue = getValueAtPosition(x + 1, y);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = RIGHT;
 					relevantNeighborCount++;
 				}
-				neighborValue = getValue(x - 1, y);
+				neighborValue = getValueAtPosition(x - 1, y);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = LEFT;
 					relevantNeighborCount++;
 				}
-				neighborValue = getValue(x, y + 1);
+				neighborValue = getValueAtPosition(x, y + 1);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = UP;
 					relevantNeighborCount++;
 				}
-				neighborValue = getValue(x, y - 1);
+				neighborValue = getValueAtPosition(x, y - 1);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = DOWN;
@@ -221,7 +221,7 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	public long getValue(int x, int y){	
+	public long getValueAtPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {

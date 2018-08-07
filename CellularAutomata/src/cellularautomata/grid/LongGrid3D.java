@@ -32,13 +32,13 @@ public abstract class LongGrid3D implements Grid3D, LongGrid, ProcessableGrid<Lo
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */
-	public abstract long getValue(int x, int y, int z) throws Exception;
+	public abstract long getValueAtPosition(int x, int y, int z) throws Exception;
 
 	public long[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
 				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
-		long maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX, minY, minZ), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinYAtX(x);
 			maxY = getMaxYAtX(x);
@@ -46,7 +46,7 @@ public abstract class LongGrid3D implements Grid3D, LongGrid, ProcessableGrid<Lo
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					long value = getValue(x, y, z);
+					long value = getValueAtPosition(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -61,7 +61,7 @@ public abstract class LongGrid3D implements Grid3D, LongGrid, ProcessableGrid<Lo
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxYAtX(minX), minY = getMinYAtX(minX),
 				maxZ = getMaxZ(minX, minY), minZ = getMinZ(minX, minY);
-		long maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		long maxValue = getValueAtPosition(minX, minY, minZ), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinYAtX(x);
 			maxY = getMaxYAtX(x);
@@ -69,7 +69,7 @@ public abstract class LongGrid3D implements Grid3D, LongGrid, ProcessableGrid<Lo
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					long value = getValue(x, y, z);
+					long value = getValueAtPosition(x, y, z);
 					if (value != backgroundValue) {
 						if (value > maxValue)
 							maxValue = value;
@@ -94,7 +94,7 @@ public abstract class LongGrid3D implements Grid3D, LongGrid, ProcessableGrid<Lo
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					total += getValue(x, y, z);
+					total += getValueAtPosition(x, y, z);
 				}
 			}
 		}

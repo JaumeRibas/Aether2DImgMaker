@@ -25,12 +25,8 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -68,6 +64,11 @@ public class CAImgMaker {
 	private volatile boolean backupRequested = false;
 	
 	
+	public CAImgMaker() {}
+	
+	public CAImgMaker(long backupLeap) {
+		this.backupLeap = backupLeap;
+	}
 	
 	public void createNonSymmetricImages(SymmetricLongCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
 		long currentStep = ca.getStep();
@@ -440,6 +441,15 @@ public class CAImgMaker {
 	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricIntCellularAutomaton3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
+				
+		int scanInitialZIndex = ca.getNonSymmetricMinZ();
+		createScanningAndCrossSectionNonSymmetricImages(ca, scanInitialZIndex, crossSectionZ, scanningColorMapper, 
+			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
+	}
+	
+	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricIntCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
+			String imagesPath, String backupPath) throws Exception {
 		
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -449,7 +459,7 @@ public class CAImgMaker {
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		int scanZ = ca.getNonSymmetricMinZ();
+		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
 		String scanImgPath = imagesPath + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
@@ -1070,7 +1080,7 @@ public class CAImgMaker {
 			for (int i = 0; i < gridPositionSize; i++) {
 				for (int x = minX, xx = 0; x <= maxX; x++, xx++) {
 					if (xx >= yy) {
-						java.awt.Color c = grid.getColor(x, y);
+						java.awt.Color c = grid.getColorAtPosition(x, y);
 						for (int j = 0; j < gridPositionSize; j++) {
 							pixelData[dataIndex++] = (byte) c.getRed();
 							pixelData[dataIndex++] = (byte) c.getGreen();
@@ -1108,7 +1118,7 @@ public class CAImgMaker {
 		for (int y = maxY; y >= minY; y--) {
 			for (int i = 0; i < gridPositionSize; i++) {
 				for (int x = minX; x <= maxX; x++) {
-					java.awt.Color c = grid.getColor(x,y);
+					java.awt.Color c = grid.getColorAtPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
 						pixelData[dataIndex++] = (byte) c.getRed();
 						pixelData[dataIndex++] = (byte) c.getGreen();
@@ -1133,46 +1143,6 @@ public class CAImgMaker {
 		String pathName = path + "/" + name;
 		System.out.println("Creating image at '" + pathName + "'");
 		ImageIO.write(image, "png", new File(pathName));
-	}
-	
-	public static long[][] parseCSVLong2DArray(String pathName) throws IOException {
-		long[][] array = null;
-		try(BufferedReader br = new BufferedReader(new FileReader(pathName))) {
-		    String line = br.readLine();
-		    if (line != null) {
-		    	List<long[]> rows = new ArrayList<long[]>();
-		    	int lineIndex = 1; 
-		    	String[] elements = line.split(",");
-		    	int colCount = elements.length;
-		    	long[] row = new long[colCount];
-		    	for (int i = 0; i < colCount; i++) {
-		    		row[i] = Long.parseLong(elements[i]);
-		    	}
-		    	rows.add(row);
-		    	line = br.readLine();
-		    	while (line != null) {
-		    		lineIndex++;
-		    		elements = line.split(",");
-		    		if (elements.length != colCount)
-		    			throw new IllegalArgumentException("Wrong number of elements at line " + lineIndex);
-		    		row = new long[colCount];
-			    	for (int i = 0; i < colCount; i++) {
-			    		row[i] = Long.parseLong(elements[i]);
-			    	}
-			    	rows.add(row);
-			        line = br.readLine();
-			    }
-		    	int rowCount = rows.size();
-		    	array = new long[colCount][rowCount];
-		    	for (int y = 0; y < rowCount; y++) {
-		    		row = rows.get(y);
-	    			for (int x = 0; x < colCount; x++) {
-	    				array[x][y] = row[x];
-			    	}
-		    	}
-		    }
-		}
-		return array;
 	}
 	
 	private class StdInRunnable implements Runnable {

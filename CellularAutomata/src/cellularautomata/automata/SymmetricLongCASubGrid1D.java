@@ -31,8 +31,8 @@ public class SymmetricLongCASubGrid1D extends LongCellularAutomaton1D {
 	}
 
 	@Override
-	public long getValue(int x) {
-		return ca.getValue(x);
+	public long getValueAtPosition(int x) {
+		return ca.getValueAtPosition(x);
 	}
 
 	@Override

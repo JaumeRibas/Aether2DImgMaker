@@ -47,16 +47,16 @@ public class IntGrid3DProjectedSurfaceMaxX extends IntGrid2D {
 	}
 
 	@Override
-	public int getValue(int x, int y) throws Exception {
+	public int getValueAtPosition(int x, int y) throws Exception {
 		int sourceX, sourceY, sourceZ, minX;
 		sourceY = y;
 		sourceZ = x;
 		sourceX = source.getMaxX();
 		minX = source.getMinX();
-		int value = source.getValue(sourceX, sourceY, sourceZ);
+		int value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
 		while (value == backgroundValue && sourceX > minX) {
 			sourceX--;
-			value = source.getValue(sourceX, sourceY, sourceZ);
+			value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
 		}
 		return value;
 	}

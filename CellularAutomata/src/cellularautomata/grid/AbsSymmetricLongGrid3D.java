@@ -25,8 +25,8 @@ public class AbsSymmetricLongGrid3D extends SymmetricLongGrid3D {
 	}
 
 	@Override
-	public long getValue(int x, int y, int z) throws Exception {
-		return Math.abs(source.getValue(x, y, z));
+	public long getValueAtPosition(int x, int y, int z) throws Exception {
+		return Math.abs(source.getValueAtPosition(x, y, z));
 	}
 
 	@Override

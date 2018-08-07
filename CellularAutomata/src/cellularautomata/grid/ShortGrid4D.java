@@ -27,19 +27,19 @@ public abstract class ShortGrid4D implements Grid4D, ShortGrid {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (w,x,y,z)
 	 */
-	public abstract short getValue(int w, int x, int y, int z);
+	public abstract short getValueAtPosition(int w, int x, int y, int z);
 
 	public short[] getMinAndMaxValue() {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValue(minW, minX, minY, minZ), minValue = maxValue;
+		short maxValue = getValueAtPosition(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						short value = getValue(w, x, y, z);
+						short value = getValueAtPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -56,12 +56,12 @@ public abstract class ShortGrid4D implements Grid4D, ShortGrid {
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValue(minW, minX, minY, minZ), minValue = maxValue;
+		short maxValue = getValueAtPosition(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						short value = getValue(w, x, y, z);
+						short value = getValueAtPosition(w, x, y, z);
 						if (value != backgroundValue) {
 							if (value > maxValue)
 								maxValue = value;
@@ -85,7 +85,7 @@ public abstract class ShortGrid4D implements Grid4D, ShortGrid {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						total += getValue(w, x, y, z);
+						total += getValueAtPosition(w, x, y, z);
 					}
 				}	
 			}	

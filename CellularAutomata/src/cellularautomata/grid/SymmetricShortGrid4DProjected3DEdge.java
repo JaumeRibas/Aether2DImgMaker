@@ -57,10 +57,10 @@ public class SymmetricShortGrid4DProjected3DEdge extends ShortGrid3D {
 	}
 	
 	@Override
-	public short getValue(int x, int y, int z) {
+	public short getValueAtPosition(int x, int y, int z) {
 		int w = source.getNonSymmetricMaxW(), 
 				minW = source.getNonSymmetricMinW();
-		short value = source.getValue(w, x, y, z);
+		short value = source.getValueAtPosition(w, x, y, z);
 		while (value == backgroundValue && w > minW) {
 			w--;
 			value = source.getNonSymmetricValue(w, x, y, z);

@@ -26,17 +26,17 @@ public abstract class ShortGrid3D implements Grid3D, ShortGrid {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	public abstract short getValue(int x, int y, int z);
+	public abstract short getValueAtPosition(int x, int y, int z);
 
 	public short[] getMinAndMaxValue() {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		short maxValue = getValueAtPosition(minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					short value = getValue(x, y, z);
+					short value = getValueAtPosition(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -51,11 +51,11 @@ public abstract class ShortGrid3D implements Grid3D, ShortGrid {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValue(minX, minY, minZ), minValue = maxValue;
+		short maxValue = getValueAtPosition(minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					short value = getValue(x, y, z);
+					short value = getValueAtPosition(x, y, z);
 					if (value != backgroundValue) {
 						if (value > maxValue)
 							maxValue = value;
@@ -76,7 +76,7 @@ public abstract class ShortGrid3D implements Grid3D, ShortGrid {
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					total += getValue(x, y, z);
+					total += getValueAtPosition(x, y, z);
 				}	
 			}	
 		}

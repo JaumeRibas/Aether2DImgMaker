@@ -33,12 +33,12 @@ public class ColorMappedSymmetricShortGrid2DWithBackground extends ColorMappedSy
 	}
 
 	@Override
-	public Color getColor(int x, int y) throws Exception {
-		int value = source.getValue(x, y);
+	public Color getColorAtPosition(int x, int y) throws Exception {
+		int value = source.getValueAtPosition(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
-		return colorMap.getColor(value);
+		return colorMap.getColorAtPosition(value);
 	}
 	
 	@Override
@@ -47,6 +47,6 @@ public class ColorMappedSymmetricShortGrid2DWithBackground extends ColorMappedSy
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
-		return colorMap.getColor(value);
+		return colorMap.getColorAtPosition(value);
 	}
 }

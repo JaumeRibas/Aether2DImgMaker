@@ -25,8 +25,8 @@ public class AbsShortGrid4D extends ShortGrid4D {
 	}
 
 	@Override
-	public short getValue(int w, int x, int y, int z) {
-		return (short) Math.abs(source.getValue(w, x, y, z));
+	public short getValueAtPosition(int w, int x, int y, int z) {
+		return (short) Math.abs(source.getValueAtPosition(w, x, y, z));
 	}
 	
 	@Override

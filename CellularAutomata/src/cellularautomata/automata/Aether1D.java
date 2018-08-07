@@ -66,13 +66,13 @@ public class Aether1D extends SymmetricLongCellularAutomaton1D {
 			long value = this.grid[x];
 			int relevantNeighborCount = 0;
 			long neighborValue;
-			neighborValue = getValue(x + 1);
+			neighborValue = getValueAtPosition(x + 1);
 			if (neighborValue < value) {
 				neighborValues[relevantNeighborCount] = neighborValue;
 				neighborDirections[relevantNeighborCount] = RIGHT;
 				relevantNeighborCount++;
 			}
-			neighborValue = getValue(x - 1);
+			neighborValue = getValueAtPosition(x - 1);
 			if (neighborValue < value) {
 				neighborValues[relevantNeighborCount] = neighborValue;
 				neighborDirections[relevantNeighborCount] = LEFT;
@@ -154,7 +154,7 @@ public class Aether1D extends SymmetricLongCellularAutomaton1D {
 		}
 	}
 	
-	public long getValue(int x){	
+	public long getValueAtPosition(int x){	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
 			return grid[x];

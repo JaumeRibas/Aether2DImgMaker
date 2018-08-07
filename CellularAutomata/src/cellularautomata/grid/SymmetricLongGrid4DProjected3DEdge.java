@@ -57,10 +57,10 @@ public class SymmetricLongGrid4DProjected3DEdge extends LongGrid3D {
 	}
 	
 	@Override
-	public long getValue(int x, int y, int z) {
+	public long getValueAtPosition(int x, int y, int z) {
 		int w = source.getNonSymmetricMaxW(), 
 				minW = source.getNonSymmetricMinW();
-		long value = source.getValue(w, x, y, z);
+		long value = source.getValueAtPosition(w, x, y, z);
 		while (value == backgroundValue && w > minW) {
 			w--;
 			value = source.getNonSymmetricValue(w, x, y, z);

@@ -95,37 +95,37 @@ public class Aether3DEnclosed extends SymmetricLongCellularAutomaton3D {
 					long value = grid[x][y][z];
 					int relevantNeighborCount = 0;
 					long neighborValue;
-					neighborValue = getValue(x + 1, y, z);
+					neighborValue = getValueAtPosition(x + 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = RIGHT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValue(x - 1, y, z);
+					neighborValue = getValueAtPosition(x - 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = LEFT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValue(x, y + 1, z);
+					neighborValue = getValueAtPosition(x, y + 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = UP;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValue(x, y - 1, z);
+					neighborValue = getValueAtPosition(x, y - 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = DOWN;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValue(x, y, z + 1);
+					neighborValue = getValueAtPosition(x, y, z + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = FRONT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValue(x, y, z - 1);
+					neighborValue = getValueAtPosition(x, y, z - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = BACK;
@@ -284,7 +284,7 @@ public class Aether3DEnclosed extends SymmetricLongCellularAutomaton3D {
 		return newGridSlice;
 	}
 	
-	public long getValue(int x, int y, int z){
+	public long getValueAtPosition(int x, int y, int z){
 		x = getEnclosedCoord(x);
 		y = getEnclosedCoord(y);
 		z = getEnclosedCoord(z);

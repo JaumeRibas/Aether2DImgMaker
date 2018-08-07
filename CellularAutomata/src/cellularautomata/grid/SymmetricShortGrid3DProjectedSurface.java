@@ -47,16 +47,16 @@ public class SymmetricShortGrid3DProjectedSurface extends ShortGrid2D {
 	}
 
 	@Override
-	public short getValue(int x, int y) {
+	public short getValueAtPosition(int x, int y) {
 		int sourceX, sourceY, sourceZ, minX;
 		sourceY = y;
 		sourceZ = x;
 		sourceX = source.getMaxX();
 		minX = source.getMinX();
-		short value = source.getValue(sourceX, sourceY, sourceZ);
+		short value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
 		while (value == backgroundValue && sourceX > minX) {
 			sourceX--;
-			value = source.getValue(sourceX, sourceY, sourceZ);
+			value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
 		}
 		return value;
 	}

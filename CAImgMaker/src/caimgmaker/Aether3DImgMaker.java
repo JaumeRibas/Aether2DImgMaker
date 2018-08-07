@@ -24,21 +24,25 @@ import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
 public class Aether3DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-2000", "D:/data/test"};//debug
+//		args = new String[]{"-2000", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
 			int initialValue = 0;
-			SymmetricIntCellularAutomaton3D ca;
-			String initValOrBackupPath = args[0];
 			boolean isRestore = false;
+			String path;
+			int initialStep = 0;
+			int scanInitialZIndex = 0;
+			boolean isScanInitialZIndexDefined = false;	
+			long backupLeap = 0;
+			boolean isBackupLeapDefined = false;
+			
+			String initValOrBackupPath = args[0];
 			try {
 				initialValue = Integer.parseInt(initValOrBackupPath);
 			} catch (NumberFormatException ex) {
 				isRestore = true;
 			}
-			String path;
-			int initialStep = 0;
 			if (args.length > 1) {
 				path = args[1];
 				char lastCharacter = path.charAt(path.length() - 1); 
@@ -47,14 +51,24 @@ public class Aether3DImgMaker {
 				}
 				if (args.length > 2) {
 					initialStep = Integer.parseInt(args[2]);
+					if (args.length > 3) {
+						scanInitialZIndex = Integer.parseInt(args[3]);
+						isScanInitialZIndexDefined = true;
+						if (args.length > 4) {
+							backupLeap = Long.parseLong(args[4]);
+							isBackupLeapDefined = true;
+						}
+					}
 				}
 			} else {
 				path = "./";
 			}
+			SymmetricIntCellularAutomaton3D ca;
 			if (isRestore) {
 				ca = new IntAether3DSwap(initValOrBackupPath, path);
 			} else {
-				ca = new IntAether3DSwap(initialValue, Long.parseLong("10737418240"), path);//10GiB
+				ca = new IntAether3DSwap(initialValue, Long.parseLong("8589934592"), path);//8GiB
+//				ca = new IntAether3DSwap(initialValue, Long.parseLong("10737418240"), path);//10GiB
 //				ca = new IntAether3DSwap(initialValue, Long.parseLong("1048576"), path);//1MiB
 			}
 			boolean finished = false;
@@ -64,9 +78,19 @@ public class Aether3DImgMaker {
 			}
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createScanningAndCrossSectionNonSymmetricImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+			CAImgMaker imgMaker = null;
+			if (isBackupLeapDefined) {
+				imgMaker = new CAImgMaker(backupLeap);
+			} else {
+				imgMaker = new CAImgMaker();
+			}
+			if (isScanInitialZIndexDefined) {
+				imgMaker.createScanningAndCrossSectionNonSymmetricImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
 					path + "/img/", path + "/backups/");
+			} else {
+				imgMaker.createScanningAndCrossSectionNonSymmetricImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+					path + "/img/", path + "/backups/");
+			}
 
 		}		
 	}

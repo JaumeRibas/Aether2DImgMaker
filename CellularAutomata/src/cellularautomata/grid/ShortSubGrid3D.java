@@ -38,8 +38,8 @@ public class ShortSubGrid3D extends ShortGrid3D {
 	}
 
 	@Override
-	public short getValue(int x, int y, int z) {
-		return source.getValue(x, y, z);
+	public short getValueAtPosition(int x, int y, int z) {
+		return source.getValueAtPosition(x, y, z);
 	}
 
 	@Override

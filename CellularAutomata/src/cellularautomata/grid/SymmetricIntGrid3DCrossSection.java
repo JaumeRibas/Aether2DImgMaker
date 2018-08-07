@@ -75,8 +75,8 @@ public class SymmetricIntGrid3DCrossSection extends SymmetricIntGrid2D implement
 	}
 
 	@Override
-	public int getValue(int x, int y) throws Exception {
-		return source.getValue(x, y, z);
+	public int getValueAtPosition(int x, int y) throws Exception {
+		return source.getValueAtPosition(x, y, z);
 	}
 
 	@Override

@@ -111,7 +111,7 @@ public class ImageRenderingProcessor implements ColorGrid2DProcessor {
 					
 			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
 				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y++, yy++) {
-					java.awt.Color c = gridBlock.getColor(x, y);
+					java.awt.Color c = gridBlock.getColorAtPosition(x, y);
 					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 					
 					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;

@@ -33,15 +33,15 @@ public class NonSymmetricIntGrid3DSlice implements Serializable {
 		data = new int[getIndex(x, x) + 1];
 	}
 
-	public void setValue(int y, int z, int value) {
+	public void setValueAtPosition(int y, int z, int value) {
 		data[getIndex(y, z)] = value;	
 	}
 	
-	public int getValue(int y, int z) {
+	public int getValueAtPosition(int y, int z) {
 		return data[getIndex(y, z)];
 	}
 	
-	public void addValue(int y, int z, int value) {
+	public void addValueAtPosition(int y, int z, int value) {
 		data[getIndex(y, z)] += value;
 	}
 	

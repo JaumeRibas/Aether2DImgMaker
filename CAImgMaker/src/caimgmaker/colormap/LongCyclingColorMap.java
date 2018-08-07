@@ -38,7 +38,7 @@ public class LongCyclingColorMap implements LongColorMap {
 	}
 	
 	@Override
-	public Color getColor(long value) {		
+	public Color getColorAtPosition(long value) {		
 		long loopedValue = loopValue(value, range);
 		double fraction = (double)loopedValue/range;
 		float brightness = (float)((fraction*brightnessRange + minBrightness)/MAX_COLOR_PROP_VAL);		

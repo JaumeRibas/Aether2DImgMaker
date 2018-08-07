@@ -32,12 +32,12 @@ public class ColorMappedSymmetricLongGrid2DWithBackground extends ColorMappedSym
 	}
 
 	@Override
-	public Color getColor(int x, int y) throws Exception {
-		long value = source.getValue(x, y);
+	public Color getColorAtPosition(int x, int y) throws Exception {
+		long value = source.getValueAtPosition(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
-		return colorMap.getColor(value);
+		return colorMap.getColorAtPosition(value);
 	}
 	
 	@Override
@@ -46,6 +46,6 @@ public class ColorMappedSymmetricLongGrid2DWithBackground extends ColorMappedSym
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
-		return colorMap.getColor(value);
+		return colorMap.getColorAtPosition(value);
 	}
 }

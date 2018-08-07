@@ -26,15 +26,15 @@ public abstract class ShortGrid2D implements Grid2D, ShortGrid {
 	 * @param y the position on the y-coordinate
 	 * @return the value at (x,y)
 	 */
-	public abstract short getValue(int x, int y);
+	public abstract short getValueAtPosition(int x, int y);
 	
 	public short[] getMinAndMaxValue() {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		short maxValue = getValue(minX, minY), minValue = maxValue;
+		short maxValue = getValueAtPosition(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				short value = getValue(x, y);
+				short value = getValueAtPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -53,10 +53,10 @@ public abstract class ShortGrid2D implements Grid2D, ShortGrid {
 	public short[] getMinAndMaxValue(short backgroundValue) {
 		int maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY();
-		short maxValue = getValue(minX, minY), minValue = maxValue;
+		short maxValue = getValueAtPosition(minX, minY), minValue = maxValue;
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				short value = getValue(x, y);
+				short value = getValueAtPosition(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)
 						maxValue = value;
@@ -74,7 +74,7 @@ public abstract class ShortGrid2D implements Grid2D, ShortGrid {
 				maxY = getMaxY(), minY = getMinY();
 		for (int y = minY; y <= maxY; y++) {
 			for (int x = minX; x <= maxX; x++) {
-				total += getValue(x, y);
+				total += getValueAtPosition(x, y);
 			}	
 		}
 		return total;

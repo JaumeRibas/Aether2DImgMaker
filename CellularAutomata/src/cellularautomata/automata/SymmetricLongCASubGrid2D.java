@@ -31,8 +31,8 @@ public class SymmetricLongCASubGrid2D extends LongCellularAutomaton2D {
 	}
 
 	@Override
-	public long getValue(int x, int y) throws Exception {
-		return ca.getValue(x, y);
+	public long getValueAtPosition(int x, int y) throws Exception {
+		return ca.getValueAtPosition(x, y);
 	}
 
 	@Override

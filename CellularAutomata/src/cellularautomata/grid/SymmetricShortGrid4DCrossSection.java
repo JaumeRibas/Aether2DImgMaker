@@ -49,8 +49,8 @@ public class SymmetricShortGrid4DCrossSection extends SymmetricShortGrid2D {
 	}
 
 	@Override
-	public short getValue(int x, int y) {
-		return source.getValue(x, y, this.y, z);
+	public short getValueAtPosition(int x, int y) {
+		return source.getValueAtPosition(x, y, this.y, z);
 	}
 
 	@Override

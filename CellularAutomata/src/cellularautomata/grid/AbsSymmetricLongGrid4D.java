@@ -25,8 +25,8 @@ public class AbsSymmetricLongGrid4D extends SymmetricLongGrid4D {
 	}
 
 	@Override
-	public long getValue(int w, int x, int y, int z) {
-		return Math.abs(source.getValue(w, x, y, z));
+	public long getValueAtPosition(int w, int x, int y, int z) {
+		return Math.abs(source.getValueAtPosition(w, x, y, z));
 	}
 	
 	@Override

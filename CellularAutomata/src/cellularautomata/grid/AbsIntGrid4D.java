@@ -25,8 +25,8 @@ public class AbsIntGrid4D extends IntGrid4D {
 	}
 
 	@Override
-	public int getValue(int w, int x, int y, int z) {
-		return Math.abs(source.getValue(w, x, y, z));
+	public int getValueAtPosition(int w, int x, int y, int z) {
+		return Math.abs(source.getValueAtPosition(w, x, y, z));
 	}
 	
 	@Override

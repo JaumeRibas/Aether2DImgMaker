@@ -35,8 +35,8 @@ public class ColorSubGrid2D extends ColorGrid2D {
 	}
 
 	@Override
-	public Color getColor(int x, int y) throws Exception {
-		return source.getColor(x, y);
+	public Color getColorAtPosition(int x, int y) throws Exception {
+		return source.getColorAtPosition(x, y);
 	}
 
 	@Override

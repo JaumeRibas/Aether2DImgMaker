@@ -25,8 +25,8 @@ public class AbsSymmetricShortGrid3D extends SymmetricShortGrid3D {
 	}
 
 	@Override
-	public short getValue(int x, int y, int z) {
-		return (short) Math.abs(source.getValue(x, y, z));
+	public short getValueAtPosition(int x, int y, int z) {
+		return (short) Math.abs(source.getValueAtPosition(x, y, z));
 	}
 
 	@Override

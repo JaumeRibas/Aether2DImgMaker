@@ -84,10 +84,10 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 			for (int y = 0; y <= x; y++) {
 				long value = grid[x][y];
 				if (value != 0) {
-					long up = getValue(x, y + 1);
-					long down = getValue(x, y - 1); 
-					long left = getValue(x - 1, y);
-					long right = getValue(x + 1, y);
+					long up = getValueAtPosition(x, y + 1);
+					long down = getValueAtPosition(x, y - 1); 
+					long left = getValueAtPosition(x - 1, y);
+					long right = getValueAtPosition(x + 1, y);
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
 					//if the current position is equal to its neighbors the algorithm has no effect
@@ -170,7 +170,7 @@ public class SpreadIntegerValue2D extends SymmetricLongCellularAutomaton2D {
 		return newGridSlice;
 	}
 	
-	public long getValue(int x, int y){	
+	public long getValueAtPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {

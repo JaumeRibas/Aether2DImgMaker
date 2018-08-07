@@ -225,7 +225,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 		};
 	}
 	
-	public long getValue(int x, int y, int z){	
+	public long getValueAtPosition(int x, int y, int z){	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
@@ -341,7 +341,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 	}
 
 	public long getNonSymmetricValue(int x, int y, int z) {
-		return getValue(x, y, z);
+		return getValueAtPosition(x, y, z);
 	}
 	
 	/**
