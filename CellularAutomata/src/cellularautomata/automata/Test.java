@@ -41,6 +41,29 @@ public class Test {
 		compare(ae1, ae2);
 	}
 	
+	public static void takeSamples() {
+		try {
+			System.out.println("Loading backup");
+			IntAether3DSwap ca = new IntAether3DSwap("D:/data/Aether3D/-1073741823/backups/IntAether3DSwap_9997", "./");
+			System.out.println("Taking samples");
+			System.out.println("Sample 1 (170,59):" + ca.getValueAtPosition(170, 59, 0));
+			System.out.println("Sample 2 (181,66):" + ca.getValueAtPosition(181, 66, 0));
+			System.out.println("Sample 3 (385,134):" + ca.getValueAtPosition(385, 134, 0));
+			System.out.println("Sample 4 (421,174):" + ca.getValueAtPosition(421, 174, 0));
+			System.out.println("Sample 5 (638,225):" + ca.getValueAtPosition(638, 225, 0));
+			System.out.println("Sample 6 (658,245):" + ca.getValueAtPosition(658, 245, 0));
+			System.out.println("Sample 7 (779,370):" + ca.getValueAtPosition(779, 370, 0));
+			System.out.println("Sample 8 (807,396):" + ca.getValueAtPosition(807, 396, 0));
+			System.out.println("Sample 9 (3565,90):" + ca.getValueAtPosition(3565, 90, 0));
+			System.out.println("Sample 10 (3577,102):" + ca.getValueAtPosition(3577, 102, 0));
+			System.out.println("Sample 11 (3653,314):" + ca.getValueAtPosition(3653, 314, 0));
+			System.out.println("Sample 12 (3657,374):" + ca.getValueAtPosition(3657, 374, 0));
+			System.out.println("Finished");
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void generateBackup() {
 		SymmetricIntCellularAutomaton3D ca;
 		String path = "D:/data/test";
