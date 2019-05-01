@@ -16,7 +16,7 @@
  */
 package cellularautomata.grid;
 
-public interface ProcessableGrid<P extends GridProcessor<?>> {
+public interface ActionableGrid<P extends GridProcessor<?>> {
 	/**
 	 * Triggers the processing of the grid by the added processors.
 	 * 
