@@ -72,7 +72,7 @@ public class ColorMappedIntGrid2D extends ColorGrid2D implements IntGrid2DProces
 
 	@Override
 	public Color getColorAtPosition(int x, int y) throws Exception {
-		return colorMap.getColorAtPosition(source.getValueAtPosition(x, y));
+		return colorMap.getColor(source.getValueAtPosition(x, y));
 	}
 	
 	@Override

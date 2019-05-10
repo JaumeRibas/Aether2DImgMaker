@@ -48,7 +48,7 @@ public class LongGrayscaleMap implements LongBoundedColorMap {
 	}
 	
 	@Override
-	public Color getColorAtPosition(long value) throws IllegalArgumentException {
+	public Color getColor(long value) throws IllegalArgumentException {
 		if (value < minValue || value > maxValue ) 
 			throw new IllegalArgumentException("Value " + value + " outside range (" + minValue + "-" + maxValue + ")");
 		float brightness = (float) (((value - minValue)*brightnessIncreasePerUnit + minBrightness)/255);

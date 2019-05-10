@@ -38,6 +38,6 @@ public class ColorMappedShortGrid2DWithBackground extends ColorMappedShortGrid2D
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
-		return colorMap.getColorAtPosition(value);
+		return colorMap.getColor(value);
 	}
 }

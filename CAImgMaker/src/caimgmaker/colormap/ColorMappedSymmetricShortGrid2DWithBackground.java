@@ -38,7 +38,7 @@ public class ColorMappedSymmetricShortGrid2DWithBackground extends ColorMappedSy
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
-		return colorMap.getColorAtPosition(value);
+		return colorMap.getColor(value);
 	}
 	
 	@Override
@@ -47,6 +47,6 @@ public class ColorMappedSymmetricShortGrid2DWithBackground extends ColorMappedSy
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}
-		return colorMap.getColorAtPosition(value);
+		return colorMap.getColor(value);
 	}
 }

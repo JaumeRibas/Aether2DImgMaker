@@ -31,11 +31,11 @@ public class LongUnboundedColorMap implements LongBoundedColorMap {
 		colorMap.setValueRange(min, max);
 	}
 	
-	public Color getColorAtPosition(long value) throws Exception {
+	public Color getColor(long value) throws Exception {
 		if (value < colorMap.getMinValue() || value > colorMap.getMaxValue()) {
 			return outOfBoundsColor;
 		} else {
-			return colorMap.getColorAtPosition(value);
+			return colorMap.getColor(value);
 		}
 	}
 	
