@@ -19,7 +19,7 @@ package cellularautomata.grid;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class IntGrid2D implements Grid2D, IntGrid, ProcessableGrid<IntGrid2DProcessor> {
+public abstract class IntGrid2D implements Grid2D, IntGrid, ActionableGrid<IntGrid2DProcessor> {
 	
 	protected Set<IntGrid2DProcessor> processors;
 	

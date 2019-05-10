@@ -16,12 +16,14 @@
  */
 package caimgmaker;
 
+import java.math.BigInteger;
+
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether3DSwap;
 import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
 
-public class Aether3DImgMaker {
+public class IntAether3DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-2000", "D:/data/test"};//, "150", "30", "10000"};//debug
@@ -38,9 +40,16 @@ public class Aether3DImgMaker {
 			boolean isBackupLeapDefined = false;
 			
 			String initValOrBackupPath = args[0];
-			try {
-				initialValue = Integer.parseInt(initValOrBackupPath);
-			} catch (NumberFormatException ex) {
+			if (initValOrBackupPath.matches("-?\\d+")) {
+				BigInteger tmp = new BigInteger(initValOrBackupPath);
+				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
+						&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
+					initialValue = tmp.intValue();
+				} else {
+					System.err.println("Initial value out of range.");
+					return;
+				}
+			} else {
 				isRestore = true;
 			}
 			if (args.length > 1) {

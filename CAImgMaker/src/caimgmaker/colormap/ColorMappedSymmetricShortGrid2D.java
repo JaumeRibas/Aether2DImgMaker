@@ -111,7 +111,7 @@ public class ColorMappedSymmetricShortGrid2D extends SymmetricColorGrid2D {
 	}
 
 	@Override
-	public Color getNonSymmetricColor(int x, int y) throws Exception {
+	public Color getNonSymmetricColorAtPosition(int x, int y) throws Exception {
 		return colorMap.getColorAtPosition(source.getNonSymmetricValue(x, y));
 	}
 	

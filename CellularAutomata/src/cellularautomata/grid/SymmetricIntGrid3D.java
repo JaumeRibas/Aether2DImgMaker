@@ -16,7 +16,7 @@
  */
 package cellularautomata.grid;
 
-public abstract class SymmetricIntGrid3D extends IntGrid3D implements SymmetricGrid3D, ProcessableGrid<IntGrid3DProcessor> {
+public abstract class SymmetricIntGrid3D extends IntGrid3D implements SymmetricGrid3D, ActionableGrid<IntGrid3DProcessor> {
 	
 	/**
 	 * Returns the value at a given position

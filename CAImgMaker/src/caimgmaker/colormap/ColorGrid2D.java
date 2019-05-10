@@ -21,9 +21,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import cellularautomata.grid.Grid2D;
-import cellularautomata.grid.ProcessableGrid;
+import cellularautomata.grid.ActionableGrid;
 
-public abstract class ColorGrid2D implements Grid2D, ProcessableGrid<ColorGrid2DProcessor> {
+public abstract class ColorGrid2D implements Grid2D, ActionableGrid<ColorGrid2DProcessor> {
 	
 	protected Set<ColorGrid2DProcessor> processors;
 	

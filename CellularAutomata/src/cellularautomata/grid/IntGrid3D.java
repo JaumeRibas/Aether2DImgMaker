@@ -19,7 +19,7 @@ package cellularautomata.grid;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class IntGrid3D implements Grid3D, IntGrid, ProcessableGrid<IntGrid3DProcessor> {
+public abstract class IntGrid3D implements Grid3D, IntGrid, ActionableGrid<IntGrid3DProcessor> {
 	
 	protected Set<IntGrid3DProcessor> processors;
 	

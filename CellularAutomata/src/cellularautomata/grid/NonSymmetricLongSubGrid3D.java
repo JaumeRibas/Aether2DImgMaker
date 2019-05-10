@@ -16,69 +16,35 @@
  */
 package cellularautomata.grid;
 
-import java.io.Serializable;
-
-import cellularautomata.grid.NonSymmetricLongGrid3DSlice;
-
-public class SizeLimitedNonSymmetricLongSlicedGrid3D extends LongGrid3D implements Serializable {
+public class NonSymmetricLongSubGrid3D extends LongGrid3D {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6869953413944757177L;
-
-	public static final int MIN_LENGTH = 2;
-
-	public int maxX;
-	public int minX;
-	private NonSymmetricLongGrid3DSlice[] slices;
-
-	public SizeLimitedNonSymmetricLongSlicedGrid3D(int minX, long maxBytes) {
+	private LongGrid3D source;
+	private int minX;
+	private int maxX;
+	private int minY;
+	private int maxY;
+	private int minZ;
+	private int maxZ;
+	
+	public NonSymmetricLongSubGrid3D(LongGrid3D source, int minX, int maxX, int minY, 
+			int maxY, int minZ, int maxZ) {
+		this.source = source;
 		this.minX = minX;
-		int xLength = getMaxXLength(minX, maxBytes);
-		if (xLength < 2) {
-			throw new OutOfMemoryError("Grid with minX=" + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
-		}
-		slices = new NonSymmetricLongGrid3DSlice[xLength];
-		maxX = minX + xLength - 1;
-		for (int x = minX, i = 0; x <= maxX; x++, i++) {
-			slices[i] = new NonSymmetricLongGrid3DSlice(x);
-		}
-	}
-
-	public void setValueAtPosition(int x, int y, int z, long initialValue) {
-		slices[x - minX].setValueAtPosition(y, z, initialValue);			
+		this.maxX = maxX;
+		this.minY = minY;
+		this.maxY = maxY;
+		this.minZ = minZ;
+		this.maxZ = maxZ;
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y, int z) {
-		return slices[x - minX].getValueAtPosition(y, z);
-	}
-
-	public void setSlice(int x, NonSymmetricLongGrid3DSlice slice) {
-		slices[x - minX] = slice;
-	}
-	
-	private int getMaxXLength(int minX, long maxBytes) {
-		long size = Constants.ARRAY_SIZE_OVERHEAD;
-		int xLength = 0;
-		int x = minX;
-		//round up to 8 multiple
-		long reminder = size % 8;
-		long roundedSize = reminder > 0 ? size + 8 - reminder: size;
-		while (roundedSize <= maxBytes) {
-			size += NonSymmetricLongGrid3DSlice.getSliceSize(x) + Integer.BYTES;
-			reminder = size % 8;
-			roundedSize = reminder > 0 ? size + 8 - reminder: size;
-			x++;
-			xLength++;
-		}
-		return xLength - 1;
+	public long getValueAtPosition(int x, int y, int z) throws Exception {
+		return source.getValueAtPosition(x, y, z);
 	}
 
 	@Override
 	public int getMinX() {
-		return minX;
+		return Math.max(minX, 0);
 	}
 
 	@Override
@@ -88,37 +54,37 @@ public class SizeLimitedNonSymmetricLongSlicedGrid3D extends LongGrid3D implemen
 	
 	@Override
 	public int getMinY() {
-		return 0;
+		return Math.max(minY, getMinZ());
 	}
 	
 	@Override
 	public int getMaxY() {
-		return maxX;
+		return Math.min(maxY, maxX);
 	}
 	
 	@Override
 	public int getMinZ() {
-		return 0;
+		return Math.max(minZ, 0);
 	}
 	
 	@Override
 	public int getMaxZ() {
-		return maxX;
+		return Math.min(maxZ, getMaxY());
 	}
 	
 	@Override
 	public int getMinXAtY(int y) {
-		return y;
+		return Math.max(getMinX(), y);
 	}
 
 	@Override
 	public int getMinXAtZ(int z) {
-		return z;
+		return Math.max(getMinX(), z);
 	}
 
 	@Override
 	public int getMinX(int y, int z) {
-		return Math.max(y, z);
+		return Math.max(getMinX(), Math.max(y, z));
 	}
 
 	@Override
@@ -138,62 +104,62 @@ public class SizeLimitedNonSymmetricLongSlicedGrid3D extends LongGrid3D implemen
 
 	@Override
 	public int getMinYAtX(int x) {
-		return 0;
+		return getMinZ();
 	}
 
 	@Override
 	public int getMinYAtZ(int z) {
-		return z;
+		return Math.max(getMinY(), z);
 	}
 
 	@Override
 	public int getMinY(int x, int z) {
-		return z;
+		return Math.max(getMinY(), z);
 	}
 
 	@Override
 	public int getMaxYAtX(int x) {
-		return Math.min(maxX, x);
+		return Math.min(getMaxY(), x);
 	}
 
 	@Override
 	public int getMaxYAtZ(int z) {
-		return maxX;
+		return getMaxY();
 	}
 
 	@Override
 	public int getMaxY(int x, int z) {
-		return Math.min(maxX, x);
+		return Math.min(getMaxY(), x);
 	}
 
 	@Override
 	public int getMinZAtX(int x) {
-		return 0;
+		return getMinZ();
 	}
 
 	@Override
 	public int getMinZAtY(int y) {
-		return 0;
+		return getMinZ();
 	}
 
 	@Override
 	public int getMinZ(int x, int y) {
-		return 0;
+		return getMinZ();
 	}
 
 	@Override
 	public int getMaxZAtX(int x) {
-		return Math.min(maxX, x);
+		return Math.min(getMaxZ(), x);
 	}
 
 	@Override
 	public int getMaxZAtY(int y) {
-		return Math.min(maxX, y);
+		return Math.min(getMaxZ(), y);
 	}
 
 	@Override
 	public int getMaxZ(int x, int y) {
-		return Math.min(maxX, y);
+		return Math.min(getMaxZ(), y);
 	}
-	
+
 }

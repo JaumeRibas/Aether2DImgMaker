@@ -636,7 +636,7 @@ public class IntAether3DSwap extends SymmetricIntCellularAutomaton3D {
 		File gridBackupFolder = new File(backupFolderPath + File.separator + GRID_FOLDER_NAME);
 	    FileUtils.copyDirectory(gridFolder, gridBackupFolder);
 		HashMap<String, Object> properties = getPropertiesMap();
-		Utils.serializeToFile(properties, backupFolderPath, "properties.ser");
+		Utils.serializeToFile(properties, backupFolderPath, PROPERTIES_BACKUP_FILE_NAME);
 	}
 	
 	private HashMap<String, Object> getPropertiesMap() {

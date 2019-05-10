@@ -41,7 +41,7 @@ public class ColorMappedSymmetricLongGrid2DWithBackground extends ColorMappedSym
 	}
 	
 	@Override
-	public Color getNonSymmetricColor(int x, int y) throws Exception {
+	public Color getNonSymmetricColorAtPosition(int x, int y) throws Exception {
 		long value = source.getNonSymmetricValue(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;

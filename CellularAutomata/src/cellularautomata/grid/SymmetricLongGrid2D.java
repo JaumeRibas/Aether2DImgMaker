@@ -38,11 +38,12 @@ public abstract class SymmetricLongGrid2D extends LongGrid2D implements Symmetri
 	public abstract long getNonSymmetricValue(int x, int y) throws Exception;
 	
 	public long[] getMinAndMaxValue() throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		long maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
+		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
-			for (int y = minY; y <= x && y <= maxY; y++) {
+			int minY = getNonSymmetricMinY(x);
+			int maxY = getNonSymmetricMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
 				long value = getNonSymmetricValue(x, y);
 				if (value > maxValue)
 					maxValue = value;
@@ -53,12 +54,60 @@ public abstract class SymmetricLongGrid2D extends LongGrid2D implements Symmetri
 		return new long[]{ minValue, maxValue };
 	}
 	
-	public long[] getMinAndMaxValue(long backgroundValue) throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		long maxValue = getNonSymmetricValue(minX, minY), minValue = maxValue;
+	public long[] getEvenPositionsMinAndMaxValue() throws Exception {
+		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
-			for (int y = minY; y <= x && y <= maxY; y++) {
+			int minY = getNonSymmetricMinY(x);
+			int maxY = getNonSymmetricMaxY(x);
+			if ((minY+x)%2 != 0) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				long value = getNonSymmetricValue(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return new long[]{ minValue, maxValue };
+	}
+	
+	public long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		for (int x = minX; x <= maxX; x++) {
+			int minY = getNonSymmetricMinY(x);
+			int maxY = getNonSymmetricMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isEven) { 
+				if (!isPositionEven) {
+					minY++;
+				}
+			} else {
+				if (isPositionEven) {
+					minY++;
+				}
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				long value = getNonSymmetricValue(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return new long[]{ minValue, maxValue };
+	}
+	
+	public long[] getMinAndMaxValue(long backgroundValue) throws Exception {		
+		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		for (int x = minX; x <= maxX; x++) {
+			int minY = getNonSymmetricMinY(x);
+			int maxY = getNonSymmetricMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
 				long value = getNonSymmetricValue(x, y);
 				if (value != backgroundValue) {
 					if (value > maxValue)

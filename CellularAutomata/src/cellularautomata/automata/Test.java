@@ -299,6 +299,7 @@ public class Test {
 			boolean finished2 = false;
 			boolean equal = true;
 			while (!finished1 && !finished2) {
+//				System.out.println("Step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
 					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
 						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {

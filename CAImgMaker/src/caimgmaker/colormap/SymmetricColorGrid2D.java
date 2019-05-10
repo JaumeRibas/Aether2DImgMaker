@@ -38,6 +38,6 @@ public abstract class SymmetricColorGrid2D extends ColorGrid2D implements Symmet
 	 * @return the {@link Color} at (x,y)
 	 * @throws Exception 
 	 */
-	public abstract Color getNonSymmetricColor(int x, int y) throws Exception;
+	public abstract Color getNonSymmetricColorAtPosition(int x, int y) throws Exception;
 
 }

@@ -21,6 +21,14 @@ public class SymmetricLongGrid3DCrossSection extends SymmetricLongGrid2D impleme
 	private SymmetricLongGrid3D source;
 	private int z;
 	
+	public int getZ() {
+		return z;
+	}
+
+	public void setZ(int z) {
+		this.z = z;
+	}
+	
 	public SymmetricLongGrid3DCrossSection(SymmetricLongGrid3D source, int z) {
 		this.source = source;
 		this.z = z;

@@ -22,20 +22,20 @@ package cellularautomata.grid;
  * @author Jaume
  *
  */
-public class IntGrid2DEvenOddMinAndMaxProcessor implements IntGrid2DProcessor {
+public class LongGrid2DEvenOddMinAndMaxProcessor implements LongGrid2DProcessor {
 
-	private int[] evenMinAndMax;
-	private int[] oddMinAndMax;
+	private long[] evenMinAndMax;
+	private long[] oddMinAndMax;
 
 	@Override
-	public void processGridBlock(IntGrid2D gridBlock) throws Exception {
+	public void processGridBlock(LongGrid2D gridBlock) throws Exception {
 		int maxX = gridBlock.getMaxX(), minX = gridBlock.getMinX(), 
 				maxY = gridBlock.getMaxY(minX), minY = gridBlock.getMinY(minX);
 		//even
 		if (evenMinAndMax == null) {
-			evenMinAndMax = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+			evenMinAndMax = new long[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
 		}
-		int evenMaxValue = evenMinAndMax[1], evenMinValue = evenMinAndMax[0];
+		long evenMaxValue = evenMinAndMax[1], evenMinValue = evenMinAndMax[0];
 		for (int x = minX; x <= maxX; x++) {
 			minY = gridBlock.getMinY(x);
 			maxY = gridBlock.getMaxY(x);
@@ -43,7 +43,7 @@ public class IntGrid2DEvenOddMinAndMaxProcessor implements IntGrid2DProcessor {
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
-				int value = gridBlock.getValueAtPosition(x, y);
+				long value = gridBlock.getValueAtPosition(x, y);
 				if (value > evenMaxValue)
 					evenMaxValue = value;
 				if (value < evenMinValue)
@@ -54,9 +54,9 @@ public class IntGrid2DEvenOddMinAndMaxProcessor implements IntGrid2DProcessor {
 		evenMinAndMax[1] = evenMaxValue;
 		//odd
 		if (oddMinAndMax == null) {
-			oddMinAndMax = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+			oddMinAndMax = new long[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
 		}
-		int oddMaxValue = oddMinAndMax[1], oddMinValue = oddMinAndMax[0];
+		long oddMaxValue = oddMinAndMax[1], oddMinValue = oddMinAndMax[0];
 		for (int x = minX; x <= maxX; x++) {
 			minY = gridBlock.getMinY(x);
 			maxY = gridBlock.getMaxY(x);
@@ -64,7 +64,7 @@ public class IntGrid2DEvenOddMinAndMaxProcessor implements IntGrid2DProcessor {
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
-				int value = gridBlock.getValueAtPosition(x, y);
+				long value = gridBlock.getValueAtPosition(x, y);
 				if (value > oddMaxValue)
 					oddMaxValue = value;
 				if (value < oddMinValue)
@@ -86,11 +86,11 @@ public class IntGrid2DEvenOddMinAndMaxProcessor implements IntGrid2DProcessor {
 		
 	}
 	
-	public int[] getEvenMinAndMaxValue() {
+	public long[] getEvenMinAndMaxValue() {
 		return evenMinAndMax;
 	}
 	
-	public int[] getOddMinAndMaxValue() {
+	public long[] getOddMinAndMaxValue() {
 		return oddMinAndMax;
 	}
 }

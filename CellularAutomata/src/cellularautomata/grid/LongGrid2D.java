@@ -19,7 +19,7 @@ package cellularautomata.grid;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class LongGrid2D implements Grid2D, LongGrid, ProcessableGrid<LongGrid2DProcessor> {
+public abstract class LongGrid2D implements Grid2D, LongGrid, ActionableGrid<LongGrid2DProcessor> {
 	
 	protected Set<LongGrid2DProcessor> processors;
 	
