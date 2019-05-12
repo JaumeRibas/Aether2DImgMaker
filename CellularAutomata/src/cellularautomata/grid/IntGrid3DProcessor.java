@@ -21,6 +21,6 @@ import cellularautomata.grid.IntGrid3D;
 public interface IntGrid3DProcessor extends GridProcessor<IntGrid3D> {
 
 	@Override
-	public void processGridBlock(IntGrid3D gridBlock) throws Exception;
+	void processGridBlock(IntGrid3D gridBlock) throws Exception;
 
 }

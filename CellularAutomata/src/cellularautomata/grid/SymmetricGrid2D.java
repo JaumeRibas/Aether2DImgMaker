@@ -23,7 +23,7 @@ public interface SymmetricGrid2D extends Grid2D {
 	 * 
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinX();
+	int getNonSymmetricMinX();
 	
 	/**
 	 * Returns the smallest x-coordinate of the non symmetric section of the grid at y.<br/>
@@ -33,14 +33,14 @@ public interface SymmetricGrid2D extends Grid2D {
 	 * @param y the y-coordinate
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinX(int y);
+	int getNonSymmetricMinX(int y);
 	
 	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxX();
+	int getNonSymmetricMaxX();
 	
 	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid at y.<br/>
@@ -50,14 +50,14 @@ public interface SymmetricGrid2D extends Grid2D {
 	 * @param y the y-coordinate
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxX(int y);
+	int getNonSymmetricMaxX(int y);
 	
 	/**
 	 * Returns the smallest y-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the smallest y
 	 */
-	public int getNonSymmetricMinY();
+	int getNonSymmetricMinY();
 	
 	/**
 	 * Returns the smallest y-coordinate of the non symmetric section of the grid at x.<br/>
@@ -67,14 +67,14 @@ public interface SymmetricGrid2D extends Grid2D {
 	 * @param x the x-coordinate
 	 * @return the smallest y
 	 */
-	public int getNonSymmetricMinY(int x);
+	int getNonSymmetricMinY(int x);
 	
 	/**
 	 * Returns the largest y-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest y
 	 */
-	public int getNonSymmetricMaxY();
+	int getNonSymmetricMaxY();
 	
 	/**
 	 * Returns the largest y-coordinate of the non symmetric section of the grid at x.<br/>
@@ -84,6 +84,6 @@ public interface SymmetricGrid2D extends Grid2D {
 	 * @param x the x-coordinate
 	 * @return the largest y
 	 */
-	public int getNonSymmetricMaxY(int x);
+	int getNonSymmetricMaxY(int x);
 
 }

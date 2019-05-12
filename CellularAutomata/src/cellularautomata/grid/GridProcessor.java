@@ -18,9 +18,9 @@ package cellularautomata.grid;
 
 public interface GridProcessor<P extends Grid> {
 
-	public void beforeProcessing() throws Exception;
+	void beforeProcessing() throws Exception;
 
-	public void processGridBlock(P gridBlock) throws Exception;
+	void processGridBlock(P gridBlock) throws Exception;
 	
-	public void afterProcessing() throws Exception;
+	void afterProcessing() throws Exception;
 }

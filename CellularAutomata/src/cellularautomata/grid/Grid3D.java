@@ -23,7 +23,7 @@ public interface Grid3D extends Grid {
 	 * 
 	 * @return the smallest x
 	 */
-	public int getMinX();
+	int getMinX();
 	
 	/**
 	 * Returns the smallest x-coordinate of the grid at y.<br/>
@@ -33,7 +33,7 @@ public interface Grid3D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the smallest x
 	 */
-	public default int getMinXAtY(int y) {
+	default int getMinXAtY(int y) {
 		return getMinX();
 	}
 	
@@ -45,7 +45,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the smallest x
 	 */
-	public default int getMinXAtZ(int z) {
+	default int getMinXAtZ(int z) {
 		return getMinX();
 	}
 	
@@ -58,7 +58,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the smallest x
 	 */
-	public default int getMinX(int y, int z) {
+	default int getMinX(int y, int z) {
 		return getMinX();
 	}
 	
@@ -67,7 +67,7 @@ public interface Grid3D extends Grid {
 	 * 
 	 * @return the largest x
 	 */
-	public int getMaxX();
+	int getMaxX();
 	
 	/**
 	 * Returns the largest x-coordinate of the grid at y.<br/>
@@ -77,7 +77,7 @@ public interface Grid3D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the largest x
 	 */
-	public default int getMaxXAtY(int y) {
+	default int getMaxXAtY(int y) {
 		return getMaxX();
 	}
 	
@@ -89,7 +89,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the largest x
 	 */
-	public default int getMaxXAtZ(int z) {
+	default int getMaxXAtZ(int z) {
 		return getMaxX();
 	}
 	
@@ -102,7 +102,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the largest x
 	 */
-	public default int getMaxX(int y, int z) {
+	default int getMaxX(int y, int z) {
 		return getMaxX();
 	}
 	
@@ -111,7 +111,7 @@ public interface Grid3D extends Grid {
 	 * 
 	 * @return the smallest y
 	 */
-	public int getMinY();
+	int getMinY();
 	
 	/**
 	 * Returns the smallest y-coordinate of the grid at x.<br/>
@@ -121,7 +121,7 @@ public interface Grid3D extends Grid {
 	 * @param x the x-coordinate
 	 * @return the smallest y
 	 */
-	public default int getMinYAtX(int x) {
+	default int getMinYAtX(int x) {
 		return getMinY();
 	}
 	
@@ -133,7 +133,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the smallest y
 	 */
-	public default int getMinYAtZ(int z) {
+	default int getMinYAtZ(int z) {
 		return getMinY();
 	}
 	
@@ -146,7 +146,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the smallest y
 	 */
-	public default int getMinY(int x, int z) {
+	default int getMinY(int x, int z) {
 		return getMinY();
 	}
 
@@ -155,7 +155,7 @@ public interface Grid3D extends Grid {
 	 * 
 	 * @return the largest y
 	 */
-	public int getMaxY();
+	int getMaxY();
 	
 	/**
 	 * Returns the largest y-coordinate of the grid at x.<br/>
@@ -165,7 +165,7 @@ public interface Grid3D extends Grid {
 	 * @param x the x-coordinate
 	 * @return the largest y
 	 */
-	public default int getMaxYAtX(int x) {
+	default int getMaxYAtX(int x) {
 		return getMaxY();
 	}
 	
@@ -177,7 +177,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the largest y
 	 */
-	public default int getMaxYAtZ(int z) {
+	default int getMaxYAtZ(int z) {
 		return getMaxY();
 	}
 	
@@ -190,7 +190,7 @@ public interface Grid3D extends Grid {
 	 * @param z the z-coordinate
 	 * @return the largest y
 	 */
-	public default int getMaxY(int x, int z) {
+	default int getMaxY(int x, int z) {
 		return getMaxY();
 	}
 	
@@ -199,7 +199,7 @@ public interface Grid3D extends Grid {
 	 * 
 	 * @return the smallest z
 	 */
-	public int getMinZ();
+	int getMinZ();
 	
 	/**
 	 * Returns the smallest z-coordinate of the grid at x.<br/>
@@ -209,7 +209,7 @@ public interface Grid3D extends Grid {
 	 * @param x the x-coordinate
 	 * @return the smallest z
 	 */
-	public default int getMinZAtX(int x) {
+	default int getMinZAtX(int x) {
 		return getMinZ();
 	}
 	
@@ -221,7 +221,7 @@ public interface Grid3D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the smallest z
 	 */
-	public default int getMinZAtY(int y) {
+	default int getMinZAtY(int y) {
 		return getMinZ();
 	}
 	
@@ -234,7 +234,7 @@ public interface Grid3D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the smallest z
 	 */
-	public default int getMinZ(int x, int y) {
+	default int getMinZ(int x, int y) {
 		return getMinZ();
 	}
 	
@@ -243,7 +243,7 @@ public interface Grid3D extends Grid {
 	 * 
 	 * @return the largest z
 	 */
-	public int getMaxZ();
+	int getMaxZ();
 	
 	/**
 	 * Returns the largest z-coordinate of the grid at x.<br/>
@@ -253,7 +253,7 @@ public interface Grid3D extends Grid {
 	 * @param x the x-coordinate
 	 * @return the largest z
 	 */
-	public default int getMaxZAtX(int x) {
+	default int getMaxZAtX(int x) {
 		return getMaxZ();
 	}
 	
@@ -265,7 +265,7 @@ public interface Grid3D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the largest z
 	 */
-	public default int getMaxZAtY(int y) {
+	default int getMaxZAtY(int y) {
 		return getMaxZ();
 	}
 	
@@ -278,7 +278,7 @@ public interface Grid3D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the largest z
 	 */
-	public default int getMaxZ(int x, int y) {
+	default int getMaxZ(int x, int y) {
 		return getMaxZ();
 	}
 

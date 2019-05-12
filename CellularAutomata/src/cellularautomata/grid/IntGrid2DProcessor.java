@@ -19,6 +19,6 @@ package cellularautomata.grid;
 public interface IntGrid2DProcessor extends GridProcessor<IntGrid2D> {
 
 	@Override
-	public void processGridBlock(IntGrid2D gridBlock) throws Exception;
+	void processGridBlock(IntGrid2D gridBlock) throws Exception;
 
 }

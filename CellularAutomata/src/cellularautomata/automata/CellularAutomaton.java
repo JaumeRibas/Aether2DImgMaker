@@ -28,21 +28,21 @@ public interface CellularAutomaton {
 	 * @return true if the state changed or false otherwise
 	 * @throws Exception 
 	 */
-	public boolean nextStep() throws Exception;
+	boolean nextStep() throws Exception;
 	
 	/**
 	 * Returns the current step
 	 * 
 	 * @return the current step
 	 */
-	public long getStep();
+	long getStep();
 	
 	/**
 	 * Return the cellular automaton's name in a format that can be used in file names
 	 * 
 	 * @return the name
 	 */
-	public String getName();
+	String getName();
 	
 	/**
 	 * Return the cellular automaton's name and configuration as a folder and sub-folder(s) path.
@@ -50,7 +50,7 @@ public interface CellularAutomaton {
 	 * 
 	 * @return the path
 	 */
-	public String getSubFolderPath();
+	String getSubFolderPath();
 
 	/**
 	 * Backs up the state of the automaton to a file or folder for future restoration.<br/>
@@ -61,5 +61,5 @@ public interface CellularAutomaton {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException;
+	void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException;
 }

@@ -18,12 +18,12 @@ package cellularautomata.grid;
 
 public interface IntGrid {
 
-	public int[] getMinAndMaxValue() throws Exception;
+	int[] getMinAndMaxValue() throws Exception;
 	
-	public int[] getMinAndMaxValue(int backgroundValue) throws Exception;
+	int[] getMinAndMaxValue(int backgroundValue) throws Exception;
 	
-	public int getTotalValue() throws Exception;
+	int getTotalValue() throws Exception;
 	
-	public int getMaxAbsoluteValue() throws Exception;
+	int getMaxAbsoluteValue() throws Exception;
 	
 }

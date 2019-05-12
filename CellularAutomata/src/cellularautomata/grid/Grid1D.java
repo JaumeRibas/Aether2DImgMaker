@@ -23,14 +23,14 @@ public interface Grid1D extends Grid {
 	 * 
 	 * @return the smallest x
 	 */
-	public int getMinX();
+	int getMinX();
 	
 	/**
 	 * Returns the largest x-coordinate
 	 * 
 	 * @return the largest x
 	 */
-	public int getMaxX();
+	int getMaxX();
 	
 	/**
 	 * Returns a wrapped {@link Grid1D} with the passed bounds.
@@ -39,5 +39,5 @@ public interface Grid1D extends Grid {
 	 * @param maxX
 	 * @return a {@link Grid1D} wrapping the current grid 
 	 */
-	public Grid1D subGrid(int minX, int maxX);
+	Grid1D subGrid(int minX, int maxX);
 }

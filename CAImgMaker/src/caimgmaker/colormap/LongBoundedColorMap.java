@@ -18,13 +18,13 @@ package caimgmaker.colormap;
 
 public interface LongBoundedColorMap extends LongColorMap {
 
-	public long getMaxValue();
+	long getMaxValue();
 
-	public long getMinValue();
+	long getMinValue();
 	
-	public void setMinValue(long value) throws Exception;
+	void setMinValue(long value) throws Exception;
 	
-	public void setMaxValue(long value) throws Exception;
+	void setMaxValue(long value) throws Exception;
 	
-	public void setValueRange(long min, long max) throws Exception;
+	void setValueRange(long min, long max) throws Exception;
 }

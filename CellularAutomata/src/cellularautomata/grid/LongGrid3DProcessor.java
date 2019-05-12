@@ -19,5 +19,5 @@ package cellularautomata.grid;
 public interface LongGrid3DProcessor extends GridProcessor<LongGrid3D> {
 
 	@Override
-	public void processGridBlock(LongGrid3D gridBlock) throws Exception;
+	void processGridBlock(LongGrid3D gridBlock) throws Exception;
 }

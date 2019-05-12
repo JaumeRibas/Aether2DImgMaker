@@ -23,7 +23,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * 
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinX();
+	int getNonSymmetricMinX();
 	
 	/**
 	 * Returns the smallest x-coordinate of the non symmetric section of the grid at y.<br/>
@@ -33,7 +33,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param y the y-coordinate
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinXAtY(int y);
+	int getNonSymmetricMinXAtY(int y);
 	
 	/**
 	 * Returns the smallest x-coordinate of the non symmetric section of the grid at z.<br/>
@@ -43,7 +43,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinXAtZ(int z);
+	int getNonSymmetricMinXAtZ(int z);
 	
 	/**
 	 * Returns the smallest x-coordinate of the non symmetric section of the grid at (y,z).<br/>
@@ -54,14 +54,14 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinX(int y, int z);
+	int getNonSymmetricMinX(int y, int z);
 	
 	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxX();
+	int getNonSymmetricMaxX();
 	
 	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid at y.<br/>
@@ -71,7 +71,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param y the y-coordinate
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxXAtY(int y);
+	int getNonSymmetricMaxXAtY(int y);
 	
 	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid at z.<br/>
@@ -81,7 +81,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxXAtZ(int z);
+	int getNonSymmetricMaxXAtZ(int z);
 	
 	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid at (y,z).<br/>
@@ -92,14 +92,14 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxX(int y, int z);
+	int getNonSymmetricMaxX(int y, int z);
 	
 	/**
 	 * Returns the smallest y-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the smallest y
 	 */
-	public int getNonSymmetricMinY();
+	int getNonSymmetricMinY();
 	
 	/**
 	 * Returns the smallest y-coordinate of the non symmetric section of the grid at x.<br/>
@@ -109,7 +109,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param x the x-coordinate
 	 * @return the smallest y
 	 */
-	public int getNonSymmetricMinYAtX(int x);
+	int getNonSymmetricMinYAtX(int x);
 	
 	/**
 	 * Returns the smallest y-coordinate of the non symmetric section of the grid at z.<br/>
@@ -119,7 +119,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the smallest y
 	 */
-	public int getNonSymmetricMinYAtZ(int z);
+	int getNonSymmetricMinYAtZ(int z);
 	
 	/**
 	 * Returns the smallest y-coordinate of the non symmetric section of the grid at (x,z).<br/>
@@ -130,14 +130,14 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the smallest y
 	 */
-	public int getNonSymmetricMinY(int x, int z);
+	int getNonSymmetricMinY(int x, int z);
 
 	/**
 	 * Returns the largest y-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest y
 	 */
-	public int getNonSymmetricMaxY();
+	int getNonSymmetricMaxY();
 	
 	/**
 	 * Returns the largest y-coordinate of the non symmetric section of the grid at x.<br/>
@@ -147,7 +147,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param x the x-coordinate
 	 * @return the largest y
 	 */
-	public int getNonSymmetricMaxYAtX(int x);
+	int getNonSymmetricMaxYAtX(int x);
 	
 	/**
 	 * Returns the largest y-coordinate of the non symmetric section of the grid at z.<br/>
@@ -157,7 +157,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the largest y
 	 */
-	public int getNonSymmetricMaxYAtZ(int z);
+	int getNonSymmetricMaxYAtZ(int z);
 	
 	/**
 	 * Returns the largest y-coordinate of the non symmetric section of the grid at (x,z).<br/>
@@ -168,14 +168,14 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param z the z-coordinate
 	 * @return the largest y
 	 */
-	public int getNonSymmetricMaxY(int x, int z);
+	int getNonSymmetricMaxY(int x, int z);
 	
 	/**
 	 * Returns the smallest z-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the smallest z
 	 */
-	public int getNonSymmetricMinZ();
+	int getNonSymmetricMinZ();
 	
 	/**
 	 * Returns the smallest z-coordinate of the non symmetric section of the grid at x.<br/>
@@ -185,7 +185,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param x the x-coordinate
 	 * @return the smallest z
 	 */
-	public int getNonSymmetricMinZAtX(int x);
+	int getNonSymmetricMinZAtX(int x);
 	
 	/**
 	 * Returns the smallest z-coordinate of the non symmetric section of the grid at y.<br/>
@@ -195,7 +195,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param y the y-coordinate
 	 * @return the smallest z
 	 */
-	public int getNonSymmetricMinZAtY(int y);
+	int getNonSymmetricMinZAtY(int y);
 	
 	/**
 	 * Returns the smallest z-coordinate of the non symmetric section of the grid at (x,y).<br/>
@@ -206,14 +206,14 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param y the y-coordinate
 	 * @return the smallest z
 	 */
-	public int getNonSymmetricMinZ(int x, int y);
+	int getNonSymmetricMinZ(int x, int y);
 	
 	/**
 	 * Returns the largest z-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest z
 	 */
-	public int getNonSymmetricMaxZ();
+	int getNonSymmetricMaxZ();
 	
 	/**
 	 * Returns the largest z-coordinate of the non symmetric section of the grid at x.<br/>
@@ -223,7 +223,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param x the x-coordinate
 	 * @return the largest z
 	 */
-	public int getNonSymmetricMaxZAtX(int x);
+	int getNonSymmetricMaxZAtX(int x);
 	
 	/**
 	 * Returns the largest z-coordinate of the non symmetric section of the grid at y.<br/>
@@ -233,7 +233,7 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param y the y-coordinate
 	 * @return the largest z
 	 */
-	public int getNonSymmetricMaxZAtY(int y);
+	int getNonSymmetricMaxZAtY(int y);
 	
 	/**
 	 * Returns the largest z-coordinate of the non symmetric section of the grid at (x,y).<br/>
@@ -244,6 +244,6 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * @param y the y-coordinate
 	 * @return the largest z
 	 */
-	public int getNonSymmetricMaxZ(int x, int y);
+	int getNonSymmetricMaxZ(int x, int y);
 
 }

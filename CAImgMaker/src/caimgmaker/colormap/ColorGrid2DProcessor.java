@@ -21,6 +21,6 @@ import cellularautomata.grid.GridProcessor;
 public interface ColorGrid2DProcessor extends GridProcessor<ColorGrid2D> {
 
 	@Override
-	public void processGridBlock(ColorGrid2D gridBlock) throws Exception;
+	void processGridBlock(ColorGrid2D gridBlock) throws Exception;
 	
 }

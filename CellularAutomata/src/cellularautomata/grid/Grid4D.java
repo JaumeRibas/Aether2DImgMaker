@@ -23,55 +23,55 @@ public interface Grid4D extends Grid {
 	 * 
 	 * @return the smallest w
 	 */
-	public int getMinW();
+	int getMinW();
 	
 	/**
 	 * Returns the largest w-coordinate
 	 * 
 	 * @return the largest w
 	 */
-	public int getMaxW();
+	int getMaxW();
 	
 	/**
 	 * Returns the smallest x-coordinate
 	 * 
 	 * @return the smallest x
 	 */
-	public int getMinX();
+	int getMinX();
 	
 	/**
 	 * Returns the largest x-coordinate
 	 * 
 	 * @return the largest x
 	 */
-	public int getMaxX();
+	int getMaxX();
 	
 	/**
 	 * Returns the smallest y-coordinate
 	 * 
 	 * @return the smallest y
 	 */
-	public int getMinY();
+	int getMinY();
 	
 	/**
 	 * Returns the largest y-coordinate
 	 * 
 	 * @return the largest y
 	 */
-	public int getMaxY();
+	int getMaxY();
 	
 	/**
 	 * Returns the smallest z-coordinate
 	 * 
 	 * @return the smallest z
 	 */
-	public int getMinZ();
+	int getMinZ();
 	
 	/**
 	 * Returns the largest z-coordinate
 	 * 
 	 * @return the largest z
 	 */
-	public int getMaxZ();
+	int getMaxZ();
 
 }

@@ -18,10 +18,10 @@ package cellularautomata.grid;
 
 public interface LongGrid {
 
-	public long[] getMinAndMaxValue() throws Exception;
+	long[] getMinAndMaxValue() throws Exception;
 	
-	public long getTotalValue() throws Exception;
+	long getTotalValue() throws Exception;
 	
-	public long getMaxAbsoluteValue() throws Exception;
+	long getMaxAbsoluteValue() throws Exception;
 	
 }

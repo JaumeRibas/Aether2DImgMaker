@@ -22,9 +22,9 @@ public interface ActionableGrid<P extends GridProcessor<?>> {
 	 * 
 	 * @throws Exception 
 	 */
-	public void processGrid() throws Exception;
+	void processGrid() throws Exception;
 	
-	public void addProcessor(P processor);
+	void addProcessor(P processor);
 	
-	public boolean removeProcessor(P processor);
+	boolean removeProcessor(P processor);
 }

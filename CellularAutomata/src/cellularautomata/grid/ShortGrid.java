@@ -18,12 +18,12 @@ package cellularautomata.grid;
 
 public interface ShortGrid {
 
-	public short[] getMinAndMaxValue();
+	short[] getMinAndMaxValue();
 	
-	public short[] getMinAndMaxValue(short backgroundValue);
+	short[] getMinAndMaxValue(short backgroundValue);
 	
-	public short getTotalValue();
+	short getTotalValue();
 	
-	public short getMaxAbsoluteValue();
+	short getMaxAbsoluteValue();
 	
 }

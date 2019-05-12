@@ -23,7 +23,7 @@ public interface Grid2D extends Grid {
 	 * 
 	 * @return the smallest x
 	 */
-	public int getMinX();
+	int getMinX();
 	
 	/**
 	 * Returns the smallest x-coordinate at y.<br/>
@@ -33,7 +33,7 @@ public interface Grid2D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the smallest x
 	 */
-	public default int getMinX(int y) {
+	default int getMinX(int y) {
 		return getMinX();
 	}
 	
@@ -42,7 +42,7 @@ public interface Grid2D extends Grid {
 	 * 
 	 * @return the largest x
 	 */
-	public int getMaxX();
+	int getMaxX();
 	
 	/**
 	 * Returns the largest x-coordinate at y.<br/>
@@ -52,7 +52,7 @@ public interface Grid2D extends Grid {
 	 * @param y the y-coordinate
 	 * @return the largest x
 	 */
-	public default int getMaxX(int y) {
+	default int getMaxX(int y) {
 		return getMaxX();
 	}
 	
@@ -61,7 +61,7 @@ public interface Grid2D extends Grid {
 	 * 
 	 * @return the smallest y
 	 */
-	public int getMinY();
+	int getMinY();
 	
 	/**
 	 * Returns the smallest y-coordinate at x.<br/>
@@ -71,7 +71,7 @@ public interface Grid2D extends Grid {
 	 * @param x the x-coordinate
 	 * @return the smallest y
 	 */
-	public default int getMinY(int x) {
+	default int getMinY(int x) {
 		return getMinY();
 	}
 	
@@ -80,7 +80,7 @@ public interface Grid2D extends Grid {
 	 * 
 	 * @return the largest y
 	 */
-	public int getMaxY();
+	int getMaxY();
 	
 	/**
 	 * Returns the largest y-coordinate at x.<br/>
@@ -90,7 +90,7 @@ public interface Grid2D extends Grid {
 	 * @param x the x-coordinate
 	 * @return the largest y
 	 */
-	public default int getMaxY(int x) {
+	default int getMaxY(int x) {
 		return getMaxY();
 	}
 	
@@ -103,5 +103,5 @@ public interface Grid2D extends Grid {
 	 * @param maxY
 	 * @return a {@link Grid2D} wrapping the current grid 
 	 */
-	public Grid2D subGrid(int minX, int maxX, int minY, int maxY);
+	Grid2D subGrid(int minX, int maxX, int minY, int maxY);
 }

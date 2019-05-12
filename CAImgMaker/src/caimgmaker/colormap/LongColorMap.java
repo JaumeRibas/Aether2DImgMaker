@@ -19,5 +19,5 @@ package caimgmaker.colormap;
 import java.awt.Color;
 
 public interface LongColorMap {
-	public Color getColor(long value) throws Exception;
+	Color getColor(long value) throws Exception;
 }

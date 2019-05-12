@@ -23,13 +23,13 @@ public interface SymmetricGrid1D extends Grid1D {
 	 * 
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinX();
+	int getNonSymmetricMinX();
 	
 	/**
 	 * Returns the largest x-coordinate of the non symmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxX();
+	int getNonSymmetricMaxX();
 
 }

@@ -25,55 +25,55 @@ public interface SymmetricGrid4D extends Grid4D {
 	 * 
 	 * @return the smallest w
 	 */
-	public int getNonSymmetricMinW();
+	int getNonSymmetricMinW();
 	
 	/**
 	 * Returns the largest w-coordinate
 	 * 
 	 * @return the largest w
 	 */
-	public int getNonSymmetricMaxW();
+	int getNonSymmetricMaxW();
 	
 	/**
 	 * Returns the smallest x-coordinate
 	 * 
 	 * @return the smallest x
 	 */
-	public int getNonSymmetricMinX();
+	int getNonSymmetricMinX();
 	
 	/**
 	 * Returns the largest x-coordinate
 	 * 
 	 * @return the largest x
 	 */
-	public int getNonSymmetricMaxX();
+	int getNonSymmetricMaxX();
 	
 	/**
 	 * Returns the smallest y-coordinate
 	 * 
 	 * @return the smallest y
 	 */
-	public int getNonSymmetricMinY();
+	int getNonSymmetricMinY();
 	
 	/**
 	 * Returns the largest y-coordinate
 	 * 
 	 * @return the largest y
 	 */
-	public int getNonSymmetricMaxY();
+	int getNonSymmetricMaxY();
 	
 	/**
 	 * Returns the smallest z-coordinate
 	 * 
 	 * @return the smallest z
 	 */
-	public int getNonSymmetricMinZ();
+	int getNonSymmetricMinZ();
 	
 	/**
 	 * Returns the largest z-coordinate
 	 * 
 	 * @return the largest z
 	 */
-	public int getNonSymmetricMaxZ();
+	int getNonSymmetricMaxZ();
 
 }
