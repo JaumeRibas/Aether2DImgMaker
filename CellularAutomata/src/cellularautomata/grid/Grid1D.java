@@ -33,11 +33,11 @@ public interface Grid1D extends Grid {
 	int getMaxX();
 	
 	/**
-	 * Returns a wrapped {@link Grid1D} with the passed bounds.
+	 * Returns a decorated {@link Grid1D} with the passed bounds.
 	 * 
 	 * @param minX
 	 * @param maxX
-	 * @return a {@link Grid1D} wrapping the current grid 
+	 * @return a {@link Grid1D} decorating the current grid 
 	 */
 	Grid1D subGrid(int minX, int maxX);
 }

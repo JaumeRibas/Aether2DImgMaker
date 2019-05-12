@@ -95,13 +95,13 @@ public interface Grid2D extends Grid {
 	}
 	
 	/**
-	 * Returns a wrapped {@link Grid2D} with the passed bounds.
+	 * Returns a decorated {@link Grid2D} with the passed bounds.
 	 * 
 	 * @param minX
 	 * @param maxX
 	 * @param minY
 	 * @param maxY
-	 * @return a {@link Grid2D} wrapping the current grid 
+	 * @return a {@link Grid2D} decorating the current grid 
 	 */
 	Grid2D subGrid(int minX, int maxX, int minY, int maxY);
 }
