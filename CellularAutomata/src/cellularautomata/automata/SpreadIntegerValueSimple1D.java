@@ -19,7 +19,7 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SpreadIntegerValueSimple1D extends SymmetricLongCellularAutomaton1D {	
+public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomaton1D {	
 
 	/** A 1D array representing the grid */
 	private long[] grid;
@@ -159,7 +159,7 @@ public class SpreadIntegerValueSimple1D extends SymmetricLongCellularAutomaton1D
 		}
 	}
 	
-	public long getNonSymmetricValue(int x){	
+	public long getValueAtNonSymmetricPosition(int x){	
 		return getValueAtPosition(x);
 	}
 	

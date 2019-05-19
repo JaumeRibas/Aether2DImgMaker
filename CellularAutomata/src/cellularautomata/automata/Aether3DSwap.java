@@ -27,13 +27,12 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
-import cellularautomata.grid.LongGrid3D;
-import cellularautomata.grid.LongGrid3DProcessor;
+import cellularautomata.grid3D.LongGrid3D;
 import cellularautomata.grid.NonSymmetricLongGrid3DSlice;
-import cellularautomata.grid.NonSymmetricLongSubGrid3D;
+import cellularautomata.grid3D.NonSymmetricLongSubGrid3D;
 import cellularautomata.grid.SizeLimitedNonSymmetricLongGrid3D;
 
-public class Aether3DSwap extends SymmetricLongCellularAutomaton3D {
+public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 
 	public static final long PRIMITIVE_MAX_VALUE = Long.MAX_VALUE;
 	
@@ -295,11 +294,7 @@ public class Aether3DSwap extends SymmetricLongCellularAutomaton3D {
 			} else {
 				subBlock = block;
 			}
-			if (processors != null) {
-				for (LongGrid3DProcessor processor : processors) {
-					processor.processGridBlock(subBlock);
-				}
-			}
+			triggerProcessGridBlock(subBlock);
 		}
 	}
 	
@@ -660,7 +655,7 @@ public class Aether3DSwap extends SymmetricLongCellularAutomaton3D {
 	}
 
 	@Override
-	public long getNonSymmetricValue(int x, int y, int z) throws IOException, ClassNotFoundException {
+	public long getValueAtNonSymmetricPosition(int x, int y, int z) throws IOException, ClassNotFoundException {
 		long value;
 		//TODO: try to keep blocks contiguous
 		if (x == gridBlockA.minX || x == gridBlockA.maxX || x > gridBlockA.minX && x < gridBlockA.maxX) {
@@ -683,7 +678,7 @@ public class Aether3DSwap extends SymmetricLongCellularAutomaton3D {
 		y = nonSymmetricCoords[1];
 		z = nonSymmetricCoords[2];
 		if (x <= maxX) {
-			return getNonSymmetricValue(x, y, z);
+			return getValueAtNonSymmetricPosition(x, y, z);
 		} else {
 			return 0;
 		}

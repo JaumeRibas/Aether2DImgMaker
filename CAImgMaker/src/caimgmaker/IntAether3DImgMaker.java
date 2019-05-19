@@ -21,12 +21,12 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether3DSwap;
-import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
+import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 
 public class IntAether3DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-2000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-20000", "D:/data/test2"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -72,7 +72,7 @@ public class IntAether3DImgMaker {
 			} else {
 				path = "./";
 			}
-			SymmetricIntCellularAutomaton3D ca;
+			SymmetricIntActionableCellularAutomaton3D ca;
 			if (isRestore) {
 				ca = new IntAether3DSwap(initValOrBackupPath, path);
 			} else {

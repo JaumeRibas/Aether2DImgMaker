@@ -27,7 +27,7 @@ import java.util.List;
  * @author Jaume
  *
  */
-public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {	
+public class AetherSimple2D implements SymmetricLongCellularAutomaton2D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -324,7 +324,7 @@ public class AetherSimple2D extends SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public long getNonSymmetricValue(int x, int y) {
+	public long getValueAtNonSymmetricPosition(int x, int y) {
 		return getValueAtPosition(x, y);
 	}
 

@@ -14,9 +14,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid;
+package cellularautomata.grid;//TODO move to grid3D package and make app to convert serialized backups
 
 import java.io.Serializable;
+
+import cellularautomata.grid.Constants;
 
 public class NonSymmetricIntGrid3DSlice implements Serializable {
 

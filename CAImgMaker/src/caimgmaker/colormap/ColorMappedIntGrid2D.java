@@ -17,10 +17,9 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import cellularautomata.grid.IntGrid2D;
-import cellularautomata.grid.IntGrid2DProcessor;
+import cellularautomata.grid2D.IntGrid2D;
 
-public class ColorMappedIntGrid2D extends ColorGrid2D implements IntGrid2DProcessor {
+public class ColorMappedIntGrid2D implements ColorGrid2D {
 
 	protected IntGrid2D source;
 	protected LongColorMap colorMap;
@@ -74,24 +73,5 @@ public class ColorMappedIntGrid2D extends ColorGrid2D implements IntGrid2DProces
 	public Color getColorAtPosition(int x, int y) throws Exception {
 		return colorMap.getColor(source.getValueAtPosition(x, y));
 	}
-	
-	@Override
-	public void beforeProcessing() throws Exception {
-		triggerBeforeProcessing();		
-	}
 
-	@Override
-	public void afterProcessing() throws Exception {
-		triggerAfterProcessing();		
-	}
-
-	@Override
-	public void processGridBlock(IntGrid2D gridBlock) throws Exception {
-		triggerProcessGridBlock(new ColorMappedIntGrid2D(gridBlock, colorMap));
-	}
-	
-	@Override
-	public void processGrid() throws Exception {
-		source.processGrid();
-	}
 }

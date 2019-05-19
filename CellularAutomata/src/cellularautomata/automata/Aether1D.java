@@ -19,7 +19,7 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Aether1D extends SymmetricLongCellularAutomaton1D {	
+public class Aether1D implements SymmetricLongCellularAutomaton1D {	
 
 	private static final byte RIGHT = 1;
 	private static final byte LEFT = 0;
@@ -218,5 +218,10 @@ public class Aether1D extends SymmetricLongCellularAutomaton1D {
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public long getValueAtNonSymmetricPosition(int x) {
+		return grid[x];
 	}
 }

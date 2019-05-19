@@ -16,9 +16,22 @@
  */
 package cellularautomata.grid;
 
-public interface LongGrid {
+public interface LongGrid extends Grid {
 
 	long[] getMinAndMaxValue() throws Exception;
+	
+	/**
+	 * Get min and max values excluding a particular value
+	 * 
+	 * @param excludedValue
+	 * @return
+	 * @throws Exception 
+	 */
+	long[] getMinAndMaxValueExcluding(long excludedValue) throws Exception;
+	
+	long[] getMinAndMaxValueAtEvenPositions() throws Exception;
+	
+	long[] getMinAndMaxValueAtOddPositions() throws Exception;
 	
 	long getTotalValue() throws Exception;
 	

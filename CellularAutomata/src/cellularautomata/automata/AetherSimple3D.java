@@ -28,7 +28,7 @@ import java.util.List;
  * @author Jaume
  *
  */
-public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {	
+public class AetherSimple3D implements SymmetricLongCellularAutomaton3D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -340,7 +340,7 @@ public class AetherSimple3D extends SymmetricLongCellularAutomaton3D {
 		return getMaxZ();
 	}
 
-	public long getNonSymmetricValue(int x, int y, int z) {
+	public long getValueAtNonSymmetricPosition(int x, int y, int z) {
 		return getValueAtPosition(x, y, z);
 	}
 	

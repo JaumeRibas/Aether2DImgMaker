@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether3DSwap;
-import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
+import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 
 public class IntAether3DEvenOddImgMaker {
 	
@@ -72,7 +72,7 @@ public class IntAether3DEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			SymmetricIntCellularAutomaton3D ca;
+			SymmetricIntActionableCellularAutomaton3D ca;
 			if (isRestore) {
 				ca = new IntAether3DSwap(initValOrBackupPath, path);
 			} else {

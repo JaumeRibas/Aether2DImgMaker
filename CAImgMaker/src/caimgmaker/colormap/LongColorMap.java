@@ -18,6 +18,7 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
+//ColorGridRegion1D?
 public interface LongColorMap {
 	Color getColor(long value) throws Exception;
 }

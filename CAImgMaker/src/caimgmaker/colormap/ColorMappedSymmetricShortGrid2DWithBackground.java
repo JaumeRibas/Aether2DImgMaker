@@ -18,7 +18,7 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-import cellularautomata.grid.SymmetricShortGrid2D;
+import cellularautomata.grid2D.SymmetricShortGrid2D;
 
 public class ColorMappedSymmetricShortGrid2DWithBackground extends ColorMappedSymmetricShortGrid2D {
 
@@ -42,8 +42,8 @@ public class ColorMappedSymmetricShortGrid2DWithBackground extends ColorMappedSy
 	}
 	
 	@Override
-	public Color getNonSymmetricColorAtPosition(int x, int y) throws Exception {
-		int value = source.getNonSymmetricValue(x, y);
+	public Color getColorAtNonSymmetricPosition(int x, int y) throws Exception {
+		int value = source.getValueAtNonSymmetricPosition(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}

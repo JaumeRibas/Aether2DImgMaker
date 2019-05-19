@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 
-public class IntAether3D extends SymmetricIntCellularAutomaton3D {
+public class IntAether3D implements SymmetricIntCellularAutomaton3D {
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -345,7 +345,7 @@ public class IntAether3D extends SymmetricIntCellularAutomaton3D {
 		}
 	}
 	
-	public int getNonSymmetricValue(int x, int y, int z){	
+	public int getValueAtNonSymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	

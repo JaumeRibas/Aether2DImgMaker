@@ -17,11 +17,9 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import cellularautomata.grid.IntGrid2D;
-import cellularautomata.grid.IntGrid2DProcessor;
-import cellularautomata.grid.SymmetricIntGrid2D;
+import cellularautomata.grid2D.SymmetricIntGrid2D;
 
-public class ColorMappedSymmetricIntGrid2D extends SymmetricColorGrid2D implements IntGrid2DProcessor {
+public class ColorMappedSymmetricIntGrid2D implements SymmetricColorGrid2D {
 
 	protected SymmetricIntGrid2D source;
 	protected LongColorMap colorMap;
@@ -112,32 +110,13 @@ public class ColorMappedSymmetricIntGrid2D extends SymmetricColorGrid2D implemen
 	}
 
 	@Override
-	public Color getNonSymmetricColorAtPosition(int x, int y) throws Exception {
-		return colorMap.getColor(source.getNonSymmetricValue(x, y));
+	public Color getColorAtNonSymmetricPosition(int x, int y) throws Exception {
+		return colorMap.getColor(source.getValueAtNonSymmetricPosition(x, y));
 	}
 	
 	@Override
 	public Color getColorAtPosition(int x, int y) throws Exception {
 		return colorMap.getColor(source.getValueAtPosition(x, y));
 	}
-	
-	@Override
-	public void beforeProcessing() throws Exception {
-		triggerBeforeProcessing();		
-	}
 
-	@Override
-	public void afterProcessing() throws Exception {
-		triggerAfterProcessing();		
-	}
-
-	@Override
-	public void processGridBlock(IntGrid2D gridBlock) throws Exception {
-		triggerProcessGridBlock(new ColorMappedIntGrid2D(gridBlock, colorMap));
-	}
-	
-	@Override
-	public void processGrid() throws Exception {
-		source.processGrid();
-	}
 }

@@ -16,15 +16,15 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid.SymmetricLongGrid2D;
+import cellularautomata.grid2D.SymmetricLongGrid2D;
 
-public abstract class SymmetricLongCellularAutomaton2D extends SymmetricLongGrid2D implements CellularAutomaton {
+public interface SymmetricLongCellularAutomaton2D extends SymmetricLongGrid2D, CellularAutomaton {
 	/**
 	 * Returns the background value
 	 * 
 	 * @return the value padding the most part of the grid
 	 */
-	public abstract long getBackgroundValue();
+	long getBackgroundValue();
 	
-	public abstract LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY);
+	LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY);
 }

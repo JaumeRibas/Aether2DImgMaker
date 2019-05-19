@@ -18,9 +18,9 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import cellularautomata.grid.LongGrid1D;
+import cellularautomata.grid1D.LongGrid1D;
 
-public class SymmetricLongCASubGrid1D extends LongCellularAutomaton1D {
+public class SymmetricLongCASubGrid1D implements LongCellularAutomaton1D {
 	
 	private SymmetricLongCellularAutomaton1D ca;
 	private LongGrid1D subGrid;

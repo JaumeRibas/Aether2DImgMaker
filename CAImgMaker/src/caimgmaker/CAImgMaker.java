@@ -31,34 +31,34 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import caimgmaker.colormap.ActionableGrid2DColorMapperProcessor;
 import caimgmaker.colormap.ColorGrid2D;
-import caimgmaker.colormap.ColorMappedSymmetricIntGrid2D;
-import caimgmaker.colormap.ColorMappedSymmetricLongGrid2D;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.SymmetricColorGrid2D;
 import cellularautomata.automata.Aether3D;
 import cellularautomata.automata.LongCellularAutomaton2D;
-import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
+import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 import cellularautomata.automata.SymmetricIntCellularAutomaton4D;
+import cellularautomata.automata.SymmetricLongActionableCellularAutomaton3D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton3D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton4D;
 import cellularautomata.automata.SymmetricShortCellularAutomaton4D;
-import cellularautomata.grid.Grid2D;
-import cellularautomata.grid.IntGrid2D;
-import cellularautomata.grid.IntGrid2DEvenOddMinAndMaxProcessor;
-import cellularautomata.grid.IntGrid2DMinAndMaxProcessor;
-import cellularautomata.grid.IntGrid3D;
-import cellularautomata.grid.LongGrid2D;
-import cellularautomata.grid.LongGrid2DEvenOddMinAndMaxProcessor;
-import cellularautomata.grid.LongGrid3D;
-import cellularautomata.grid.ShortGrid2D;
-import cellularautomata.grid.ShortGrid3D;
-import cellularautomata.grid.SymmetricIntGrid2D;
-import cellularautomata.grid.SymmetricIntGrid3DCrossSection;
-import cellularautomata.grid.SymmetricLongGrid2D;
-import cellularautomata.grid.SymmetricLongGrid3DCrossSection;
-import cellularautomata.grid.SymmetricShortGrid2D;
+import cellularautomata.grid.IntGridMinAndMaxProcessor;
+import cellularautomata.grid.LongGridEvenOddMinAndMaxProcessor;
+import cellularautomata.grid.IntGridEvenOddMinAndMaxProcessor;
+import cellularautomata.grid2D.Grid2D;
+import cellularautomata.grid2D.IntGrid2D;
+import cellularautomata.grid3D.ActionableIntGrid3DCrossSectionProcessor;
+import cellularautomata.grid3D.ActionableLongGrid3DCrossSectionProcessor;
+import cellularautomata.grid3D.IntGrid3D;
+import cellularautomata.grid2D.LongGrid2D;
+import cellularautomata.grid3D.LongGrid3D;
+import cellularautomata.grid2D.ShortGrid2D;
+import cellularautomata.grid3D.ShortGrid3D;
+import cellularautomata.grid2D.SymmetricIntGrid2D;
+import cellularautomata.grid2D.SymmetricLongGrid2D;
+import cellularautomata.grid2D.SymmetricShortGrid2D;
 
 public class CAImgMaker {
 	
@@ -482,7 +482,7 @@ public class CAImgMaker {
 		inputThread.join();
 	}
 	
-	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricIntCellularAutomaton3D ca, int crossSectionZ, 
+	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricIntActionableCellularAutomaton3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
@@ -491,7 +491,7 @@ public class CAImgMaker {
 			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricIntCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
+	public void createScanningAndCrossSectionNonSymmetricImages(SymmetricIntActionableCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -510,11 +510,11 @@ public class CAImgMaker {
 		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		
-		SymmetricIntGrid3DCrossSection scan = new SymmetricIntGrid3DCrossSection(ca, scanZ);
-		SymmetricIntGrid3DCrossSection xSection = new SymmetricIntGrid3DCrossSection(ca, crossSectionZ);
+		ActionableIntGrid3DCrossSectionProcessor scan = new ActionableIntGrid3DCrossSectionProcessor(ca, scanZ);
+		ActionableIntGrid3DCrossSectionProcessor xSection = new ActionableIntGrid3DCrossSectionProcessor(ca, crossSectionZ);
 		
-		IntGrid2DMinAndMaxProcessor scanMinAndMaxProcessor = new IntGrid2DMinAndMaxProcessor();
-		IntGrid2DMinAndMaxProcessor xSectionMinAndMaxProcessor = new IntGrid2DMinAndMaxProcessor();
+		IntGridMinAndMaxProcessor<IntGrid2D> scanMinAndMaxProcessor = new IntGridMinAndMaxProcessor<IntGrid2D>();
+		IntGridMinAndMaxProcessor<IntGrid2D> xSectionMinAndMaxProcessor = new IntGridMinAndMaxProcessor<IntGrid2D>();
 		
 		scan.addProcessor(scanMinAndMaxProcessor);
 		xSection.addProcessor(xSectionMinAndMaxProcessor);
@@ -537,10 +537,10 @@ public class CAImgMaker {
 			System.out.println("Scan: Min value " + scanMinAndMaxValue[0] + " Max value " + scanMinAndMaxValue[1]);
 			System.out.println("Cross section: Min value " + xSectionMinAndMaxValue[0] + " Max value " + xSectionMinAndMaxValue[1]);
 			
-			ColorMappedSymmetricIntGrid2D colorMappedScan = 
-					scanningColorMapper.getMappedIntGrid(scan, scanMinAndMaxValue[0], scanMinAndMaxValue[1]);
-			ColorMappedSymmetricIntGrid2D colorMappedCrossSection = 
-					crossSectionColorMapper.getMappedIntGrid(xSection, xSectionMinAndMaxValue[0], xSectionMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D> scanColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D>(scan, scanningColorMapper, scanMinAndMaxValue[0], scanMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D> crossSectionColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D>(xSection, crossSectionColorMapper, xSectionMinAndMaxValue[0], xSectionMinAndMaxValue[1]);
 			
 			ImageRenderingProcessor scanImageRenderer = 
 					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -549,17 +549,17 @@ public class CAImgMaker {
 					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
 							caName + "_x-section_" + currentStep + ".png");
 			
-			colorMappedScan.addProcessor(scanImageRenderer);
-			colorMappedCrossSection.addProcessor(xSectionImageRenderer);
+			scanColorMapperProcessor.addProcessor(scanImageRenderer);
+			crossSectionColorMapperProcessor.addProcessor(xSectionImageRenderer);
 			
-			scan.addProcessor(colorMappedScan);
-			xSection.addProcessor(colorMappedCrossSection);
+			scan.addProcessor(scanColorMapperProcessor);
+			xSection.addProcessor(crossSectionColorMapperProcessor);
 			
 			//generate images
 			ca.processGrid();
 			
-			scan.removeProcessor(colorMappedScan);
-			xSection.removeProcessor(colorMappedCrossSection);
+			scan.removeProcessor(scanColorMapperProcessor);
+			xSection.removeProcessor(crossSectionColorMapperProcessor);
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -593,7 +593,7 @@ public class CAImgMaker {
 		inputThread.join();
 	}
 	
-	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricIntCellularAutomaton3D ca, int crossSectionZ, 
+	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricIntActionableCellularAutomaton3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
@@ -602,7 +602,7 @@ public class CAImgMaker {
 			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 
-	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricIntCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
+	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricIntActionableCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -622,11 +622,11 @@ public class CAImgMaker {
 		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		
-		SymmetricIntGrid3DCrossSection scan = new SymmetricIntGrid3DCrossSection(ca, scanZ);
-		SymmetricIntGrid3DCrossSection xSection = new SymmetricIntGrid3DCrossSection(ca, crossSectionZ);
+		ActionableIntGrid3DCrossSectionProcessor scan = new ActionableIntGrid3DCrossSectionProcessor(ca, scanZ);
+		ActionableIntGrid3DCrossSectionProcessor xSection = new ActionableIntGrid3DCrossSectionProcessor(ca, crossSectionZ);
 		
-		IntGrid2DEvenOddMinAndMaxProcessor scanMinAndMaxProcessor = new IntGrid2DEvenOddMinAndMaxProcessor();
-		IntGrid2DEvenOddMinAndMaxProcessor xSectionMinAndMaxProcessor = new IntGrid2DEvenOddMinAndMaxProcessor();
+		IntGridEvenOddMinAndMaxProcessor<IntGrid2D> scanMinAndMaxProcessor = new IntGridEvenOddMinAndMaxProcessor<IntGrid2D>();
+		IntGridEvenOddMinAndMaxProcessor<IntGrid2D> xSectionMinAndMaxProcessor = new IntGridEvenOddMinAndMaxProcessor<IntGrid2D>();
 		
 		scan.addProcessor(scanMinAndMaxProcessor);
 		xSection.addProcessor(xSectionMinAndMaxProcessor);
@@ -653,14 +653,14 @@ public class CAImgMaker {
 			System.out.println("Cross section even positions: Min value " + evenXSectionMinAndMaxValue[0] + " Max value " + evenXSectionMinAndMaxValue[1]);
 			System.out.println("Cross section odd positions: Min value " + oddXSectionMinAndMaxValue[0] + " Max value " + oddXSectionMinAndMaxValue[1]);
 			
-			ColorMappedSymmetricIntGrid2D colorMappedEvenScan = 
-					scanningColorMapper.getMappedIntGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
-			ColorMappedSymmetricIntGrid2D colorMappedOddScan = 
-					scanningColorMapper.getMappedIntGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-			ColorMappedSymmetricIntGrid2D colorMappedEvenCrossSection = 
-					crossSectionColorMapper.getMappedIntGrid(xSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
-			ColorMappedSymmetricIntGrid2D colorMappedOddCrossSection = 
-					crossSectionColorMapper.getMappedIntGrid(xSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D> evenScanColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D>(scan, scanningColorMapper, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D> oddScanColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D>(scan, scanningColorMapper, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D> evenCrossSectionColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D>(xSection, crossSectionColorMapper, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D> oddCrossSectionColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<IntGrid2D, ColorGrid2D>(xSection, crossSectionColorMapper, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
@@ -697,23 +697,23 @@ public class CAImgMaker {
 					new EvenOddImageRenderingProcessor(false, minX, maxX, minY, maxY, minWidth, minHeight, 
 							crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_x-section_" + currentStep + ".png");
 			
-			colorMappedEvenScan.addProcessor(evenScanImageRenderer);
-			colorMappedOddScan.addProcessor(oddScanImageRenderer);
-			colorMappedEvenCrossSection.addProcessor(evenXSectionImageRenderer);
-			colorMappedOddCrossSection.addProcessor(oddXSectionImageRenderer);
+			evenScanColorMapperProcessor.addProcessor(evenScanImageRenderer);
+			oddScanColorMapperProcessor.addProcessor(oddScanImageRenderer);
+			evenCrossSectionColorMapperProcessor.addProcessor(evenXSectionImageRenderer);
+			oddCrossSectionColorMapperProcessor.addProcessor(oddXSectionImageRenderer);
 			
-			scan.addProcessor(colorMappedEvenScan);
-			scan.addProcessor(colorMappedOddScan);
-			xSection.addProcessor(colorMappedEvenCrossSection);
-			xSection.addProcessor(colorMappedOddCrossSection);
+			scan.addProcessor(evenScanColorMapperProcessor);
+			scan.addProcessor(oddScanColorMapperProcessor);
+			xSection.addProcessor(evenCrossSectionColorMapperProcessor);
+			xSection.addProcessor(oddCrossSectionColorMapperProcessor);
 			
 			//generate images
 			ca.processGrid();
 			
-			scan.removeProcessor(colorMappedEvenScan);
-			scan.removeProcessor(colorMappedOddScan);
-			xSection.removeProcessor(colorMappedEvenCrossSection);
-			xSection.removeProcessor(colorMappedOddCrossSection);
+			scan.removeProcessor(evenScanColorMapperProcessor);
+			scan.removeProcessor(oddScanColorMapperProcessor);
+			xSection.removeProcessor(evenCrossSectionColorMapperProcessor);
+			xSection.removeProcessor(oddCrossSectionColorMapperProcessor);
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -748,7 +748,7 @@ public class CAImgMaker {
 		inputThread.join();
 	}
 	
-	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricLongCellularAutomaton3D ca, int crossSectionZ, 
+	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricLongActionableCellularAutomaton3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
@@ -757,7 +757,7 @@ public class CAImgMaker {
 			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricLongCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
+	public void createScanningAndCrossSectionNonSymmetricEvenOddImages(SymmetricLongActionableCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -765,7 +765,6 @@ public class CAImgMaker {
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		
-		long currentMillis = System.currentTimeMillis();
 		long currentStep = ca.getStep();
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
@@ -778,11 +777,11 @@ public class CAImgMaker {
 		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		
-		SymmetricLongGrid3DCrossSection scan = new SymmetricLongGrid3DCrossSection(ca, scanZ);
-		SymmetricLongGrid3DCrossSection xSection = new SymmetricLongGrid3DCrossSection(ca, crossSectionZ);
+		ActionableLongGrid3DCrossSectionProcessor scan = new ActionableLongGrid3DCrossSectionProcessor(ca, scanZ);
+		ActionableLongGrid3DCrossSectionProcessor xSection = new ActionableLongGrid3DCrossSectionProcessor(ca, crossSectionZ);
 		
-		LongGrid2DEvenOddMinAndMaxProcessor scanMinAndMaxProcessor = new LongGrid2DEvenOddMinAndMaxProcessor();
-		LongGrid2DEvenOddMinAndMaxProcessor xSectionMinAndMaxProcessor = new LongGrid2DEvenOddMinAndMaxProcessor();
+		LongGridEvenOddMinAndMaxProcessor<LongGrid2D> scanMinAndMaxProcessor = new LongGridEvenOddMinAndMaxProcessor<LongGrid2D>();
+		LongGridEvenOddMinAndMaxProcessor<LongGrid2D> xSectionMinAndMaxProcessor = new LongGridEvenOddMinAndMaxProcessor<LongGrid2D>();
 		
 		scan.addProcessor(scanMinAndMaxProcessor);
 		xSection.addProcessor(xSectionMinAndMaxProcessor);
@@ -809,14 +808,14 @@ public class CAImgMaker {
 			System.out.println("Cross section even positions: Min value " + evenXSectionMinAndMaxValue[0] + " Max value " + evenXSectionMinAndMaxValue[1]);
 			System.out.println("Cross section odd positions: Min value " + oddXSectionMinAndMaxValue[0] + " Max value " + oddXSectionMinAndMaxValue[1]);
 			
-			ColorMappedSymmetricLongGrid2D colorMappedEvenScan = 
-					scanningColorMapper.getMappedLongGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
-			ColorMappedSymmetricLongGrid2D colorMappedOddScan = 
-					scanningColorMapper.getMappedLongGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-			ColorMappedSymmetricLongGrid2D colorMappedEvenCrossSection = 
-					crossSectionColorMapper.getMappedLongGrid(xSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
-			ColorMappedSymmetricLongGrid2D colorMappedOddCrossSection = 
-					crossSectionColorMapper.getMappedLongGrid(xSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D> evenScanColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D>(scan, scanningColorMapper, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D> oddScanColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D>(scan, scanningColorMapper, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D> evenCrossSectionColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D>(xSection, crossSectionColorMapper, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
+			ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D> oddCrossSectionColorMapperProcessor = 
+					new ActionableGrid2DColorMapperProcessor<LongGrid2D, ColorGrid2D>(xSection, crossSectionColorMapper, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
@@ -853,23 +852,23 @@ public class CAImgMaker {
 					new EvenOddImageRenderingProcessor(false, minX, maxX, minY, maxY, minWidth, minHeight, 
 							crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_x-section_" + currentStep + ".png");
 			
-			colorMappedEvenScan.addProcessor(evenScanImageRenderer);
-			colorMappedOddScan.addProcessor(oddScanImageRenderer);
-			colorMappedEvenCrossSection.addProcessor(evenXSectionImageRenderer);
-			colorMappedOddCrossSection.addProcessor(oddXSectionImageRenderer);
+			evenScanColorMapperProcessor.addProcessor(evenScanImageRenderer);
+			oddScanColorMapperProcessor.addProcessor(oddScanImageRenderer);
+			evenCrossSectionColorMapperProcessor.addProcessor(evenXSectionImageRenderer);
+			oddCrossSectionColorMapperProcessor.addProcessor(oddXSectionImageRenderer);
 			
-			scan.addProcessor(colorMappedEvenScan);
-			scan.addProcessor(colorMappedOddScan);
-			xSection.addProcessor(colorMappedEvenCrossSection);
-			xSection.addProcessor(colorMappedOddCrossSection);
+			scan.addProcessor(evenScanColorMapperProcessor);
+			scan.addProcessor(oddScanColorMapperProcessor);
+			xSection.addProcessor(evenCrossSectionColorMapperProcessor);
+			xSection.addProcessor(oddCrossSectionColorMapperProcessor);
 			
 			//generate images
 			ca.processGrid();
 			
-			scan.removeProcessor(colorMappedEvenScan);
-			scan.removeProcessor(colorMappedOddScan);
-			xSection.removeProcessor(colorMappedEvenCrossSection);
-			xSection.removeProcessor(colorMappedOddCrossSection);
+			scan.removeProcessor(evenScanColorMapperProcessor);
+			scan.removeProcessor(oddScanColorMapperProcessor);
+			xSection.removeProcessor(evenCrossSectionColorMapperProcessor);
+			xSection.removeProcessor(oddCrossSectionColorMapperProcessor);
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -900,7 +899,6 @@ public class CAImgMaker {
 			isEvenStep = !isEvenStep;
 		} while (ca.nextStep());
 		System.out.println("Finished!");
-		System.out.println("Execution time " + (System.currentTimeMillis() - currentMillis) + " milliseconds.");
 		stdIn.stop();
 		inputThread.join();
 	}
@@ -966,7 +964,7 @@ public class CAImgMaker {
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
 			LongGrid2D xSection = edge.crossSection(scanZ);
-			long[] minAndMaxValue = xSection.getMinAndMaxValue(ca.getBackgroundValue());
+			long[] minAndMaxValue = xSection.getMinAndMaxValueExcluding(ca.getBackgroundValue());
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			ColorGrid2D colorGrid = colorMapper.getMappedLongGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
 			createSliceImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_3DEdge_x-section_" + currentStep + ".png");			
@@ -1015,7 +1013,7 @@ public class CAImgMaker {
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
 			LongGrid2D scan = edge.crossSection(scanZ);
-			long[] minAndMaxValue = scan.getMinAndMaxValue(ca.getBackgroundValue());
+			long[] minAndMaxValue = scan.getMinAndMaxValueExcluding(ca.getBackgroundValue());
 			System.out.println("3DEdge scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			ColorGrid2D colorGrid = colorMapper.getMappedLongGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createSliceImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
@@ -1079,7 +1077,7 @@ public class CAImgMaker {
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
 			IntGrid2D scan = edge.crossSection(scanZ);
-			int[] minAndMaxValue = scan.getMinAndMaxValue(ca.getBackgroundValue());
+			int[] minAndMaxValue = scan.getMinAndMaxValueExcluding(ca.getBackgroundValue());
 			System.out.println("3DEdge scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			ColorGrid2D colorGrid = colorMapper.getMappedIntGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createSliceImage(colorGrid, minWidth, minHeight, imgPath 
@@ -1144,7 +1142,7 @@ public class CAImgMaker {
 				scanZ = edge.getMinZ();
 			System.out.println("Scan z: " + scanZ);
 			ShortGrid2D scan = edge.crossSection(scanZ);
-			short[] minAndMaxValue = scan.getMinAndMaxValue(ca.getBackgroundValue());
+			short[] minAndMaxValue = scan.getMinAndMaxValueExcluding(ca.getBackgroundValue());
 			System.out.println("3DEdge scan: Min value " + historicMinAndMaxValue[0] + " Max value " + historicMinAndMaxValue[1]);
 			ColorGrid2D colorGrid = colorMapper.getMappedShortGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createSliceImage(colorGrid, minWidth, minHeight, imgPath 
@@ -1321,7 +1319,7 @@ public class CAImgMaker {
 			for (int i = 0; i < gridPositionSize; i++) {
 				dataIndex += gridLeftMargin * 3;
 				for (int x = framedGridMinXAtY; x <= framedGridMaxXAtY; x++) {
-					java.awt.Color c = grid.getNonSymmetricColorAtPosition(x, y);
+					java.awt.Color c = grid.getColorAtNonSymmetricPosition(x, y);
 					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 					for (int j = 0; j < gridPositionSize; j++) {
 						pixelData[dataIndex++] = r;
@@ -1397,7 +1395,7 @@ public class CAImgMaker {
 					
 			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
 				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y++, yy++) {
-					java.awt.Color c = gridRegion.getNonSymmetricColorAtPosition(x, y);
+					java.awt.Color c = gridRegion.getColorAtNonSymmetricPosition(x, y);
 					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 					
 					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;
@@ -1483,7 +1481,7 @@ public class CAImgMaker {
 			}
 			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
 				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y+=2, yy+=2) {
-					java.awt.Color c = gridRegion.getNonSymmetricColorAtPosition(x, y);
+					java.awt.Color c = gridRegion.getColorAtNonSymmetricPosition(x, y);
 					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 					
 					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;

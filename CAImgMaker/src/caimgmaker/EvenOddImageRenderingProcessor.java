@@ -19,9 +19,9 @@ package caimgmaker;
 import java.io.IOException;
 
 import caimgmaker.colormap.ColorGrid2D;
-import caimgmaker.colormap.ColorGrid2DProcessor;
+import cellularautomata.grid.GridProcessor;
 
-public class EvenOddImageRenderingProcessor implements ColorGrid2DProcessor {
+public class EvenOddImageRenderingProcessor implements GridProcessor<ColorGrid2D>{
 
 	private boolean isEven;
 	private int minX;

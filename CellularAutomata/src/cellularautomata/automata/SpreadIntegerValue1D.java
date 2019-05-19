@@ -25,7 +25,7 @@ import java.io.IOException;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue1D extends SymmetricLongCellularAutomaton1D {
+public class SpreadIntegerValue1D implements SymmetricLongCellularAutomaton1D {
 
 	private long[] grid;
 	
@@ -127,7 +127,7 @@ public class SpreadIntegerValue1D extends SymmetricLongCellularAutomaton1D {
 		}
 	}
 	
-	public long getNonSymmetricValue(int x){	
+	public long getValueAtNonSymmetricPosition(int x){	
 		return grid[x];
 	}
 	

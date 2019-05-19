@@ -23,14 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import cellularautomata.grid.IntGrid2D;
-import cellularautomata.grid.IntGrid3D;
-import cellularautomata.grid.IntGrid3DProcessor;
-import cellularautomata.grid.LongGrid1D;
-import cellularautomata.grid.LongGrid2D;
-import cellularautomata.grid.LongGrid3D;
-import cellularautomata.grid.LongGrid3DProcessor;
-import cellularautomata.grid.ShortGrid2D;
+import cellularautomata.grid2D.IntGrid2D;
+import cellularautomata.grid1D.LongGrid1D;
+import cellularautomata.grid2D.LongGrid2D;
+import cellularautomata.grid2D.ShortGrid2D;
 
 public class Test {
 	
@@ -44,7 +40,7 @@ public class Test {
 	public static void takeSamples() {
 		try {
 			System.out.println("Loading backup");
-			IntAether3DSwap ca = new IntAether3DSwap("D:/data/Aether3D/-1073741823/backups/IntAether3DSwap_9997", "./");
+			IntAether3DSwap ca = new IntAether3DSwap("D:/data/Aether3D/-1073741823/backups/IntAether3DSwap_9997", "D:/data/test");
 			System.out.println("Taking samples");
 			System.out.println("Sample 1 (170,59):" + ca.getValueAtPosition(170, 59, 0));
 			System.out.println("Sample 2 (181,66):" + ca.getValueAtPosition(181, 66, 0));
@@ -462,6 +458,25 @@ public class Test {
 		}
 	}
 	
+	public static void checkTotalValueConservation(SymmetricIntCellularAutomaton3D ca) {
+		System.out.println("Checking total value conservation...");
+		try {
+			long value = ca.getTotalValue(), newValue = value;
+			boolean finished = false;
+			while (value == newValue && !finished) {
+				finished = !ca.nextStep();
+				newValue = ca.getTotalValue();
+			}
+			if (!finished) {
+				System.out.println("Total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
+			} else {
+				System.out.println("The total value remained constant!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void stepByStep(SymmetricLongCellularAutomaton2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
@@ -768,50 +783,4 @@ public class Test {
 		return array;
 	}
 
-}
-
-class LongMinAndMax3DProcessor implements LongGrid3DProcessor {
-	private long[] minAndMax;
-	@Override
-	public void processGridBlock(LongGrid3D gridBlock) throws Exception {
-		System.out.println("Processing block " + gridBlock.getMinX());
-		long[] blockMinAndMax = gridBlock.getMinAndMaxValue();
-		if (blockMinAndMax[0] < minAndMax[0]) minAndMax[0] = blockMinAndMax[0];
-		if (blockMinAndMax[1] > minAndMax[1]) minAndMax[1] = blockMinAndMax[1];
-	}
-	
-	public long[] getMinAndMaxValues() {
-		return minAndMax;
-	}
-
-	@Override
-	public void beforeProcessing() {
-		minAndMax = new long[]{Long.MAX_VALUE, Long.MIN_VALUE};		
-	}
-
-	@Override
-	public void afterProcessing() {	}
-}
-
-class IntMinAndMax3DProcessor implements IntGrid3DProcessor {
-	private int[] minAndMax;
-	@Override
-	public void processGridBlock(IntGrid3D gridBlock) throws Exception {
-		System.out.println("Processing block " + gridBlock.getMinX());
-		int[] blockMinAndMax = gridBlock.getMinAndMaxValue();
-		if (blockMinAndMax[0] < minAndMax[0]) minAndMax[0] = blockMinAndMax[0];
-		if (blockMinAndMax[1] > minAndMax[1]) minAndMax[1] = blockMinAndMax[1];
-	}
-	
-	public int[] getMinAndMaxValues() {
-		return minAndMax;
-	}
-
-	@Override
-	public void beforeProcessing() {
-		minAndMax = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE};		
-	}
-
-	@Override
-	public void afterProcessing() {	}
 }

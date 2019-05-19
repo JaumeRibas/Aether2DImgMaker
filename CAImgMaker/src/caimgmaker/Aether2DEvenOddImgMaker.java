@@ -26,7 +26,6 @@ import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 public class Aether2DEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-		System.out.println(Integer.MAX_VALUE);
 //		args = new String[]{"10000000", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");

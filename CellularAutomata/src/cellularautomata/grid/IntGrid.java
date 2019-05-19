@@ -16,11 +16,22 @@
  */
 package cellularautomata.grid;
 
-public interface IntGrid {
+public interface IntGrid extends Grid {
 
 	int[] getMinAndMaxValue() throws Exception;
 	
-	int[] getMinAndMaxValue(int backgroundValue) throws Exception;
+	/**
+	 * Get min and max values excluding a particular value
+	 * 
+	 * @param excludedValue
+	 * @return
+	 * @throws Exception 
+	 */
+	int[] getMinAndMaxValueExcluding(int excludedValue) throws Exception;
+	
+	int[] getMinAndMaxValueAtEvenPositions() throws Exception;
+	
+	int[] getMinAndMaxValueAtOddPositions() throws Exception;
 	
 	int getTotalValue() throws Exception;
 	

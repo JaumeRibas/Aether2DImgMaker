@@ -16,9 +16,9 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid.LongGrid4D;
+import cellularautomata.grid4D.LongGrid4D;
 
-public abstract class LongCellularAutomaton4D extends LongGrid4D implements CellularAutomaton {
+public interface LongCellularAutomaton4D extends LongGrid4D, CellularAutomaton {
 	/**
 	 * Returns the background value
 	 * 

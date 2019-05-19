@@ -16,14 +16,14 @@
  */
 package cellularautomata.grid;
 
-public interface ShortGrid {
+public interface ShortGrid extends Grid {
 
-	short[] getMinAndMaxValue();
+	short[] getMinAndMaxValue() throws Exception;
 	
-	short[] getMinAndMaxValue(short backgroundValue);
+	short[] getMinAndMaxValueExcluding(short excludedValue) throws Exception;
 	
-	short getTotalValue();
+	short getTotalValue() throws Exception;
 	
-	short getMaxAbsoluteValue();
+	short getMaxAbsoluteValue() throws Exception;
 	
 }

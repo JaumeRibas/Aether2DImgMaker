@@ -16,15 +16,71 @@
  */
 package cellularautomata.grid;
 
-public interface ActionableGrid<P extends GridProcessor<?>> {
+import java.util.HashSet;
+import java.util.Set;
+
+import cellularautomata.grid.Grid;
+
+//TODO try to make it more standard. Perhaps using the Iterable interface. 
+public abstract class ActionableGrid<P extends GridProcessor<G>, G extends Grid> {
+	
+	protected Set<P> processors;
+	
+	public void addProcessor(P processor) {
+		if (processors == null) {
+			processors = new HashSet<P>();
+		}
+		processors.add(processor);
+	}
+	
+	public boolean removeProcessor(P processor) {
+		if (processors != null) {
+			return processors.remove(processor);
+		}
+		return false;
+	}
+	
 	/**
 	 * Triggers the processing of the grid by the added processors.
 	 * 
 	 * @throws Exception 
 	 */
-	void processGrid() throws Exception;
+	public abstract void processGrid() throws Exception;
 	
-	void addProcessor(P processor);
+	/*
+	//Possible alternative approach to ensure triggerBeforeProcessing and triggerAfterProcessing are called
+	public void processGrid() throws Exception {
+		triggerBeforeProcessing();
+		while (G block = getNextGridBlock() != null) {
+			triggerProcessGridBlock(block);
+		}
+		triggerAfterProcessing();
+	}
 	
-	boolean removeProcessor(P processor);
+	protected abstract G getNextGridBlock() throws Exception;
+	*/
+	
+	protected void triggerBeforeProcessing() throws Exception {
+		if (processors != null) {
+			for (P processor : processors) {
+				processor.beforeProcessing();
+			}
+		}
+	}
+	
+	protected void triggerProcessGridBlock(G gridBlock) throws Exception {
+		if (processors != null) {
+			for (P processor : processors) {
+				processor.processGridBlock(gridBlock);
+			}
+		}
+	}
+	
+	protected void triggerAfterProcessing() throws Exception {
+		if (processors != null) {
+			for (P processor : processors) {
+				processor.afterProcessing();
+			}
+		}
+	}
 }

@@ -19,7 +19,7 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Aether2D extends SymmetricLongCellularAutomaton2D {
+public class Aether2D implements SymmetricLongCellularAutomaton2D {
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -237,7 +237,7 @@ public class Aether2D extends SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	public long getNonSymmetricValue(int x, int y){	
+	public long getValueAtNonSymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	

@@ -17,15 +17,9 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
+import cellularautomata.grid2D.Grid2D;
 
-import cellularautomata.grid.Grid2D;
-import cellularautomata.grid.ActionableGrid;
-
-public abstract class ColorGrid2D implements Grid2D, ActionableGrid<ColorGrid2DProcessor> {
-	
-	protected Set<ColorGrid2DProcessor> processors;
+public interface ColorGrid2D extends Grid2D {
 	
 	/**
 	 * Returns the color at a given position
@@ -35,57 +29,11 @@ public abstract class ColorGrid2D implements Grid2D, ActionableGrid<ColorGrid2DP
 	 * @return the {@link Color} at (x,y)
 	 * @throws Exception 
 	 */
-	public abstract Color getColorAtPosition(int x, int y) throws Exception;
+	Color getColorAtPosition(int x, int y) throws Exception;
 	
 	@Override
-	public ColorGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
+	default ColorGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
 		return new ColorSubGrid2D(this, minX, maxX, minY, maxY);
 	}	
-	
-	@Override
-	public void processGrid() throws Exception {
-		triggerBeforeProcessing();
-		triggerProcessGridBlock(this);
-		triggerAfterProcessing();
-	}
-	
-	@Override
-	public void addProcessor(ColorGrid2DProcessor processor) {
-		if (processors == null) {
-			processors = new HashSet<ColorGrid2DProcessor>();
-		}
-		processors.add(processor);
-	}
-	
-	@Override
-	public boolean removeProcessor(ColorGrid2DProcessor processor) {
-		if (processors != null) {
-			return processors.remove(processor);
-		}
-		return false;
-	}
-	
-	protected void triggerBeforeProcessing() throws Exception {
-		if (processors != null) {
-			for (ColorGrid2DProcessor processor : processors) {
-				processor.beforeProcessing();
-			}
-		}
-	}
-	
-	protected void triggerProcessGridBlock(ColorGrid2D gridBlock) throws Exception {
-		if (processors != null) {
-			for (ColorGrid2DProcessor processor : processors) {
-				processor.processGridBlock(gridBlock);
-			}
-		}
-	}
-	
-	protected void triggerAfterProcessing() throws Exception {
-		if (processors != null) {
-			for (ColorGrid2DProcessor processor : processors) {
-				processor.afterProcessing();
-			}
-		}
-	}
+
 }

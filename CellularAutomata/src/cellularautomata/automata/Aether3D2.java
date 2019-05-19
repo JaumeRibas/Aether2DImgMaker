@@ -22,7 +22,7 @@ import java.math.BigInteger;
 
 import cellularautomata.grid.NonSymmetricLongGrid3DSlice;
 
-public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
+public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -321,7 +321,7 @@ public class Aether3D2 extends SymmetricLongCellularAutomaton3D {
 		}
 	}
 	
-	public long getNonSymmetricValue(int x, int y, int z){	
+	public long getValueAtNonSymmetricPosition(int x, int y, int z){	
 		return grid[x].getValueAtPosition(y, z);
 	}
 	

@@ -16,11 +16,13 @@
  */
 package cellularautomata.grid;
 
-public interface GridProcessor<P extends Grid> {
+import cellularautomata.grid.Grid;
+
+public interface GridProcessor<G extends Grid> {
 
 	void beforeProcessing() throws Exception;
 
-	void processGridBlock(P gridBlock) throws Exception;
+	void processGridBlock(G gridBlock) throws Exception;
 	
 	void afterProcessing() throws Exception;
 }

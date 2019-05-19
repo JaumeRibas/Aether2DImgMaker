@@ -18,7 +18,7 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-public class ColorSubGrid2D extends ColorGrid2D {
+public class ColorSubGrid2D implements ColorGrid2D {
 	
 	private ColorGrid2D source;
 	private int minX;
