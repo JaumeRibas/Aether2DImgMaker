@@ -16,14 +16,14 @@
  */
 package cellularautomata.grid3D;
 
-import cellularautomata.grid2D.LongGrid2D;
+import cellularautomata.grid2D.ShortGrid2D;
 
-public class LongGrid3DCrossSection implements LongGrid2D {
+public class ShortGrid3DZCrossSection implements ShortGrid2D {
 
-	private LongGrid3D source;
+	private ShortGrid3D source;
 	private int z;
 	
-	public LongGrid3DCrossSection(LongGrid3D source, int z) {
+	public ShortGrid3DZCrossSection(ShortGrid3D source, int z) {
 		this.source = source;
 		this.z = z;
 	}
@@ -69,7 +69,7 @@ public class LongGrid3DCrossSection implements LongGrid2D {
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) throws Exception {
+	public short getValueAtPosition(int x, int y) {
 		return source.getValueAtPosition(x, y, z);
 	}
 

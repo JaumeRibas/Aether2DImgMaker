@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid4D;
 
+import cellularautomata.grid2D.ShortGrid2D;
+
 public class AbsShortGrid4D implements ShortGrid4D {
 	
 	private ShortGrid4D source;
@@ -67,6 +69,11 @@ public class AbsShortGrid4D implements ShortGrid4D {
 	@Override
 	public int getMaxZ() {
 		return source.getMaxZ();
+	}
+	
+	@Override
+	public ShortGrid2D crossSectionAtYZ(int y, int z) {
+		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 }

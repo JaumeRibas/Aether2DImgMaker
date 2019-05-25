@@ -17,6 +17,7 @@
 package cellularautomata.grid4D;
 
 import cellularautomata.grid.Grid;
+import cellularautomata.grid2D.Grid2D;
 
 public interface Grid4D extends Grid {
 	
@@ -76,4 +77,5 @@ public interface Grid4D extends Grid {
 	 */
 	int getMaxZ();
 
+	Grid2D crossSectionAtYZ(int y, int z);
 }

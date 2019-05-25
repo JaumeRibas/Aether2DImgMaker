@@ -401,7 +401,7 @@ public class Test {
 				System.out.println("Step " + ca.getStep());
 				short[] minAndMaxValue = ca.getMinAndMaxValue();
 				System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-				printAsGrid(ca.projected3DEdge().crossSection(0), ca.getBackgroundValue());
+				printAsGrid(ca.projected3DEdge().crossSectionAtZ(0), ca.getBackgroundValue());
 			} while (ca.nextStep());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -533,7 +533,7 @@ public class Test {
 			do {
 				for (SymmetricLongCellularAutomaton3D ca : cas) {
 					System.out.println("step " + ca.getStep());
-					printAsGrid(ca.crossSection(0), ca.getBackgroundValue());
+					printAsGrid(ca.crossSectionAtZ(0), ca.getBackgroundValue());
 					System.out.println("totalValue " + ca.getTotalValue());
 					boolean caChanged = ca.nextStep();
 					anyChanged = anyChanged || caChanged;
@@ -551,7 +551,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca.crossSection(0,0), ca.getBackgroundValue());
+				printAsGrid(ca.crossSectionAtYZ(0,0), ca.getBackgroundValue());
 				System.out.println("totalValue " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());

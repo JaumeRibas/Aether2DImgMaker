@@ -134,8 +134,8 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 		return new ShortSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
-	default ShortGrid2D crossSection(int z) {
-		return new ShortGrid3DCrossSection(this, z);
+	default ShortGrid2D crossSectionAtZ(int z) {
+		return new ShortGrid3DZCrossSection(this, z);
 	}
 	
 	default ShortGrid2D projectedSurfaceMaxX(short backgroundValue) {

@@ -21,7 +21,7 @@ import java.io.Serializable;
 import cellularautomata.grid.Constants;
 import cellularautomata.grid3D.LongGrid3D;
 
-public class SizeLimitedNonSymmetricLongGrid3D implements LongGrid3D, Serializable {
+public class SizeLimitedNonSymmetricLongGrid3D implements LongGrid3D, Serializable {//TODO rename to SizeLimitedNonSymmetricLongGrid3DBlock
 
 	/**
 	 * 

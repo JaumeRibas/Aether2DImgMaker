@@ -17,6 +17,7 @@
 package cellularautomata.grid3D;
 
 import cellularautomata.grid.Grid;
+import cellularautomata.grid2D.Grid2D;
 
 public interface Grid3D extends Grid {
 	
@@ -283,5 +284,7 @@ public interface Grid3D extends Grid {
 	default int getMaxZ(int x, int y) {
 		return getMaxZ();
 	}
+	
+	Grid2D crossSectionAtZ(int z);
 
 }

@@ -16,14 +16,22 @@
  */
 package cellularautomata.grid3D;
 
-import cellularautomata.grid2D.ShortGrid2D;
+import cellularautomata.grid2D.SymmetricLongGrid2D;
 
-public class ShortGrid3DCrossSection implements ShortGrid2D {
+public class SymmetricLongGrid3DZCrossSection implements SymmetricLongGrid2D {
 
-	private ShortGrid3D source;
+	private SymmetricLongGrid3D source;
 	private int z;
 	
-	public ShortGrid3DCrossSection(ShortGrid3D source, int z) {
+	public int getZ() {
+		return z;
+	}
+
+	public void setZ(int z) {
+		this.z = z;
+	}
+	
+	public SymmetricLongGrid3DZCrossSection(SymmetricLongGrid3D source, int z) {
 		this.source = source;
 		this.z = z;
 	}
@@ -69,8 +77,53 @@ public class ShortGrid3DCrossSection implements ShortGrid2D {
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y) {
+	public long getValueAtPosition(int x, int y) throws Exception {
 		return source.getValueAtPosition(x, y, z);
+	}
+
+	@Override
+	public int getNonSymmetricMinX() {
+		return source.getNonSymmetricMinXAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxX() {
+		return source.getNonSymmetricMaxXAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMinY() {
+		return source.getNonSymmetricMinYAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxY() {
+		return source.getNonSymmetricMaxYAtZ(z);
+	}
+
+	@Override
+	public int getNonSymmetricMinX(int y) {
+		return source.getNonSymmetricMinX(y, z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxX(int y) {
+		return source.getNonSymmetricMaxX(y, z);
+	}
+
+	@Override
+	public int getNonSymmetricMinY(int x) {
+		return source.getNonSymmetricMinY(x, z);
+	}
+
+	@Override
+	public int getNonSymmetricMaxY(int x) {
+		return source.getNonSymmetricMaxY(x, z);
+	}
+
+	@Override
+	public long getValueAtNonSymmetricPosition(int x, int y) throws Exception {
+		return source.getValueAtNonSymmetricPosition(x, y, z);
 	}
 
 }

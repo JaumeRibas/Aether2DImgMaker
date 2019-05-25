@@ -85,8 +85,8 @@ public interface SymmetricIntGrid3D extends IntGrid3D, SymmetricGrid3D {
 		return new AbsSymmetricIntGrid3D(this);
 	}
 	
-	default SymmetricIntGrid2D crossSection(int z) {
-		return new SymmetricIntGrid3DCrossSection(this, z);
+	default SymmetricIntGrid2D crossSectionAtZ(int z) {
+		return new SymmetricIntGrid3DZCrossSection(this, z);
 	}
 	
 	default IntGrid2D projectedSurface(int backgroundValue) {

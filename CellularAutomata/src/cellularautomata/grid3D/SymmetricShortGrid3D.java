@@ -76,8 +76,8 @@ public interface SymmetricShortGrid3D extends ShortGrid3D, SymmetricGrid3D {
 		return new AbsSymmetricShortGrid3D(this);
 	}
 	
-	default SymmetricShortGrid2D crossSection(int z) {
-		return new SymmetricShortGrid3DCrossSection(this, z);
+	default SymmetricShortGrid2D crossSectionAtZ(int z) {
+		return new SymmetricShortGrid3DZCrossSection(this, z);
 	}
 	
 	default ShortGrid2D projectedSurface(short backgroundValue) {

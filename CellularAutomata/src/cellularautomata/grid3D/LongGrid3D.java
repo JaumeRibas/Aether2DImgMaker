@@ -185,8 +185,8 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 		return new LongSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
-	default LongGrid2D crossSection(int z) {
-		return new LongGrid3DCrossSection(this, z);
+	default LongGrid2D crossSectionAtZ(int z) {
+		return new LongGrid3DZCrossSection(this, z);
 	}
 
 }

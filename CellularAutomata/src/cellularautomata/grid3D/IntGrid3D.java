@@ -191,8 +191,8 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 		return new IntSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
-	default IntGrid2D crossSection(int z) {
-		return new IntGrid3DCrossSection(this, z);
+	default IntGrid2D crossSectionAtZ(int z) {
+		return new IntGrid3DZCrossSection(this, z);
 	}
 	
 	default IntGrid2D projectedSurfaceMaxX(int backgroundValue) {

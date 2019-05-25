@@ -18,12 +18,12 @@ package cellularautomata.grid3D;
 
 import cellularautomata.grid2D.IntGrid2D;
 
-public class IntGrid3DCrossSection implements IntGrid2D {
+public class IntGrid3DZCrossSection implements IntGrid2D {
 
 	private IntGrid3D source;
 	private int z;
 	
-	public IntGrid3DCrossSection(IntGrid3D source, int z) {
+	public IntGrid3DZCrossSection(IntGrid3D source, int z) {
 		this.source = source;
 		this.z = z;
 	}

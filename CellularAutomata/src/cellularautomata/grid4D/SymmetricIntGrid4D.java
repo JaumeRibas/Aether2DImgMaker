@@ -83,8 +83,8 @@ public interface SymmetricIntGrid4D extends IntGrid4D, SymmetricGrid4D {
 		return new AbsSymmetricIntGrid4D(this);
 	}
 	
-	default SymmetricIntGrid2D crossSection(int y, int z) {
-		return new SymmetricIntGrid4DCrossSection(this, y, z);
+	default SymmetricIntGrid2D crossSectionAtYZ(int y, int z) {
+		return new SymmetricIntGrid4DYZCrossSection(this, y, z);
 	}
 	
 	default IntGrid3D projected3DEdge(int backgroundValue) {

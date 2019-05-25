@@ -14,116 +14,90 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3D;
+package cellularautomata.grid4D;
 
 import cellularautomata.grid2D.SymmetricLongGrid2D;
 
-public class SymmetricLongGrid3DCrossSection implements SymmetricLongGrid2D {
+public class SymmetricLongGrid4DYZCrossSection implements SymmetricLongGrid2D {
 
-	private SymmetricLongGrid3D source;
+	private SymmetricLongGrid4D source;
+	private int y;
 	private int z;
 	
-	public int getZ() {
-		return z;
-	}
-
-	public void setZ(int z) {
-		this.z = z;
-	}
-	
-	public SymmetricLongGrid3DCrossSection(SymmetricLongGrid3D source, int z) {
+	public SymmetricLongGrid4DYZCrossSection(SymmetricLongGrid4D source, int y, int z) {
 		this.source = source;
+		this.y = y;
 		this.z = z;
 	}
 
 	@Override
 	public int getMinX() {
-		return source.getMinXAtZ(z);
-	}
-	
-	@Override
-	public int getMinX(int y) {
-		return source.getMinX(y, z);
-	}
-	
-	@Override
-	public int getMaxX() {
-		return source.getMaxXAtZ(z);
-	}
-	
-	@Override
-	public int getMaxX(int y) {
-		return source.getMaxX(y, z);
-	}
-	
-	@Override
-	public int getMinY() {
-		return source.getMinYAtZ(z);
-	}
-	
-	@Override
-	public int getMinY(int x) {
-		return source.getMinY(x, z);
-	}
-	
-	@Override
-	public int getMaxY() {
-		return source.getMaxYAtZ(z);
-	}
-	
-	@Override
-	public int getMaxY(int x) {
-		return source.getMaxY(x, z);
+		return source.getMinW();
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(x, y, z);
+	public int getMaxX() {
+		return source.getMaxW();
+	}
+
+	@Override
+	public int getMinY() {
+		return source.getMinX();
+	}
+
+	@Override
+	public int getMaxY() {
+		return source.getMaxX();
+	}
+
+	@Override
+	public long getValueAtPosition(int x, int y) {
+		return source.getValueAtPosition(x, y, this.y, z);
 	}
 
 	@Override
 	public int getNonSymmetricMinX() {
-		return source.getNonSymmetricMinXAtZ(z);
+		return source.getNonSymmetricMinW();
 	}
 
 	@Override
 	public int getNonSymmetricMaxX() {
-		return source.getNonSymmetricMaxXAtZ(z);
+		return source.getNonSymmetricMaxW();
 	}
 
 	@Override
 	public int getNonSymmetricMinY() {
-		return source.getNonSymmetricMinYAtZ(z);
+		return source.getNonSymmetricMinX();
 	}
 
 	@Override
 	public int getNonSymmetricMaxY() {
-		return source.getNonSymmetricMaxYAtZ(z);
+		return source.getNonSymmetricMaxX();
 	}
 
 	@Override
+	public long getValueAtNonSymmetricPosition(int x, int y) {
+		return source.getValueAtNonSymmetricPosition(x, y, this.y, z);
+	}
+	
+	@Override
 	public int getNonSymmetricMinX(int y) {
-		return source.getNonSymmetricMinX(y, z);
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public int getNonSymmetricMaxX(int y) {
-		return source.getNonSymmetricMaxX(y, z);
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public int getNonSymmetricMinY(int x) {
-		return source.getNonSymmetricMinY(x, z);
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public int getNonSymmetricMaxY(int x) {
-		return source.getNonSymmetricMaxY(x, z);
-	}
-
-	@Override
-	public long getValueAtNonSymmetricPosition(int x, int y) throws Exception {
-		return source.getValueAtNonSymmetricPosition(x, y, z);
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 }

@@ -18,7 +18,7 @@ package cellularautomata.grid3D;
 
 import cellularautomata.grid2D.SymmetricIntGrid2D;
 
-public class SymmetricIntGrid3DCrossSection implements SymmetricIntGrid2D {
+public class SymmetricIntGrid3DZCrossSection implements SymmetricIntGrid2D {
 
 	private SymmetricIntGrid3D source;
 	private int z;
@@ -31,7 +31,7 @@ public class SymmetricIntGrid3DCrossSection implements SymmetricIntGrid2D {
 		this.z = z;
 	}
 
-	public SymmetricIntGrid3DCrossSection(SymmetricIntGrid3D source, int z) {
+	public SymmetricIntGrid3DZCrossSection(SymmetricIntGrid3D source, int z) {
 		this.source = source;
 		this.z = z;
 	}

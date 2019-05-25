@@ -85,8 +85,8 @@ public interface SymmetricLongGrid3D extends LongGrid3D, SymmetricGrid3D {
 		return new AbsSymmetricLongGrid3D(this);
 	}
 	
-	default SymmetricLongGrid2D crossSection(int z) {
-		return new SymmetricLongGrid3DCrossSection(this, z);
+	default SymmetricLongGrid2D crossSectionAtZ(int z) {
+		return new SymmetricLongGrid3DZCrossSection(this, z);
 	}
 	
 	default LongGrid2D projectedSurface(long backgroundValue) {

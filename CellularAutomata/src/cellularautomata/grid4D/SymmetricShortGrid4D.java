@@ -83,8 +83,8 @@ public interface SymmetricShortGrid4D extends ShortGrid4D, SymmetricGrid4D {
 		return new AbsSymmetricShortGrid4D(this);
 	}
 	
-	default SymmetricShortGrid2D crossSection(int y, int z) {
-		return new SymmetricShortGrid4DCrossSection(this, y, z);
+	default SymmetricShortGrid2D crossSectionAtYZ(int y, int z) {
+		return new SymmetricShortGrid4DYZCrossSection(this, y, z);
 	}
 	
 	default ShortGrid3D projected3DEdge(short backgroundValue) {

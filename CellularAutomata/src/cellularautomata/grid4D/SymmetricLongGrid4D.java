@@ -83,8 +83,8 @@ public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 		return new AbsSymmetricLongGrid4D(this);
 	}
 	
-	default SymmetricLongGrid2D crossSection(int y, int z) {
-		return new SymmetricLongGrid4DCrossSection(this, y, z);
+	default SymmetricLongGrid2D crossSectionAtYZ(int y, int z) {
+		return new SymmetricLongGrid4DYZCrossSection(this, y, z);
 	}
 	
 	default LongGrid3D projected3DEdge(long backgroundValue) {

@@ -16,15 +16,15 @@
  */
 package cellularautomata.grid4D;
 
-import cellularautomata.grid2D.SymmetricLongGrid2D;
+import cellularautomata.grid2D.SymmetricShortGrid2D;
 
-public class SymmetricLongGrid4DCrossSection implements SymmetricLongGrid2D {
+public class SymmetricShortGrid4DYZCrossSection implements SymmetricShortGrid2D {
 
-	private SymmetricLongGrid4D source;
+	private SymmetricShortGrid4D source;
 	private int y;
 	private int z;
 	
-	public SymmetricLongGrid4DCrossSection(SymmetricLongGrid4D source, int y, int z) {
+	public SymmetricShortGrid4DYZCrossSection(SymmetricShortGrid4D source, int y, int z) {
 		this.source = source;
 		this.y = y;
 		this.z = z;
@@ -51,7 +51,7 @@ public class SymmetricLongGrid4DCrossSection implements SymmetricLongGrid2D {
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) {
+	public short getValueAtPosition(int x, int y) {
 		return source.getValueAtPosition(x, y, this.y, z);
 	}
 
@@ -76,10 +76,10 @@ public class SymmetricLongGrid4DCrossSection implements SymmetricLongGrid2D {
 	}
 
 	@Override
-	public long getValueAtNonSymmetricPosition(int x, int y) {
+	public short getValueAtNonSymmetricPosition(int x, int y) {
 		return source.getValueAtNonSymmetricPosition(x, y, this.y, z);
 	}
-	
+
 	@Override
 	public int getNonSymmetricMinX(int y) {
 		throw new UnsupportedOperationException("Not implemented yet");
@@ -99,5 +99,4 @@ public class SymmetricLongGrid4DCrossSection implements SymmetricLongGrid2D {
 	public int getNonSymmetricMaxY(int x) {
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
-
 }
