@@ -49,8 +49,8 @@ import cellularautomata.grid.LongGridEvenOddMinAndMaxProcessor;
 import cellularautomata.grid.IntGridEvenOddMinAndMaxProcessor;
 import cellularautomata.grid2D.Grid2D;
 import cellularautomata.grid2D.IntGrid2D;
-import cellularautomata.grid3D.ActionableIntGrid3DZCrossSectionProcessor;
-import cellularautomata.grid3D.ActionableLongGrid3DZCrossSectionProcessor;
+import cellularautomata.grid3D.ActionableSymmetricIntGrid3DZCrossSectionProcessor;
+import cellularautomata.grid3D.ActionableSymmetricLongGrid3DZCrossSectionProcessor;
 import cellularautomata.grid3D.IntGrid3D;
 import cellularautomata.grid2D.LongGrid2D;
 import cellularautomata.grid3D.LongGrid3D;
@@ -487,8 +487,8 @@ public class CAImgMaker {
 		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		
-		ActionableIntGrid3DZCrossSectionProcessor scan = new ActionableIntGrid3DZCrossSectionProcessor(ca, scanZ);
-		ActionableIntGrid3DZCrossSectionProcessor xSection = new ActionableIntGrid3DZCrossSectionProcessor(ca, crossSectionZ);
+		ActionableSymmetricIntGrid3DZCrossSectionProcessor scan = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, scanZ);
+		ActionableSymmetricIntGrid3DZCrossSectionProcessor xSection = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, crossSectionZ);
 		
 		IntGridMinAndMaxProcessor<IntGrid2D> scanMinAndMaxProcessor = new IntGridMinAndMaxProcessor<IntGrid2D>();
 		IntGridMinAndMaxProcessor<IntGrid2D> xSectionMinAndMaxProcessor = new IntGridMinAndMaxProcessor<IntGrid2D>();
@@ -599,8 +599,8 @@ public class CAImgMaker {
 		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		
-		ActionableIntGrid3DZCrossSectionProcessor scan = new ActionableIntGrid3DZCrossSectionProcessor(ca, scanZ);
-		ActionableIntGrid3DZCrossSectionProcessor xSection = new ActionableIntGrid3DZCrossSectionProcessor(ca, crossSectionZ);
+		ActionableSymmetricIntGrid3DZCrossSectionProcessor scan = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, scanZ);
+		ActionableSymmetricIntGrid3DZCrossSectionProcessor xSection = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, crossSectionZ);
 		
 		IntGridEvenOddMinAndMaxProcessor<IntGrid2D> scanMinAndMaxProcessor = new IntGridEvenOddMinAndMaxProcessor<IntGrid2D>();
 		IntGridEvenOddMinAndMaxProcessor<IntGrid2D> xSectionMinAndMaxProcessor = new IntGridEvenOddMinAndMaxProcessor<IntGrid2D>();
@@ -754,8 +754,8 @@ public class CAImgMaker {
 		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		
-		ActionableLongGrid3DZCrossSectionProcessor scan = new ActionableLongGrid3DZCrossSectionProcessor(ca, scanZ);
-		ActionableLongGrid3DZCrossSectionProcessor xSection = new ActionableLongGrid3DZCrossSectionProcessor(ca, crossSectionZ);
+		ActionableSymmetricLongGrid3DZCrossSectionProcessor scan = new ActionableSymmetricLongGrid3DZCrossSectionProcessor(ca, scanZ);
+		ActionableSymmetricLongGrid3DZCrossSectionProcessor xSection = new ActionableSymmetricLongGrid3DZCrossSectionProcessor(ca, crossSectionZ);
 		
 		LongGridEvenOddMinAndMaxProcessor<LongGrid2D> scanMinAndMaxProcessor = new LongGridEvenOddMinAndMaxProcessor<LongGrid2D>();
 		LongGridEvenOddMinAndMaxProcessor<LongGrid2D> xSectionMinAndMaxProcessor = new LongGridEvenOddMinAndMaxProcessor<LongGrid2D>();

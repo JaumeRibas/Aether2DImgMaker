@@ -17,14 +17,16 @@
 package cellularautomata.grid3D;
 
 import cellularautomata.grid.ActionableGrid;
+import cellularautomata.grid.ActionableSymmetricGrid;
 import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid2D.LongGrid2D;
+import cellularautomata.grid.SymmetricGridProcessor;
+import cellularautomata.grid2D.IntGrid2D;
 
-public class ActionableLongGrid3DZCrossSectionProcessor extends ActionableGrid<GridProcessor<LongGrid2D>, LongGrid2D> implements GridProcessor<LongGrid3D> {
+public class ActionableSymmetricIntGrid3DZCrossSectionProcessor extends ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> implements SymmetricGridProcessor<IntGrid3D> {
 
-	private ActionableGrid<GridProcessor<LongGrid3D>, LongGrid3D> source;
+	private ActionableSymmetricGrid<SymmetricGridProcessor<IntGrid3D>, IntGrid3D> source;
 	private int z;
-	
+
 	public int getZ() {
 		return z;
 	}
@@ -32,8 +34,8 @@ public class ActionableLongGrid3DZCrossSectionProcessor extends ActionableGrid<G
 	public void setZ(int z) {
 		this.z = z;
 	}
-	
-	public ActionableLongGrid3DZCrossSectionProcessor(ActionableGrid<GridProcessor<LongGrid3D>, LongGrid3D> source, int z) {
+
+	public ActionableSymmetricIntGrid3DZCrossSectionProcessor(ActionableSymmetricGrid<SymmetricGridProcessor<IntGrid3D>, IntGrid3D> source, int z) {
 		this.source = source;
 		this.z = z;
 	}
@@ -49,7 +51,7 @@ public class ActionableLongGrid3DZCrossSectionProcessor extends ActionableGrid<G
 	}
 
 	@Override
-	public void processGridBlock(LongGrid3D gridBlock) throws Exception {
+	public void processGridBlock(IntGrid3D gridBlock) throws Exception {
 		if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
 			triggerProcessGridBlock(gridBlock.crossSectionAtZ(z));
 		}
@@ -59,5 +61,5 @@ public class ActionableLongGrid3DZCrossSectionProcessor extends ActionableGrid<G
 	public void processGrid() throws Exception {
 		source.processGrid();
 	}
-
+	
 }
