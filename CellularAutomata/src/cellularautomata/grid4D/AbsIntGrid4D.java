@@ -16,8 +16,6 @@
  */
 package cellularautomata.grid4D;
 
-import cellularautomata.grid2D.IntGrid2D;
-
 public class AbsIntGrid4D implements IntGrid4D {
 	
 	private IntGrid4D source;
@@ -69,11 +67,6 @@ public class AbsIntGrid4D implements IntGrid4D {
 	@Override
 	public int getMaxZ() {
 		return source.getMaxZ();
-	}
-
-	@Override
-	public IntGrid2D crossSectionAtYZ(int y, int z) {
-		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 }

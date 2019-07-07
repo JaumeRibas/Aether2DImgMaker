@@ -16,74 +16,43 @@
  */
 package cellularautomata.grid4D;
 
-public class ShortSubGrid4D implements ShortGrid4D {
+import cellularautomata.grid2D.LongGrid2D;
+
+public class LongGrid4DYZCrossSection implements LongGrid2D {
+
+	private LongGrid4D source;
+	private int y;
+	private int z;
 	
-	private ShortGrid4D source;
-	private int minW;
-	private int maxW;
-	private int minX;
-	private int maxX;
-	private int minY;
-	private int maxY;
-	private int minZ;
-	private int maxZ;
-	
-	public ShortSubGrid4D(ShortGrid4D source, int minW, int maxW, int minX, 
-			int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public LongGrid4DYZCrossSection(LongGrid4D source, int y, int z) {
 		this.source = source;
-		this.minW = minW;
-		this.maxW = maxW;
-		this.minX = minX;
-		this.maxX = maxX;
-		this.minY = minY;
-		this.maxY = maxY;
-		this.minZ = minZ;
-		this.maxZ = maxZ;
-	}
-
-	@Override
-	public short getValueAtPosition(int w, int x, int y, int z) {
-		return source.getValueAtPosition(w, x, y, z);
-	}
-	
-	@Override
-	public int getMinW() {
-		return minW;
-	}
-
-	@Override
-	public int getMaxW() {
-		return maxW;
+		this.y = y;
+		this.z = z;
 	}
 
 	@Override
 	public int getMinX() {
-		return minX;
+		return source.getMinW();
 	}
 
 	@Override
 	public int getMaxX() {
-		return maxX;
+		return source.getMaxW();
 	}
 
 	@Override
 	public int getMinY() {
-		return minY;
+		return source.getMinX();
 	}
 
 	@Override
 	public int getMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		return minZ;
+		return source.getMaxX();
 	}
 
 	@Override
-	public int getMaxZ() {
-		return maxZ;
+	public long getValueAtPosition(int x, int y) {
+		return source.getValueAtPosition(x, y, this.y, z);
 	}
 
 }

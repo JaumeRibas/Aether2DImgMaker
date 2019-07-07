@@ -16,8 +16,6 @@
  */
 package cellularautomata.grid4D;
 
-import cellularautomata.grid2D.LongGrid2D;
-
 public class AbsLongGrid4D implements LongGrid4D {
 	
 	private LongGrid4D source;
@@ -69,11 +67,6 @@ public class AbsLongGrid4D implements LongGrid4D {
 	@Override
 	public int getMaxZ() {
 		return source.getMaxZ();
-	}
-
-	@Override
-	public LongGrid2D crossSectionAtYZ(int y, int z) {
-		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 }

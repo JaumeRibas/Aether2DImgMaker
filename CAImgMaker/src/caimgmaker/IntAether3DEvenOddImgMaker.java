@@ -26,7 +26,7 @@ import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 public class IntAether3DEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-2000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-2000", "D:/data/testCopier"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {

@@ -17,6 +17,7 @@
 package cellularautomata.grid4D;
 
 import cellularautomata.grid.ShortGrid;
+import cellularautomata.grid2D.ShortGrid2D;
 
 public interface ShortGrid4D extends Grid4D, ShortGrid {
 	
@@ -109,6 +110,10 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	
 	default ShortGrid4D absoluteGrid() {
 		return new AbsShortGrid4D(this);
+	}
+	
+	default ShortGrid2D crossSectionAtYZ(int y, int z) {
+		return new ShortGrid4DYZCrossSection(this, y, z);
 	}
 	
 	default ShortGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {

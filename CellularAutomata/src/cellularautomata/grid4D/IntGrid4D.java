@@ -17,6 +17,7 @@
 package cellularautomata.grid4D;
 
 import cellularautomata.grid.IntGrid;
+import cellularautomata.grid2D.IntGrid2D;
 
 public interface IntGrid4D extends Grid4D, IntGrid {
 	
@@ -165,6 +166,10 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	
 	default IntGrid4D absoluteGrid() {
 		return new AbsIntGrid4D(this);
+	}
+	
+	default IntGrid2D crossSectionAtYZ(int y, int z) {
+		return new IntGrid4DYZCrossSection(this, y, z);
 	}
 	
 	default IntGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {

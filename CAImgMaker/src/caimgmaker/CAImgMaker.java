@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
-
 import caimgmaker.colormap.ActionableGrid2DColorMapperProcessor;
 import caimgmaker.colormap.ColorGrid2D;
 import caimgmaker.colormap.ColorMapper;
@@ -44,11 +43,13 @@ import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton3D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton4D;
 import cellularautomata.automata.SymmetricShortCellularAutomaton4D;
+import cellularautomata.automata.Utils;
 import cellularautomata.grid.IntGridMinAndMaxProcessor;
 import cellularautomata.grid.LongGridEvenOddMinAndMaxProcessor;
 import cellularautomata.grid.IntGridEvenOddMinAndMaxProcessor;
 import cellularautomata.grid2D.Grid2D;
 import cellularautomata.grid2D.IntGrid2D;
+import cellularautomata.grid3D.ActionableSymmetricIntGrid3DZCrossSectionCopy;
 import cellularautomata.grid3D.ActionableSymmetricIntGrid3DZCrossSectionProcessor;
 import cellularautomata.grid3D.ActionableSymmetricLongGrid3DZCrossSectionProcessor;
 import cellularautomata.grid3D.IntGrid3D;
@@ -56,6 +57,7 @@ import cellularautomata.grid2D.LongGrid2D;
 import cellularautomata.grid3D.LongGrid3D;
 import cellularautomata.grid2D.ShortGrid2D;
 import cellularautomata.grid3D.ShortGrid3D;
+import cellularautomata.grid3D.SymmetricIntGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid2D.SymmetricIntGrid2D;
 import cellularautomata.grid2D.SymmetricLongGrid2D;
 import cellularautomata.grid2D.SymmetricShortGrid2D;
@@ -595,32 +597,51 @@ public class CAImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
+		String copiesPath = imagesPath + "copies";
+		String scanCopiesPath =  copiesPath + "/scan-slice/";
+		String crossSectionCopiesPath = copiesPath + "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		String scanImgPath = imagesPath + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
 		String crossSectionImgPath = imagesPath + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
 		
-		ActionableSymmetricIntGrid3DZCrossSectionProcessor scan = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, scanZ);
-		ActionableSymmetricIntGrid3DZCrossSectionProcessor xSection = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, crossSectionZ);
+		SymmetricIntGrid3DZCrossSectionCopierProcessor copier = new SymmetricIntGrid3DZCrossSectionCopierProcessor();
 		
 		IntGridEvenOddMinAndMaxProcessor<IntGrid2D> scanMinAndMaxProcessor = new IntGridEvenOddMinAndMaxProcessor<IntGrid2D>();
 		IntGridEvenOddMinAndMaxProcessor<IntGrid2D> xSectionMinAndMaxProcessor = new IntGridEvenOddMinAndMaxProcessor<IntGrid2D>();
 		
-		scan.addProcessor(scanMinAndMaxProcessor);
-		xSection.addProcessor(xSectionMinAndMaxProcessor);
+		ca.addProcessor(copier);
 		
-		ca.addProcessor(scan);
-		ca.addProcessor(xSection);
-		//get min and max for current step
+		copier.requestCopy(scanZ);
+		copier.requestCopy(crossSectionZ);
+
+		//copy current step cross sections
 		ca.processGrid();
 		
 		do {
-			scan.removeProcessor(scanMinAndMaxProcessor);
-			xSection.removeProcessor(xSectionMinAndMaxProcessor);
 			System.out.println("Current step: " + currentStep);
 			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
 					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
 			System.out.println("Scan z: " + scanZ);
+			ActionableSymmetricIntGrid3DZCrossSectionCopy scan = copier.getCopy(scanZ);
+			ActionableSymmetricIntGrid3DZCrossSectionCopy xSection = copier.getCopy(crossSectionZ);
+			
+			if (currentStep%10 == 0) {
+				System.out.println("Saving cross sections copies at '" + copiesPath + "'");
+				Utils.serializeToFile(scan, scanCopiesPath + "/" + numberedFolder, caName + "_x-section_" + currentStep + ".ser");
+				Utils.serializeToFile(xSection, crossSectionCopiesPath + "/" + numberedFolder, caName + "_x-section_" + currentStep + ".ser");
+			}
+			
+			scan.addProcessor(scanMinAndMaxProcessor);
+			xSection.addProcessor(xSectionMinAndMaxProcessor);
+			
+			//get min and max for cross sections
+			scan.processGrid();
+			xSection.processGrid();
+			
+			scan.removeProcessor(scanMinAndMaxProcessor);
+			xSection.removeProcessor(xSectionMinAndMaxProcessor);
+			
 			int[] evenScanMinAndMaxValue = scanMinAndMaxProcessor.getEvenMinAndMaxValue();
 			int[] evenXSectionMinAndMaxValue = xSectionMinAndMaxProcessor.getEvenMinAndMaxValue();
 			int[] oddScanMinAndMaxValue = scanMinAndMaxProcessor.getOddMinAndMaxValue();
@@ -685,12 +706,8 @@ public class CAImgMaker {
 			xSection.addProcessor(oddCrossSectionColorMapperProcessor);
 			
 			//generate images
-			ca.processGrid();
-			
-			scan.removeProcessor(evenScanColorMapperProcessor);
-			scan.removeProcessor(oddScanColorMapperProcessor);
-			xSection.removeProcessor(evenCrossSectionColorMapperProcessor);
-			xSection.removeProcessor(oddCrossSectionColorMapperProcessor);
+			scan.processGrid();
+			xSection.processGrid();
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -714,11 +731,13 @@ public class CAImgMaker {
 			scanZ++;
 			if (scanZ >= ca.getNonSymmetricMaxZ())
 				scanZ = ca.getNonSymmetricMinZ();
-			scan.setZ(scanZ);
-			scan.addProcessor(scanMinAndMaxProcessor);
-			xSection.addProcessor(xSectionMinAndMaxProcessor);
+			
+			copier.requestCopy(scanZ);
+			copier.requestCopy(crossSectionZ);
+			
 			currentStep++;
 			isEvenStep = !isEvenStep;
+			System.out.println();
 		} while (ca.nextStep());
 		System.out.println("Finished!");
 		stdIn.stop();
