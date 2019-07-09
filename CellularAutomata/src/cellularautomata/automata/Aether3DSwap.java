@@ -320,10 +320,10 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 					if (gridBlockB.minX != x + 1) {
 						saveGridBlock(gridBlockB);
 						gridBlockB = null;
-						gridBlockB = loadGridBlock(x + 1);
+						gridBlockB = loadOrBuildGridBlock(x + 1);
 					}
 				} else {
-					gridBlockB = loadGridBlock(x + 1);
+					gridBlockB = loadOrBuildGridBlock(x + 1);
 				}
 				x++;
 				if (x <= maxX) {
