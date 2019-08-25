@@ -303,44 +303,41 @@ public class IntAether3DSwap extends SymmetricIntActionableCellularAutomaton3D {
 		triggerBeforeProcessing();
 		if (gridBlockB == null) { //one block
 			processGridBlock(gridBlockA);
-		} else if (Math.min(gridBlockA.minX, gridBlockB.minX) == 0
-				&& Math.max(gridBlockA.maxX, gridBlockB.maxX) >= maxX) {//two blocks
-			if (gridBlockA.minX > gridBlockB.minX) {
-				processGridBlock(gridBlockB);
-				processGridBlock(gridBlockA);
-			} else {
-				processGridBlock(gridBlockA);
-				processGridBlock(gridBlockB);
-			}
-		} else { //more than two blocks
-			//I keep the one closest to zero (in case it can be reused when computing the next step)
-			//and save the other
+		} else {
 			if (gridBlockA.minX < gridBlockB.minX) {
 				SizeLimitedNonSymmetricIntGrid3D swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
-			saveGridBlock(gridBlockA);
-			if (gridBlockB.minX > 0) {
-				gridBlockA = null;
-				gridBlockA = loadGridBlock(0);
+			if (gridBlockB.minX == 0 && gridBlockA.maxX >= maxX
+					&& gridBlockB.maxX == gridBlockA.minX - 1) {//two blocks
+				processGridBlock(gridBlockB);
 				processGridBlock(gridBlockA);
-				while (gridBlockA.maxX < gridBlockB.minX - 1) {
-					int nextX = gridBlockA.maxX + 1;
+			} else { //more than two blocks
+				//I keep the one closest to zero (in case it can be reused when computing the next step)
+				//and save the other
+				saveGridBlock(gridBlockA);
+				if (gridBlockB.minX > 0) {
+					gridBlockA = null;
+					gridBlockA = loadGridBlock(0);
+					processGridBlock(gridBlockA);
+					while (gridBlockA.maxX < gridBlockB.minX - 1) {
+						int nextX = gridBlockA.maxX + 1;
+						gridBlockA = null;
+						gridBlockA = loadGridBlock(nextX);
+						processGridBlock(gridBlockA);
+					}
+				}
+				processGridBlock(gridBlockB);
+				int previousMaxX = gridBlockB.maxX;			
+				while (previousMaxX < maxX) {
+					int nextX = previousMaxX + 1;
 					gridBlockA = null;
 					gridBlockA = loadGridBlock(nextX);
 					processGridBlock(gridBlockA);
+					previousMaxX = gridBlockA.maxX;
 				}
-			}
-			processGridBlock(gridBlockB);
-			int previousMaxX = gridBlockB.maxX;			
-			while (previousMaxX < maxX) {
-				int nextX = previousMaxX + 1;
-				gridBlockA = null;
-				gridBlockA = loadGridBlock(nextX);
-				processGridBlock(gridBlockA);
-				previousMaxX = gridBlockA.maxX;
-			}
+			}			
 		}
 		triggerAfterProcessing();
 	}
