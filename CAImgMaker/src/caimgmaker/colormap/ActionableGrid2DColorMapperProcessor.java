@@ -16,9 +16,9 @@
  */
 package caimgmaker.colormap;
 
-import cellularautomata.grid2D.Grid2D;
 import cellularautomata.grid.ActionableGrid;
 import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid2d.Grid2D;
 
 public class ActionableGrid2DColorMapperProcessor<G extends Grid2D, C extends ColorGrid2D> extends ActionableGrid<GridProcessor<C>, C> implements GridProcessor<G> {
 	

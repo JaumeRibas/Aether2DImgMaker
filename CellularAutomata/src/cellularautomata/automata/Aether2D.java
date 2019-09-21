@@ -38,8 +38,6 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 	private int maxY;
 
 	private int maxXMinusOne;
-
-	private boolean changed;
 	
 	/**
 	 * Creates an instance with the given initial value.
@@ -67,7 +65,7 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 			newGrid = new long[grid.length][];
 		}
 		maxXMinusOne = newGrid.length - 2;
-		changed = false;
+		boolean changed = false;
 		newGrid[0] = buildGridSlice(0);
 		boolean isFirst = true;
 		long[] neighborValues = new long[4];
@@ -308,11 +306,6 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
-	}
-
-	@Override
-	public LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY) {
-		return new SymmetricLongCASubGrid2D(this, minX, maxX, minY, maxY);
 	}
 
 	@Override

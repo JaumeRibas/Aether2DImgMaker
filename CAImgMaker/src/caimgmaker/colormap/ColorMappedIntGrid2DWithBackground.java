@@ -17,7 +17,8 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import cellularautomata.grid2D.IntGrid2D;
+
+import cellularautomata.grid2d.IntGrid2D;
 
 public class ColorMappedIntGrid2DWithBackground extends ColorMappedIntGrid2D {
 

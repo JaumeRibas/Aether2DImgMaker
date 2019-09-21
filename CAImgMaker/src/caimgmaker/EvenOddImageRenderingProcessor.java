@@ -53,7 +53,7 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ColorGrid2D
 		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
 		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
 		
-		imageWidth = Math.max(framedGridWidthInPixels, minWidth); //TODO: make separate images when grid overflows
+		imageWidth = Math.max(framedGridWidthInPixels, minWidth);
 		imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
 		
 		
@@ -65,8 +65,6 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ColorGrid2D
 		
 		
 		canvasTopMargin = imageHeight - framedGridHeightInPixels;
-//		int canvasRightMargin = imageWidth - framedGridWidthInPixels;
-
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import cellularautomata.grid.NonSymmetricLongGrid3DSlice;
+import cellularautomata.grid3d.NonSymmetricLongGrid3DSlice;
 
 public class Aether3D3 implements SymmetricLongCellularAutomaton3D {
 	

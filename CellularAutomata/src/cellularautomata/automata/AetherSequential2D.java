@@ -357,11 +357,6 @@ public class AetherSequential2D implements SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY) {
-		return new SymmetricLongCASubGrid2D(this, minX, maxX, minY, maxY);
-	}
-
-	@Override
 	public int getNonSymmetricMinX(int y) {
 		return y;
 	}

@@ -16,8 +16,8 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid2D.LongGrid2D;
-import cellularautomata.grid3D.SymmetricLongGrid3D;
+import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid3d.SymmetricLongGrid3D;
 
 public interface SymmetricLongCellularAutomaton3D extends SymmetricLongGrid3D, CellularAutomaton {
 	

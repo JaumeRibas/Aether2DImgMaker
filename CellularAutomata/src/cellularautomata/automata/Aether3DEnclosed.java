@@ -40,8 +40,6 @@ public class Aether3DEnclosed implements SymmetricLongCellularAutomaton3D {
 	
 	private int maxY;
 	private int maxZ;
-
-	private boolean changed;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -81,7 +79,7 @@ public class Aether3DEnclosed implements SymmetricLongCellularAutomaton3D {
 	public boolean nextStep(){
 		long[][][] newGrid = null;
 		newGrid = new long[grid.length][][];
-		changed = false;
+		boolean changed = false;
 		newGrid[0] = buildGridSlice(0);
 		boolean first = true;
 		long[] neighborValues = new long[6];

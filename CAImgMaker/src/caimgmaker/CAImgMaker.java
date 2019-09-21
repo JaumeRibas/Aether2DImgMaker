@@ -46,21 +46,23 @@ import cellularautomata.automata.SymmetricShortCellularAutomaton4D;
 import cellularautomata.automata.Utils;
 import cellularautomata.grid.IntGridMinAndMaxProcessor;
 import cellularautomata.grid.LongGridEvenOddMinAndMaxProcessor;
+import cellularautomata.grid.SymmetricGridProcessor;
+import cellularautomata.grid2d.Grid2D;
+import cellularautomata.grid2d.IntGrid2D;
+import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid2d.ShortGrid2D;
+import cellularautomata.grid2d.SubareaGrid;
+import cellularautomata.grid2d.SymmetricIntGrid2D;
+import cellularautomata.grid2d.SymmetricLongGrid2D;
+import cellularautomata.grid2d.SymmetricShortGrid2D;
+import cellularautomata.grid3d.ActionableSymmetricIntGrid3DZCrossSectionCopy;
+import cellularautomata.grid3d.ActionableSymmetricIntGrid3DZCrossSectionProcessor;
+import cellularautomata.grid3d.ActionableSymmetricLongGrid3DZCrossSectionProcessor;
+import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.grid3d.LongGrid3D;
+import cellularautomata.grid3d.ShortGrid3D;
+import cellularautomata.grid3d.SymmetricIntGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid.IntGridEvenOddMinAndMaxProcessor;
-import cellularautomata.grid2D.Grid2D;
-import cellularautomata.grid2D.IntGrid2D;
-import cellularautomata.grid3D.ActionableSymmetricIntGrid3DZCrossSectionCopy;
-import cellularautomata.grid3D.ActionableSymmetricIntGrid3DZCrossSectionProcessor;
-import cellularautomata.grid3D.ActionableSymmetricLongGrid3DZCrossSectionProcessor;
-import cellularautomata.grid3D.IntGrid3D;
-import cellularautomata.grid2D.LongGrid2D;
-import cellularautomata.grid3D.LongGrid3D;
-import cellularautomata.grid2D.ShortGrid2D;
-import cellularautomata.grid3D.ShortGrid3D;
-import cellularautomata.grid3D.SymmetricIntGrid3DZCrossSectionCopierProcessor;
-import cellularautomata.grid2D.SymmetricIntGrid2D;
-import cellularautomata.grid2D.SymmetricLongGrid2D;
-import cellularautomata.grid2D.SymmetricShortGrid2D;
 
 public class CAImgMaker {
 	
@@ -420,8 +422,6 @@ public class CAImgMaker {
 			int minX = ca.getNonSymmetricMinX(), maxX = ca.getNonSymmetricMaxX(), 
 					minY = ca.getNonSymmetricMinY(), maxY = ca.getNonSymmetricMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-//			long[] minAndMaxValue = ca.getMinAndMaxValue();
-//			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			if (scanZ >= ca.getNonSymmetricMaxZ())
 				scanZ = ca.getNonSymmetricMinZ();
 			System.out.println("Scan z: " + scanZ);
@@ -1229,6 +1229,112 @@ public class CAImgMaker {
 		System.out.println("Finished!");
 	}
 	
+	public void createXScanningNonSymmetricImages(SymmetricIntActionableCellularAutomaton3D ca,	ColorMapper colorMapper, 
+			int minWidth, int minHeight, String imagesPath) throws Exception {
+		long currentStep = ca.getStep();
+		String caName = ca.getName();
+		String imgsPath = imagesPath + colorMapper.getClass().getSimpleName() + "/scans/step=" + currentStep + "/x_scan/";
+		System.out.println("Scanning grid at step " + currentStep + " along the x axis.");
+		
+		ca.addProcessor(new SymmetricGridProcessor<IntGrid3D>() {
+			
+			@Override
+			public void processGridBlock(IntGrid3D gridBlock) throws Exception {
+				int minX = gridBlock.getMinX(), maxX = gridBlock.getMaxX();
+				System.out.println("New block: minX=" + minX + ", maxX=" + maxX);
+				for (int scanX = minX; scanX <= maxX; scanX++) {
+					System.out.println("Current x: " + scanX);
+					IntGrid2D xSection = gridBlock.crossSectionAtX(scanX);
+					int[] minAndMaxValue = xSection.getMinAndMaxValue();
+					System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+					ColorGrid2D colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+					createImage(colorGrid, minWidth, minHeight, imgsPath, caName + "_x-section_" + scanX + ".png");
+				}
+			}
+			
+			@Override
+			public void beforeProcessing() throws Exception {
+				//do nothing		
+			}
+			
+			@Override
+			public void afterProcessing() throws Exception {
+				//do nothing
+			}
+		});
+
+		//generate images
+		ca.processGrid();
+	
+		System.out.println("Finished!");
+	}
+	
+	public void createXScanningNonSymmetricEvenOddImages(SymmetricIntActionableCellularAutomaton3D ca, ColorMapper colorMapper, 
+			int imageWidth, int imageHeight, String imagesPath) throws Exception {
+		long currentStep = ca.getStep();
+		String caName = ca.getName();
+		String imgsPath = imagesPath + colorMapper.getClass().getSimpleName() + "/scans/step=" 
+				+ currentStep + "/x_scan/" + imageWidth + "x" + imageHeight + "/";
+		System.out.println("Scanning grid at step " + currentStep + " along the x axis.");
+		
+		ca.addProcessor(new SymmetricGridProcessor<IntGrid3D>() {
+			
+			@Override
+			public void processGridBlock(IntGrid3D gridBlock) throws Exception {
+				int minX = gridBlock.getMinX();
+				int maxX = gridBlock.getMaxX();
+				System.out.println("New block: minX=" + minX + ", maxX=" + maxX);
+				boolean isEven = (minX + currentStep)%2 == 0;
+				for (int scanX = minX; scanX <= maxX; scanX++, isEven = !isEven) {
+					System.out.println("Current x: " + scanX);
+					IntGrid2D xSection = gridBlock.crossSectionAtX(scanX);
+					SubareaGrid<IntGrid2D> xSectionSubareaGrid = new SubareaGrid<IntGrid2D>(xSection, imageWidth, imageHeight);
+					int subareasGridMinX = xSectionSubareaGrid.getMinX();
+					int subareasGridMaxX = xSectionSubareaGrid.getMaxX();
+					for (int subareasX = subareasGridMinX; subareasX <= subareasGridMaxX; subareasX++) {
+						int subareasGridLocalMinY = xSectionSubareaGrid.getMinY(subareasX);
+						int subareasGridLocalMaxY = xSectionSubareaGrid.getMaxY(subareasX);
+						for (int subareasY = subareasGridLocalMinY; subareasY <= subareasGridLocalMaxY; subareasY++) {
+							System.out.println("Subarea " + subareasX + "," + subareasY);
+							int framedGridMinX = subareasX * imageWidth;
+							int framedGridMaxX = framedGridMinX + imageWidth - 1;
+							int framedGridMinY = subareasY * imageHeight;
+							int framedGridMaxY = framedGridMinY + imageHeight - 1;
+							IntGrid2D xSectionSubarea = xSectionSubareaGrid.getSubareaAtPosition(subareasX, subareasY);
+							int[] evenMinAndMaxValue = isEven? xSectionSubarea.getMinAndMaxValueAtEvenPositions() : xSectionSubarea.getMinAndMaxValueAtOddPositions();
+							System.out.println("Even positions min value " + evenMinAndMaxValue[0] + ", Even positions max value " + evenMinAndMaxValue[1]);
+							ColorGrid2D colorGrid = colorMapper.getMappedGrid(xSectionSubarea, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+							createImageFromEvenOrOddPositions(isEven, colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
+									imageWidth, imageHeight, imgsPath + "even/" 
+									+ subareasX + "," + subareasY, caName + "_x-section_" + scanX + ".png");
+							int[] oddMinAndMaxValue = isEven? xSectionSubarea.getMinAndMaxValueAtOddPositions() : xSectionSubarea.getMinAndMaxValueAtEvenPositions();
+							System.out.println("Odd positions min value " + oddMinAndMaxValue[0] + ", Odd positions max value " + oddMinAndMaxValue[1]);
+							colorGrid = colorMapper.getMappedGrid(xSectionSubarea, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
+							createImageFromEvenOrOddPositions(!isEven, colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
+									imageWidth, imageHeight, imgsPath + "odd/" 
+									+ subareasX + "," + subareasY, caName + "_x-section_" + scanX + ".png");
+						}						
+					}					
+				}
+			}
+			
+			@Override
+			public void beforeProcessing() throws Exception {
+				//do nothing		
+			}
+			
+			@Override
+			public void afterProcessing() throws Exception {
+				//do nothing
+			}
+		});
+
+		//generate images
+		ca.processGrid();
+	
+		System.out.println("Finished!");
+	}
+	
 	public static int getGridPositionSize(int minX, int maxX, int minY, int maxY, int preferredMaxWidth, int preferredMaxHeight) {
 		int ySize = 1;
 		int height = maxY - minY + 1;
@@ -1261,6 +1367,74 @@ public class CAImgMaker {
 		return Math.min(xSize, ySize);
 	}
 	
+	public void createImage(ColorGrid2D grid, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
+			throws Exception {
+		int gridPositionSize = getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
+		createImage(grid, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
+	}
+	
+	public void createImage(ColorGrid2D grid, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
+			int minWidth, int minHeight, String path, String name) throws Exception {
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
+		int width = Math.max(dataWidth, minWidth);
+		int height = Math.max(dataHeight, minHeight);
+		long longByteCount = (long)width * height * 3;
+		if (longByteCount > Integer.MAX_VALUE)
+			throw new Exception("Integer max value exceeded");
+		int byteCount = (int)longByteCount;
+		byte[] pixelData = new byte[byteCount];
+		int canvasTopMargin = height - dataHeight;
+		int canvasRightMargin = width - dataWidth;
+		int gridTopMargin = 0;
+		int framedGridMinY, framedGridMaxY;
+		int gridMaxY = grid.getMaxY(), gridMinY = grid.getMinY();
+		if (maxY > gridMaxY) {
+			gridTopMargin = (maxY - gridMaxY) * gridPositionSize;
+			framedGridMaxY = gridMaxY;
+		} else {
+			framedGridMaxY = maxY;
+		}
+		if (minY < gridMinY) {
+			framedGridMinY = gridMinY;
+		} else {
+			framedGridMinY = minY;
+		}
+		int dataIndex = (canvasTopMargin + gridTopMargin) * width * 3;
+		for (int y = framedGridMaxY; y >= framedGridMinY; y--) {
+			int gridMinXAtY = grid.getMinX(y);
+			int gridMaxXAtY = grid.getMaxX(y);
+			int gridLeftMargin = 0, gridRightMargin = 0;
+			int framedGridMinXAtY, framedGridMaxXAtY;
+			if (minX < gridMinXAtY) {
+				gridLeftMargin = (gridMinXAtY - minX) * gridPositionSize;
+				framedGridMinXAtY = gridMinXAtY;
+			} else {
+				framedGridMinXAtY = minX;
+			}
+			if (maxX > gridMaxXAtY) {
+				gridRightMargin = (maxX - gridMaxXAtY) * gridPositionSize;
+				framedGridMaxXAtY = gridMaxXAtY;
+			} else {
+				framedGridMaxXAtY = maxX;
+			}
+			for (int i = 0; i < gridPositionSize; i++) {
+				dataIndex += gridLeftMargin * 3;
+				for (int x = framedGridMinXAtY; x <= framedGridMaxXAtY; x++) {
+					java.awt.Color c = grid.getColorAtPosition(x, y);
+					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = r;
+						pixelData[dataIndex++] = g;
+						pixelData[dataIndex++] = b;
+					}				
+				}
+				dataIndex += (canvasRightMargin + gridRightMargin) * 3;
+			}
+		}
+		saveAsPngImage(pixelData, width, height, path, name);
+	}
+	
 	public void createNonSymmetricImage(SymmetricColorGrid2D grid, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
 		int gridPositionSize = getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
@@ -1271,7 +1445,7 @@ public class CAImgMaker {
 			int minWidth, int minHeight, String path, String name) throws Exception {
 		int dataWidth = (maxX - minX + 1) * gridPositionSize;
 		int dataHeight = (maxY - minY + 1) * gridPositionSize;
-		int width = Math.max(dataWidth, minWidth); //TODO: make separate images when grid overflows
+		int width = Math.max(dataWidth, minWidth);
 		int height = Math.max(dataHeight, minHeight);
 		long longByteCount = (long)width * height * 3;
 		if (longByteCount > Integer.MAX_VALUE)
@@ -1344,7 +1518,7 @@ public class CAImgMaker {
 		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
 		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
 		
-		int imageWidth = Math.max(framedGridWidthInPixels, minWidth); //TODO: make separate images when grid overflows
+		int imageWidth = Math.max(framedGridWidthInPixels, minWidth);
 		int imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
 		
 		
@@ -1352,12 +1526,9 @@ public class CAImgMaker {
 		if (longByteCount > Integer.MAX_VALUE)
 			throw new Exception("Integer max value exceeded");
 		int byteCount = (int)longByteCount;
-		byte[] pixelData = new byte[byteCount];	
-		
+		byte[] pixelData = new byte[byteCount];
 		
 		int canvasTopMargin = imageHeight - framedGridHeightInPixels;
-//		int canvasRightMargin = imageWidth - framedGridWidthInPixels;
-		
 		
 		int regionMinX = gridRegion.getNonSymmetricMinX();
 		int regionMaxX = gridRegion.getNonSymmetricMaxX();
@@ -1427,7 +1598,7 @@ public class CAImgMaker {
 		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
 		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
 		
-		int imageWidth = Math.max(framedGridWidthInPixels, minWidth); //TODO: make separate images when grid overflows
+		int imageWidth = Math.max(framedGridWidthInPixels, minWidth);
 		int imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
 		
 		
@@ -1439,7 +1610,6 @@ public class CAImgMaker {
 		
 		
 		int canvasTopMargin = imageHeight - framedGridHeightInPixels;
-//		int canvasRightMargin = imageWidth - framedGridWidthInPixels;
 		
 		
 		int regionMinX = gridRegion.getNonSymmetricMinX();
@@ -1544,6 +1714,46 @@ public class CAImgMaker {
 		saveAsPngImage(pixelData, width, height, path, name);
 	}
 	
+	public void createSliceImage2(ColorGrid2D grid, int minWidth, int minHeight, String path, String name) 
+			throws Exception {
+		int gridPositionSize = getGridPositionSize(grid, minWidth, minHeight);
+		createSliceImage2(grid, gridPositionSize, minWidth, minHeight, path, name);
+	}
+	
+	public void createSliceImage2(ColorGrid2D grid, int gridPositionSize, int minWidth, int minHeight, String path, String name) throws Exception {
+		int maxX = grid.getMaxX(), minX = grid.getMinX(),
+				maxY = grid.getMaxY(), minY = grid.getMinY();
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
+		int width = Math.max(dataWidth, minWidth);
+		int height = Math.max(dataHeight, minHeight);
+		long longByteCount = (long)width * height * 3;
+		if (longByteCount > Integer.MAX_VALUE)
+			throw new Exception("Integer max value exceeded");
+		int byteCount = (int)longByteCount;
+		byte[] pixelData = new byte[byteCount];
+		int topMargin = height - dataHeight;
+		int rightMargin = width - dataWidth;
+		int dataIndex = topMargin * width * 3;		
+		for (int y = maxY, yy = maxY - minY; y >= minY; y--, yy--) {
+			for (int i = 0; i < gridPositionSize; i++) {
+				for (int x = minX, xx = 0; x <= maxX; x++, xx++) {
+					if (xx <= yy) {
+						java.awt.Color c = grid.getColorAtPosition(x, y);
+						for (int j = 0; j < gridPositionSize; j++) {
+							pixelData[dataIndex++] = (byte) c.getRed();
+							pixelData[dataIndex++] = (byte) c.getGreen();
+							pixelData[dataIndex++] = (byte) c.getBlue();
+						}
+					} else
+						dataIndex += 3 * gridPositionSize;					
+				}
+				dataIndex += 3 * rightMargin;
+			}
+		}
+		saveAsPngImage(pixelData, width, height, path, name);
+	}
+	
 	public void createImage(ColorGrid2D grid, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
 		int gridPositionSize = getGridPositionSize(grid, minWidth, minHeight);
@@ -1565,8 +1775,13 @@ public class CAImgMaker {
 		int rightMargin = width - dataWidth;
 		int dataIndex = topMargin * width * 3;		
 		for (int y = maxY; y >= minY; y--) {
+			int localMinX = grid.getMinX(y);
+			int localMaxX = grid.getMaxX(y);
+			int localLeftMargin = (localMinX - minX)  * gridPositionSize;
+			int localRightMargin = rightMargin + ((maxX - localMaxX) * gridPositionSize);
 			for (int i = 0; i < gridPositionSize; i++) {
-				for (int x = minX; x <= maxX; x++) {
+				dataIndex += 3 * localLeftMargin;
+				for (int x = localMinX; x <= localMaxX; x++) {
 					java.awt.Color c = grid.getColorAtPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
 						pixelData[dataIndex++] = (byte) c.getRed();
@@ -1574,7 +1789,157 @@ public class CAImgMaker {
 						pixelData[dataIndex++] = (byte) c.getBlue();
 					}
 				}
-				dataIndex += 3 * rightMargin;
+				dataIndex += 3 * localRightMargin;
+			}
+		}
+		saveAsPngImage(pixelData, width, height, path, name);
+	}
+	
+	public void createImageFromEvenOrOddPositions(boolean isEven, ColorGrid2D grid, int minWidth, int minHeight, String path, String name) 
+			throws Exception {
+		int gridPositionSize = getGridPositionSize(grid, minWidth, minHeight);
+		createImageFromEvenOrOddPositions(isEven, grid, gridPositionSize, minWidth, minHeight, path, name);
+	}
+	
+	public void createImageFromEvenOrOddPositions(boolean isEven, ColorGrid2D grid, int gridPositionSize, int minWidth, int minHeight, String path, String name) throws Exception {
+		int maxX = grid.getMaxX(), minX = grid.getMinX(), maxY = grid.getMaxY(), minY = grid.getMinY();
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
+		int width = Math.max(dataWidth, minWidth);
+		int height = Math.max(dataHeight, minHeight);
+		long longByteCount = (long)width * height * 3;
+		if (longByteCount > Integer.MAX_VALUE)
+			throw new Exception("Integer max value exceeded");
+		int byteCount = (int)longByteCount;
+		byte[] pixelData = new byte[byteCount];
+		int topMargin = height - dataHeight;
+		int rightMargin = width - dataWidth;
+		int dataIndex = topMargin * width * 3;		
+		for (int y = maxY; y >= minY; y--) {
+			int localMinX = grid.getMinX(y);
+			int localMaxX = grid.getMaxX(y);
+			boolean isPositionEven = (localMinX+y)%2 == 0;
+			if (isEven) { 
+				if (!isPositionEven) {
+					localMinX++;
+				}
+			} else {
+				if (isPositionEven) {
+					localMinX++;
+				}
+			}
+			int localLeftMargin = (localMinX - minX)  * gridPositionSize;
+			int localRightMargin = rightMargin + ((maxX - localMaxX) * gridPositionSize);
+			for (int i = 0; i < gridPositionSize; i++) {
+				dataIndex += 3 * localLeftMargin;
+				int x = localMinX;
+				for (; x < localMaxX; x+=2) {
+					java.awt.Color c = grid.getColorAtPosition(x,y);
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = (byte) c.getRed();
+						pixelData[dataIndex++] = (byte) c.getGreen();
+						pixelData[dataIndex++] = (byte) c.getBlue();
+					}
+					dataIndex += 3 * gridPositionSize;
+				}
+				if (x == localMaxX) {
+					java.awt.Color c = grid.getColorAtPosition(x,y);
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = (byte) c.getRed();
+						pixelData[dataIndex++] = (byte) c.getGreen();
+						pixelData[dataIndex++] = (byte) c.getBlue();
+					}
+				}
+				dataIndex += 3 * localRightMargin;
+			}
+		}
+		saveAsPngImage(pixelData, width, height, path, name);
+	}
+	
+	public void createImageFromEvenOrOddPositions(boolean isEven, ColorGrid2D grid, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
+			throws Exception {
+		int gridPositionSize = getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
+		createImageFromEvenOrOddPositions(isEven, grid, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
+	}
+	
+	public void createImageFromEvenOrOddPositions(boolean isEven, ColorGrid2D grid, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
+			int minWidth, int minHeight, String path, String name) throws Exception {
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
+		int width = Math.max(dataWidth, minWidth);
+		int height = Math.max(dataHeight, minHeight);
+		long longByteCount = (long)width * height * 3;
+		if (longByteCount > Integer.MAX_VALUE)
+			throw new Exception("Integer max value exceeded");
+		int byteCount = (int)longByteCount;
+		byte[] pixelData = new byte[byteCount];
+		int canvasTopMargin = height - dataHeight;
+		int canvasRightMargin = width - dataWidth;
+		int gridTopMargin = 0;
+		int framedGridMinY, framedGridMaxY;
+		int gridMaxY = grid.getMaxY(), gridMinY = grid.getMinY();
+		if (maxY > gridMaxY) {
+			gridTopMargin = (maxY - gridMaxY) * gridPositionSize;
+			framedGridMaxY = gridMaxY;
+		} else {
+			framedGridMaxY = maxY;
+		}
+		if (minY < gridMinY) {
+			framedGridMinY = gridMinY;
+		} else {
+			framedGridMinY = minY;
+		}
+		int dataIndex = (canvasTopMargin + gridTopMargin) * width * 3;
+		for (int y = framedGridMaxY; y >= framedGridMinY; y--) {
+			int gridMinXAtY = grid.getMinX(y);
+			int gridMaxXAtY = grid.getMaxX(y);
+			int gridLeftMargin = 0, gridRightMargin = 0;
+			int framedGridMinXAtY, framedGridMaxXAtY;
+			if (minX < gridMinXAtY) {
+				gridLeftMargin = (gridMinXAtY - minX) * gridPositionSize;
+				framedGridMinXAtY = gridMinXAtY;
+			} else {
+				framedGridMinXAtY = minX;
+			}
+			if (maxX > gridMaxXAtY) {
+				gridRightMargin = (maxX - gridMaxXAtY) * gridPositionSize;
+				framedGridMaxXAtY = gridMaxXAtY;
+			} else {
+				framedGridMaxXAtY = maxX;
+			}
+			boolean isPositionEven = (framedGridMinXAtY+y)%2 == 0;
+			if (isEven) { 
+				if (!isPositionEven) {
+					framedGridMinXAtY++;
+					gridLeftMargin += gridPositionSize;
+				}
+			} else {
+				if (isPositionEven) {
+					framedGridMinXAtY++;
+					gridLeftMargin += gridPositionSize;
+				}
+			}
+			for (int i = 0; i < gridPositionSize; i++) {
+				dataIndex += gridLeftMargin * 3;
+				int x = framedGridMinXAtY;
+				for (; x < framedGridMaxXAtY; x+=2) {
+					java.awt.Color c = grid.getColorAtPosition(x,y);
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = (byte) c.getRed();
+						pixelData[dataIndex++] = (byte) c.getGreen();
+						pixelData[dataIndex++] = (byte) c.getBlue();
+					}
+					dataIndex += 3 * gridPositionSize;
+				}
+				if (x == framedGridMaxXAtY) {
+					java.awt.Color c = grid.getColorAtPosition(x,y);
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = (byte) c.getRed();
+						pixelData[dataIndex++] = (byte) c.getGreen();
+						pixelData[dataIndex++] = (byte) c.getBlue();
+					}
+				}
+				dataIndex += (canvasRightMargin + gridRightMargin) * 3;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);

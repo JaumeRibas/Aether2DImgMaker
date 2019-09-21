@@ -18,7 +18,7 @@ package cellularautomata.automata;
 
 import cellularautomata.grid.ActionableSymmetricGrid;
 import cellularautomata.grid.SymmetricGridProcessor;
-import cellularautomata.grid3D.LongGrid3D;
+import cellularautomata.grid3d.LongGrid3D;
 
 public abstract class SymmetricLongActionableCellularAutomaton3D extends ActionableSymmetricGrid<SymmetricGridProcessor<LongGrid3D>, LongGrid3D> implements SymmetricLongCellularAutomaton3D {
 	

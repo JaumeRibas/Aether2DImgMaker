@@ -17,7 +17,8 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import cellularautomata.grid2D.LongGrid2D;
+
+import cellularautomata.grid2d.LongGrid2D;
 
 public class ColorMappedLongGrid2D implements ColorGrid2D {
 

@@ -34,8 +34,6 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 	private boolean boundsReached;
 
 	private int maxXMinusOne;
-
-	private boolean changed;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -59,7 +57,7 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 			newGrid = new long[grid.length];
 		}
 		maxXMinusOne = newGrid.length - 2;
-		changed = false;
+		boolean changed = false;
 		long[] neighborValues = new long[2];
 		byte[] neighborDirections = new byte[2];
 		for (int x = 0; x < grid.length; x++) {

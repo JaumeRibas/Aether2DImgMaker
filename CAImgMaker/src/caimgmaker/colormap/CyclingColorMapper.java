@@ -16,12 +16,12 @@
  */
 package caimgmaker.colormap;
 
-import cellularautomata.grid2D.IntGrid2D;
-import cellularautomata.grid2D.LongGrid2D;
-import cellularautomata.grid2D.ShortGrid2D;
-import cellularautomata.grid2D.SymmetricIntGrid2D;
-import cellularautomata.grid2D.SymmetricLongGrid2D;
-import cellularautomata.grid2D.SymmetricShortGrid2D;
+import cellularautomata.grid2d.IntGrid2D;
+import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid2d.ShortGrid2D;
+import cellularautomata.grid2d.SymmetricIntGrid2D;
+import cellularautomata.grid2d.SymmetricLongGrid2D;
+import cellularautomata.grid2d.SymmetricShortGrid2D;
 
 public class CyclingColorMapper extends ColorMapper {
 

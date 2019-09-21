@@ -213,7 +213,7 @@ public class AetherSimple2D implements SymmetricLongCellularAutomaton2D {
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 
 				|| arrayY < 0 || arrayY > grid[0].length - 1) {
-			//If the entered position is outside the array the value will be the backgroundValue
+			//If the entered position is outside the array the value will be 0
 			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
@@ -341,11 +341,6 @@ public class AetherSimple2D implements SymmetricLongCellularAutomaton2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
-	}
-
-	@Override
-	public LongCellularAutomaton2D caSubGrid(int minX, int maxX, int minY, int maxY) {
-		return new SymmetricLongCASubGrid2D(this, minX, maxX, minY, maxY);
 	}
 
 	@Override

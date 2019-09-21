@@ -23,10 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import cellularautomata.grid2D.IntGrid2D;
-import cellularautomata.grid1D.LongGrid1D;
-import cellularautomata.grid2D.LongGrid2D;
-import cellularautomata.grid2D.ShortGrid2D;
+import cellularautomata.grid.SymmetricGridProcessor;
+import cellularautomata.grid1d.LongGrid1D;
+import cellularautomata.grid2d.IntGrid2D;
+import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid2d.ShortGrid2D;
+import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.grid3d.LongGrid3D;
 
 public class Test {
 	
@@ -232,7 +235,7 @@ public class Test {
 						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
 							}
@@ -266,7 +269,7 @@ public class Test {
 						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
 							}
@@ -296,17 +299,17 @@ public class Test {
 			boolean equal = true;
 			while (!finished1 && !finished2) {
 //				System.out.println("Step " + ca1.getStep());
-				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+				for (int x = ca1.getMinX(); x <= ca1.getMaxX(); x++) {
+					for (int z = ca1.getMinZAtX(x); z <= ca1.getMaxZAtX(x); z++) {
+						for (int y = ca1.getMinY(x, z); y <= ca1.getMaxY(x, z); y++) {
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): "
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
-							}
+							}	
 						}	
-					}	
+					}
 				}
 				finished1 = !ca1.nextStep();
 				finished2 = !ca2.nextStep();
@@ -318,6 +321,110 @@ public class Test {
 			}
 			if (equal)
 				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricIntActionableCellularAutomaton3D ca1, SymmetricLongCellularAutomaton3D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			SymmetricGridProcessor<IntGrid3D> comparator = new SymmetricGridProcessor<IntGrid3D>() {
+				
+				@Override
+				public void processGridBlock(IntGrid3D gridBlock) throws Exception {
+					for (int x = gridBlock.getMinX(); x <= gridBlock.getMaxX(); x++) {
+						for (int z = gridBlock.getMinZAtX(x); z <= gridBlock.getMaxZAtX(x); z++) {
+							for (int y = gridBlock.getMinY(x, z); y <= gridBlock.getMaxY(x, z); y++) {
+								if (gridBlock.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
+									System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+											+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
+											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
+								}	
+							}	
+						}
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// TODO Auto-generated method stub
+					
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processGrid();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricLongActionableCellularAutomaton3D ca1, SymmetricLongCellularAutomaton3D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			SymmetricGridProcessor<LongGrid3D> comparator = new SymmetricGridProcessor<LongGrid3D>() {
+				
+				@Override
+				public void processGridBlock(LongGrid3D gridBlock) throws Exception {
+					for (int x = gridBlock.getMinX(); x <= gridBlock.getMaxX(); x++) {
+						for (int z = gridBlock.getMinZAtX(x); z <= gridBlock.getMaxZAtX(x); z++) {
+							for (int y = gridBlock.getMinY(x, z); y <= gridBlock.getMaxY(x, z); y++) {
+								if (gridBlock.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
+									System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+											+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
+											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
+								}	
+							}	
+						}
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// TODO Auto-generated method stub
+					
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processGrid();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -336,7 +443,7 @@ public class Test {
 							for (int w = ca2.getMinW(); w <= ca2.getMaxW(); w++) {
 								if (ca1.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
 									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + "): " 
+									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z) 
 											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z));
 								}
@@ -372,7 +479,7 @@ public class Test {
 							for (int w = ca2.getMinW(); w <= ca2.getMaxW(); w++) {
 								if (ca1.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
 									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + "): " 
+									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z) 
 											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z));
 								}

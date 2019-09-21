@@ -16,8 +16,8 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid3D.ShortGrid3D;
-import cellularautomata.grid4D.SymmetricShortGrid4D;
+import cellularautomata.grid3d.ShortGrid3D;
+import cellularautomata.grid4d.SymmetricShortGrid4D;
 
 public interface SymmetricShortCellularAutomaton4D extends SymmetricShortGrid4D, CellularAutomaton {
 

@@ -17,7 +17,8 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import cellularautomata.grid2D.SymmetricGrid2D;
+
+import cellularautomata.grid2d.SymmetricGrid2D;
 
 public interface SymmetricColorGrid2D extends ColorGrid2D, SymmetricGrid2D {
 	

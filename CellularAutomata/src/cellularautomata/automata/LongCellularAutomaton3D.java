@@ -16,7 +16,7 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid3D.LongGrid3D;
+import cellularautomata.grid3d.LongGrid3D;
 
 public interface LongCellularAutomaton3D extends LongGrid3D, CellularAutomaton {
 	/**

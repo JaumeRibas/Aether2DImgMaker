@@ -51,7 +51,7 @@ public class ImageRenderingProcessor implements GridProcessor<ColorGrid2D> {
 		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
 		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
 		
-		imageWidth = Math.max(framedGridWidthInPixels, minWidth); //TODO: make separate images when grid overflows
+		imageWidth = Math.max(framedGridWidthInPixels, minWidth);
 		imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
 		
 		
@@ -59,12 +59,9 @@ public class ImageRenderingProcessor implements GridProcessor<ColorGrid2D> {
 		if (longByteCount > Integer.MAX_VALUE)
 			throw new Exception("Integer max value exceeded");
 		int byteCount = (int)longByteCount;
-		pixelData = new byte[byteCount];	
-		
+		pixelData = new byte[byteCount];		
 		
 		canvasTopMargin = imageHeight - framedGridHeightInPixels;
-//		int canvasRightMargin = imageWidth - framedGridWidthInPixels;
-
 	}
 
 	@Override

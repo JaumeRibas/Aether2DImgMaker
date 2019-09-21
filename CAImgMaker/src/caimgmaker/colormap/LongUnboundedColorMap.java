@@ -20,11 +20,13 @@ import java.awt.Color;
 
 public class LongUnboundedColorMap implements LongBoundedColorMap {
 	private LongBoundedColorMap colorMap;
-	private Color outOfBoundsColor;
+	private Color outOfLowerBoundColor;
+	private Color outOfUpperBoundColor;
 	
-	public LongUnboundedColorMap(LongBoundedColorMap colorMap, Color outOfBoundsColor) {
+	public LongUnboundedColorMap(LongBoundedColorMap colorMap, Color outOfLowerBoundColor, Color outOfUpperBoundColor) {
 		this.colorMap = colorMap;
-		this.outOfBoundsColor = outOfBoundsColor;
+		this.outOfLowerBoundColor = outOfLowerBoundColor;
+		this.outOfUpperBoundColor = outOfUpperBoundColor;
 	}
 	
 	public void setValueRange(long min, long max) throws Exception {
@@ -32,8 +34,10 @@ public class LongUnboundedColorMap implements LongBoundedColorMap {
 	}
 	
 	public Color getColor(long value) throws Exception {
-		if (value < colorMap.getMinValue() || value > colorMap.getMaxValue()) {
-			return outOfBoundsColor;
+		if (value < colorMap.getMinValue()) {
+			return outOfLowerBoundColor;
+		} else if (value > colorMap.getMaxValue()) {
+			return outOfUpperBoundColor;
 		} else {
 			return colorMap.getColor(value);
 		}

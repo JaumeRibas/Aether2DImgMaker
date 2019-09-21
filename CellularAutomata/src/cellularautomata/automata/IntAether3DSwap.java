@@ -27,10 +27,10 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
-import cellularautomata.grid3D.IntGrid3D;
-import cellularautomata.grid.NonSymmetricIntGrid3DSlice;
-import cellularautomata.grid3D.NonSymmetricIntSubGrid3D;
-import cellularautomata.grid.SizeLimitedNonSymmetricIntGrid3D;
+import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.grid3d.NonSymmetricIntGrid3DSlice;
+import cellularautomata.grid3d.NonSymmetricIntSubGrid3D;
+import cellularautomata.grid3d.SizeLimitedNonSymmetricIntGrid3D;
 
 public class IntAether3DSwap extends SymmetricIntActionableCellularAutomaton3D {
 

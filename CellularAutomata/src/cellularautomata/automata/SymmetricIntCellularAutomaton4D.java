@@ -16,8 +16,8 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid3D.IntGrid3D;
-import cellularautomata.grid4D.SymmetricIntGrid4D;
+import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.grid4d.SymmetricIntGrid4D;
 
 public interface SymmetricIntCellularAutomaton4D extends SymmetricIntGrid4D, CellularAutomaton {
 

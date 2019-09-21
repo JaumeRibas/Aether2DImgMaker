@@ -42,7 +42,6 @@ public class IntAether3D implements SymmetricIntCellularAutomaton3D {
 	private boolean boundsReached;
 
 	private int maxXMinusOne;
-	private boolean changed;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -106,7 +105,7 @@ public class IntAether3D implements SymmetricIntCellularAutomaton3D {
 			newGrid = new int[grid.length][][];
 		}
 		maxXMinusOne = newGrid.length - 2;
-		changed = false;
+		boolean changed = false;
 		newGrid[0] = buildGridSlice(0);
 		boolean first = true;
 		int[] neighborValues = new int[6];

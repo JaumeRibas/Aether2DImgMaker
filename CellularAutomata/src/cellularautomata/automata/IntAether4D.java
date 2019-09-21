@@ -44,7 +44,6 @@ public class IntAether4D implements SymmetricIntCellularAutomaton4D {
 	private boolean boundsReached;
 
 	private int maxWMinusOne;
-	private boolean changed;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -109,7 +108,7 @@ public class IntAether4D implements SymmetricIntCellularAutomaton4D {
 			newGrid = new int[grid.length][][][];
 		}
 		maxWMinusOne = newGrid.length - 2;
-		changed = false;
+		boolean changed = false;
 		newGrid[0] = buildGridSlice(0);
 		boolean first = true;
 		int[] neighborValues = new int[8];

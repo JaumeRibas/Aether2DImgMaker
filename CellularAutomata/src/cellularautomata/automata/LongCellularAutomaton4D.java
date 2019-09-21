@@ -16,7 +16,7 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid4D.LongGrid4D;
+import cellularautomata.grid4d.LongGrid4D;
 
 public interface LongCellularAutomaton4D extends LongGrid4D, CellularAutomaton {
 	/**
