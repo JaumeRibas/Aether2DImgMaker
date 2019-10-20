@@ -21,9 +21,6 @@ import java.awt.Color;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
-import cellularautomata.grid2d.SymmetricIntGrid2D;
-import cellularautomata.grid2d.SymmetricLongGrid2D;
-import cellularautomata.grid2d.SymmetricShortGrid2D;
 
 public class GrayscaleWithBackgroundMapper extends ColorMapper {
 
@@ -44,33 +41,15 @@ public class GrayscaleWithBackgroundMapper extends ColorMapper {
 	}
 
 	@Override
-	public ColorMappedSymmetricLongGrid2D getMappedLongGrid(SymmetricLongGrid2D grid, long minValue, long maxValue) {
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		return new ColorMappedSymmetricLongGrid2DWithBackground(grid, colorMap, backgroundValue, backgroundColor);
-	}
-
-	@Override
 	public ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (int) backgroundValue, backgroundColor);
-	}
-
-	@Override
-	public ColorMappedSymmetricIntGrid2D getMappedIntGrid(SymmetricIntGrid2D grid, int minValue, int maxValue) {
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		return new ColorMappedSymmetricIntGrid2DWithBackground(grid, colorMap, (int) backgroundValue, backgroundColor);
 	}
 	
 	@Override
 	public ColorMappedShortGrid2D getMappedShortGrid(ShortGrid2D grid, short minValue, short maxValue) {
 		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, (short) backgroundValue, backgroundColor);
-	}
-
-	@Override
-	public ColorMappedSymmetricShortGrid2D getMappedShortGrid(SymmetricShortGrid2D grid, short minValue, short maxValue) {
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		return new ColorMappedSymmetricShortGrid2DWithBackground(grid, colorMap, (short) backgroundValue, backgroundColor);
 	}
 
 }

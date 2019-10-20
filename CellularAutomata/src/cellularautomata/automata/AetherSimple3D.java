@@ -76,6 +76,23 @@ public class AetherSimple3D implements SymmetricLongCellularAutomaton3D {
 	}
 	
 	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public AetherSimple3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		AetherSimple3D data = (AetherSimple3D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		grid = data.grid;
+		originIndex = data.originIndex;
+		boundsReached = data.boundsReached;
+		currentStep = data.currentStep;
+	}
+	
+	/**
 	 * Computes the next step of the algorithm and returns whether
 	 * or not the state of the grid changed. 
 	 *  
@@ -316,31 +333,31 @@ public class AetherSimple3D implements SymmetricLongCellularAutomaton3D {
 		return valuesMaxZ;
 	}
 	
-	public int getNonSymmetricMinX() {
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxX() {
+	public int getNonsymmetricMaxX() {
 		return getMaxX();
 	}
 
-	public int getNonSymmetricMinY() {
+	public int getNonsymmetricMinY() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxY() {
+	public int getNonsymmetricMaxY() {
 		return getMaxY();
 	}
 
-	public int getNonSymmetricMinZ() {
+	public int getNonsymmetricMinZ() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxZ() {
+	public int getNonsymmetricMaxZ() {
 		return getMaxZ();
 	}
 
-	public long getValueAtNonSymmetricPosition(int x, int y, int z) {
+	public long getValueAtNonsymmetricPosition(int x, int y, int z) {
 		return getValueAtPosition(x, y, z);
 	}
 	
@@ -363,14 +380,8 @@ public class AetherSimple3D implements SymmetricLongCellularAutomaton3D {
 	}
 	
 	@Override
-	public long getBackgroundValue() {
-		return 0;
-	}
-	
-	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		CustomSymmetricLongCA3DData data = new CustomSymmetricLongCA3DData(grid, initialValue, 0, currentStep, boundsReached, getMaxY(), getMaxZ());
-		Utils.serializeToFile(data, backupPath, backupName);
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 
 	@Override
@@ -384,92 +395,92 @@ public class AetherSimple3D implements SymmetricLongCellularAutomaton3D {
 	}
 	
 	@Override
-	public int getNonSymmetricMinXAtY(int y) {
+	public int getNonsymmetricMinXAtY(int y) {
 		return y;
 	}
 
 	@Override
-	public int getNonSymmetricMinXAtZ(int z) {
+	public int getNonsymmetricMinXAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonSymmetricMinX(int y, int z) {
+	public int getNonsymmetricMinX(int y, int z) {
 		return Math.max(y, z);
 	}
 
 	@Override
-	public int getNonSymmetricMaxXAtY(int y) {
-		return getNonSymmetricMaxX();
+	public int getNonsymmetricMaxXAtY(int y) {
+		return getNonsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonSymmetricMaxXAtZ(int z) {
-		return getNonSymmetricMaxX();
+	public int getNonsymmetricMaxXAtZ(int z) {
+		return getNonsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonSymmetricMaxX(int y, int z) {
-		return getNonSymmetricMaxX();
+	public int getNonsymmetricMaxX(int y, int z) {
+		return getNonsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonSymmetricMinYAtX(int x) {
+	public int getNonsymmetricMinYAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMinYAtZ(int z) {
+	public int getNonsymmetricMinYAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonSymmetricMinY(int x, int z) {
+	public int getNonsymmetricMinY(int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonSymmetricMaxYAtX(int x) {
-		return Math.min(getNonSymmetricMaxY(), x);
+	public int getNonsymmetricMaxYAtX(int x) {
+		return Math.min(getNonsymmetricMaxY(), x);
 	}
 
 	@Override
-	public int getNonSymmetricMaxYAtZ(int z) {
-		return getNonSymmetricMaxY();
+	public int getNonsymmetricMaxYAtZ(int z) {
+		return getNonsymmetricMaxY();
 	}
 
 	@Override
-	public int getNonSymmetricMaxY(int x, int z) {
-		return Math.min(getNonSymmetricMaxY(), x);
+	public int getNonsymmetricMaxY(int x, int z) {
+		return Math.min(getNonsymmetricMaxY(), x);
 	}
 
 	@Override
-	public int getNonSymmetricMinZAtX(int x) {
+	public int getNonsymmetricMinZAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMinZAtY(int y) {
+	public int getNonsymmetricMinZAtY(int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMinZ(int x, int y) {
+	public int getNonsymmetricMinZ(int x, int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxZAtX(int x) {
-		return Math.min(getNonSymmetricMaxZ(), x);
+	public int getNonsymmetricMaxZAtX(int x) {
+		return Math.min(getNonsymmetricMaxZ(), x);
 	}
 
 	@Override
-	public int getNonSymmetricMaxZAtY(int y) {
-		return Math.min(getNonSymmetricMaxZ(), y);
+	public int getNonsymmetricMaxZAtY(int y) {
+		return Math.min(getNonsymmetricMaxZ(), y);
 	}
 
 	@Override
-	public int getNonSymmetricMaxZ(int x, int y) {
-		return Math.min(getNonSymmetricMaxZ(), y);
+	public int getNonsymmetricMaxZ(int x, int y) {
+		return Math.min(getNonsymmetricMaxZ(), y);
 	}
 }

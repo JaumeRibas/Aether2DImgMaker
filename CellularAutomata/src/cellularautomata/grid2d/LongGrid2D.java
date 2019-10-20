@@ -30,6 +30,7 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	 */
 	public abstract long getValueAtPosition(int x, int y) throws Exception;
 	
+	@Override
 	default long[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
@@ -48,75 +49,34 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	}
 	
 	@Override
-	default long[] getMinAndMaxValueAtEvenPositions() throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		long evenMinValue = Long.MAX_VALUE, evenMaxValue = Long.MIN_VALUE;
+	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
-			maxY = getMaxY(x);
-			if ((minY+x)%2 != 0) {
-				minY++;
-			}
-			for (int y = minY; y <= maxY; y+=2) {
-				long value = getValueAtPosition(x, y);
-				if (value > evenMaxValue)
-					evenMaxValue = value;
-				if (value < evenMinValue)
-					evenMinValue = value;
-			}
-		}
-		return new long[]{evenMinValue, evenMaxValue};
-	}
-	
-	default long[] getMinAndMaxValueAtOddPositions() throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		long oddMinValue = Long.MAX_VALUE, oddMaxValue = Long.MIN_VALUE;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
-			maxY = getMaxY(x);
-			if ((minY+x)%2 == 0) {
-				minY++;
-			}
-			for (int y = minY; y <= maxY; y+=2) {
-				long value = getValueAtPosition(x, y);
-				if (value > oddMaxValue)
-					oddMaxValue = value;
-				if (value < oddMinValue)
-					oddMinValue = value;
-			}
-		}
-		return new long[]{oddMinValue, oddMaxValue};
-	}
-
-	default long[] getMinAndMaxValueExcluding(long excludedValue) throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		long maxValue, minValue;
-		if (excludedValue == Long.MIN_VALUE) {
-			maxValue = Long.MIN_VALUE + 1;
-			minValue = Long.MAX_VALUE;
-		} else if (excludedValue == Long.MAX_VALUE) {
-			maxValue = Long.MIN_VALUE;
-			minValue = Long.MAX_VALUE - 1;
-		} else {
-			maxValue = Long.MIN_VALUE;
-			minValue = Long.MAX_VALUE;
-		}
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
-			maxY = getMaxY(x);
-			for (int y = minY; y <= maxY; y++) {
-				long value = getValueAtPosition(x, y);
-				if (value != excludedValue) {
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isEven) { 
+				if (!isPositionEven) {
+					minY++;
 				}
+			} else {
+				if (isPositionEven) {
+					minY++;
+				}
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				long value = getValueAtPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
 			}
 		}
 		return new long[]{ minValue, maxValue };
 	}
 	
+	@Override
 	default long getTotalValue() throws Exception {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
@@ -130,22 +90,12 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 		return total;
 	}
 	
-	default long getMaxAbsoluteValue() throws Exception {
-		long maxAbsoluteValue;
-		long[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = Math.abs(minAndMax[0]);
-			maxAbsoluteValue = Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
+	@Override
 	default LongGrid2D absoluteGrid() {
 		return new AbsLongGrid2D(this);
 	}
 	
+	@Override
 	default LongGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
 		return new LongSubGrid2D(this, minX, maxX, minY, maxY);
 	}

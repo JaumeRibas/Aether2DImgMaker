@@ -16,19 +16,8 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid4d.SymmetricIntGrid4D;
 
 public interface SymmetricIntCellularAutomaton4D extends SymmetricIntGrid4D, CellularAutomaton {
 
-	/**
-	 * Returns the background value
-	 * 
-	 * @return the value padding the most part of the grid
-	 */
-	int getBackgroundValue();
-	
-	default IntGrid3D projected3DEdge() {
-		return this.projected3DEdge(getBackgroundValue());
-	}
 }

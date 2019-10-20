@@ -16,19 +16,8 @@
  */
 package cellularautomata.automata;
 
-import cellularautomata.grid3d.ShortGrid3D;
 import cellularautomata.grid4d.SymmetricShortGrid4D;
 
 public interface SymmetricShortCellularAutomaton4D extends SymmetricShortGrid4D, CellularAutomaton {
 
-	/**
-	 * Returns the background value
-	 * 
-	 * @return the value padding the most part of the grid
-	 */
-	short getBackgroundValue();
-		
-	default ShortGrid3D projected3DEdge() {
-		return this.projected3DEdge(getBackgroundValue());
-	}
 }

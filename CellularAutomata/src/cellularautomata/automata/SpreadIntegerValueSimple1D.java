@@ -159,7 +159,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 		}
 	}
 	
-	public long getValueAtNonSymmetricPosition(int x){	
+	public long getValueAtNonsymmetricPosition(int x){	
 		return getValueAtPosition(x);
 	}
 	
@@ -214,16 +214,15 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 	}
 
 	@Override
-	public int getNonSymmetricMinX() {
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxX() {
+	public int getNonsymmetricMaxX() {
 		return getMaxX();
 	}
 
-	@Override
 	public long getBackgroundValue() {
 		return backgroundValue;
 	}
@@ -236,11 +235,6 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue + "/" + backgroundValue;
-	}
-
-	@Override
-	public LongCellularAutomaton1D caSubGrid(int minX, int maxX) {
-		return new SymmetricLongCASubGrid1D(this, minX, maxX);
 	}
 
 	@Override

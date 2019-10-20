@@ -48,79 +48,34 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	}
 	
 	@Override
-	default int[] getMinAndMaxValueAtEvenPositions() throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		int evenMinValue = Integer.MAX_VALUE, evenMaxValue = Integer.MIN_VALUE;
+	default int[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
-			maxY = getMaxY(x);
-			if ((minY+x)%2 != 0) {
-				minY++;
-			}
-			for (int y = minY; y <= maxY; y+=2) {
-				int value = getValueAtPosition(x, y);
-				if (value > evenMaxValue)
-					evenMaxValue = value;
-				if (value < evenMinValue)
-					evenMinValue = value;
-			}
-		}
-		return new int[]{evenMinValue, evenMaxValue};
-	}
-	
-	@Override
-	default int[] getMinAndMaxValueAtOddPositions() throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		int oddMinValue = Integer.MAX_VALUE, oddMaxValue = Integer.MIN_VALUE;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
-			maxY = getMaxY(x);
-			if ((minY+x)%2 == 0) {
-				minY++;
-			}
-			for (int y = minY; y <= maxY; y+=2) {
-				int value = getValueAtPosition(x, y);
-				if (value > oddMaxValue)
-					oddMaxValue = value;
-				if (value < oddMinValue)
-					oddMinValue = value;
-			}
-		}
-		return new int[] {oddMinValue, oddMaxValue};
-	}
-	
-	default int[] getMinAndMaxValueExcluding(int backgroundValue) throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		int maxValue, minValue;
-		switch (backgroundValue) {
-			case Integer.MIN_VALUE:
-				maxValue = Integer.MIN_VALUE + 1;
-				minValue = Integer.MAX_VALUE;
-				break;
-			case Integer.MAX_VALUE:
-				maxValue = Integer.MIN_VALUE;
-				minValue = Integer.MAX_VALUE - 1;
-				break;
-			default:
-				maxValue = Integer.MIN_VALUE;
-				minValue = Integer.MAX_VALUE;
-		}
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
-			maxY = getMaxY(x);
-			for (int y = minY; y <= maxY; y++) {
-				int value = getValueAtPosition(x, y);
-				if (value != backgroundValue) {
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isEven) { 
+				if (!isPositionEven) {
+					minY++;
 				}
+			} else {
+				if (isPositionEven) {
+					minY++;
+				}
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				int value = getValueAtPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
 			}
 		}
 		return new int[]{ minValue, maxValue };
 	}
 	
+	@Override
 	default int getTotalValue() throws Exception {
 		int total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
@@ -134,18 +89,7 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 		return total;
 	}
 	
-	default int getMaxAbsoluteValue() throws Exception {
-		int maxAbsoluteValue;
-		int[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = Math.abs(minAndMax[0]);
-			maxAbsoluteValue = Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
+	@Override
 	default IntGrid2D absoluteGrid() {
 		return new AbsIntGrid2D(this);
 	}

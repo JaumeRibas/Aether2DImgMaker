@@ -20,13 +20,13 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	
 	/**
 	 * <p>
-	 * Returns the value at a given position within the non symmetric section of the grid.
-	 * That is, where the x-coordinate is inside the [{@link #getNonSymmetricMinX()}, {@link #getNonSymmetricMaxX()}] bounds 
-	 * and the y-coordinate is inside the [{@link #getNonSymmetricMinY(int x)}, {@link #getNonSymmetricMaxY(int x)}] bounds.
+	 * Returns the value at a given position within the nonsymmetric section of the grid.
+	 * That is, where the x-coordinate is inside the [{@link #getNonsymmetricMinX()}, {@link #getNonsymmetricMaxX()}] bounds 
+	 * and the y-coordinate is inside the [{@link #getNonsymmetricMinY(int x)}, {@link #getNonsymmetricMaxY(int x)}] bounds.
 	 * </p>
 	 * <p>
-	 * Or where the y-coordinate is inside the [{@link #getNonSymmetricMinY()}, {@link #getNonSymmetricMaxY()}] bounds 
-	 * and the x-coordinate is inside the [{@link #getNonSymmetricMinX(int y)}, {@link #getNonSymmetricMaxX(int y)}] bounds.
+	 * Or where the y-coordinate is inside the [{@link #getNonsymmetricMinY()}, {@link #getNonsymmetricMaxY()}] bounds 
+	 * and the x-coordinate is inside the [{@link #getNonsymmetricMinX(int y)}, {@link #getNonsymmetricMaxX(int y)}] bounds.
 	 * </p>
 	 * <p>
 	 * The result of getting the value of a position outside this bounds is undefined.
@@ -34,51 +34,13 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	 * 
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
-	 * @return the {@link long} value at (x,y)
+	 * @return the {@link int} value at (x,y)
 	 * @throws Exception 
 	 */
-	int getValueAtNonSymmetricPosition(int x, int y) throws Exception;
-	
-	default int[] getMinAndMaxValue() throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(minX), minY = getNonSymmetricMinY(minX);
-		int maxValue = getValueAtNonSymmetricPosition(minX, minY), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getNonSymmetricMinY(x);
-			maxY = getNonSymmetricMaxY(x);
-			for (int y = minY; y <= maxY; y++) {
-				int value = getValueAtNonSymmetricPosition(x, y);
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;
-			}
-		}
-		return new int[]{ minValue, maxValue };
-	}
-	
-	default int[] getMinAndMaxValueExcluding(int backgroundValue) throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(minX), minY = getNonSymmetricMinY(minX);
-		int maxValue = getValueAtNonSymmetricPosition(minX, minY), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getNonSymmetricMinY(x);
-			maxY = getNonSymmetricMaxY(x);
-			for (int y = minY; y <= maxY; y++) {
-				int value = getValueAtNonSymmetricPosition(x, y);
-				if (value != backgroundValue) {
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;	
-				}
-			}
-		}
-		return new int[]{ minValue, maxValue };
-	}
+	int getValueAtNonsymmetricPosition(int x, int y) throws Exception;
 	
 	@Override
-	default SymmetricIntGrid2D absoluteGrid() {
-		return new AbsSymmetricIntGrid2D(this);
+	default IntGrid2D nonsymmetricSection() {
+		return new NonsymmetricIntGridSection2D(this);
 	}
 }

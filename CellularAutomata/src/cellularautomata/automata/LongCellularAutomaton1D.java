@@ -19,10 +19,5 @@ package cellularautomata.automata;
 import cellularautomata.grid1d.LongGrid1D;
 
 public interface LongCellularAutomaton1D extends LongGrid1D, CellularAutomaton {
-	/**
-	 * Returns the background value
-	 * 
-	 * @return the value padding the most part of the grid
-	 */
-	public abstract long getBackgroundValue();
+
 }

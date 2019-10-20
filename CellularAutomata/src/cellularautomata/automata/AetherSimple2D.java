@@ -304,33 +304,28 @@ public class AetherSimple2D implements SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public int getNonSymmetricMinX() {
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxX() {
+	public int getNonsymmetricMaxX() {
 		return getMaxX();
 	}
 
 	@Override
-	public int getNonSymmetricMinY() {
+	public int getNonsymmetricMinY() {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxY() {
+	public int getNonsymmetricMaxY() {
 		return getMaxY();
 	}
 
 	@Override
-	public long getValueAtNonSymmetricPosition(int x, int y) {
+	public long getValueAtNonsymmetricPosition(int x, int y) {
 		return getValueAtPosition(x, y);
-	}
-
-	@Override
-	public long getBackgroundValue() {
-		return 0;
 	}
 
 	@Override
@@ -344,23 +339,23 @@ public class AetherSimple2D implements SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public int getNonSymmetricMinX(int y) {
+	public int getNonsymmetricMinX(int y) {
 		return y;
 	}
 
 	@Override
-	public int getNonSymmetricMaxX(int y) {
+	public int getNonsymmetricMaxX(int y) {
 		return getMaxX();
 	}
 
 	@Override
-	public int getNonSymmetricMinY(int x) {
+	public int getNonsymmetricMinY(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxY(int x) {
-		return Math.min(getNonSymmetricMaxY(), x);
+	public int getNonsymmetricMaxY(int x) {
+		return Math.min(getNonsymmetricMaxY(), x);
 	}
 
 	@Override

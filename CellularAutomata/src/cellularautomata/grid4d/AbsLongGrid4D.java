@@ -25,7 +25,7 @@ public class AbsLongGrid4D implements LongGrid4D {
 	}
 
 	@Override
-	public long getValueAtPosition(int w, int x, int y, int z) {
+	public long getValueAtPosition(int w, int x, int y, int z) throws Exception {
 		return Math.abs(source.getValueAtPosition(w, x, y, z));
 	}
 	

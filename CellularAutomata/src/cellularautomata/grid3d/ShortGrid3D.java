@@ -28,10 +28,11 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
+	 * @throws Exception 
 	 */
-	short getValueAtPosition(int x, int y, int z);
+	short getValueAtPosition(int x, int y, int z) throws Exception;
 
-	default short[] getMinAndMaxValue() {
+	default short[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		short maxValue = Short.MIN_VALUE, minValue = Short.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -52,43 +53,40 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 		return new short[]{ minValue, maxValue };
 	}
 	
-	default short[] getMinAndMaxValueExcluding(short backgroundValue) {
+	@Override
+	default short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
-		short maxValue, minValue;
-		switch (backgroundValue) {
-			case Short.MIN_VALUE:
-				maxValue = Short.MIN_VALUE + 1;
-				minValue = Short.MAX_VALUE;
-				break;
-			case Short.MAX_VALUE:
-				maxValue = Short.MIN_VALUE;
-				minValue = Short.MAX_VALUE - 1;
-				break;
-			default:
-				maxValue = Short.MIN_VALUE;
-				minValue = Short.MAX_VALUE;
-		}
+		short evenMinValue = Short.MAX_VALUE, evenMaxValue = Short.MIN_VALUE;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinYAtX(x);
 			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
-				for (int z = minZ; z <= maxZ; z++) {
-					short value = getValueAtPosition(x, y, z);
-					if (value != backgroundValue) {
-						if (value > maxValue)
-							maxValue = value;
-						if (value < minValue)
-							minValue = value;
+				boolean isPositionEven = (minZ+x+y)%2 == 0;
+				if (isEven) { 
+					if (!isPositionEven) {
+						minZ++;
 					}
+				} else {
+					if (isPositionEven) {
+						minZ++;
+					}
+				}
+				for (int z = minZ; z <= maxZ; z+=2) {
+					short value = getValueAtPosition(x, y, z);
+					if (value > evenMaxValue)
+						evenMaxValue = value;
+					if (value < evenMinValue)
+						evenMinValue = value;
 				}
 			}
 		}
-		return new short[]{ minValue, maxValue };
+		return new short[]{evenMinValue, evenMaxValue};
 	}
 	
-	default short getTotalValue() {
+	@Override
+	default short getTotalValue() throws Exception {
 		short total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		for (int x = minX; x <= maxX; x++) {
@@ -105,22 +103,12 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 		return total;
 	}
 	
-	default short getMaxAbsoluteValue() {
-		short maxAbsoluteValue;
-		short[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = (short) Math.abs(minAndMax[0]);
-			maxAbsoluteValue = (short) Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
+	@Override
 	default ShortGrid3D absoluteGrid() {
 		return new AbsShortGrid3D(this);
 	}
 	
+	@Override
 	default ShortGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minX < getMinX() || minX > getMaxX() 
 				|| maxX < getMinX() || maxX > getMaxX()
@@ -134,11 +122,18 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 		return new ShortSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
+	@Override
 	default ShortGrid2D crossSectionAtZ(int z) {
 		return new ShortGrid3DZCrossSection(this, z);
 	}
 	
-	default ShortGrid2D projectedSurfaceMaxX(short backgroundValue) {
-		return new ShortGrid3DProjectedSurfaceMaxX(this, backgroundValue);
+	@Override
+	default ShortGrid2D crossSectionAtX(int x) {
+		return new ShortGrid3DXCrossSection(this, x);
+	}
+	
+	@Override
+	default ShortGrid2D projectedSurfaceMaxX() {
+		return new ShortGrid3DProjectedSurfaceMaxX(this);
 	}
 }

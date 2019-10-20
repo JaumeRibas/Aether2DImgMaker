@@ -51,7 +51,7 @@ public class IntGrid4DYZCrossSection implements IntGrid2D {
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y) {
+	public int getValueAtPosition(int x, int y) throws Exception {
 		return source.getValueAtPosition(x, y, this.y, z);
 	}
 

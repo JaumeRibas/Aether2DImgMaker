@@ -18,6 +18,7 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid.LongGrid;
 import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid3d.LongGrid3D;
 
 public interface LongGrid4D extends Grid4D, LongGrid {
 	
@@ -29,11 +30,12 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (w,x,y,z)
+	 * @throws Exception 
 	 */
-	long getValueAtPosition(int w, int x, int y, int z);
+	long getValueAtPosition(int w, int x, int y, int z) throws Exception;
 
 	@Override
-	default long[] getMinAndMaxValue() {
+	default long[] getMinAndMaxValue() throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
@@ -56,84 +58,40 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	}
 	
 	@Override
-	default long[] getMinAndMaxValueAtEvenPositions() throws Exception {
+	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		long evenMinValue = Integer.MAX_VALUE, evenMaxValue = Integer.MIN_VALUE;
+		long minValue = Long.MAX_VALUE, maxValue = Long.MIN_VALUE;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					if ((minW+x+y+z)%2 != 0) {
-						minW++;
-					}
-					for (int w = minW; w <= maxW; w+=2) {
-						long value = getValueAtPosition(w, x, y, z);
-						if (value > evenMaxValue)
-							evenMaxValue = value;
-						if (value < evenMinValue)
-							evenMinValue = value;
-					}
-				}
-			}
-		}
-		return new long[]{evenMinValue, evenMaxValue};
-	}
-	
-	@Override
-	default long[] getMinAndMaxValueAtOddPositions() throws Exception {
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		long oddMinValue = Integer.MAX_VALUE, oddMaxValue = Integer.MIN_VALUE;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					if ((minW+x+y+z)%2 == 0) {
-						minW++;
-					}
-					for (int w = minW; w <= maxW; w+=2) {
-						long value = getValueAtPosition(w, x, y, z);
-						if (value > oddMaxValue)
-							oddMaxValue = value;
-						if (value < oddMinValue)
-							oddMinValue = value;
-					}
-				}
-			}
-		}
-		return new long[]{oddMinValue, oddMaxValue};
-	}
-	
-	@Override
-	default long[] getMinAndMaxValueExcluding(long excludedValue) {
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		long maxValue = getValueAtPosition(minW, minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
-						long value = getValueAtPosition(w, x, y, z);
-						if (value != excludedValue) {
-							if (value > maxValue)
-								maxValue = value;
-							if (value < minValue)
-								minValue = value;
+					boolean isPositionEven = (minW+x+y+z)%2 == 0;
+					if (isEven) { 
+						if (!isPositionEven) {
+							minW++;
+						}
+					} else {
+						if (isPositionEven) {
+							minW++;
 						}
 					}
+					for (int w = minW; w <= maxW; w+=2) {
+						long value = getValueAtPosition(w, x, y, z);
+						if (value > maxValue)
+							maxValue = value;
+						if (value < minValue)
+							minValue = value;
+					}
 				}
 			}
 		}
-		return new long[]{ minValue, maxValue };
+		return new long[]{minValue, maxValue};
 	}
 	
 	@Override
-	default long getTotalValue() {
+	default long getTotalValue() throws Exception {
 		long total = 0;
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
@@ -152,26 +110,16 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	}
 	
 	@Override
-	default long getMaxAbsoluteValue() {
-		long maxAbsoluteValue;
-		long[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = Math.abs(minAndMax[0]);
-			maxAbsoluteValue = Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
 	default LongGrid4D absoluteGrid() {
 		return new AbsLongGrid4D(this);
 	}
 	
+	@Override
 	default LongGrid2D crossSectionAtYZ(int y, int z) {
 		return new LongGrid4DYZCrossSection(this, y, z);
 	}
 	
+	@Override
 	default LongGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minW < getMinW() || minW > getMaxW() 
 				|| maxW < getMinW() || maxW > getMaxW()
@@ -185,5 +133,10 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 		if (minX > maxX || minY > maxY || minZ > maxZ)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new LongSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default LongGrid3D projected3DEdgeMaxW() {
+		return new LongGrid4DProjected3DEdgeMaxW(this);
 	}
 }

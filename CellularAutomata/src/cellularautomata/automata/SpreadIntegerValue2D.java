@@ -186,23 +186,23 @@ public class SpreadIntegerValue2D implements SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	public long getValueAtNonSymmetricPosition(int x, int y){	
+	public long getValueAtNonsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	
-	public int getNonSymmetricMinX() {
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxX() {
+	public int getNonsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
-	public int getNonSymmetricMinY() {
+	public int getNonsymmetricMinY() {
 		return 0;
 	}
 	
-	public int getNonSymmetricMaxY() {
+	public int getNonsymmetricMaxY() {
 		return maxY;
 	}
 	
@@ -226,25 +226,24 @@ public class SpreadIntegerValue2D implements SymmetricLongCellularAutomaton2D {
 
 	@Override
 	public int getMinX() {
-		return -getNonSymmetricMaxX();
+		return -getNonsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxX() {
-		return getNonSymmetricMaxX();
+		return getNonsymmetricMaxX();
 	}
 
 	@Override
 	public int getMinY() {
-		return -getNonSymmetricMaxX();
+		return -getNonsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxY() {
-		return getNonSymmetricMaxX();
+		return getNonsymmetricMaxX();
 	}
 
-	@Override
 	public long getBackgroundValue() {
 		return backgroundValue;
 	}
@@ -260,23 +259,23 @@ public class SpreadIntegerValue2D implements SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public int getNonSymmetricMinX(int y) {
+	public int getNonsymmetricMinX(int y) {
 		return y;
 	}
 
 	@Override
-	public int getNonSymmetricMaxX(int y) {
-		return getNonSymmetricMaxX();
+	public int getNonsymmetricMaxX(int y) {
+		return getNonsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonSymmetricMinY(int x) {
+	public int getNonsymmetricMinY(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxY(int x) {
-		return Math.min(getNonSymmetricMaxY(), x);
+	public int getNonsymmetricMaxY(int x) {
+		return Math.min(getNonsymmetricMaxY(), x);
 	}
 
 	@Override

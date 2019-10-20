@@ -20,21 +20,10 @@ public interface IntGrid extends Grid {
 
 	int[] getMinAndMaxValue() throws Exception;
 	
-	/**
-	 * Get min and max values excluding a particular value
-	 * 
-	 * @param excludedValue
-	 * @return
-	 * @throws Exception 
-	 */
-	int[] getMinAndMaxValueExcluding(int excludedValue) throws Exception;
-	
-	int[] getMinAndMaxValueAtEvenPositions() throws Exception;
-	
-	int[] getMinAndMaxValueAtOddPositions() throws Exception;
+	int[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception;
 	
 	int getTotalValue() throws Exception;
-	
-	int getMaxAbsoluteValue() throws Exception;
+
+	IntGrid absoluteGrid();
 	
 }

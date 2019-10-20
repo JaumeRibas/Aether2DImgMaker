@@ -69,7 +69,7 @@ public class ShortGrid3DZCrossSection implements ShortGrid2D {
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y) {
+	public short getValueAtPosition(int x, int y) throws Exception {
 		return source.getValueAtPosition(x, y, z);
 	}
 

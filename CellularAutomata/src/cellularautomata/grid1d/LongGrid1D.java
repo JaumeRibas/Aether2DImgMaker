@@ -43,37 +43,27 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	}
 	
 	@Override
-	default long[] getMinAndMaxValueAtEvenPositions() throws Exception {
+	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
-		long evenMinValue = Long.MAX_VALUE, evenMaxValue = Long.MIN_VALUE;
-		if (minX%2 != 0) {
-			minX++;
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		boolean isPositionEven = minX%2 == 0;
+		if (isEven) { 
+			if (!isPositionEven) {
+				minX++;
+			}
+		} else {
+			if (isPositionEven) {
+				minX++;
+			}
 		}
 		for (int x = minX; x <= maxX; x+=2) {
 			long value = getValueAtPosition(x);
-			if (value > evenMaxValue)
-				evenMaxValue = value;
-			if (value < evenMinValue)
-				evenMinValue = value;
+			if (value > maxValue)
+				maxValue = value;
+			if (value < minValue)
+				minValue = value;
 		}
-		return new long[]{evenMinValue, evenMaxValue};
-	}
-	
-	@Override
-	default long[] getMinAndMaxValueAtOddPositions() throws Exception {
-		int maxX = getMaxX(), minX = getMinX();
-		long oddMinValue = Integer.MAX_VALUE, oddMaxValue = Integer.MIN_VALUE;
-		if (minX%2 == 0) {
-			minX++;
-		}
-		for (int x = minX; x <= maxX; x+=2) {
-			long value = getValueAtPosition(x);
-			if (value > oddMaxValue)
-				oddMaxValue = value;
-			if (value < oddMinValue)
-				oddMinValue = value;
-		}
-		return new long[]{oddMinValue, oddMaxValue};
+		return new long[]{ minValue, maxValue };
 	}
 	
 	default long[] getMinAndMaxValueExcluding(long excludedValue) {

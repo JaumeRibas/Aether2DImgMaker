@@ -16,9 +16,6 @@
  */
 package cellularautomata.grid4d;
 
-import cellularautomata.grid2d.SymmetricShortGrid2D;
-import cellularautomata.grid3d.ShortGrid3D;
-
 public interface SymmetricShortGrid4D extends ShortGrid4D, SymmetricGrid4D {
 
 	/**
@@ -30,64 +27,10 @@ public interface SymmetricShortGrid4D extends ShortGrid4D, SymmetricGrid4D {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	short getValueAtNonSymmetricPosition(int w, int x, int y, int z);
+	short getValueAtNonsymmetricPosition(int w, int x, int y, int z);
 
-	default short[] getMinAndMaxValue() {
-		int maxW = getNonSymmetricMaxW(), minW = getNonSymmetricMinW(), 
-				maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		short maxValue = getValueAtNonSymmetricPosition(minW, minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
-						short value = getValueAtNonSymmetricPosition(w, x, y, z);
-						if (value > maxValue)
-							maxValue = value;
-						if (value < minValue)
-							minValue = value;
-					}
-				}
-			}
-		}
-		return new short[]{ minValue, maxValue };
-	}
-	
-	default short[] getMinAndMaxValueExcluding(short backgroundValue) {
-		int maxW = getNonSymmetricMaxW(), minW = getNonSymmetricMinW(), 
-				maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		short maxValue = getValueAtNonSymmetricPosition(minW, minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
-						short value = getValueAtNonSymmetricPosition(w, x, y, z);
-						if (value != backgroundValue) {
-							if (value > maxValue)
-								maxValue = value;
-							if (value < minValue)
-								minValue = value;
-						}
-					}
-				}
-			}
-		}
-		return new short[]{ minValue, maxValue };
-	}
-	
 	@Override
-	default SymmetricShortGrid4D absoluteGrid() {
-		return new AbsSymmetricShortGrid4D(this);
-	}
-	
-	default SymmetricShortGrid2D crossSectionAtYZ(int y, int z) {
-		return new SymmetricShortGrid4DYZCrossSection(this, y, z);
-	}
-	
-	default ShortGrid3D projected3DEdge(short backgroundValue) {
-		return new SymmetricShortGrid4DProjected3DEdge(this, backgroundValue);
+	default ShortGrid4D nonsymmetricSection() {
+		return new NonsymmetricShortGridSection4D(this);
 	}
 }

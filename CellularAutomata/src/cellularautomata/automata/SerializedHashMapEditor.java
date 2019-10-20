@@ -14,7 +14,6 @@ public class SerializedHashMapEditor {
 			properties.put("maxGridBlockSize", Long.parseLong("8589934592")/2);
 			Utils.serializeToFile(properties, "D:/data/Aether3D/-1073741823/backupResized/IntAether3DSwap_6513/", "properties.ser");
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -42,7 +42,7 @@ public class IntSubGrid4D implements IntGrid4D {
 	}
 
 	@Override
-	public int getValueAtPosition(int w, int x, int y, int z) {
+	public int getValueAtPosition(int w, int x, int y, int z) throws Exception {
 		return source.getValueAtPosition(w, x, y, z);
 	}
 	

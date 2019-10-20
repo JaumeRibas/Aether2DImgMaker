@@ -26,9 +26,11 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
 	 * @return the value at (x,y)
+	 * @throws Exception 
 	 */
-	short getValueAtPosition(int x, int y);
+	short getValueAtPosition(int x, int y) throws Exception;
 	
+	@Override
 	default short[] getMinAndMaxValue() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		short maxValue = Short.MIN_VALUE, minValue = Short.MAX_VALUE;
@@ -46,45 +48,35 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 		return new short[]{ minValue, maxValue };
 	}
 	
-	/**
-	 * Get min and max values excluding a backgroundValue
-	 * 
-	 * @param backgroundValue
-	 * @return
-	 * @throws Exception 
-	 */
-	default short[] getMinAndMaxValueExcluding(short backgroundValue) throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		short maxValue, minValue;
-		switch (backgroundValue) {
-			case Short.MIN_VALUE:
-				maxValue = Short.MIN_VALUE + 1;
-				minValue = Short.MAX_VALUE;
-				break;
-			case Short.MAX_VALUE:
-				maxValue = Short.MIN_VALUE;
-				minValue = Short.MAX_VALUE - 1;
-				break;
-			default:
-				maxValue = Short.MIN_VALUE;
-				minValue = Short.MAX_VALUE;
-		}
+	@Override
+	default short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		short maxValue = Short.MIN_VALUE, minValue = Short.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
-			maxY = getMaxY(x);
-			for (int y = minY; y <= maxY; y++) {
-				short value = getValueAtPosition(x, y);
-				if (value != backgroundValue) {
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isEven) { 
+				if (!isPositionEven) {
+					minY++;
 				}
+			} else {
+				if (isPositionEven) {
+					minY++;
+				}
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				short value = getValueAtPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
 			}
 		}
 		return new short[]{ minValue, maxValue };
 	}
 	
+	@Override
 	default short getTotalValue() throws Exception {
 		short total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
@@ -98,22 +90,12 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 		return total;
 	}
 	
-	default short getMaxAbsoluteValue() throws Exception {
-		short maxAbsoluteValue;
-		short[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = (short) Math.abs(minAndMax[0]);
-			maxAbsoluteValue = (short) Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
+	@Override
 	default ShortGrid2D absoluteGrid() {
 		return new AbsShortGrid2D(this);
 	}
 	
+	@Override
 	default ShortGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
 		return new ShortSubGrid2D(this, minX, maxX, minY, maxY);
 	}

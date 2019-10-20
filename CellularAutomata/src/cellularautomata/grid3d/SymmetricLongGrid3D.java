@@ -16,9 +16,6 @@
  */
 package cellularautomata.grid3d;
 
-import cellularautomata.grid2d.LongGrid2D;
-import cellularautomata.grid2d.SymmetricLongGrid2D;
-
 public interface SymmetricLongGrid3D extends LongGrid3D, SymmetricGrid3D {
 	
 	/**
@@ -30,66 +27,10 @@ public interface SymmetricLongGrid3D extends LongGrid3D, SymmetricGrid3D {
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */
-	long getValueAtNonSymmetricPosition(int x, int y, int z) throws Exception;
+	long getValueAtNonsymmetricPosition(int x, int y, int z) throws Exception;
 
-	default long[] getMinAndMaxValue() throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxYAtX(minX), minY = getNonSymmetricMinYAtX(minX),
-				maxZ = getNonSymmetricMaxZ(minX, minY), minZ = getNonSymmetricMinZ(minX, minY);
-		long maxValue = getValueAtNonSymmetricPosition(minX, minY, minZ), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getNonSymmetricMinYAtX(x);
-			maxY = getNonSymmetricMaxYAtX(x);
-			for (int y = minY; y <= maxY; y++) {
-				minZ = getNonSymmetricMinZ(x, y);
-				maxZ = getNonSymmetricMaxZ(x, y);
-				for (int z = minZ; z <= maxZ; z++) {
-					long value = getValueAtNonSymmetricPosition(x, y, z);
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;
-				}
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
-	
-	default long[] getMinAndMaxValueExcluding(int excludedValue) throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxYAtX(minX), minY = getNonSymmetricMinYAtX(minX),
-				maxZ = getNonSymmetricMaxZ(minX, minY), minZ = getNonSymmetricMinZ(minX, minY);
-		long maxValue = getValueAtNonSymmetricPosition(minX, minY, minZ), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getNonSymmetricMinYAtX(x);
-			maxY = getNonSymmetricMaxYAtX(x);
-			for (int y = minY; y <= maxY; y++) {
-				minZ = getNonSymmetricMinZ(x, y);
-				maxZ = getNonSymmetricMaxZ(x, y);
-				for (int z = minZ; z <= maxZ; z++) {
-					long value = getValueAtNonSymmetricPosition(x, y, z);
-					if (value != excludedValue) {
-						if (value > maxValue)
-							maxValue = value;
-						if (value < minValue)
-							minValue = value;
-					}
-				}
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
-	
 	@Override
-	default SymmetricLongGrid3D absoluteGrid() {
-		return new AbsSymmetricLongGrid3D(this);
-	}
-	
-	default SymmetricLongGrid2D crossSectionAtZ(int z) {
-		return new SymmetricLongGrid3DZCrossSection(this, z);
-	}
-	
-	default LongGrid2D projectedSurface(long backgroundValue) {
-		return new SymmetricLongGrid3DProjectedSurface(this, backgroundValue);
+	default LongGrid3D nonsymmetricSection() {
+		return new NonsymmetricLongGridSection3D(this);
 	}
 }

@@ -38,7 +38,7 @@ public class ShortSubGrid3D implements ShortGrid3D {
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y, int z) {
+	public short getValueAtPosition(int x, int y, int z) throws Exception {
 		return source.getValueAtPosition(x, y, z);
 	}
 

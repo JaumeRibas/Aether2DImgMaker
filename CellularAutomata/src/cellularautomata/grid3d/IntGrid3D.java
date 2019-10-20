@@ -55,92 +55,35 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	}
 	
 	@Override
-	default int[] getMinAndMaxValueAtEvenPositions() throws Exception {
+	default int[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
-		//even
-		int evenMinValue = Integer.MAX_VALUE, evenMaxValue = Integer.MIN_VALUE;
+		int minValue = Integer.MAX_VALUE, maxValue = Integer.MIN_VALUE;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinYAtX(x);
 			maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
-				if ((minZ+x+y)%2 != 0) {
-					minZ++;
-				}
-				for (int z = minZ; z <= maxZ; z+=2) {
-					int value = getValueAtPosition(x, y, z);
-					if (value > evenMaxValue)
-						evenMaxValue = value;
-					if (value < evenMinValue)
-						evenMinValue = value;
-				}
-			}
-		}
-		return new int[]{evenMinValue, evenMaxValue};
-	}
-	
-	@Override
-	default int[] getMinAndMaxValueAtOddPositions() throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
-		//odd
-		int oddMinValue = Integer.MAX_VALUE, oddMaxValue = Integer.MIN_VALUE;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinYAtX(x);
-			maxY = getMaxYAtX(x);
-			for (int y = minY; y <= maxY; y++) {
-				minZ = getMinZ(x, y);
-				maxZ = getMaxZ(x, y);
-				if ((minZ+x+y)%2 == 0) {
-					minZ++;
-				}
-				for (int z = minZ; z <= maxZ; z+=2) {
-					int value = getValueAtPosition(x, y, z);
-					if (value > oddMaxValue)
-						oddMaxValue = value;
-					if (value < oddMinValue)
-						oddMinValue = value;
-				}
-			}
-		}
-		return new int[]{oddMinValue, oddMaxValue};
-	}
-	
-	@Override
-	default int[] getMinAndMaxValueExcluding(int backgroundValue) throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
-		int maxValue, minValue;
-		switch (backgroundValue) {
-			case Integer.MIN_VALUE:
-				maxValue = Integer.MIN_VALUE + 1;
-				minValue = Integer.MAX_VALUE;
-				break;
-			case Integer.MAX_VALUE:
-				maxValue = Integer.MIN_VALUE;
-				minValue = Integer.MAX_VALUE - 1;
-				break;
-			default:
-				maxValue = Integer.MIN_VALUE;
-				minValue = Integer.MAX_VALUE;
-		}
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinYAtX(x);
-			maxY = getMaxYAtX(x);
-			for (int y = minY; y <= maxY; y++) {
-				minZ = getMinZ(x, y);
-				maxZ = getMaxZ(x, y);
-				for (int z = minZ; z <= maxZ; z++) {
-					int value = getValueAtPosition(x, y, z);
-					if (value != backgroundValue) {
-						if (value > maxValue)
-							maxValue = value;
-						if (value < minValue)
-							minValue = value;
+				boolean isPositionEven = (minZ+x+y)%2 == 0;
+				if (isEven) { 
+					if (!isPositionEven) {
+						minZ++;
+					}
+				} else {
+					if (isPositionEven) {
+						minZ++;
 					}
 				}
+				for (int z = minZ; z <= maxZ; z+=2) {
+					int value = getValueAtPosition(x, y, z);
+					if (value > maxValue)
+						maxValue = value;
+					if (value < minValue)
+						minValue = value;
+				}
 			}
 		}
-		return new int[]{ minValue, maxValue };
+		return new int[]{minValue, maxValue};
 	}
 	
 	@Override
@@ -162,22 +105,11 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	}
 	
 	@Override
-	default int getMaxAbsoluteValue() throws Exception {
-		int maxAbsoluteValue;
-		int[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = Math.abs(minAndMax[0]);
-			maxAbsoluteValue = Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
 	default IntGrid3D absoluteGrid() {
 		return new AbsIntGrid3D(this);
 	}
 	
+	@Override
 	default IntGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minX < getMinX() || minX > getMaxX() 
 				|| maxX < getMinX() || maxX > getMaxX()
@@ -191,16 +123,19 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 		return new IntSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
+	@Override
 	default IntGrid2D crossSectionAtZ(int z) {
 		return new IntGrid3DZCrossSection(this, z);
 	}
 	
+	@Override
 	default IntGrid2D crossSectionAtX(int x) {
 		return new IntGrid3DXCrossSection(this, x);
 	}
 	
-	default IntGrid2D projectedSurfaceMaxX(int backgroundValue) {
-		return new IntGrid3DProjectedSurfaceMaxX(this, backgroundValue);
+	@Override
+	default IntGrid2D projectedSurfaceMaxX() {
+		return new IntGrid3DProjectedSurfaceMaxX(this);
 	}
 	
 }

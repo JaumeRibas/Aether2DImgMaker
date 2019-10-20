@@ -21,11 +21,9 @@ import cellularautomata.grid2d.ShortGrid2D;
 public class ShortGrid3DProjectedSurfaceMaxX implements ShortGrid2D {
 
 	private ShortGrid3D source;
-	private short backgroundValue;
 	
-	public ShortGrid3DProjectedSurfaceMaxX(ShortGrid3D source, short backgroundValue) {
+	public ShortGrid3DProjectedSurfaceMaxX(ShortGrid3D source) {
 		this.source = source;
-		this.backgroundValue = backgroundValue;
 	}
 
 	@Override
@@ -37,6 +35,16 @@ public class ShortGrid3DProjectedSurfaceMaxX implements ShortGrid2D {
 	public int getMaxX() {
 		return source.getMaxZ();
 	}
+	
+	@Override
+	public int getMinX(int y) {
+		return source.getMinZAtY(y);
+	}
+
+	@Override
+	public int getMaxX(int y) {
+		return source.getMaxZAtY(y);
+	}
 
 	@Override
 	public int getMinY() {
@@ -47,19 +55,27 @@ public class ShortGrid3DProjectedSurfaceMaxX implements ShortGrid2D {
 	public int getMaxY() {
 		return source.getMaxY();
 	}
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinYAtZ(x);
+	}
 
 	@Override
-	public short getValueAtPosition(int x, int y) {
-		int sourceX, sourceY, sourceZ, minX;
+	public int getMaxY(int x) {
+		return source.getMaxYAtZ(x);
+	}
+
+	@Override
+	public short getValueAtPosition(int x, int y) throws Exception {
+		int sourceX, sourceY, sourceZ;
 		sourceY = y;
 		sourceZ = x;
-		sourceX = source.getMaxX();
-		minX = source.getMinX();
-		short value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
-		while (value == backgroundValue && sourceX > minX) {
-			sourceX--;
-			value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
-		}
-		return value;
+		sourceX = source.getMaxX(sourceY, sourceZ);
+		return source.getValueAtPosition(sourceX, sourceY, sourceZ);
+		/*//TODO move to overridden getMaxX(int y, int z) at CA implementation
+		while (getValueAtPosition(maxX, y, z) == backgroundValue && maxX > minX) {
+			maxX--;
+		}*/
 	}
 }

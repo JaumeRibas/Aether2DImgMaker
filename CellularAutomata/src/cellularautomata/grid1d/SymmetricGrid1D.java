@@ -19,17 +19,25 @@ package cellularautomata.grid1d;
 public interface SymmetricGrid1D extends Grid1D {
 
 	/**
-	 * Returns the smallest x-coordinate of the non symmetric section of the grid
+	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest x
 	 */
-	int getNonSymmetricMinX();
+	int getNonsymmetricMinX();
 	
 	/**
-	 * Returns the largest x-coordinate of the non symmetric section of the grid
+	 * Returns the largest x-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	int getNonSymmetricMaxX();
+	int getNonsymmetricMaxX();
+	
+	
+	/**
+	 * Returns a nonsymmetric section of the grid
+	 * 
+	 * @return a 1D grid
+	 */
+	Grid1D nonsymmetricSection();
 
 }

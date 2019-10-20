@@ -81,16 +81,15 @@ public class IntAether4D implements SymmetricIntCellularAutomaton4D {
 	 * @throws FileNotFoundException 
 	 */
 	public IntAether4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		CustomSymmetricIntCA4DData data = (CustomSymmetricIntCA4DData) Utils.deserializeFromFile(backupPath);
-		if (data.getBackgroundValue() != 0)
-			throw new UnsupportedOperationException(
-					"Only background value 0 is suported. Subtract background value from all grid to get same relative values with background value 0");
-		initialValue = data.getInitialValue();
-		grid = data.getGrid();
-		maxY = data.getMaxY();
-		maxZ = data.getMaxZ();
-		boundsReached = data.isBoundsReached();
-		currentStep = data.getStep();
+		IntAether4D data = (IntAether4D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		grid = data.grid;
+		maxX = data.maxX;
+		maxY = data.maxY;
+		maxZ = data.maxZ;
+		maxWMinusOne = data.maxWMinusOne;
+		boundsReached = data.boundsReached;
+		currentStep = data.currentStep;
 	}
 	
 	/**
@@ -416,7 +415,7 @@ public class IntAether4D implements SymmetricIntCellularAutomaton4D {
 		}
 	}
 	
-	public int getValueAtNonSymmetricPosition(int w, int x, int y, int z){	
+	public int getValueAtNonsymmetricPosition(int w, int x, int y, int z){	
 		if (w < grid.length 
 				&& x < grid[w].length 
 				&& y < grid[w][x].length 
@@ -429,73 +428,83 @@ public class IntAether4D implements SymmetricIntCellularAutomaton4D {
 	
 	@Override
 	public int getMinW() {
-		return -getNonSymmetricMaxW();
+		return -getNonsymmetricMaxW();
 	}
 
 	@Override
 	public int getMaxW() {
-		return getNonSymmetricMaxW();
+		return getNonsymmetricMaxW();
 	}
 
 	@Override
 	public int getMinX() {
-		return -getNonSymmetricMaxW();
+		return -getNonsymmetricMaxW();
 	}
 
 	@Override
 	public int getMaxX() {
-		return getNonSymmetricMaxW();
+		return getNonsymmetricMaxW();
 	}
 
 	@Override
 	public int getMinY() {
-		return -getNonSymmetricMaxW();
+		return -getNonsymmetricMaxW();
 	}
 
 	@Override
 	public int getMaxY() {
-		return getNonSymmetricMaxW();
+		return getNonsymmetricMaxW();
 	}
 
 	@Override
 	public int getMinZ() {
-		return -getNonSymmetricMaxW();
+		return -getNonsymmetricMaxW();
 	}
 
 	@Override
 	public int getMaxZ() {
-		return getNonSymmetricMaxW();
+		return getNonsymmetricMaxW();
 	}
 	
-	public int getNonSymmetricMinW() {
+	@Override
+	public int getNonsymmetricMinW(int x, int y, int z) {
+		return Math.max(Math.max(x, y), z);
+	}
+
+	@Override
+	public int getNonsymmetricMaxW(int x, int y, int z) {
+		return getNonsymmetricMaxW();
+	}
+	
+	public int getNonsymmetricMinW() {
 		return 0;
 	}
 	
-	public int getNonSymmetricMaxW() {
+	public int getNonsymmetricMaxW() {
 		return grid.length - 1;
 	}
 	
-	public int getNonSymmetricMinX() {
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxX() {
+	public int getNonsymmetricMaxX() {
 		return maxX;
 	}
 	
-	public int getNonSymmetricMinY() {
+	public int getNonsymmetricMinY() {
 		return 0;
 	}
 	
-	public int getNonSymmetricMaxY() {
+	public int getNonsymmetricMaxY() {
 		return maxY;
 	}
 	
-	public int getNonSymmetricMinZ() {
+	public int getNonsymmetricMinZ() {
 		return 0;
 	}
 	
-	public int getNonSymmetricMaxZ() {
+	public int getNonsymmetricMaxZ() {
 		return maxZ;
 	}
 	
@@ -519,13 +528,7 @@ public class IntAether4D implements SymmetricIntCellularAutomaton4D {
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		CustomSymmetricIntCA4DData data = new CustomSymmetricIntCA4DData(grid, initialValue, 0, currentStep, boundsReached, maxX, maxY, maxZ);
-		Utils.serializeToFile(data, backupPath, backupName);
-	}
-
-	@Override
-	public int getBackgroundValue() {
-		return 0;
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 
 	@Override

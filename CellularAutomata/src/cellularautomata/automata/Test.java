@@ -257,6 +257,40 @@ public class Test {
 		}
 	}
 	
+	public static void compare(SymmetricIntCellularAutomaton3D ca1, SymmetricLongCellularAutomaton3D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
+								equal = false;
+								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+										+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
+										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void compare(SymmetricIntCellularAutomaton3D ca1, SymmetricIntCellularAutomaton3D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -350,14 +384,12 @@ public class Test {
 				
 				@Override
 				public void beforeProcessing() throws Exception {
-					// TODO Auto-generated method stub
-					
+					// do nothing					
 				}
 				
 				@Override
 				public void afterProcessing() throws Exception {
-					// TODO Auto-generated method stub
-					
+					// do nothing					
 				}
 			};
 			
@@ -402,14 +434,12 @@ public class Test {
 				
 				@Override
 				public void beforeProcessing() throws Exception {
-					// TODO Auto-generated method stub
-					
+					// do nothing					
 				}
 				
 				@Override
 				public void afterProcessing() throws Exception {
-					// TODO Auto-generated method stub
-					
+					// do nothing			
 				}
 			};
 			
@@ -508,7 +538,7 @@ public class Test {
 				System.out.println("Step " + ca.getStep());
 				short[] minAndMaxValue = ca.getMinAndMaxValue();
 				System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-				printAsGrid(ca.projected3DEdge().crossSectionAtZ(0), ca.getBackgroundValue());
+				printAsGrid(ca.projected3DEdgeMaxW().crossSectionAtZ(0), (short)0);
 			} while (ca.nextStep());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -614,12 +644,27 @@ public class Test {
 		}
 	}
 	
+	public static void stepByStep(SymmetricIntCellularAutomaton3D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step " + ca.getStep());
+				printAsGrid(ca.crossSectionAtZ(0), 0);
+				System.out.println("totalValue " + ca.getTotalValue());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void stepByStep3DEdgeSurface(SymmetricIntCellularAutomaton4D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca.projected3DEdge().projectedSurfaceMaxX(ca.getBackgroundValue()), ca.getBackgroundValue());
+				printAsGrid(ca.projected3DEdgeMaxW().projectedSurfaceMaxX(), 0);
 				System.out.println("totalValue " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -640,7 +685,7 @@ public class Test {
 			do {
 				for (SymmetricLongCellularAutomaton3D ca : cas) {
 					System.out.println("step " + ca.getStep());
-					printAsGrid(ca.crossSectionAtZ(0), ca.getBackgroundValue());
+					printAsGrid(ca.crossSectionAtZ(0), 0);
 					System.out.println("totalValue " + ca.getTotalValue());
 					boolean caChanged = ca.nextStep();
 					anyChanged = anyChanged || caChanged;
@@ -658,7 +703,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca.crossSectionAtYZ(0,0), ca.getBackgroundValue());
+				printAsGrid(ca.crossSectionAtYZ(0,0), 0);
 				System.out.println("totalValue " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -673,7 +718,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca, ca.getBackgroundValue());
+				printAsGrid(ca, 0);
 				System.out.println("totalValue " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -708,12 +753,12 @@ public class Test {
 		printAsGrid(m, minX, maxX, backgroundValue);
 	}
 	
-	public static void printAsGrid(IntGrid2D m, int backgroundValue) throws Exception{
+	public static void printAsGrid(IntGrid2D m, int backgroundValue) throws Exception {
 		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
 		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
 	}
 	
-	public static void printAsGrid(ShortGrid2D m, short backgroundValue) {
+	public static void printAsGrid(ShortGrid2D m, short backgroundValue) throws Exception {
 		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
 		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
 	}
@@ -810,7 +855,7 @@ public class Test {
 		System.out.println(headFoot);
 	}
 	
-	public static void printAsGrid(ShortGrid2D m, int minX, int maxX, int minY, int maxY, short backgroundValue) {
+	public static void printAsGrid(ShortGrid2D m, int minX, int maxX, int minY, int maxY, short backgroundValue) throws Exception {
 		int maxDigits = 3;
 		for (int y = maxY; y >= minY; y--) {
 			for (int x = minX; x <= maxX; x++) {

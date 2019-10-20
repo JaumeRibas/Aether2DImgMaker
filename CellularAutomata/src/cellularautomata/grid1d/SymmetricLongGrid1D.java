@@ -18,38 +18,11 @@ package cellularautomata.grid1d;
 
 public interface SymmetricLongGrid1D extends LongGrid1D, SymmetricGrid1D {
 	
-	long getValueAtNonSymmetricPosition(int x);
-	
-	default long[] getMinAndMaxValue() {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = getValueAtPosition(minX), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			long value = getValueAtPosition(x);
-			if (value > maxValue)
-				maxValue = value;
-			if (value < minValue)
-				minValue = value;
-		}
-		return new long[]{ minValue, maxValue };
-	}
-	
-	default long[] getMinAndMaxValueExcluding(long backgroundValue) {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = getValueAtPosition(minX), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			long value = getValueAtPosition(x);
-			if (value != backgroundValue) {
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;	
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
+	long getValueAtNonsymmetricPosition(int x);
 	
 	@Override
-	default SymmetricLongGrid1D absoluteGrid() {
-		return new AbsSymmetricLongGrid1D(this);
+	default LongGrid1D nonsymmetricSection() {
+		return new NonsymmetricLongGridSection1D(this);
 	}
+
 }

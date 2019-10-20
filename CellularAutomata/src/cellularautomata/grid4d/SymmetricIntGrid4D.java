@@ -16,9 +16,6 @@
  */
 package cellularautomata.grid4d;
 
-import cellularautomata.grid2d.SymmetricIntGrid2D;
-import cellularautomata.grid3d.IntGrid3D;
-
 public interface SymmetricIntGrid4D extends IntGrid4D, SymmetricGrid4D {
 
 	/**
@@ -30,64 +27,11 @@ public interface SymmetricIntGrid4D extends IntGrid4D, SymmetricGrid4D {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	int getValueAtNonSymmetricPosition(int w, int x, int y, int z);
+	int getValueAtNonsymmetricPosition(int w, int x, int y, int z);
 
-	default int[] getMinAndMaxValue() {
-		int maxW = getNonSymmetricMaxW(), minW = getNonSymmetricMinW(), 
-				maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		int maxValue = getValueAtNonSymmetricPosition(minW, minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
-						int value = getValueAtNonSymmetricPosition(w, x, y, z);
-						if (value > maxValue)
-							maxValue = value;
-						if (value < minValue)
-							minValue = value;
-					}
-				}
-			}
-		}
-		return new int[]{ minValue, maxValue };
-	}
-	
-	default int[] getMinAndMaxValueExcluding(int backgroundValue) {
-		int maxW = getNonSymmetricMaxW(), minW = getNonSymmetricMinW(), 
-				maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		int maxValue = getValueAtNonSymmetricPosition(minW, minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
-						int value = getValueAtNonSymmetricPosition(w, x, y, z);
-						if (value != backgroundValue) {
-							if (value > maxValue)
-								maxValue = value;
-							if (value < minValue)
-								minValue = value;
-						}
-					}
-				}
-			}
-		}
-		return new int[]{ minValue, maxValue };
-	}
-	
 	@Override
-	default SymmetricIntGrid4D absoluteGrid() {
-		return new AbsSymmetricIntGrid4D(this);
+	default IntGrid4D nonsymmetricSection() {
+		return new NonsymmetricIntGridSection4D(this);
 	}
-	
-	default SymmetricIntGrid2D crossSectionAtYZ(int y, int z) {
-		return new SymmetricIntGrid4DYZCrossSection(this, y, z);
-	}
-	
-	default IntGrid3D projected3DEdge(int backgroundValue) {
-		return new SymmetricIntGrid4DProjected3DEdge(this, backgroundValue);
-	}
+
 }

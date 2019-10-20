@@ -20,53 +20,24 @@ import cellularautomata.grid2d.Grid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
-import cellularautomata.grid2d.SymmetricGrid2D;
-import cellularautomata.grid2d.SymmetricIntGrid2D;
-import cellularautomata.grid2d.SymmetricLongGrid2D;
-import cellularautomata.grid2d.SymmetricShortGrid2D;
 
 public abstract class ColorMapper {
 		
 	public abstract ColorMappedLongGrid2D getMappedLongGrid(LongGrid2D grid, long minValue, long maxValue);
 	public abstract ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue);
 	public abstract ColorMappedShortGrid2D getMappedShortGrid(ShortGrid2D grid, short minValue, short maxValue);
-	public abstract ColorMappedSymmetricLongGrid2D getMappedLongGrid(SymmetricLongGrid2D grid, long minValue, long maxValue);
-	public abstract ColorMappedSymmetricIntGrid2D getMappedIntGrid(SymmetricIntGrid2D grid, int minValue, int maxValue);
-	public abstract ColorMappedSymmetricShortGrid2D getMappedShortGrid(SymmetricShortGrid2D grid, short minValue, short maxValue);
 	
 	public ColorGrid2D getMappedGrid(Grid2D grid, long minValue, long maxValue) {
 		ColorGrid2D mappedGrid = null;
 		if (grid instanceof LongGrid2D) {
 			mappedGrid = getMappedLongGrid((LongGrid2D)grid, minValue, maxValue);
-		} else if (grid instanceof SymmetricLongGrid2D) {
-			mappedGrid = getMappedLongGrid((SymmetricLongGrid2D)grid, minValue, maxValue);
-		} else if (grid instanceof IntGrid2D) {
+		}  else if (grid instanceof IntGrid2D) {
 			mappedGrid = getMappedIntGrid((IntGrid2D)grid, (int)minValue, (int)maxValue);
-		} else if (grid instanceof SymmetricIntGrid2D) {
-			mappedGrid = getMappedIntGrid((SymmetricIntGrid2D)grid, (int)minValue, (int)maxValue);
 		} else if (grid instanceof ShortGrid2D) {
 			mappedGrid = getMappedShortGrid((ShortGrid2D)grid, (short)minValue, (short)maxValue);
-		} else if (grid instanceof SymmetricShortGrid2D) {
-			mappedGrid = getMappedShortGrid((SymmetricShortGrid2D)grid, (short)minValue, (short)maxValue);
 		} else {
 			throw new IllegalArgumentException(
 					"Missing else if branch for Grid2D subtype " 
-							+ grid.getClass().getSimpleName() + ".");
-		}
-		return mappedGrid;
-	}
-	
-	public SymmetricColorGrid2D getMappedSymmetricGrid(SymmetricGrid2D grid, long minValue, long maxValue) {
-		SymmetricColorGrid2D mappedGrid = null;
-		if (grid instanceof SymmetricLongGrid2D) {
-			mappedGrid = getMappedLongGrid((SymmetricLongGrid2D)grid, minValue, maxValue);
-		} else if (grid instanceof SymmetricIntGrid2D) {
-			mappedGrid = getMappedIntGrid((SymmetricIntGrid2D)grid, (int)minValue, (int)maxValue);
-		} else if (grid instanceof SymmetricShortGrid2D) {
-			mappedGrid = getMappedShortGrid((SymmetricShortGrid2D)grid, (short)minValue, (short)maxValue);
-		} else {
-			throw new IllegalArgumentException(
-					"Missing else if branch for SymmetricGrid2D subtype " 
 							+ grid.getClass().getSimpleName() + ".");
 		}
 		return mappedGrid;

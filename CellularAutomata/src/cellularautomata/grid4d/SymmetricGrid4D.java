@@ -21,59 +21,90 @@ public interface SymmetricGrid4D extends Grid4D {
 	//TODO: add extra methods
 	
 	/**
-	 * Returns the smallest w-coordinate
+	 * Returns the smallest w-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest w
 	 */
-	int getNonSymmetricMinW();
+	int getNonsymmetricMinW();
 	
 	/**
-	 * Returns the largest w-coordinate
+	 * Returns the largest w-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest w
 	 */
-	int getNonSymmetricMaxW();
+	int getNonsymmetricMaxW();
 	
 	/**
-	 * Returns the smallest x-coordinate
+	 * Returns the smallest w-coordinate of the nonsymmetric section of the grid at (x,y,z).<br/>
+	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
+	 * {@link #getMaxX()}], [{@link #getMinY()}, {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param z the z-coordinate
+	 * @return the smallest w
+	 */
+	int getNonsymmetricMinW(int x, int y, int z);
+	
+	/**
+	 * Returns the largest w-coordinate of the nonsymmetric section of the grid at (x,y,z).<br/>
+	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
+	 * {@link #getMaxX()}], [{@link #getMinY()}, {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param z the z-coordinate
+	 * @return the largest w
+	 */
+	int getNonsymmetricMaxW(int x, int y, int z);
+	
+	/**
+	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest x
 	 */
-	int getNonSymmetricMinX();
+	int getNonsymmetricMinX();
 	
 	/**
-	 * Returns the largest x-coordinate
+	 * Returns the largest x-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	int getNonSymmetricMaxX();
+	int getNonsymmetricMaxX();
 	
 	/**
-	 * Returns the smallest y-coordinate
+	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest y
 	 */
-	int getNonSymmetricMinY();
+	int getNonsymmetricMinY();
 	
 	/**
-	 * Returns the largest y-coordinate
+	 * Returns the largest y-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest y
 	 */
-	int getNonSymmetricMaxY();
+	int getNonsymmetricMaxY();
 	
 	/**
-	 * Returns the smallest z-coordinate
+	 * Returns the smallest z-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest z
 	 */
-	int getNonSymmetricMinZ();
+	int getNonsymmetricMinZ();
 	
 	/**
-	 * Returns the largest z-coordinate
+	 * Returns the largest z-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest z
 	 */
-	int getNonSymmetricMaxZ();
+	int getNonsymmetricMaxZ();
+	
+	/**
+	 * Returns a nonsymmetric section of the grid
+	 * 
+	 * @return a 4D grid
+	 */
+	Grid4D nonsymmetricSection();
 
 }

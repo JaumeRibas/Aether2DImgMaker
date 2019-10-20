@@ -51,10 +51,10 @@ public class Aether2DImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("Current step: " + ca.getStep());
 			}
-			ColorMapper colorMapper = new HueWithBackgroundMapper(ca.getBackgroundValue(), Color.BLACK);
+			ColorMapper colorMapper = new HueWithBackgroundMapper(0, Color.BLACK);
 			path += ca.getSubFolderPath() + "/img/";	
 			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createNonSymmetricImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+			imgMaker.createNonsymmetricImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
 		}		
 	}
 	

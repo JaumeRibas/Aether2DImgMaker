@@ -285,6 +285,23 @@ public interface Grid3D extends Grid {
 		return getMaxZ();
 	}
 	
+	/**
+	 * Returns a decorated {@link Grid2D} with the passed bounds.
+	 * 
+	 * @param minX
+	 * @param maxX
+	 * @param minY
+	 * @param maxY
+	 * @param minZ
+	 * @param maxZ
+	 * @return a {@link Grid2D} decorating the current grid 
+	 */
+	Grid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ);
+	
 	Grid2D crossSectionAtZ(int z);
+	
+	Grid2D crossSectionAtX(int x);
+
+	Grid2D projectedSurfaceMaxX();
 
 }

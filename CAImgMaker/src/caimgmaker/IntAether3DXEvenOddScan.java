@@ -74,9 +74,8 @@ public class IntAether3DXEvenOddScan {
 			}
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new HueMapper();
-			CAImgMaker imgMaker = null;
-			imgMaker = new CAImgMaker();
-			imgMaker.createXScanningNonSymmetricEvenOddImages(ca, colorMapper, Constants.HD_HEIGHT, Constants.HD_HEIGHT, 
+			CAImgMaker imgMaker = new CAImgMaker();
+			imgMaker.createXScanningNonsymmetricEvenOddImages(ca, colorMapper, Constants.HD_HEIGHT, Constants.HD_HEIGHT, 
 					path + "/img/");
 
 		}		

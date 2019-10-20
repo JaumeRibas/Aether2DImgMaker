@@ -19,9 +19,6 @@ package caimgmaker.colormap;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
-import cellularautomata.grid2d.SymmetricIntGrid2D;
-import cellularautomata.grid2d.SymmetricLongGrid2D;
-import cellularautomata.grid2d.SymmetricShortGrid2D;
 
 public class CyclingColorMapper extends ColorMapper {
 
@@ -40,21 +37,9 @@ public class CyclingColorMapper extends ColorMapper {
 	}
 
 	@Override
-	public ColorMappedSymmetricLongGrid2D getMappedLongGrid(SymmetricLongGrid2D grid, long minValue, long maxValue) {
-		LongCyclingColorMap colorMap = new LongCyclingColorMap(minBrightness, range);
-		return new ColorMappedSymmetricLongGrid2D(grid, colorMap);
-	}
-
-	@Override
 	public ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue) {
 		LongCyclingColorMap colorMap = new LongCyclingColorMap(minBrightness, range);
 		return new ColorMappedIntGrid2D(grid, colorMap);
-	}
-
-	@Override
-	public ColorMappedSymmetricIntGrid2D getMappedIntGrid(SymmetricIntGrid2D grid, int minValue, int maxValue) {
-		LongCyclingColorMap colorMap = new LongCyclingColorMap(minBrightness, range);
-		return new ColorMappedSymmetricIntGrid2D(grid, colorMap);
 	}
 	
 	@Override
@@ -62,11 +47,4 @@ public class CyclingColorMapper extends ColorMapper {
 		LongCyclingColorMap colorMap = new LongCyclingColorMap(minBrightness, range);
 		return new ColorMappedShortGrid2D(grid, colorMap);
 	}
-
-	@Override
-	public ColorMappedSymmetricShortGrid2D getMappedShortGrid(SymmetricShortGrid2D grid, short minValue, short maxValue) {
-		LongCyclingColorMap colorMap = new LongCyclingColorMap(minBrightness, range);
-		return new ColorMappedSymmetricShortGrid2D(grid, colorMap);
-	}
-
 }

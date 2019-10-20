@@ -19,231 +19,238 @@ package cellularautomata.grid3d;
 public interface SymmetricGrid3D extends Grid3D {
 	
 	/**
-	 * Returns the smallest x-coordinate of the non symmetric section of the grid
+	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest x
 	 */
-	int getNonSymmetricMinX();
+	int getNonsymmetricMinX();
 	
 	/**
-	 * Returns the smallest x-coordinate of the non symmetric section of the grid at y.<br/>
-	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonSymmetricMinY()} 
-	 * or bigger than {@link #getNonSymmetricMaxY()}
+	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonsymmetricMinY()} 
+	 * or bigger than {@link #getNonsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest x
 	 */
-	int getNonSymmetricMinXAtY(int y);
+	int getNonsymmetricMinXAtY(int y);
 	
 	/**
-	 * Returns the smallest x-coordinate of the non symmetric section of the grid at z.<br/>
-	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonSymmetricMinZ()} 
-	 * or bigger than {@link #getNonSymmetricMaxZ()}
+	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonsymmetricMinZ()} 
+	 * or bigger than {@link #getNonsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the smallest x
 	 */
-	int getNonSymmetricMinXAtZ(int z);
+	int getNonsymmetricMinXAtZ(int z);
 	
 	/**
-	 * Returns the smallest x-coordinate of the non symmetric section of the grid at (y,z).<br/>
-	 * It's not defined to call this method on a 'y' and 'z' coordinates outside the bounds of [{@link #getNonSymmetricMinY()}, 
-	 * {@link #getNonSymmetricMaxY()}] and [{@link #getNonSymmetricMinZ()}, {@link #getNonSymmetricMaxZ()}] 
+	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid at (y,z).<br/>
+	 * It's not defined to call this method on a 'y' and 'z' coordinates outside the bounds of [{@link #getNonsymmetricMinY()}, 
+	 * {@link #getNonsymmetricMaxY()}] and [{@link #getNonsymmetricMinZ()}, {@link #getNonsymmetricMaxZ()}] 
 	 * 
 	 * @param y the y-coordinate
 	 * @param z the z-coordinate
 	 * @return the smallest x
 	 */
-	int getNonSymmetricMinX(int y, int z);
+	int getNonsymmetricMinX(int y, int z);
 	
 	/**
-	 * Returns the largest x-coordinate of the non symmetric section of the grid
+	 * Returns the largest x-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	int getNonSymmetricMaxX();
+	int getNonsymmetricMaxX();
 	
 	/**
-	 * Returns the largest x-coordinate of the non symmetric section of the grid at y.<br/>
-	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonSymmetricMinY()} 
-	 * or bigger than {@link #getNonSymmetricMaxY()}
+	 * Returns the largest x-coordinate of the nonsymmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonsymmetricMinY()} 
+	 * or bigger than {@link #getNonsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest x
 	 */
-	int getNonSymmetricMaxXAtY(int y);
+	int getNonsymmetricMaxXAtY(int y);
 	
 	/**
-	 * Returns the largest x-coordinate of the non symmetric section of the grid at z.<br/>
-	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonSymmetricMinZ()} 
-	 * or bigger than {@link #getNonSymmetricMaxZ()}
+	 * Returns the largest x-coordinate of the nonsymmetric section of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonsymmetricMinZ()} 
+	 * or bigger than {@link #getNonsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the largest x
 	 */
-	int getNonSymmetricMaxXAtZ(int z);
+	int getNonsymmetricMaxXAtZ(int z);
 	
 	/**
-	 * Returns the largest x-coordinate of the non symmetric section of the grid at (y,z).<br/>
-	 * It's not defined to call this method on a 'y' and 'z' coordinates outside the bounds of [{@link #getNonSymmetricMinY()}, 
-	 * {@link #getNonSymmetricMaxY()}] and [{@link #getNonSymmetricMinZ()}, {@link #getNonSymmetricMaxZ()}] 
+	 * Returns the largest x-coordinate of the nonsymmetric section of the grid at (y,z).<br/>
+	 * It's not defined to call this method on a 'y' and 'z' coordinates outside the bounds of [{@link #getNonsymmetricMinY()}, 
+	 * {@link #getNonsymmetricMaxY()}] and [{@link #getNonsymmetricMinZ()}, {@link #getNonsymmetricMaxZ()}] 
 	 * 
 	 * @param y the y-coordinate
 	 * @param z the z-coordinate
 	 * @return the largest x
 	 */
-	int getNonSymmetricMaxX(int y, int z);
+	int getNonsymmetricMaxX(int y, int z);
 	
 	/**
-	 * Returns the smallest y-coordinate of the non symmetric section of the grid
+	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest y
 	 */
-	int getNonSymmetricMinY();
+	int getNonsymmetricMinY();
 	
 	/**
-	 * Returns the smallest y-coordinate of the non symmetric section of the grid at x.<br/>
-	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonSymmetricMinX()} 
-	 * or bigger than {@link #getNonSymmetricMaxX()}
+	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonsymmetricMinX()} 
+	 * or bigger than {@link #getNonsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest y
 	 */
-	int getNonSymmetricMinYAtX(int x);
+	int getNonsymmetricMinYAtX(int x);
 	
 	/**
-	 * Returns the smallest y-coordinate of the non symmetric section of the grid at z.<br/>
-	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonSymmetricMinZ()} 
-	 * or bigger than {@link #getNonSymmetricMaxZ()}
+	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonsymmetricMinZ()} 
+	 * or bigger than {@link #getNonsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the smallest y
 	 */
-	int getNonSymmetricMinYAtZ(int z);
+	int getNonsymmetricMinYAtZ(int z);
 	
 	/**
-	 * Returns the smallest y-coordinate of the non symmetric section of the grid at (x,z).<br/>
-	 * It's not defined to call this method on a 'x' and 'z' coordinates outside the bounds of [{@link #getNonSymmetricMinX()}, 
-	 * {@link #getNonSymmetricMaxX()}] and [{@link #getNonSymmetricMinZ()}, {@link #getNonSymmetricMaxZ()}] 
+	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid at (x,z).<br/>
+	 * It's not defined to call this method on a 'x' and 'z' coordinates outside the bounds of [{@link #getNonsymmetricMinX()}, 
+	 * {@link #getNonsymmetricMaxX()}] and [{@link #getNonsymmetricMinZ()}, {@link #getNonsymmetricMaxZ()}] 
 	 * 
 	 * @param x the x-coordinate
 	 * @param z the z-coordinate
 	 * @return the smallest y
 	 */
-	int getNonSymmetricMinY(int x, int z);
+	int getNonsymmetricMinY(int x, int z);
 
 	/**
-	 * Returns the largest y-coordinate of the non symmetric section of the grid
+	 * Returns the largest y-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest y
 	 */
-	int getNonSymmetricMaxY();
+	int getNonsymmetricMaxY();
 	
 	/**
-	 * Returns the largest y-coordinate of the non symmetric section of the grid at x.<br/>
-	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonSymmetricMinX()} 
-	 * or bigger than {@link #getNonSymmetricMaxX()}
+	 * Returns the largest y-coordinate of the nonsymmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonsymmetricMinX()} 
+	 * or bigger than {@link #getNonsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest y
 	 */
-	int getNonSymmetricMaxYAtX(int x);
+	int getNonsymmetricMaxYAtX(int x);
 	
 	/**
-	 * Returns the largest y-coordinate of the non symmetric section of the grid at z.<br/>
-	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonSymmetricMinZ()} 
-	 * or bigger than {@link #getNonSymmetricMaxZ()}
+	 * Returns the largest y-coordinate of the nonsymmetric section of the grid at z.<br/>
+	 * It's not defined to call this method on a z-coordinate smaller than {@link #getNonsymmetricMinZ()} 
+	 * or bigger than {@link #getNonsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the largest y
 	 */
-	int getNonSymmetricMaxYAtZ(int z);
+	int getNonsymmetricMaxYAtZ(int z);
 	
 	/**
-	 * Returns the largest y-coordinate of the non symmetric section of the grid at (x,z).<br/>
-	 * It's not defined to call this method on a 'x' and 'z' coordinates outside the bounds of [{@link #getNonSymmetricMinX()}, 
-	 * {@link #getNonSymmetricMaxX()}] and [{@link #getNonSymmetricMinZ()}, {@link #getNonSymmetricMaxZ()}] 
+	 * Returns the largest y-coordinate of the nonsymmetric section of the grid at (x,z).<br/>
+	 * It's not defined to call this method on a 'x' and 'z' coordinates outside the bounds of [{@link #getNonsymmetricMinX()}, 
+	 * {@link #getNonsymmetricMaxX()}] and [{@link #getNonsymmetricMinZ()}, {@link #getNonsymmetricMaxZ()}] 
 	 * 
 	 * @param x the x-coordinate
 	 * @param z the z-coordinate
 	 * @return the largest y
 	 */
-	int getNonSymmetricMaxY(int x, int z);
+	int getNonsymmetricMaxY(int x, int z);
 	
 	/**
-	 * Returns the smallest z-coordinate of the non symmetric section of the grid
+	 * Returns the smallest z-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the smallest z
 	 */
-	int getNonSymmetricMinZ();
+	int getNonsymmetricMinZ();
 	
 	/**
-	 * Returns the smallest z-coordinate of the non symmetric section of the grid at x.<br/>
-	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonSymmetricMinX()} 
-	 * or bigger than {@link #getNonSymmetricMaxX()}
+	 * Returns the smallest z-coordinate of the nonsymmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonsymmetricMinX()} 
+	 * or bigger than {@link #getNonsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest z
 	 */
-	int getNonSymmetricMinZAtX(int x);
+	int getNonsymmetricMinZAtX(int x);
 	
 	/**
-	 * Returns the smallest z-coordinate of the non symmetric section of the grid at y.<br/>
-	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonSymmetricMinY()} 
-	 * or bigger than {@link #getNonSymmetricMaxY()}
+	 * Returns the smallest z-coordinate of the nonsymmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonsymmetricMinY()} 
+	 * or bigger than {@link #getNonsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest z
 	 */
-	int getNonSymmetricMinZAtY(int y);
+	int getNonsymmetricMinZAtY(int y);
 	
 	/**
-	 * Returns the smallest z-coordinate of the non symmetric section of the grid at (x,y).<br/>
-	 * It's not defined to call this method on a 'x' and 'y' coordinates outside the bounds of [{@link #getNonSymmetricMinX()}, 
-	 * {@link #getNonSymmetricMaxX()}] and [{@link #getNonSymmetricMinY()}, {@link #getNonSymmetricMaxY()}] 
+	 * Returns the smallest z-coordinate of the nonsymmetric section of the grid at (x,y).<br/>
+	 * It's not defined to call this method on a 'x' and 'y' coordinates outside the bounds of [{@link #getNonsymmetricMinX()}, 
+	 * {@link #getNonsymmetricMaxX()}] and [{@link #getNonsymmetricMinY()}, {@link #getNonsymmetricMaxY()}] 
 	 * 
 	 * @param x the x-coordinate
 	 * @param y the y-coordinate
 	 * @return the smallest z
 	 */
-	int getNonSymmetricMinZ(int x, int y);
+	int getNonsymmetricMinZ(int x, int y);
 	
 	/**
-	 * Returns the largest z-coordinate of the non symmetric section of the grid
+	 * Returns the largest z-coordinate of the nonsymmetric section of the grid
 	 * 
 	 * @return the largest z
 	 */
-	int getNonSymmetricMaxZ();
+	int getNonsymmetricMaxZ();
 	
 	/**
-	 * Returns the largest z-coordinate of the non symmetric section of the grid at x.<br/>
-	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonSymmetricMinX()} 
-	 * or bigger than {@link #getNonSymmetricMaxX()}
+	 * Returns the largest z-coordinate of the nonsymmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonsymmetricMinX()} 
+	 * or bigger than {@link #getNonsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest z
 	 */
-	int getNonSymmetricMaxZAtX(int x);
+	int getNonsymmetricMaxZAtX(int x);
 	
 	/**
-	 * Returns the largest z-coordinate of the non symmetric section of the grid at y.<br/>
-	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonSymmetricMinY()} 
-	 * or bigger than {@link #getNonSymmetricMaxY()}
+	 * Returns the largest z-coordinate of the nonsymmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonsymmetricMinY()} 
+	 * or bigger than {@link #getNonsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest z
 	 */
-	int getNonSymmetricMaxZAtY(int y);
+	int getNonsymmetricMaxZAtY(int y);
 	
 	/**
-	 * Returns the largest z-coordinate of the non symmetric section of the grid at (x,y).<br/>
-	 * It's not defined to call this method on a 'x' and 'y' coordinates outside the bounds of [{@link #getNonSymmetricMinX()}, 
-	 * {@link #getNonSymmetricMaxX()}] and [{@link #getNonSymmetricMinY()}, {@link #getNonSymmetricMaxY()}] 
+	 * Returns the largest z-coordinate of the nonsymmetric section of the grid at (x,y).<br/>
+	 * It's not defined to call this method on a 'x' and 'y' coordinates outside the bounds of [{@link #getNonsymmetricMinX()}, 
+	 * {@link #getNonsymmetricMaxX()}] and [{@link #getNonsymmetricMinY()}, {@link #getNonsymmetricMaxY()}] 
 	 * 
 	 * @param x the x-coordinate
 	 * @param y the y-coordinate
 	 * @return the largest z
 	 */
-	int getNonSymmetricMaxZ(int x, int y);
+	int getNonsymmetricMaxZ(int x, int y);
+	
+	/**
+	 * Returns a nonsymmetric section of the grid
+	 * 
+	 * @return a 3D grid
+	 */
+	Grid3D nonsymmetricSection();
 
 }

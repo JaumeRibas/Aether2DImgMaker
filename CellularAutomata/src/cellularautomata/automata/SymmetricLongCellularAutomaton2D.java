@@ -20,11 +20,4 @@ import cellularautomata.grid2d.SymmetricLongGrid2D;
 
 public interface SymmetricLongCellularAutomaton2D extends SymmetricLongGrid2D, CellularAutomaton {
 	
-	/**
-	 * Returns the background value
-	 * 
-	 * @return the value padding the most part of the grid
-	 */
-	long getBackgroundValue();
-	
 }

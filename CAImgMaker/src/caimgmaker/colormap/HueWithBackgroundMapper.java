@@ -21,9 +21,6 @@ import java.awt.Color;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
-import cellularautomata.grid2d.SymmetricIntGrid2D;
-import cellularautomata.grid2d.SymmetricLongGrid2D;
-import cellularautomata.grid2d.SymmetricShortGrid2D;
 
 public class HueWithBackgroundMapper extends ColorMapper {
 
@@ -42,33 +39,15 @@ public class HueWithBackgroundMapper extends ColorMapper {
 	}
 
 	@Override
-	public ColorMappedSymmetricLongGrid2D getMappedLongGrid(SymmetricLongGrid2D grid, long minValue, long maxValue) {
-		LongHueMap colorMap = new LongHueMap(minValue, maxValue);
-		return new ColorMappedSymmetricLongGrid2DWithBackground(grid, colorMap, backgroundValue, backgroundColor);
-	}
-
-	@Override
 	public ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue) {
 		LongHueMap colorMap = new LongHueMap(minValue, maxValue);
 		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (int) backgroundValue, backgroundColor);
-	}
-
-	@Override
-	public ColorMappedSymmetricIntGrid2D getMappedIntGrid(SymmetricIntGrid2D grid, int minValue, int maxValue) {
-		LongHueMap colorMap = new LongHueMap(minValue, maxValue);
-		return new ColorMappedSymmetricIntGrid2DWithBackground(grid, colorMap, (int) backgroundValue, backgroundColor);
 	}
 	
 	@Override
 	public ColorMappedShortGrid2D getMappedShortGrid(ShortGrid2D grid, short minValue, short maxValue) {
 		LongHueMap colorMap = new LongHueMap(minValue, maxValue);
 		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, (short) backgroundValue, backgroundColor);
-	}
-
-	@Override
-	public ColorMappedSymmetricShortGrid2D getMappedShortGrid(SymmetricShortGrid2D grid, short minValue, short maxValue) {
-		LongHueMap colorMap = new LongHueMap(minValue, maxValue);
-		return new ColorMappedSymmetricShortGrid2DWithBackground(grid, colorMap, (short) backgroundValue, backgroundColor);
 	}
 
 }

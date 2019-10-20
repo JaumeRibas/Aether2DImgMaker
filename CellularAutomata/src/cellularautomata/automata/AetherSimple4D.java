@@ -66,6 +66,23 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
+	}	
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public AetherSimple4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		AetherSimple4D data = (AetherSimple4D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		grid = data.grid;
+		originIndex = data.originIndex;
+		boundsReached = data.boundsReached;
+		currentStep = data.currentStep;
 	}
 	
 	/**
@@ -260,6 +277,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the smallest w of a nonzero value at the current step
 	 */
+	@Override
 	public int getMinW() {
 		int arrayMinW = - originIndex;
 		int valuesMinW;
@@ -276,6 +294,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the largest w of a nonzero value at the current step
 	 */
+	@Override
 	public int getMaxW() {
 		int arrayMaxW = grid.length - 1 - originIndex;
 		int valuesMaxW;
@@ -292,6 +311,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the smallest x of a nonzero value at the current step
 	 */
+	@Override
 	public int getMinX() {
 		int arrayMinX = - originIndex;
 		int valuesMinX;
@@ -308,6 +328,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the largest x of a nonzero value at the current step
 	 */
+	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
@@ -319,6 +340,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 		return valuesMaxX;
 	}
 	
+	@Override
 	public int getMinY() {
 		int arrayMinY = - originIndex;
 		int valuesMinY;
@@ -330,6 +352,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 		return valuesMinY;
 	}
 	
+	@Override
 	public int getMaxY() {
 		int arrayMaxY = grid[0].length - 1 - originIndex;
 		int valuesMaxY;
@@ -341,6 +364,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 		return valuesMaxY;
 	}
 	
+	@Override
 	public int getMinZ() {
 		int arrayMinZ = - originIndex;
 		int valuesMinZ;
@@ -352,6 +376,7 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 		return valuesMinZ;
 	}
 	
+	@Override
 	public int getMaxZ() {
 		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
 		int valuesMaxZ;
@@ -381,39 +406,58 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 		return initialValue;
 	}
 
-	public int getNonSymmetricMinW() {
+	@Override
+	public int getNonsymmetricMinW() {
 		return 0;
 	}
+	
+	@Override
+	public int getNonsymmetricMinW(int x, int y, int z) {
+		return Math.max(Math.max(x, y), z);
+	}
 
-	public int getNonSymmetricMaxW() {
+	@Override
+	public int getNonsymmetricMaxW(int x, int y, int z) {
+		return getNonsymmetricMaxW();
+	}
+
+	@Override
+	public int getNonsymmetricMaxW() {
 		return getMaxW();
 	}
 
-	public int getNonSymmetricMinX() {
+	@Override
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxX() {
+	@Override
+	public int getNonsymmetricMaxX() {
 		return getMaxX();
 	}
 
-	public int getNonSymmetricMinY() {
+	@Override
+	public int getNonsymmetricMinY() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxY() {
+	@Override
+	public int getNonsymmetricMaxY() {
 		return getMaxY();
 	}
 
-	public int getNonSymmetricMinZ() {
+	@Override
+	public int getNonsymmetricMinZ() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxZ() {
+	@Override
+	public int getNonsymmetricMaxZ() {
 		return getMaxZ();
 	}
 
-	public long getValueAtNonSymmetricPosition(int w, int x, int y, int z) {
+	@Override
+	public long getValueAtNonsymmetricPosition(int w, int x, int y, int z) {
 		return getValueAtPosition(w, x, y, z);
 	}
 
@@ -426,16 +470,9 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
 	}
-
-	@Override
-	public long getBackgroundValue() {
-		return 0;
-	}
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		CustomSymmetricLongCA4DData data = new CustomSymmetricLongCA4DData(grid, initialValue, 0, currentStep, 
-				boundsReached, getMaxX(), getMaxY(), getMaxZ());
-		Utils.serializeToFile(data, backupPath, backupName);
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }

@@ -18,6 +18,7 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid.ShortGrid;
 import cellularautomata.grid2d.ShortGrid2D;
+import cellularautomata.grid3d.ShortGrid3D;
 
 public interface ShortGrid4D extends Grid4D, ShortGrid {
 	
@@ -29,10 +30,12 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (w,x,y,z)
+	 * @throws Exception 
 	 */
-	short getValueAtPosition(int w, int x, int y, int z);
+	short getValueAtPosition(int w, int x, int y, int z) throws Exception;
 
-	default short[] getMinAndMaxValue() {
+	@Override
+	default short[] getMinAndMaxValue() throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
@@ -54,31 +57,41 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 		return new short[]{ minValue, maxValue };
 	}
 	
-	default short[] getMinAndMaxValueExcluding(short backgroundValue) {
+	@Override
+	default short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValueAtPosition(minW, minX, minY, minZ), minValue = maxValue;
+		short minValue = Short.MAX_VALUE, maxValue = Short.MIN_VALUE;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
-						short value = getValueAtPosition(w, x, y, z);
-						if (value != backgroundValue) {
-							if (value > maxValue)
-								maxValue = value;
-							if (value < minValue)
-								minValue = value;
+					boolean isPositionEven = (minW+x+y+z)%2 == 0;
+					if (isEven) { 
+						if (!isPositionEven) {
+							minW++;
 						}
+					} else {
+						if (isPositionEven) {
+							minW++;
+						}
+					}
+					for (int w = minW; w <= maxW; w+=2) {
+						short value = getValueAtPosition(w, x, y, z);
+						if (value > maxValue)
+							maxValue = value;
+						if (value < minValue)
+							minValue = value;
 					}
 				}
 			}
 		}
-		return new short[]{ minValue, maxValue };
+		return new short[]{minValue, maxValue};
 	}
 	
-	default short getTotalValue() {
+	@Override
+	default short getTotalValue() throws Exception {
 		short total = 0;
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
@@ -96,26 +109,17 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 		return total;
 	}
 	
-	default short getMaxAbsoluteValue() {
-		short maxAbsoluteValue;
-		short[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = (short) Math.abs(minAndMax[0]);
-			maxAbsoluteValue = (short) Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
+	@Override
 	default ShortGrid4D absoluteGrid() {
 		return new AbsShortGrid4D(this);
 	}
 	
+	@Override
 	default ShortGrid2D crossSectionAtYZ(int y, int z) {
 		return new ShortGrid4DYZCrossSection(this, y, z);
 	}
 	
+	@Override
 	default ShortGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minW < getMinW() || minW > getMaxW() 
 				|| maxW < getMinW() || maxW > getMaxW()
@@ -129,5 +133,10 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 		if (minX > maxX || minY > maxY || minZ > maxZ)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new ShortSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default ShortGrid3D projected3DEdgeMaxW() {
+		return new ShortGrid4DProjected3DEdgeMaxW(this);
 	}
 }

@@ -42,7 +42,7 @@ public class LongSubGrid4D implements LongGrid4D {
 	}
 
 	@Override
-	public long getValueAtPosition(int w, int x, int y, int z) {
+	public long getValueAtPosition(int w, int x, int y, int z) throws Exception {
 		return source.getValueAtPosition(w, x, y, z);
 	}
 	

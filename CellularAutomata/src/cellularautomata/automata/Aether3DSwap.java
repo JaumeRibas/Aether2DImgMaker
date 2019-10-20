@@ -28,9 +28,9 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.grid3d.LongGrid3D;
-import cellularautomata.grid3d.NonSymmetricLongGrid3DSlice;
-import cellularautomata.grid3d.NonSymmetricLongSubGrid3D;
-import cellularautomata.grid3d.SizeLimitedNonSymmetricLongGrid3D;
+import cellularautomata.grid3d.NonsymmetricLongGrid3DSlice;
+import cellularautomata.grid3d.NonsymmetricLongSubGrid3D;
+import cellularautomata.grid3d.SizeLimitedNonsymmetricLongGrid3D;
 
 public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 
@@ -47,8 +47,8 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 	private static final byte FRONT = 5;
 	private static final byte BACK = 6;
 	
-	private SizeLimitedNonSymmetricLongGrid3D gridBlockA;
-	private SizeLimitedNonSymmetricLongGrid3D gridBlockB;
+	private SizeLimitedNonsymmetricLongGrid3D gridBlockA;
+	private SizeLimitedNonsymmetricLongGrid3D gridBlockB;
 	private long initialValue;
 	private int currentStep;
 	private int maxX, maxY, maxZ;
@@ -73,7 +73,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
-		gridBlockA = new SizeLimitedNonSymmetricLongGrid3D(0, maxGridBlockSize);
+		gridBlockA = new SizeLimitedNonsymmetricLongGrid3D(0, maxGridBlockSize);
 		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
 		maxX = 1;//we leave a buffer of one position to account for 'negative growth'
 		maxY = 0;
@@ -117,10 +117,10 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 
-	private SizeLimitedNonSymmetricLongGrid3D loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
+	private SizeLimitedNonsymmetricLongGrid3D loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedNonSymmetricLongGrid3D gridBlock = null;
+		SizeLimitedNonsymmetricLongGrid3D gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -139,14 +139,14 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedNonSymmetricLongGrid3D) in.readObject();
+			gridBlock = (SizeLimitedNonsymmetricLongGrid3D) in.readObject();
 			in.close();
 		}
 		return gridBlock;
 	}
 	
-	private SizeLimitedNonSymmetricLongGrid3D loadGridBlock(int minX) throws IOException, ClassNotFoundException {
-		SizeLimitedNonSymmetricLongGrid3D gridBlock = loadGridBlockSafe(minX);
+	private SizeLimitedNonsymmetricLongGrid3D loadGridBlock(int minX) throws IOException, ClassNotFoundException {
+		SizeLimitedNonsymmetricLongGrid3D gridBlock = loadGridBlockSafe(minX);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minX=" + minX + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -154,10 +154,10 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 	
-	private SizeLimitedNonSymmetricLongGrid3D findGridBlockSafe(int x) throws IOException, ClassNotFoundException {
+	private SizeLimitedNonsymmetricLongGrid3D findGridBlockSafe(int x) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedNonSymmetricLongGrid3D gridBlock = null;
+		SizeLimitedNonsymmetricLongGrid3D gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -178,14 +178,14 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedNonSymmetricLongGrid3D) in.readObject();
+			gridBlock = (SizeLimitedNonsymmetricLongGrid3D) in.readObject();
 			in.close();
 		}
 		return gridBlock;		
 	}
 	
-	private SizeLimitedNonSymmetricLongGrid3D findGridBlock(int x) throws IOException, ClassNotFoundException {
-		SizeLimitedNonSymmetricLongGrid3D gridBlock = findGridBlockSafe(x);
+	private SizeLimitedNonsymmetricLongGrid3D findGridBlock(int x) throws IOException, ClassNotFoundException {
+		SizeLimitedNonsymmetricLongGrid3D gridBlock = findGridBlockSafe(x);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block containing x=" + x + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -193,7 +193,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 	
-	private void saveGridBlock(SizeLimitedNonSymmetricLongGrid3D gridBlock) throws FileNotFoundException, IOException {
+	private void saveGridBlock(SizeLimitedNonsymmetricLongGrid3D gridBlock) throws FileNotFoundException, IOException {
 		String name = "minX=" + gridBlock.minX + "_maxX=" + gridBlock.maxX + ".ser";
 		String pathName = this.gridFolder.getPath() + File.separator + name;
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
@@ -202,12 +202,12 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		out.close();
 	}
 	
-	private SizeLimitedNonSymmetricLongGrid3D loadOrBuildGridBlock(int minX) throws ClassNotFoundException, IOException {		
-		SizeLimitedNonSymmetricLongGrid3D gridBlock = loadGridBlockSafe(minX);
+	private SizeLimitedNonsymmetricLongGrid3D loadOrBuildGridBlock(int minX) throws ClassNotFoundException, IOException {		
+		SizeLimitedNonsymmetricLongGrid3D gridBlock = loadGridBlockSafe(minX);
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedNonSymmetricLongGrid3D(minX, maxGridBlockSize);
+			return new SizeLimitedNonsymmetricLongGrid3D(minX, maxGridBlockSize);
 		}
 	}
 
@@ -215,14 +215,14 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 	public boolean nextStep() throws Exception {
 		triggerBeforeProcessing();
 		boolean gridChanged = false;		
-		NonSymmetricLongGrid3DSlice[] newGridSlices = 
-				new NonSymmetricLongGrid3DSlice[] {
+		NonsymmetricLongGrid3DSlice[] newGridSlices = 
+				new NonsymmetricLongGrid3DSlice[] {
 						null, 
-						new NonSymmetricLongGrid3DSlice(0), 
-						new NonSymmetricLongGrid3DSlice(1)};
+						new NonsymmetricLongGrid3DSlice(0), 
+						new NonsymmetricLongGrid3DSlice(1)};
 		if (gridBlockA.minX > 0) {
 			if (gridBlockB != null && gridBlockB.minX == 0) {
-				SizeLimitedNonSymmetricLongGrid3D swp = gridBlockA;
+				SizeLimitedNonsymmetricLongGrid3D swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			} else {
@@ -238,7 +238,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		x++;
 		while (x <= currentMaxX) {
 			while (x <= currentMaxX && x < gridBlockA.maxX) {
-				slideGridSlices(newGridSlices, new NonSymmetricLongGrid3DSlice(x + 1));
+				slideGridSlices(newGridSlices, new NonsymmetricLongGrid3DSlice(x + 1));
 				anySlicePositionToppled = computeGridSlice(gridBlockA, x, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
@@ -254,18 +254,18 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 				} else {
 					gridBlockB = loadOrBuildGridBlock(x + 1);
 				}
-				slideGridSlices(newGridSlices, new NonSymmetricLongGrid3DSlice(x + 1));
+				slideGridSlices(newGridSlices, new NonsymmetricLongGrid3DSlice(x + 1));
 				anySlicePositionToppled = computeLastGridSlice(gridBlockA, gridBlockB, x, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
 				x++;
 				if (x <= currentMaxX) {
-					slideGridSlices(newGridSlices, new NonSymmetricLongGrid3DSlice(x + 1));
+					slideGridSlices(newGridSlices, new NonsymmetricLongGrid3DSlice(x + 1));
 					anySlicePositionToppled = computeFirstGridSlice(gridBlockA, gridBlockB, x, newGridSlices);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
 					processGridBlock(gridBlockA);
-					SizeLimitedNonSymmetricLongGrid3D swp = gridBlockA;
+					SizeLimitedNonsymmetricLongGrid3D swp = gridBlockA;
 					gridBlockA = gridBlockB;
 					gridBlockB = swp;
 					x++;
@@ -286,11 +286,11 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		return gridChanged;
 	}
 	
-	private void processGridBlock(SizeLimitedNonSymmetricLongGrid3D block) throws Exception {
+	private void processGridBlock(SizeLimitedNonsymmetricLongGrid3D block) throws Exception {
 		if (block.minX <= maxX) {
 			LongGrid3D subBlock = null;
 			if (block.maxX > maxX) {
-				subBlock = new NonSymmetricLongSubGrid3D(block, block.minX, maxX, 0, maxX, 0, maxX);
+				subBlock = new NonsymmetricLongSubGrid3D(block, block.minX, maxX, 0, maxX, 0, maxX);
 			} else {
 				subBlock = block;
 			}
@@ -305,7 +305,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 			processGridBlock(gridBlockA);
 		} else {
 			if (gridBlockA.minX < gridBlockB.minX) {
-				SizeLimitedNonSymmetricLongGrid3D swp = gridBlockA;
+				SizeLimitedNonsymmetricLongGrid3D swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
@@ -342,28 +342,28 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		triggerAfterProcessing();
 	}
 
-	private void slideGridSlices(NonSymmetricLongGrid3DSlice[] newGridSlices, NonSymmetricLongGrid3DSlice newSlice) {
+	private void slideGridSlices(NonsymmetricLongGrid3DSlice[] newGridSlices, NonsymmetricLongGrid3DSlice newSlice) {
 		newGridSlices[LEFT] = newGridSlices[CENTER];
 		newGridSlices[CENTER] = newGridSlices[RIGHT];
 		newGridSlices[RIGHT] = newSlice;
 	}
 	
-	private boolean computeGridSlice(SizeLimitedNonSymmetricLongGrid3D gridBlock, int x, NonSymmetricLongGrid3DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedNonsymmetricLongGrid3D gridBlock, int x, NonsymmetricLongGrid3DSlice[] newGridSlices) {
 		return computeGridSlice(gridBlock, gridBlock, gridBlock, x, newGridSlices);
 	}
 	
-	private boolean computeLastGridSlice(SizeLimitedNonSymmetricLongGrid3D leftGridBlock, SizeLimitedNonSymmetricLongGrid3D rightGridBlock,
-			int x, NonSymmetricLongGrid3DSlice[] newGridSlices) {
+	private boolean computeLastGridSlice(SizeLimitedNonsymmetricLongGrid3D leftGridBlock, SizeLimitedNonsymmetricLongGrid3D rightGridBlock,
+			int x, NonsymmetricLongGrid3DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, leftGridBlock, rightGridBlock, x, newGridSlices);
 	}
 	
-	private boolean computeFirstGridSlice(SizeLimitedNonSymmetricLongGrid3D leftGridBlock, SizeLimitedNonSymmetricLongGrid3D rightGridBlock,
-			int x, NonSymmetricLongGrid3DSlice[] newGridSlices) {
+	private boolean computeFirstGridSlice(SizeLimitedNonsymmetricLongGrid3D leftGridBlock, SizeLimitedNonsymmetricLongGrid3D rightGridBlock,
+			int x, NonsymmetricLongGrid3DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, rightGridBlock, rightGridBlock, x, newGridSlices);
 	}
 
-	private boolean computeGridSlice(SizeLimitedNonSymmetricLongGrid3D leftGridBlock, SizeLimitedNonSymmetricLongGrid3D centerGridBlock, 
-			SizeLimitedNonSymmetricLongGrid3D rightGridBlock, int x, NonSymmetricLongGrid3DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedNonsymmetricLongGrid3D leftGridBlock, SizeLimitedNonsymmetricLongGrid3D centerGridBlock, 
+			SizeLimitedNonsymmetricLongGrid3D rightGridBlock, int x, NonsymmetricLongGrid3DSlice[] newGridSlices) {
 		boolean anyPositionToppled = false;
 		for (int y = 0; y <= x; y++) {
 			for (int z = 0; z <= y; z++) {				
@@ -382,12 +382,12 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		return anyPositionToppled;
 	}
 	
-	private long getValueAtPosition(int centerX, SizeLimitedNonSymmetricLongGrid3D leftGridBlock, SizeLimitedNonSymmetricLongGrid3D centerGridBlock, 
-			SizeLimitedNonSymmetricLongGrid3D rightGridBlock, int x, int y, int z) {
-		int[] nonSymmetricCoords = getNonSymmetricCoords(x, y, z);
-		x = nonSymmetricCoords[0];
-		y = nonSymmetricCoords[1];
-		z = nonSymmetricCoords[2];
+	private long getValueAtPosition(int centerX, SizeLimitedNonsymmetricLongGrid3D leftGridBlock, SizeLimitedNonsymmetricLongGrid3D centerGridBlock, 
+			SizeLimitedNonsymmetricLongGrid3D rightGridBlock, int x, int y, int z) {
+		int[] nonsymmetricCoords = getNonsymmetricCoords(x, y, z);
+		x = nonsymmetricCoords[0];
+		y = nonsymmetricCoords[1];
+		z = nonsymmetricCoords[2];
 		long value;
 		if (x == centerX) {
 			value = centerGridBlock.getValueAtPosition(x, y, z);
@@ -400,7 +400,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 	}
 	
 	private boolean computePosition(long value, long rightValue, long leftValue, long upValue, long downValue, long frontValue, long backValue, 
-			int x, int y, int z, NonSymmetricLongGrid3DSlice[] newGridSlices) {
+			int x, int y, int z, NonsymmetricLongGrid3DSlice[] newGridSlices) {
 		long[] neighborValues = new long[6];
 		byte[] neighborDirections = new byte[6];
 		int relevantNeighborCount = 0;
@@ -476,7 +476,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		return toppled;
 	}
 
-	private void addToNeighbor(NonSymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, byte direction, long value) {
+	private void addToNeighbor(NonsymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, byte direction, long value) {
 		switch(direction) {
 		case RIGHT:
 			addRight(newGridSlices, x, y, z, value);
@@ -499,14 +499,14 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 	
-	private void addRight(NonSymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
+	private void addRight(NonsymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		newGridSlices[RIGHT].addValueAtPosition(y, z, value);
 		if (x == maxX - 1) {
 			maxX++;
 		}
 	}
 	
-	private void addLeft(NonSymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
+	private void addLeft(NonsymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (x > y) {
 			long valueToAdd = value;
 			if (y == x - 1) {
@@ -525,7 +525,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 	
-	private void addUp(NonSymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
+	private void addUp(NonsymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (y < x) {
 			long valueToAdd = value;
 			if (y == x - 1) {
@@ -538,7 +538,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 	
-	private void addDown(NonSymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
+	private void addDown(NonsymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (y > z) {	
 			long valueToAdd = value;
 			if (z == y - 1) {
@@ -551,7 +551,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 	
-	private void addFront(NonSymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
+	private void addFront(NonsymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (z < y) {
 			long valueToAdd = value;
 			if (z == y - 1) {
@@ -567,7 +567,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 		}
 	}
 	
-	private void addBack(NonSymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
+	private void addBack(NonsymmetricLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (z > 0) {
 			long valueToAdd = value;
 			if (z == 1) {
@@ -604,11 +604,6 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 	 */
 	public long getInitialValue() {
 		return initialValue;
-	}
-	
-	@Override
-	public long getBackgroundValue() {
-		return 0;
 	}
 	
 	@Override
@@ -653,7 +648,7 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 	}
 
 	@Override
-	public long getValueAtNonSymmetricPosition(int x, int y, int z) throws IOException, ClassNotFoundException {
+	public long getValueAtNonsymmetricPosition(int x, int y, int z) throws IOException, ClassNotFoundException {
 		long value;
 		//TODO: try to keep blocks contiguous
 		if (x == gridBlockA.minX || x == gridBlockA.maxX || x > gridBlockA.minX && x < gridBlockA.maxX) {
@@ -671,18 +666,18 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 
 	@Override
 	public long getValueAtPosition(int x, int y, int z) throws IOException, ClassNotFoundException {
-		int[] nonSymmetricCoords = getNonSymmetricCoords(x, y, z);
-		x = nonSymmetricCoords[0];
-		y = nonSymmetricCoords[1];
-		z = nonSymmetricCoords[2];
+		int[] nonsymmetricCoords = getNonsymmetricCoords(x, y, z);
+		x = nonsymmetricCoords[0];
+		y = nonsymmetricCoords[1];
+		z = nonsymmetricCoords[2];
 		if (x <= maxX) {
-			return getValueAtNonSymmetricPosition(x, y, z);
+			return getValueAtNonsymmetricPosition(x, y, z);
 		} else {
 			return 0;
 		}
 	}
 	
-	private int[] getNonSymmetricCoords(int x, int y, int z) {
+	private int[] getNonsymmetricCoords(int x, int y, int z) {
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -737,122 +732,122 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 	}
 	
 	@Override
-	public int getNonSymmetricMinX() {
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxX() {
+	public int getNonsymmetricMaxX() {
 		return maxX;
 	}
 	
 	@Override
-	public int getNonSymmetricMinY() {
+	public int getNonsymmetricMinY() {
 		return 0;
 	}
 	
 	@Override
-	public int getNonSymmetricMaxY() {
+	public int getNonsymmetricMaxY() {
 		return maxY;
 	}
 	
 	@Override
-	public int getNonSymmetricMinZ() {
+	public int getNonsymmetricMinZ() {
 		return 0;
 	}
 	
 	@Override
-	public int getNonSymmetricMaxZ() {
+	public int getNonsymmetricMaxZ() {
 		return maxZ;
 	}
 	
 	@Override
-	public int getNonSymmetricMinXAtY(int y) {
+	public int getNonsymmetricMinXAtY(int y) {
 		return y;
 	}
 
 	@Override
-	public int getNonSymmetricMinXAtZ(int z) {
+	public int getNonsymmetricMinXAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonSymmetricMinX(int y, int z) {
+	public int getNonsymmetricMinX(int y, int z) {
 		return Math.max(y, z);
 	}
 
 	@Override
-	public int getNonSymmetricMaxXAtY(int y) {
+	public int getNonsymmetricMaxXAtY(int y) {
 		return maxX;
 	}
 
 	@Override
-	public int getNonSymmetricMaxXAtZ(int z) {
+	public int getNonsymmetricMaxXAtZ(int z) {
 		return maxX;
 	}
 
 	@Override
-	public int getNonSymmetricMaxX(int y, int z) {
+	public int getNonsymmetricMaxX(int y, int z) {
 		return maxX;
 	}
 
 	@Override
-	public int getNonSymmetricMinYAtX(int x) {
+	public int getNonsymmetricMinYAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMinYAtZ(int z) {
+	public int getNonsymmetricMinYAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonSymmetricMinY(int x, int z) {
+	public int getNonsymmetricMinY(int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonSymmetricMaxYAtX(int x) {
+	public int getNonsymmetricMaxYAtX(int x) {
 		return Math.min(maxY, x);
 	}
 
 	@Override
-	public int getNonSymmetricMaxYAtZ(int z) {
+	public int getNonsymmetricMaxYAtZ(int z) {
 		return maxY;
 	}
 
 	@Override
-	public int getNonSymmetricMaxY(int x, int z) {
+	public int getNonsymmetricMaxY(int x, int z) {
 		return Math.min(maxY, x);
 	}
 
 	@Override
-	public int getNonSymmetricMinZAtX(int x) {
+	public int getNonsymmetricMinZAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMinZAtY(int y) {
+	public int getNonsymmetricMinZAtY(int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMinZ(int x, int y) {
+	public int getNonsymmetricMinZ(int x, int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonSymmetricMaxZAtX(int x) {
+	public int getNonsymmetricMaxZAtX(int x) {
 		return Math.min(maxZ, x);
 	}
 
 	@Override
-	public int getNonSymmetricMaxZAtY(int y) {
+	public int getNonsymmetricMaxZAtY(int y) {
 		return Math.min(maxZ, y);
 	}
 
 	@Override
-	public int getNonSymmetricMaxZ(int x, int y) {
+	public int getNonsymmetricMaxZ(int x, int y) {
 		return Math.min(maxZ, y);
 	}
 

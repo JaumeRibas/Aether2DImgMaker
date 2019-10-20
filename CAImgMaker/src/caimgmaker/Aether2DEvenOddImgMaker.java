@@ -51,10 +51,10 @@ public class Aether2DEvenOddImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("Current step: " + ca.getStep());
 			}
-			ColorMapper colorMapper = new HueWithBackgroundMapper(ca.getBackgroundValue(), Color.BLACK);
+			ColorMapper colorMapper = new HueWithBackgroundMapper(0, Color.BLACK);
 			path += ca.getSubFolderPath() + "/img/";	
 			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createNonSymmetricEvenOddImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+			imgMaker.createNonsymmetricEvenOddImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
 		}		
 	}
 	

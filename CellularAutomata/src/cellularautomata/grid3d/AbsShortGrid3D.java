@@ -25,7 +25,7 @@ public class AbsShortGrid3D implements ShortGrid3D {
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y, int z) {
+	public short getValueAtPosition(int x, int y, int z) throws Exception {
 		return (short) Math.abs(source.getValueAtPosition(x, y, z));
 	}
 

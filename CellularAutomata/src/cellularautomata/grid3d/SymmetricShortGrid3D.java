@@ -16,9 +16,6 @@
  */
 package cellularautomata.grid3d;
 
-import cellularautomata.grid2d.ShortGrid2D;
-import cellularautomata.grid2d.SymmetricShortGrid2D;
-
 public interface SymmetricShortGrid3D extends ShortGrid3D, SymmetricGrid3D {
 
 	/**
@@ -29,58 +26,10 @@ public interface SymmetricShortGrid3D extends ShortGrid3D, SymmetricGrid3D {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	short getValueAtNonSymmetricPosition(int x, int y, int z);
+	short getValueAtNonsymmetricPosition(int x, int y, int z);
 
-	default short[] getMinAndMaxValue() {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		short maxValue = getValueAtNonSymmetricPosition(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					short value = getValueAtNonSymmetricPosition(x, y, z);
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;
-				}
-			}
-		}
-		return new short[]{ minValue, maxValue };
-	}
-	
-	default short[] getMinAndMaxValueExcluding(short backgroundValue) {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY(),
-				maxZ = getMaxZ(), minZ = getNonSymmetricMinZ();
-		short maxValue = getValueAtNonSymmetricPosition(minX, minY, minZ), minValue = maxValue;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					short value = getValueAtNonSymmetricPosition(x, y, z);
-					if (value != backgroundValue) {
-						if (value > maxValue)
-							maxValue = value;
-						if (value < minValue)
-							minValue = value;
-					}
-				}
-			}
-		}
-		return new short[]{ minValue, maxValue };
-	}
-	
 	@Override
-	default SymmetricShortGrid3D absoluteGrid() {
-		return new AbsSymmetricShortGrid3D(this);
-	}
-	
-	default SymmetricShortGrid2D crossSectionAtZ(int z) {
-		return new SymmetricShortGrid3DZCrossSection(this, z);
-	}
-	
-	default ShortGrid2D projectedSurface(short backgroundValue) {
-		return new SymmetricShortGrid3DProjectedSurface(this, backgroundValue);
+	default ShortGrid3D nonsymmetricSection() {
+		return new NonsymmetricShortGridSection3D(this);
 	}
 }

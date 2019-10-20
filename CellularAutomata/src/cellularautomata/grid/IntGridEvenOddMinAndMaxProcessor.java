@@ -25,14 +25,14 @@ public class IntGridEvenOddMinAndMaxProcessor<G extends IntGrid> implements Grid
 	@Override
 	public void processGridBlock(G gridBlock) throws Exception {
 		//even
-		int[] blockEvenMinAndMax = gridBlock.getMinAndMaxValueAtEvenPositions();
+		int[] blockEvenMinAndMax = gridBlock.getEvenOddPositionsMinAndMaxValue(true);
 		if (evenMinAndMax == null) {
 			evenMinAndMax = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
 		}
 		if (blockEvenMinAndMax[0] < evenMinAndMax[0]) evenMinAndMax[0] = blockEvenMinAndMax[0];
 		if (blockEvenMinAndMax[1] > evenMinAndMax[1]) evenMinAndMax[1] = blockEvenMinAndMax[1];
 		//odd
-		int[] blockOddMinAndMax = gridBlock.getMinAndMaxValueAtOddPositions();
+		int[] blockOddMinAndMax = gridBlock.getEvenOddPositionsMinAndMaxValue(false);
 		if (oddMinAndMax == null) {
 			oddMinAndMax = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
 		}

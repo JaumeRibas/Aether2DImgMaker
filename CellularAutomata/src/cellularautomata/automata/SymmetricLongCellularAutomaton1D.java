@@ -19,12 +19,5 @@ package cellularautomata.automata;
 import cellularautomata.grid1d.SymmetricLongGrid1D;
 
 public interface SymmetricLongCellularAutomaton1D extends SymmetricLongGrid1D, CellularAutomaton {
-	/**
-	 * Returns the background value
-	 * 
-	 * @return the value padding the most part of the grid
-	 */
-	long getBackgroundValue();
-	
-	LongCellularAutomaton1D caSubGrid(int minX, int maxX);
+
 }

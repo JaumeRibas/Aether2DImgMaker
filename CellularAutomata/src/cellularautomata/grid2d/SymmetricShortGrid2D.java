@@ -20,11 +20,11 @@ public interface SymmetricShortGrid2D extends ShortGrid2D, SymmetricGrid2D {
 	
 	/**
 	 * <p>
-	 * Returns the value at a given position within the non symmetric section of the grid.
-	 * That is, where the x is larger or equal to {@link #getNonSymmetricMinX()} 
-	 * and smaller or equal to {@link #getNonSymmetricMaxX()}; 
-	 * and the y is is larger or equal to {@link #getNonSymmetricMinY()} 
-	 * and smaller or equal to {@link #getNonSymmetricMaxY()}.
+	 * Returns the value at a given position within the nonsymmetric section of the grid.
+	 * That is, where the x is larger or equal to {@link #getNonsymmetricMinX()} 
+	 * and smaller or equal to {@link #getNonsymmetricMaxX()}; 
+	 * and the y is is larger or equal to {@link #getNonsymmetricMinY()} 
+	 * and smaller or equal to {@link #getNonsymmetricMaxY()}.
 	 * </p>
 	 * <p>
 	 * The result of getting the value of a position outside this bounds is undefined.
@@ -34,44 +34,10 @@ public interface SymmetricShortGrid2D extends ShortGrid2D, SymmetricGrid2D {
 	 * @param y the position on the y-coordinate
 	 * @return the {@link long} value at (x,y)
 	 */
-	short getValueAtNonSymmetricPosition(int x, int y);
-	
-	default short[] getMinAndMaxValue() {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		short maxValue = getValueAtNonSymmetricPosition(minX, minY), minValue = maxValue;
-		for (int y = minY; y <= maxY; y++) {
-			for (int x = minX; x <= maxX; x++) {
-				short value = getValueAtNonSymmetricPosition(x, y);
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;
-			}
-		}
-		return new short[]{ minValue, maxValue };
-	}
-	
-	default short[] getMinAndMaxValueExcluding(short backgroundValue) {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX(), 
-				maxY = getNonSymmetricMaxY(), minY = getNonSymmetricMinY();
-		short maxValue = getValueAtNonSymmetricPosition(minX, minY), minValue = maxValue;
-		for (int y = minY; y <= maxY; y++) {
-			for (int x = minX; x <= maxX; x++) {
-				short value = getValueAtNonSymmetricPosition(x, y);
-				if (value != backgroundValue) {
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;	
-				}
-			}
-		}
-		return new short[]{ minValue, maxValue };
-	}
+	short getValueAtNonsymmetricPosition(int x, int y);
 	
 	@Override
-	default SymmetricShortGrid2D absoluteGrid() {
-		return new AbsSymmetricShortGrid2D(this);
+	default ShortGrid2D nonsymmetricSection() {
+		return new NonsymmetricShortGridSection2D(this);
 	}
 }

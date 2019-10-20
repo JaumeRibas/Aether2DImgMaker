@@ -20,11 +20,11 @@ public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	
 	/**
 	 * <p>
-	 * Returns the value at a given position within the non symmetric section of the grid.
-	 * That is, where the x is larger or equal to {@link #getNonSymmetricMinX()} 
-	 * and smaller or equal to {@link #getNonSymmetricMaxX()}; 
-	 * and the y is is larger or equal to {@link #getNonSymmetricMinY()} 
-	 * and smaller or equal to {@link #getNonSymmetricMaxY()}.
+	 * Returns the value at a given position within the nonsymmetric section of the grid.
+	 * That is, where the x is larger or equal to {@link #getNonsymmetricMinX()} 
+	 * and smaller or equal to {@link #getNonsymmetricMaxX()}; 
+	 * and the y is is larger or equal to {@link #getNonsymmetricMinY()} 
+	 * and smaller or equal to {@link #getNonsymmetricMaxY()}.
 	 * </p>
 	 * <p>
 	 * The result of getting the value of a position outside this bounds is undefined.
@@ -35,93 +35,10 @@ public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	 * @return the {@link long} value at (x,y)
 	 * @throws Exception 
 	 */
-	long getValueAtNonSymmetricPosition(int x, int y) throws Exception;
-	
-	default long[] getMinAndMaxValue() throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
-		for (int x = minX; x <= maxX; x++) {
-			int minY = getNonSymmetricMinY(x);
-			int maxY = getNonSymmetricMaxY(x);
-			for (int y = minY; y <= maxY; y++) {
-				long value = getValueAtNonSymmetricPosition(x, y);
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
-	
-	default long[] getEvenPositionsMinAndMaxValue() throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
-		for (int x = minX; x <= maxX; x++) {
-			int minY = getNonSymmetricMinY(x);
-			int maxY = getNonSymmetricMaxY(x);
-			if ((minY+x)%2 != 0) {
-				minY++;
-			}
-			for (int y = minY; y <= maxY; y+=2) {
-				long value = getValueAtNonSymmetricPosition(x, y);
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
-	
-	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
-		for (int x = minX; x <= maxX; x++) {
-			int minY = getNonSymmetricMinY(x);
-			int maxY = getNonSymmetricMaxY(x);
-			boolean isPositionEven = (minY+x)%2 == 0;
-			if (isEven) { 
-				if (!isPositionEven) {
-					minY++;
-				}
-			} else {
-				if (isPositionEven) {
-					minY++;
-				}
-			}
-			for (int y = minY; y <= maxY; y+=2) {
-				long value = getValueAtNonSymmetricPosition(x, y);
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
-	
-	default long[] getMinAndMaxValueExcluding(long excludedValue) throws Exception {		
-		int maxX = getNonSymmetricMaxX(), minX = getNonSymmetricMinX();
-		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
-		for (int x = minX; x <= maxX; x++) {
-			int minY = getNonSymmetricMinY(x);
-			int maxY = getNonSymmetricMaxY(x);
-			for (int y = minY; y <= maxY; y++) {
-				long value = getValueAtNonSymmetricPosition(x, y);
-				if (value != excludedValue) {
-					if (value > maxValue)
-						maxValue = value;
-					if (value < minValue)
-						minValue = value;	
-				}
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
+	long getValueAtNonsymmetricPosition(int x, int y) throws Exception;
 	
 	@Override
-	default SymmetricLongGrid2D absoluteGrid() {
-		return new AbsSymmetricLongGrid2D(this);
+	default LongGrid2D nonsymmetricSection() {
+		return new NonsymmetricLongGridSection2D(this);
 	}
 }

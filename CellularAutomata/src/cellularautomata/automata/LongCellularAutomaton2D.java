@@ -20,11 +20,4 @@ import cellularautomata.grid2d.LongGrid2D;
 
 public interface LongCellularAutomaton2D extends LongGrid2D, CellularAutomaton {
 	
-	/**
-	 * Returns the background value
-	 * 
-	 * @return the value padding the most part of the grid
-	 */
-	long getBackgroundValue();
-	
 }

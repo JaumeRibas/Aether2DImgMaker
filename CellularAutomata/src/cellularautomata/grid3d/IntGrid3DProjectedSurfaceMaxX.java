@@ -21,11 +21,9 @@ import cellularautomata.grid2d.IntGrid2D;
 public class IntGrid3DProjectedSurfaceMaxX implements IntGrid2D {
 
 	private IntGrid3D source;
-	private int backgroundValue;
 	
-	public IntGrid3DProjectedSurfaceMaxX(IntGrid3D source, int backgroundValue) {
+	public IntGrid3DProjectedSurfaceMaxX(IntGrid3D source) {
 		this.source = source;
-		this.backgroundValue = backgroundValue;
 	}
 
 	@Override
@@ -37,6 +35,16 @@ public class IntGrid3DProjectedSurfaceMaxX implements IntGrid2D {
 	public int getMaxX() {
 		return source.getMaxZ();
 	}
+	
+	@Override
+	public int getMinX(int y) {
+		return source.getMinZAtY(y);
+	}
+
+	@Override
+	public int getMaxX(int y) {
+		return source.getMaxZAtY(y);
+	}
 
 	@Override
 	public int getMinY() {
@@ -47,19 +55,27 @@ public class IntGrid3DProjectedSurfaceMaxX implements IntGrid2D {
 	public int getMaxY() {
 		return source.getMaxY();
 	}
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinYAtZ(x);
+	}
+
+	@Override
+	public int getMaxY(int x) {
+		return source.getMaxYAtZ(x);
+	}
 
 	@Override
 	public int getValueAtPosition(int x, int y) throws Exception {
-		int sourceX, sourceY, sourceZ, minX;
+		int sourceX, sourceY, sourceZ;
 		sourceY = y;
 		sourceZ = x;
-		sourceX = source.getMaxX();
-		minX = source.getMinX();
-		int value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
-		while (value == backgroundValue && sourceX > minX) {
-			sourceX--;
-			value = source.getValueAtPosition(sourceX, sourceY, sourceZ);
-		}
-		return value;
+		sourceX = source.getMaxX(sourceY, sourceZ);
+		return source.getValueAtPosition(sourceX, sourceY, sourceZ);
+		/*//TODO move to overridden getMaxX(int y, int z) at CA implementation
+		while (getValueAtPosition(maxX, y, z) == backgroundValue && maxX > minX) {
+			maxX--;
+		}*/
 	}
 }

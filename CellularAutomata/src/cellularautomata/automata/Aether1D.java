@@ -161,11 +161,11 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 		}
 	}
 	
-	public int getNonSymmetricMinX() {
+	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonSymmetricMaxX() {
+	public int getNonsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
@@ -180,22 +180,17 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 
 	@Override
 	public int getMinX() {
-		return -getNonSymmetricMaxX();
+		return -getNonsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxX() {
-		return getNonSymmetricMaxX();
+		return getNonsymmetricMaxX();
 	}
 
 	@Override
 	public long getStep() {
 		return currentStep;
-	}
-
-	@Override
-	public long getBackgroundValue() {
-		return 0;
 	}
 
 	@Override
@@ -209,17 +204,12 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 	}
 
 	@Override
-	public LongCellularAutomaton1D caSubGrid(int minX, int maxX) {
-		return new SymmetricLongCASubGrid1D(this, minX, maxX);
-	}
-
-	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public long getValueAtNonSymmetricPosition(int x) {
+	public long getValueAtNonsymmetricPosition(int x) {
 		return grid[x];
 	}
 }

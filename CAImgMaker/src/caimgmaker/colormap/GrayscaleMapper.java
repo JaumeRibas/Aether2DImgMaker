@@ -21,9 +21,6 @@ import java.awt.Color;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
-import cellularautomata.grid2d.SymmetricIntGrid2D;
-import cellularautomata.grid2d.SymmetricLongGrid2D;
-import cellularautomata.grid2d.SymmetricShortGrid2D;
 
 public class GrayscaleMapper extends ColorMapper {
 
@@ -57,30 +54,12 @@ public class GrayscaleMapper extends ColorMapper {
 	}
 
 	@Override
-	public ColorMappedSymmetricLongGrid2D getMappedLongGrid(SymmetricLongGrid2D grid, long minValue, long maxValue) {
-		LongBoundedColorMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		if (outOfLowerBoundColor != null) {
-			colorMap = new LongUnboundedColorMap(colorMap, outOfLowerBoundColor, outOfUpperBoundColor);
-		}
-		return new ColorMappedSymmetricLongGrid2D(grid, colorMap);
-	}
-
-	@Override
 	public ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue) {
 		LongBoundedColorMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		if (outOfLowerBoundColor != null) {
 			colorMap = new LongUnboundedColorMap(colorMap, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
 		return new ColorMappedIntGrid2D(grid, colorMap);
-	}
-
-	@Override
-	public ColorMappedSymmetricIntGrid2D getMappedIntGrid(SymmetricIntGrid2D grid, int minValue, int maxValue) {
-		LongBoundedColorMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		if (outOfLowerBoundColor != null) {
-			colorMap = new LongUnboundedColorMap(colorMap, outOfLowerBoundColor, outOfUpperBoundColor);
-		}
-		return new ColorMappedSymmetricIntGrid2D(grid, colorMap);
 	}
 	
 	@Override
@@ -90,15 +69,6 @@ public class GrayscaleMapper extends ColorMapper {
 			colorMap = new LongUnboundedColorMap(colorMap, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
 		return new ColorMappedShortGrid2D(grid, colorMap);
-	}
-
-	@Override
-	public ColorMappedSymmetricShortGrid2D getMappedShortGrid(SymmetricShortGrid2D grid, short minValue, short maxValue) {
-		LongBoundedColorMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		if (outOfLowerBoundColor != null) {
-			colorMap = new LongUnboundedColorMap(colorMap, outOfLowerBoundColor, outOfUpperBoundColor);
-		}
-		return new ColorMappedSymmetricShortGrid2D(grid, colorMap);
 	}
 
 }

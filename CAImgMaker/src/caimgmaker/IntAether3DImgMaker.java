@@ -26,7 +26,7 @@ import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 public class IntAether3DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-20000", "D:/data/test2"};//, "150", "30", "10000"};//debug
+		args = new String[]{"-2000", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -76,9 +76,9 @@ public class IntAether3DImgMaker {
 			if (isRestore) {
 				ca = new IntAether3DSwap(initValOrBackupPath, path);
 			} else {
-				ca = new IntAether3DSwap(initialValue, Long.parseLong("8589934592"), path);//8GiB
+//				ca = new IntAether3DSwap(initialValue, Long.parseLong("8589934592"), path);//8GiB
 //				ca = new IntAether3DSwap(initialValue, Long.parseLong("10737418240"), path);//10GiB
-//				ca = new IntAether3DSwap(initialValue, Long.parseLong("1048576"), path);//1MiB
+				ca = new IntAether3DSwap(initialValue, Long.parseLong("1048576"), path);//1MiB
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
@@ -94,10 +94,10 @@ public class IntAether3DImgMaker {
 				imgMaker = new CAImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionNonSymmetricImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+				imgMaker.createScanningAndCrossSectionNonsymmetricImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
 					path + "/img/", path + "/backups/");
 			} else {
-				imgMaker.createScanningAndCrossSectionNonSymmetricImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+				imgMaker.createScanningAndCrossSectionNonsymmetricImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
 					path + "/img/", path + "/backups/");
 			}
 

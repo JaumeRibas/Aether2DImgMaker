@@ -51,7 +51,7 @@ public class LongGrid4DYZCrossSection implements LongGrid2D {
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) {
+	public long getValueAtPosition(int x, int y) throws Exception {
 		return source.getValueAtPosition(x, y, this.y, z);
 	}
 

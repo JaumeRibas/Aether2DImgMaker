@@ -18,6 +18,7 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid.IntGrid;
 import cellularautomata.grid2d.IntGrid2D;
+import cellularautomata.grid3d.IntGrid3D;
 
 public interface IntGrid4D extends Grid4D, IntGrid {
 	
@@ -29,11 +30,12 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (w,x,y,z)
+	 * @throws Exception 
 	 */
-	int getValueAtPosition(int w, int x, int y, int z);
+	int getValueAtPosition(int w, int x, int y, int z) throws Exception;
 
 	@Override
-	default int[] getMinAndMaxValue() {
+	default int[] getMinAndMaxValue() throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
@@ -56,84 +58,40 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	}
 	
 	@Override
-	default int[] getMinAndMaxValueAtEvenPositions() throws Exception {
+	default int[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		int evenMinValue = Integer.MAX_VALUE, evenMaxValue = Integer.MIN_VALUE;
+		int minValue = Integer.MAX_VALUE, maxValue = Integer.MIN_VALUE;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
-					if ((minW+x+y+z)%2 != 0) {
-						minW++;
-					}
-					for (int w = minW; w <= maxW; w+=2) {
-						int value = getValueAtPosition(w, x, y, z);
-						if (value > evenMaxValue)
-							evenMaxValue = value;
-						if (value < evenMinValue)
-							evenMinValue = value;
-					}
-				}
-			}
-		}
-		return new int[]{evenMinValue, evenMaxValue};
-	}
-	
-	@Override
-	default int[] getMinAndMaxValueAtOddPositions() throws Exception {
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		int oddMinValue = Integer.MAX_VALUE, oddMaxValue = Integer.MIN_VALUE;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					if ((minW+x+y+z)%2 == 0) {
-						minW++;
-					}
-					for (int w = minW; w <= maxW; w+=2) {
-						int value = getValueAtPosition(w, x, y, z);
-						if (value > oddMaxValue)
-							oddMaxValue = value;
-						if (value < oddMinValue)
-							oddMinValue = value;
-					}
-				}
-			}
-		}
-		return new int[]{oddMinValue, oddMaxValue};
-	}
-	
-	@Override
-	default int[] getMinAndMaxValueExcluding(int backgroundValue) {
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
-						int value = getValueAtPosition(w, x, y, z);
-						if (value != backgroundValue) {
-							if (value > maxValue)
-								maxValue = value;
-							if (value < minValue)
-								minValue = value;
+					boolean isPositionEven = (minW+x+y+z)%2 == 0;
+					if (isEven) { 
+						if (!isPositionEven) {
+							minW++;
+						}
+					} else {
+						if (isPositionEven) {
+							minW++;
 						}
 					}
+					for (int w = minW; w <= maxW; w+=2) {
+						int value = getValueAtPosition(w, x, y, z);
+						if (value > maxValue)
+							maxValue = value;
+						if (value < minValue)
+							minValue = value;
+					}
 				}
 			}
 		}
-		return new int[]{ minValue, maxValue };
+		return new int[]{minValue, maxValue};
 	}
 	
 	@Override
-	default int getTotalValue() {
+	default int getTotalValue() throws Exception {
 		int total = 0;
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
@@ -152,26 +110,16 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	}
 	
 	@Override
-	default int getMaxAbsoluteValue() {
-		int maxAbsoluteValue;
-		int[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = Math.abs(minAndMax[0]);
-			maxAbsoluteValue = Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
 	default IntGrid4D absoluteGrid() {
 		return new AbsIntGrid4D(this);
 	}
 	
+	@Override
 	default IntGrid2D crossSectionAtYZ(int y, int z) {
 		return new IntGrid4DYZCrossSection(this, y, z);
 	}
 	
+	@Override
 	default IntGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minW < getMinW() || minW > getMaxW() 
 				|| maxW < getMinW() || maxW > getMaxW()
@@ -185,5 +133,10 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 		if (minX > maxX || minY > maxY || minZ > maxZ)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new IntSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default IntGrid3D projected3DEdgeMaxW() {
+		return new IntGrid4DProjected3DEdgeMaxW(this);
 	}
 }

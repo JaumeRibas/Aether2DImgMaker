@@ -24,19 +24,19 @@ import cellularautomata.grid.SymmetricGridProcessor;
 
 public class SymmetricIntGrid3DZCrossSectionCopierProcessor implements SymmetricGridProcessor<IntGrid3D> {
 
-	private Map<Integer, List<NonSymmetricIntGrid3DZCrossSectionBlock>> copyRequests = new HashMap<Integer, List<NonSymmetricIntGrid3DZCrossSectionBlock>>();
-	private Map<Integer, List<NonSymmetricIntGrid3DZCrossSectionBlock>> copies = new HashMap<Integer, List<NonSymmetricIntGrid3DZCrossSectionBlock>>();
+	private Map<Integer, List<NonsymmetricIntGrid3DZCrossSectionBlock>> copyRequests = new HashMap<Integer, List<NonsymmetricIntGrid3DZCrossSectionBlock>>();
+	private Map<Integer, List<NonsymmetricIntGrid3DZCrossSectionBlock>> copies = new HashMap<Integer, List<NonsymmetricIntGrid3DZCrossSectionBlock>>();
 	
 	public void requestCopy(int crossSectionZ) {
-		copyRequests.put(crossSectionZ, new ArrayList<NonSymmetricIntGrid3DZCrossSectionBlock>());
+		copyRequests.put(crossSectionZ, new ArrayList<NonsymmetricIntGrid3DZCrossSectionBlock>());
 	}
 	
 	public ActionableSymmetricIntGrid3DZCrossSectionCopy getCopy(int crossSectionZ) {
 		if (copies.containsKey(crossSectionZ)) {
-			List<NonSymmetricIntGrid3DZCrossSectionBlock> copyBlocks = copies.get(crossSectionZ);
+			List<NonsymmetricIntGrid3DZCrossSectionBlock> copyBlocks = copies.get(crossSectionZ);
 			if (copyBlocks.size() > 0) {
 				return new ActionableSymmetricIntGrid3DZCrossSectionCopy(
-						(NonSymmetricIntGrid3DZCrossSectionBlock[])copyBlocks.toArray(new NonSymmetricIntGrid3DZCrossSectionBlock[0]), 
+						(NonsymmetricIntGrid3DZCrossSectionBlock[])copyBlocks.toArray(new NonsymmetricIntGrid3DZCrossSectionBlock[0]), 
 						crossSectionZ);
 			}
 		}
@@ -52,7 +52,7 @@ public class SymmetricIntGrid3DZCrossSectionCopierProcessor implements Symmetric
 	public void processGridBlock(IntGrid3D gridBlock) throws Exception {
 		for (Integer copyZ : copyRequests.keySet()) {
 			if (copyZ >= gridBlock.getMinZ() && copyZ <= gridBlock.getMaxZ()) {
-				copyRequests.get(copyZ).add(new NonSymmetricIntGrid3DZCrossSectionBlock(gridBlock, copyZ));
+				copyRequests.get(copyZ).add(new NonsymmetricIntGrid3DZCrossSectionBlock(gridBlock, copyZ));
 			}
 		}
 	}

@@ -20,10 +20,10 @@ public interface ShortGrid extends Grid {
 
 	short[] getMinAndMaxValue() throws Exception;
 	
-	short[] getMinAndMaxValueExcluding(short excludedValue) throws Exception;
+	short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception;
 	
 	short getTotalValue() throws Exception;
 	
-	short getMaxAbsoluteValue() throws Exception;
+	ShortGrid absoluteGrid();
 	
 }
