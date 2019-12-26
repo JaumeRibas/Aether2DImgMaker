@@ -70,7 +70,7 @@ public class SpreadIntegerValue1D implements SymmetricLongCellularAutomaton1D {
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++) {
-			if (nextX < newGrid.length) {
+			if (nextX >= grid.length && nextX < newGrid.length) {
 				newGrid[nextX] = backgroundValue;
 			}
 			long value = grid[x];

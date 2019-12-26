@@ -382,7 +382,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongCellularAutomato
 	
 	public static void padEdges(long[][] grid, int width, long value) {
 		//left
-		for (int x = 0; x < grid.length && x < width; x++) {
+		for (int x = 0; x < width && x < grid.length; x++) {
 			for (int y = 0; y < grid[x].length; y ++) {
 				grid[x][y] = value;
 			}
@@ -393,13 +393,13 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongCellularAutomato
 				grid[x][y] = value;
 			}
 		}
-		//up
+		//down
 		for (int x = width; x < grid.length - width; x++) {
-			for (int y = 0; y < grid[x].length && y < width; y++) {
+			for (int y = 0; y < width && y < grid[x].length; y++) {
 				grid[x][y] = value;
 			}
 		}
-		//down
+		//up
 		for (int x = width; x < grid.length - width; x++) {
 			for (int y = grid[x].length - width; y < grid[x].length; y++) {
 				grid[x][y] = value;

@@ -48,7 +48,7 @@ public abstract class ActionableGrid<P extends GridProcessor<G>, G extends Grid>
 	public abstract void processGrid() throws Exception;
 	
 	/*
-	//Possible alternative approach to ensure triggerBeforeProcessing and triggerAfterProcessing are called
+	//Possible alternative approach to ensure triggerBeforeProcessing and triggerAfterProcessing are called?
 	public void processGrid() throws Exception {
 		triggerBeforeProcessing();
 		while (G block = getNextGridBlock() != null) {
