@@ -90,15 +90,17 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 			long value = this.grid[x];
 			if (value != 0) {
 				long right;
-				if (x < grid.length - 1)
-					right = grid[x + 1];
-				else
-					right = backgroundValue;
 				long left;
-				if (x > 0)
+				if (x < grid.length - 1) {
+					right = grid[x + 1];
+					if (x > 0)
+						left = grid[x - 1];
+					else
+						left = backgroundValue;
+				} else {
+					right = backgroundValue;
 					left = grid[x - 1];
-				else
-					left = backgroundValue;
+				}
 				boolean isRightEqual = value == right, isLeftEqual = value == left;
 				//if the current position is equal to its neighbors the algorithm has no effect
 				if (!(isRightEqual && isLeftEqual)) {
@@ -151,10 +153,9 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 	public long getValueAtPosition(int x){	
 		int arrayX = xOriginIndex + x;
 		if (arrayX < 0 || arrayX > grid.length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the entered position is outside the array the value will be the backgroundValue
 			return backgroundValue;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX];
 		}
 	}

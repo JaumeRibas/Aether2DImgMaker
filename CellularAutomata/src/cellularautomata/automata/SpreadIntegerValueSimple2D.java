@@ -20,84 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * <h1>Cellular automaton that spreads an integer value over a grid.</h1>
- * 
- * <p>
- * Every step, the value of each position is divided between itself and its von Neumann neighbors.
- * This division is an integer division, and its remainder is left at that given position.
- * The values that collide are added up.
- * The algorithm effectively ends once all positions have a value too small to divide.
- * </p>
- * 
- * <h2>2D Example:</h2>
- * 
- * <h3>step 0</h3>
- * <br/>
- * <table>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;32</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * </table>
- * 
- * <p>We start off with a grid padded with 0 and a single position with value of 32.</p>
- * <br/>
- *
- * <h3>step 1</h3>
- * <br/>
- * <table>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;6</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;6</td><td>&nbsp;&nbsp;&nbsp;8</td><td>&nbsp;&nbsp;&nbsp;6</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;6</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * </table>
- * 
- * <p>
- * We divide the 32 between his position and his neighboring positions (up, down, left, right and center).<br/>
- * &nbsp;32/5 = 6<br/>
- * We place the result at each position, and we add the remaining 2 to the center value.<br/>
- * &nbsp;6+2 = 8</p>
- * <br/>
- * 
- * 
- * <h3>step 2</h3> 
- * <br/>
- * <table>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;1</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;3</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;1</td><td>&nbsp;&nbsp;&nbsp;3</td><td>&nbsp;&nbsp;&nbsp;8</td><td>&nbsp;&nbsp;&nbsp;3</td><td>&nbsp;&nbsp;&nbsp;1</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;3</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;1</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * </table>
- * 
- * <p>
- * We repeat the process for every position, adding up the values that collide.<br/>
- * The new value at any given position results from adding up the quotient of the division<br/>
- * of its four neighbors, the quotient of its own division and the remainder of its own division.<br/>
- * For example, for the center position:<br/> 
- * &nbsp;4*6/5 + 8/5 + 8%5 = 4 + 1 + 3 = 8<br/><br/>
- * At this step all values, but the center 8, are smaller than 5.
- * </p>
- * <br/>
- * 
- * 
- * <h3>step 3</h3>
- * <br/>
- * <table>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;1</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;4</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;1</td><td>&nbsp;&nbsp;&nbsp;4</td><td>&nbsp;&nbsp;&nbsp;4</td><td>&nbsp;&nbsp;&nbsp;4</td><td>&nbsp;&nbsp;&nbsp;1</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;4</td><td>&nbsp;&nbsp;&nbsp;2</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * 	<tr><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;1</td><td>&nbsp;&nbsp;&nbsp;0</td><td>&nbsp;&nbsp;&nbsp;0</td></tr>
- * </table>
- * 
- * <p>
- * Finally, we divide the center 8. 
- * We add the resulting 1 to its neighbors and leave the remaining 3 plus a 1 at the center.<br/>
- * Since all positions now have a value smaller than 5, we consider this the last step.
- * </p>
+ * A simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton for review and testing purposes
  * 
  * @author Jaume Ribas
  *
@@ -176,25 +99,29 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongCellularAutomato
 				long value = this.grid[x][y];
 				if (value != 0) {
 					long right;
-					if (x < grid.length - 1)
-						right = grid[x + 1][y];
-					else
-						right = backgroundValue;
 					long left;
-					if (x > 0)
+					if (x < grid.length - 1) {
+						right = grid[x + 1][y];
+						if (x > 0)
+							left = grid[x - 1][y];
+						else
+							left = backgroundValue;
+					} else {
+						right = backgroundValue;
 						left = grid[x - 1][y];
-					else
-						left = backgroundValue;
+					}
 					long up;
-					if (y < grid[x].length - 1)
-						up = grid[x][y + 1];
-					else
-						up = backgroundValue;
 					long down;
-					if (y > 0)
+					if (y < grid[x].length - 1) {
+						up = grid[x][y + 1];
+						if (y > 0)
+							down = grid[x][y - 1];
+						else
+							down = backgroundValue;
+					} else {
+						up = backgroundValue;
 						down = grid[x][y - 1];
-					else
-						down = backgroundValue;
+					}
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
 					//if the current position is equal to its neighbors the algorithm has no effect
@@ -262,10 +189,9 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongCellularAutomato
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 
 				|| arrayY < 0 || arrayY > grid[0].length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the entered position is outside the array the value will be the backgroundValue
 			return backgroundValue;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY];
 		}
 	}
