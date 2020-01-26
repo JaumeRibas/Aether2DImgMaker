@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,27 +77,27 @@ public class SpreadIntegerValue3D implements SymmetricLongCellularAutomaton3D  {
 					long value = grid[x][y][z];
 					if (value != 0) {
 						//Divide its value by 7 (using integer division)
-						long quotient = value/7;
-						if (quotient != 0) {
-							//I assume that if any quotient is not zero the state changes
+						long share = value/7;
+						if (share != 0) {
+							//I assume that if any share is not zero the state changes
 							changed = true;
-							//Add the quotient to the neighboring positions
+							//Add the share to the neighboring positions
 							boolean yEqualsXMinusOne = y == x - 1;
 							boolean zEqualsYMinusOne = z == y - 1;
 							//x+
-							newGrid[x+1][y][z] += quotient;
+							newGrid[x+1][y][z] += share;
 							if (x == maxXMinusOne) {
 								xBoundReached = true;
 							}
 							//x-
 							if (x > y) {
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (yEqualsXMinusOne) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 									if (z == y) {
-										valueToAdd += quotient;
+										valueToAdd += share;
 										if (x == 1) {
-											valueToAdd += 3*quotient;
+											valueToAdd += 3*share;
 										}
 									}
 								}
@@ -105,9 +105,9 @@ public class SpreadIntegerValue3D implements SymmetricLongCellularAutomaton3D  {
 							}
 							//y+
 							if (y < x) {
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (yEqualsXMinusOne) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 								}
 								int yy = y+1;
 								newGrid[x][yy][z] += valueToAdd;
@@ -116,22 +116,22 @@ public class SpreadIntegerValue3D implements SymmetricLongCellularAutomaton3D  {
 							}
 							//y-
 							if (y > z) {	
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (zEqualsYMinusOne) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 									if (y == 1) {
-										valueToAdd += 2*quotient;
+										valueToAdd += 2*share;
 									}
 								}
 								newGrid[x][y-1][z] += valueToAdd;
 							}
 							//z+
 							if (z < y) {
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (zEqualsYMinusOne) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 									if (x == y) {
-										valueToAdd += quotient;
+										valueToAdd += share;
 									}
 								}
 								int zz = z+1;
@@ -141,14 +141,14 @@ public class SpreadIntegerValue3D implements SymmetricLongCellularAutomaton3D  {
 							}
 							//z-
 							if (z > 0) {
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (z == 1) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 								}
 								newGrid[x][y][z-1] += valueToAdd;
 							}								
 						}
-						newGrid[x][y][z] += value - 6*quotient;
+						newGrid[x][y][z] += value - 6*share;
 					}
 				}
 				grid[x][y] = null;

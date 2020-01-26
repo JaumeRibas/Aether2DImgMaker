@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
 public class IntNearAether1_3DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-		args = new String[]{(-(Integer.MAX_VALUE/2)) + "", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{(-(Integer.MAX_VALUE/2)) + "", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 public class IntAether3DEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-2000", "D:/data/testCopier"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -38,7 +38,6 @@ public class IntAether3DEvenOddImgMaker {
 			boolean isScanInitialZIndexDefined = false;	
 			long backupLeap = 0;
 			boolean isBackupLeapDefined = false;
-			
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
 				BigInteger tmp = new BigInteger(initValOrBackupPath);
@@ -99,8 +98,7 @@ public class IntAether3DEvenOddImgMaker {
 			} else {
 				imgMaker.createScanningAndCrossSectionNonsymmetricEvenOddImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
 					path + "/img/", path + "/backups/");
-			}
-
+			}	
 		}		
 	}
 	

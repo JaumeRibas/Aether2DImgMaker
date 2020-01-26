@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,10 +16,8 @@
  */
 package caimgmaker;
 
-import java.awt.Color;
-
 import caimgmaker.colormap.ColorMapper;
-import caimgmaker.colormap.HueWithBackgroundMapper;
+import caimgmaker.colormap.HueMapper;
 import cellularautomata.automata.Aether2D;
 import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 
@@ -51,7 +49,7 @@ public class Aether2DImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("Current step: " + ca.getStep());
 			}
-			ColorMapper colorMapper = new HueWithBackgroundMapper(0, Color.BLACK);
+			ColorMapper colorMapper = new HueMapper();
 			path += ca.getSubFolderPath() + "/img/";	
 			CAImgMaker imgMaker = new CAImgMaker();
 			imgMaker.createNonsymmetricImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);

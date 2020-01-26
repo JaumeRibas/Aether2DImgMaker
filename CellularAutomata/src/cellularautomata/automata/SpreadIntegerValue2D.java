@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -93,37 +93,37 @@ public class SpreadIntegerValue2D implements SymmetricLongCellularAutomaton2D {
 					//if the current position is equal to its neighbors the algorithm has no effect
 					if (!(isUpEqual && isDownEqual && isRightEqual && isLeftEqual)) {
 						//Divide its value by 5 (using integer division)
-						long quotient = value/5;
-						if (quotient != 0) {
-							//I assume that if any quotient is not zero the state changes
+						long share = value/5;
+						if (share != 0) {
+							//I assume that if any share is not zero the state changes
 							changed = true;
-							//Add the quotient to the neighboring positions
-							//if the neighbor's value is equal to the current value, add the quotient to the current position instead
+							//Add the share to the neighboring positions
+							//if the neighbor's value is equal to the current value, add the share to the current position instead
 							//x+
 							if (isRightEqual)
-								newGrid[x][y] += quotient;
+								newGrid[x][y] += share;
 							else
-								newGrid[x+1][y] += quotient;
+								newGrid[x+1][y] += share;
 							//x-
 							if (isLeftEqual)
-								newGrid[x][y] += quotient;
+								newGrid[x][y] += share;
 							else if (x > y) {
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (x == y + 1) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 									if (x == 1) {
-										valueToAdd += 2*quotient;							
+										valueToAdd += 2*share;							
 									}
 								}
 								newGrid[x-1][y] += valueToAdd;
 							}
 							//y+
 							if (isUpEqual)
-								newGrid[x][y] += quotient;
+								newGrid[x][y] += share;
 							else if (y < x) {
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (y == x - 1) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 								}
 								int yy = y+1;
 								newGrid[x][yy] += valueToAdd;
@@ -132,11 +132,11 @@ public class SpreadIntegerValue2D implements SymmetricLongCellularAutomaton2D {
 							}
 							//y-
 							if (isDownEqual)
-								newGrid[x][y] += quotient;
+								newGrid[x][y] += share;
 							else if (y > 0) {
-								long valueToAdd = quotient;
+								long valueToAdd = share;
 								if (y == 1) {
-									valueToAdd += quotient;
+									valueToAdd += share;
 								}
 								newGrid[x][y-1] += valueToAdd;
 							}
@@ -145,7 +145,7 @@ public class SpreadIntegerValue2D implements SymmetricLongCellularAutomaton2D {
 								xBoundReached = true;
 							}								
 						}
-						newGrid[x][y] += value - 4*quotient;
+						newGrid[x][y] += value - 4*share;
 					} else {
 						newGrid[x][y] += value;
 					}

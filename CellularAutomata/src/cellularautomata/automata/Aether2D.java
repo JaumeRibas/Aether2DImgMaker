@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -306,7 +306,11 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 
 	@Override
 	public int getNonsymmetricMaxX(int y) {
-		return getNonsymmetricMaxX();
+		int maxX = getNonsymmetricMaxX();
+		while (getValueAtNonsymmetricPosition(maxX, y) == 0 && maxX >= 0) {
+			maxX--;
+		}
+		return maxX;
 	}
 
 	@Override

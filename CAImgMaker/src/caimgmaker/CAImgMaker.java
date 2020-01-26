@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import caimgmaker.colormap.ColorMapper;
 import cellularautomata.automata.Aether3D;
 import cellularautomata.automata.LongCellularAutomaton2D;
 import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
+import cellularautomata.automata.SymmetricIntCellularAutomaton2D;
 import cellularautomata.automata.SymmetricIntCellularAutomaton3D;
 import cellularautomata.automata.SymmetricIntCellularAutomaton4D;
 import cellularautomata.automata.SymmetricLongActionableCellularAutomaton3D;
@@ -90,6 +91,31 @@ public class CAImgMaker {
 					minY = nonsymmetricSection.getMinY(), maxY = nonsymmetricSection.getMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
 			long[] minAndMaxValue = nonsymmetricSection.getMinAndMaxValue();
+			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			ColorGrid2D colorGrid = colorMapper.getMappedGrid(nonsymmetricSection, minAndMaxValue[0], minAndMaxValue[1]);
+			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}			
+			currentStep++;
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+	}
+	
+	public void createNonsymmetricImages(SymmetricIntCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + colorMapper.getClass().getSimpleName() + "/slice/";
+		IntGrid2D nonsymmetricSection = ca.nonsymmetricSection();
+		do {
+			System.out.println("Current step: " + currentStep);
+			int minX = nonsymmetricSection.getMinX(), maxX = nonsymmetricSection.getMaxX(), 
+					minY = nonsymmetricSection.getMinY(), maxY = nonsymmetricSection.getMaxY();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
+			int[] minAndMaxValue = nonsymmetricSection.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			ColorGrid2D colorGrid = colorMapper.getMappedGrid(nonsymmetricSection, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");

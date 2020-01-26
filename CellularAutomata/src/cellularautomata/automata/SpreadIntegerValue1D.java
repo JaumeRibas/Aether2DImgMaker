@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -79,24 +79,24 @@ public class SpreadIntegerValue1D implements SymmetricLongCellularAutomaton1D {
 				//if the current position is equal to its neighbors the algorithm has no effect
 				if (!(isRightEqual && isLeftEqual)) {
 					//Divide its value by 3 (using integer division)
-					long quotient = value/3;
-					if (quotient != 0) {
-						//I assume that if any quotient is not zero the state changes
+					long share = value/3;
+					if (share != 0) {
+						//I assume that if any share is not zero the state changes
 						changed = true;
-						//Add the quotient to the neighboring positions
-						//if the neighbor's value is equal to the current value, add the quotient to the current position instead
+						//Add the share to the neighboring positions
+						//if the neighbor's value is equal to the current value, add the share to the current position instead
 						//x+
 						if (isRightEqual)
-							newGrid[x] += quotient;
+							newGrid[x] += share;
 						else
-							newGrid[x+1] += quotient;
+							newGrid[x+1] += share;
 						//x-
 						if (isLeftEqual)
-							newGrid[x] += quotient;
+							newGrid[x] += share;
 						else if (x > 0) {
-							long valueToAdd = quotient;
+							long valueToAdd = share;
 							if (x == 1) {
-								valueToAdd += quotient;							
+								valueToAdd += share;							
 							}
 							newGrid[x-1] += valueToAdd;
 						}
@@ -105,7 +105,7 @@ public class SpreadIntegerValue1D implements SymmetricLongCellularAutomaton1D {
 							boundReached = true;
 						}								
 					}
-					newGrid[x] += value - 2*quotient;
+					newGrid[x] += value - 2*share;
 				} else {
 					newGrid[x] += value;
 				}

@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -105,28 +105,28 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 				//if the current position is equal to its neighbors the algorithm has no effect
 				if (!(isRightEqual && isLeftEqual)) {
 					//Divide its value by 3 (using integer division)
-					long quotient = value/3;
-					if (quotient != 0) {
-						//I assume that if any quotient is not zero the state changes
+					long share = value/3;
+					if (share != 0) {
+						//I assume that if any share is not zero the state changes
 						changed = true;
-						//Add the quotient and the remainder to the corresponding position in the new array
-						newGrid[x + indexOffset] += value%3 + quotient;
-						//Add the quotient to the neighboring positions
-						//if the neighbor's value is equal to the current value, add the quotient to the current position instead
+						//Add the share and the remainder to the corresponding position in the new array
+						newGrid[x + indexOffset] += value%3 + share;
+						//Add the share to the neighboring positions
+						//if the neighbor's value is equal to the current value, add the share to the current position instead
 						if (isRightEqual)
-							newGrid[x + indexOffset] += quotient;
+							newGrid[x + indexOffset] += share;
 						else
-							newGrid[x + indexOffset + 1] += quotient;
+							newGrid[x + indexOffset + 1] += share;
 						if (isLeftEqual)
-							newGrid[x + indexOffset] += quotient;
+							newGrid[x + indexOffset] += share;
 						else
-							newGrid[x + indexOffset - 1] += quotient;
+							newGrid[x + indexOffset - 1] += share;
 						//Check whether or not we reached the edge of the array
 						if (x == 1 || x == this.grid.length - 2) {
 							boundsReached = true;
 						}
 					} else {
-						//if the quotient is zero, just add the value to the corresponding position in the new array
+						//if the share is zero, just add the value to the corresponding position in the new array
 						newGrid[x + indexOffset] += value;
 					}
 				} else {

@@ -1,8 +1,5 @@
-package cellularautomata.grid2d;
-import cellularautomata.grid.GridProcessor;
-
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,7 +14,8 @@ import cellularautomata.grid.GridProcessor;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
+package cellularautomata.grid2d;
+import cellularautomata.grid.GridProcessor;
 
 public class Grid2DBoundsProcessor<G extends Grid2D> implements GridProcessor<G> {
 

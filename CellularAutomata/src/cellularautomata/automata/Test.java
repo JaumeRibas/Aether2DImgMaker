@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2019 Jaume Ribas
+    Copyright (C) 2017-2020 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,6 +38,20 @@ public class Test {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compare(ae1, ae2);
+	}
+	
+	public static void sivTesting() {
+		long initialValue = 100000;
+		SpreadIntegerValue2D ae1 = new SpreadIntegerValue2D(initialValue, 0);
+		SpreadIntegerValueSimple2D ae2 = new SpreadIntegerValueSimple2D(initialValue, 0);
+		compare(ae1, ae2);
+	}
+	
+	public static void raceSandpileImplementations() {
+		long initialValue = 2000;
+		SpreadIntegerValue1D siv1 = new SpreadIntegerValue1D(initialValue, 0);
+		SingleSourceLongSandpile1D siv2 = new SingleSourceLongSandpile1D(new SpreadIntegerValueRules(), initialValue);
+		race(new CellularAutomaton[] { siv1, siv2 });
 	}
 	
 	public static void takeSamples() {
@@ -128,6 +142,38 @@ public class Test {
 	}
 	
 	public static void compare(SymmetricLongCellularAutomaton2D ca1, SymmetricLongCellularAutomaton2D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+					for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+						if (ca1.getValueAtPosition(x, y) != ca2.getValueAtPosition(x, y)) {
+							equal = false;
+							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+									+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y) 
+									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y));
+						}
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricIntCellularAutomaton2D ca1, SymmetricLongCellularAutomaton2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -620,7 +666,22 @@ public class Test {
 			do {
 				System.out.println("step " + ca.getStep());
 				printAsGrid(ca, 0);
-				System.out.println("totalValue " + ca.getTotalValue());
+				System.out.println("total value " + ca.getTotalValue());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep(SymmetricIntCellularAutomaton2D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step " + ca.getStep());
+				printAsGrid(ca, 0);
+				System.out.println("total value " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
 			s.close();
@@ -635,7 +696,7 @@ public class Test {
 			do {
 				System.out.println("step " + ca.getStep());
 				printAsGrid(ca, 0);
-				System.out.println("totalValue " + ca.getTotalValue());
+				System.out.println("total value " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
 			s.close();
@@ -650,7 +711,7 @@ public class Test {
 			do {
 				System.out.println("step " + ca.getStep());
 				printAsGrid(ca.crossSectionAtZ(0), 0);
-				System.out.println("totalValue " + ca.getTotalValue());
+				System.out.println("total value " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
 			s.close();
@@ -665,7 +726,7 @@ public class Test {
 			do {
 				System.out.println("step " + ca.getStep());
 				printAsGrid(ca.projected3DEdgeMaxW().projectedSurfaceMaxX(), 0);
-				System.out.println("totalValue " + ca.getTotalValue());
+				System.out.println("total value " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
 			s.close();
@@ -686,7 +747,7 @@ public class Test {
 				for (SymmetricLongCellularAutomaton3D ca : cas) {
 					System.out.println("step " + ca.getStep());
 					printAsGrid(ca.crossSectionAtZ(0), 0);
-					System.out.println("totalValue " + ca.getTotalValue());
+					System.out.println("total value " + ca.getTotalValue());
 					boolean caChanged = ca.nextStep();
 					anyChanged = anyChanged || caChanged;
 				}
@@ -704,7 +765,7 @@ public class Test {
 			do {
 				System.out.println("step " + ca.getStep());
 				printAsGrid(ca.crossSectionAtYZ(0,0), 0);
-				System.out.println("totalValue " + ca.getTotalValue());
+				System.out.println("total value " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
 			s.close();
@@ -719,7 +780,7 @@ public class Test {
 			do {
 				System.out.println("step " + ca.getStep());
 				printAsGrid(ca, 0);
-				System.out.println("totalValue " + ca.getTotalValue());
+				System.out.println("total value " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
 			s.close();
