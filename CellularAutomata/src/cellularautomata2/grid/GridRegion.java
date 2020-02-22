@@ -35,7 +35,7 @@ public abstract class GridRegion implements GridEntity {
 	 * @return the upper bound
 	 */
 	public int getUpperBound(int axis) {
-		return getUpperBound(axis, new Integer[getGridDimension() - 1]);
+		return getUpperBound(axis, new PartialCoordinates(getGridDimension() - 1));
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public abstract class GridRegion implements GridEntity {
 	 * @param coordinates an {@link Integer} array of length {@link #getGridDimension()} with the coordinates.
 	 * @return  the upper bound
 	 */
-	public abstract int getUpperBound(int axis, Integer[] coordinates); //Use PartialCoordinates?
+	public abstract int getUpperBound(int axis, PartialCoordinates coordinates);
 	
 	/**
 	 * Returns the lower bound of the region on the given axis.
@@ -71,7 +71,7 @@ public abstract class GridRegion implements GridEntity {
 	 * @return the lower bound
 	 */
 	public int getLowerBound(int axis) {
-		return getLowerBound(axis, new Integer[getGridDimension() - 1]);
+		return getLowerBound(axis, new PartialCoordinates(getGridDimension() - 1));
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public abstract class GridRegion implements GridEntity {
 	 * @param coordinates an {@link Integer} array of length {@link #getGridDimension()} - 1 with the coordinates.
 	 * @return  the lower bound
 	 */
-	public abstract int getLowerBound(int axis, Integer[] coordinates);
+	public abstract int getLowerBound(int axis, PartialCoordinates coordinates);
 	
 	/**
 	 * Executes a {@link PositionCommand} for every position of the region.
@@ -110,15 +110,16 @@ public abstract class GridRegion implements GridEntity {
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
+		Integer[] boundsCoordinates = new Integer[dimension];
+		PartialCoordinates immutableBoundsCoordinates = new PartialCoordinates(boundsCoordinates);
 		int[] upperBounds = new int[dimension];
 		int[] lowerBounds = new int[dimension];
-		Integer[] boundsCoordinates = new Integer[dimension];
 		int currentAxis = dimension - 1;
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int lowerBound = getLowerBound(0, boundsCoordinates);
-				int upperBound = getUpperBound(0, boundsCoordinates);
+				int lowerBound = getLowerBound(0, immutableBoundsCoordinates);
+				int upperBound = getUpperBound(0, immutableBoundsCoordinates);
 				for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
 					coordinates[0] = currentCoordinate;
 					command.execute(immutableCoordinates);
@@ -126,9 +127,9 @@ public abstract class GridRegion implements GridEntity {
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBound(currentAxis, boundsCoordinates);
+				int localLowerBound = getLowerBound(currentAxis, immutableBoundsCoordinates);
 				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
+				upperBounds[currentAxis] = getUpperBound(currentAxis, immutableBoundsCoordinates);
 				coordinates[currentAxis] = localLowerBound;
 				boundsCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
@@ -159,15 +160,16 @@ public abstract class GridRegion implements GridEntity {
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
+		Integer[] boundsCoordinates = new Integer[dimension];
+		PartialCoordinates immutableBoundsCoordinates = new PartialCoordinates(boundsCoordinates);
 		int[] upperBounds = new int[dimension];
 		int[] lowerBounds = new int[dimension];
-		Integer[] boundsCoordinates = new Integer[dimension];
 		int currentAxis = dimension - 1;
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int lowerBound = getLowerBound(0, boundsCoordinates);
-				int upperBound = getUpperBound(0, boundsCoordinates);
+				int lowerBound = getLowerBound(0, immutableBoundsCoordinates);
+				int upperBound = getUpperBound(0, immutableBoundsCoordinates);
 				int currentCoordinate = lowerBound;
 				coordinates[0] = currentCoordinate;
 				if (!Utils.isEvenPosition(coordinates)) {
@@ -180,9 +182,9 @@ public abstract class GridRegion implements GridEntity {
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBound(currentAxis, boundsCoordinates);
+				int localLowerBound = getLowerBound(currentAxis, immutableBoundsCoordinates);
 				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
+				upperBounds[currentAxis] = getUpperBound(currentAxis, immutableBoundsCoordinates);
 				coordinates[currentAxis] = localLowerBound;
 				boundsCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
@@ -213,15 +215,16 @@ public abstract class GridRegion implements GridEntity {
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
+		Integer[] boundsCoordinates = new Integer[dimension];
+		PartialCoordinates immutableBoundsCoordinates = new PartialCoordinates(boundsCoordinates);
 		int[] upperBounds = new int[dimension];
 		int[] lowerBounds = new int[dimension];
-		Integer[] boundsCoordinates = new Integer[dimension];
 		int currentAxis = dimension - 1;
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int lowerBound = getLowerBound(0, boundsCoordinates);
-				int upperBound = getUpperBound(0, boundsCoordinates);
+				int lowerBound = getLowerBound(0, immutableBoundsCoordinates);
+				int upperBound = getUpperBound(0, immutableBoundsCoordinates);
 				int currentCoordinate = lowerBound;
 				coordinates[0] = currentCoordinate;
 				if (Utils.isEvenPosition(coordinates)) {
@@ -234,9 +237,9 @@ public abstract class GridRegion implements GridEntity {
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBound(currentAxis, boundsCoordinates);
+				int localLowerBound = getLowerBound(currentAxis, immutableBoundsCoordinates);
 				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
+				upperBounds[currentAxis] = getUpperBound(currentAxis, immutableBoundsCoordinates);
 				coordinates[currentAxis] = localLowerBound;
 				boundsCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;

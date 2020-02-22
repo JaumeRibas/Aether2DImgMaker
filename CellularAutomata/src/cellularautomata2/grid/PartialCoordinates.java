@@ -17,7 +17,7 @@
 package cellularautomata2.grid;
 
 /**
- * A way to pass immutable coordinates to methods.
+ * A way to pass immutable partial coordinates to methods.
  * @author Jaume
  *
  */
@@ -25,7 +25,11 @@ public class PartialCoordinates {
 	
 	private Integer[] coordinates;
 	
-	public PartialCoordinates(Integer[] coordinates) {
+	public PartialCoordinates(int count) {
+		coordinates = new Integer[count];
+	}
+	
+	public PartialCoordinates(Integer... coordinates) {
 		this.coordinates = coordinates;
 	}
 	
@@ -39,6 +43,10 @@ public class PartialCoordinates {
 	
 	public Integer[] getCopyAsArray() {
 		return coordinates.clone();
+	}
+	
+	public void copyIntoArray(Integer[] array) {
+		System.arraycopy(coordinates, 0, array, 0, array.length);
 	}
 	
 }

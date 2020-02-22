@@ -16,8 +16,6 @@
  */
 package cellularautomata2.arrays;
 
-import cellularautomata2.grid.IntValueCommand;
-
 public interface MultidimensionalIntArray extends MultidimensionalArray {
 	
 	/**

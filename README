@@ -13,10 +13,10 @@ Parameters:
 	default: "./"
 	The following sub-folder structure will be created at this location: 
 	'/Aether2D/<initial value>/img/<Color map>/slice/<numbered folder>'
-	Each numbered folder will contain up to 10000 images. 
+	Each numbered folder will contain up to 10,000 images. 
 	
 3rd) Initial step (optional)
 	The app will skip ahead to this step without generating images.
 
 	
-Author: Jaume Ribas r.ribas.jaume@gmail.com	2017-2019
+Author: Jaume Ribas r.ribas.jaume@gmail.com	2017-2020

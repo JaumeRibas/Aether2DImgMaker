@@ -6,10 +6,10 @@ import cellularautomata2.arrays.PositionCommand;
 public class Test {
 
 	public static void main(String[] args) {
-		testSpreadIntegerValue();
+		testSpreadIntegerValue2AndUpD();
 	}
 	
-	public static void testSpreadIntegerValue() {
+	public static void testSpreadIntegerValue1D() {
 		int counter = 0;
 		try {
 			SpreadIntegerValue siv = new SpreadIntegerValue(1, 0, 9);
@@ -24,6 +24,26 @@ public class Test {
 				});
 				System.out.println();
 				System.out.println("total: " + siv.getTotalValue());
+				if (counter == 50) break;
+			} while (siv.nextStep());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void testSpreadIntegerValue2AndUpD() {
+		int counter = 0;
+		try {
+			int dimension = 3;
+			SpreadIntegerValue siv = new SpreadIntegerValue(dimension, 49, 0);
+			int[] crossSectionCoordinatesArray = new int[dimension];
+			crossSectionCoordinatesArray[2] = 2;
+			Coordinates crossSectionCoordinates = new Coordinates(crossSectionCoordinatesArray);
+			do {
+				counter++;
+				System.out.println(siv.toString2DCrossSection(0, 1, crossSectionCoordinates));
+				System.out.println("total: " + siv.getTotalValue());
+				System.out.println(System.lineSeparator());
 				if (counter == 50) break;
 			} while (siv.nextStep());
 		} catch (Exception e) {

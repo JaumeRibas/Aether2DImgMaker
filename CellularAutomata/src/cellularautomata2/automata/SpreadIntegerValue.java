@@ -20,10 +20,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import cellularautomata2.arrays.Coordinates;
+import cellularautomata2.arrays.IntValueCommand;
 import cellularautomata2.arrays.PositionCommand;
 import cellularautomata2.arrays.SquareIntArray;
 import cellularautomata2.arrays.Utils;
-import cellularautomata2.grid.IntValueCommand;
+import cellularautomata2.grid.PartialCoordinates;
 
 public class SpreadIntegerValue extends IntCellularAutomaton {
 
@@ -245,12 +246,12 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 	}
 
 	@Override
-	public int getUpperBound(int axis, Integer[] coordinates) {
+	public int getUpperBound(int axis, PartialCoordinates coordinates) {
 		return grid.getSide() - 1 - originIndex;
 	}
 
 	@Override
-	public int getLowerBound(int axis, Integer[] coordinates) {
+	public int getLowerBound(int axis, PartialCoordinates coordinates) {
 		return -getUpperBound(axis, coordinates);
 	}
 

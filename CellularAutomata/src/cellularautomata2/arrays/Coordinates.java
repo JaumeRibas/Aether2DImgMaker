@@ -27,7 +27,7 @@ public class Coordinates {
 	
 	private int[] coordinates;
 	
-	public Coordinates(int[] coordinates) {
+	public Coordinates(int... coordinates) {
 		this.coordinates = coordinates;
 	}
 	

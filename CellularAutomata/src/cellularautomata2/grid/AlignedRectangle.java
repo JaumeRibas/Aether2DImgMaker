@@ -61,13 +61,13 @@ public class AlignedRectangle extends GridRegion {
 	}
 
 	@Override
-	public int getUpperBound(int axis, Integer[] coordinates) {
+	public int getUpperBound(int axis, PartialCoordinates coordinates) {
 		//The returned bounds are independent from the passed coordinates
 		return upperBounds[axis];
 	}
 
 	@Override
-	public int getLowerBound(int axis, Integer[] coordinates) {
+	public int getLowerBound(int axis, PartialCoordinates coordinates) {
 		//The returned bounds are independent from the passed coordinates
 		return lowerBounds[axis];
 	}

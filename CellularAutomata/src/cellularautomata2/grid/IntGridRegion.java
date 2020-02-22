@@ -17,6 +17,7 @@
 package cellularautomata2.grid;
 
 import cellularautomata2.arrays.Coordinates;
+import cellularautomata2.arrays.IntValueCommand;
 import cellularautomata2.arrays.PositionCommand;
 
 public abstract class IntGridRegion extends GridRegion {
@@ -60,6 +61,92 @@ public abstract class IntGridRegion extends GridRegion {
 		GetTotalValueCommand command = new GetTotalValueCommand();
 		forEachValue(command);
 		return command.totalValue;
+	}
+	
+	public String toString2DCrossSection(int horizontalAxis, int verticalAxis, Coordinates coordinates) {
+		return toString2DCrossSection(horizontalAxis, verticalAxis, coordinates, true, true);
+	}	
+	
+	public String toString2DCrossSection(int horizontalAxis, 
+			int verticalAxis, Coordinates coordinates, boolean horizontalDirectionAscending, boolean verticalDirectionAscending) {
+		//TODO add parameters for vertical and horizontal bounds (partial?)
+		if (horizontalAxis == verticalAxis) {
+			throw new IllegalArgumentException("Horizontal and vertical axes must be different.");
+		}
+		int gridDimension = getGridDimension();
+		int lastAxis = gridDimension - 1;
+		if (horizontalAxis < 0 || horizontalAxis > lastAxis) {
+			throw new IllegalArgumentException("Horizontal axis doesn't exist.");
+		}
+		if (verticalAxis < 0 || verticalAxis > lastAxis) {
+			throw new IllegalArgumentException("Vertical axis doesn't exist.");
+		}
+		int[] coordinatesArray = coordinates.getCopyAsArray();
+		if (gridDimension != coordinatesArray.length) {
+			throw new IllegalArgumentException("Region's grid dimension (" 
+					+ gridDimension + ") doesn't match coordinate count (" 
+					+ coordinatesArray.length + ")");
+		}
+		int firstCrossSectionAxis;
+		int secondCrossSectionAxis;
+		if (horizontalAxis < verticalAxis) {
+			firstCrossSectionAxis = horizontalAxis;
+			secondCrossSectionAxis = verticalAxis;
+		} else {
+			firstCrossSectionAxis = verticalAxis;
+			secondCrossSectionAxis = horizontalAxis;
+		}
+		Integer[] boundsCoordinates = new Integer[gridDimension];//filled with nulls by default
+		PartialCoordinates immutableBoundsCoordinates = new PartialCoordinates(boundsCoordinates);
+		//check whether or not coordinates are outside the region
+		final String outOfBoundsMessage = "Coordinates are outside the region.";
+		int axis = 0;
+		for (; axis < firstCrossSectionAxis; axis++) {
+			int coordinate = coordinatesArray[axis];
+			if (coordinate < getLowerBound(axis, immutableBoundsCoordinates)
+					|| coordinate > getUpperBound(axis, immutableBoundsCoordinates)) {
+				throw new IllegalArgumentException(outOfBoundsMessage);
+			}
+			boundsCoordinates[axis] = coordinate;
+		}
+		for (axis++; axis < secondCrossSectionAxis; axis++) {
+			int coordinate = coordinatesArray[axis];
+			if (coordinate < getLowerBound(axis, immutableBoundsCoordinates)
+					|| coordinate > getUpperBound(axis, immutableBoundsCoordinates)) {
+				throw new IllegalArgumentException(outOfBoundsMessage);
+			}
+			boundsCoordinates[axis] = coordinate;
+		}
+		for (axis++; axis < gridDimension; axis++) {
+			int coordinate = coordinatesArray[axis];
+			if (coordinate < getLowerBound(axis, immutableBoundsCoordinates)
+					|| coordinate > getUpperBound(axis, immutableBoundsCoordinates)) {
+				throw new IllegalArgumentException(outOfBoundsMessage);
+			}
+			boundsCoordinates[axis] = coordinate;
+		}
+		int maxVerticalCoordinate = getUpperBound(verticalAxis, immutableBoundsCoordinates);
+		int minVerticalCoordinate = getLowerBound(verticalAxis, immutableBoundsCoordinates);
+		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, immutableBoundsCoordinates);
+		int minHorizontalCoordinate = getLowerBound(horizontalAxis, immutableBoundsCoordinates);
+		StringBuilder strBuilder = new StringBuilder();
+		//TODO use directions
+		Coordinates immutableCoordinates = new Coordinates(coordinatesArray);
+		for (int verticalCoordinate = maxVerticalCoordinate; verticalCoordinate >= minVerticalCoordinate; verticalCoordinate--) {
+			boundsCoordinates[verticalAxis] = verticalCoordinate;
+			coordinatesArray[verticalAxis] = verticalCoordinate;
+			int localMinHorizontalCoordinate = getLowerBound(horizontalAxis, immutableBoundsCoordinates);
+			int localMaxHorizontalCoordinate = getUpperBound(horizontalAxis, immutableBoundsCoordinates);
+			//TODO use margins
+			int localHorizontalMarginLowerEnd = localMinHorizontalCoordinate - minHorizontalCoordinate;
+			int localHorizontalMarginUpperEnd = maxHorizontalCoordinate - localMaxHorizontalCoordinate;
+			for (int horizontalCoordinate = localMinHorizontalCoordinate; horizontalCoordinate <= localMaxHorizontalCoordinate; horizontalCoordinate++) {
+				coordinatesArray[horizontalAxis] = horizontalCoordinate;
+				strBuilder.append(getValue(immutableCoordinates)).append(",");
+			}
+			strBuilder.append(System.lineSeparator());
+		}
+		return strBuilder.toString();
 	}
 	
 	class GetValueBoundsValueCommand implements IntValueCommand {
