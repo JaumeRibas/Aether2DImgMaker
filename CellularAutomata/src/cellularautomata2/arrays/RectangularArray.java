@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata2.arrays;
 
 /**
  * A rectangle-like multidimensional array.
@@ -61,7 +61,7 @@ public abstract class RectangularArray implements MultidimensionalArray {
 		int internalIndex = 0;
 		for (int partialDimension = sizes.length - 1; partialDimension > -1; partialDimension--) {
 			int[] partialSizes = new int[partialDimension + 1];
-			partialSizes[partialDimension] = indexes.getCoordinate(partialDimension);
+			partialSizes[partialDimension] = indexes.get(partialDimension);
 			for (int j = partialDimension - 1; j > -1; j--) {
 				partialSizes[j] = sizes[j];
 			}
@@ -85,9 +85,9 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	
 	
 	@Override
-	public void forEachIndex(CoordinateCommand command) {
+	public void forEachIndex(PositionCommand command) {
 		if (command == null) {
-			throw new IllegalArgumentException("The coordinate command cannot be null.");
+			throw new IllegalArgumentException("The command cannot be null.");
 		}
 		int dimension = getDimension();
 		int[] upperBounds = new int[dimension];
@@ -100,15 +100,15 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	}
 	
 	/**
-	 * Executes a {@link CoordinateCommand} for every index of the edges of the array.
+	 * Executes a {@link PositionCommand} for every index of the edges of the array.
 	 * @param command
 	 */
-	public void forEachEdgeIndex(int edgeWidth, CoordinateCommand command) {
+	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater or equal to one.");
 		}
 		if (command == null) {
-			throw new IllegalArgumentException("The coordinate command cannot be null.");
+			throw new IllegalArgumentException("The command cannot be null.");
 		}
 		int dimension = getDimension();
 		int[] upperBounds = new int[dimension];
@@ -116,11 +116,12 @@ public abstract class RectangularArray implements MultidimensionalArray {
 		int doubleEdgeWidthMinusOne = 2*edgeWidth - 1;
 		boolean anyUpperBoundLowerOrEqualToDoubleEdgeWidth = false;
 		for (int i = 0; i < dimension; i++) {
-			upperBounds[i] = getSize(i) - 1;
+			int upperBound = getSize(i) - 1;
+			upperBounds[i] = upperBound;
 			//lowerBounds[i] = 0; default value
 			anyUpperBoundLowerOrEqualToDoubleEdgeWidth = 
 					anyUpperBoundLowerOrEqualToDoubleEdgeWidth 
-					|| upperBounds[i] <= doubleEdgeWidthMinusOne;
+					|| upperBound <= doubleEdgeWidthMinusOne;
 		}
 		if (anyUpperBoundLowerOrEqualToDoubleEdgeWidth) {
 			//for all positions
@@ -144,29 +145,35 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	}
 	
 	/**
-	 * Executes a {@link CoordinateCommand} for every index within the passed bounds. 
+	 * Executes a {@link PositionCommand} for every index within the passed bounds. 
 	 * 
 	 * @param upperBounds
 	 * @param lowerBounds
 	 * @param command
 	 */
-	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, CoordinateCommand command) {
+	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, PositionCommand command) {
 		int dimension = upperBounds.length;
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		int currentAxis = 0;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				for (coordinates[0] = lowerBounds[0]; coordinates[0] <= upperBounds[0]; coordinates[0]++) {
+				int upperBound = upperBounds[0];
+				for (int currentCoordinate = lowerBounds[0]; currentCoordinate <= upperBound; currentCoordinate++) {
+					coordinates[0] = currentCoordinate;
 					command.execute(immutableCoordinates);
 				}
 				currentAxis++;
-			} else if (coordinates[currentAxis] < upperBounds[currentAxis]) {
-				coordinates[currentAxis]++;
-				currentAxis = 0;
 			} else {
-				coordinates[currentAxis] = lowerBounds[currentAxis];
-				currentAxis++;
+				int currentCoordinate = coordinates[currentAxis];
+				if (currentCoordinate < upperBounds[currentAxis]) {
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					currentAxis = 0;
+				} else {
+					coordinates[currentAxis] = lowerBounds[currentAxis];
+					currentAxis++;
+				}
 			}
 		}
 	}

@@ -21,7 +21,7 @@ package cellularautomata2.grid;
  * @author Jaume
  *
  */
-public class PartialCoordinates implements MultidimensionalEntity {
+public class PartialCoordinates {
 	
 	private Integer[] coordinates;
 	
@@ -29,12 +29,11 @@ public class PartialCoordinates implements MultidimensionalEntity {
 		this.coordinates = coordinates;
 	}
 	
-	public int getCoordinate(int axis) {
+	public Integer get(int axis) {
 		return coordinates[axis];
 	}
-	
-	@Override
-	public int getDimension() {
+
+	public int getCount() {
 		return coordinates.length;
 	}
 	

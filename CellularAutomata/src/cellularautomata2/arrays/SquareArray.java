@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata2.arrays;
 
 /**
  * A square-like multidimensional array.
@@ -51,15 +51,15 @@ public abstract class SquareArray extends RectangularArray {
 	protected int getInternalArrayIndex(Coordinates indexes) {
 		int internalIndex = 0;
 		for (int partialDimension = dimension - 1; partialDimension > -1; partialDimension--) {
-			internalIndex += indexes.getCoordinate(partialDimension) * Math.pow(side, partialDimension);
+			internalIndex += indexes.get(partialDimension) * Math.pow(side, partialDimension);
 		}
 		return internalIndex;
 	}
 	
 	@Override
-	public void forEachIndex(CoordinateCommand command) {
+	public void forEachIndex(PositionCommand command) {
 		if (command == null) {
-			throw new IllegalArgumentException("The coordinate command cannot be null.");
+			throw new IllegalArgumentException("The command cannot be null.");
 		}
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
@@ -67,32 +67,37 @@ public abstract class SquareArray extends RectangularArray {
 		int currentAxis = 0;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				for (coordinates[0] = 0; coordinates[0] < side; coordinates[0]++) {
+				for (int currentCoordinate = 0; currentCoordinate < side; currentCoordinate++) {
+					coordinates[0] = currentCoordinate;
 					command.execute(immutableCoordinates);
 				}
 				currentAxis++;
-			} else if (coordinates[currentAxis] < sideMinusOne) {
-				coordinates[currentAxis]++;
-				currentAxis = 0;
 			} else {
-				coordinates[currentAxis] = 0;
-				currentAxis++;
+				int currentCoordinate = coordinates[currentAxis];
+				if (currentCoordinate < sideMinusOne) {
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					currentAxis = 0;
+				} else {
+					coordinates[currentAxis] = 0;
+					currentAxis++;
+				}
 			}
 		}
 	}
 	
 	/**
-	 * Executes a {@link CoordinateCommand} for every coordinate of the edges of the array.
+	 * Executes a {@link PositionCommand} for every coordinate of the edges of the array.
 	 * 
 	 * @param command
 	 */
 	@Override
-	public void forEachEdgeIndex(int edgeWidth, CoordinateCommand command) {
+	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater or equal to one.");
 		}
 		if (command == null) {
-			throw new IllegalArgumentException("The coordinate command cannot be null.");
+			throw new IllegalArgumentException("The command cannot be null.");
 		}
 		if (side <= 2*edgeWidth) {
 			forEachIndex(command);

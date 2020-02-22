@@ -16,34 +16,13 @@
  */
 package cellularautomata2.grid;
 
-/**
- * A way to pass immutable coordinates to methods.
- * @author Jaume
- *
- */
-public class Coordinates implements MultidimensionalEntity {
-	
-	private int[] coordinates;
-	
-	public Coordinates(int[] coordinates) {
-		this.coordinates = coordinates;
-	}
-	
-	public int getCoordinate(int axis) {
-		return coordinates[axis];
-	}
-	
-	@Override
-	public int getDimension() {
-		return coordinates.length;
-	}
-	
-	public int[] getCopyAsArray() {
-		return coordinates.clone();
-	}
-	
-	public void copyIntoArray(int[] array) {
-		System.arraycopy(coordinates, 0, array, 0, array.length);
-	}
+public interface IntValueCommand {
+
+	/**
+	 * <p>Executes the command.</p>
+	 * 
+	 * @param value
+	 */
+	void execute(int value);
 	
 }

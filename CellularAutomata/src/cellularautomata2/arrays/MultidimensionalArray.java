@@ -14,15 +14,22 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata2.arrays;
 
-public interface MultidimensionalEntity {
+public interface MultidimensionalArray {
 	
 	/**
-	 * Returns the dimension of the entity.
+	 * Returns the dimension of the array.
 	 * 
-	 * @return the dimension of the entity.
+	 * @return the dimension of the array.
 	 */
 	int getDimension();
+	
+	/**
+	 * Executes a {@link PositionCommand} for every index of the array.
+	 * 
+	 * @param command
+	 */
+	void forEachIndex(PositionCommand command);
 	
 }

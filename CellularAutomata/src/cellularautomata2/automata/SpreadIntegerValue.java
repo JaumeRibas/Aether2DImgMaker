@@ -19,10 +19,11 @@ package cellularautomata2.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata2.grid.CoordinateCommand;
-import cellularautomata2.grid.Coordinates;
-import cellularautomata2.grid.SquareIntArray;
-import cellularautomata2.grid.Utils;
+import cellularautomata2.arrays.Coordinates;
+import cellularautomata2.arrays.PositionCommand;
+import cellularautomata2.arrays.SquareIntArray;
+import cellularautomata2.arrays.Utils;
+import cellularautomata2.grid.IntValueCommand;
 
 public class SpreadIntegerValue extends IntCellularAutomaton {
 
@@ -60,7 +61,7 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 		//Make the array of side 5 so as to leave a margin of two positions around the center.
 		int side = 5;
 		grid = new SquareIntArray(gridDimension, side);
-		grid.forEachIndex(new CoordinateCommand() {
+		grid.forEachIndex(new PositionCommand() {
 			@Override 
 			public void execute(Coordinates indexes) {
 				grid.set(indexes, backgroundValue);				
@@ -118,7 +119,7 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 		return sivCommand.changed;
 	}
 	
-	class SpreadIntegerValueCommand implements CoordinateCommand {
+	class SpreadIntegerValueCommand implements PositionCommand {
 		public boolean changed = false;
 		private int gridSideMinusOne;
 		private int gridSide;
@@ -251,6 +252,11 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 	@Override
 	public int getLowerBound(int axis, Integer[] coordinates) {
 		return -getUpperBound(axis, coordinates);
+	}
+
+	@Override
+	public void forEachValue(IntValueCommand command) {
+		grid.forEachValue(command);
 	}
 	
 }

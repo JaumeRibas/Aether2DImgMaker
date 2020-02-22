@@ -16,6 +16,9 @@
  */
 package cellularautomata2.grid;
 
+import cellularautomata2.arrays.Coordinates;
+import cellularautomata2.arrays.PositionCommand;
+
 public abstract class IntGridRegion extends GridRegion {
 	
 	/**
@@ -28,37 +31,56 @@ public abstract class IntGridRegion extends GridRegion {
 	 * @return the value at the given position.
 	 */
 	public abstract int getValue(Coordinates coordinates);
+	
+	/**
+	 * Executes a {@link IntValueCommand} for every value of the region.
+	 * @param command
+	 */
+	public abstract void forEachValue(IntValueCommand command);
 
 	public Bounds getValueBounds() throws Exception {
-		GetValueBoundsCommand command = new GetValueBoundsCommand(this);
-		forEachPosition(command);
+		GetValueBoundsValueCommand command = new GetValueBoundsValueCommand();
+		forEachValue(command);
 		return new Bounds(command.lowerBound, command.upperBound);
 	}
 	
 	public Bounds getEvenPositionsValueBounds() throws Exception {
-		GetValueBoundsCommand command = new GetValueBoundsCommand(this);
+		GetValueBoundsCoordinateCommand command = new GetValueBoundsCoordinateCommand(this);
 		forEachEvenPosition(command);
 		return new Bounds(command.lowerBound, command.upperBound);
 	}
 	
 	public Bounds getOddPositionsValueBounds() throws Exception {
-		GetValueBoundsCommand command = new GetValueBoundsCommand(this);
+		GetValueBoundsCoordinateCommand command = new GetValueBoundsCoordinateCommand(this);
 		forEachOddPosition(command);
 		return new Bounds(command.lowerBound, command.upperBound);
 	}
 	
 	public long getTotalValue() throws Exception {
-		GetTotalValueCommand command = new GetTotalValueCommand(this);
-		forEachPosition(command);
+		GetTotalValueCommand command = new GetTotalValueCommand();
+		forEachValue(command);
 		return command.totalValue;
 	}
 	
-	class GetValueBoundsCommand implements CoordinateCommand {
+	class GetValueBoundsValueCommand implements IntValueCommand {
+		public int lowerBound = Integer.MAX_VALUE;
+		public int upperBound = Integer.MIN_VALUE;
+		
+		@Override
+		public void execute(int value) {
+			if (value > upperBound)
+				upperBound = value;
+			if (value < lowerBound)
+				lowerBound = value;
+		}
+	}
+	
+	class GetValueBoundsCoordinateCommand implements PositionCommand {
 		public int lowerBound = Integer.MAX_VALUE;
 		public int upperBound = Integer.MIN_VALUE;
 		private IntGridRegion region;
 		
-		public GetValueBoundsCommand(IntGridRegion region) {
+		public GetValueBoundsCoordinateCommand(IntGridRegion region) {
 			this.region = region;
 		}
 		
@@ -72,17 +94,12 @@ public abstract class IntGridRegion extends GridRegion {
 		}
 	}
 	
-	class GetTotalValueCommand implements CoordinateCommand {
+	class GetTotalValueCommand implements IntValueCommand {
 		public int totalValue = 0;
-		private IntGridRegion region;
-		
-		public GetTotalValueCommand(IntGridRegion region) {
-			this.region = region;
-		}
 		
 		@Override
-		public void execute(Coordinates coordinates) {
-			totalValue += region.getValue(coordinates);
+		public void execute(int value) {
+			totalValue += value;
 		}
 	}
 }

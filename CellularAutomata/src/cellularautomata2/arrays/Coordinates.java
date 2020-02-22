@@ -14,15 +14,42 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata2.arrays;
 
-public interface MultidimensionalArray extends MultidimensionalEntity {
+import java.util.Arrays;
+
+/**
+ * A way to pass immutable coordinates to methods.
+ * @author Jaume
+ *
+ */
+public class Coordinates {
 	
-	/**
-	 * Executes a {@link CoordinateCommand} for every index of the array.
-	 * 
-	 * @param command
-	 */
-	void forEachIndex(CoordinateCommand command);
+	private int[] coordinates;
+	
+	public Coordinates(int[] coordinates) {
+		this.coordinates = coordinates;
+	}
+	
+	public int get(int axis) {
+		return coordinates[axis];
+	}
+	
+	public int getCount() {
+		return coordinates.length;
+	}
+	
+	public int[] getCopyAsArray() {
+		return coordinates.clone();
+	}
+	
+	public void copyIntoArray(int[] array) {
+		System.arraycopy(coordinates, 0, array, 0, array.length);
+	}
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(coordinates);
+	}
 	
 }

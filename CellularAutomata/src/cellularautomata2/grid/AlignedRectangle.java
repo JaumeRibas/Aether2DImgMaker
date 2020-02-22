@@ -16,7 +16,7 @@
  */
 package cellularautomata2.grid;
 /**
- * A rectangle-like region of dimension n, whose sides are parallel to the axes.
+ * A rectangle-like region of dimension n, whose edges are parallel to the axes.
  * 
  * @author Jaume
  *
@@ -39,7 +39,7 @@ public class AlignedRectangle extends GridRegion {
 		}
 		int gridDimension = vertex1.length;
 		if (gridDimension != vertex2.length) {
-			throw new IllegalArgumentException("Vertices must have the same grid dimension.");
+			throw new IllegalArgumentException("Vertices must have the same number of coordinates.");
 		}
 		//get rectangle bounds from vertices
 		upperBounds = new int[gridDimension];

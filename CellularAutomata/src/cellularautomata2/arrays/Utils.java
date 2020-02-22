@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata2.arrays;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -32,7 +32,6 @@ public class Utils {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
-
 	/**
 	 * Adds a value to each element of an array
 	 * 
@@ -45,4 +44,10 @@ public class Utils {
 			array[i] += value;
 		}
 	}
+	
+	public static <T> void copyArrayWithoutElement(T[] sourceArray, T[] targetArray, int indexToSkip) {
+		System.arraycopy(sourceArray, 0, targetArray, 0, indexToSkip);
+		System.arraycopy(sourceArray, indexToSkip + 1, targetArray, indexToSkip, targetArray.length - indexToSkip);
+	}
+	
 }

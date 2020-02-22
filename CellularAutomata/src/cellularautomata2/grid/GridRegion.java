@@ -16,6 +16,10 @@
  */
 package cellularautomata2.grid;
 
+import cellularautomata2.arrays.Coordinates;
+import cellularautomata2.arrays.PositionCommand;
+import cellularautomata2.arrays.Utils;
+
 /**
  * A region of a grid whose shape is such that no line parallel to an axis crosses its bounds in more than two places.
  *  
@@ -36,27 +40,26 @@ public abstract class GridRegion implements GridEntity {
 	
 	/**
 	 * <p>Returns the local upper bound of the region on the given axis at the given coordinates.</p>
+	 * <p>It is not defined to call this method on a coordinate array with length different from {@link #getGridDimension()}.
+	 * <p>The coordinate of the axis whose bound is being requested is ignored.</p>
 	 * <p>{@link null} coordinates may be passed to indicate no restriction on one or more axes.</p>
-	 * <p>It is not defined to call this method on a coordinate array with length different from {@link #getGridDimension()} - 1.
 	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the region.</p>
-	 * <p>This bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
+	 * <p>These bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
 	 * And progressively narrowing down the coordinates by calling {@link #getUpperBound(int axis, Integer[] coordinates)} 
 	 * and {@link #getLowerBound(int axis, Integer[] coordinates)} adding one extra coordinate value in every call. 
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
 	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
 	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getUpperBound(2) getLowerBound(2) (1 <= z <= 5)</li>
-	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> == 3:
-	 * getUpperBound(1, new Integer[]{null, 3}) getLowerBound(1, new Integer[]{null, 3}) (note that the coordinates in the array must be in 
-	 * the same order as the axes excluding the axis whose bounds are being requested)
-	 * (10 <= y <= 12)</li>
+	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> = 3:
+	 * getUpperBound(1, new Integer[]{null, null, 3}) getLowerBound(1, new Integer[]{null, null, 3}) (10 <= y <= 12)</li>
 	 * <li>Using both the global <strong>z</strong> bounds and the local <strong>y</strong> bounds obtained, 
-	 * get the local <strong>x</strong> bounds where <strong>z</strong> == 3 and <strong>y</strong> == 11:
-	 * getUpperBound(0, new Integer[]{11, 3}) getLowerBound(0, new Integer[]{11, 3})</li>
+	 * get the local <strong>x</strong> bounds where <strong>z</strong> = 3 and <strong>y</strong> = 11:
+	 * getUpperBound(0, new Integer[]{null, 11, 3}) getLowerBound(0, new Integer[]{null, 11, 3})</li>
 	 * </ol>
 	 * 
 	 * @param  axis the index of the axis on which the upper bound is requested.
-	 * @param coordinates an {@link Integer} array of length {@link #getGridDimension()} - 1 representing the coordinates on the other axes in order.
+	 * @param coordinates an {@link Integer} array of length {@link #getGridDimension()} with the coordinates.
 	 * @return  the upper bound
 	 */
 	public abstract int getUpperBound(int axis, Integer[] coordinates); //Use PartialCoordinates?
@@ -73,180 +76,182 @@ public abstract class GridRegion implements GridEntity {
 	
 	/**
 	 * <p>Returns the local lower bound of the region on the given axis at the given coordinates.</p>
+	 * <p>It is not defined to call this method on a coordinate array with length different from {@link #getGridDimension()}.
 	 * <p>{@link null} coordinates may be passed to indicate no restriction on one or more axes.</p>
-	 * <p>It is not defined to call this method on a coordinate array with length different from {@link #getGridDimension()} - 1.
 	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the region.</p>
-	 * <p>This bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
+	 * <p>These bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
 	 * And progressively narrowing down the coordinates by calling {@link #getUpperBound(int axis, Integer[] coordinates)} 
 	 * and {@link #getLowerBound(int axis, Integer[] coordinates)} adding one extra coordinate value in every call. 
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
 	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
 	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getUpperBound(2) getLowerBound(2) (1 <= z <= 5)</li>
-	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> == 3:
-	 * getUpperBound(1, new Integer[]{null, 3}) getLowerBound(1, new Integer[]{null, 3}) (note that the coordinates in the array must be in 
-	 * the same order as the axes excluding the axis whose bounds are being requested)
-	 * (10 <= y <= 12)</li>
+	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> = 3:
+	 * getUpperBound(1, new Integer[]{null, null, 3}) getLowerBound(1, new Integer[]{null, null, 3}) (10 <= y <= 12)</li>
 	 * <li>Using both the global <strong>z</strong> bounds and the local <strong>y</strong> bounds obtained, 
-	 * get the local <strong>x</strong> bounds where <strong>z</strong> == 3 and <strong>y</strong> == 11:
-	 * getUpperBound(0, new Integer[]{11, 3}) getLowerBound(0, new Integer[]{11, 3})</li>
+	 * get the local <strong>x</strong> bounds where <strong>z</strong> = 3 and <strong>y</strong> = 11:
+	 * getUpperBound(0, new Integer[]{null, 11, 3}) getLowerBound(0, new Integer[]{null, 11, 3})</li>
 	 * </ol>
 	 * 
 	 * @param  axis the index of the axis on which the lower bound is requested.
-	 * @param coordinates an {@link Integer} array of length {@link #getGridDimension()} - 1 representing the coordinates on the other axes in order.
+	 * @param coordinates an {@link Integer} array of length {@link #getGridDimension()} - 1 with the coordinates.
 	 * @return  the lower bound
 	 */
 	public abstract int getLowerBound(int axis, Integer[] coordinates);
 	
 	/**
-	 * Executes a {@link CoordinateCommand} for every coordinate of the region.
+	 * Executes a {@link PositionCommand} for every position of the region.
 	 * @param command
 	 */
-	public void forEachPosition(CoordinateCommand command) {
+	public void forEachPosition(PositionCommand command) {
 		if (command == null) {
-			throw new IllegalArgumentException("The coordinate command cannot be null.");
+			throw new IllegalArgumentException("The command cannot be null.");
 		}
 		int dimension = getGridDimension();
-		int dimensionMinusOne = dimension - 1;
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
-		Integer[] upperBounds = new Integer[dimension];
-		Integer[] lowerBounds = new Integer[dimension];
-		int currentAxis = dimensionMinusOne;
+		int[] upperBounds = new int[dimension];
+		int[] lowerBounds = new int[dimension];
+		Integer[] boundsCoordinates = new Integer[dimension];
+		int currentAxis = dimension - 1;
+		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
-			boolean isBeginningOfLoop = false;
-			if (lowerBounds[currentAxis] == null) {
-				isBeginningOfLoop = true;
-				Integer[] boundsCoordinates = new Integer[dimensionMinusOne];
-				for (int i = currentAxis + 1; i < dimension; i++) {
-					boundsCoordinates[i-1] = new Integer(coordinates[i]);
-				}
-				lowerBounds[currentAxis] = getLowerBound(currentAxis, boundsCoordinates);
-				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
-			}
 			if (currentAxis == 0) {
-				int lowerBound = lowerBounds[0];
-				int upperBound = upperBounds[0];
-				for (coordinates[0] = lowerBound; coordinates[0] <= upperBound; coordinates[0]++) {
+				int lowerBound = getLowerBound(0, boundsCoordinates);
+				int upperBound = getUpperBound(0, boundsCoordinates);
+				for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
+					coordinates[0] = currentCoordinate;
 					command.execute(immutableCoordinates);
 				}
-				lowerBounds[0] = null;
-				upperBounds[0] = null;
+				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				coordinates[currentAxis] = lowerBounds[currentAxis];
-				currentAxis--;
-			} else if (coordinates[currentAxis] < upperBounds[currentAxis]) {
-				coordinates[currentAxis]++;
+				int localLowerBound = getLowerBound(currentAxis, boundsCoordinates);
+				lowerBounds[currentAxis] = localLowerBound;
+				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
+				coordinates[currentAxis] = localLowerBound;
+				boundsCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
 			} else {
-				lowerBounds[0] = null;
-				upperBounds[0] = null;
-				currentAxis++;
+				int currentCoordinate = coordinates[currentAxis];
+				if (currentCoordinate < upperBounds[currentAxis]) {
+					isBeginningOfLoop = true;
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					boundsCoordinates[currentAxis] = currentCoordinate;
+					currentAxis--;
+				} else {
+					boundsCoordinates[currentAxis] = null;
+					currentAxis++;
+				}
 			}
 		}
 	}
 	
 	/**
-	 * Executes a {@link CoordinateCommand} for every even coordinate of the region.
+	 * Executes a {@link PositionCommand} for every even position of the region.
 	 * @param commands
 	 */
-	public void forEachEvenPosition(CoordinateCommand command) {
+	public void forEachEvenPosition(PositionCommand command) {
 		if (command == null) {
-			throw new IllegalArgumentException("The coordinate command cannot be null.");
+			throw new IllegalArgumentException("The command cannot be null.");
 		}
 		int dimension = getGridDimension();
-		int dimensionMinusOne = dimension - 1;
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
-		Integer[] upperBounds = new Integer[dimension];
-		Integer[] lowerBounds = new Integer[dimension];
-		int currentAxis = dimensionMinusOne;
+		int[] upperBounds = new int[dimension];
+		int[] lowerBounds = new int[dimension];
+		Integer[] boundsCoordinates = new Integer[dimension];
+		int currentAxis = dimension - 1;
+		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
-			boolean isBeginningOfLoop = false;
-			if (lowerBounds[currentAxis] == null) {
-				isBeginningOfLoop = true;
-				Integer[] boundsCoordinates = new Integer[dimensionMinusOne];
-				for (int i = currentAxis + 1; i < dimension; i++) {
-					boundsCoordinates[i-1] = new Integer(coordinates[i]);
-				}
-				lowerBounds[currentAxis] = getLowerBound(currentAxis, boundsCoordinates);
-				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
-			}
 			if (currentAxis == 0) {
-				coordinates[0] = lowerBounds[0];
+				int lowerBound = getLowerBound(0, boundsCoordinates);
+				int upperBound = getUpperBound(0, boundsCoordinates);
+				int currentCoordinate = lowerBound;
+				coordinates[0] = currentCoordinate;
 				if (!Utils.isEvenPosition(coordinates)) {
-					coordinates[0]++;
+					currentCoordinate++;
 				}
-				int upperBound = upperBounds[0];
-				for (; coordinates[0] <= upperBound; coordinates[0] += 2) {
+				for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
+					coordinates[0] = currentCoordinate;
 					command.execute(immutableCoordinates);
 				}
-				lowerBounds[0] = null;
-				upperBounds[0] = null;
+				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				coordinates[currentAxis] = lowerBounds[currentAxis];
-				currentAxis--;
-			} else if (coordinates[currentAxis] < upperBounds[currentAxis]) {
-				coordinates[currentAxis]++;
+				int localLowerBound = getLowerBound(currentAxis, boundsCoordinates);
+				lowerBounds[currentAxis] = localLowerBound;
+				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
+				coordinates[currentAxis] = localLowerBound;
+				boundsCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
 			} else {
-				lowerBounds[0] = null;
-				upperBounds[0] = null;
-				currentAxis++;
+				int currentCoordinate = coordinates[currentAxis];
+				if (currentCoordinate < upperBounds[currentAxis]) {
+					isBeginningOfLoop = true;
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					boundsCoordinates[currentAxis] = currentCoordinate;
+					currentAxis--;
+				} else {
+					boundsCoordinates[currentAxis] = null;
+					currentAxis++;
+				}
 			}
 		}
 	}
 	
 	/**
-	 * Executes a {@link CoordinateCommand} for every odd coordinate of the region.
+	 * Executes a {@link PositionCommand} for every odd position of the region.
 	 * @param commands
 	 */
-	public void forEachOddPosition(CoordinateCommand command) {
+	public void forEachOddPosition(PositionCommand command) {
 		if (command == null) {
-			throw new IllegalArgumentException("The coordinate command cannot be null.");
+			throw new IllegalArgumentException("The command cannot be null.");
 		}
 		int dimension = getGridDimension();
-		int dimensionMinusOne = dimension - 1;
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
-		Integer[] upperBounds = new Integer[dimension];
-		Integer[] lowerBounds = new Integer[dimension];
-		int currentAxis = dimensionMinusOne;
+		int[] upperBounds = new int[dimension];
+		int[] lowerBounds = new int[dimension];
+		Integer[] boundsCoordinates = new Integer[dimension];
+		int currentAxis = dimension - 1;
+		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
-			boolean isBeginningOfLoop = false;
-			if (lowerBounds[currentAxis] == null) {
-				isBeginningOfLoop = true;
-				Integer[] boundsCoordinates = new Integer[dimensionMinusOne];
-				for (int i = currentAxis + 1; i < dimension; i++) {
-					boundsCoordinates[i-1] = new Integer(coordinates[i]);
-				}
-				lowerBounds[currentAxis] = getLowerBound(currentAxis, boundsCoordinates);
-				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
-			}
 			if (currentAxis == 0) {
-				coordinates[0] = lowerBounds[0];
+				int lowerBound = getLowerBound(0, boundsCoordinates);
+				int upperBound = getUpperBound(0, boundsCoordinates);
+				int currentCoordinate = lowerBound;
+				coordinates[0] = currentCoordinate;
 				if (Utils.isEvenPosition(coordinates)) {
-					coordinates[0]++;
+					currentCoordinate++;
 				}
-				int upperBound = upperBounds[0];
-				for (; coordinates[0] <= upperBound; coordinates[0] += 2) {
+				for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
+					coordinates[0] = currentCoordinate;
 					command.execute(immutableCoordinates);
 				}
-				lowerBounds[0] = null;
-				upperBounds[0] = null;
+				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				coordinates[currentAxis] = lowerBounds[currentAxis];
-				currentAxis--;
-			} else if (coordinates[currentAxis] < upperBounds[currentAxis]) {
-				coordinates[currentAxis]++;
+				int localLowerBound = getLowerBound(currentAxis, boundsCoordinates);
+				lowerBounds[currentAxis] = localLowerBound;
+				upperBounds[currentAxis] = getUpperBound(currentAxis, boundsCoordinates);
+				coordinates[currentAxis] = localLowerBound;
+				boundsCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
 			} else {
-				lowerBounds[0] = null;
-				upperBounds[0] = null;
-				currentAxis++;
+				int currentCoordinate = coordinates[currentAxis];
+				if (currentCoordinate < upperBounds[currentAxis]) {
+					isBeginningOfLoop = true;
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					boundsCoordinates[currentAxis] = currentCoordinate;
+					currentAxis--;
+				} else {
+					boundsCoordinates[currentAxis] = null;
+					currentAxis++;
+				}
 			}
 		}
 	}

@@ -14,13 +14,23 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata2.arrays;
+
+import cellularautomata2.grid.IntValueCommand;
 
 public interface MultidimensionalIntArray extends MultidimensionalArray {
 	
 	/**
-	 * <p>Gets the value at the given coordinates.</p>
-	 * <p>It is not defined to call this method with indexes of a dimension different form the array's dimension. This is obtained by calling the {@link #getDimension()} method.</p>
+	 * Executes a {@link IntValueCommand} for every value of the array.
+	 * 
+	 * @param command
+	 */
+	void forEachValue(IntValueCommand command);
+	
+	/**
+	 * <p>Gets the value at the given indexes.</p>
+	 * <p>It is not defined to call this method with an index count different form the dimension of the array. 
+	 * These can be obtained by calling {@link Coordinates#getCount()} and {@link #getDimension()} respectively.</p>
 	 * <p>It is also not defined to call this method with indexes outside the bounds of the array.</p>
 	 * 
 	 * @param indexes
@@ -30,7 +40,8 @@ public interface MultidimensionalIntArray extends MultidimensionalArray {
 
 	/**
 	 * <p>Adds a value to the position at the given indexes and returns the resulting value.</p>
-	 * <p>It is not defined to call this method with indexes of a dimension different form the array's dimension. This is obtained by calling the {@link #getDimension()} method.</p>
+	 * <p>It is not defined to call this method with an index count different form the dimension of the array. 
+	 * These can be obtained by calling {@link Coordinates#getCount()} and {@link #getDimension()} respectively.</p>
 	 * <p>It is also not defined to call this method with indexes outside the bounds of the array.</p>
 	 * 
 	 * @param indexes
@@ -41,10 +52,12 @@ public interface MultidimensionalIntArray extends MultidimensionalArray {
 
 	/**
 	 * <p>Sets the value at the given indexes.</p>
-	 * <p>It is not defined to call this method with indexes of a dimension different form the array's dimension. This is obtained by calling the {@link #getDimension()} method.</p>
+	 * <p>It is not defined to call this method with an index count different form the dimension of the array. 
+	 * These can be obtained by calling {@link Coordinates#getCount()} and {@link #getDimension()} respectively.</p>
 	 * <p>It is also not defined to call this method with indexes outside the bounds of the array.</p>
 	 * 
 	 * @param indexes
+	 * @param value
 	 */
 	void set(Coordinates indexes, int value);
 

@@ -14,7 +14,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata2.arrays;
+
+import cellularautomata2.grid.IntValueCommand;
 
 public class SquareIntArray extends SquareArray implements MultidimensionalIntArray {
 
@@ -51,12 +53,21 @@ public class SquareIntArray extends SquareArray implements MultidimensionalIntAr
 	}
 	
 	public void padEdges(int edgeWidth, int value) {
-		forEachEdgeIndex(edgeWidth, new CoordinateCommand() {		
+		forEachEdgeIndex(edgeWidth, new PositionCommand() {		
 			@Override
 			public void execute(Coordinates coordinates) {
 				set(coordinates, value);
 			}
 		});
+	}
+	
+	@Override
+	public void forEachValue(IntValueCommand command) {
+		if (command != null) {
+			for (int i = 0; i < values.length; i++) {
+				command.execute(values[i]);
+			}
+		}
 	}
 	
 }
