@@ -96,47 +96,47 @@ public abstract class IntGridRegion extends GridRegion {
 			firstCrossSectionAxis = verticalAxis;
 			secondCrossSectionAxis = horizontalAxis;
 		}
-		Integer[] boundsCoordinates = new Integer[gridDimension];//filled with nulls by default
-		PartialCoordinates immutableBoundsCoordinates = new PartialCoordinates(boundsCoordinates);
+		Integer[] partialCoordinates = new Integer[gridDimension];//filled with nulls by default
+		PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 		//check whether or not coordinates are outside the region
 		final String outOfBoundsMessage = "Coordinates are outside the region.";
 		int axis = 0;
 		for (; axis < firstCrossSectionAxis; axis++) {
 			int coordinate = coordinatesArray[axis];
-			if (coordinate < getLowerBound(axis, immutableBoundsCoordinates)
-					|| coordinate > getUpperBound(axis, immutableBoundsCoordinates)) {
+			if (coordinate < getLowerBound(axis, immutablePartialCoordinates)
+					|| coordinate > getUpperBound(axis, immutablePartialCoordinates)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
 			}
-			boundsCoordinates[axis] = coordinate;
+			partialCoordinates[axis] = coordinate;
 		}
 		for (axis++; axis < secondCrossSectionAxis; axis++) {
 			int coordinate = coordinatesArray[axis];
-			if (coordinate < getLowerBound(axis, immutableBoundsCoordinates)
-					|| coordinate > getUpperBound(axis, immutableBoundsCoordinates)) {
+			if (coordinate < getLowerBound(axis, immutablePartialCoordinates)
+					|| coordinate > getUpperBound(axis, immutablePartialCoordinates)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
 			}
-			boundsCoordinates[axis] = coordinate;
+			partialCoordinates[axis] = coordinate;
 		}
 		for (axis++; axis < gridDimension; axis++) {
 			int coordinate = coordinatesArray[axis];
-			if (coordinate < getLowerBound(axis, immutableBoundsCoordinates)
-					|| coordinate > getUpperBound(axis, immutableBoundsCoordinates)) {
+			if (coordinate < getLowerBound(axis, immutablePartialCoordinates)
+					|| coordinate > getUpperBound(axis, immutablePartialCoordinates)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
 			}
-			boundsCoordinates[axis] = coordinate;
+			partialCoordinates[axis] = coordinate;
 		}
-		int maxVerticalCoordinate = getUpperBound(verticalAxis, immutableBoundsCoordinates);
-		int minVerticalCoordinate = getLowerBound(verticalAxis, immutableBoundsCoordinates);
-		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, immutableBoundsCoordinates);
-		int minHorizontalCoordinate = getLowerBound(horizontalAxis, immutableBoundsCoordinates);
+		int maxVerticalCoordinate = getUpperBound(verticalAxis, immutablePartialCoordinates);
+		int minVerticalCoordinate = getLowerBound(verticalAxis, immutablePartialCoordinates);
+		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, immutablePartialCoordinates);
+		int minHorizontalCoordinate = getLowerBound(horizontalAxis, immutablePartialCoordinates);
 		StringBuilder strBuilder = new StringBuilder();
 		//TODO use directions
 		Coordinates immutableCoordinates = new Coordinates(coordinatesArray);
 		for (int verticalCoordinate = maxVerticalCoordinate; verticalCoordinate >= minVerticalCoordinate; verticalCoordinate--) {
-			boundsCoordinates[verticalAxis] = verticalCoordinate;
+			partialCoordinates[verticalAxis] = verticalCoordinate;
 			coordinatesArray[verticalAxis] = verticalCoordinate;
-			int localMinHorizontalCoordinate = getLowerBound(horizontalAxis, immutableBoundsCoordinates);
-			int localMaxHorizontalCoordinate = getUpperBound(horizontalAxis, immutableBoundsCoordinates);
+			int localMinHorizontalCoordinate = getLowerBound(horizontalAxis, immutablePartialCoordinates);
+			int localMaxHorizontalCoordinate = getUpperBound(horizontalAxis, immutablePartialCoordinates);
 			//TODO use margins
 			int localHorizontalMarginLowerEnd = localMinHorizontalCoordinate - minHorizontalCoordinate;
 			int localHorizontalMarginUpperEnd = maxHorizontalCoordinate - localMaxHorizontalCoordinate;

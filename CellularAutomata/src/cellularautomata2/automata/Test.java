@@ -32,19 +32,19 @@ public class Test {
 	}
 	
 	public static void testSpreadIntegerValue2AndUpD() {
-		int counter = 0;
+		//int counter = 0;
 		try {
-			int dimension = 3;
-			SpreadIntegerValue siv = new SpreadIntegerValue(dimension, 49, 0);
+			int dimension = 2;
+			SpreadIntegerValue siv = new SpreadIntegerValue(dimension, 20000, 0);
 			int[] crossSectionCoordinatesArray = new int[dimension];
-			crossSectionCoordinatesArray[2] = 2;
+			//crossSectionCoordinatesArray[2] = 1;
 			Coordinates crossSectionCoordinates = new Coordinates(crossSectionCoordinatesArray);
 			do {
-				counter++;
+				//counter++;
 				System.out.println(siv.toString2DCrossSection(0, 1, crossSectionCoordinates));
 				System.out.println("total: " + siv.getTotalValue());
 				System.out.println(System.lineSeparator());
-				if (counter == 50) break;
+				//if (counter == 50) break;
 			} while (siv.nextStep());
 		} catch (Exception e) {
 			e.printStackTrace();

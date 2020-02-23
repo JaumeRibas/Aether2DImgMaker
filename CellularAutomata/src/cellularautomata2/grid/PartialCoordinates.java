@@ -25,10 +25,6 @@ public class PartialCoordinates {
 	
 	private Integer[] coordinates;
 	
-	public PartialCoordinates(int count) {
-		coordinates = new Integer[count];
-	}
-	
 	public PartialCoordinates(Integer... coordinates) {
 		this.coordinates = coordinates;
 	}
