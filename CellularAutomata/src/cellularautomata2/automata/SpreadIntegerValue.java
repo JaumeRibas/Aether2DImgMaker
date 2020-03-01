@@ -108,10 +108,10 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 			newGrid = new SquareIntArray(gridDimension, grid.getSide());
 		}
 		SpreadIntegerValueCommand sivCommand = new SpreadIntegerValueCommand(newGrid, indexOffset);
-		//For every position
+		//For every position apply rules
 		grid.forEachIndex(sivCommand);
 		//Replace the old array with the new one
-		this.grid = newGrid;
+		grid = newGrid;
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
@@ -153,27 +153,29 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 							isPositionCloseToEdge = true;
 						}
 						if (indexOnAxis < gridSideMinusOne) {
-							indexes[axis] += 1;
+							indexes[axis] = indexOnAxis + 1;
 							upperNeighborValues[axis] = grid.get(immutableIndexes);
 							if (indexOnAxis > 0) {
-								indexes[axis] -= 2;
+								indexes[axis] = indexOnAxis - 1;
 								lowerNeighborValues[axis] = grid.get(immutableIndexes);
 							} else {
 								lowerNeighborValues[axis] = backgroundValue; 
 							}
 						} else {
 							upperNeighborValues[axis] = backgroundValue;
-							indexes[axis] -= 1;
+							indexes[axis] = indexOnAxis - 1;
 							//if the grid side where one, this would be out of bounds.
 							//but since it starts at 5 and only gets bigger it's fine
 							lowerNeighborValues[axis] = grid.get(immutableIndexes);
 						}
 						indexes[axis] = indexOnAxis;//reset index
-						isUpperNeighborValueEqual[axis] = value == upperNeighborValues[axis];
-						isLowerNeighborValueEqual[axis] = value == lowerNeighborValues[axis];
+						boolean isCurrentUpperNeighborValueEqual = value == upperNeighborValues[axis];
+						boolean isCurrentLowerNeighborValueEqual = value == lowerNeighborValues[axis];
+						isUpperNeighborValueEqual[axis] = isCurrentUpperNeighborValueEqual;
+						isLowerNeighborValueEqual[axis] = isCurrentLowerNeighborValueEqual;
 						areAllNeighborValuesEqual = areAllNeighborValuesEqual 
-								&& isUpperNeighborValueEqual[axis] 
-								&& isLowerNeighborValueEqual[axis];
+								&& isCurrentUpperNeighborValueEqual 
+								&& isCurrentLowerNeighborValueEqual;
 					}
 					System.arraycopy(indexes, 0, newIndexes, 0, newIndexes.length);
 					Utils.addToArray(newIndexes, indexOffset);
@@ -195,14 +197,14 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 								if (isUpperNeighborValueEqual[axis]) {
 									newGrid.addAndGet(immutableNewIndexes, share);
 								} else {
-									newIndexes[axis] += 1;
+									newIndexes[axis] = newIndexOnAxis + 1;
 									newGrid.addAndGet(immutableNewIndexes, share);
 									newIndexes[axis] = newIndexOnAxis;//reset index
 								}
 								if (isLowerNeighborValueEqual[axis]) {
 									newGrid.addAndGet(immutableNewIndexes, share);
 								} else {
-									newIndexes[axis] -= 1;
+									newIndexes[axis] = newIndexOnAxis - 1;
 									newGrid.addAndGet(immutableNewIndexes, share);
 									newIndexes[axis] = newIndexOnAxis;//reset index
 								}
@@ -241,8 +243,7 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

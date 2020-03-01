@@ -47,6 +47,31 @@ public class Test {
 		compare(ae1, ae2);
 	}
 	
+	public static void testAetherRandomConfig() {
+		Aether3DRandomConfiguration ae1 = new Aether3DRandomConfiguration(3, -10, 10);
+		stepByStep(ae1);
+	}
+	
+	public static int findAetherMaxSafeIntValue(int dimension, int minValue) {	
+		long maxValue = (long)Integer.MAX_VALUE + 1;
+		long maxResultingValue;
+		do {
+			maxValue--;
+			maxResultingValue = minValue + (((maxValue-minValue)/2)*dimension*2);
+		} while(maxResultingValue > Integer.MAX_VALUE);
+		return (int)maxValue;
+	}
+	
+	public static int findAetherMinSafeIntValue(int dimension, int maxValue) {	
+		long minValue = (long)Integer.MAX_VALUE -1;
+		long maxResultingValue;
+		do {
+			minValue++;
+			maxResultingValue = minValue + (((maxValue-minValue)/2)*dimension*2);
+		} while(maxResultingValue > Integer.MAX_VALUE);
+		return (int)minValue;
+	}
+	
 	public static void raceSandpileImplementations() {
 		long initialValue = 2000;
 		SpreadIntegerValue1D siv1 = new SpreadIntegerValue1D(initialValue, 0);
@@ -142,6 +167,38 @@ public class Test {
 	}
 	
 	public static void compare(SymmetricLongCellularAutomaton2D ca1, SymmetricLongCellularAutomaton2D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+					for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+						if (ca1.getValueAtPosition(x, y) != ca2.getValueAtPosition(x, y)) {
+							equal = false;
+							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+									+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y) 
+									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y));
+						}
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricLongCellularAutomaton2D ca1, IntCellularAutomaton2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -270,6 +327,40 @@ public class Test {
 	}
 	
 	public static void compare(SymmetricLongCellularAutomaton3D ca1, SymmetricLongCellularAutomaton3D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
+								equal = false;
+								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+										+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
+										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricLongCellularAutomaton3D ca1, IntCellularAutomaton3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -622,6 +713,25 @@ public class Test {
 		}
 	}
 	
+	public static void checkTotalValueConservation(IntCellularAutomaton2D ca) {
+		System.out.println("Checking total value conservation...");
+		try {
+			long value = ca.getTotalValue(), newValue = value;
+			boolean finished = false;
+			while (value == newValue && !finished) {
+				finished = !ca.nextStep();
+				newValue = ca.getTotalValue();
+			}
+			if (!finished) {
+				System.out.println("Total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
+			} else {
+				System.out.println("The total value remained constant!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void checkTotalValueConservation(SymmetricLongCellularAutomaton3D ca) {
 		System.out.println("Checking total value conservation...");
 		try {
@@ -666,6 +776,36 @@ public class Test {
 			do {
 				System.out.println("step " + ca.getStep());
 				printAsGrid(ca, 0);
+				System.out.println("total value " + ca.getTotalValue());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep(IntCellularAutomaton2D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step " + ca.getStep());
+				printAsGrid(ca, 0);
+				System.out.println("total value " + ca.getTotalValue());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep(IntCellularAutomaton3D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step " + ca.getStep());
+				printAsGrid(ca.crossSectionAtZ(0), 0);
 				System.out.println("total value " + ca.getTotalValue());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -744,6 +884,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			boolean anyChanged = false;
 			do {
+				anyChanged = false;
 				for (SymmetricLongCellularAutomaton3D ca : cas) {
 					System.out.println("step " + ca.getStep());
 					printAsGrid(ca.crossSectionAtZ(0), 0);

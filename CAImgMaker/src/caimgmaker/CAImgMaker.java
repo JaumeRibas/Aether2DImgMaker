@@ -34,6 +34,9 @@ import caimgmaker.colormap.ActionableGrid2DColorMapperProcessor;
 import caimgmaker.colormap.ColorGrid2D;
 import caimgmaker.colormap.ColorMapper;
 import cellularautomata.automata.Aether3D;
+import cellularautomata.automata.CellularAutomaton;
+import cellularautomata.automata.IntCellularAutomaton2D;
+import cellularautomata.automata.IntCellularAutomaton3D;
 import cellularautomata.automata.LongCellularAutomaton2D;
 import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 import cellularautomata.automata.SymmetricIntCellularAutomaton2D;
@@ -341,6 +344,29 @@ public class CAImgMaker {
 		System.out.println("Finished!");
 	}
 	
+	public void createImages(IntCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		String imgPath = path + "/";
+		do {
+			System.out.println("Current step: " + currentStep);
+			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
+			int[] minAndMaxValue = ca.getMinAndMaxValue();
+			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			ColorGrid2D colorGrid = colorMapper.getMappedIntGrid(ca, minAndMaxValue[0], minAndMaxValue[1]);
+			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}			
+			currentStep++;
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+	}
+	
 	public void createImages(LongCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
@@ -441,12 +467,33 @@ public class CAImgMaker {
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String path) throws Exception {
 				
-		int scanInitialZIndex = ca.nonsymmetricSection().getMinZ();
-		createScanningAndCrossSectionNonsymmetricImages(ca, scanInitialZIndex, crossSectionZ, scanningColorMapper, 
-			crossSectionColorMapper, minWidth, minHeight, path);	
+		createScanningAndCrossSectionImages(ca, ca.nonsymmetricSection(), crossSectionZ, 
+				crossSectionColorMapper, crossSectionColorMapper, minHeight, minHeight, path);	
 	}
 	
 	public void createScanningAndCrossSectionNonsymmetricImages(SymmetricIntCellularAutomaton3D ca, int scanInitialZIndex, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path) throws Exception {
+		createScanningAndCrossSectionImages(ca, ca.nonsymmetricSection(), scanInitialZIndex, crossSectionZ, 
+				crossSectionColorMapper, crossSectionColorMapper, minHeight, minHeight, path);
+	}
+	
+	public void createScanningAndCrossSectionImages(IntCellularAutomaton3D ca, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
+			String path) throws Exception {
+		createScanningAndCrossSectionImages(ca, ca, crossSectionZ, scanningColorMapper, 
+			crossSectionColorMapper, minWidth, minHeight, path);	
+	}
+	
+	public void createScanningAndCrossSectionImages(CellularAutomaton ca, IntGrid3D grid, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
+			String path) throws Exception {
+				
+		int scanInitialZIndex = grid.getMinZ();
+		createScanningAndCrossSectionImages(ca, grid, scanInitialZIndex, crossSectionZ, scanningColorMapper, 
+			crossSectionColorMapper, minWidth, minHeight, path);	
+	}
+	
+	public void createScanningAndCrossSectionImages(CellularAutomaton ca, IntGrid3D grid, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -460,23 +507,22 @@ public class CAImgMaker {
 		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
 		String crossSectionImgPath = path + "/" + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
-		IntGrid3D nonsymmetricSection = ca.nonsymmetricSection();
 		do {
 			System.out.println("Current step: " + currentStep);
-			int minX = nonsymmetricSection.getMinX(), maxX = nonsymmetricSection.getMaxX(), 
-					minY = nonsymmetricSection.getMinY(), maxY = nonsymmetricSection.getMaxY();
+			int minX = grid.getMinX(), maxX = grid.getMaxX(), 
+					minY = grid.getMinY(), maxY = grid.getMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			if (scanZ >= nonsymmetricSection.getMaxZ())
-				scanZ = nonsymmetricSection.getMinZ();
+			if (scanZ >= grid.getMaxZ())
+				scanZ = grid.getMinZ();
 			System.out.println("Scan z: " + scanZ);
-			IntGrid2D scan = nonsymmetricSection.crossSectionAtZ(scanZ);
+			IntGrid2D scan = grid.crossSectionAtZ(scanZ);
 			int[] minAndMaxValue = scan.getMinAndMaxValue();
 			System.out.println("Scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			ColorGrid2D colorGrid = scanningColorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
 					scanImgPath + numberedFolder, caName + "_x-section_" + currentStep + ".png");
 			scanZ++;
-			IntGrid2D xSection = nonsymmetricSection.crossSectionAtZ(crossSectionZ);
+			IntGrid2D xSection = grid.crossSectionAtZ(crossSectionZ);
 			minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			colorGrid = crossSectionColorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);

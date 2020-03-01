@@ -24,13 +24,14 @@ package cellularautomata2.arrays;
  */
 public abstract class SquareArray extends RectangularArray {
 
-	private int dimension;
-	private int side;
+	protected int dimension;
+	protected int side;
 	
 	/**
 	 * Creates a square-like multidimensional array with the given dimension and side.
 	 * 
-	 * @param sizes
+	 * @param dimension
+	 * @param side
 	 */
 	public SquareArray(int dimension, int side) {
 		if (dimension < 0) {

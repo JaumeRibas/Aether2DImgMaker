@@ -35,7 +35,7 @@ public class Test {
 		//int counter = 0;
 		try {
 			int dimension = 2;
-			SpreadIntegerValue siv = new SpreadIntegerValue(dimension, 20000, 0);
+			SpreadIntegerValue siv = new SpreadIntegerValue(dimension, 32, 0);
 			int[] crossSectionCoordinatesArray = new int[dimension];
 			//crossSectionCoordinatesArray[2] = 1;
 			Coordinates crossSectionCoordinates = new Coordinates(crossSectionCoordinatesArray);
