@@ -40,6 +40,61 @@ public class Test {
 		compare(ae1, ae2);
 	}
 	
+	public static void test4DZCrossSection() {
+		IntAether4D ae = new IntAether4D(-200);
+		
+		int z = 0;
+		IntGrid3D cs = ae.nonsymmetricSection().crossSectionAtZ(z);
+		try {
+			do {
+				System.out.println("Comparing step " + ae.getStep());
+				int maxW = ae.getNonsymmetricMaxWAtZ(z);
+				if (maxW != cs.getMaxX()) {
+					System.out.println("Different max w!");
+					return;
+				}
+				int minW = ae.getNonsymmetricMinWAtZ(z);
+				if (minW != cs.getMinX()) {
+					System.out.println("Different min w!");
+					return;
+				}
+				for (int w = minW; w <= maxW; w++) {
+					int maxX = ae.getNonsymmetricMaxXAtWZ(w, z);
+					if (maxX != cs.getMaxYAtX(w)) {
+						System.out.println("Different max x!");
+						return;
+					}
+					int minX = ae.getNonsymmetricMinXAtWZ(w, z);
+					if (minX != cs.getMinYAtX(w)) {
+						System.out.println("Different min x!");
+						return;
+					}
+					for (int x = minX; x <= maxX; x++) {
+						int maxY = ae.getNonsymmetricMaxY(w, x, z);
+						if (maxY != cs.getMaxZ(w, x)) {
+							System.out.println("Different max y!");
+							return;
+						}
+						int minY = ae.getNonsymmetricMinY(w, x, z);
+						if (minY != cs.getMinZ(w, x)) {
+							System.out.println("Different min y!");
+							return;
+						}
+						for (int y = minY; y <= maxY; y++) {
+							if (ae.getValueAtNonsymmetricPosition(w, x, y, z) != cs.getValueAtPosition(w, x, y)) {
+								System.out.println("Different max y!");
+								return;
+							}
+						}
+					}
+				}
+			} while(ae.nextStep());
+			System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void sivTesting() {
 		long initialValue = 100000;
 		SpreadIntegerValue2D ae1 = new SpreadIntegerValue2D(initialValue, 0);

@@ -139,4 +139,10 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	default LongGrid3D projected3DEdgeMaxW() {
 		return new LongGrid4DProjected3DEdgeMaxW(this);
 	}
+	
+	@Override
+	default LongGrid3D crossSectionAtZ(int z) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new LongGrid4DZCrossSection(this, z);
+	}
 }

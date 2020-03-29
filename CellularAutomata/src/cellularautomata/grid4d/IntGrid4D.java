@@ -139,4 +139,9 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	default IntGrid3D projected3DEdgeMaxW() {
 		return new IntGrid4DProjected3DEdgeMaxW(this);
 	}
+	
+	@Override
+	default IntGrid3D crossSectionAtZ(int z) {
+		return new IntGrid4DZCrossSection(this, z);
+	}
 }

@@ -98,6 +98,7 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	 *  
 	 * @return true if the state of the grid changed or false otherwise
 	 */
+	@Override
 	public boolean nextStep(){
 		long[][][][] newGrid = null;
 		if (boundsReached) {
@@ -377,6 +378,7 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		return newGridSlice;
 	}
 	
+	@Override
 	public long getValueAtPosition(int w, int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
@@ -415,6 +417,7 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 	
+	@Override
 	public long getValueAtNonsymmetricPosition(int w, int x, int y, int z){	
 		if (w < grid.length 
 				&& x < grid[w].length 
@@ -480,32 +483,149 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		return getNonsymmetricMaxW();
 	}
 	
+	@Override
 	public int getNonsymmetricMaxW() {
 		return grid.length - 1;
 	}
 	
+	@Override
 	public int getNonsymmetricMinX() {
 		return 0;
 	}
 
+	@Override
 	public int getNonsymmetricMaxX() {
 		return maxX;
 	}
 	
+	@Override
 	public int getNonsymmetricMinY() {
 		return 0;
 	}
 	
+	@Override
 	public int getNonsymmetricMaxY() {
 		return maxY;
 	}
 	
+	@Override
 	public int getNonsymmetricMinZ() {
 		return 0;
 	}
 	
+	@Override
 	public int getNonsymmetricMaxZ() {
 		return maxZ;
+	}
+
+	@Override
+	public int getNonsymmetricMinWAtZ(int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonsymmetricMinWAtXZ(int x, int z) {
+		return x;
+	}
+
+	@Override
+	public int getNonsymmetricMinWAtYZ(int y, int z) {
+		return y;
+	}
+
+	@Override
+	public int getNonsymmetricMaxWAtZ(int z) {
+		return getNonsymmetricMaxW(); //TODO: check actual value? store all max values?
+	}
+
+	@Override
+	public int getNonsymmetricMaxWAtXZ(int x, int z) {
+		return getNonsymmetricMaxW();
+	}
+
+	@Override
+	public int getNonsymmetricMaxWAtYZ(int y, int z) {
+		return getNonsymmetricMaxW();
+	}
+
+	@Override
+	public int getNonsymmetricMinXAtZ(int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonsymmetricMinXAtWZ(int w, int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonsymmetricMinXAtYZ(int y, int z) {
+		return y;
+	}
+
+	@Override
+	public int getNonsymmetricMinX(int w, int y, int z) {
+		return y;
+	}
+
+	@Override
+	public int getNonsymmetricMaxXAtZ(int z) {
+		return getNonsymmetricMaxX();
+	}
+
+	@Override
+	public int getNonsymmetricMaxXAtWZ(int w, int z) {
+		return Math.min(getNonsymmetricMaxX(), w);
+	}
+
+	@Override
+	public int getNonsymmetricMaxXAtYZ(int y, int z) {
+		return getNonsymmetricMaxX();
+	}
+
+	@Override
+	public int getNonsymmetricMaxX(int w, int y, int z) {
+		return Math.min(getNonsymmetricMaxX(), w);
+	}
+
+	@Override
+	public int getNonsymmetricMinYAtZ(int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonsymmetricMaxYAtWZ(int w, int z) {
+		return Math.min(getNonsymmetricMaxY(), w);
+	}
+
+	@Override
+	public int getNonsymmetricMinYAtXZ(int x, int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonsymmetricMinY(int w, int x, int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonsymmetricMaxYAtZ(int z) {
+		return getNonsymmetricMaxY();
+	}
+
+	@Override
+	public int getNonsymmetricMinYAtWZ(int w, int z) {
+		return z;
+	}
+
+	@Override
+	public int getNonsymmetricMaxYAtXZ(int x, int z) {
+		return Math.min(getNonsymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getNonsymmetricMaxY(int w, int x, int z) {
+		return Math.min(getNonsymmetricMaxY(), x);
 	}
 	
 	/**
@@ -513,6 +633,7 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the current step
 	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

@@ -26,7 +26,7 @@ import cellularautomata.automata.IntCellularAutomaton3D;
 public class Aether3DRandomConfigImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"200", "0", "715827883", "D:/data/test"};//debug
+//		args = new String[]{"21", "0", "-1000", "D:/data/test"};//debug
 		if (args.length < 3) {
 			System.err.println("You must specify an initial side and a min and max values.");
 		} else {
@@ -74,6 +74,11 @@ public class Aether3DRandomConfigImgMaker {
 			} else {
 				System.err.println("Initial side must be a valid integer in base ten.");
 				return;
+			}
+			if (minValue > maxValue) {
+				int swap = minValue;
+				minValue = maxValue;
+				maxValue = swap;
 			}
 			IntCellularAutomaton3D ca = new Aether3DRandomConfiguration(initialSide, minValue, maxValue);
 			String path;

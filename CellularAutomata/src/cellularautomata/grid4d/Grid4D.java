@@ -106,9 +106,99 @@ public interface Grid4D extends Grid {
 	 */
 	int getMaxZ();
 
+	default int getMinWAtZ(int z) {
+		return getMinW();
+	}
+
+	default int getMinWAtXZ(int x, int z) {
+		return getMinW();
+	}
+
+	default int getMinWAtYZ(int y, int z) {
+		return getMinW();
+	}
+
+	default int getMaxWAtZ(int z) {
+		return getMaxW();
+	}
+
+	default int getMaxWAtXZ(int x, int z) {
+		return getMaxW();
+	}
+
+	default int getMaxWAtYZ(int y, int z) {
+		return getMaxW();
+	}
+
+	default int getMinXAtZ(int z) {
+		return getMinX();
+	}
+
+	default int getMinXAtWZ(int w, int z) {
+		return getMinX();
+	}
+
+	default int getMinXAtYZ(int y, int z) {
+		return getMinX();
+	}
+
+	default int getMinX(int w, int y, int z) {
+		return getMinX();
+	}
+
+	default int getMaxXAtZ(int z) {
+		return getMaxX();
+	}
+
+	default int getMaxXAtWZ(int w, int z) {
+		return getMaxX();
+	}
+
+	default int getMaxXAtYZ(int y, int z) {
+		return getMaxX();
+	}
+
+	default int getMaxX(int w, int y, int z) {
+		return getMaxX();
+	}
+
+	default int getMinYAtZ(int z) {
+		return getMinY();
+	}
+
+	default int getMaxYAtWZ(int w, int z) {
+		return getMaxY();
+	}
+
+	default int getMinYAtXZ(int x, int z) {
+		return getMinY();
+	}
+
+	default int getMinY(int w, int x, int z) {
+		return getMinY();
+	}
+
+	default int getMaxYAtZ(int z) {
+		return getMaxY();
+	}
+
+	default int getMinYAtWZ(int w, int z) {
+		return getMinY();
+	}
+
+	default int getMaxYAtXZ(int x, int z) {
+		return getMaxY();
+	}
+
+	default int getMaxY(int w, int x, int z) {
+		return getMaxY();
+	}	
+
 	Grid2D crossSectionAtYZ(int y, int z);
 
 	Grid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ);
 
 	Grid3D projected3DEdgeMaxW();
+	
+	Grid3D crossSectionAtZ(int z);
 }

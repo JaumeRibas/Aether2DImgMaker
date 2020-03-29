@@ -139,4 +139,10 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	default ShortGrid3D projected3DEdgeMaxW() {
 		return new ShortGrid4DProjected3DEdgeMaxW(this);
 	}
+	
+	@Override
+	default ShortGrid3D crossSectionAtZ(int z) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new ShortGrid4DZCrossSection(this, z);
+	}
 }

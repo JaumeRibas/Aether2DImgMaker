@@ -99,6 +99,50 @@ public interface SymmetricGrid4D extends Grid4D {
 	 * @return the largest z
 	 */
 	int getNonsymmetricMaxZ();
+
+	int getNonsymmetricMinWAtZ(int z);
+
+	int getNonsymmetricMinWAtXZ(int x, int z);
+
+	int getNonsymmetricMinWAtYZ(int y, int z);
+
+	int getNonsymmetricMaxWAtZ(int z);
+
+	int getNonsymmetricMaxWAtXZ(int x, int z);
+
+	int getNonsymmetricMaxWAtYZ(int y, int z);
+
+	int getNonsymmetricMinXAtZ(int z);
+
+	int getNonsymmetricMinXAtWZ(int w, int z);
+
+	int getNonsymmetricMinXAtYZ(int y, int z);
+
+	int getNonsymmetricMinX(int w, int y, int z);
+
+	int getNonsymmetricMaxXAtZ(int z);
+
+	int getNonsymmetricMaxXAtWZ(int w, int z);
+
+	int getNonsymmetricMaxXAtYZ(int y, int z);
+
+	int getNonsymmetricMaxX(int w, int y, int z);
+
+	int getNonsymmetricMinYAtZ(int z);
+
+	int getNonsymmetricMaxYAtWZ(int w, int z);
+
+	int getNonsymmetricMinYAtXZ(int x, int z);
+
+	int getNonsymmetricMinY(int w, int x, int z);
+
+	int getNonsymmetricMaxYAtZ(int z);
+
+	int getNonsymmetricMinYAtWZ(int w, int z);
+
+	int getNonsymmetricMaxYAtXZ(int x, int z);
+
+	int getNonsymmetricMaxY(int w, int x, int z);
 	
 	/**
 	 * Returns a nonsymmetric section of the grid

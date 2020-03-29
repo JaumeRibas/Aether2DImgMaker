@@ -71,12 +71,13 @@ import cellularautomata.grid.IntGridEvenOddMinAndMaxProcessor;
 public class CAImgMaker {
 	
 	private long imgsPerFolder = 10000;
-	private long backupLeap = 1000 * 60 * 60 * 12;
-//	private long backupLeap = 1000 * 30;//debug
+	private long backupLeap;
+	private boolean saveBackupsAutomatically = true;
 	private volatile boolean backupRequested = false;
 	
-	
-	public CAImgMaker() {}
+	public CAImgMaker() {
+		saveBackupsAutomatically = false;
+	}
 	
 	public CAImgMaker(long backupLeap) {
 		this.backupLeap = backupLeap;
@@ -132,24 +133,29 @@ public class CAImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createNonsymmetricEvenOddImages(SymmetricLongCellularAutomaton2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
+	public void createNonsymmetricEvenOddImages(SymmetricLongCellularAutomaton2D ca, ColorMapper colorMapper, 
+			int minWidth, int minHeight, String path) throws Exception {
+		createEvenOddImages(ca, ca.nonsymmetricSection(), colorMapper, minHeight, minHeight, path);
+	}
+	
+	public void createEvenOddImages(CellularAutomaton ca, LongGrid2D grid, ColorMapper colorMapper, 
+			int minWidth, int minHeight, String path) throws Exception {	
 		long currentStep = ca.getStep();
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		String imgPath = path + colorMapper.getClass().getSimpleName() + "/slice/";
-		LongGrid2D nonsymmetricSection = ca.nonsymmetricSection();
 		do {
 			System.out.println("Current step: " + currentStep);
-			int minX = nonsymmetricSection.getMinX(), maxX = nonsymmetricSection.getMaxX(), 
-					minY = nonsymmetricSection.getMinY(), maxY = nonsymmetricSection.getMaxY();
+			int minX = grid.getMinX(), maxX = grid.getMaxX(), 
+					minY = grid.getMinY(), maxY = grid.getMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			long[] evenMinAndMaxValue = nonsymmetricSection.getEvenOddPositionsMinAndMaxValue(true);
-			long[] oddMinAndMaxValue = nonsymmetricSection.getEvenOddPositionsMinAndMaxValue(false);
+			long[] evenMinAndMaxValue = grid.getEvenOddPositionsMinAndMaxValue(true);
+			long[] oddMinAndMaxValue = grid.getEvenOddPositionsMinAndMaxValue(false);
 			System.out.println("Even positions: Min value " + evenMinAndMaxValue[0] + " Max value " + evenMinAndMaxValue[1]);
 			System.out.println("Odd positions: Min value " + oddMinAndMaxValue[0] + " Max value " + oddMinAndMaxValue[1]);
-			ColorGrid2D evenColorGrid = colorMapper.getMappedGrid(nonsymmetricSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
-			ColorGrid2D oddColorGrid = colorMapper.getMappedGrid(nonsymmetricSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
+			ColorGrid2D evenColorGrid = colorMapper.getMappedGrid(grid, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+			ColorGrid2D oddColorGrid = colorMapper.getMappedGrid(grid, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 			String evenFolder, oddFolder;
 			if (isEvenStep) {
 				evenFolder = "even-odd";
@@ -391,6 +397,10 @@ public class CAImgMaker {
 	}
 	
 	public void createScanningNonsymmetricImages(SymmetricLongCellularAutomaton3D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
+		createScanningImages(ca, ca.nonsymmetricSection(), colorMapper, minHeight, minHeight, path);
+	}
+	
+	public void createScanningImages(CellularAutomaton ca, LongGrid3D grid, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -399,17 +409,16 @@ public class CAImgMaker {
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
 		String imgPath = path + "/scan-slice/";
-		LongGrid3D nonsymmetricSection = ca.nonsymmetricSection();
-		int scanZ = nonsymmetricSection.getMinZ();
+		int scanZ = grid.getMinZ();
 		do {
 			System.out.println("Current step: " + currentStep);
-			int minX = nonsymmetricSection.getMinX(), maxX = nonsymmetricSection.getMaxX(), 
-					minY = nonsymmetricSection.getMinY(), maxY = nonsymmetricSection.getMaxY();
+			int minX = grid.getMinX(), maxX = grid.getMaxX(), 
+					minY = grid.getMinY(), maxY = grid.getMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			if (scanZ >= nonsymmetricSection.getMaxZ())
-				scanZ = nonsymmetricSection.getMinZ();
+			if (scanZ >= grid.getMaxZ())
+				scanZ = grid.getMinZ();
 			System.out.println("Scan z: " + scanZ);
-			LongGrid2D xSection = nonsymmetricSection.crossSectionAtZ(scanZ);
+			LongGrid2D xSection = grid.crossSectionAtZ(scanZ);
 			long[] minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 			ColorGrid2D colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
@@ -421,9 +430,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -507,13 +519,24 @@ public class CAImgMaker {
 		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan-slice/";
 		String crossSectionImgPath = path + "/" + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/cross-section-slice/" + "z=" + crossSectionZ + "/";
+		boolean caFinished = false;
+		boolean lastPassFinished = false;
+		boolean lastPassStarted = false;
 		do {
 			System.out.println("Current step: " + currentStep);
 			int minX = grid.getMinX(), maxX = grid.getMaxX(), 
 					minY = grid.getMinY(), maxY = grid.getMaxY();
 			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
-			if (scanZ >= grid.getMaxZ())
+			if (scanZ >= grid.getMaxZ()) {
 				scanZ = grid.getMinZ();
+				if (caFinished) {
+					if (lastPassStarted) {
+						lastPassFinished = true;
+					} else {
+						lastPassStarted = true;
+					}
+				}
+			}
 			System.out.println("Scan z: " + scanZ);
 			IntGrid2D scan = grid.crossSectionAtZ(scanZ);
 			int[] minAndMaxValue = scan.getMinAndMaxValue();
@@ -522,20 +545,83 @@ public class CAImgMaker {
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
 					scanImgPath + numberedFolder, caName + "_x-section_" + currentStep + ".png");
 			scanZ++;
-			IntGrid2D xSection = grid.crossSectionAtZ(crossSectionZ);
+			if (!caFinished) {
+				IntGrid2D xSection = grid.crossSectionAtZ(crossSectionZ);
+				minAndMaxValue = xSection.getMinAndMaxValue();
+				System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+				colorGrid = crossSectionColorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+				createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
+						caName + "_x-section_" + currentStep + ".png");
+			}
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
+			}
+			if (backupRequested) {
+				backUp = true;
+				backupRequested = false;
+			}
+			if (backUp) {
+				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);					
+			}
+			currentStep++;
+			if (!caFinished) {
+				caFinished = !ca.nextStep();
+			}
+		} while (!caFinished || !lastPassFinished);
+		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
+	}
+	
+	/*//TODO use general inclined plane
+	public void createBisectingPlanesImages(CellularAutomaton ca, IntGrid3D grid, 
+			ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		long currentStep = ca.getStep();
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		String caName = ca.getName();
+		String bisectingPlaneImgPath = path + "/" + colorMapper.getClass().getSimpleName() + "/bisecting-plane/";
+		IntGrid2D xSection = grid.crossSectionAtZ(crossSectionZ);
+		do {
+			System.out.println("Current step: " + currentStep);
+			int minX = grid.getMinX(), maxX = grid.getMaxX(), 
+					minY = grid.getMinY(), maxY = grid.getMaxY();
+			System.out.println("maxY=" + maxY + ", maxX=" + maxX);
+			IntGrid2D scan = grid.crossSectionAtZ(scanZ);
+			int[] minAndMaxValue = scan.getMinAndMaxValue();
+			System.out.println("Scan: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
+			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+					bisectingPlaneImgPath + numberedFolder, caName + "_x-section_" + currentStep + ".png");
 			minAndMaxValue = xSection.getMinAndMaxValue();
 			System.out.println("Cross section: Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
-			colorGrid = crossSectionColorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
 					caName + "_x-section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
 				folderImageCount = 0;
-			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			}
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -550,6 +636,7 @@ public class CAImgMaker {
 		stdIn.stop();
 		inputThread.join();
 	}
+	*/
 	
 	public void createScanningAndCrossSectionNonsymmetricImages(SymmetricIntActionableCellularAutomaton3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
@@ -635,9 +722,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -804,9 +894,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -961,9 +1054,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -1062,9 +1158,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -1127,9 +1226,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -1192,9 +1294,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;
@@ -1257,9 +1362,12 @@ public class CAImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			boolean backUp = System.currentTimeMillis() >= nextBckTime;
-			if (backUp) {
-				nextBckTime += backupLeap;
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += backupLeap;
+				}
 			}
 			if (backupRequested) {
 				backUp = true;

@@ -48,11 +48,7 @@ public class NonsymmetricIntGrid3DSlice implements Serializable {
 	}
 	
 	private static int getIndex(int y, int z) {
-		if (y%2 == 0) {
-			return (y + 1) * y/2 + z;
-		} else {
-			return y * (y/2 + 1) + z;
-		}
+		return (int)(Math.pow(y, 2) - y)/2 + y + z;
 	}
 	
 	public static long getSliceSize(int x) {
