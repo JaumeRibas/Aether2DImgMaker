@@ -51,11 +51,11 @@ public class NearAether1Simple3D implements SymmetricLongCellularAutomaton3D {
 	public NearAether1Simple3D(long initialValue) {
 		//safety check to prevent exceeding the data type's max value
 		if (initialValue < 0) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
-					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(6)));
-			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
+			//for this algorithm the safety check of Aether can be reused
+			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
+			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
+						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
 			}
 		}
 		this.initialValue = initialValue;

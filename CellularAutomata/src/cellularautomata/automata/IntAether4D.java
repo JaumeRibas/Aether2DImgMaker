@@ -52,11 +52,10 @@ public class IntAether4D implements SymmetricIntCellularAutomaton4D {
 	 */
 	public IntAether4D(int initialValue) {
 		if (initialValue < 0) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
-					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(8)));
-			if (maxValue.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Integer.MAX_VALUE + ").");
+			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, BigInteger.valueOf(initialValue));
+			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
+				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
+						+ ") exceeds implementation's limit (" + Integer.MAX_VALUE + "). Use a greater initial value or a different implementation.");
 			}
 		}
 		this.initialValue = initialValue;

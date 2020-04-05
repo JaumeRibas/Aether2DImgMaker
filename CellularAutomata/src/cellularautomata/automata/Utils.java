@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 
 public class Utils {
 	
@@ -42,6 +43,26 @@ public class Utils {
 		out.writeObject(obj);
 		out.flush();
 		out.close();
+	}
+	
+	/**
+	 * <p>Gives the maximum value difference between neighbors throughout the evolution of an Aether model with single source initial configuration.</p>
+	 * <p>If the source value is larger or equal to zero, the maximum value difference between neighbors is equal to the source value</p>
+	 * 
+	 * @param gridDimension the dimension of the grid
+	 * @param sourceValue the value of the single source initial configuration
+	 * @return
+	 */
+	public static BigInteger getAetherMaxNeighboringValuesDifferenceFromSingleSource(int gridDimension, BigInteger sourceValue) {
+		if (gridDimension <= 0) {
+			throw new IllegalArgumentException("Grid dimension must be greater than zero.");
+		}
+		if (sourceValue.compareTo(BigInteger.ZERO) < 0) {
+			BigInteger two = BigInteger.valueOf(2);
+			return sourceValue.add(sourceValue.negate().divide(two).multiply(BigInteger.valueOf(gridDimension).multiply(two).add(BigInteger.ONE))).abs();
+		} else {
+			return sourceValue; 
+		}
 	}
 
 }

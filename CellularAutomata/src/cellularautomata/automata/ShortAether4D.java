@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 
-public class Aether4D implements SymmetricLongCellularAutomaton4D {
+public class ShortAether4D implements SymmetricShortCellularAutomaton4D {
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;
@@ -32,9 +32,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	private static final byte Z_NEGATIVE = 7;
 
 	/** A 4D array representing the grid */
-	private long[][][][] grid;
+	private short[][][][] grid;
 	
-	private long initialValue;
+	private short initialValue;
 	private long currentStep;
 	private int maxX;
 	private int maxY;
@@ -50,16 +50,16 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public Aether4D(long initialValue) {
+	public ShortAether4D(short initialValue) {
 		if (initialValue < 0) {
 			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Short.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
+						+ ") exceeds implementation's limit (" + Short.MAX_VALUE + "). Use a greater initial value or a different implementation.");
 			}
 		}
 		this.initialValue = initialValue;
-		grid = new long[3][][][];
+		grid = new short[3][][][];
 		grid[0] = buildGridSlice(0);
 		grid[1] = buildGridSlice(1);
 		grid[2] = buildGridSlice(2);
@@ -79,8 +79,8 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Aether4D data = (Aether4D) Utils.deserializeFromFile(backupPath);
+	public ShortAether4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		ShortAether4D data = (ShortAether4D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
 		maxX = data.maxX;
@@ -99,18 +99,18 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	 */
 	@Override
 	public boolean nextStep(){
-		long[][][][] newGrid = null;
+		short[][][][] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 1][][][];
+			newGrid = new short[grid.length + 1][][][];
 		} else {
-			newGrid = new long[grid.length][][][];
+			newGrid = new short[grid.length][][][];
 		}
 		maxWMinusOne = newGrid.length - 2;
 		boolean changed = false;
 		newGrid[0] = buildGridSlice(0);
 		boolean first = true;
-		long[] neighborValues = new long[8];
+		short[] neighborValues = new short[8];
 		byte[] neighborDirections = new byte[8];
 		for (int w = 0, nextW = 1; w < grid.length; w++, nextW++, first = false) {
 			if (nextW < newGrid.length) {
@@ -119,9 +119,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 			for (int x = 0; x <= w; x++) {
 				for (int y = 0; y <= x; y++) {
 					for (int z = 0; z <= y; z++) {
-						long value = grid[w][x][y][z];
+						short value = grid[w][x][y][z];
 						int relevantNeighborCount = 0;
-						long neighborValue;
+						short neighborValue;
 						neighborValue = getValueAtPosition(w + 1, x, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
@@ -179,7 +179,7 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 								for (int i = relevantNeighborCount - 2; i >= 0; i--) {
 									if (neighborValues[i] < neighborValues[i+1]) {
 										sorted = false;
-										long valSwap = neighborValues[i];
+										short valSwap = neighborValues[i];
 										neighborValues[i] = neighborValues[i+1];
 										neighborValues[i+1] = valSwap;
 										byte dirSwap = neighborDirections[i];
@@ -190,16 +190,16 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 							}
 							//divide
 							boolean isFirstNeighbor = true;
-							long previousNeighborValue = 0;
+							short previousNeighborValue = 0;
 							for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
 								neighborValue = neighborValues[i];
 								if (neighborValue != previousNeighborValue || isFirstNeighbor) {
 									int shareCount = relevantNeighborCount - i + 1;
-									long toShare = value - neighborValue;
-									long share = toShare/shareCount;
+									int toShare = value - neighborValue;
+									short share = (short) (toShare/shareCount);
 									if (share != 0) {
 										changed = true;
-										value = value - toShare + toShare%shareCount + share;
+										value = (short) (value - toShare + toShare%shareCount + share);
 										for (int j = i; j < relevantNeighborCount; j++) {
 											addToNeighbor(newGrid, w, x, y, z, neighborDirections[j], share);
 										}
@@ -221,7 +221,7 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		return changed;
 	}
 	
-	private void addToNeighbor(long grid[][][][], int w, int x, int y, int z, byte direction, long value) {
+	private void addToNeighbor(short grid[][][][], int w, int x, int y, int z, byte direction, short value) {
 		switch(direction) {
 		case W_POSITIVE:
 			addToWPositive(grid, w, x, y, z, value);
@@ -250,16 +250,16 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 	
-	private void addToWPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToWPositive(short[][][][] grid, int w, int x, int y, int z, short value) {
 		grid[w+1][x][y][z] += value;
 		if (w >= maxWMinusOne) {
 			boundsReached = true;
 		}	
 	}
 				
-	private void addToWNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToWNegative(short[][][][] grid, int w, int x, int y, int z, short value) {
 		if (w > x) {
-			long valueToAdd = value;
+			short valueToAdd = value;
 			if (w == x + 1) {
 				valueToAdd += value;
 				if (x == y) {
@@ -279,9 +279,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 
-	private void addToXPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToXPositive(short[][][][] grid, int w, int x, int y, int z, short value) {
 		if (x < w) {
-			long valueToAdd = value;
+			short valueToAdd = value;
 			if (x == w - 1) {
 				valueToAdd += value;
 			}
@@ -292,9 +292,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 
-	private void addToXNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToXNegative(short[][][][] grid, int w, int x, int y, int z, short value) {
 		if (x > y) {
-			long valueToAdd = value;									
+			short valueToAdd = value;									
 			if (y == x - 1) {
 				valueToAdd += value;
 				if (y == z) {
@@ -308,9 +308,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 
-	private void addToYPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToYPositive(short[][][][] grid, int w, int x, int y, int z, short value) {
 		if (y < x) {
-			long valueToAdd = value;									
+			short valueToAdd = value;									
 			if (y == x - 1) {
 				valueToAdd += value;
 				if (w == x) {
@@ -324,9 +324,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 
-	private void addToYNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToYNegative(short[][][][] grid, int w, int x, int y, int z, short value) {
 		if (y > z) {	
-			long valueToAdd = value;
+			short valueToAdd = value;
 			if (z == y - 1) {
 				valueToAdd += value;
 				if (y == 1) {
@@ -337,9 +337,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 
-	private void addToZPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToZPositive(short[][][][] grid, int w, int x, int y, int z, short value) {
 		if (z < y) {
-			long valueToAdd = value;
+			short valueToAdd = value;
 			if (z == y - 1) {
 				valueToAdd += value;
 				if (x == y) {
@@ -356,9 +356,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 
-	private void addToZNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToZNegative(short[][][][] grid, int w, int x, int y, int z, short value) {
 		if (z > 0) {
-			long valueToAdd = value;
+			short valueToAdd = value;
 			if (z == 1) {
 				valueToAdd += value;
 			}
@@ -366,19 +366,19 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		}
 	}
 	
-	private long[][][] buildGridSlice(int w) {
-		long[][][] newGridSlice = new long[w + 1][][];
+	private short[][][] buildGridSlice(int w) {
+		short[][][] newGridSlice = new short[w + 1][][];
 		for (int x = 0; x < newGridSlice.length; x++) {
-			newGridSlice[x] = new long[x + 1][];
+			newGridSlice[x] = new short[x + 1][];
 			for (int y = 0; y < newGridSlice[x].length; y++) {
-				newGridSlice[x][y] = new long[y + 1];
+				newGridSlice[x][y] = new short[y + 1];
 			}
 		}
 		return newGridSlice;
 	}
-	
+
 	@Override
-	public long getValueAtPosition(int w, int x, int y, int z){	
+	public short getValueAtPosition(int w, int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -415,9 +415,9 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 			return 0;
 		}
 	}
-	
+
 	@Override
-	public long getValueAtNonsymmetricPosition(int w, int x, int y, int z){	
+	public short getValueAtNonsymmetricPosition(int w, int x, int y, int z){	
 		if (w < grid.length 
 				&& x < grid[w].length 
 				&& y < grid[w][x].length 
@@ -468,10 +468,6 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 		return getNonsymmetricMaxW();
 	}
 	
-	public int getNonsymmetricMinW() {
-		return 0;
-	}
-	
 	@Override
 	public int getNonsymmetricMinW(int x, int y, int z) {
 		return Math.max(Math.max(x, y), z);
@@ -481,12 +477,17 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	public int getNonsymmetricMaxW(int x, int y, int z) {
 		return getNonsymmetricMaxW();
 	}
-	
+
+	@Override
+	public int getNonsymmetricMinW() {
+		return 0;
+	}
+
 	@Override
 	public int getNonsymmetricMaxW() {
 		return grid.length - 1;
 	}
-	
+
 	@Override
 	public int getNonsymmetricMinX() {
 		return 0;
@@ -496,17 +497,17 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	public int getNonsymmetricMaxX() {
 		return maxX;
 	}
-	
+
 	@Override
 	public int getNonsymmetricMinY() {
 		return 0;
 	}
-	
+
 	@Override
 	public int getNonsymmetricMaxY() {
 		return maxY;
 	}
-	
+
 	@Override
 	public int getNonsymmetricMinZ() {
 		return 0;
@@ -642,7 +643,7 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getIntialValue() {
+	public int getIntialValue() {
 		return initialValue;
 	}
 	
@@ -660,5 +661,4 @@ public class Aether4D implements SymmetricLongCellularAutomaton4D {
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
 	}
-	
 }

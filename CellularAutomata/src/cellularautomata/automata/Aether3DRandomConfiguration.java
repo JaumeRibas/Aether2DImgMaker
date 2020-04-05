@@ -65,7 +65,7 @@ public class Aether3DRandomConfiguration implements IntCellularAutomaton3D {
 			actualMaxValue = 0;
 		}
 		final int dimension = 3;
-		long resultingMaxValue = actualMinValue + (((actualMaxValue-actualMinValue)/2)*dimension *2);
+		long resultingMaxValue = actualMinValue + (((actualMaxValue-actualMinValue)/2)*(dimension *2 + 1));
 		if (resultingMaxValue > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException("The range between min and max value is too big.");
 		}

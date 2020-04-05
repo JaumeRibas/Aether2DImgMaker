@@ -142,7 +142,6 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	
 	@Override
 	default ShortGrid3D crossSectionAtZ(int z) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new ShortGrid4DZCrossSection(this, z);
+		return new ShortGrid4DZCrossSection(this, z);
 	}
 }

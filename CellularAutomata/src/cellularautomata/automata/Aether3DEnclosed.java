@@ -42,19 +42,19 @@ public class Aether3DEnclosed implements SymmetricLongCellularAutomaton3D {
 	private int maxZ;
 	
 	/**
-	 * Creates an instance with the given initial value
+	 * Creates an instance with the given initial value and grid side
 	 * 
-	 * @param initialValue the value at the origin at step 0
+	 * @param initialValue
+	 * @param side
 	 */
 	public Aether3DEnclosed(long initialValue, int side) {
 		if (side%2 == 0)
 			throw new UnsupportedOperationException("Only uneven sides are supported.");
 		if (initialValue < 0) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
-					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(6)));
-			if (maxValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + Long.MAX_VALUE + ").");
+			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
+			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
+						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
 			}
 		}
 		this.side = side;

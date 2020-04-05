@@ -18,6 +18,7 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 
 public class Aether2D implements SymmetricLongCellularAutomaton2D {
 	
@@ -45,6 +46,13 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public Aether2D(long initialValue) {
+		if (initialValue < 0) {
+			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(2, BigInteger.valueOf(initialValue));
+			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
+						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
+			}
+		}
 		this.initialValue = initialValue;
 		grid = new long[3][];
 		grid[0] = buildGridSlice(0);

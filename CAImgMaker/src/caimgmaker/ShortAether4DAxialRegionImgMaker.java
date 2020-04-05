@@ -20,24 +20,24 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.IntAether4D;
-import cellularautomata.automata.SymmetricIntCellularAutomaton4D;
+import cellularautomata.automata.ShortAether4D;
+import cellularautomata.automata.SymmetricShortCellularAutomaton4D;
 
-public class Aether4DAxialRegionImgMaker {
+public class ShortAether4DAxialRegionImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-200", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
-			int initialValue;
+			short initialValue;
 			int scanInitialZIndex = 0;
 			boolean isScanInitialZIndexDefined = false;
 			BigInteger tmp = new BigInteger(args[0]);
-			if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
-					&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
+			if (tmp.compareTo(BigInteger.valueOf(Short.MAX_VALUE)) <= 0 
+					&& tmp.compareTo(BigInteger.valueOf(Short.MIN_VALUE)) >= 0) {
 				initialValue = tmp.shortValue();
-				SymmetricIntCellularAutomaton4D ca = new IntAether4D(initialValue);
+				SymmetricShortCellularAutomaton4D ca = new ShortAether4D(initialValue);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {

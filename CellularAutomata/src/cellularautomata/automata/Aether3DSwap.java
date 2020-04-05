@@ -64,11 +64,10 @@ public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
 	 */
 	public Aether3DSwap(long initialValue, long maxGridHeapSize, String folderPath) throws Exception {
 		if (initialValue < 0) {
-			BigInteger maxValue = BigInteger.valueOf(initialValue).add(
-					BigInteger.valueOf(initialValue).negate().divide(BigInteger.valueOf(2)).multiply(BigInteger.valueOf(6)));
-			if (maxValue.compareTo(BigInteger.valueOf(PRIMITIVE_MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value " + maxValue 
-						+ " exceeds implementation's limit (" + PRIMITIVE_MAX_VALUE + ").");
+			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
+			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(PRIMITIVE_MAX_VALUE)) > 0) {
+				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
+						+ ") exceeds implementation's limit (" + PRIMITIVE_MAX_VALUE + "). Use a greater initial value or a different implementation.");
 			}
 		}
 		this.initialValue = initialValue;

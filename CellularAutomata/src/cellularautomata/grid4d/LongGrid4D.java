@@ -142,7 +142,6 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	
 	@Override
 	default LongGrid3D crossSectionAtZ(int z) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new LongGrid4DZCrossSection(this, z);
+		return new LongGrid4DZCrossSection(this, z);
 	}
 }
