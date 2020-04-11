@@ -24,7 +24,7 @@ import cellularautomata.automata.LongCellularAutomaton2D;
 public class Aether2DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-		args = new String[]{"10000000", "D:/data/test"};//debug
+//		args = new String[]{"10000000", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {

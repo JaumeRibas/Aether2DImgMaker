@@ -26,7 +26,7 @@ import cellularautomata.automata.IntSpreadIntegerValue2D;
 public class SIV2DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-		args = new String[]{"1000000", "0", "D:/data/test"};//debug
+//		args = new String[]{"1000000", "0", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
