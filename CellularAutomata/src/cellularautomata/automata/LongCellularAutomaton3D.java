@@ -18,6 +18,9 @@ package cellularautomata.automata;
 
 import cellularautomata.grid3d.LongGrid3D;
 
-public interface LongCellularAutomaton3D extends LongGrid3D, CellularAutomaton {
-
+public interface LongCellularAutomaton3D extends LongGrid3D, LongCellularAutomaton {
+	@Override
+	default LongCellularAutomaton2D crossSectionAtZ(int z) {
+		return new LongCA3DZCrossSection(this, z);
+	}
 }

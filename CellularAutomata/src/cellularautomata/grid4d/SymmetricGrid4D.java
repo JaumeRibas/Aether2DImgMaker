@@ -18,24 +18,24 @@ package cellularautomata.grid4d;
 
 public interface SymmetricGrid4D extends Grid4D {
 	
-	//TODO: add extra methods
+	//TODO: add missing methods
 	
 	/**
-	 * Returns the smallest w-coordinate of the nonsymmetric section of the grid
+	 * Returns the smallest w-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the smallest w
 	 */
-	int getNonsymmetricMinW();
+	int getAsymmetricMinW();
 	
 	/**
-	 * Returns the largest w-coordinate of the nonsymmetric section of the grid
+	 * Returns the largest w-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the largest w
 	 */
-	int getNonsymmetricMaxW();
+	int getAsymmetricMaxW();
 	
 	/**
-	 * Returns the smallest w-coordinate of the nonsymmetric section of the grid at (x,y,z).<br/>
+	 * Returns the smallest w-coordinate of the asymmetric section of the grid at (x,y,z).<br/>
 	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
 	 * {@link #getMaxX()}], [{@link #getMinY()}, {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
 	 * 
@@ -44,10 +44,10 @@ public interface SymmetricGrid4D extends Grid4D {
 	 * @param z the z-coordinate
 	 * @return the smallest w
 	 */
-	int getNonsymmetricMinW(int x, int y, int z);
+	int getAsymmetricMinW(int x, int y, int z);
 	
 	/**
-	 * Returns the largest w-coordinate of the nonsymmetric section of the grid at (x,y,z).<br/>
+	 * Returns the largest w-coordinate of the asymmetric section of the grid at (x,y,z).<br/>
 	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
 	 * {@link #getMaxX()}], [{@link #getMinY()}, {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
 	 * 
@@ -56,99 +56,99 @@ public interface SymmetricGrid4D extends Grid4D {
 	 * @param z the z-coordinate
 	 * @return the largest w
 	 */
-	int getNonsymmetricMaxW(int x, int y, int z);
+	int getAsymmetricMaxW(int x, int y, int z);
 	
 	/**
-	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid
+	 * Returns the smallest x-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the smallest x
 	 */
-	int getNonsymmetricMinX();
+	int getAsymmetricMinX();
 	
 	/**
-	 * Returns the largest x-coordinate of the nonsymmetric section of the grid
+	 * Returns the largest x-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	int getNonsymmetricMaxX();
+	int getAsymmetricMaxX();
 	
 	/**
-	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid
+	 * Returns the smallest y-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the smallest y
 	 */
-	int getNonsymmetricMinY();
+	int getAsymmetricMinY();
 	
 	/**
-	 * Returns the largest y-coordinate of the nonsymmetric section of the grid
+	 * Returns the largest y-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the largest y
 	 */
-	int getNonsymmetricMaxY();
+	int getAsymmetricMaxY();
 	
 	/**
-	 * Returns the smallest z-coordinate of the nonsymmetric section of the grid
+	 * Returns the smallest z-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the smallest z
 	 */
-	int getNonsymmetricMinZ();
+	int getAsymmetricMinZ();
 	
 	/**
-	 * Returns the largest z-coordinate of the nonsymmetric section of the grid
+	 * Returns the largest z-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the largest z
 	 */
-	int getNonsymmetricMaxZ();
+	int getAsymmetricMaxZ();
 
-	int getNonsymmetricMinWAtZ(int z);
+	int getAsymmetricMinWAtZ(int z);
 
-	int getNonsymmetricMinWAtXZ(int x, int z);
+	int getAsymmetricMinWAtXZ(int x, int z);
 
-	int getNonsymmetricMinWAtYZ(int y, int z);
+	int getAsymmetricMinWAtYZ(int y, int z);
 
-	int getNonsymmetricMaxWAtZ(int z);
+	int getAsymmetricMaxWAtZ(int z);
 
-	int getNonsymmetricMaxWAtXZ(int x, int z);
+	int getAsymmetricMaxWAtXZ(int x, int z);
 
-	int getNonsymmetricMaxWAtYZ(int y, int z);
+	int getAsymmetricMaxWAtYZ(int y, int z);
 
-	int getNonsymmetricMinXAtZ(int z);
+	int getAsymmetricMinXAtZ(int z);
 
-	int getNonsymmetricMinXAtWZ(int w, int z);
+	int getAsymmetricMinXAtWZ(int w, int z);
 
-	int getNonsymmetricMinXAtYZ(int y, int z);
+	int getAsymmetricMinXAtYZ(int y, int z);
 
-	int getNonsymmetricMinX(int w, int y, int z);
+	int getAsymmetricMinX(int w, int y, int z);
 
-	int getNonsymmetricMaxXAtZ(int z);
+	int getAsymmetricMaxXAtZ(int z);
 
-	int getNonsymmetricMaxXAtWZ(int w, int z);
+	int getAsymmetricMaxXAtWZ(int w, int z);
 
-	int getNonsymmetricMaxXAtYZ(int y, int z);
+	int getAsymmetricMaxXAtYZ(int y, int z);
 
-	int getNonsymmetricMaxX(int w, int y, int z);
+	int getAsymmetricMaxX(int w, int y, int z);
 
-	int getNonsymmetricMinYAtZ(int z);
+	int getAsymmetricMinYAtZ(int z);
 
-	int getNonsymmetricMaxYAtWZ(int w, int z);
+	int getAsymmetricMaxYAtWZ(int w, int z);
 
-	int getNonsymmetricMinYAtXZ(int x, int z);
+	int getAsymmetricMinYAtXZ(int x, int z);
 
-	int getNonsymmetricMinY(int w, int x, int z);
+	int getAsymmetricMinY(int w, int x, int z);
 
-	int getNonsymmetricMaxYAtZ(int z);
+	int getAsymmetricMaxYAtZ(int z);
 
-	int getNonsymmetricMinYAtWZ(int w, int z);
+	int getAsymmetricMinYAtWZ(int w, int z);
 
-	int getNonsymmetricMaxYAtXZ(int x, int z);
+	int getAsymmetricMaxYAtXZ(int x, int z);
 
-	int getNonsymmetricMaxY(int w, int x, int z);
+	int getAsymmetricMaxY(int w, int x, int z);
 	
 	/**
-	 * Returns a nonsymmetric section of the grid
+	 * Returns an asymmetric section of the grid
 	 * 
 	 * @return a 4D grid
 	 */
-	Grid4D nonsymmetricSection();
+	Grid4D asymmetricSection();
 
 }

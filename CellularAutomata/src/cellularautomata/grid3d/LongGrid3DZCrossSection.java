@@ -20,8 +20,8 @@ import cellularautomata.grid2d.LongGrid2D;
 
 public class LongGrid3DZCrossSection implements LongGrid2D {
 
-	private LongGrid3D source;
-	private int z;
+	protected LongGrid3D source;
+	protected int z;
 	
 	public LongGrid3DZCrossSection(LongGrid3D source, int z) {
 		this.source = source;

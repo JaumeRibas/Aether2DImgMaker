@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether4D;
-import cellularautomata.automata.SymmetricIntCellularAutomaton4D;
+import cellularautomata.automata.IntCellularAutomaton3D;
 
 public class Aether4DAxialRegionImgMaker {
 	
@@ -36,8 +36,8 @@ public class Aether4DAxialRegionImgMaker {
 			BigInteger tmp = new BigInteger(args[0]);
 			if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
 					&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
-				initialValue = tmp.shortValue();
-				SymmetricIntCellularAutomaton4D ca = new IntAether4D(initialValue);
+				initialValue = tmp.intValue();
+				IntAether4D ca = new IntAether4D(initialValue);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {
@@ -62,14 +62,15 @@ public class Aether4DAxialRegionImgMaker {
 					System.out.println("Current step: " + ca.getStep());
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
-				path += ca.getSubFolderPath() + "/img/axial-region";	
+				IntCellularAutomaton3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
+				String imagesPath = path + axialRegion.getSubFolderPath() + "/img";
 				CAImgMaker imgMaker = new CAImgMaker();
 				if (isScanInitialZIndexDefined) {
-					imgMaker.createScanningAndCrossSectionImages(ca, ca.nonsymmetricSection().crossSectionAtZ(0), scanInitialZIndex, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+					imgMaker.createScanningAndCrossSectionImages(axialRegion, scanInitialZIndex, 
+							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath);
 				} else {
-					imgMaker.createScanningAndCrossSectionImages(ca, ca.nonsymmetricSection().crossSectionAtZ(0), 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+					imgMaker.createScanningAndCrossSectionImages(axialRegion, 
+							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath);
 				}
 			} else {
 				System.err.println("Initial value out of range.");

@@ -28,7 +28,7 @@ import java.util.List;
  * @author Jaume
  *
  */
-public class AetherSequential2D implements SymmetricLongCellularAutomaton2D {	
+public class AetherSequential2D implements LongCellularAutomaton2D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -325,31 +325,6 @@ public class AetherSequential2D implements SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public int getNonsymmetricMinX() {
-		return 0;
-	}
-
-	@Override
-	public int getNonsymmetricMaxX() {
-		return getMaxX();
-	}
-
-	@Override
-	public int getNonsymmetricMinY() {
-		return 0;
-	}
-
-	@Override
-	public int getNonsymmetricMaxY() {
-		return getMaxY();
-	}
-
-	@Override
-	public long getValueAtNonsymmetricPosition(int x, int y) {
-		return getValueAtPosition(x, y);
-	}
-
-	@Override
 	public String getName() {
 		return "Aether2D";
 	}
@@ -357,26 +332,6 @@ public class AetherSequential2D implements SymmetricLongCellularAutomaton2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
-	}
-
-	@Override
-	public int getNonsymmetricMinX(int y) {
-		return y;
-	}
-
-	@Override
-	public int getNonsymmetricMaxX(int y) {
-		return getMaxX();
-	}
-
-	@Override
-	public int getNonsymmetricMinY(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getNonsymmetricMaxY(int x) {
-		return Math.min(getNonsymmetricMaxY(), x);
 	}
 
 	@Override

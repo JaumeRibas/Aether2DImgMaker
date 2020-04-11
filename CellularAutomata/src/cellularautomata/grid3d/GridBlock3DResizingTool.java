@@ -26,7 +26,7 @@ import java.io.ObjectOutputStream;
 
 public class GridBlock3DResizingTool {
 	
-	private static SizeLimitedNonsymmetricIntGrid3D sourceBlock;
+	private static SizeLimitedAnisotropicIntGrid3DBlock sourceBlock;
 	private static File sourceFolder;
 
 	public static void main(String[] args) throws Exception {
@@ -64,12 +64,12 @@ public class GridBlock3DResizingTool {
 		
 		//create new block with new size
 		System.out.println("Creating target block " + targetXIndex);
-		SizeLimitedNonsymmetricIntGrid3D targetBlock = new SizeLimitedNonsymmetricIntGrid3D(targetXIndex, newSize);
+		SizeLimitedAnisotropicIntGrid3DBlock targetBlock = new SizeLimitedAnisotropicIntGrid3DBlock(targetXIndex, newSize);
 		System.out.println("minX=" + targetBlock.minX + ", maxX=" + targetBlock.maxX);
 
 		//fill with slices of source block
 		System.out.println("Filling target block with slices of source block from " + targetXIndex + " to " + targetBlock.maxX);
-		NonsymmetricIntGrid3DSlice slice = getSourceSlice(targetXIndex);
+		AnisotropicIntGrid3DSlice slice = getSourceSlice(targetXIndex);
 		for (; slice != null && targetXIndex <= targetBlock.maxX; targetXIndex++) {
 			targetBlock.setSlice(targetXIndex, slice);
 			slice = getSourceSlice(targetXIndex + 1);
@@ -83,7 +83,7 @@ public class GridBlock3DResizingTool {
 			
 			//create block
 			System.out.println("Creating target block " + targetXIndex);
-			targetBlock = new SizeLimitedNonsymmetricIntGrid3D(targetXIndex, newSize);
+			targetBlock = new SizeLimitedAnisotropicIntGrid3DBlock(targetXIndex, newSize);
 			System.out.println("minX=" + targetBlock.minX + ", maxX=" + targetBlock.maxX);
 			
 			//fill with slices of source block
@@ -100,7 +100,7 @@ public class GridBlock3DResizingTool {
 	}
 	
 	
-	private static NonsymmetricIntGrid3DSlice getSourceSlice(int x) throws ClassNotFoundException, IOException {
+	private static AnisotropicIntGrid3DSlice getSourceSlice(int x) throws ClassNotFoundException, IOException {
 		if (x > sourceBlock.maxX) {
 			int nextMinX = sourceBlock.maxX + 1;
 			sourceBlock = null;
@@ -117,7 +117,7 @@ public class GridBlock3DResizingTool {
 	}
 	
 	
-	private static void saveGridBlock(SizeLimitedNonsymmetricIntGrid3D gridBlock, String path) throws FileNotFoundException, IOException {
+	private static void saveGridBlock(SizeLimitedAnisotropicIntGrid3DBlock gridBlock, String path) throws FileNotFoundException, IOException {
 		String name = "minX=" + gridBlock.minX + "_maxX=" + gridBlock.maxX + ".ser";
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path + "/" + name));
 		out.writeObject(gridBlock);
@@ -125,8 +125,8 @@ public class GridBlock3DResizingTool {
 		out.close();
 	}
 	
-	private static SizeLimitedNonsymmetricIntGrid3D loadGridBlock(File folder, int minX) throws IOException, ClassNotFoundException {
-		SizeLimitedNonsymmetricIntGrid3D gridBlock = loadGridBlockSafe(folder, minX);
+	private static SizeLimitedAnisotropicIntGrid3DBlock loadGridBlock(File folder, int minX) throws IOException, ClassNotFoundException {
+		SizeLimitedAnisotropicIntGrid3DBlock gridBlock = loadGridBlockSafe(folder, minX);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minX=" + minX + " could be found at folder path \"" + folder.getAbsolutePath() + "\".");
 		} else {
@@ -134,10 +134,10 @@ public class GridBlock3DResizingTool {
 		}
 	}
 	
-	private static SizeLimitedNonsymmetricIntGrid3D loadGridBlockSafe(File folder, int minX) throws IOException, ClassNotFoundException {
+	private static SizeLimitedAnisotropicIntGrid3DBlock loadGridBlockSafe(File folder, int minX) throws IOException, ClassNotFoundException {
 		File[] files = folder.listFiles();
 		boolean found = false;
-		SizeLimitedNonsymmetricIntGrid3D gridBlock = null;
+		SizeLimitedAnisotropicIntGrid3DBlock gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -156,7 +156,7 @@ public class GridBlock3DResizingTool {
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedNonsymmetricIntGrid3D) in.readObject();
+			gridBlock = (SizeLimitedAnisotropicIntGrid3DBlock) in.readObject();
 			in.close();
 		}
 		return gridBlock;

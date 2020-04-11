@@ -243,23 +243,28 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 		}
 	}
 	
-	public long getValueAtNonsymmetricPosition(int x, int y){	
+	@Override
+	public long getValueAtAsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	
-	public int getNonsymmetricMinX() {
+	@Override
+	public int getAsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonsymmetricMaxX() {
+	@Override
+	public int getAsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
-	public int getNonsymmetricMinY() {
+	@Override
+	public int getAsymmetricMinY() {
 		return 0;
 	}
 	
-	public int getNonsymmetricMaxY() {
+	@Override
+	public int getAsymmetricMaxY() {
 		return maxY;
 	}
 	
@@ -274,22 +279,22 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 
 	@Override
 	public int getMinX() {
-		return -getNonsymmetricMaxX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxX() {
-		return getNonsymmetricMaxX();
+		return getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMinY() {
-		return -getNonsymmetricMaxX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxY() {
-		return getNonsymmetricMaxX();
+		return getAsymmetricMaxX();
 	}
 
 	@Override
@@ -308,27 +313,27 @@ public class Aether2D implements SymmetricLongCellularAutomaton2D {
 	}
 
 	@Override
-	public int getNonsymmetricMinX(int y) {
+	public int getAsymmetricMinX(int y) {
 		return y;
 	}
 
 	@Override
-	public int getNonsymmetricMaxX(int y) {
-		int maxX = getNonsymmetricMaxX();
-		while (getValueAtNonsymmetricPosition(maxX, y) == 0 && maxX >= 0) {
+	public int getAsymmetricMaxX(int y) {
+		int maxX = getAsymmetricMaxX();
+		while (getValueAtAsymmetricPosition(maxX, y) == 0 && maxX >= 0) {
 			maxX--;
 		}
 		return maxX;
 	}
 
 	@Override
-	public int getNonsymmetricMinY(int x) {
+	public int getAsymmetricMinY(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxY(int x) {
-		return Math.min(getNonsymmetricMaxY(), x);
+	public int getAsymmetricMaxY(int x) {
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override

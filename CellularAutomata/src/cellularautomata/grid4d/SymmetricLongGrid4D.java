@@ -27,10 +27,10 @@ public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	long getValueAtNonsymmetricPosition(int w, int x, int y, int z);
+	long getValueAtAsymmetricPosition(int w, int x, int y, int z);
 
 	@Override
-	default LongGrid4D nonsymmetricSection() {
-		return new NonsymmetricLongGridSection4D(this);
+	default LongGrid4D asymmetricSection() {
+		return new AsymmetricLongGridSection4D(this);
 	}
 }

@@ -21,7 +21,6 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether2DRandomConfiguration;
-import cellularautomata.automata.IntCellularAutomaton2D;
 
 public class Aether2DRandomConfigImgMaker {
 	
@@ -75,7 +74,7 @@ public class Aether2DRandomConfigImgMaker {
 				System.err.println("Initial side must be a valid integer in base ten.");
 				return;
 			}
-			IntCellularAutomaton2D ca = new Aether2DRandomConfiguration(initialSide, minValue, maxValue);
+			Aether2DRandomConfiguration ca = new Aether2DRandomConfiguration(initialSide, minValue, maxValue);
 			String path;
 			if (args.length > 2) {
 				path = args[3];

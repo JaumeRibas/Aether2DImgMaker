@@ -20,8 +20,8 @@ import cellularautomata.grid2d.IntGrid2D;
 
 public class IntGrid3DZCrossSection implements IntGrid2D {
 
-	private IntGrid3D source;
-	private int z;
+	protected IntGrid3D source;
+	protected int z;
 	
 	public IntGrid3DZCrossSection(IntGrid3D source, int z) {
 		this.source = source;

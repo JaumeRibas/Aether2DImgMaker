@@ -18,6 +18,9 @@ package cellularautomata.automata;
 
 import cellularautomata.grid4d.SymmetricLongGrid4D;
 
-public interface SymmetricLongCellularAutomaton4D extends SymmetricLongGrid4D, CellularAutomaton {
-
+public interface SymmetricLongCellularAutomaton4D extends SymmetricLongGrid4D, LongCellularAutomaton4D {
+	@Override
+	default LongCellularAutomaton4D asymmetricSection() {
+		return new AsymmetricLongCASection4D(this);
+	}
 }

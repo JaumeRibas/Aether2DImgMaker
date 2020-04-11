@@ -18,6 +18,9 @@ package cellularautomata.automata;
 
 import cellularautomata.grid2d.SymmetricIntGrid2D;
 
-public interface SymmetricIntCellularAutomaton2D extends SymmetricIntGrid2D, CellularAutomaton {
-	
+public interface SymmetricIntCellularAutomaton2D extends SymmetricIntGrid2D, IntCellularAutomaton2D {
+	@Override
+	default IntCellularAutomaton2D asymmetricSection() {
+		return new AsymmetricIntCASection2D(this);
+	}
 }

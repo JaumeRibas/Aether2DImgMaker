@@ -44,6 +44,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 	 * Creates an instance with the given initial value
 	 *  
 	 * @param initialValue the value at the origin at step 0
+	 * @param backgroundValue the value at all other positions of the grid
 	 */
 	public SpreadIntegerValueSimple3D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
@@ -78,6 +79,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 	public SpreadIntegerValueSimple3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		SpreadIntegerValueSimple3D data = (SpreadIntegerValueSimple3D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
+		backgroundValue = data.backgroundValue;
 		grid = data.grid;
 		originIndex = data.originIndex;
 		boundsReached = data.boundsReached;
@@ -306,31 +308,31 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 		return valuesMaxZ;
 	}
 	
-	public int getNonsymmetricMinX() {
+	public int getAsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonsymmetricMaxX() {
+	public int getAsymmetricMaxX() {
 		return getMaxX();
 	}
 
-	public int getNonsymmetricMinY() {
+	public int getAsymmetricMinY() {
 		return 0;
 	}
 
-	public int getNonsymmetricMaxY() {
+	public int getAsymmetricMaxY() {
 		return getMaxY();
 	}
 
-	public int getNonsymmetricMinZ() {
+	public int getAsymmetricMinZ() {
 		return 0;
 	}
 
-	public int getNonsymmetricMaxZ() {
+	public int getAsymmetricMaxZ() {
 		return getMaxZ();
 	}
 
-	public long getValueAtNonsymmetricPosition(int x, int y, int z) {
+	public long getValueAtAsymmetricPosition(int x, int y, int z) {
 		return getValueAtPosition(x, y, z);
 	}
 	
@@ -358,6 +360,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 	}
 	
 	public static void padEdges(long[][][] grid, int width, long value) {
+		int lengthMinusWith = grid.length - width;
 		//min X side
 		for (int x = 0; x < width && x < grid.length; x++) {
 			for (int y = 0; y < grid[x].length; y++) {
@@ -367,7 +370,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 			}
 		}
 		//max X side
-		for (int x = grid.length - width; x < grid.length; x++) {
+		for (int x = lengthMinusWith; x < grid.length; x++) {
 			for (int y = 0; y < grid[x].length; y++) {
 				for (int z = 0; z < grid[x][y].length; z++) {
 					grid[x][y][z] = value;
@@ -375,7 +378,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 			}
 		}
 		//min Y side
-		for (int x = width; x < grid.length - width; x++) {
+		for (int x = width; x < lengthMinusWith; x++) {
 			for (int y = 0; y < width && y < grid[x].length; y++) {
 				for (int z = 0; z < grid[x][y].length; z++) {
 					grid[x][y][z] = value;
@@ -383,7 +386,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 			}
 		}
 		//max Y side
-		for (int x = width; x < grid.length - width; x++) {
+		for (int x = width; x < lengthMinusWith; x++) {
 			for (int y = grid[x].length - width; y < grid[x].length; y++) {
 				for (int z = 0; z < grid[x][y].length; z++) {
 					grid[x][y][z] = value;
@@ -391,7 +394,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 			}
 		}
 		//min Z side
-		for (int x = width; x < grid.length - width; x++) {
+		for (int x = width; x < lengthMinusWith; x++) {
 			for (int y = width; y < grid[x].length - width; y++) {
 				for (int z = 0; z < width && z < grid[x][y].length; z++) {
 					grid[x][y][z] = value;
@@ -399,7 +402,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 			}
 		}
 		//max Z side
-		for (int x = width; x < grid.length - width; x++) {
+		for (int x = width; x < lengthMinusWith; x++) {
 			for (int y = width; y < grid[x].length - width; y++) {
 				for (int z = grid[x][y].length - width; z < grid[x][y].length; z++) {
 					grid[x][y][z] = value;
@@ -415,96 +418,96 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongCellularAutomato
 
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+		return getName() + "/" + initialValue + "/" + backgroundValue;
 	}
 	
 	@Override
-	public int getNonsymmetricMinXAtY(int y) {
+	public int getAsymmetricMinXAtY(int y) {
 		return y;
 	}
 
 	@Override
-	public int getNonsymmetricMinXAtZ(int z) {
+	public int getAsymmetricMinXAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinX(int y, int z) {
+	public int getAsymmetricMinX(int y, int z) {
 		return Math.max(y, z);
 	}
 
 	@Override
-	public int getNonsymmetricMaxXAtY(int y) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxXAtY(int y) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMaxXAtZ(int z) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxXAtZ(int z) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMaxX(int y, int z) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxX(int y, int z) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMinYAtX(int x) {
+	public int getAsymmetricMinYAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMinYAtZ(int z) {
+	public int getAsymmetricMinYAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinY(int x, int z) {
+	public int getAsymmetricMinY(int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMaxYAtX(int x) {
-		return Math.min(getNonsymmetricMaxY(), x);
+	public int getAsymmetricMaxYAtX(int x) {
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override
-	public int getNonsymmetricMaxYAtZ(int z) {
-		return getNonsymmetricMaxY();
+	public int getAsymmetricMaxYAtZ(int z) {
+		return getAsymmetricMaxY();
 	}
 
 	@Override
-	public int getNonsymmetricMaxY(int x, int z) {
-		return Math.min(getNonsymmetricMaxY(), x);
+	public int getAsymmetricMaxY(int x, int z) {
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override
-	public int getNonsymmetricMinZAtX(int x) {
+	public int getAsymmetricMinZAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMinZAtY(int y) {
+	public int getAsymmetricMinZAtY(int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMinZ(int x, int y) {
+	public int getAsymmetricMinZ(int x, int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxZAtX(int x) {
-		return Math.min(getNonsymmetricMaxZ(), x);
+	public int getAsymmetricMaxZAtX(int x) {
+		return Math.min(getAsymmetricMaxZ(), x);
 	}
 
 	@Override
-	public int getNonsymmetricMaxZAtY(int y) {
-		return Math.min(getNonsymmetricMaxZ(), y);
+	public int getAsymmetricMaxZAtY(int y) {
+		return Math.min(getAsymmetricMaxZ(), y);
 	}
 
 	@Override
-	public int getNonsymmetricMaxZ(int x, int y) {
-		return Math.min(getNonsymmetricMaxZ(), y);
+	public int getAsymmetricMaxZ(int x, int y) {
+		return Math.min(getAsymmetricMaxZ(), y);
 	}
 }

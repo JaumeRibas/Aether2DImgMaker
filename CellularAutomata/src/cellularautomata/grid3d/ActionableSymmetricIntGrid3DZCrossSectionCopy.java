@@ -29,14 +29,14 @@ public class ActionableSymmetricIntGrid3DZCrossSectionCopy extends ActionableGri
 	 */
 	private static final long serialVersionUID = -2151281544490932379L;
 	
-	private NonsymmetricIntGrid3DZCrossSectionBlock[] blocks;
+	private AnisotropicIntGrid3DZCrossSectionBlock[] blocks;
 	private int z;
 
 	public int getZ() {
 		return z;
 	}
 
-	public ActionableSymmetricIntGrid3DZCrossSectionCopy(NonsymmetricIntGrid3DZCrossSectionBlock[] blocks, int z) {
+	public ActionableSymmetricIntGrid3DZCrossSectionCopy(AnisotropicIntGrid3DZCrossSectionBlock[] blocks, int z) {
 		this.blocks = blocks;
 		this.z = z;
 	}
@@ -44,7 +44,7 @@ public class ActionableSymmetricIntGrid3DZCrossSectionCopy extends ActionableGri
 	@Override
 	public void processGrid() throws Exception {
 		triggerBeforeProcessing();
-		for (NonsymmetricIntGrid3DZCrossSectionBlock block : blocks) {
+		for (AnisotropicIntGrid3DZCrossSectionBlock block : blocks) {
 			triggerProcessGridBlock(block);
 		}
 		triggerAfterProcessing();

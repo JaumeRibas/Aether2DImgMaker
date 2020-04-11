@@ -20,11 +20,11 @@ public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	
 	/**
 	 * <p>
-	 * Returns the value at a given position within the nonsymmetric section of the grid.
-	 * That is, where the x is larger or equal to {@link #getNonsymmetricMinX()} 
-	 * and smaller or equal to {@link #getNonsymmetricMaxX()}; 
-	 * and the y is is larger or equal to {@link #getNonsymmetricMinY()} 
-	 * and smaller or equal to {@link #getNonsymmetricMaxY()}.
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * That is, where the x is larger or equal to {@link #getAsymmetricMinX()} 
+	 * and smaller or equal to {@link #getAsymmetricMaxX()}; 
+	 * and the y is is larger or equal to {@link #getAsymmetricMinY()} 
+	 * and smaller or equal to {@link #getAsymmetricMaxY()}.
 	 * </p>
 	 * <p>
 	 * The result of getting the value of a position outside this bounds is undefined.
@@ -35,10 +35,10 @@ public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	 * @return the {@link long} value at (x,y)
 	 * @throws Exception 
 	 */
-	long getValueAtNonsymmetricPosition(int x, int y) throws Exception;
+	long getValueAtAsymmetricPosition(int x, int y) throws Exception;
 	
 	@Override
-	default LongGrid2D nonsymmetricSection() {
-		return new NonsymmetricLongGridSection2D(this);
+	default LongGrid2D asymmetricSection() {
+		return new AsymmetricLongGridSection2D(this);
 	}
 }

@@ -18,6 +18,9 @@ package cellularautomata.automata;
 
 import cellularautomata.grid4d.LongGrid4D;
 
-public interface LongCellularAutomaton4D extends LongGrid4D, CellularAutomaton {
-
+public interface LongCellularAutomaton4D extends LongGrid4D, LongCellularAutomaton {
+	@Override
+	default LongCellularAutomaton3D crossSectionAtZ(int z) {
+		return new LongCA4DZCrossSection(this, z);
+	}
 }

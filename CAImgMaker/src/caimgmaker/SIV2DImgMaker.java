@@ -20,13 +20,13 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
+import cellularautomata.automata.IntCellularAutomaton2D;
 import cellularautomata.automata.IntSpreadIntegerValue2D;
-import cellularautomata.automata.SymmetricIntCellularAutomaton2D;
 
 public class SIV2DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"1000000", "0", "D:/data/test", "999999"};//debug
+		args = new String[]{"1000000", "0", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -62,7 +62,7 @@ public class SIV2DImgMaker {
 					return;
 				}
 			}
-			SymmetricIntCellularAutomaton2D ca = new IntSpreadIntegerValue2D(initialValue, backgroundValue);
+			IntCellularAutomaton2D ca = new IntSpreadIntegerValue2D(initialValue, backgroundValue).asymmetricSection();
 			String path;
 			long initialStep = 0;
 			if (args.length > 2) {
@@ -96,9 +96,9 @@ public class SIV2DImgMaker {
 				System.out.println("Current step: " + ca.getStep());
 			}
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			path += ca.getSubFolderPath() + "/img/";	
+			path += ca.getSubFolderPath() + "/img";	
 			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createNonsymmetricImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+			imgMaker.createImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
 		}		
 	}
 	

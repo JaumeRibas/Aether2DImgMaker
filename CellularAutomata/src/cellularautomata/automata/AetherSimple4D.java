@@ -388,167 +388,167 @@ public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {
 	}
 	
 	@Override
-	public int getNonsymmetricMinW(int x, int y, int z) {
+	public int getAsymmetricMinW(int x, int y, int z) {
 		return Math.max(Math.max(x, y), z);
 	}
 
 	@Override
-	public int getNonsymmetricMaxW(int x, int y, int z) {
-		return getNonsymmetricMaxW();
+	public int getAsymmetricMaxW(int x, int y, int z) {
+		return getAsymmetricMaxW();
 	}
 
 	@Override
-	public int getNonsymmetricMinW() {
+	public int getAsymmetricMinW() {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxW() {
+	public int getAsymmetricMaxW() {
 		return getMaxW();
 	}
 
 	@Override
-	public int getNonsymmetricMinX() {
+	public int getAsymmetricMinX() {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxX() {
+	public int getAsymmetricMaxX() {
 		return getMaxW();
 	}
 
 	@Override
-	public int getNonsymmetricMinY() {
+	public int getAsymmetricMinY() {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxY() {
+	public int getAsymmetricMaxY() {
 		return getMaxW();
 	}
 
 	@Override
-	public int getNonsymmetricMinZ() {
+	public int getAsymmetricMinZ() {
 		return 0;
 	}
 	
 	@Override
-	public int getNonsymmetricMaxZ() {
+	public int getAsymmetricMaxZ() {
 		return getMaxW();
 	}
 
 	@Override
-	public int getNonsymmetricMinWAtZ(int z) {
+	public int getAsymmetricMinWAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinWAtXZ(int x, int z) {
+	public int getAsymmetricMinWAtXZ(int x, int z) {
 		return x;
 	}
 
 	@Override
-	public int getNonsymmetricMinWAtYZ(int y, int z) {
+	public int getAsymmetricMinWAtYZ(int y, int z) {
 		return y;
 	}
 
 	@Override
-	public int getNonsymmetricMaxWAtZ(int z) {
-		return getNonsymmetricMaxW(); //TODO: check actual value? store all max values?
+	public int getAsymmetricMaxWAtZ(int z) {
+		return getAsymmetricMaxW(); //TODO: check actual value? store all max values?
 	}
 
 	@Override
-	public int getNonsymmetricMaxWAtXZ(int x, int z) {
-		return getNonsymmetricMaxW();
+	public int getAsymmetricMaxWAtXZ(int x, int z) {
+		return getAsymmetricMaxW();
 	}
 
 	@Override
-	public int getNonsymmetricMaxWAtYZ(int y, int z) {
-		return getNonsymmetricMaxW();
+	public int getAsymmetricMaxWAtYZ(int y, int z) {
+		return getAsymmetricMaxW();
 	}
 
 	@Override
-	public int getNonsymmetricMinXAtZ(int z) {
+	public int getAsymmetricMinXAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinXAtWZ(int w, int z) {
+	public int getAsymmetricMinXAtWZ(int w, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinXAtYZ(int y, int z) {
+	public int getAsymmetricMinXAtYZ(int y, int z) {
 		return y;
 	}
 
 	@Override
-	public int getNonsymmetricMinX(int w, int y, int z) {
+	public int getAsymmetricMinX(int w, int y, int z) {
 		return y;
 	}
 
 	@Override
-	public int getNonsymmetricMaxXAtZ(int z) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxXAtZ(int z) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMaxXAtWZ(int w, int z) {
-		return Math.min(getNonsymmetricMaxX(), w);
+	public int getAsymmetricMaxXAtWZ(int w, int z) {
+		return Math.min(getAsymmetricMaxX(), w);
 	}
 
 	@Override
-	public int getNonsymmetricMaxXAtYZ(int y, int z) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxXAtYZ(int y, int z) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMaxX(int w, int y, int z) {
-		return Math.min(getNonsymmetricMaxX(), w);
+	public int getAsymmetricMaxX(int w, int y, int z) {
+		return Math.min(getAsymmetricMaxX(), w);
 	}
 
 	@Override
-	public int getNonsymmetricMinYAtZ(int z) {
+	public int getAsymmetricMinYAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMaxYAtWZ(int w, int z) {
-		return Math.min(getNonsymmetricMaxY(), w);
+	public int getAsymmetricMaxYAtWZ(int w, int z) {
+		return Math.min(getAsymmetricMaxY(), w);
 	}
 
 	@Override
-	public int getNonsymmetricMinYAtXZ(int x, int z) {
+	public int getAsymmetricMinYAtXZ(int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinY(int w, int x, int z) {
+	public int getAsymmetricMinY(int w, int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMaxYAtZ(int z) {
-		return getNonsymmetricMaxY();
+	public int getAsymmetricMaxYAtZ(int z) {
+		return getAsymmetricMaxY();
 	}
 
 	@Override
-	public int getNonsymmetricMinYAtWZ(int w, int z) {
+	public int getAsymmetricMinYAtWZ(int w, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMaxYAtXZ(int x, int z) {
-		return Math.min(getNonsymmetricMaxY(), x);
+	public int getAsymmetricMaxYAtXZ(int x, int z) {
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override
-	public int getNonsymmetricMaxY(int w, int x, int z) {
-		return Math.min(getNonsymmetricMaxY(), x);
+	public int getAsymmetricMaxY(int w, int x, int z) {
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override
-	public long getValueAtNonsymmetricPosition(int w, int x, int y, int z) {
+	public long getValueAtAsymmetricPosition(int w, int x, int y, int z) {
 		return getValueAtPosition(w, x, y, z);
 	}
 	

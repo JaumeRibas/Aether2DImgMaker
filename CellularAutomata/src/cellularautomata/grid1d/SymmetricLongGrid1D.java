@@ -18,11 +18,11 @@ package cellularautomata.grid1d;
 
 public interface SymmetricLongGrid1D extends LongGrid1D, SymmetricGrid1D {
 	
-	long getValueAtNonsymmetricPosition(int x);
+	long getValueAtAsymmetricPosition(int x);
 	
 	@Override
-	default LongGrid1D nonsymmetricSection() {
-		return new NonsymmetricLongGridSection1D(this);
+	default LongGrid1D asymmetricSection() {
+		return new AsymmetricLongGridSection1D(this);
 	}
 
 }

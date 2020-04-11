@@ -20,7 +20,6 @@ import caimgmaker.colormap.ColorGrid2D;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether2D;
-import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.SubareaGrid;
 
@@ -49,12 +48,12 @@ public class Aether2DLastStepsImgMaker {
 		while (true) {
 			long initialValue = i;
 			System.out.println("Current initial value: " + initialValue);
-			SymmetricLongCellularAutomaton2D ae = new Aether2D(initialValue);
+			Aether2D ae = new Aether2D(initialValue);
 			while (ae.nextStep());
 			long lastStep = ae.getStep() - 1;
 			System.out.println("Last step: " + lastStep);
-			LongGrid2D nonsymmetricSection = ae.nonsymmetricSection();
-			SubareaGrid<LongGrid2D> subareaGrid = new SubareaGrid<LongGrid2D>(nonsymmetricSection, imageWidth, imageHeight);
+			LongGrid2D asymmetricSection = ae.asymmetricSection();
+			SubareaGrid<LongGrid2D> subareaGrid = new SubareaGrid<LongGrid2D>(asymmetricSection, imageWidth, imageHeight);
 			int subareasGridMinX = subareaGrid.getMinX();
 			int subareasGridMaxX = subareaGrid.getMaxX();
 			for (int subareasX = subareasGridMinX; subareasX <= subareasGridMaxX; subareasX++) {

@@ -21,7 +21,7 @@ import java.awt.Color;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.HueWithBackgroundMapper;
 import cellularautomata.automata.Aether2D;
-import cellularautomata.automata.SymmetricLongCellularAutomaton2D;
+import cellularautomata.automata.LongCellularAutomaton2D;
 
 public class Aether2DEvenOddImgMaker {
 	
@@ -31,7 +31,7 @@ public class Aether2DEvenOddImgMaker {
 			System.err.println("You must specify an initial value.");
 		} else {
 			long initialValue = Long.parseLong(args[0]);
-			SymmetricLongCellularAutomaton2D ca = new Aether2D(initialValue);
+			LongCellularAutomaton2D ca = new Aether2D(initialValue).asymmetricSection();
 			String path;
 			int initialStep = 0;
 			if (args.length > 1) {
@@ -52,9 +52,9 @@ public class Aether2DEvenOddImgMaker {
 				System.out.println("Current step: " + ca.getStep());
 			}
 			ColorMapper colorMapper = new HueWithBackgroundMapper(0, Color.BLACK);
-			path += ca.getSubFolderPath() + "/img/";	
+			path += ca.getSubFolderPath() + "/img";	
 			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createNonsymmetricEvenOddImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+			imgMaker.createEvenOddImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
 		}		
 	}
 	

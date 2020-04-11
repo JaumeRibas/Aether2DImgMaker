@@ -18,6 +18,9 @@ package cellularautomata.automata;
 
 import cellularautomata.grid3d.IntGrid3D;
 
-public interface IntCellularAutomaton3D extends IntGrid3D, CellularAutomaton {
-	
+public interface IntCellularAutomaton3D extends IntGrid3D, IntCellularAutomaton {
+	@Override
+	default IntCellularAutomaton2D crossSectionAtZ(int z) {
+		return new IntCA3DZCrossSection(this, z);
+	}
 }

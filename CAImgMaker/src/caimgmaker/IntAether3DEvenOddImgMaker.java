@@ -21,7 +21,6 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether3DSwap;
-import cellularautomata.automata.SymmetricIntActionableCellularAutomaton3D;
 
 public class IntAether3DEvenOddImgMaker {
 	
@@ -71,7 +70,7 @@ public class IntAether3DEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			SymmetricIntActionableCellularAutomaton3D ca;
+			IntAether3DSwap ca;
 			if (isRestore) {
 				ca = new IntAether3DSwap(initValOrBackupPath, path);
 			} else {
@@ -93,11 +92,11 @@ public class IntAether3DEvenOddImgMaker {
 				imgMaker = new CAImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionNonsymmetricEvenOddImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
-					path + "/img/", path + "/backups/");
+				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+					path + "/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionNonsymmetricEvenOddImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
-					path + "/img/", path + "/backups/");
+				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+					path + "/img", path + "/backups");
 			}	
 		}		
 	}

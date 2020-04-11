@@ -160,6 +160,7 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 		}
 	}
 	
+	@Override
 	public long getValueAtPosition(int x){	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
@@ -169,11 +170,13 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 		}
 	}
 	
-	public int getNonsymmetricMinX() {
+	@Override
+	public int getAsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonsymmetricMaxX() {
+	@Override
+	public int getAsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
@@ -188,12 +191,12 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 
 	@Override
 	public int getMinX() {
-		return -getNonsymmetricMaxX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxX() {
-		return getNonsymmetricMaxX();
+		return getAsymmetricMaxX();
 	}
 
 	@Override
@@ -217,7 +220,7 @@ public class Aether1D implements SymmetricLongCellularAutomaton1D {
 	}
 
 	@Override
-	public long getValueAtNonsymmetricPosition(int x) {
+	public long getValueAtAsymmetricPosition(int x) {
 		return grid[x];
 	}
 }

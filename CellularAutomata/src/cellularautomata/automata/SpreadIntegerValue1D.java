@@ -125,15 +125,15 @@ public class SpreadIntegerValue1D implements SymmetricLongCellularAutomaton1D {
 		}
 	}
 	
-	public long getValueAtNonsymmetricPosition(int x){	
+	public long getValueAtAsymmetricPosition(int x){	
 		return grid[x];
 	}
 	
-	public int getNonsymmetricMinX() {
+	public int getAsymmetricMinX() {
 		return 0;
 	}
 
-	public int getNonsymmetricMaxX() {
+	public int getAsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
@@ -157,12 +157,12 @@ public class SpreadIntegerValue1D implements SymmetricLongCellularAutomaton1D {
 
 	@Override
 	public int getMinX() {
-		return -getNonsymmetricMaxX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxX() {
-		return getNonsymmetricMaxX();
+		return getAsymmetricMaxX();
 	}
 	
 	public long getBackgroundValue() {

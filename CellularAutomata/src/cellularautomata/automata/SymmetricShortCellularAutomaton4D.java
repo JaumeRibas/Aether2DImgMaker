@@ -18,6 +18,9 @@ package cellularautomata.automata;
 
 import cellularautomata.grid4d.SymmetricShortGrid4D;
 
-public interface SymmetricShortCellularAutomaton4D extends SymmetricShortGrid4D, CellularAutomaton {
-
+public interface SymmetricShortCellularAutomaton4D extends SymmetricShortGrid4D, ShortCellularAutomaton4D {
+	@Override
+	default ShortCellularAutomaton4D asymmetricSection() {
+		return new AsymmetricShortCASection4D(this);
+	}
 }

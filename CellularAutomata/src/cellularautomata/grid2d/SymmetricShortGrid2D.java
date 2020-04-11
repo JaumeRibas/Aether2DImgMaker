@@ -20,11 +20,11 @@ public interface SymmetricShortGrid2D extends ShortGrid2D, SymmetricGrid2D {
 	
 	/**
 	 * <p>
-	 * Returns the value at a given position within the nonsymmetric section of the grid.
-	 * That is, where the x is larger or equal to {@link #getNonsymmetricMinX()} 
-	 * and smaller or equal to {@link #getNonsymmetricMaxX()}; 
-	 * and the y is is larger or equal to {@link #getNonsymmetricMinY()} 
-	 * and smaller or equal to {@link #getNonsymmetricMaxY()}.
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * That is, where the x is larger or equal to {@link #getAsymmetricMinX()} 
+	 * and smaller or equal to {@link #getAsymmetricMaxX()}; 
+	 * and the y is is larger or equal to {@link #getAsymmetricMinY()} 
+	 * and smaller or equal to {@link #getAsymmetricMaxY()}.
 	 * </p>
 	 * <p>
 	 * The result of getting the value of a position outside this bounds is undefined.
@@ -34,10 +34,10 @@ public interface SymmetricShortGrid2D extends ShortGrid2D, SymmetricGrid2D {
 	 * @param y the position on the y-coordinate
 	 * @return the {@link long} value at (x,y)
 	 */
-	short getValueAtNonsymmetricPosition(int x, int y);
+	short getValueAtAsymmetricPosition(int x, int y);
 	
 	@Override
-	default ShortGrid2D nonsymmetricSection() {
-		return new NonsymmetricShortGridSection2D(this);
+	default ShortGrid2D asymmetricSection() {
+		return new AsymmetricShortGridSection2D(this);
 	}
 }

@@ -19,7 +19,7 @@ package caimgmaker;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.AbelianSandpileSingleSource2D;
-import cellularautomata.automata.SymmetricIntCellularAutomaton2D;
+import cellularautomata.automata.IntCellularAutomaton2D;
 
 public class AbelianSandpile2DImgMaker {
 	
@@ -29,7 +29,7 @@ public class AbelianSandpile2DImgMaker {
 			System.err.println("You must specify an initial value.");
 		} else {
 			int initialValue = Integer.parseInt(args[0]);
-			SymmetricIntCellularAutomaton2D ca = new AbelianSandpileSingleSource2D(initialValue);
+			IntCellularAutomaton2D ca = new AbelianSandpileSingleSource2D(initialValue).asymmetricSection();
 			String path;
 			long initialStep = 0;
 			if (args.length > 1) {
@@ -50,9 +50,9 @@ public class AbelianSandpile2DImgMaker {
 				System.out.println("Current step: " + ca.getStep());
 			}
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			path += ca.getSubFolderPath() + "/img/";	
+			path += ca.getSubFolderPath() + "/img";	
 			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createNonsymmetricImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+			imgMaker.createImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
 		}		
 	}
 	

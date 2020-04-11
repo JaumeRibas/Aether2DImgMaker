@@ -27,11 +27,11 @@ public interface SymmetricIntGrid4D extends IntGrid4D, SymmetricGrid4D {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	int getValueAtNonsymmetricPosition(int w, int x, int y, int z);
+	int getValueAtAsymmetricPosition(int w, int x, int y, int z);
 
 	@Override
-	default IntGrid4D nonsymmetricSection() {
-		return new NonsymmetricIntGridSection4D(this);
+	default IntGrid4D asymmetricSection() {
+		return new AsymmetricIntGridSection4D(this);
 	}
 
 }

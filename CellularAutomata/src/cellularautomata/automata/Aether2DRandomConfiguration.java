@@ -46,7 +46,7 @@ public class Aether2DRandomConfiguration implements IntCellularAutomaton2D {
 	 * 
 	 * @param initialSide the side of the square area that will be filled with random values and will be used as initial configuration
 	 * @param minValue the minimum value for the random values
-	 * @param maxValue the maximum value for the random values. Cannot be larger than {@link Aether2DRandomConfiguration#MAX_ALLOWED_VALUE}
+	 * @param maxValue the maximum value for the random values
 	 */
 	public Aether2DRandomConfiguration(int initialSide, int minValue, int maxValue) {
 		if (minValue > maxValue) {

@@ -18,6 +18,6 @@ package cellularautomata.automata;
 
 import cellularautomata.grid2d.IntGrid2D;
 
-public interface IntCellularAutomaton2D extends IntGrid2D, CellularAutomaton {
+public interface IntCellularAutomaton2D extends IntGrid2D, IntCellularAutomaton {
 	
 }

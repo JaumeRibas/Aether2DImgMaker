@@ -21,7 +21,6 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether3DRandomConfiguration;
-import cellularautomata.automata.IntCellularAutomaton3D;
 
 public class Aether3DRandomConfigImgMaker {
 	
@@ -80,7 +79,7 @@ public class Aether3DRandomConfigImgMaker {
 				minValue = maxValue;
 				maxValue = swap;
 			}
-			IntCellularAutomaton3D ca = new Aether3DRandomConfiguration(initialSide, minValue, maxValue);
+			Aether3DRandomConfiguration ca = new Aether3DRandomConfiguration(initialSide, minValue, maxValue);
 			String path;
 			if (args.length > 2) {
 				path = args[3];

@@ -27,10 +27,10 @@ public interface SymmetricShortGrid4D extends ShortGrid4D, SymmetricGrid4D {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	short getValueAtNonsymmetricPosition(int w, int x, int y, int z);
+	short getValueAtAsymmetricPosition(int w, int x, int y, int z);
 
 	@Override
-	default ShortGrid4D nonsymmetricSection() {
-		return new NonsymmetricShortGridSection4D(this);
+	default ShortGrid4D asymmetricSection() {
+		return new AsymmetricShortGridSection4D(this);
 	}
 }

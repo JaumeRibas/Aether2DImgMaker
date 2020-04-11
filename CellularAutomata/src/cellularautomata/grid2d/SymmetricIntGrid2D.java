@@ -20,13 +20,13 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	
 	/**
 	 * <p>
-	 * Returns the value at a given position within the nonsymmetric section of the grid.
-	 * That is, where the x-coordinate is inside the [{@link #getNonsymmetricMinX()}, {@link #getNonsymmetricMaxX()}] bounds 
-	 * and the y-coordinate is inside the [{@link #getNonsymmetricMinY(int x)}, {@link #getNonsymmetricMaxY(int x)}] bounds.
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * That is, where the x-coordinate is inside the [{@link #getAsymmetricMinX()}, {@link #getAsymmetricMaxX()}] bounds 
+	 * and the y-coordinate is inside the [{@link #getAsymmetricMinY(int x)}, {@link #getAsymmetricMaxY(int x)}] bounds.
 	 * </p>
 	 * <p>
-	 * Or where the y-coordinate is inside the [{@link #getNonsymmetricMinY()}, {@link #getNonsymmetricMaxY()}] bounds 
-	 * and the x-coordinate is inside the [{@link #getNonsymmetricMinX(int y)}, {@link #getNonsymmetricMaxX(int y)}] bounds.
+	 * Or where the y-coordinate is inside the [{@link #getAsymmetricMinY()}, {@link #getAsymmetricMaxY()}] bounds 
+	 * and the x-coordinate is inside the [{@link #getAsymmetricMinX(int y)}, {@link #getAsymmetricMaxX(int y)}] bounds.
 	 * </p>
 	 * <p>
 	 * The result of getting the value of a position outside this bounds is undefined.
@@ -37,10 +37,10 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	 * @return the {@link int} value at (x,y)
 	 * @throws Exception 
 	 */
-	int getValueAtNonsymmetricPosition(int x, int y) throws Exception;
+	int getValueAtAsymmetricPosition(int x, int y) throws Exception;
 	
 	@Override
-	default IntGrid2D nonsymmetricSection() {
-		return new NonsymmetricIntGridSection2D(this);
+	default IntGrid2D asymmetricSection() {
+		return new AsymmetricIntGridSection2D(this);
 	}
 }

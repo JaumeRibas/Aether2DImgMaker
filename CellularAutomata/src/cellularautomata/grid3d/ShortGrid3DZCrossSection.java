@@ -20,8 +20,8 @@ import cellularautomata.grid2d.ShortGrid2D;
 
 public class ShortGrid3DZCrossSection implements ShortGrid2D {
 
-	private ShortGrid3D source;
-	private int z;
+	protected ShortGrid3D source;
+	protected int z;
 	
 	public ShortGrid3DZCrossSection(ShortGrid3D source, int z) {
 		this.source = source;

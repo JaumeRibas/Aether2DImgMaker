@@ -19,78 +19,78 @@ package cellularautomata.grid2d;
 public interface SymmetricGrid2D extends Grid2D {
 
 	/**
-	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid
+	 * Returns the smallest x-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the smallest x
 	 */
-	int getNonsymmetricMinX();
+	int getAsymmetricMinX();
 	
 	/**
-	 * Returns the smallest x-coordinate of the nonsymmetric section of the grid at y.<br/>
-	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonsymmetricMinY()} 
-	 * or bigger than {@link #getNonsymmetricMaxY()}
+	 * Returns the smallest x-coordinate of the asymmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()} 
+	 * or bigger than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest x
 	 */
-	int getNonsymmetricMinX(int y);
+	int getAsymmetricMinX(int y);
 	
 	/**
-	 * Returns the largest x-coordinate of the nonsymmetric section of the grid
+	 * Returns the largest x-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the largest x
 	 */
-	int getNonsymmetricMaxX();
+	int getAsymmetricMaxX();
 	
 	/**
-	 * Returns the largest x-coordinate of the nonsymmetric section of the grid at y.<br/>
-	 * It's not defined to call this method on a y-coordinate smaller than {@link #getNonsymmetricMinY()}
-	 * or bigger than {@link #getNonsymmetricMaxY()}
+	 * Returns the largest x-coordinate of the asymmetric section of the grid at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()}
+	 * or bigger than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest x
 	 */
-	int getNonsymmetricMaxX(int y);
+	int getAsymmetricMaxX(int y);
 	
 	/**
-	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid
+	 * Returns the smallest y-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the smallest y
 	 */
-	int getNonsymmetricMinY();
+	int getAsymmetricMinY();
 	
 	/**
-	 * Returns the smallest y-coordinate of the nonsymmetric section of the grid at x.<br/>
-	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonsymmetricMinX()}
-	 * or bigger than {@link #getNonsymmetricMaxX()}
+	 * Returns the smallest y-coordinate of the asymmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()}
+	 * or bigger than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest y
 	 */
-	int getNonsymmetricMinY(int x);
+	int getAsymmetricMinY(int x);
 	
 	/**
-	 * Returns the largest y-coordinate of the nonsymmetric section of the grid
+	 * Returns the largest y-coordinate of the asymmetric section of the grid
 	 * 
 	 * @return the largest y
 	 */
-	int getNonsymmetricMaxY();
+	int getAsymmetricMaxY();
 	
 	/**
-	 * Returns the largest y-coordinate of the nonsymmetric section of the grid at x.<br/>
-	 * It's not defined to call this method on a x-coordinate smaller than {@link #getNonsymmetricMinX()}
-	 * or bigger than {@link #getNonsymmetricMaxX()}
+	 * Returns the largest y-coordinate of the asymmetric section of the grid at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()}
+	 * or bigger than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest y
 	 */
-	int getNonsymmetricMaxY(int x);
+	int getAsymmetricMaxY(int x);
 	
 	/**
-	 * Returns a nonsymmetric section of the grid
+	 * Returns an asymmetric section of the grid
 	 * 
 	 * @return a 2D grid
 	 */
-	Grid2D nonsymmetricSection();
+	Grid2D asymmetricSection();
 
 }

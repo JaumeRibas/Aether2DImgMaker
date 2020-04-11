@@ -75,7 +75,7 @@ public class IntAether3DZEvenOddScan {
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			CAImgMaker imgMaker = new CAImgMaker();
-			imgMaker.createZScanningNonsymmetricEvenOddImages(ca, colorMapper, path + "/img/");
+			imgMaker.createZScanningEvenOddImagesFromAsymmetricSection(ca, colorMapper, path + "/img/");
 
 		}		
 	}

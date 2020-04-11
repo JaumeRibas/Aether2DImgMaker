@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import cellularautomata.grid3d.NonsymmetricLongGrid3DSlice;
+import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
 
 public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 	
@@ -32,7 +32,7 @@ public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 	private static final byte BACK = 5;
 
 	/** A 3D array representing the grid */
-	private NonsymmetricLongGrid3DSlice[] grid;
+	private AnisotropicLongGrid3DSlice[] grid;
 	
 	private long initialValue;
 	private long currentStep;
@@ -59,10 +59,10 @@ public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 			}
 		}
 		this.initialValue = initialValue;
-		grid = new NonsymmetricLongGrid3DSlice[3];
-		grid[0] = new NonsymmetricLongGrid3DSlice(0);
-		grid[1] = new NonsymmetricLongGrid3DSlice(1);
-		grid[2] = new NonsymmetricLongGrid3DSlice(2);
+		grid = new AnisotropicLongGrid3DSlice[3];
+		grid[0] = new AnisotropicLongGrid3DSlice(0);
+		grid[1] = new AnisotropicLongGrid3DSlice(1);
+		grid[2] = new AnisotropicLongGrid3DSlice(2);
 		grid[0].setValueAtPosition(0, 0, this.initialValue);
 		maxY = 0;
 		maxZ = 0;
@@ -77,20 +77,22 @@ public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 	 * @return true if the state of the grid changed or false otherwise
 	 */
 	public boolean nextStep(){
-		NonsymmetricLongGrid3DSlice[] newGrid = null;
+		AnisotropicLongGrid3DSlice[] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new NonsymmetricLongGrid3DSlice[grid.length + 1];
+			newGrid = new AnisotropicLongGrid3DSlice[grid.length + 1];
 		} else {
-			newGrid = new NonsymmetricLongGrid3DSlice[grid.length];
+			newGrid = new AnisotropicLongGrid3DSlice[grid.length];
 		}
 		maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = new NonsymmetricLongGrid3DSlice(0);
+		newGrid[0] = new AnisotropicLongGrid3DSlice(0);
 		boolean first = true;
+		long[] neighborValues = new long[6];
+		byte[] neighborDirections = new byte[6];
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, first = false) {
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = new NonsymmetricLongGrid3DSlice(nextX);
+				newGrid[nextX] = new AnisotropicLongGrid3DSlice(nextX);
 			}
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {
@@ -101,8 +103,148 @@ public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 					long downValue = getValueAtPosition(x, y - 1, z);
 					long frontValue = getValueAtPosition(x, y, z + 1);
 					long backValue = getValueAtPosition(x, y, z - 1);
-					boolean positionChanged = computePosition(value,  rightValue, leftValue, upValue, downValue, frontValue, backValue, x, y, z, newGrid);
-					changed = changed || positionChanged;
+					int relevantNeighborCount = 0;
+					if (rightValue < value) {
+						neighborValues[relevantNeighborCount] = rightValue;
+						neighborDirections[relevantNeighborCount] = RIGHT;
+						relevantNeighborCount++;
+					}
+					if (leftValue < value) {
+						neighborValues[relevantNeighborCount] = leftValue;
+						neighborDirections[relevantNeighborCount] = LEFT;
+						relevantNeighborCount++;
+					}
+					if (upValue < value) {
+						neighborValues[relevantNeighborCount] = upValue;
+						neighborDirections[relevantNeighborCount] = UP;
+						relevantNeighborCount++;
+					}
+					if (downValue < value) {
+						neighborValues[relevantNeighborCount] = downValue;
+						neighborDirections[relevantNeighborCount] = DOWN;
+						relevantNeighborCount++;
+					}
+					if (frontValue < value) {
+						neighborValues[relevantNeighborCount] = frontValue;
+						neighborDirections[relevantNeighborCount] = FRONT;
+						relevantNeighborCount++;
+					}
+					if (backValue < value) {
+						neighborValues[relevantNeighborCount] = backValue;
+						neighborDirections[relevantNeighborCount] = BACK;
+						relevantNeighborCount++;
+					}
+					if (relevantNeighborCount > 0) {
+						//sort
+						boolean sorted = false;
+						while (!sorted) {
+							sorted = true;
+							for (int i = relevantNeighborCount - 2; i >= 0; i--) {
+								if (neighborValues[i] < neighborValues[i+1]) {
+									sorted = false;
+									long valSwap = neighborValues[i];
+									neighborValues[i] = neighborValues[i+1];
+									neighborValues[i+1] = valSwap;
+									byte dirSwap = neighborDirections[i];
+									neighborDirections[i] = neighborDirections[i+1];
+									neighborDirections[i+1] = dirSwap;
+								}
+							}
+						}
+						//divide
+						boolean isFirstNeighbor = true;
+						long previousNeighborValue = 0;
+						for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
+							long neighborValue = neighborValues[i];
+							if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+								int shareCount = relevantNeighborCount - i + 1;
+								long toShare = value - neighborValue;
+								long share = toShare/shareCount;
+								if (share != 0) {
+									changed = true;
+									value = value - toShare + toShare%shareCount + share;
+									for (int j = i; j < relevantNeighborCount; j++) {
+										switch(neighborDirections[j]) {
+										case RIGHT:
+											newGrid[x+1].addValueAtPosition(y, z, share);
+											if (x >= maxXMinusOne) {
+												boundsReached = true;
+											}
+											break;
+										case LEFT:
+											if (x > y) {
+												long valueToAdd = share;
+												if (y == x - 1) {
+													valueToAdd += share;
+													if (z == y) {
+														valueToAdd += share;
+														if (x == 1) {
+															valueToAdd += 3*share;
+														}
+													}
+												}
+												newGrid[x-1].addValueAtPosition(y, z, valueToAdd);
+											}
+											if (x >= maxXMinusOne) {
+												boundsReached = true;
+											}
+											break;
+										case UP:
+											if (y < x) {
+												long valueToAdd = share;
+												if (y == x - 1) {
+													valueToAdd += share;
+												}
+												int yy = y+1;
+												newGrid[x].addValueAtPosition(yy, z, valueToAdd);
+												if (yy > maxY)
+													maxY = yy;
+											}
+											break;
+										case DOWN:
+											if (y > z) {	
+												long valueToAdd = share;
+												if (z == y - 1) {
+													valueToAdd += share;
+													if (y == 1) {
+														valueToAdd += 2*share;
+													}
+												}
+												newGrid[x].addValueAtPosition(y-1, z, valueToAdd);
+											}
+											break;
+										case FRONT:
+											if (z < y) {
+												long valueToAdd = share;
+												if (z == y - 1) {
+													valueToAdd += share;
+													if (x == y) {
+														valueToAdd += share;
+													}
+												}
+												int zz = z+1;
+												newGrid[x].addValueAtPosition(y, zz, valueToAdd);
+												if (zz > maxZ)
+													maxZ = zz;
+											}
+											break;
+										case BACK:
+											if (z > 0) {
+												long valueToAdd = share;
+												if (z == 1) {
+													valueToAdd += share;
+												}
+												newGrid[x].addValueAtPosition(y, z-1, valueToAdd);
+											}
+											break;
+										}
+									}
+								}
+								previousNeighborValue = neighborValue;
+							}
+						}	
+					}					
+					newGrid[x].addValueAtPosition(y, z, value);
 				}
 			}
 			if (!first) {
@@ -112,184 +254,6 @@ public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 		grid = newGrid;
 		currentStep++;
 		return changed;
-	}
-	
-	private boolean computePosition(long value, long rightValue, long leftValue, long upValue, long downValue, long frontValue, long backValue, 
-			int x, int y, int z, NonsymmetricLongGrid3DSlice[] newGrid) {
-		boolean changed = false;
-		long[] neighborValues = new long[6];
-		byte[] neighborDirections = new byte[6];
-		int relevantNeighborCount = 0;
-		if (rightValue < value) {
-			neighborValues[relevantNeighborCount] = rightValue;
-			neighborDirections[relevantNeighborCount] = RIGHT;
-			relevantNeighborCount++;
-		}
-		if (leftValue < value) {
-			neighborValues[relevantNeighborCount] = leftValue;
-			neighborDirections[relevantNeighborCount] = LEFT;
-			relevantNeighborCount++;
-		}
-		if (upValue < value) {
-			neighborValues[relevantNeighborCount] = upValue;
-			neighborDirections[relevantNeighborCount] = UP;
-			relevantNeighborCount++;
-		}
-		if (downValue < value) {
-			neighborValues[relevantNeighborCount] = downValue;
-			neighborDirections[relevantNeighborCount] = DOWN;
-			relevantNeighborCount++;
-		}
-		if (frontValue < value) {
-			neighborValues[relevantNeighborCount] = frontValue;
-			neighborDirections[relevantNeighborCount] = FRONT;
-			relevantNeighborCount++;
-		}
-		if (backValue < value) {
-			neighborValues[relevantNeighborCount] = backValue;
-			neighborDirections[relevantNeighborCount] = BACK;
-			relevantNeighborCount++;
-		}
-		if (relevantNeighborCount > 0) {
-			//sort
-			boolean sorted = false;
-			while (!sorted) {
-				sorted = true;
-				for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-					if (neighborValues[i] < neighborValues[i+1]) {
-						sorted = false;
-						long valSwap = neighborValues[i];
-						neighborValues[i] = neighborValues[i+1];
-						neighborValues[i+1] = valSwap;
-						byte dirSwap = neighborDirections[i];
-						neighborDirections[i] = neighborDirections[i+1];
-						neighborDirections[i+1] = dirSwap;
-					}
-				}
-			}
-			//divide
-			boolean isFirstNeighbor = true;
-			long previousNeighborValue = 0;
-			for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-				long neighborValue = neighborValues[i];
-				if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-					int shareCount = relevantNeighborCount - i + 1;
-					long toShare = value - neighborValue;
-					long share = toShare/shareCount;
-					if (share != 0) {
-						changed = true;
-						value = value - toShare + toShare%shareCount + share;
-						for (int j = i; j < relevantNeighborCount; j++) {
-							addToNeighbor(newGrid, x, y, z, neighborDirections[j], share);
-						}
-					}
-					previousNeighborValue = neighborValue;
-				}
-			}	
-		}					
-		newGrid[x].addValueAtPosition(y, z, value);
-		return changed;
-	}
-
-	private void addToNeighbor(NonsymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, byte direction, long value) {
-		switch(direction) {
-		case RIGHT:
-			addRight(newGrid, x, y, z, value);
-			break;
-		case LEFT:
-			addLeft(newGrid, x, y, z, value);
-			break;
-		case UP:
-			addUp(newGrid, x, y, z, value);
-			break;
-		case DOWN:
-			addDown(newGrid, x, y, z, value);
-			break;
-		case FRONT:
-			addFront(newGrid, x, y, z, value);
-			break;
-		case BACK:
-			addBack(newGrid, x, y, z, value);
-			break;
-		}
-	}
-	
-	private void addRight(NonsymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, long value) {
-		newGrid[x+1].addValueAtPosition(y, z, value);
-		if (x >= maxXMinusOne) {
-			boundsReached = true;
-		}
-	}
-	
-	private void addLeft(NonsymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, long value) {
-		if (x > y) {
-			long valueToAdd = value;
-			if (y == x - 1) {
-				valueToAdd += value;
-				if (z == y) {
-					valueToAdd += value;
-					if (x == 1) {
-						valueToAdd += 3*value;
-					}
-				}
-			}
-			newGrid[x-1].addValueAtPosition(y, z, valueToAdd);
-		}
-		if (x >= maxXMinusOne) {
-			boundsReached = true;
-		}
-	}
-	
-	private void addUp(NonsymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, long value) {
-		if (y < x) {
-			long valueToAdd = value;
-			if (y == x - 1) {
-				valueToAdd += value;
-			}
-			int yy = y+1;
-			newGrid[x].addValueAtPosition(yy, z, valueToAdd);
-			if (yy > maxY)
-				maxY = yy;
-		}
-	}
-	
-	private void addDown(NonsymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, long value) {
-		if (y > z) {	
-			long valueToAdd = value;
-			if (z == y - 1) {
-				valueToAdd += value;
-				if (y == 1) {
-					valueToAdd += 2*value;
-				}
-			}
-			newGrid[x].addValueAtPosition(y-1, z, valueToAdd);
-		}
-	}
-	
-	private void addFront(NonsymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, long value) {
-		if (z < y) {
-			long valueToAdd = value;
-			if (z == y - 1) {
-				valueToAdd += value;
-				if (x == y) {
-					valueToAdd += value;
-				}
-			}
-			int zz = z+1;
-			newGrid[x].addValueAtPosition(y, zz, valueToAdd);
-			if (zz > maxZ)
-				maxZ = zz;
-		}
-	}
-	
-	private void addBack(NonsymmetricLongGrid3DSlice[] newGrid, int x, int y, int z, long value) {
-		if (z > 0) {
-			long valueToAdd = value;
-			if (z == 1) {
-				valueToAdd += value;
-			}
-			newGrid[x].addValueAtPosition(y, z-1, valueToAdd);
-		}	
 	}
 	
 	public long getValueAtPosition(int x, int y, int z){	
@@ -313,75 +277,75 @@ public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 				x = swp;
 			}
 		} while (!sorted);
-		if (x < grid.length && y <= x && z <= y) {
+		if (x < grid.length) {
 			return grid[x].getValueAtPosition(y, z);
 		} else {
 			return 0;
 		}
 	}
 	
-	public long getValueAtNonsymmetricPosition(int x, int y, int z){	
+	public long getValueAtAsymmetricPosition(int x, int y, int z){	
 		return grid[x].getValueAtPosition(y, z);
 	}
 	
 	@Override
-	public int getNonsymmetricMinX() {
+	public int getAsymmetricMinX() {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxX() {
+	public int getAsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
 	@Override
-	public int getNonsymmetricMinY() {
+	public int getAsymmetricMinY() {
 		return 0;
 	}
 	
 	@Override
-	public int getNonsymmetricMaxY() {
+	public int getAsymmetricMaxY() {
 		return maxY;
 	}
 	
 	@Override
-	public int getNonsymmetricMinZ() {
+	public int getAsymmetricMinZ() {
 		return 0;
 	}
 	
 	@Override
-	public int getNonsymmetricMaxZ() {
+	public int getAsymmetricMaxZ() {
 		return maxZ;
 	}
 	
 	@Override
 	public int getMinX() {
-		return -getNonsymmetricMaxX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxX() {
-		return getNonsymmetricMaxX();
+		return getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMinY() {
-		return -getNonsymmetricMaxX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxY() {
-		return getNonsymmetricMaxX();
+		return getAsymmetricMaxX();
 	}
 	
 	@Override
 	public int getMinZ() {
-		return -getNonsymmetricMaxX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	public int getMaxZ() {
-		return getNonsymmetricMaxX();
+		return getAsymmetricMaxX();
 	}	
 	
 	/**
@@ -413,93 +377,93 @@ public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
 	}
 	
 	@Override
-	public int getNonsymmetricMinXAtY(int y) {
+	public int getAsymmetricMinXAtY(int y) {
 		return y;
 	}
 
 	@Override
-	public int getNonsymmetricMinXAtZ(int z) {
+	public int getAsymmetricMinXAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinX(int y, int z) {
+	public int getAsymmetricMinX(int y, int z) {
 		return Math.max(y, z);
 	}
 
 	@Override
-	public int getNonsymmetricMaxXAtY(int y) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxXAtY(int y) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMaxXAtZ(int z) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxXAtZ(int z) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMaxX(int y, int z) {
-		return getNonsymmetricMaxX();
+	public int getAsymmetricMaxX(int y, int z) {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
-	public int getNonsymmetricMinYAtX(int x) {
+	public int getAsymmetricMinYAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMinYAtZ(int z) {
+	public int getAsymmetricMinYAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMinY(int x, int z) {
+	public int getAsymmetricMinY(int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getNonsymmetricMaxYAtX(int x) {
-		return Math.min(getNonsymmetricMaxY(), x);
+	public int getAsymmetricMaxYAtX(int x) {
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override
-	public int getNonsymmetricMaxYAtZ(int z) {
-		return getNonsymmetricMaxY();
+	public int getAsymmetricMaxYAtZ(int z) {
+		return getAsymmetricMaxY();
 	}
 
 	@Override
-	public int getNonsymmetricMaxY(int x, int z) {
-		return Math.min(getNonsymmetricMaxY(), x);
+	public int getAsymmetricMaxY(int x, int z) {
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override
-	public int getNonsymmetricMinZAtX(int x) {
+	public int getAsymmetricMinZAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMinZAtY(int y) {
+	public int getAsymmetricMinZAtY(int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMinZ(int x, int y) {
+	public int getAsymmetricMinZ(int x, int y) {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxZAtX(int x) {
-		return Math.min(getNonsymmetricMaxZ(), x);
+	public int getAsymmetricMaxZAtX(int x) {
+		return Math.min(getAsymmetricMaxZ(), x);
 	}
 
 	@Override
-	public int getNonsymmetricMaxZAtY(int y) {
-		return Math.min(getNonsymmetricMaxZ(), y);
+	public int getAsymmetricMaxZAtY(int y) {
+		return Math.min(getAsymmetricMaxZ(), y);
 	}
 
 	@Override
-	public int getNonsymmetricMaxZ(int x, int y) {
-		return Math.min(getNonsymmetricMaxZ(), y);
+	public int getAsymmetricMaxZ(int x, int y) {
+		return Math.min(getAsymmetricMaxZ(), y);
 	}
 
 	@Override

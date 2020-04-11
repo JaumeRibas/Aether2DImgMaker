@@ -18,6 +18,6 @@ package cellularautomata.automata;
 
 import cellularautomata.grid2d.LongGrid2D;
 
-public interface LongCellularAutomaton2D extends LongGrid2D, CellularAutomaton {
+public interface LongCellularAutomaton2D extends LongGrid2D, LongCellularAutomaton {
 	
 }

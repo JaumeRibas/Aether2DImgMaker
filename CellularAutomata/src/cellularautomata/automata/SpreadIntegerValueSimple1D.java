@@ -160,7 +160,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 		}
 	}
 	
-	public long getValueAtNonsymmetricPosition(int x){	
+	public long getValueAtAsymmetricPosition(int x){	
 		return getValueAtPosition(x);
 	}
 	
@@ -215,12 +215,12 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongCellularAutomato
 	}
 
 	@Override
-	public int getNonsymmetricMinX() {
+	public int getAsymmetricMinX() {
 		return 0;
 	}
 
 	@Override
-	public int getNonsymmetricMaxX() {
+	public int getAsymmetricMaxX() {
 		return getMaxX();
 	}
 
