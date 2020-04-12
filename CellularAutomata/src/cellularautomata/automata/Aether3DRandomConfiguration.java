@@ -21,7 +21,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Aether3DRandomConfiguration implements IntCellularAutomaton3D {	
+import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
+
+public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;

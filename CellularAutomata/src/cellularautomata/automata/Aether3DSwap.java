@@ -28,11 +28,12 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.grid3d.LongGrid3D;
+import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
 import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
 import cellularautomata.grid3d.AsymmetricLongSubGrid3D;
 import cellularautomata.grid3d.SizeLimitedAnisotropicLongGrid3DBlock;
 
-public class Aether3DSwap extends SymmetricLongActionableCellularAutomaton3D {
+public class Aether3DSwap extends SymmetricActionableEvolvingLongGrid3D {
 
 	public static final long PRIMITIVE_MAX_VALUE = Long.MAX_VALUE;
 	

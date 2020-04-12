@@ -22,7 +22,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AetherSimple4D implements SymmetricLongCellularAutomaton4D {	
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
+
+public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {	
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;

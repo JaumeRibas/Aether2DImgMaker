@@ -19,7 +19,9 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class AbelianSandpileSingleSource2D implements SymmetricIntCellularAutomaton2D {
+import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid2D;
+
+public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D {
 
 	private int[][] grid;
 	

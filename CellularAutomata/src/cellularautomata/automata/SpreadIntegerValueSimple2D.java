@@ -19,13 +19,15 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
+
 /**
  * A simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton for review and testing purposes
  * 
  * @author Jaume Ribas
  *
  */
-public class SpreadIntegerValueSimple2D implements SymmetricLongCellularAutomaton2D {	
+public class SpreadIntegerValueSimple2D implements SymmetricEvolvingLongGrid2D {	
 
 	/** A 2D array representing the grid */
 	private long[][] grid;

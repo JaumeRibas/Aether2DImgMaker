@@ -23,6 +23,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import cellularautomata.evolvinggrid.EvolvingIntGrid;
+import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
+import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
+import cellularautomata.evolvinggrid.EvolvingIntGrid4D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid;
+import cellularautomata.evolvinggrid.EvolvingLongGrid1D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid4D;
+import cellularautomata.evolvinggrid.EvolvingModel;
+import cellularautomata.evolvinggrid.EvolvingShortGrid;
+import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
+import cellularautomata.evolvinggrid.SymmetricActionableEvolvingIntGrid3D;
+import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid4D;
 import cellularautomata.grid.SymmetricGridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid2d.IntGrid2D;
@@ -159,7 +174,7 @@ public class CATests {
 		long initialValue = 2000;
 		SpreadIntegerValue1D siv1 = new SpreadIntegerValue1D(initialValue, 0);
 		SingleSourceLongSandpile1D siv2 = new SingleSourceLongSandpile1D(new SpreadIntegerValueRules(), initialValue);
-		race(new CellularAutomaton[] { siv1, siv2 });
+		race(new EvolvingModel[] { siv1, siv2 });
 	}
 	
 	public static void takeSamples() {
@@ -218,7 +233,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(LongCellularAutomaton1D ca1, LongCellularAutomaton1D ca2) {
+	public static void compare(EvolvingLongGrid1D ca1, EvolvingLongGrid1D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -249,7 +264,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(IntCellularAutomaton2D ca1, LongCellularAutomaton2D ca2) {
+	public static void compare(EvolvingIntGrid2D ca1, EvolvingLongGrid2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -281,7 +296,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(IntCellularAutomaton2D ca1, IntCellularAutomaton2D ca2) {
+	public static void compare(EvolvingIntGrid2D ca1, EvolvingIntGrid2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -313,7 +328,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(LongCellularAutomaton2D ca1, LongCellularAutomaton2D ca2) {
+	public static void compare(EvolvingLongGrid2D ca1, EvolvingLongGrid2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -345,7 +360,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(IntCellularAutomaton3D ca1, IntCellularAutomaton3D ca2) {
+	public static void compare(EvolvingIntGrid3D ca1, EvolvingIntGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -379,7 +394,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(SymmetricIntActionableCellularAutomaton3D ca1, LongCellularAutomaton3D ca2) {
+	public static void compare(SymmetricActionableEvolvingIntGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -429,7 +444,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(SymmetricLongActionableCellularAutomaton3D ca1, LongCellularAutomaton3D ca2) {
+	public static void compare(SymmetricActionableEvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -479,7 +494,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(LongCellularAutomaton4D ca1, LongCellularAutomaton4D ca2) {
+	public static void compare(EvolvingLongGrid4D ca1, EvolvingLongGrid4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -515,7 +530,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(SymmetricShortCellularAutomaton4D ca1, SymmetricShortCellularAutomaton4D ca2) {
+	public static void compare(SymmetricEvolvingShortGrid4D ca1, SymmetricEvolvingShortGrid4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -553,7 +568,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(IntCellularAutomaton4D ca1, LongCellularAutomaton4D ca2) {
+	public static void compare(EvolvingIntGrid4D ca1, EvolvingLongGrid4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -591,7 +606,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(ShortCellularAutomaton3D ca1,  IntCellularAutomaton3D ca2) {
+	public static void compare(EvolvingShortGrid3D ca1,  EvolvingIntGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -627,7 +642,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(IntCellularAutomaton3D ca1, LongCellularAutomaton3D ca2) {
+	public static void compare(EvolvingIntGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -664,7 +679,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(ShortCellularAutomaton3D ca1, LongCellularAutomaton3D ca2) {
+	public static void compare(EvolvingShortGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -700,7 +715,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(LongCellularAutomaton3D ca1, LongCellularAutomaton3D ca2) {
+	public static void compare(EvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -736,7 +751,7 @@ public class CATests {
 		}
 	}
 
-	public static void printMinAndMaxValues(ShortCellularAutomaton ca) {
+	public static void printMinAndMaxValues(EvolvingShortGrid ca) {
 		try {
 			do {
 				short[] minAndMax = ca.getMinAndMaxValue();
@@ -747,7 +762,7 @@ public class CATests {
 		}
 	}
 	
-	public static void printMinAndMaxValues(LongCellularAutomaton ca) {
+	public static void printMinAndMaxValues(EvolvingLongGrid ca) {
 		try {
 			do {
 				long[] minAndMax = ca.getMinAndMaxValue();
@@ -758,7 +773,7 @@ public class CATests {
 		}
 	}
 	
-	public static void checkTotalValueConservation(LongCellularAutomaton ca) {
+	public static void checkTotalValueConservation(EvolvingLongGrid ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			long value = ca.getTotalValue(), newValue = value;
@@ -777,7 +792,7 @@ public class CATests {
 		}
 	}
 	
-	public static void checkTotalValueConservation(IntCellularAutomaton ca) {
+	public static void checkTotalValueConservation(EvolvingIntGrid ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			int value = ca.getTotalValue(), newValue = value;
@@ -796,7 +811,7 @@ public class CATests {
 		}
 	}
 	
-	public static void stepByStep(IntCellularAutomaton2D ca) {
+	public static void stepByStep(EvolvingIntGrid2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -811,7 +826,7 @@ public class CATests {
 		}
 	}
 	
-	public static void stepByStep(LongCellularAutomaton1D ca) {
+	public static void stepByStep(EvolvingLongGrid1D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -826,7 +841,7 @@ public class CATests {
 		}
 	}
 	
-	public static void stepByStep(LongCellularAutomaton2D ca) {
+	public static void stepByStep(EvolvingLongGrid2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -841,10 +856,10 @@ public class CATests {
 		}
 	}	
 	
-	public static void race(CellularAutomaton[] cas) {
+	public static void race(EvolvingModel[] cas) {
 		try {
 			long millis;
-			for (CellularAutomaton ca : cas) {
+			for (EvolvingModel ca : cas) {
 				millis = System.currentTimeMillis();
 				while (ca.nextStep());
 				System.out.println(ca.getClass().getSimpleName() + ": " + (System.currentTimeMillis() - millis));

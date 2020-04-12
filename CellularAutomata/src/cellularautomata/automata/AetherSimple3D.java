@@ -22,13 +22,15 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
+
 /**
  * A simplified implementation of the Aether cellular automaton for review and testing purposes
  * 
  * @author Jaume
  *
  */
-public class AetherSimple3D implements SymmetricLongCellularAutomaton3D {	
+public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;

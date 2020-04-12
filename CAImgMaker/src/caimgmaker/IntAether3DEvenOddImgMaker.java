@@ -85,11 +85,11 @@ public class IntAether3DEvenOddImgMaker {
 			}
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			CAImgMaker imgMaker = null;
+			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new CAImgMaker(backupLeap);
+				imgMaker = new ImgMaker(backupLeap);
 			} else {
-				imgMaker = new CAImgMaker();
+				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
 				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 

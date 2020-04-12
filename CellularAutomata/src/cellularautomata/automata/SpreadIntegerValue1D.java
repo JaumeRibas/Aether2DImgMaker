@@ -19,13 +19,15 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
+
 /**
  * Optimized implementation of the SpreadIntegerValue cellular automaton in 1D.
  * 
  * @author Jaume
  *
  */
-public class SpreadIntegerValue1D implements SymmetricLongCellularAutomaton1D {
+public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 
 	private long[] grid;
 	

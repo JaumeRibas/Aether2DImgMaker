@@ -20,7 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 
-public class IntAether4D implements SymmetricIntCellularAutomaton4D {
+import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid4D;
+
+public class IntAether4D implements SymmetricEvolvingIntGrid4D {
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;

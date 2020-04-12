@@ -69,7 +69,7 @@ public class Aether2DLastStepsImgMaker {
 					long[] minAndMaxValue = subarea.getMinAndMaxValue();
 					System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
 					ColorGrid2D colorGrid = colorMapper.getMappedGrid(subarea, minAndMaxValue[0], minAndMaxValue[1]);
-					CAImgMaker.createImage(colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
+					ImgMaker.createImage(colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
 							imageWidth, imageHeight, imgPath + subareasX + "," + subareasY, 
 							ae.getName() + "_" + initialValue + ".png");
 				}						

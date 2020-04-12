@@ -61,10 +61,10 @@ public class SymmetricIntGrid3DXCrossSectionEvenOddImgMakerProcessor implements 
 				IntGrid2D xSection = gridBlock.crossSectionAtX(x);			
 				int[] evenMinAndMaxValue = xSection.getEvenOddPositionsMinAndMaxValue(isEven);
 				ColorGrid2D colorGrid = colorMapper.getMappedGrid(xSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
-				CAImgMaker.createImageFromEvenOrOddPositions(isEven, colorGrid, imageWidth, imageHeight, imgsPath + "even/", imgsName);
+				ImgMaker.createImageFromEvenOrOddPositions(isEven, colorGrid, imageWidth, imageHeight, imgsPath + "even/", imgsName);
 				int[] oddMinAndMaxValue = xSection.getEvenOddPositionsMinAndMaxValue(!isEven);
 				colorGrid = colorMapper.getMappedGrid(xSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
-				CAImgMaker.createImageFromEvenOrOddPositions(!isEven, colorGrid, imageWidth, imageHeight, imgsPath + "odd/", imgsName);
+				ImgMaker.createImageFromEvenOrOddPositions(!isEven, colorGrid, imageWidth, imageHeight, imgsPath + "odd/", imgsName);
 				imagesMade = true;
 			}			
 		}

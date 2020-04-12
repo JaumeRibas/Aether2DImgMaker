@@ -22,7 +22,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NearAether2Simple3D implements SymmetricLongCellularAutomaton3D {	
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
+
+public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;

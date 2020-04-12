@@ -46,7 +46,7 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ColorGrid2D
 		this.maxY = maxY;
 		this.path = path;
 		this.name = name;
-		this.gridPositionSize = CAImgMaker.getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
+		this.gridPositionSize = ImgMaker.getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
 		framedGridWidth = maxX - minX + 1;
 		framedGridHeight = maxY - minY + 1;
 		
@@ -74,7 +74,7 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ColorGrid2D
 
 	@Override
 	public void afterProcessing() throws IOException {	
-		CAImgMaker.saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
+		ImgMaker.saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
 	}
 
 	@Override

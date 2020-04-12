@@ -20,8 +20,8 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.LongCellularAutomaton3D;
 import cellularautomata.automata.SpreadIntegerValue4D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 
 public class SpreadIntegerValue4DAxialRegionImgMaker {
 	
@@ -63,9 +63,9 @@ public class SpreadIntegerValue4DAxialRegionImgMaker {
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				String backupPath = path + ca.getSubFolderPath() + "/backups";
-				LongCellularAutomaton3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
+				EvolvingLongGrid3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
 				String imagesPath = path + axialRegion.getSubFolderPath() + "/img";
-				CAImgMaker imgMaker = new CAImgMaker();
+				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionImages(axialRegion, scanInitialZIndex, 
 							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);

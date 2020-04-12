@@ -19,13 +19,15 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
+
 /**
  * Optimized implementation of the SpreadIntegerValue cellular automaton in 2D.
  * 
  * @author Jaume
  *
  */
-public class SpreadIntegerValue2D implements SymmetricLongCellularAutomaton2D {
+public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 
 	private long[][] grid;
 	

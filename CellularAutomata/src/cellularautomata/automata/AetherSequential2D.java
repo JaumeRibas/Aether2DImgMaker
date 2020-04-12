@@ -22,13 +22,15 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
+
 /**
  * An asynchronous sequential version of the Aether cellular automaton to test whether or not it is abelian
  * 
  * @author Jaume
  *
  */
-public class AetherSequential2D implements LongCellularAutomaton2D {	
+public class AetherSequential2D implements EvolvingLongGrid2D {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;

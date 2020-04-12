@@ -19,7 +19,9 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SpreadIntegerValue4D implements SymmetricLongCellularAutomaton4D {
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
+
+public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D {
 	
 	/** A 4D array representing the grid */
 	private long[][][][] grid;

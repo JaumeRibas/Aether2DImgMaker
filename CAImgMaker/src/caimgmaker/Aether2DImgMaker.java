@@ -19,7 +19,7 @@ package caimgmaker;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.HueMapper;
 import cellularautomata.automata.Aether2D;
-import cellularautomata.automata.LongCellularAutomaton2D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
 
 public class Aether2DImgMaker {
 	
@@ -29,7 +29,7 @@ public class Aether2DImgMaker {
 			System.err.println("You must specify an initial value.");
 		} else {
 			long initialValue = Long.parseLong(args[0]);
-			LongCellularAutomaton2D ca = new Aether2D(initialValue).asymmetricSection();
+			EvolvingLongGrid2D ca = new Aether2D(initialValue).asymmetricSection();
 			String path;
 			int initialStep = 0;
 			if (args.length > 1) {
@@ -51,7 +51,7 @@ public class Aether2DImgMaker {
 			}
 			ColorMapper colorMapper = new HueMapper();
 			path += ca.getSubFolderPath() + "/img";	
-			CAImgMaker imgMaker = new CAImgMaker();
+			ImgMaker imgMaker = new ImgMaker();
 			imgMaker.createImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
 		}		
 	}

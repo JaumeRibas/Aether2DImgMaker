@@ -20,9 +20,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
 import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
 
-public class Aether3D2 implements SymmetricLongCellularAutomaton3D {
+public class Aether3D2 implements SymmetricEvolvingLongGrid3D {
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;

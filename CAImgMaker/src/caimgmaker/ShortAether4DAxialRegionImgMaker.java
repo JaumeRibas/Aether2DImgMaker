@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.ShortAether4D;
-import cellularautomata.automata.ShortCellularAutomaton3D;
+import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
 
 public class ShortAether4DAxialRegionImgMaker {
 	
@@ -37,7 +37,7 @@ public class ShortAether4DAxialRegionImgMaker {
 			if (tmp.compareTo(BigInteger.valueOf(Short.MAX_VALUE)) <= 0 
 					&& tmp.compareTo(BigInteger.valueOf(Short.MIN_VALUE)) >= 0) {
 				initialValue = tmp.shortValue();
-				ShortCellularAutomaton3D ca = new ShortAether4D(initialValue).asymmetricSection().crossSectionAtZ(0);
+				EvolvingShortGrid3D ca = new ShortAether4D(initialValue).asymmetricSection().crossSectionAtZ(0);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {
@@ -63,7 +63,7 @@ public class ShortAether4DAxialRegionImgMaker {
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				path += ca.getSubFolderPath() + "/img";	
-				CAImgMaker imgMaker = new CAImgMaker();
+				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionImages(ca, scanInitialZIndex, 
 							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);

@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether4D;
-import cellularautomata.automata.IntCellularAutomaton3D;
+import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
 
 public class Aether4DAxialRegionImgMaker {
 	
@@ -62,9 +62,9 @@ public class Aether4DAxialRegionImgMaker {
 					System.out.println("Current step: " + ca.getStep());
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
-				IntCellularAutomaton3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
+				EvolvingIntGrid3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
 				String imagesPath = path + axialRegion.getSubFolderPath() + "/img";
-				CAImgMaker imgMaker = new CAImgMaker();
+				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionImages(axialRegion, scanInitialZIndex, 
 							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath);

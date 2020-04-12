@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether3DSwap;
-import cellularautomata.automata.SymmetricLongActionableCellularAutomaton3D;
+import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
 
 public class Aether3DEvenOddImgMaker {
 	
@@ -71,7 +71,7 @@ public class Aether3DEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			SymmetricLongActionableCellularAutomaton3D ca;
+			SymmetricActionableEvolvingLongGrid3D ca;
 			if (isRestore) {
 				ca = new Aether3DSwap(initValOrBackupPath, path);
 			} else {
@@ -86,11 +86,11 @@ public class Aether3DEvenOddImgMaker {
 			}
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			CAImgMaker imgMaker = null;
+			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new CAImgMaker(backupLeap);
+				imgMaker = new ImgMaker(backupLeap);
 			} else {
-				imgMaker = new CAImgMaker();
+				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
 				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 

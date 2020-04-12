@@ -19,13 +19,15 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
+
 /**
  * A synchronous sandpile model with isotropic rules and a single source initial configuration.
  * 
  * @author Jaume
  *
  */
-public class SingleSourceLongSandpile1D implements SymmetricLongCellularAutomaton1D {	
+public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {	
 
 	private static final byte RIGHT = 1;
 	private static final byte LEFT = 0;

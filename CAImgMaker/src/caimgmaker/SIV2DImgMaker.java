@@ -20,8 +20,8 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.IntCellularAutomaton2D;
 import cellularautomata.automata.IntSpreadIntegerValue2D;
+import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
 
 public class SIV2DImgMaker {
 	
@@ -62,7 +62,7 @@ public class SIV2DImgMaker {
 					return;
 				}
 			}
-			IntCellularAutomaton2D ca = new IntSpreadIntegerValue2D(initialValue, backgroundValue).asymmetricSection();
+			EvolvingIntGrid2D ca = new IntSpreadIntegerValue2D(initialValue, backgroundValue).asymmetricSection();
 			String path;
 			long initialStep = 0;
 			if (args.length > 2) {
@@ -97,7 +97,7 @@ public class SIV2DImgMaker {
 			}
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			path += ca.getSubFolderPath() + "/img";	
-			CAImgMaker imgMaker = new CAImgMaker();
+			ImgMaker imgMaker = new ImgMaker();
 			imgMaker.createImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
 		}		
 	}
