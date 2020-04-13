@@ -156,7 +156,7 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 							long toShare = value - neighborValue;
 							long share = toShare/shareCount;
 							if (share != 0) {
-								checkBoundsReached(x, y);
+								checkBoundsReached(x + indexOffset, y + indexOffset, newGrid.length);
 								changed = true;
 								//the center keeps the remainder and one share
 								value = value - toShare + toShare%shareCount + share;
@@ -184,9 +184,9 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y) {
-		if (x == 1 || x == grid.length - 2 || 
-			y == 1 || y == grid[0].length - 2) {
+	private void checkBoundsReached(int x, int y, int length) {
+		if (x == 1 || x == length - 2 || 
+			y == 1 || y == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -211,13 +211,7 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 		};
 	}
 	
-	/**
-	 * Returns the value at a given position for the current step
-	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @return the value at (x,y)
-	 */
+	@Override
 	public long getValueAtPosition(int x, int y){	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
@@ -231,11 +225,7 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 		}
 	}
 	
-	/**
-	 * Returns the smallest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMinX() {
 		int arrayMinX = - xOriginIndex;
 		int valuesMinX;
@@ -247,11 +237,7 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 		return valuesMinX;
 	}
 	
-	/**
-	 * Returns the largest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1 - xOriginIndex;
 		int valuesMaxX;
@@ -263,11 +249,7 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 		return valuesMaxX;
 	}
 	
-	/**
-	 * Returns the smallest y-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest y of a nonzero value at the current step
-	 */
+	@Override
 	public int getMinY() {
 		int arrayMinY = - yOriginIndex;
 		int valuesMinY;
@@ -279,11 +261,7 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 		return valuesMinY;
 	}
 	
-	/**
-	 * Returns the largest y-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest y of a nonzero value at the current step
-	 */
+	@Override
 	public int getMaxY() {
 		int arrayMaxY = grid[0].length - 1 - yOriginIndex;
 		int valuesMaxY;
@@ -294,12 +272,8 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 		}
 		return valuesMaxY;
 	}
-	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

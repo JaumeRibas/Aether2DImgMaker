@@ -180,7 +180,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 							int toShare = value - neighborValue;
 							int share = toShare/shareCount;
 							if (share != 0) {
-								checkBoundsReached(x, y);
+								checkBoundsReached(x + indexOffset, y + indexOffset, newGrid.length);
 								changed = true;
 								value = value - toShare + toShare%shareCount + share;
 								for (int j = i; j < relevantNeighborCount; j++) {
@@ -203,9 +203,9 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y) {
-		if (x == 1 || x == grid.length - 2 || 
-			y == 1 || y == grid[0].length - 2) {
+	private void checkBoundsReached(int x, int y, int length) {
+		if (x == 1 || x == length - 2 || 
+			y == 1 || y == length - 2) {
 			boundsReached = true;
 		}
 	}

@@ -206,7 +206,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 								int toShare = value - neighborValue;
 								int share = toShare/shareCount;
 								if (share != 0) {
-									checkBoundsReached(x, y, z);
+									checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
 									changed = true;
 									value = value - toShare + toShare%shareCount + share;
 									for (int j = i; j < relevantNeighborCount; j++) {
@@ -237,10 +237,10 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y, int z) {
-		if (x == 1 || x == grid.length - 2 || 
-			y == 1 || y == grid.length - 2 || 
-			z == 1 || z == grid.length - 2) {
+	private void checkBoundsReached(int x, int y, int z, int length) {
+		if (x == 1 || x == length - 2 || 
+			y == 1 || y == length - 2 || 
+			z == 1 || z == length - 2) {
 			boundsReached = true;
 		}
 	}

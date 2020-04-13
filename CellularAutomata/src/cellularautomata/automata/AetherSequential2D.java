@@ -165,7 +165,7 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 					long toShare = topplingValue - neighborValue;
 					long share = toShare/shareCount;
 					if (share != 0) {
-						checkBoundsReached(topplingPositionXIndex, topplingPositionYIndex);
+						checkBoundsReached(topplingPositionXIndex + indexOffset, topplingPositionYIndex + indexOffset, newGrid.length);
 						hasToppled = true;
 						//the center keeps the remainder and one share
 						topplingValue = topplingValue - toShare + toShare%shareCount + share;
@@ -217,9 +217,9 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 		return previousChanged;
 	}
 	
-	private void checkBoundsReached(int x, int y) {
-		if (x == 1 || x == grid.length - 2 || 
-			y == 1 || y == grid[0].length - 2) {
+	private void checkBoundsReached(int x, int y, int length) {
+		if (x == 1 || x == length - 2 || 
+			y == 1 || y == length - 2) {
 			boundsReached = true;
 		}
 	}

@@ -187,7 +187,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 									long toShare = value - neighborValue;
 									long share = toShare/shareCount;
 									if (share != 0) {
-										checkBoundsReached(w, x, y, z);
+										checkBoundsReached(w + indexOffset, x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
 										changed = true;
 										value = value - toShare + toShare%shareCount + share;
 										for (LongNeighbor neighbor : neighbors) {
@@ -215,11 +215,11 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		return changed;
 	}
 	
-	private void checkBoundsReached(int w, int x, int y, int z) {
-		if (w == 1 || w == grid.length - 2 || 
-			x == 1 || x == grid[0].length - 2 || 
-			y == 1 || y == grid[0][0].length - 2 || 
-			z == 1 || z == grid[0][0][0].length - 2) {
+	private void checkBoundsReached(int w, int x, int y, int z, int length) {
+		if (w == 1 || w == length - 2 || 
+			x == 1 || x == length - 2 || 
+			y == 1 || y == length - 2 || 
+			z == 1 || z == length - 2) {
 			boundsReached = true;
 		}
 	}
