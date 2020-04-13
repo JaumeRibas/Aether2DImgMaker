@@ -46,7 +46,7 @@ public interface CellularAutomaton {
 	
 	/**
 	 * Return the cellular automaton's name and configuration as a folder and sub-folder(s) path.
-	 * For example: "<Name>/<Initial value>"
+	 * For example: "{Name}/{Initial value}"
 	 * 
 	 * @return the path
 	 */
