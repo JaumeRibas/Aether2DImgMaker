@@ -94,10 +94,10 @@ public class Aether3DEvenOddImgMaker {
 			}
 			if (isScanInitialZIndexDefined) {
 				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
-					path + "/img/", path + "/backups/");
+					path + "/img", path + "/backups");
 			} else {
 				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
-					path + "/img/", path + "/backups/");
+					path + "/img", path + "/backups");
 			}
 			
 		}		
