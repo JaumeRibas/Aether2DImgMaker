@@ -70,12 +70,12 @@ public class IntAether3DZEvenOddScan {
 			boolean finished = false;
 			while (ca.getStep() < step && !finished) {
 				finished = !ca.nextStep();
-				System.out.println("Current step: " + ca.getStep());
+				System.out.println("step: " + ca.getStep());
 			}
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createZScanningEvenOddImagesFromAsymmetricSection(ca, colorMapper, path + "/img/");
+			imgMaker.createZScanningEvenOddImagesFromAsymmetricSection(ca, colorMapper, path + "/img");
 
 		}		
 	}

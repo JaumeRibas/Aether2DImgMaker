@@ -93,7 +93,7 @@ public class SIV2DImgMaker {
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
 				finished = !ca.nextStep();
-				System.out.println("Current step: " + ca.getStep());
+				System.out.println("step: " + ca.getStep());
 			}
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			path += ca.getSubFolderPath() + "/img";	

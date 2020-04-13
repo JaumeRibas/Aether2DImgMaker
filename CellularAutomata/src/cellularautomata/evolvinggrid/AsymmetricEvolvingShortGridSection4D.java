@@ -23,12 +23,12 @@ public class AsymmetricEvolvingShortGridSection4D extends AsymmetricShortGridSec
 
 	@Override
 	public String getName() {
-		return ((SymmetricEvolvingShortGrid4D) source).getName() + "_Asymmetric";
+		return ((SymmetricEvolvingShortGrid4D) source).getName() + "_asymmetric_section";
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return ((SymmetricEvolvingShortGrid4D) source).getSubFolderPath() + "/Asymmetric";
+		return ((SymmetricEvolvingShortGrid4D) source).getSubFolderPath() + "/asymmetric_section";
 	}
 
 	@Override

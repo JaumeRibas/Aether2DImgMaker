@@ -81,7 +81,7 @@ public class IntAether3DEvenOddImgMaker {
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
 				finished = !ca.nextStep();
-				System.out.println("Current step: " + ca.getStep());
+				System.out.println("step: " + ca.getStep());
 			}
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);

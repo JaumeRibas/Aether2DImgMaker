@@ -23,12 +23,12 @@ public class AsymmetricEvolvingLongGridSection4D extends AsymmetricLongGridSecti
 
 	@Override
 	public String getName() {
-		return ((SymmetricEvolvingLongGrid4D) source).getName() + "_Asymmetric";
+		return ((SymmetricEvolvingLongGrid4D) source).getName() + "_asymmetric_section";
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return ((SymmetricEvolvingLongGrid4D) source).getSubFolderPath() + "/Asymmetric";
+		return ((SymmetricEvolvingLongGrid4D) source).getSubFolderPath() + "/asymmetric_section";
 	}
 
 	@Override

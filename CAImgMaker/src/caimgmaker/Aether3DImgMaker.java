@@ -82,7 +82,7 @@ public class Aether3DImgMaker {
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
 				finished = !ca.nextStep();
-				System.out.println("Current step: " + ca.getStep());
+				System.out.println("step: " + ca.getStep());
 			}
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
@@ -94,10 +94,10 @@ public class Aether3DImgMaker {
 			}
 			if (isScanInitialZIndexDefined) {
 				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, scanInitialZIndex, 0, colorMapper, colorMapper, 
-						Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path + "/img/slice", path + "/backups");
+						Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path + "/img/asymmetric_section", path + "/backups");
 			} else {
 				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, 0, colorMapper, colorMapper, 
-						Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path + "/img/slice", path + "/backups");
+						Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path + "/img/asymmetric_section", path + "/backups");
 			}
 			
 		}		

@@ -23,12 +23,12 @@ public class AsymmetricEvolvingIntGridSection4D extends AsymmetricIntGridSection
 
 	@Override
 	public String getName() {
-		return ((SymmetricEvolvingIntGrid4D) source).getName() + "_Asymmetric";
+		return ((SymmetricEvolvingIntGrid4D) source).getName() + "_asymmetric_section";
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return ((SymmetricEvolvingIntGrid4D) source).getSubFolderPath() + "/Asymmetric";
+		return ((SymmetricEvolvingIntGrid4D) source).getSubFolderPath() + "/asymmetric_section";
 	}
 
 	@Override

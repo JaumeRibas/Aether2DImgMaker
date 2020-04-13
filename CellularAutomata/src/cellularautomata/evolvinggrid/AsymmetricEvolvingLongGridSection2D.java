@@ -23,12 +23,12 @@ public class AsymmetricEvolvingLongGridSection2D extends AsymmetricLongGridSecti
 
 	@Override
 	public String getName() {
-		return ((SymmetricEvolvingLongGrid2D) source).getName() + "_Asymmetric";
+		return ((SymmetricEvolvingLongGrid2D) source).getName() + "_asymmetric_section";
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return ((SymmetricEvolvingLongGrid2D) source).getSubFolderPath() + "/Asymmetric";
+		return ((SymmetricEvolvingLongGrid2D) source).getSubFolderPath() + "/asymmetric_section";
 	}
 
 	@Override

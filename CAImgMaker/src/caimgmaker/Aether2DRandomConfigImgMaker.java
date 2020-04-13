@@ -86,7 +86,7 @@ public class Aether2DRandomConfigImgMaker {
 				path = "./";
 			}
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			path += ca.getSubFolderPath() + "/img/";	
+			path += ca.getSubFolderPath() + "/img";	
 			ImgMaker imgMaker = new ImgMaker();
 			imgMaker.createImages(ca, colorMapper, Constants.HD_HEIGHT/2, Constants.HD_HEIGHT/2, path);
 		}		

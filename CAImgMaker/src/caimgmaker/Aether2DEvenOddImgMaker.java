@@ -49,7 +49,7 @@ public class Aether2DEvenOddImgMaker {
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
 				finished = !ca.nextStep();
-				System.out.println("Current step: " + ca.getStep());
+				System.out.println("step: " + ca.getStep());
 			}
 			ColorMapper colorMapper = new HueWithBackgroundMapper(0, Color.BLACK);
 			path += ca.getSubFolderPath() + "/img";	

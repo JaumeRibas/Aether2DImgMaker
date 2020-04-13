@@ -23,12 +23,12 @@ public class AsymmetricEvolvingIntGridSection3D extends AsymmetricIntGridSection
 
 	@Override
 	public String getName() {
-		return ((SymmetricEvolvingIntGrid3D) source).getName() + "_Asymmetric";
+		return ((SymmetricEvolvingIntGrid3D) source).getName() + "_asymmetric_section";
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return ((SymmetricEvolvingIntGrid3D) source).getSubFolderPath() + "/Asymmetric";
+		return ((SymmetricEvolvingIntGrid3D) source).getSubFolderPath() + "/asymmetric_section";
 	}
 
 	@Override

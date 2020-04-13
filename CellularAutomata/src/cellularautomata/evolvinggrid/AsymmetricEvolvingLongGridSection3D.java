@@ -23,12 +23,12 @@ public class AsymmetricEvolvingLongGridSection3D extends AsymmetricLongGridSecti
 
 	@Override
 	public String getName() {
-		return ((SymmetricEvolvingLongGrid3D) source).getName() + "_Asymmetric";
+		return ((SymmetricEvolvingLongGrid3D) source).getName() + "_asymmetric_section";
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return ((SymmetricEvolvingLongGrid3D) source).getSubFolderPath() + "/Asymmetric";
+		return ((SymmetricEvolvingLongGrid3D) source).getSubFolderPath() + "/asymmetric_section";
 	}
 
 	@Override

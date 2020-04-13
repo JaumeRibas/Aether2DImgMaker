@@ -44,14 +44,14 @@ public class Aether2DLastStepsImgMaker {
 	public static void createAether2DLastStepsImages(ColorMapper colorMapper, int imageWidth, int imageHeight, String path) throws Exception {
 		int i = -156250000;
 		String imgPath = path + new Aether2D(0).getName() 
-				+ "/img/lats-steps/" + colorMapper.getClass().getSimpleName() + "/";
+				+ "/img/lats_steps/" + colorMapper.getClass().getSimpleName() + "/";
 		while (true) {
 			long initialValue = i;
-			System.out.println("Current initial value: " + initialValue);
+			System.out.println("initial value: " + initialValue);
 			Aether2D ae = new Aether2D(initialValue);
 			while (ae.nextStep());
 			long lastStep = ae.getStep() - 1;
-			System.out.println("Last step: " + lastStep);
+			System.out.println("last step: " + lastStep);
 			LongGrid2D asymmetricSection = ae.asymmetricSection();
 			SubareaGrid<LongGrid2D> subareaGrid = new SubareaGrid<LongGrid2D>(asymmetricSection, imageWidth, imageHeight);
 			int subareasGridMinX = subareaGrid.getMinX();
@@ -60,14 +60,14 @@ public class Aether2DLastStepsImgMaker {
 				int subareasGridLocalMinY = subareaGrid.getMinY(subareasX);
 				int subareasGridLocalMaxY = subareaGrid.getMaxY(subareasX);
 				for (int subareasY = subareasGridLocalMinY; subareasY <= subareasGridLocalMaxY; subareasY++) {
-					System.out.println("Subarea " + subareasX + "," + subareasY);
+					System.out.println("subarea " + subareasX + "," + subareasY);
 					int framedGridMinX = subareasX * imageWidth;
 					int framedGridMaxX = framedGridMinX + imageWidth - 1;
 					int framedGridMinY = subareasY * imageHeight;
 					int framedGridMaxY = framedGridMinY + imageHeight - 1;
 					LongGrid2D subarea = subareaGrid.getSubareaAtPosition(subareasX, subareasY);
 					long[] minAndMaxValue = subarea.getMinAndMaxValue();
-					System.out.println("Min value " + minAndMaxValue[0] + " Max value " + minAndMaxValue[1]);
+					System.out.println("min value: " + minAndMaxValue[0] + ", max value: " + minAndMaxValue[1]);
 					ColorGrid2D colorGrid = colorMapper.getMappedGrid(subarea, minAndMaxValue[0], minAndMaxValue[1]);
 					ImgMaker.createImage(colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
 							imageWidth, imageHeight, imgPath + subareasX + "," + subareasY, 
