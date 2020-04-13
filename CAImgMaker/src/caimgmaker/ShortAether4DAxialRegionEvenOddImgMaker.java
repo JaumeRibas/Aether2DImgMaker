@@ -23,10 +23,10 @@ import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.ShortAether4D;
 import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
 
-public class ShortAether4DAxialRegionImgMaker {
+public class ShortAether4DAxialRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-200", "D:/data/test"};//debug
+//		args = new String[]{"-201", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -37,7 +37,7 @@ public class ShortAether4DAxialRegionImgMaker {
 			if (tmp.compareTo(BigInteger.valueOf(Short.MAX_VALUE)) <= 0 
 					&& tmp.compareTo(BigInteger.valueOf(Short.MIN_VALUE)) >= 0) {
 				initialValue = tmp.shortValue();
-				EvolvingShortGrid3D ca = new ShortAether4D(initialValue).asymmetricSection().crossSectionAtZ(0);
+				ShortAether4D ca = new ShortAether4D(initialValue);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {
@@ -62,14 +62,16 @@ public class ShortAether4DAxialRegionImgMaker {
 					System.out.println("Current step: " + ca.getStep());
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
-				path += ca.getSubFolderPath() + "/img";	
+				EvolvingShortGrid3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
+				String imagesPath = path + axialRegion.getSubFolderPath() + "/img";
+				String backupPath = path + ca.getSubFolderPath() + "/backups";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
-					imgMaker.createScanningAndCrossSectionImages(ca, scanInitialZIndex, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, scanInitialZIndex, 
+							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
-					imgMaker.createScanningAndCrossSectionImages(ca, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, 
+							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
 				System.err.println("Initial value out of range.");

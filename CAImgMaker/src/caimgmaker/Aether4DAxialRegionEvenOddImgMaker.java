@@ -23,7 +23,7 @@ import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether4D;
 import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
 
-public class Aether4DAxialRegionImgMaker {
+public class Aether4DAxialRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-200", "D:/data/test"};//debug
@@ -64,13 +64,14 @@ public class Aether4DAxialRegionImgMaker {
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				EvolvingIntGrid3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
 				String imagesPath = path + axialRegion.getSubFolderPath() + "/img";
+				String backupPath = path + ca.getSubFolderPath() + "/backups";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
-					imgMaker.createScanningAndCrossSectionImages(axialRegion, scanInitialZIndex, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath);
+					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, scanInitialZIndex, 
+							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
-					imgMaker.createScanningAndCrossSectionImages(axialRegion, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath);
+					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, 
+							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
 				System.err.println("Initial value out of range.");
