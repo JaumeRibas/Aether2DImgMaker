@@ -272,7 +272,7 @@ public class CATests {
 			boolean equal = true;
 			while (!finished1 && !finished2) {
 				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-					for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getValueAtPosition(x, y) != ca2.getValueAtPosition(x, y)) {
 							equal = false;
 							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
@@ -304,7 +304,7 @@ public class CATests {
 			boolean equal = true;
 			while (!finished1 && !finished2) {
 				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-					for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getValueAtPosition(x, y) != ca2.getValueAtPosition(x, y)) {
 							equal = false;
 							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
@@ -335,13 +335,16 @@ public class CATests {
 			boolean finished2 = false;
 			boolean equal = true;
 			while (!finished1 && !finished2) {
-				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-					for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+				System.out.println("Comparing step " + ca1.getStep());
+				int maxY = ca1.getMaxY();
+				for (int y = ca1.getMinY(); y <= maxY; y++) {
+					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getValueAtPosition(x, y) != ca2.getValueAtPosition(x, y)) {
 							equal = false;
 							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y) 
 									+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y));
+							return;
 						}
 					}	
 				}
@@ -368,8 +371,8 @@ public class CATests {
 			boolean equal = true;
 			while (!finished1 && !finished2) {
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
 								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
@@ -502,14 +505,15 @@ public class CATests {
 			boolean equal = true;
 			while (!finished1 && !finished2) {
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
-							for (int w = ca2.getMinW(); w <= ca2.getMaxW(); w++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
+							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
 								if (ca1.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
 									equal = false;
 									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z) 
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z));
+									return;
 								}
 							}
 						}	
@@ -539,14 +543,14 @@ public class CATests {
 			while (!finished1 && !finished2) {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
-							for (int w = ca2.getMinW(); w <= ca2.getMaxW(); w++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
+							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
 								if (ca1.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
 									equal = false;
 									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
-											+ ca2.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z) 
-											+ " != " + ca1.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z));
+											+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z) 
+											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z));
 									return;
 								}
 							}
@@ -568,6 +572,10 @@ public class CATests {
 		}
 	}
 	
+	public static void compare(EvolvingLongGrid4D ca1, EvolvingIntGrid4D ca2) {
+		compare(ca2, ca1);
+	}
+	
 	public static void compare(EvolvingIntGrid4D ca1, EvolvingLongGrid4D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -577,15 +585,15 @@ public class CATests {
 			while (!finished1 && !finished2) {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
-							for (int w = ca2.getMinW(); w <= ca2.getMaxW(); w++) {
-//								System.out.println("Comparing position (" + w + ", " + x + ", " + y + ", " + z + ")");
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
+							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
 								if (ca1.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
 									equal = false;
 									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z) 
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z));
+									return;
 								}
 							}
 						}	
@@ -615,8 +623,8 @@ public class CATests {
 			while (!finished1 && !finished2) {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
 								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
@@ -642,6 +650,10 @@ public class CATests {
 		}
 	}
 	
+	public static void compare(EvolvingLongGrid3D ca1, EvolvingIntGrid3D ca2) {
+		compare(ca2, ca1);
+	}
+	
 	public static void compare(EvolvingIntGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -651,8 +663,8 @@ public class CATests {
 			while (!finished1 && !finished2) {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 //							System.out.println("Comparing position (" + x + ", " + y + ", " + z + ")");
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
@@ -688,8 +700,8 @@ public class CATests {
 			while (!finished1 && !finished2) {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
 								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
@@ -724,8 +736,8 @@ public class CATests {
 			while (!finished1 && !finished2) {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
-						for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 								equal = false;
 								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
