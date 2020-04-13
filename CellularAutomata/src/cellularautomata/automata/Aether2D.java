@@ -321,11 +321,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 
 	@Override
 	public int getAsymmetricMaxX(int y) {
-		int maxX = getAsymmetricMaxX();
-		while (getValueAtAsymmetricPosition(maxX, y) == 0 && maxX >= 0) {
-			maxX--;
-		}
-		return maxX;
+		return getAsymmetricMaxX();
 	}
 
 	@Override
