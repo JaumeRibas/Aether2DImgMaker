@@ -37,13 +37,10 @@ import cellularautomata.automata.Aether3D;
 import cellularautomata.automata.Utils;
 import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
 import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
-import cellularautomata.evolvinggrid.EvolvingIntGrid4D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
-import cellularautomata.evolvinggrid.EvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.EvolvingShortGrid2D;
 import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
-import cellularautomata.evolvinggrid.EvolvingShortGrid4D;
 import cellularautomata.evolvinggrid.SymmetricActionableEvolvingIntGrid3D;
 import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
 import cellularautomata.grid.IntGridMinAndMaxProcessor;
@@ -60,7 +57,6 @@ import cellularautomata.grid3d.ActionableSymmetricIntGrid3DZCrossSectionProcesso
 import cellularautomata.grid3d.ActionableSymmetricLongGrid3DZCrossSectionProcessor;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.LongGrid3D;
-import cellularautomata.grid3d.ShortGrid3D;
 import cellularautomata.grid3d.IsotropicIntGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid.IntGridEvenOddMinAndMaxProcessor;
 
@@ -210,7 +206,7 @@ public class ImgMaker {
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long rangeMin = 0, rangeMax = 0;
 		boolean firstIteration = true;
-		String imgPath = path + "/cross_section_value_scan/z=" + z + "/value_range=" + valueRange + "/scan_speed=" + scanSpeed + "/";
+		String imgPath = path + "/z=" + z + "/value_scan/value_range=" + valueRange + "/scan_speed=" + scanSpeed + "/";
 		do {
 			System.out.println("step: " + currentStep);
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -254,7 +250,7 @@ public class ImgMaker {
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long firstRangeMin = 0, rangeMin = 0;
 		boolean firstIteration = true;
-		String imgPath = path + "/cross_section_value_ranges/z=" + z + "/";
+		String imgPath = path + "/z=" + z + "/value_ranges/";
 		do {
 			System.out.println("step: " + currentStep);
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -294,31 +290,6 @@ public class ImgMaker {
 		System.out.println("finished!");
 	}
 	
-	public void createSurfaceMaxXImages(EvolvingLongGrid3D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		String imgPath = path + "/surface/";
-		do {
-			System.out.println("step: " + currentStep);
-			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			LongGrid2D surface = ca.projectedSurfaceMaxX();
-			long[] minAndMaxValue = surface.getMinAndMaxValue();
-			System.out.println("min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}			
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-	}
-	
 	public void createScanningImages(EvolvingLongGrid3D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -327,7 +298,7 @@ public class ImgMaker {
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		String imgPath = path + "/scan/";
+		String imgPath = path + "/z_scan/";
 		int scanZ = ca.getMinZ();
 		do {
 			System.out.println("step: " + currentStep);
@@ -374,7 +345,7 @@ public class ImgMaker {
 	public void createAether3DLastStepsCrossSectionImages(ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
 		int i = 0;
 		String imgPath = path + "/" + new Aether3D(0).getName() 
-				+ "/img/lats_steps/cross_section_asymetric/" + colorMapper.getClass().getSimpleName();
+				+ "/img/lats_steps/asymetric_section/" + colorMapper.getClass().getSimpleName();
 		while (true) {
 			long initialValue = i;
 			System.out.println("initial value: " + initialValue);
@@ -415,9 +386,9 @@ public class ImgMaker {
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
 		int scanZ = scanInitialZIndex;
 		String caName = ca.getName();
-		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan/";
+		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = path + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		boolean caFinished = false;
 		boolean lastPassFinished = false;
 		boolean lastPassStarted = false;
@@ -505,9 +476,9 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "//z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		
 		do {
 			System.out.println("step: " + currentStep);
@@ -732,9 +703,9 @@ public class ImgMaker {
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
 		int scanZ = scanInitialZIndex;
 		String caName = ca.getName();
-		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan/";
+		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = path + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		boolean caFinished = false;
 		boolean lastPassFinished = false;
 		boolean lastPassStarted = false;
@@ -819,9 +790,9 @@ public class ImgMaker {
 		long nextBckTime = System.currentTimeMillis() + backupLeap;
 		int scanZ = scanInitialZIndex;
 		String caName = ca.getName();
-		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan/";
+		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = path + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		boolean caFinished = false;
 		boolean lastPassFinished = false;
 		boolean lastPassStarted = false;
@@ -967,9 +938,9 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan_slice/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section_slice/" + "z=" + crossSectionZ + "/";
+				+ "/asymmetric_section/" + "z=" + crossSectionZ + "/";
 		
 		ActionableSymmetricIntGrid3DZCrossSectionProcessor scan = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, scanZ);
 		ActionableSymmetricIntGrid3DZCrossSectionProcessor xSection = new ActionableSymmetricIntGrid3DZCrossSectionProcessor(ca, crossSectionZ);
@@ -1082,9 +1053,9 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan_slice/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section_slice/" + "z=" + crossSectionZ + "/";
+				+ "/asymmetric_section/" + "z=" + crossSectionZ + "/";
 		
 		ActionableSymmetricLongGrid3DZCrossSectionProcessor scan = new ActionableSymmetricLongGrid3DZCrossSectionProcessor(ca, scanZ);
 		ActionableSymmetricLongGrid3DZCrossSectionProcessor xSection = new ActionableSymmetricLongGrid3DZCrossSectionProcessor(ca, crossSectionZ);
@@ -1199,11 +1170,11 @@ public class ImgMaker {
 		
 		String caName = ca.getName();
 		String copiesPath = imagesPath + "copies";
-		String scanCopiesPath =  copiesPath + "/scan_slice/";
-		String crossSectionCopiesPath = copiesPath + "/cross_section_slice/" + "z=" + crossSectionZ + "/";
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan_slice/";
+		String scanCopiesPath =  copiesPath + "/asymmetric_section/z_scan/";
+		String crossSectionCopiesPath = copiesPath + "/asymmetric_section/" + "z=" + crossSectionZ + "/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section_slice/" + "z=" + crossSectionZ + "/";
+				+ "/asymmetric_section/" + "z=" + crossSectionZ + "/";
 		
 		IsotropicIntGrid3DZCrossSectionCopierProcessor copier = new IsotropicIntGrid3DZCrossSectionCopierProcessor();
 		
@@ -1373,9 +1344,9 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan_slice/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section_slice/" + "z=" + crossSectionZ + "/";
+				+ "/asymmetric_section/" + "z=" + crossSectionZ + "/";
 		
 		ActionableSymmetricLongGrid3DZCrossSectionProcessor scan = new ActionableSymmetricLongGrid3DZCrossSectionProcessor(ca, scanZ);
 		ActionableSymmetricLongGrid3DZCrossSectionProcessor xSection = new ActionableSymmetricLongGrid3DZCrossSectionProcessor(ca, crossSectionZ);
@@ -1514,9 +1485,9 @@ public class ImgMaker {
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
 		String caName = ca.getName();
-		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan/";
+		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = path + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		int scanZ = ca.getMinZ();
 		do {
 			System.out.println("step: " + currentStep);
@@ -1543,314 +1514,6 @@ public class ImgMaker {
 				numberedFolder++;
 				folderImageCount = 0;
 			}		
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-	}
-	
-	public void createScanning3DEdgeMaxWImages(EvolvingLongGrid4D ca, ColorMapper colorMapper, 
-			int minWidth, int minHeight, String path, String backupPath) throws Exception {
-		StdInRunnable stdIn = new StdInRunnable();
-		Thread inputThread = new Thread(stdIn);
-		inputThread.start();
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		LongGrid3D edge = ca.projected3DEdgeMaxW();
-		int scanZ = edge.getMinZ();
-		String imgPath = path + "/scan_3D_edge/";
-		do {
-			edge = ca.projected3DEdgeMaxW();
-			System.out.println("step: " + currentStep);
-			int maxY = edge.getMaxY(), maxX = edge.getMaxX();
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			if (scanZ >= edge.getMaxZ())
-				scanZ = edge.getMinZ();
-			System.out.println("scan z: " + scanZ);
-			LongGrid2D xSection = edge.crossSectionAtZ(scanZ);
-			long[] minAndMaxValue = xSection.getMinAndMaxValue();
-			System.out.println("min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");			
-			scanZ++;
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}		
-			boolean backUp = false;
-			if (saveBackupsAutomatically) {
-				backUp = System.currentTimeMillis() >= nextBckTime;
-				if (backUp) {
-					nextBckTime += backupLeap;
-				}
-			}
-			if (backupRequested) {
-				backUp = true;
-				backupRequested = false;
-			}
-			if (backUp) {
-				ca.backUp(backupPath, ca.getClass().getSimpleName() + "_" + currentStep);				
-			}
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-		stdIn.stop();
-		inputThread.join();
-	}
-	
-	public void createScanningAndCrossSection3DEdgeMaxWImages(EvolvingLongGrid4D ca, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
-		StdInRunnable stdIn = new StdInRunnable();
-		Thread inputThread = new Thread(stdIn);
-		inputThread.start();
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		LongGrid3D edge = ca.projected3DEdgeMaxW();
-		int scanZ = edge.getMinZ();
-		do {
-			edge = ca.projected3DEdgeMaxW();
-			System.out.println("step: " + currentStep);
-			int maxY = edge.getMaxY(), maxX = edge.getMaxX(), minX, minY;
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			String imgPath = path + "/";
-			if (scanZ >= edge.getMaxZ())
-				scanZ = edge.getMinZ();
-			System.out.println("scan z: " + scanZ);
-			LongGrid2D scan = edge.crossSectionAtZ(scanZ);
-			long[] minAndMaxValue = scan.getMinAndMaxValue();
-			System.out.println("3D edge scan: min value: " + minAndMaxValue[0] + ", max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/scan_3D_edge/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");			
-			scanZ++;
-			LongGrid2D xSection = edge.crossSectionAtZ(crossSectionZ);
-			minAndMaxValue = xSection.getMinAndMaxValue();
-			System.out.println("3D edge cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/3D_edge/z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");
-			LongGrid2D xSection2 = ca.crossSectionAtYZ(crossSectionZ, crossSectionZ);
-			minAndMaxValue = xSection2.getMinAndMaxValue();
-			System.out.println("cross section: min value " + minAndMaxValue[0] + ", max value: " + minAndMaxValue[1]);
-			ColorGrid2D symmColorGrid = colorMapper.getMappedGrid(xSection2, minAndMaxValue[0], minAndMaxValue[1]);
-			minX = ca.getMinX(); maxX = ca.getMaxX();
-			minY = ca.getMinY(); maxY = ca.getMaxY();
-			createImage(symmColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + colorMapper.getClass().getSimpleName() 
-					+ "/cross_section/y=" + crossSectionZ + "_z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}		
-			boolean backUp = false;
-			if (saveBackupsAutomatically) {
-				backUp = System.currentTimeMillis() >= nextBckTime;
-				if (backUp) {
-					nextBckTime += backupLeap;
-				}
-			}
-			if (backupRequested) {
-				backUp = true;
-				backupRequested = false;
-			}
-			if (backUp) {
-				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);				
-			}
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-		stdIn.stop();
-		inputThread.join();
-	}
-	
-	public void createScanningAndCrossSection3DEdgeImages(EvolvingIntGrid4D ca, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
-		StdInRunnable stdIn = new StdInRunnable();
-		Thread inputThread = new Thread(stdIn);
-		inputThread.start();
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		IntGrid3D edge = ca.projected3DEdgeMaxW();
-		int scanZ = edge.getMinZ();
-		do {
-			edge = ca.projected3DEdgeMaxW();
-			System.out.println("step: " + currentStep);
-			int maxY = edge.getMaxY(), maxX = edge.getMaxX(), minX, minY;
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			String imgPath = path;
-			if (scanZ >= edge.getMaxZ())
-				scanZ = edge.getMinZ();
-			System.out.println("scan z: " + scanZ);
-			IntGrid2D scan = edge.crossSectionAtZ(scanZ);
-			int[] minAndMaxValue = scan.getMinAndMaxValue();
-			System.out.println("3D edge scan: min value: " + minAndMaxValue[0] + ", max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath 
-					+ "/scan_3D_edge/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");			
-			scanZ++;
-			IntGrid2D xSection = edge.crossSectionAtZ(crossSectionZ);
-			minAndMaxValue = xSection.getMinAndMaxValue();
-			System.out.println("3D edge cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath
-					+ "/cross_section_3D_edge/z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");
-			IntGrid2D xSection2 = ca.crossSectionAtYZ(crossSectionZ, crossSectionZ);
-			minAndMaxValue = xSection2.getMinAndMaxValue();
-			System.out.println("cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			ColorGrid2D symmColorGrid = colorMapper.getMappedGrid(xSection2, minAndMaxValue[0], minAndMaxValue[1]);
-			minX = ca.getMinX(); maxX = ca.getMaxX();
-			minY = ca.getMinY(); maxY = ca.getMaxY();
-			createImage(symmColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath
-					+ "/cross_section/y=" + crossSectionZ + "_z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}		
-			boolean backUp = false;
-			if (saveBackupsAutomatically) {
-				backUp = System.currentTimeMillis() >= nextBckTime;
-				if (backUp) {
-					nextBckTime += backupLeap;
-				}
-			}
-			if (backupRequested) {
-				backUp = true;
-				backupRequested = false;
-			}
-			if (backUp) {
-				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);				
-			}
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-		stdIn.stop();
-		inputThread.join();
-	}
-	
-	public void createScanningAndCrossSection3DEdgeMaxWImages(EvolvingShortGrid4D ca, 
-			int crossSectionZ, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
-		StdInRunnable stdIn = new StdInRunnable();
-		Thread inputThread = new Thread(stdIn);
-		inputThread.start();
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		ShortGrid3D edge = ca.projected3DEdgeMaxW();
-		int scanZ = edge.getMinZ();
-		do {
-			edge = ca.projected3DEdgeMaxW();
-			System.out.println("step: " + currentStep);
-			int maxY = edge.getMaxY(), maxX = edge.getMaxX(), minX, minY;
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			String imgPath = path;
-			if (scanZ >= edge.getMaxZ())
-				scanZ = edge.getMinZ();
-			System.out.println("scan z: " + scanZ);
-			ShortGrid2D scan = edge.crossSectionAtZ(scanZ);
-			short[] minAndMaxValue = scan.getMinAndMaxValue();
-			System.out.println("3D edge scan: min value: " + minAndMaxValue[0] + ", max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath 
-					+ "/scan_3D_edge/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");			
-			scanZ++;
-			ShortGrid2D xSection = edge.crossSectionAtZ(crossSectionZ);
-			minAndMaxValue = xSection.getMinAndMaxValue();
-			System.out.println("3D edge cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath 
-					+ "/cross_section_3D_edge/z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");
-			ShortGrid2D xSection2 = ca.crossSectionAtYZ(crossSectionZ, crossSectionZ);
-			minAndMaxValue = xSection2.getMinAndMaxValue();
-			System.out.println("cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			ColorGrid2D symmColorGrid = colorMapper.getMappedGrid(xSection2, minAndMaxValue[0], minAndMaxValue[1]);
-			minX = ca.getMinX(); maxX = ca.getMaxX();
-			minY = ca.getMinY(); maxY = ca.getMaxY();
-			createImage(symmColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath
-					+ "/cross_section/y=" + crossSectionZ + "_z=" + crossSectionZ + "/" + numberedFolder, ca.getName() + "_3D_edge_x_section_" + currentStep + ".png");
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}		
-			boolean backUp = false;
-			if (saveBackupsAutomatically) {
-				backUp = System.currentTimeMillis() >= nextBckTime;
-				if (backUp) {
-					nextBckTime += backupLeap;
-				}
-			}
-			if (backupRequested) {
-				backUp = true;
-				backupRequested = false;
-			}
-			if (backUp) {
-				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);				
-			}
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-		stdIn.stop();
-		inputThread.join();
-	}
-	
-	public void create3DEdgeSurfaceImages(EvolvingIntGrid4D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		String imgPath = path + "/surface_3D_egde/";
-		do {
-			System.out.println("step: " + currentStep);
-			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			IntGrid2D surface = ca.projected3DEdgeMaxW().projectedSurfaceMaxX();
-			int[] minAndMaxValue = surface.getMinAndMaxValue();
-			System.out.println("min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}			
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-	}
-	
-	public void create3DEdgeSurfaceImages(EvolvingShortGrid4D ca, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		String imgPath = path + "/surface_3D_egde/";
-		do {
-			System.out.println("step: " + currentStep);
-			int maxY = ca.getMaxY(), maxX = ca.getMaxX();
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			ShortGrid2D surface = ca.projected3DEdgeMaxW().projectedSurfaceMaxX();
-			short[] minAndMaxValue = surface.getMinAndMaxValue();
-			System.out.println("min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(surface, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_" + currentStep + ".png");
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}			
 			currentStep++;
 			System.out.println();
 		} while (ca.nextStep());
