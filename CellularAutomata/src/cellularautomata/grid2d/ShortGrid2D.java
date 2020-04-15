@@ -91,11 +91,6 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 	}
 	
 	@Override
-	default ShortGrid2D absoluteGrid() {
-		return new AbsShortGrid2D(this);
-	}
-	
-	@Override
 	default ShortGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
 		return new ShortSubGrid2D(this, minX, maxX, minY, maxY);
 	}

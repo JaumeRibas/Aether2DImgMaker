@@ -104,11 +104,6 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	}
 	
 	@Override
-	default ShortGrid3D absoluteGrid() {
-		return new AbsShortGrid3D(this);
-	}
-	
-	@Override
 	default ShortGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minX < getMinX() || minX > getMaxX() 
 				|| maxX < getMinX() || maxX > getMaxX()
@@ -130,10 +125,5 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	@Override
 	default ShortGrid2D crossSectionAtX(int x) {
 		return new ShortGrid3DXCrossSection(this, x);
-	}
-	
-	@Override
-	default ShortGrid2D projectedSurfaceMaxX() {
-		return new ShortGrid3DProjectedSurfaceMaxX(this);
 	}
 }

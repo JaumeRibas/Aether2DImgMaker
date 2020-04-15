@@ -66,21 +66,7 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 		return new long[]{ minValue, maxValue };
 	}
 	
-	default long[] getMinAndMaxValueExcluding(long excludedValue) {
-		int maxX = getMaxX(), minX = getMinX();
-		long maxValue = getValueAtPosition(minX), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			long value = getValueAtPosition(x);
-			if (value != excludedValue) {
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;
-			}
-		}
-		return new long[]{ minValue, maxValue };
-	}
-	
+	@Override
 	default long getTotalValue() {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX();
@@ -90,22 +76,7 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 		return total;
 	}
 	
-	default long getMaxAbsoluteValue() {
-		long maxAbsoluteValue;
-		long[] minAndMax = getMinAndMaxValue();
-		if (minAndMax[0] < 0) {
-			minAndMax[0] = Math.abs(minAndMax[0]);
-			maxAbsoluteValue = Math.max(minAndMax[0], minAndMax[1]);
-		} else {
-			maxAbsoluteValue = minAndMax[1];
-		}
-		return maxAbsoluteValue;
-	}
-	
-	default LongGrid1D absoluteGrid() {
-		return new AbsLongGrid1D(this);
-	}
-	
+	@Override
 	default LongGrid1D subGrid(int minX, int maxX) {
 		return subGrid(minX, maxX, false);
 	}

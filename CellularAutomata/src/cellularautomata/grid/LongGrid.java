@@ -23,7 +23,5 @@ public interface LongGrid extends Grid {
 	long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception;
 	
 	long getTotalValue() throws Exception;
-
-	LongGrid absoluteGrid();
 	
 }

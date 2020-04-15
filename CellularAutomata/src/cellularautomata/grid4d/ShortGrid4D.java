@@ -110,11 +110,6 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	}
 	
 	@Override
-	default ShortGrid4D absoluteGrid() {
-		return new AbsShortGrid4D(this);
-	}
-	
-	@Override
 	default ShortGrid2D crossSectionAtYZ(int y, int z) {
 		return new ShortGrid4DYZCrossSection(this, y, z);
 	}
@@ -133,11 +128,6 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 		if (minX > maxX || minY > maxY || minZ > maxZ)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new ShortSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
-	}
-	
-	@Override
-	default ShortGrid3D projected3DEdgeMaxW() {
-		return new ShortGrid4DProjected3DEdgeMaxW(this);
 	}
 	
 	@Override

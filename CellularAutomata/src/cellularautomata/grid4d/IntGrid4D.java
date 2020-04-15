@@ -110,11 +110,6 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid4D absoluteGrid() {
-		return new AbsIntGrid4D(this);
-	}
-	
-	@Override
 	default IntGrid2D crossSectionAtYZ(int y, int z) {
 		return new IntGrid4DYZCrossSection(this, y, z);
 	}
@@ -133,11 +128,6 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 		if (minX > maxX || minY > maxY || minZ > maxZ)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new IntSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
-	}
-	
-	@Override
-	default IntGrid3D projected3DEdgeMaxW() {
-		return new IntGrid4DProjected3DEdgeMaxW(this);
 	}
 	
 	@Override

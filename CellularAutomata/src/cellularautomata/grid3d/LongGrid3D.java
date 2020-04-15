@@ -105,11 +105,6 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	}
 	
 	@Override
-	default LongGrid3D absoluteGrid() {
-		return new AbsLongGrid3D(this);
-	}
-	
-	@Override
 	default LongGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minX < getMinX() || minX > getMaxX() 
 				|| maxX < getMinX() || maxX > getMaxX()
@@ -131,11 +126,6 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	@Override
 	default LongGrid2D crossSectionAtX(int x) {
 		return new LongGrid3DXCrossSection(this, x);
-	}
-	
-	@Override
-	default LongGrid2D projectedSurfaceMaxX() {
-		return new LongGrid3DProjectedSurfaceMaxX(this);
 	}
 
 }

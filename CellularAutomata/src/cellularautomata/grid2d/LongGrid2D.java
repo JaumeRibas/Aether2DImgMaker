@@ -91,11 +91,6 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	}
 	
 	@Override
-	default LongGrid2D absoluteGrid() {
-		return new AbsLongGrid2D(this);
-	}
-	
-	@Override
 	default LongGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
 		return new LongSubGrid2D(this, minX, maxX, minY, maxY);
 	}

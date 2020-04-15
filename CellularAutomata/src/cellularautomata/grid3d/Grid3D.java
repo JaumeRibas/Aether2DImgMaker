@@ -302,6 +302,4 @@ public interface Grid3D extends Grid {
 	
 	Grid2D crossSectionAtX(int x);
 
-	Grid2D projectedSurfaceMaxX();
-
 }

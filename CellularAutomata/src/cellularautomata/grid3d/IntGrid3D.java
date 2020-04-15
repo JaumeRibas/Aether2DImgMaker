@@ -105,11 +105,6 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid3D absoluteGrid() {
-		return new AbsIntGrid3D(this);
-	}
-	
-	@Override
 	default IntGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minX < getMinX() || minX > getMaxX() 
 				|| maxX < getMinX() || maxX > getMaxX()
@@ -131,11 +126,6 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	@Override
 	default IntGrid2D crossSectionAtX(int x) {
 		return new IntGrid3DXCrossSection(this, x);
-	}
-	
-	@Override
-	default IntGrid2D projectedSurfaceMaxX() {
-		return new IntGrid3DProjectedSurfaceMaxX(this);
 	}
 	
 }

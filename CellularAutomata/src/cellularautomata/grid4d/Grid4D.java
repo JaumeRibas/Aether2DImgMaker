@@ -197,8 +197,6 @@ public interface Grid4D extends Grid {
 	Grid2D crossSectionAtYZ(int y, int z);
 
 	Grid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ);
-
-	Grid3D projected3DEdgeMaxW();
 	
 	Grid3D crossSectionAtZ(int z);
 }

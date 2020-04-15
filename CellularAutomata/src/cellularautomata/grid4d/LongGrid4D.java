@@ -110,11 +110,6 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	}
 	
 	@Override
-	default LongGrid4D absoluteGrid() {
-		return new AbsLongGrid4D(this);
-	}
-	
-	@Override
 	default LongGrid2D crossSectionAtYZ(int y, int z) {
 		return new LongGrid4DYZCrossSection(this, y, z);
 	}
@@ -133,11 +128,6 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 		if (minX > maxX || minY > maxY || minZ > maxZ)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new LongSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
-	}
-	
-	@Override
-	default LongGrid3D projected3DEdgeMaxW() {
-		return new LongGrid4DProjected3DEdgeMaxW(this);
 	}
 	
 	@Override

@@ -90,11 +90,6 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid2D absoluteGrid() {
-		return new AbsIntGrid2D(this);
-	}
-	
-	@Override
 	default IntGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
 		return new IntSubGrid2D(this, minX, maxX, minY, maxY);
 	}

@@ -24,6 +24,4 @@ public interface ShortGrid extends Grid {
 	
 	short getTotalValue() throws Exception;
 	
-	ShortGrid absoluteGrid();
-	
 }

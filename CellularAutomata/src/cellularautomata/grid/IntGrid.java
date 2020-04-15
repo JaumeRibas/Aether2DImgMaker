@@ -23,7 +23,5 @@ public interface IntGrid extends Grid {
 	int[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception;
 	
 	int getTotalValue() throws Exception;
-
-	IntGrid absoluteGrid();
 	
 }
