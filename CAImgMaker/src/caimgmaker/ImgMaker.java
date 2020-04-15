@@ -476,7 +476,7 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "//z_scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
 				+ "/z=" + crossSectionZ + "/";
 		
@@ -591,9 +591,9 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/cross_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		
 		do {
 			System.out.println("step: " + currentStep);
@@ -856,63 +856,6 @@ public class ImgMaker {
 		stdIn.stop();
 		inputThread.join();
 	}
-	
-	/*//TODO use general inclined plane
-	public void createBisectingPlanesImages(IntCellularAutomaton3D ca, ColorMapper colorMapper, 
-			int minWidth, int minHeight, String path) throws Exception {
-		StdInRunnable stdIn = new StdInRunnable();
-		Thread inputThread = new Thread(stdIn);
-		inputThread.start();
-		long currentStep = ca.getStep();
-		int numberedFolder = (int) (currentStep/imgsPerFolder);
-		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
-		String caName = ca.getName();
-		String bisectingPlaneImgPath = path + "/" + colorMapper.getClass().getSimpleName() + "/bisecting_plane/";
-		IntGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
-		do {
-			System.out.println("step: " + currentStep);
-			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
-					minY = ca.getMinY(), maxY = ca.getMaxY();
-			System.out.println("max y: " + maxY + System.lineSeparator() + "max x: " + maxX);
-			IntGrid2D scan = ca.crossSectionAtZ(scanZ);
-			int[] minAndMaxValue = scan.getMinAndMaxValue();
-			System.out.println("scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			ColorGrid2D colorGrid = colorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
-					bisectingPlaneImgPath + numberedFolder, caName + "_x_section_" + currentStep + ".png");
-			minAndMaxValue = xSection.getMinAndMaxValue();
-			System.out.println("cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "max value: " + minAndMaxValue[1]);
-			colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-					caName + "_x_section_" + currentStep + ".png");
-			folderImageCount++;
-			if (folderImageCount == imgsPerFolder) {
-				numberedFolder++;
-				folderImageCount = 0;
-			}
-			boolean backUp = false;
-			if (saveBackupsAutomatically) {
-				backUp = System.currentTimeMillis() >= nextBckTime;
-				if (backUp) {
-					nextBckTime += backupLeap;
-				}
-			}
-			if (backupRequested) {
-				backUp = true;
-				backupRequested = false;
-			}
-			if (backUp) {
-				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);					
-			}
-			currentStep++;
-			System.out.println();
-		} while (ca.nextStep());
-		System.out.println("finished!");
-		stdIn.stop();
-		inputThread.join();
-	}
-	*/
 	
 	public void createScanningAndCrossSectionImagesFromAsymmetricSection(SymmetricActionableEvolvingIntGrid3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
