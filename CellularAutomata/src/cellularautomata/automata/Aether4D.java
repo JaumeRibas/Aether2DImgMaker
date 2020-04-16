@@ -470,6 +470,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D {
 		return getAsymmetricMaxW();
 	}
 	
+	@Override
 	public int getAsymmetricMinW() {
 		return 0;
 	}
