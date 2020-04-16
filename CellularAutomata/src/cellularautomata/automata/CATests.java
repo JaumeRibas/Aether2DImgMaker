@@ -37,6 +37,7 @@ import cellularautomata.evolvinggrid.EvolvingShortGrid;
 import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
 import cellularautomata.evolvinggrid.SymmetricActionableEvolvingIntGrid3D;
 import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid4D;
 import cellularautomata.grid.SymmetricGridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
@@ -45,11 +46,12 @@ import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.LongGrid3D;
+import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
 
 public class CATests {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		long initialValue = 1000000;
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
@@ -335,7 +337,7 @@ public class CATests {
 			boolean finished2 = false;
 			boolean equal = true;
 			while (!finished1 && !finished2) {
-				System.out.println("Comparing step " + ca1.getStep());
+//				System.out.println("Comparing step " + ca1.getStep());
 				int maxY = ca1.getMaxY();
 				for (int y = ca1.getMinY(); y <= maxY; y++) {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
@@ -466,6 +468,58 @@ public class CATests {
 								}	
 							}	
 						}
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// do nothing					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// do nothing			
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processGrid();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SymmetricActionableEvolvingLongGrid4D ca1, EvolvingLongGrid4D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			SymmetricGridProcessor<LongGrid4D> comparator = new SymmetricGridProcessor<LongGrid4D>() {
+				
+				@Override
+				public void processGridBlock(LongGrid4D gridBlock) throws Exception {
+					for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+						for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+							for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
+								for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
+									if (ca1.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
+										System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+												+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z) 
+												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z));
+									}
+								}
+							}	
+						}	
 					}						
 				}
 				
@@ -734,7 +788,7 @@ public class CATests {
 			boolean finished2 = false;
 			boolean equal = true;
 			while (!finished1 && !finished2) {
-				System.out.println("Comparing step " + ca1.getStep());
+//				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
