@@ -21,6 +21,6 @@ import cellularautomata.grid.SymmetricGridProcessor;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.SymmetricIntGrid3D;
 
-public abstract class SymmetricActionableEvolvingIntGrid3D extends ActionableSymmetricGrid<SymmetricGridProcessor<IntGrid3D>, IntGrid3D> implements SymmetricIntGrid3D, EvolvingIntGrid {
+public abstract class SymmetricActionableEvolvingIntGrid3D extends ActionableSymmetricGrid<SymmetricGridProcessor<IntGrid3D>, IntGrid3D> implements SymmetricIntGrid3D, EvolvingIntGrid3D {
 
 }

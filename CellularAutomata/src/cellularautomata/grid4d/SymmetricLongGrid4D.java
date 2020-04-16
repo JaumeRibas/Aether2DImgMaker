@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid4d;
 
+import java.io.IOException;
+
 public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 
 	/**
@@ -26,8 +28,10 @@ public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
+	 * @throws ClassNotFoundException 
+	 * @throws IOException 
 	 */
-	long getValueAtAsymmetricPosition(int w, int x, int y, int z);
+	long getValueAtAsymmetricPosition(int w, int x, int y, int z) throws Exception;
 
 	@Override
 	default LongGrid4D asymmetricSection() {

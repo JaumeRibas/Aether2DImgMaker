@@ -23,9 +23,17 @@ public class LongSubGrid1D implements LongGrid1D {
 	private int maxX;
 	
 	public LongSubGrid1D(LongGrid1D source, int minX, int maxX) {
+		if (minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		}
+		int sourceMinX = source.getMinX();
+		int sourceMaxX = source.getMaxX();
+		if (minX > sourceMaxX || maxX < sourceMinX) {
+			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+		}
 		this.source = source;
-		this.minX = minX;
-		this.maxX = maxX;
+		this.minX = Math.max(minX, sourceMinX);
+		this.maxX = Math.min(maxX, sourceMaxX);
 	}
 
 	@Override

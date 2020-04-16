@@ -376,70 +376,6 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 	public int getAsymmetricMaxZ() {
 		return maxZ;
 	}
-	
-	@Override
-	public int getMinX() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxX() {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMinY() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxY() {
-		return getAsymmetricMaxX();
-	}
-	
-	@Override
-	public int getMinZ() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxZ() {
-		return getAsymmetricMaxX();
-	}	
-	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
-	public long getStep() {
-		return currentStep;
-	}
-	
-	/**
-	 * Returns the initial value
-	 * 
-	 * @return the value at the origin at step 0
-	 */
-	public long getInitialValue() {
-		return initialValue;
-	}	
-	
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
-	}
-
-	@Override
-	public String getName() {
-		return "Aether3D";
-	}
-	
-	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
-	}
-
 	@Override
 	public int getAsymmetricMinXAtY(int y) {
 		return y;
@@ -529,4 +465,68 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 	public int getAsymmetricMaxZ(int x, int y) {
 		return Math.min(getAsymmetricMaxZ(), y);
 	}
+	
+	@Override
+	public int getMinX() {
+		return -getAsymmetricMaxX();
+	}
+
+	@Override
+	public int getMaxX() {
+		return getAsymmetricMaxX();
+	}
+
+	@Override
+	public int getMinY() {
+		return -getAsymmetricMaxX();
+	}
+
+	@Override
+	public int getMaxY() {
+		return getAsymmetricMaxX();
+	}
+	
+	@Override
+	public int getMinZ() {
+		return -getAsymmetricMaxX();
+	}
+
+	@Override
+	public int getMaxZ() {
+		return getAsymmetricMaxX();
+	}	
+	
+	/**
+	 * Returns the current step
+	 * 
+	 * @return the current step
+	 */
+	public long getStep() {
+		return currentStep;
+	}
+	
+	/**
+	 * Returns the initial value
+	 * 
+	 * @return the value at the origin at step 0
+	 */
+	public long getInitialValue() {
+		return initialValue;
+	}	
+	
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		Utils.serializeToFile(this, backupPath, backupName);
+	}
+
+	@Override
+	public String getName() {
+		return "Aether3D";
+	}
+	
+	@Override
+	public String getSubFolderPath() {
+		return getName() + "/" + initialValue;
+	}
+	
 }

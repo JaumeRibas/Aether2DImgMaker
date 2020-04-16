@@ -37,7 +37,7 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Serial
 		this.minX = minX;
 		int xLength = getMaxXLength(minX, maxBytes);
 		if (xLength < 2) {
-			throw new OutOfMemoryError("Grid with minX=" + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
+			throw new OutOfMemoryError("Grid with min x of" + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
 		}
 		slices = new AnisotropicLongGrid3DSlice[xLength];
 		maxX = minX + xLength - 1;

@@ -30,15 +30,36 @@ public class ShortSubGrid4D implements ShortGrid4D {
 	
 	public ShortSubGrid4D(ShortGrid4D source, int minW, int maxW, int minX, 
 			int maxX, int minY, int maxY, int minZ, int maxZ) {
+		if (minW > maxW) {
+			throw new IllegalArgumentException("Min w cannot be bigger than max w.");
+		}
+		if (minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		}
+		if (minY > maxY) {
+			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
+		}
+		if (minZ > maxZ) {
+			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
+		}
+		int sourceMinW = source.getMinW();
+		int sourceMaxW = source.getMaxW();
+		int sourceMinX = source.getMinX();
+		int sourceMaxX = source.getMaxX();
+		int sourceMinY = source.getMinY();
+		int sourceMaxY = source.getMaxY();
+		int sourceMinZ = source.getMinZ();
+		int sourceMaxZ = source.getMaxZ();
+		//TODO validate that passed bounds are within source bounds
 		this.source = source;
-		this.minW = minW;
-		this.maxW = maxW;
-		this.minX = minX;
-		this.maxX = maxX;
-		this.minY = minY;
-		this.maxY = maxY;
-		this.minZ = minZ;
-		this.maxZ = maxZ;
+		this.minW = Math.max(minW, sourceMinW);
+		this.maxW = Math.min(maxW, sourceMaxW);
+		this.minX = Math.max(minX, sourceMinX);
+		this.maxX = Math.min(maxX, sourceMaxX);
+		this.minY = Math.max(minY, sourceMinY);
+		this.maxY = Math.min(maxY, sourceMaxY);
+		this.minZ = Math.max(minZ, sourceMinZ);
+		this.maxZ = Math.min(maxZ, sourceMaxZ);
 	}
 
 	@Override
@@ -85,5 +106,7 @@ public class ShortSubGrid4D implements ShortGrid4D {
 	public int getMaxZ() {
 		return maxZ;
 	}
+	
+	//TODO add missing methods
 
 }

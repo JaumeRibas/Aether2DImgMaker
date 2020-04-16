@@ -28,13 +28,29 @@ public class ShortSubGrid3D implements ShortGrid3D {
 	
 	public ShortSubGrid3D(ShortGrid3D source, int minX, int maxX, int minY, 
 			int maxY, int minZ, int maxZ) {
+		if (minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		}
+		if (minY > maxY) {
+			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
+		}
+		if (minZ > maxZ) {
+			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
+		}
+		int sourceMinX = source.getMinX();
+		int sourceMaxX = source.getMaxX();
+		int sourceMinY = source.getMinY();
+		int sourceMaxY = source.getMaxY();
+		int sourceMinZ = source.getMinZ();
+		int sourceMaxZ = source.getMaxZ();
+		//TODO validate that passed bounds are within source bounds
 		this.source = source;
-		this.minX = minX;
-		this.maxX = maxX;
-		this.minY = minY;
-		this.maxY = maxY;
-		this.minZ = minZ;
-		this.maxZ = maxZ;
+		this.minX = Math.max(minX, sourceMinX);
+		this.maxX = Math.min(maxX, sourceMaxX);
+		this.minY = Math.max(minY, sourceMinY);
+		this.maxY = Math.min(maxY, sourceMaxY);
+		this.minZ = Math.max(minZ, sourceMinZ);
+		this.maxZ = Math.min(maxZ, sourceMaxZ);
 	}
 
 	@Override
@@ -71,5 +87,7 @@ public class ShortSubGrid3D implements ShortGrid3D {
 	public int getMaxZ() {
 		return maxZ;
 	}
+	
+	//TODO add missing methods
 
 }

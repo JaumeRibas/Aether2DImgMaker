@@ -25,8 +25,12 @@ public class LongSubGrid2D implements LongGrid2D {
 	private int maxY;
 	
 	public LongSubGrid2D(LongGrid2D source, int minX, int maxX, int minY, int maxY) {
-		if (minX > maxX || minY > maxY)
-			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
+		if (minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		}
+		if (minY > maxY) {
+			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
+		}
 		this.source = source;
 		boolean outOfBounds = false;
 		int sourceMinX = source.getMinX();

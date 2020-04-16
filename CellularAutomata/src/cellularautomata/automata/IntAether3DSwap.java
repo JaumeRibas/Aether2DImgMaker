@@ -30,7 +30,7 @@ import org.apache.commons.io.FileUtils;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.evolvinggrid.SymmetricActionableEvolvingIntGrid3D;
 import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
-import cellularautomata.grid3d.AnisotropicIntSubGrid3D;
+import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
 import cellularautomata.grid3d.SizeLimitedAnisotropicIntGrid3DBlock;
 
 public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
@@ -290,7 +290,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		if (block.minX <= maxX) {
 			IntGrid3D subBlock = null;
 			if (block.maxX > maxX) {
-				subBlock = new AnisotropicIntSubGrid3D(block, block.minX, maxX, 0, maxX, 0, maxX);
+				subBlock = new IntSubGrid3DWithXBounds(block, block.minX, maxX);
 			} else {
 				subBlock = block;
 			}
