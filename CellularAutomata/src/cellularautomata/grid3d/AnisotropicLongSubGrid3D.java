@@ -16,7 +16,7 @@
  */
 package cellularautomata.grid3d;
 
-public class AsymmetricLongSubGrid3D implements LongGrid3D {
+public class AnisotropicLongSubGrid3D implements LongGrid3D {
 	
 	private LongGrid3D source;
 	private int minX;
@@ -26,7 +26,7 @@ public class AsymmetricLongSubGrid3D implements LongGrid3D {
 	private int minZ;
 	private int maxZ;
 	
-	public AsymmetricLongSubGrid3D(LongGrid3D source, int minX, int maxX, int minY, 
+	public AnisotropicLongSubGrid3D(LongGrid3D source, int minX, int maxX, int minY, 
 			int maxY, int minZ, int maxZ) {
 		this.source = source;
 		this.minX = minX;
