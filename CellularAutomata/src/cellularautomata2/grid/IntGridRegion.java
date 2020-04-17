@@ -20,7 +20,7 @@ import cellularautomata2.arrays.Coordinates;
 import cellularautomata2.arrays.IntValueCommand;
 import cellularautomata2.arrays.PositionCommand;
 
-public abstract class IntGridRegion extends GridRegion {
+public abstract class IntGridRegion implements GridRegion {
 	
 	/**
 	 * <p>Returns the value at the given coordinates.</p>

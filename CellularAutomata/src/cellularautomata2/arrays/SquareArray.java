@@ -87,11 +87,6 @@ public abstract class SquareArray extends RectangularArray {
 		}
 	}
 	
-	/**
-	 * Executes a {@link PositionCommand} for every coordinate of the edges of the array.
-	 * 
-	 * @param command
-	 */
 	@Override
 	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
 		if (edgeWidth < 1) {
@@ -135,5 +130,14 @@ public abstract class SquareArray extends RectangularArray {
 	@Override
 	public int getSize(int axis) {
 		return side;
+	}
+	
+	@Override
+	public long getVolume() {
+		return (long) Math.pow(side, dimension);
+	}
+	
+	public static long getVolume(int dimension, int side) {
+		return (long) Math.pow(side, dimension);
 	}
 }

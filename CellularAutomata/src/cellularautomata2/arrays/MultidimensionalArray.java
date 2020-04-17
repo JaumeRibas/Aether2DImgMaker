@@ -23,7 +23,14 @@ public interface MultidimensionalArray {
 	 * 
 	 * @return the dimension of the array.
 	 */
-	int getDimension();
+	int getDimension();	
+
+	/**
+	 * Returns the number of positions of the array
+	 * 
+	 * @return
+	 */
+	long getVolume();
 	
 	/**
 	 * Executes a {@link PositionCommand} for every index of the array.

@@ -21,90 +21,90 @@ import cellularautomata2.arrays.PositionCommand;
 import cellularautomata2.arrays.Utils;
 
 /**
- * A region of a grid whose shape and orientation is such that no line parallel to an axis crosses its bounds in more than two places.
- *  
+ * A region of a grid with two or more symmetric sub-regions whose shapes and orientations are such that no line parallel to an axis crosses their bounds in more than two places.
+ * 
  * @author Jaume
  *
  */
-public interface GridRegion extends GridEntity {
+public interface SymmetricGridRegion extends GridRegion {
 	
 	/**
-	 * Returns the upper bound of the region on the given axis.
+	 * Returns the upper bound of the asymmetric sub-region on the given axis.
 	 * 
 	 * @param axis the index of the axis on which the upper bound is requested.
 	 * @return the upper bound
 	 */
-	default int getUpperBound(int axis) {
-		return getUpperBound(axis, new PartialCoordinates(new Integer[getGridDimension() - 1]));
+	default int getUpperBoundOfAsymmetricRegion(int axis) {
+		return getUpperBoundOfAsymmetricRegion(axis, new PartialCoordinates(new Integer[getGridDimension() - 1]));
 	}
 	
 	/**
-	 * <p>Returns the local upper bound of the region on the given axis at the given coordinates.</p>
+	 * <p>Returns the local upper bound of the asymmetric sub-region on the given axis at the given coordinates.</p>
 	 * <p>The coordinate of the axis whose bound is being requested is ignored.</p>
 	 * <p>{@link null} coordinate values can be used to indicate no restriction on one or more axes.</p>
 	 * <p>It is not defined to call this method with a {@link PartialCoordinates} object with {@link PartialCoordinates#getCount()} different from {@link #getGridDimension()}.
-	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the region.</p>
-	 * <p>These bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
-	 * And progressively narrowing down the coordinates by calling {@link #getUpperBound(int axis, PartialCoordinates coordinates)} 
-	 * and {@link #getLowerBound(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
+	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the asymmetric sub-region.</p>
+	 * <p>These bounds are obtained by first calling the {@link #getUpperBoundOfAsymmetricRegion(int axis)} and {@link #getLowerBoundOfAsymmetricRegion(int axis)} to get the global bounds on one axis. 
+	 * And progressively narrowing down the coordinates by calling {@link #getUpperBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates)} 
+	 * and {@link #getLowerBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
-	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
+	 * <p>For example, consider a asymmetric sub-region in a 3D grid region, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
-	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getUpperBound(2) getLowerBound(2) (1 <= z <= 5)</li>
+	 * <li>Get the global bounds of the asymmetric sub-region on the <strong>z</strong> axis: getUpperBoundOfAsymmetricRegion(2) getLowerBoundOfAsymmetricRegion(2) (1 <= z <= 5)</li>
 	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> = 3:
-	 * getUpperBound(1, new PartialCoordinates(null, null, 3)) getLowerBound(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
+	 * getUpperBoundOfAsymmetricRegion(1, new PartialCoordinates(null, null, 3)) getLowerBoundOfAsymmetricRegion(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
 	 * <li>Using both the global <strong>z</strong> bounds and the local <strong>y</strong> bounds obtained, 
 	 * get the local <strong>x</strong> bounds where <strong>z</strong> = 3 and <strong>y</strong> = 11:
-	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
+	 * getUpperBoundOfAsymmetricRegion(0, new PartialCoordinates(null, 11, 3)) getLowerBoundOfAsymmetricRegion(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
 	 * @param  axis the index of the axis on which the upper bound is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
 	 * @return  the upper bound
 	 */
-	int getUpperBound(int axis, PartialCoordinates coordinates);
+	int getUpperBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates);
 	
 	/**
-	 * Returns the lower bound of the region on the given axis.
+	 * Returns the lower bound of the asymmetric sub-region on the given axis.
 	 * 
 	 * @param axis the index of the axis on which the lower bound is requested.
 	 * @return the lower bound
 	 */
-	default int getLowerBound(int axis) {
-		return getLowerBound(axis, new PartialCoordinates(new Integer[getGridDimension() - 1]));
+	default int getLowerBoundOfAsymmetricRegion(int axis) {
+		return getLowerBoundOfAsymmetricRegion(axis, new PartialCoordinates(new Integer[getGridDimension() - 1]));
 	}
 	
 	/**
-	 * <p>Returns the local lower bound of the region on the given axis at the given coordinates.</p>
+	 * <p>Returns the local lower bound of the asymmetric sub-region on the given axis at the given coordinates.</p>
 	 * <p>The coordinate of the axis whose bound is being requested is ignored.</p>
 	 * <p>{@link null} coordinate values can be used to indicate no restriction on one or more axes.</p>
 	 * <p>It is not defined to call this method with a {@link PartialCoordinates} object with {@link PartialCoordinates#getCount()} different from {@link #getGridDimension()}.
-	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the region.</p>
-	 * <p>These bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
-	 * And progressively narrowing down the coordinates by calling {@link #getUpperBound(int axis, PartialCoordinates coordinates)} 
-	 * and {@link #getLowerBound(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
+	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the asymmetric sub-region.</p>
+	 * <p>These bounds are obtained by first calling the {@link #getUpperBoundOfAsymmetricRegion(int axis)} and {@link #getLowerBoundOfAsymmetricRegion(int axis)} to get the global bounds on one axis. 
+	 * And progressively narrowing down the coordinates by calling {@link #getUpperBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates)} 
+	 * and {@link #getLowerBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
-	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
+	 * <p>For example, consider an asymmetric sub-region in a 3D grid region, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
-	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getUpperBound(2) getLowerBound(2) (1 <= z <= 5)</li>
+	 * <li>Get the global bounds of the asymmetric sub-region on the <strong>z</strong> axis: getUpperBoundOfAsymmetricRegion(2) getLowerBoundOfAsymmetricRegion(2) (1 <= z <= 5)</li>
 	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> = 3:
-	 * getUpperBound(1, new PartialCoordinates(null, null, 3)) getLowerBound(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
+	 * getUpperBoundOfAsymmetricRegion(1, new PartialCoordinates(null, null, 3)) getLowerBoundOfAsymmetricRegion(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
 	 * <li>Using both the global <strong>z</strong> bounds and the local <strong>y</strong> bounds obtained, 
 	 * get the local <strong>x</strong> bounds where <strong>z</strong> = 3 and <strong>y</strong> = 11:
-	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
+	 * getUpperBoundOfAsymmetricRegion(0, new PartialCoordinates(null, 11, 3)) getLowerBoundOfAsymmetricRegion(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
 	 * @param  axis the index of the axis on which the lower bound is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
 	 * @return  the lower bound
 	 */
-	int getLowerBound(int axis, PartialCoordinates coordinates);
+	int getLowerBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates);
 	
 	/**
-	 * Executes a {@link PositionCommand} for every position of the region.
+	 * Executes a {@link PositionCommand} for every position of the asymmetric sub-region.
 	 * @param command
 	 */
-	default void forEachPosition(PositionCommand command) {
+	default void forEachPositionInAsymmetricRegion(PositionCommand command) {
 		if (command == null) {
 			throw new IllegalArgumentException("The command cannot be null.");
 		}
@@ -119,8 +119,8 @@ public interface GridRegion extends GridEntity {
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int lowerBound = getLowerBound(0, immutablePartialCoordinates);
-				int upperBound = getUpperBound(0, immutablePartialCoordinates);
+				int lowerBound = getLowerBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
+				int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
 				for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
 					coordinates[0] = currentCoordinate;
 					command.execute(immutableCoordinates);
@@ -128,9 +128,9 @@ public interface GridRegion extends GridEntity {
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBound(currentAxis, immutablePartialCoordinates);
+				int localLowerBound = getLowerBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
 				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBound(currentAxis, immutablePartialCoordinates);
+				upperBounds[currentAxis] = getUpperBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
 				coordinates[currentAxis] = localLowerBound;
 				partialCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
@@ -151,10 +151,10 @@ public interface GridRegion extends GridEntity {
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every even position of the region.
+	 * Executes a {@link PositionCommand} for every even position of the asymmetric sub-region.
 	 * @param commands
 	 */
-	default void forEachEvenPosition(PositionCommand command) {
+	default void forEachEvenPositionInAsymmetricRegion(PositionCommand command) {
 		if (command == null) {
 			throw new IllegalArgumentException("The command cannot be null.");
 		}
@@ -169,8 +169,8 @@ public interface GridRegion extends GridEntity {
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int lowerBound = getLowerBound(0, immutablePartialCoordinates);
-				int upperBound = getUpperBound(0, immutablePartialCoordinates);
+				int lowerBound = getLowerBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
+				int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
 				int currentCoordinate = lowerBound;
 				coordinates[0] = currentCoordinate;
 				if (!Utils.isEvenPosition(coordinates)) {
@@ -183,9 +183,9 @@ public interface GridRegion extends GridEntity {
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBound(currentAxis, immutablePartialCoordinates);
+				int localLowerBound = getLowerBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
 				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBound(currentAxis, immutablePartialCoordinates);
+				upperBounds[currentAxis] = getUpperBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
 				coordinates[currentAxis] = localLowerBound;
 				partialCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
@@ -206,10 +206,10 @@ public interface GridRegion extends GridEntity {
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every odd position of the region.
+	 * Executes a {@link PositionCommand} for every odd position of the asymmetric sub-region.
 	 * @param commands
 	 */
-	default void forEachOddPosition(PositionCommand command) {
+	default void forEachOddPositionInAsymmetricRegion(PositionCommand command) {
 		if (command == null) {
 			throw new IllegalArgumentException("The command cannot be null.");
 		}
@@ -224,8 +224,8 @@ public interface GridRegion extends GridEntity {
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int lowerBound = getLowerBound(0, immutablePartialCoordinates);
-				int upperBound = getUpperBound(0, immutablePartialCoordinates);
+				int lowerBound = getLowerBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
+				int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
 				int currentCoordinate = lowerBound;
 				coordinates[0] = currentCoordinate;
 				if (Utils.isEvenPosition(coordinates)) {
@@ -238,9 +238,9 @@ public interface GridRegion extends GridEntity {
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBound(currentAxis, immutablePartialCoordinates);
+				int localLowerBound = getLowerBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
 				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBound(currentAxis, immutablePartialCoordinates);
+				upperBounds[currentAxis] = getUpperBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
 				coordinates[currentAxis] = localLowerBound;
 				partialCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;
@@ -259,33 +259,5 @@ public interface GridRegion extends GridEntity {
 			}
 		}
 	}
-	
-	/* Recursive version
-	protected void loopCoord(PositionCommand command, int[] coordinates, int axis) {
-		Integer[] boundsCoordinates = new Integer[getGridDimension() - 1];
-		for (int i = 0; i < axis; i++) {
-			boundsCoordinates[i] = new Integer(coordinates[i]);
-		}
-		Bounds[] bounds = getBounds(axis, boundsCoordinates);
-		if (axis == 0) {
-			for (int i = 0; i < bounds.length; i++) {
-				int lowerBound = bounds[i].getLower();
-				int upperBound = bounds[i].getUpper();
-				for (coordinates[0] = lowerBound; coordinates[0] <= upperBound; coordinates[0]++) {
-					command.execute(coordinates);
-				}
-			}
-		} else {
-			int previousAxis = axis - 1;
-			for (int i = 0; i < bounds.length; i++) {
-				int lowerBound = bounds[i].getLower();
-				int upperBound = bounds[i].getUpper();
-				for (coordinates[axis] = lowerBound; coordinates[axis] <= upperBound; coordinates[axis]++) {
-					loopCoord(commands, coordinates, previousAxis);
-				}
-			}
-		}
-	}
-	*/
 	
 }

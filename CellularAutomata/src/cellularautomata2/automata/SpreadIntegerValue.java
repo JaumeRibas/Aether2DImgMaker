@@ -21,209 +21,217 @@ import java.io.IOException;
 
 import cellularautomata2.arrays.Coordinates;
 import cellularautomata2.arrays.IntValueCommand;
+import cellularautomata2.arrays.AnisotropicIntArray;
 import cellularautomata2.arrays.PositionCommand;
-import cellularautomata2.arrays.SquareIntArray;
+import cellularautomata2.arrays.RectangularArray;
 import cellularautomata2.arrays.Utils;
 import cellularautomata2.grid.PartialCoordinates;
+import cellularautomata2.grid.SymmetricIntGridRegion;
 
-public class SpreadIntegerValue extends IntCellularAutomaton {
+public class SpreadIntegerValue extends SymmetricIntGridRegion implements CellularAutomaton {
 
-	private int gridDimension;
 	private int step;
 	private int initialValue;
 	private int backgroundValue;
 	
 	/** A square-like array representing the grid */
-	private SquareIntArray grid;
-	
-	/** The index of the origin within the array */
-	private int originIndex;
+	private AnisotropicIntArray grid;
 	
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	private int shareCount;
-	private int[] indexes;
-	private Coordinates immutableIndexes;
-	private int[] newIndexes;
-	private Coordinates immutableNewIndexes;
-	
 	public SpreadIntegerValue(int gridDimension, int initialValue, int backgroundValue) {
-		this.gridDimension = gridDimension;
-		//two neighbors
-		shareCount = gridDimension * 2 + 1;
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
-		indexes = new int[gridDimension];
-		immutableIndexes = new Coordinates(indexes);
-		newIndexes = new int[gridDimension];
-		immutableNewIndexes = new Coordinates(newIndexes);
-		//Create a square-like array to represent the grid. With the initial value at the origin.
-		//Make the array of side 5 so as to leave a margin of two positions around the center.
-		int side = 5;
-		grid = new SquareIntArray(gridDimension, side);
-		grid.forEachIndex(new PositionCommand() {
-			@Override 
-			public void execute(Coordinates indexes) {
-				grid.set(indexes, backgroundValue);				
-			}
-		});
-		//The origin will be at the center of the array
-		originIndex = (side - 1)/2;
-		Utils.addToArray(indexes, originIndex);
-		grid.set(immutableIndexes, initialValue); 
+		int[] indexes = new int[gridDimension];
+		Coordinates immutableIndexes = new Coordinates(indexes);
+		int side = 3;
+		grid = new AnisotropicIntArray(gridDimension, side);
+		grid.setAll(backgroundValue);
+		grid.set(immutableIndexes, initialValue);
 		this.initialValue = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
+//		throw new UnsupportedOperationException("Not implemented");
 	}
 	
 	@Override
 	public int getGridDimension() {
-		return gridDimension;
+		return grid.getDimension();
 	}
 
 	@Override
 	public int getValue(Coordinates coordinates) {
-		coordinates.copyIntoArray(indexes);
-		Utils.addToArray(indexes, originIndex);
-		return grid.get(immutableIndexes);
+		int[] coordsArray = coordinates.getCopyAsArray();
+		Utils.abs(coordsArray);
+		Utils.sortDescending(coordsArray);
+		if (coordsArray[0] < grid.getSide()) {
+			return grid.get(new Coordinates(coordsArray));
+		} else {
+			return backgroundValue;
+		}
 	}
 
 	@Override
 	public boolean nextStep() throws Exception {
+		int gridDimension = grid.getDimension();
+		int side = grid.getSide();
 		//Use new array to store the values of the next step
-		SquareIntArray newGrid = null;
-		//The offset between the indexes of the new and old array
-		int indexOffset = 0;
+		AnisotropicIntArray newGrid = null;
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new SquareIntArray(gridDimension, grid.getSide() + 2);
+			newGrid = new AnisotropicIntArray(gridDimension, side + 1);
 			if (backgroundValue != 0) {
 				newGrid.padEdges(1, backgroundValue);
 			}
-			indexOffset = 1;
 		} else {
-			newGrid = new SquareIntArray(gridDimension, grid.getSide());
+			newGrid = new AnisotropicIntArray(gridDimension, side);
 		}
-		SpreadIntegerValueCommand sivCommand = new SpreadIntegerValueCommand(newGrid, indexOffset);
-		//For every position apply rules
-		grid.forEachIndex(sivCommand);
+		int[] indexes = new int[gridDimension];
+		Coordinates immutableIndexes = new Coordinates(indexes);
+		Utils.addToArray(indexes, -1);
+		int sideMinusOne = side - 1;
+		int dimensionMinusOne = gridDimension - 1;
+		int currentAxis = dimensionMinusOne;
+		boolean changed = false;
+		while (currentAxis > -1) {
+			if (currentAxis == dimensionMinusOne) {
+				int previousCoordinatePlusOne = indexes[currentAxis - 1] + 1;
+				for (int currentCoordinate = -1; currentCoordinate <= previousCoordinatePlusOne; currentCoordinate++) {
+					indexes[currentAxis] = currentCoordinate;
+					boolean positionToppled = topplePosition(indexes, immutableIndexes, newGrid);
+					changed = changed || positionToppled;
+				}
+				currentAxis--;
+			} else {
+				int currentCoordinate = indexes[currentAxis];
+				int max;
+				if (currentAxis == 0) {
+					max = sideMinusOne;
+				} else {
+					max = indexes[currentAxis - 1] + 1;
+				}
+				if (currentCoordinate < max) {
+					currentCoordinate++;
+					indexes[currentAxis] = currentCoordinate;
+					currentAxis = dimensionMinusOne;
+				} else {
+					indexes[currentAxis] = -1;
+					currentAxis--;
+				}
+			}
+		}
 		//Replace the old array with the new one
 		grid = newGrid;
-		//Update the index of the origin
-		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
-		return sivCommand.changed;
+		return changed;
 	}
 	
-	class SpreadIntegerValueCommand implements PositionCommand {
-		public boolean changed = false;
-		private int gridSideMinusOne;
-		private int gridSide;
-		private SquareIntArray newGrid;
-		private int indexOffset;
-		
-		public SpreadIntegerValueCommand(SquareIntArray newGrid, int indexOffset) {
-			this.newGrid = newGrid;
-			this.indexOffset = indexOffset;
-			gridSide = grid.getSide();
-			gridSideMinusOne = gridSide - 1;
-		}
-		
-		@Override
-		public void execute(Coordinates currentIndexes) {
-			int value = grid.get(currentIndexes);
-			if (value != 0) {
-				currentIndexes.copyIntoArray(indexes);
-				if (Math.abs(value) >= shareCount) {
-					int[] upperNeighborValues = new int[gridDimension];
-					int[] lowerNeighborValues = new int[gridDimension];
-					boolean[] isUpperNeighborValueEqual = new boolean[gridDimension];
-					boolean[] isLowerNeighborValueEqual = new boolean[gridDimension];
-					boolean areAllNeighborValuesEqual = true;
-					boolean isPositionCloseToEdge = false;
-					for (int axis = 0; axis < gridDimension; axis++) {
-						int indexOnAxis = indexes[axis];
-						//Check whether or not we reached the edge of the array
-						if (indexOnAxis == 1 || indexOnAxis == gridSide - 2) {
-							isPositionCloseToEdge = true;
-						}
-						if (indexOnAxis < gridSideMinusOne) {
-							indexes[axis] = indexOnAxis + 1;
-							upperNeighborValues[axis] = grid.get(immutableIndexes);
-							if (indexOnAxis > 0) {
-								indexes[axis] = indexOnAxis - 1;
-								lowerNeighborValues[axis] = grid.get(immutableIndexes);
-							} else {
-								lowerNeighborValues[axis] = backgroundValue; 
-							}
-						} else {
-							upperNeighborValues[axis] = backgroundValue;
+	private boolean topplePosition(int[] indexes, Coordinates immutableIndexes, AnisotropicIntArray newGrid) {
+		int gridDimension = grid.getDimension();
+		int gridSide = grid.getSide();
+		int gridSideMinusOne = gridSide - 1;
+		int shareCount = gridDimension * 2 + 1;
+		boolean isCurrentPositionInsideGrid = Utils.areAllPositive(indexes) && Utils.isSortedDescending(indexes);
+		int value = getValue(immutableIndexes);
+		boolean changed = false;
+		if (value != 0) {
+			if (Math.abs(value) >= shareCount) {
+				int[] upperNeighborValues = new int[gridDimension];
+				int[] lowerNeighborValues = new int[gridDimension];
+				boolean[] isUpperNeighborValueEqual = new boolean[gridDimension];
+				boolean[] isLowerNeighborValueEqual = new boolean[gridDimension];
+				boolean areAllNeighborValuesEqual = true;
+				for (int axis = 0; axis < gridDimension; axis++) {
+					int indexOnAxis = indexes[axis];
+					if (indexOnAxis < gridSideMinusOne) {
+						indexes[axis] = indexOnAxis + 1;
+						upperNeighborValues[axis] = getValue(immutableIndexes);
+						if (indexOnAxis > -gridSideMinusOne) {
 							indexes[axis] = indexOnAxis - 1;
-							//if the grid side where one, this would be out of bounds.
-							//but since it starts at 5 and only gets bigger it's fine
-							lowerNeighborValues[axis] = grid.get(immutableIndexes);
-						}
-						indexes[axis] = indexOnAxis;//reset index
-						boolean isCurrentUpperNeighborValueEqual = value == upperNeighborValues[axis];
-						boolean isCurrentLowerNeighborValueEqual = value == lowerNeighborValues[axis];
-						isUpperNeighborValueEqual[axis] = isCurrentUpperNeighborValueEqual;
-						isLowerNeighborValueEqual[axis] = isCurrentLowerNeighborValueEqual;
-						areAllNeighborValuesEqual = areAllNeighborValuesEqual 
-								&& isCurrentUpperNeighborValueEqual 
-								&& isCurrentLowerNeighborValueEqual;
-					}
-					System.arraycopy(indexes, 0, newIndexes, 0, newIndexes.length);
-					Utils.addToArray(newIndexes, indexOffset);
-					//if the current position is equal to its neighbors the algorithm has no effect
-					if (!areAllNeighborValuesEqual) {
-						//Divide its value between the neighbors and center (using integer division)
-						int share = value/shareCount;
-						if (share != 0) {
-							//I assume that if any share is not zero the state changes (doesn't work for background value != 0 :( )
-							changed = true;
-							if (isPositionCloseToEdge)
-								boundsReached = true;
-							//Add the share and the remainder to the corresponding position in the new array
-							newGrid.addAndGet(immutableNewIndexes, value%shareCount + share);
-							//Add the share to the neighboring positions
-							//if the neighbor's value is equal to the current value, add the share to the current position instead
-							for (int axis = 0; axis < gridDimension; axis++) {
-								int newIndexOnAxis = newIndexes[axis];
-								if (isUpperNeighborValueEqual[axis]) {
-									newGrid.addAndGet(immutableNewIndexes, share);
-								} else {
-									newIndexes[axis] = newIndexOnAxis + 1;
-									newGrid.addAndGet(immutableNewIndexes, share);
-									newIndexes[axis] = newIndexOnAxis;//reset index
-								}
-								if (isLowerNeighborValueEqual[axis]) {
-									newGrid.addAndGet(immutableNewIndexes, share);
-								} else {
-									newIndexes[axis] = newIndexOnAxis - 1;
-									newGrid.addAndGet(immutableNewIndexes, share);
-									newIndexes[axis] = newIndexOnAxis;//reset index
-								}
-							}
+							lowerNeighborValues[axis] = getValue(immutableIndexes);
 						} else {
-							//if the share is zero, just add the value to the corresponding position in the new array
-							newGrid.addAndGet(immutableNewIndexes, value);
+							lowerNeighborValues[axis] = backgroundValue; 
 						}
 					} else {
-						//if all neighbor values are equal the current value won't change (it will get from them the same value it gives them)
-						newGrid.addAndGet(immutableNewIndexes, value);
+						upperNeighborValues[axis] = backgroundValue;
+						indexes[axis] = indexOnAxis - 1;
+						//if the grid side where one, this would be out of bounds.
+						//but since it starts at 5 and only gets bigger it's fine
+						lowerNeighborValues[axis] = getValue(immutableIndexes);
+					}
+					indexes[axis] = indexOnAxis;//reset index
+					boolean isCurrentUpperNeighborValueEqual = value == upperNeighborValues[axis];
+					boolean isCurrentLowerNeighborValueEqual = value == lowerNeighborValues[axis];
+					isUpperNeighborValueEqual[axis] = isCurrentUpperNeighborValueEqual;
+					isLowerNeighborValueEqual[axis] = isCurrentLowerNeighborValueEqual;
+					areAllNeighborValuesEqual = areAllNeighborValuesEqual 
+							&& isCurrentUpperNeighborValueEqual 
+							&& isCurrentLowerNeighborValueEqual;
+				}
+				//if the current position is equal to its neighbors the algorithm has no effect
+				if (!areAllNeighborValuesEqual) {
+					//Divide its value between the neighbors and center (using integer division)
+					int share = value/shareCount;
+					if (share != 0) {
+						//I assume that if any share is not zero the state changes (doesn't work for background value != 0 :( )
+						changed = true;
+						if (indexes[0] == gridSide - 2)
+							boundsReached = true;
+						//Add the share and the remainder to the corresponding position in the new array
+						if (isCurrentPositionInsideGrid) {
+							newGrid.addAndGet(immutableIndexes, value%shareCount + share);
+						}
+						//Add the share to the neighboring positions
+						//if the neighbor's value is equal to the current value, add the share to the current position instead
+						for (int axis = 0; axis < gridDimension; axis++) {
+							int indexOnAxis = indexes[axis];
+							if (isUpperNeighborValueEqual[axis]) {
+								if (isCurrentPositionInsideGrid) {
+									newGrid.addAndGet(immutableIndexes, share);
+								}
+							} else {
+								indexes[axis] = indexOnAxis + 1;
+								if (Utils.areAllPositive(indexes) && Utils.isSortedDescending(indexes)) {
+									newGrid.addAndGet(immutableIndexes, share);
+								}
+								indexes[axis] = indexOnAxis;//reset index
+							}
+							if (isLowerNeighborValueEqual[axis]) {
+								if (isCurrentPositionInsideGrid) {
+									newGrid.addAndGet(immutableIndexes, share);
+								}
+							} else {
+								indexes[axis] = indexOnAxis - 1;
+								if (Utils.areAllPositive(indexes) && Utils.isSortedDescending(indexes)) {
+									newGrid.addAndGet(immutableIndexes, share);
+								}
+								indexes[axis] = indexOnAxis;//reset index
+							}
+						}
+					} else {
+						//if the share is zero, just add the value to the corresponding position in the new array
+						if (isCurrentPositionInsideGrid) {
+							newGrid.addAndGet(immutableIndexes, value);
+						}
 					}
 				} else {
-					//if the abs value is smaller than the divisor just copy the value to the new grid
-					Utils.addToArray(indexes, indexOffset);
+					//if all neighbor values are equal the current value won't change (it will get from them the same value it gives them)
+					if (isCurrentPositionInsideGrid) {
+						newGrid.addAndGet(immutableIndexes, value);
+					}
+				}
+			} else {
+				if (isCurrentPositionInsideGrid) {
 					newGrid.addAndGet(immutableIndexes, value);
-				}					
-			}
+				}
+			}					
 		}
+		return changed;
 	}
 
 	@Override
@@ -238,17 +246,27 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + gridDimension + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + grid.getDimension() + "/" + initialValue + "/" + backgroundValue;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public int getUpperBound(int axis) {
+		return grid.getSide() - 1;
+	}
+
+	@Override
+	public int getLowerBound(int axis) {
+		return -getUpperBound(axis);
+	}
 
 	@Override
 	public int getUpperBound(int axis, PartialCoordinates coordinates) {
-		return grid.getSide() - 1 - originIndex;
+		return getUpperBound(axis);
 	}
 
 	@Override
@@ -258,6 +276,68 @@ public class SpreadIntegerValue extends IntCellularAutomaton {
 
 	@Override
 	public void forEachValue(IntValueCommand command) {
+		int gridDimension = grid.getDimension();
+		int sideMinusOne = grid.getSide() - 1;
+		int[] upperBounds = new int[gridDimension];
+		Utils.addToArray(upperBounds, sideMinusOne);
+		int[] lowerBounds = new int[gridDimension];
+		Utils.addToArray(lowerBounds, -sideMinusOne);
+		RectangularArray.forEachIndexWithinBounds(upperBounds, lowerBounds, new PositionCommand() {
+			
+			@Override
+			public void execute(Coordinates coordinates) {
+				command.execute(getValue(coordinates));
+			}
+		});
+	}
+	
+	@Override
+	public int getUpperBoundOfAsymmetricRegion(int axis) {
+		//side >= c1 >= c2... >= cN >= 0
+		return grid.getSide() - 1;
+	}
+
+	@Override
+	public int getLowerBoundOfAsymmetricRegion(int axis) {
+		return 0;
+	}
+
+	@Override
+	public int getUpperBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates) {
+		//side >= c1 >= c2... >= cN >= 0
+		if (axis > 0) {
+			for (int i = axis - 1; i >= 0; i--) {
+				Integer coord = coordinates.get(i);
+				if (coord != null) {
+					return coord;
+				}
+			}
+		}
+		return grid.getSide();
+	}
+
+	@Override
+	public int getLowerBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates) {
+		//side >= c1 >= c2... >= cN >= 0
+		int coordCount = coordinates.getCount();
+		if (axis < coordCount - 1) {
+			for (int i = axis + 1; i < coordCount; i++) {
+				Integer coord = coordinates.get(i);
+				if (coord != null) {
+					return coord;
+				}
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public int getValueFromAsymmetricRegion(Coordinates coordinates) {
+		return grid.get(coordinates);
+	}
+
+	@Override
+	public void forEachValueInAsymmetricRegion(IntValueCommand command) {
 		grid.forEachValue(command);
 	}
 	

@@ -21,7 +21,7 @@ package cellularautomata2.grid;
  * @author Jaume
  *
  */
-public class AlignedRectangle extends GridRegion {
+public class AlignedRectangle implements GridRegion {
 	
 	private int[] upperBounds;
 	private int[] lowerBounds;

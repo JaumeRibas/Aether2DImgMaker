@@ -70,7 +70,12 @@ public abstract class RectangularArray implements MultidimensionalArray {
 		return internalIndex;
 	}
 	
-	protected static int getVolume(int[] sizes) {
+	@Override
+	public long getVolume() {
+		return getVolume(sizes);
+	}
+	
+	public static long getVolume(int[] sizes) {
 		int volume = 1;
 		for (int i = 0; i < sizes.length; i++) {
 			volume *= sizes[i];
@@ -154,6 +159,7 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, PositionCommand command) {
 		int dimension = upperBounds.length;
 		int[] coordinates = new int[dimension];
+		System.arraycopy(lowerBounds, 0, coordinates, 0, coordinates.length);
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		int currentAxis = 0;
 		while (currentAxis < dimension) {

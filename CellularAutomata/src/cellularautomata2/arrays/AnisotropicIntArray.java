@@ -16,18 +16,12 @@
  */
 package cellularautomata2.arrays;
 
-public class RectangularIntArray extends RectangularArray implements MultidimensionalIntArray {
+public class AnisotropicIntArray extends AnisotropicArray implements MultidimensionalIntArray {
 
 	private int[] values;
 	
-	/**
-	 * Creates a rectangle-like multidimensional array with the given sizes.
-	 * The dimension of the array will be equal to the length of the sizes array.
-	 * 
-	 * @param sizes
-	 */
-	public RectangularIntArray(int[] sizes) {
-		super(sizes);
+	public AnisotropicIntArray(int dimension, int side) {
+		super(dimension, side);
 		values = new int[(int) getVolume()];
 	}
 	
@@ -42,17 +36,17 @@ public class RectangularIntArray extends RectangularArray implements Multidimens
 	}
 
 	@Override
-	public void setAll(int value) {
-		for (int i = 0; i < values.length; i++) {
-			values[i] = value;
-		}
-	}
-
-	@Override
 	public int addAndGet(Coordinates indexes, int value) {
 		int index = getInternalArrayIndex(indexes);
 		values[index] += value;
 		return values[index];
+	}
+
+	@Override
+	public void setAll(int value) {
+		for (int i = 0; i < values.length; i++) {
+			values[i] = value;
+		}
 	}
 	
 	public void padEdges(int edgeWidth, int value) {
@@ -63,7 +57,7 @@ public class RectangularIntArray extends RectangularArray implements Multidimens
 			}
 		});
 	}
-
+	
 	@Override
 	public void forEachValue(IntValueCommand command) {
 		for (int i = 0; i < values.length; i++) {

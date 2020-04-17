@@ -16,6 +16,7 @@
  */
 package cellularautomata2.arrays;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
@@ -45,9 +46,42 @@ public class Utils {
 		}
 	}
 	
-	public static <T> void copyArrayWithoutElement(T[] sourceArray, T[] targetArray, int indexToSkip) {
-		System.arraycopy(sourceArray, 0, targetArray, 0, indexToSkip);
-		System.arraycopy(sourceArray, indexToSkip + 1, targetArray, indexToSkip, targetArray.length - indexToSkip);
+	public static void abs(int[] array) {
+		for (int i = 0; i < array.length; i++) {
+			int value = array[i]; 
+			if (value < 0) {
+				array[i] = -value;
+			}
+		}
 	}
 	
+	public static void sortDescending(int[] array) {
+		Arrays.sort(array);
+		//reverse order
+		int halfLength = array.length/2;
+		for (int i = 0, j = array.length - 1; i < halfLength; i++, j--) {
+			int swp = array[i];
+			array[i] = array[j];
+			array[j] = swp;
+		}
+	}
+	
+	public static boolean isSortedDescending(int[] array) {
+		int lengthMinusOne = array.length - 1;
+		for (int i = 0; i < lengthMinusOne; i++) {
+			if (array[i] < array[i + 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean areAllPositive(int[] values) {
+		for (int i = 0; i < values.length; i++) {
+			if (values[i] < 0) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

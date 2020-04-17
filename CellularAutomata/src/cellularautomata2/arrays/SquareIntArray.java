@@ -22,8 +22,7 @@ public class SquareIntArray extends SquareArray implements MultidimensionalIntAr
 	
 	public SquareIntArray(int dimension, int side) {
 		super(dimension, side);
-		int volume = (int) Math.pow(side, dimension);
-		values = new int[volume];
+		values = new int[(int) getVolume()];
 	}
 	
 	@Override
@@ -61,10 +60,8 @@ public class SquareIntArray extends SquareArray implements MultidimensionalIntAr
 	
 	@Override
 	public void forEachValue(IntValueCommand command) {
-		if (command != null) {
-			for (int i = 0; i < values.length; i++) {
-				command.execute(values[i]);
-			}
+		for (int i = 0; i < values.length; i++) {
+			command.execute(values[i]);
 		}
 	}
 	

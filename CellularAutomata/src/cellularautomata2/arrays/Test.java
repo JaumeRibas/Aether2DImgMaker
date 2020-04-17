@@ -30,13 +30,6 @@ public class Test {
 	public static void main(String[] args) {
 		testRectangularIntArray2();
 	}
-
-	public static void testCopyArrayWithoutElement() {
-		Integer[] sourceSampleArray = new Integer[] {1,2,3,4,5};
-		Integer[] targetArray = new Integer[sourceSampleArray.length - 1];
-		Utils.copyArrayWithoutElement(sourceSampleArray, targetArray, 5);
-		System.out.println(Arrays.toString(targetArray));
-	}
 	
 	public static void testArrayClonning() {
 		int[] array1 = new int[] {1, 2, 3, 4};
