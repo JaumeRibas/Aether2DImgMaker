@@ -122,7 +122,7 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 	
 	@Override
 	public int getMinW(int x, int y, int z) {
-		return Math.max(Math.max(x, y), z);
+		return Math.max(Math.max(Math.max(x, y), z), minW);
 	}
 
 	@Override
@@ -131,17 +131,17 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 	}
 
 	public int getMinWAtZ(int z) {
-		return z;
+		return Math.max(z, minW);
 	}
 
 	@Override
 	public int getMinWAtXZ(int x, int z) {
-		return x;
+		return Math.max(x, minW);
 	}
 
 	@Override
 	public int getMinWAtYZ(int y, int z) {
-		return y;
+		return Math.max(y, minW);
 	}
 
 	@Override
