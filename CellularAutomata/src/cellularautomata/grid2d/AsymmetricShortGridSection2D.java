@@ -17,15 +17,15 @@
  */
 package cellularautomata.grid2d;
 
-public class AsymmetricShortGridSection2D extends AsymmetricGridSection2D implements ShortGrid2D{
+public class AsymmetricShortGridSection2D<G extends SymmetricShortGrid2D> extends AsymmetricGridSection2D<G> implements ShortGrid2D{
 	
-	public AsymmetricShortGridSection2D(SymmetricShortGrid2D grid) {
+	public AsymmetricShortGridSection2D(G grid) {
 		super(grid);
 	}
 
 	@Override
 	public short getValueAtPosition(int x, int y) throws Exception {
-		return ((SymmetricShortGrid2D) source).getValueAtAsymmetricPosition(x, y);
+		return source.getValueAtAsymmetricPosition(x, y);
 	}
 
 }

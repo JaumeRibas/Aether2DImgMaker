@@ -251,6 +251,8 @@ public interface SymmetricGrid3D extends Grid3D {
 	 * 
 	 * @return a 3D grid
 	 */
-	Grid3D asymmetricSection();
+	default Grid3D asymmetricSection() {
+		return new AsymmetricGridSection3D<SymmetricGrid3D>(this);
+	}
 
 }

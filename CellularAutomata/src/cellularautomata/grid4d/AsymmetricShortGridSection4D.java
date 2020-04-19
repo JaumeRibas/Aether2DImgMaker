@@ -16,15 +16,15 @@
  */
 package cellularautomata.grid4d;
 
-public class AsymmetricShortGridSection4D extends AsymmetricGridSection4D implements ShortGrid4D {
+public class AsymmetricShortGridSection4D<G extends SymmetricShortGrid4D> extends AsymmetricGridSection4D<G> implements ShortGrid4D {
 	
-	public AsymmetricShortGridSection4D(SymmetricShortGrid4D grid) {
+	public AsymmetricShortGridSection4D(G grid) {
 		super(grid);
 	}
 
 	@Override
 	public short getValueAtPosition(int w, int x, int y, int z) throws Exception {
-		return ((SymmetricShortGrid4D) source).getValueAtAsymmetricPosition(w, x, y, z);
+		return source.getValueAtAsymmetricPosition(w, x, y, z);
 	}
 
 }

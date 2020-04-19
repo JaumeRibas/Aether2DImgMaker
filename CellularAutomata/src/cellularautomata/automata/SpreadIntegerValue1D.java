@@ -55,12 +55,7 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		long[] newGrid = null;
 		if (boundReached) {
@@ -118,6 +113,7 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 		return changed;
 	}
 	
+	@Override
 	public long getValueAtPosition(int x){	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
@@ -127,23 +123,22 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 		}
 	}
 	
+	@Override
 	public long getValueAtAsymmetricPosition(int x){	
 		return grid[x];
 	}
 	
+	@Override
 	public int getAsymmetricMinX() {
 		return 0;
 	}
 
+	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

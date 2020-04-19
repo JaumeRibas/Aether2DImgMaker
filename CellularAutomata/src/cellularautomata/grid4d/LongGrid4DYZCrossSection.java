@@ -18,36 +18,10 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid2d.LongGrid2D;
 
-public class LongGrid4DYZCrossSection implements LongGrid2D {
+public class LongGrid4DYZCrossSection extends Grid4DYZCrossSection<LongGrid4D> implements LongGrid2D {
 
-	private LongGrid4D source;
-	private int y;
-	private int z;
-	
 	public LongGrid4DYZCrossSection(LongGrid4D source, int y, int z) {
-		this.source = source;
-		this.y = y;
-		this.z = z;
-	}
-
-	@Override
-	public int getMinX() {
-		return source.getMinW();
-	}
-
-	@Override
-	public int getMaxX() {
-		return source.getMaxW();
-	}
-
-	@Override
-	public int getMinY() {
-		return source.getMinX();
-	}
-
-	@Override
-	public int getMaxY() {
-		return source.getMaxX();
+		super(source, y, z);
 	}
 
 	@Override

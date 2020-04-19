@@ -20,7 +20,7 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.IntAether3DSwap;
+import cellularautomata.automata.IntAether3DAsymmetricSectionSwap;
 
 public class IntAether3DEvenOddImgMaker {
 	
@@ -70,13 +70,11 @@ public class IntAether3DEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			IntAether3DSwap ca;
+			IntAether3DAsymmetricSectionSwap ca;
 			if (isRestore) {
-				ca = new IntAether3DSwap(initValOrBackupPath, path);
+				ca = new IntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new IntAether3DSwap(initialValue, Long.parseLong("8589934592"), path);//8GiB
-//				ca = new IntAether3DSwap(initialValue, Long.parseLong("10737418240"), path);//10GiB
-//				ca = new IntAether3DSwap(initialValue, Long.parseLong("1048576"), path);//1MiB
+				ca = new IntAether3DAsymmetricSectionSwap(initialValue, Constants.EIGHT_GB, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {

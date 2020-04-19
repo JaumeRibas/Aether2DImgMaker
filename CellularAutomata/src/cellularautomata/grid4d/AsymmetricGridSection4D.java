@@ -16,12 +16,11 @@
  */
 package cellularautomata.grid4d;
 
-public abstract class AsymmetricGridSection4D implements Grid4D {
+public class AsymmetricGridSection4D<G extends SymmetricGrid4D> implements Grid4D {
 
-	protected SymmetricGrid4D source;
+	protected G source;
 	
-	public AsymmetricGridSection4D(SymmetricGrid4D grid) {
-		super();
+	public AsymmetricGridSection4D(G grid) {
 		this.source = grid;
 	}
 	

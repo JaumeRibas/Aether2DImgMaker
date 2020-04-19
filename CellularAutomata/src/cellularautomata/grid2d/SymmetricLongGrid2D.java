@@ -39,6 +39,6 @@ public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	
 	@Override
 	default LongGrid2D asymmetricSection() {
-		return new AsymmetricLongGridSection2D(this);
+		return new AsymmetricLongGridSection2D<SymmetricLongGrid2D>(this);
 	}
 }

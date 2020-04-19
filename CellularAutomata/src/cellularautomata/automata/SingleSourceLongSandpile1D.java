@@ -60,6 +60,7 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 		currentStep = 0;
 	}
 	
+	@Override
 	public boolean nextStep(){
 		long[] newGrid = null;
 		if (boundsReached) {
@@ -131,6 +132,7 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 		}
 	}
 	
+	@Override
 	public long getValueAtPosition(int x){	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
@@ -140,10 +142,12 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 		}
 	}
 	
+	@Override
 	public int getAsymmetricMinX() {
 		return 0;
 	}
 
+	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
 	}

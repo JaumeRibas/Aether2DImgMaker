@@ -19,4 +19,24 @@ package caimgmaker;
 public class Constants {
 	public static final int HD_WIDTH = 1920;
 	public static final int HD_HEIGHT = 1080;
+	
+	/**
+	 * The bytes in 10 GiB
+	 */
+	public static final long TEN_GB = Long.parseLong("10737418240");
+	
+	/**
+	 * The bytes in 8 GiB
+	 */
+	public static final long EIGHT_GB = Long.parseLong("8589934592");
+	
+	/**
+	 * The bytes in 500 MiB
+	 */
+	public static final long FIVE_HUNDRED_MB = Long.parseLong("524288000");
+	
+	/**
+	 * The bytes in 1 MiB
+	 */
+	public static final long ONE_MB = 1048576;
 }

@@ -105,5 +105,7 @@ public interface Grid2D extends Grid {
 	 * @param maxY
 	 * @return a {@link Grid2D} decorating the current grid 
 	 */
-	Grid2D subGrid(int minX, int maxX, int minY, int maxY);
+	default Grid2D subGrid(int minX, int maxX, int minY, int maxY) {
+		return new SubGrid2D<Grid2D>(this, minX, maxX, minY, maxY);
+	}
 }

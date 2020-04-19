@@ -38,6 +38,6 @@ public interface SymmetricShortGrid2D extends ShortGrid2D, SymmetricGrid2D {
 	
 	@Override
 	default ShortGrid2D asymmetricSection() {
-		return new AsymmetricShortGridSection2D(this);
+		return new AsymmetricShortGridSection2D<SymmetricShortGrid2D>(this);
 	}
 }

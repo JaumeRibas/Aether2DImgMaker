@@ -30,6 +30,6 @@ public interface SymmetricShortGrid3D extends ShortGrid3D, SymmetricGrid3D {
 
 	@Override
 	default ShortGrid3D asymmetricSection() {
-		return new AsymmetricShortGridSection3D(this);
+		return new AsymmetricShortGridSection3D<SymmetricShortGrid3D>(this);
 	}
 }

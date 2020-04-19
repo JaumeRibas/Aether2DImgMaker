@@ -27,13 +27,13 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
-import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid4D;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
 import cellularautomata.grid4d.SizeLimitedAnisotropicLongGrid4DBlock;
 
-public class Aether4DSwap extends SymmetricActionableEvolvingLongGrid4D {
+public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D {
 
 	public static final long PRIMITIVE_MAX_VALUE = Long.MAX_VALUE;
 	
@@ -64,7 +64,7 @@ public class Aether4DSwap extends SymmetricActionableEvolvingLongGrid4D {
 	 * @param folderPath
 	 * @throws Exception
 	 */
-	public Aether4DSwap(long initialValue, long maxGridHeapSize, String folderPath) throws Exception {
+	public Aether4DAsymmetricSectionSwap(long initialValue, long maxGridHeapSize, String folderPath) throws Exception {
 		if (initialValue < 0) {
 			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, BigInteger.valueOf(initialValue));
 			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(PRIMITIVE_MAX_VALUE)) > 0) {
@@ -98,7 +98,7 @@ public class Aether4DSwap extends SymmetricActionableEvolvingLongGrid4D {
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether4DSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public Aether4DAsymmetricSectionSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		gridFolder = new File(backupPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			throw new FileNotFoundException("Missing grid folder at '" + gridFolder.getAbsolutePath() + "'");
@@ -151,45 +151,6 @@ public class Aether4DSwap extends SymmetricActionableEvolvingLongGrid4D {
 		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = loadGridBlockSafe(minW);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minW=" + minW + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
-		} else {
-			return gridBlock;
-		}
-	}
-	
-	private SizeLimitedAnisotropicLongGrid4DBlock findGridBlockSafe(int w) throws IOException, ClassNotFoundException {
-		File[] files = gridFolder.listFiles();
-		boolean found = false;
-		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = null;
-		File gridBlockFile = null;
-		for (int i = 0; i < files.length && !found; i++) {
-			File currentFile = files[i];
-			String fileName = currentFile.getName();
-			int fileMinW, fileMaxW;
-			int indexOfSeparator = fileName.indexOf('_');
-			try {
-				//"minW=".length() == 5
-				fileMinW = Integer.parseInt(fileName.substring(5, indexOfSeparator));
-				fileMaxW = Integer.parseInt(fileName.substring(indexOfSeparator + 6, fileName.indexOf('.')));
-				if (w == fileMinW || w == fileMaxW || w > fileMinW && w < fileMaxW) {
-					found = true;
-					gridBlockFile = currentFile;
-				}
-			} catch (NumberFormatException ex) {
-				
-			}
-		}
-		if (found) {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicLongGrid4DBlock) in.readObject();
-			in.close();
-		}
-		return gridBlock;		
-	}
-	
-	private SizeLimitedAnisotropicLongGrid4DBlock findGridBlock(int w) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = findGridBlockSafe(w);
-		if (gridBlock == null) {
-			throw new FileNotFoundException("No grid block containing w=" + w + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
 			return gridBlock;
 		}
@@ -655,11 +616,6 @@ public class Aether4DSwap extends SymmetricActionableEvolvingLongGrid4D {
 		return getName() + "/" + initialValue;
 	}
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
 	@Override
 	public long getStep() {
 		return currentStep;
@@ -716,37 +672,6 @@ public class Aether4DSwap extends SymmetricActionableEvolvingLongGrid4D {
 		maxZ = (int) properties.get("maxZ");
 		maxGridBlockSize = (long) properties.get("maxGridBlockSize");
 	}
-
-	@Override
-	public long getValueAtAsymmetricPosition(int w, int x, int y, int z) throws IOException, ClassNotFoundException {
-		long value;
-		//TODO: try to keep blocks contiguous
-		if (w == gridBlockA.minW || w == gridBlockA.maxW || w > gridBlockA.minW && w < gridBlockA.maxW) {
-			value = gridBlockA.getValueAtPosition(w, x, y, z);
-		} else if (gridBlockB != null && (w == gridBlockB.minW || w == gridBlockB.maxW || w > gridBlockB.minW && w < gridBlockB.maxW)) {
-			value = gridBlockB.getValueAtPosition(w, x, y, z);
-		} else {
-			saveGridBlock(gridBlockA);
-			gridBlockA = null;
-			gridBlockA = findGridBlock(w);
-			value = gridBlockA.getValueAtPosition(w, x, y, z);
-		}
-		return value;
-	}
-
-	@Override
-	public long getValueAtPosition(int w, int x, int y, int z) throws IOException, ClassNotFoundException {
-		int[] asymmetricCoords = getAsymmetricCoords(w, x, y, z);
-		w = asymmetricCoords[0];
-		x = asymmetricCoords[1];
-		y = asymmetricCoords[2];
-		z = asymmetricCoords[3];
-		if (w <= maxW) {
-			return getValueAtAsymmetricPosition(w, x, y, z);
-		} else {
-			return 0;
-		}
-	}
 	
 	private int[] getAsymmetricCoords(int w, int x, int y, int z) {
 		if (w < 0) w = -w;
@@ -779,206 +704,164 @@ public class Aether4DSwap extends SymmetricActionableEvolvingLongGrid4D {
 		return new int[] {w, x, y, z};
 	}
 	
-
-	
 	@Override
 	public int getMinW() {
-		return -getAsymmetricMaxW();
-	}
-
-	@Override
-	public int getMaxW() {
-		return getAsymmetricMaxW();
-	}
-
-	@Override
-	public int getMinX() {
-		return -getAsymmetricMaxW();
-	}
-
-	@Override
-	public int getMaxX() {
-		return getAsymmetricMaxW();
-	}
-
-	@Override
-	public int getMinY() {
-		return -getAsymmetricMaxW();
-	}
-
-	@Override
-	public int getMaxY() {
-		return getAsymmetricMaxW();
-	}
-
-	@Override
-	public int getMinZ() {
-		return -getAsymmetricMaxW();
-	}
-
-	@Override
-	public int getMaxZ() {
-		return getAsymmetricMaxW();
-	}
-	
-	@Override
-	public int getAsymmetricMinW() {
 		return 0;
 	}
 	
 	@Override
-	public int getAsymmetricMinW(int x, int y, int z) {
+	public int getMinW(int x, int y, int z) {
 		return Math.max(Math.max(x, y), z);
 	}
 
 	@Override
-	public int getAsymmetricMaxW(int x, int y, int z) {
-		return getAsymmetricMaxW();
+	public int getMaxW(int x, int y, int z) {
+		return getMaxW();
 	}
 	
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getMaxW() {
 		return maxW;
 	}
 	
 	@Override
-	public int getAsymmetricMinX() {
+	public int getMinX() {
 		return 0;
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getMaxX() {
 		return maxX;
 	}
 	
 	@Override
-	public int getAsymmetricMinY() {
+	public int getMinY() {
 		return 0;
 	}
 	
 	@Override
-	public int getAsymmetricMaxY() {
+	public int getMaxY() {
 		return maxY;
 	}
 	
 	@Override
-	public int getAsymmetricMinZ() {
+	public int getMinZ() {
 		return 0;
 	}
 	
 	@Override
-	public int getAsymmetricMaxZ() {
+	public int getMaxZ() {
 		return maxZ;
 	}
 
 	@Override
-	public int getAsymmetricMinWAtZ(int z) {
+	public int getMinWAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMinWAtXZ(int x, int z) {
+	public int getMinWAtXZ(int x, int z) {
 		return x;
 	}
 
 	@Override
-	public int getAsymmetricMinWAtYZ(int y, int z) {
+	public int getMinWAtYZ(int y, int z) {
 		return y;
 	}
 
 	@Override
-	public int getAsymmetricMaxWAtZ(int z) {
-		return getAsymmetricMaxW(); //TODO: check actual value? store all max values?
+	public int getMaxWAtZ(int z) {
+		return getMaxW(); //TODO: check actual value? store all max values?
 	}
 
 	@Override
-	public int getAsymmetricMaxWAtXZ(int x, int z) {
-		return getAsymmetricMaxW();
+	public int getMaxWAtXZ(int x, int z) {
+		return getMaxW();
 	}
 
 	@Override
-	public int getAsymmetricMaxWAtYZ(int y, int z) {
-		return getAsymmetricMaxW();
+	public int getMaxWAtYZ(int y, int z) {
+		return getMaxW();
 	}
 
 	@Override
-	public int getAsymmetricMinXAtZ(int z) {
+	public int getMinXAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMinXAtWZ(int w, int z) {
+	public int getMinXAtWZ(int w, int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMinXAtYZ(int y, int z) {
+	public int getMinXAtYZ(int y, int z) {
 		return y;
 	}
 
 	@Override
-	public int getAsymmetricMinX(int w, int y, int z) {
+	public int getMinX(int w, int y, int z) {
 		return y;
 	}
 
 	@Override
-	public int getAsymmetricMaxXAtZ(int z) {
-		return getAsymmetricMaxX();
+	public int getMaxXAtZ(int z) {
+		return getMaxX();
 	}
 
 	@Override
-	public int getAsymmetricMaxXAtWZ(int w, int z) {
-		return Math.min(getAsymmetricMaxX(), w);
+	public int getMaxXAtWZ(int w, int z) {
+		return Math.min(getMaxX(), w);
 	}
 
 	@Override
-	public int getAsymmetricMaxXAtYZ(int y, int z) {
-		return getAsymmetricMaxX();
+	public int getMaxXAtYZ(int y, int z) {
+		return getMaxX();
 	}
 
 	@Override
-	public int getAsymmetricMaxX(int w, int y, int z) {
-		return Math.min(getAsymmetricMaxX(), w);
+	public int getMaxX(int w, int y, int z) {
+		return Math.min(getMaxX(), w);
 	}
 
 	@Override
-	public int getAsymmetricMinYAtZ(int z) {
+	public int getMinYAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMaxYAtWZ(int w, int z) {
-		return Math.min(getAsymmetricMaxY(), w);
+	public int getMaxYAtWZ(int w, int z) {
+		return Math.min(getMaxY(), w);
 	}
 
 	@Override
-	public int getAsymmetricMinYAtXZ(int x, int z) {
+	public int getMinYAtXZ(int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMinY(int w, int x, int z) {
+	public int getMinY(int w, int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMaxYAtZ(int z) {
-		return getAsymmetricMaxY();
+	public int getMaxYAtZ(int z) {
+		return getMaxY();
 	}
 
 	@Override
-	public int getAsymmetricMinYAtWZ(int w, int z) {
+	public int getMinYAtWZ(int w, int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMaxYAtXZ(int x, int z) {
-		return Math.min(getAsymmetricMaxY(), x);
+	public int getMaxYAtXZ(int x, int z) {
+		return Math.min(getMaxY(), x);
 	}
 
 	@Override
-	public int getAsymmetricMaxY(int w, int x, int z) {
-		return Math.min(getAsymmetricMaxY(), x);
+	public int getMaxY(int w, int x, int z) {
+		return Math.min(getMaxY(), x);
 	}
 
 }

@@ -14,13 +14,36 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.evolvinggrid;
+package cellularautomata.grid1d;
 
-import cellularautomata.grid.ActionableSymmetricGrid;
-import cellularautomata.grid.SymmetricGridProcessor;
-import cellularautomata.grid3d.LongGrid3D;
-import cellularautomata.grid3d.SymmetricLongGrid3D;
-
-public abstract class SymmetricActionableEvolvingLongGrid3D extends ActionableSymmetricGrid<SymmetricGridProcessor<LongGrid3D>, LongGrid3D> implements SymmetricLongGrid3D, EvolvingLongGrid3D {
+public class SubGrid1D<G extends Grid1D> implements Grid1D {
 	
+	protected G source;
+	private int minX;
+	private int maxX;
+	
+	public SubGrid1D(G source, int minX, int maxX) {
+		if (minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		}
+		int sourceMinX = source.getMinX();
+		int sourceMaxX = source.getMaxX();
+		if (minX > sourceMaxX || maxX < sourceMinX) {
+			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+		}
+		this.source = source;
+		this.minX = Math.max(minX, sourceMinX);
+		this.maxX = Math.min(maxX, sourceMaxX);
+	}
+
+	@Override
+	public int getMinX() {
+		return minX;
+	}
+
+	@Override
+	public int getMaxX() {
+		return maxX;
+	}
+
 }

@@ -22,7 +22,7 @@ public interface SymmetricLongGrid1D extends LongGrid1D, SymmetricGrid1D {
 	
 	@Override
 	default LongGrid1D asymmetricSection() {
-		return new AsymmetricLongGridSection1D(this);
+		return new AsymmetricLongGridSection1D<SymmetricLongGrid1D>(this);
 	}
 
 }

@@ -20,8 +20,8 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether3DSwap;
-import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
+import cellularautomata.automata.Aether3DAsymmetricSectionSwap;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
 
 public class Aether3DImgMaker {
 	
@@ -71,13 +71,11 @@ public class Aether3DImgMaker {
 			} else {
 				path = "./";
 			}
-			SymmetricActionableEvolvingLongGrid3D ca;
+			ActionableEvolvingLongGrid3D ca;
 			if (isRestore) {
-				ca = new Aether3DSwap(initValOrBackupPath, path);
+				ca = new Aether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-//				ca = new Aether3DSwap(initialValue, Long.parseLong("8589934592"), path);//8GiB
-//				ca = new Aether3DSwap(initialValue, Long.parseLong("10737418240"), path);//10GiB
-				ca = new Aether3DSwap(initialValue, Long.parseLong("1048576"), path);//1MiB
+				ca = new Aether3DAsymmetricSectionSwap(initialValue, Constants.EIGHT_GB, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {

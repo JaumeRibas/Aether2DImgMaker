@@ -62,12 +62,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricEvolvingLongGrid1D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		long[] newGrid = null;
@@ -146,12 +141,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricEvolvingLongGrid1D {
 		return changed;
 	}
 	
-	/**
-	 * Returns the value at a given position for the current step
-	 * 
-	 * @param x the position on the x-coordinate
-	 * @return the value at (x)
-	 */
+	@Override
 	public long getValueAtPosition(int x){	
 		int arrayX = xOriginIndex + x;
 		if (arrayX < 0 || arrayX > grid.length - 1) {
@@ -162,15 +152,12 @@ public class SpreadIntegerValueSimple1D implements SymmetricEvolvingLongGrid1D {
 		}
 	}
 	
+	@Override
 	public long getValueAtAsymmetricPosition(int x){	
 		return getValueAtPosition(x);
 	}
 	
-	/**
-	 * Returns the smallest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMinX() {
 		int arrayMinX = - xOriginIndex;
 		int valuesMinX;
@@ -182,11 +169,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricEvolvingLongGrid1D {
 		return valuesMinX;
 	}
 	
-	/**
-	 * Returns the largest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1 - xOriginIndex;
 		int valuesMaxX;
@@ -198,11 +181,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricEvolvingLongGrid1D {
 		return valuesMaxX;
 	}
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

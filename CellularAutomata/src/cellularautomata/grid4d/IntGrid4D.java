@@ -132,6 +132,6 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	
 	@Override
 	default IntGrid3D crossSectionAtZ(int z) {
-		return new IntGrid4DZCrossSection(this, z);
+		return new IntGrid4DZCrossSection<IntGrid4D>(this, z);
 	}
 }

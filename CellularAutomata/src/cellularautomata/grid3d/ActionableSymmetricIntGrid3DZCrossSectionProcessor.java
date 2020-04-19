@@ -17,14 +17,12 @@
 package cellularautomata.grid3d;
 
 import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.ActionableSymmetricGrid;
 import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid.SymmetricGridProcessor;
 import cellularautomata.grid2d.IntGrid2D;
 
-public class ActionableSymmetricIntGrid3DZCrossSectionProcessor extends ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> implements SymmetricGridProcessor<IntGrid3D> {
+public class ActionableSymmetricIntGrid3DZCrossSectionProcessor extends ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> implements GridProcessor<IntGrid3D> {
 
-	private ActionableSymmetricGrid<SymmetricGridProcessor<IntGrid3D>, IntGrid3D> source;
+	private ActionableGrid<GridProcessor<IntGrid3D>, IntGrid3D> source;
 	private int z;
 
 	public int getZ() {
@@ -35,7 +33,7 @@ public class ActionableSymmetricIntGrid3DZCrossSectionProcessor extends Actionab
 		this.z = z;
 	}
 
-	public ActionableSymmetricIntGrid3DZCrossSectionProcessor(ActionableSymmetricGrid<SymmetricGridProcessor<IntGrid3D>, IntGrid3D> source, int z) {
+	public ActionableSymmetricIntGrid3DZCrossSectionProcessor(ActionableGrid<GridProcessor<IntGrid3D>, IntGrid3D> source, int z) {
 		this.source = source;
 		this.z = z;
 	}

@@ -18,36 +18,10 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid2d.ShortGrid2D;
 
-public class ShortGrid4DYZCrossSection implements ShortGrid2D {
+public class ShortGrid4DYZCrossSection extends Grid4DYZCrossSection<ShortGrid4D> implements ShortGrid2D {
 
-	private ShortGrid4D source;
-	private int y;
-	private int z;
-	
 	public ShortGrid4DYZCrossSection(ShortGrid4D source, int y, int z) {
-		this.source = source;
-		this.y = y;
-		this.z = z;
-	}
-
-	@Override
-	public int getMinX() {
-		return source.getMinW();
-	}
-
-	@Override
-	public int getMaxX() {
-		return source.getMaxW();
-	}
-
-	@Override
-	public int getMinY() {
-		return source.getMinX();
-	}
-
-	@Override
-	public int getMaxY() {
-		return source.getMaxX();
+		super(source, y, z);
 	}
 
 	@Override

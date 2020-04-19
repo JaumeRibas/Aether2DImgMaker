@@ -16,39 +16,15 @@
  */
 package cellularautomata.grid1d;
 
-public class LongSubGrid1D implements LongGrid1D {
-	
-	private LongGrid1D source;
-	private int minX;
-	private int maxX;
-	
+public class LongSubGrid1D extends SubGrid1D<LongGrid1D> implements LongGrid1D {
+
 	public LongSubGrid1D(LongGrid1D source, int minX, int maxX) {
-		if (minX > maxX) {
-			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
-		}
-		int sourceMinX = source.getMinX();
-		int sourceMaxX = source.getMaxX();
-		if (minX > sourceMaxX || maxX < sourceMinX) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
-		}
-		this.source = source;
-		this.minX = Math.max(minX, sourceMinX);
-		this.maxX = Math.min(maxX, sourceMaxX);
+		super(source, minX, maxX);
 	}
 
 	@Override
 	public long getValueAtPosition(int x) {
 		return source.getValueAtPosition(x);
 	}
-
-	@Override
-	public int getMinX() {
-		return minX;
-	}
-
-	@Override
-	public int getMaxX() {
-		return maxX;
-	}
-
+	
 }

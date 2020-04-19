@@ -16,78 +16,15 @@
  */
 package cellularautomata.grid3d;
 
-public class IntSubGrid3D implements IntGrid3D {
-	
-	private IntGrid3D source;
-	private int minX;
-	private int maxX;
-	private int minY;
-	private int maxY;
-	private int minZ;
-	private int maxZ;
-	
-	public IntSubGrid3D(IntGrid3D source, int minX, int maxX, int minY, 
-			int maxY, int minZ, int maxZ) {
-		if (minX > maxX) {
-			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
-		}
-		if (minY > maxY) {
-			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
-		}
-		if (minZ > maxZ) {
-			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
-		}
-		int sourceMinX = source.getMinX();
-		int sourceMaxX = source.getMaxX();
-		int sourceMinY = source.getMinY();
-		int sourceMaxY = source.getMaxY();
-		int sourceMinZ = source.getMinZ();
-		int sourceMaxZ = source.getMaxZ();
-		//TODO validate that passed bounds are within source bounds
-		this.source = source;
-		this.minX = Math.max(minX, sourceMinX);
-		this.maxX = Math.min(maxX, sourceMaxX);
-		this.minY = Math.max(minY, sourceMinY);
-		this.maxY = Math.min(maxY, sourceMaxY);
-		this.minZ = Math.max(minZ, sourceMinZ);
-		this.maxZ = Math.min(maxZ, sourceMaxZ);
+public class IntSubGrid3D extends SubGrid3D<IntGrid3D> implements IntGrid3D {
+
+	public IntSubGrid3D(IntGrid3D source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 
 	@Override
 	public int getValueAtPosition(int x, int y, int z) throws Exception {
 		return source.getValueAtPosition(x, y, z);
 	}
-
-	@Override
-	public int getMinX() {
-		return minX;
-	}
-
-	@Override
-	public int getMaxX() {
-		return maxX;
-	}
-
-	@Override
-	public int getMinY() {
-		return minY;
-	}
-
-	@Override
-	public int getMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		return minZ;
-	}
-
-	@Override
-	public int getMaxZ() {
-		return maxZ;
-	}
-	
-	//TODO add missing methods
 
 }

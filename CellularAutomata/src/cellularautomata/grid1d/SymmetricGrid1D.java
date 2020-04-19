@@ -38,6 +38,8 @@ public interface SymmetricGrid1D extends Grid1D {
 	 * 
 	 * @return a 1D grid
 	 */
-	Grid1D asymmetricSection();
+	default Grid1D asymmetricSection() {
+		return new AsymmetricGridSection1D<SymmetricGrid1D>(this);
+	}
 
 }

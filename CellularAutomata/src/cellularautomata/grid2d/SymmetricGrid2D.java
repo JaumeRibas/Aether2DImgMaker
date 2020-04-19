@@ -91,6 +91,7 @@ public interface SymmetricGrid2D extends Grid2D {
 	 * 
 	 * @return a 2D grid
 	 */
-	Grid2D asymmetricSection();
-
+	default Grid2D asymmetricSection() {
+		return new AsymmetricGridSection2D<SymmetricGrid2D>(this);
+	}
 }

@@ -14,13 +14,40 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.evolvinggrid;
+package cellularautomata.grid4d;
 
-import cellularautomata.grid.ActionableSymmetricGrid;
-import cellularautomata.grid.SymmetricGridProcessor;
-import cellularautomata.grid3d.IntGrid3D;
-import cellularautomata.grid3d.SymmetricIntGrid3D;
+import cellularautomata.grid2d.Grid2D;
 
-public abstract class SymmetricActionableEvolvingIntGrid3D extends ActionableSymmetricGrid<SymmetricGridProcessor<IntGrid3D>, IntGrid3D> implements SymmetricIntGrid3D, EvolvingIntGrid3D {
+public class Grid4DYZCrossSection<G extends Grid4D> implements Grid2D {
+
+	protected G source;
+	protected int y;
+	protected int z;
+	
+	public Grid4DYZCrossSection(G source, int y, int z) {
+		this.source = source;
+		this.y = y;
+		this.z = z;
+	}
+
+	@Override
+	public int getMinX() {
+		return source.getMinW();
+	}
+
+	@Override
+	public int getMaxX() {
+		return source.getMaxW();
+	}
+
+	@Override
+	public int getMinY() {
+		return source.getMinX();
+	}
+
+	@Override
+	public int getMaxY() {
+		return source.getMaxX();
+	}
 
 }

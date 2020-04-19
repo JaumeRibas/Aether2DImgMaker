@@ -27,15 +27,15 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
-import cellularautomata.grid3d.IntGrid3D;
-import cellularautomata.evolvinggrid.SymmetricActionableEvolvingIntGrid3D;
-import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
-import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
-import cellularautomata.grid3d.SizeLimitedAnisotropicIntGrid3DBlock;
+import cellularautomata.grid3d.LongGrid3D;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
+import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
+import cellularautomata.grid3d.LongSubGrid3DWithXBounds;
+import cellularautomata.grid3d.SizeLimitedAnisotropicLongGrid3DBlock;
 
-public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
+public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D {
 
-	public static final long PRIMITIVE_MAX_VALUE = Integer.MAX_VALUE;
+	public static final long PRIMITIVE_MAX_VALUE = Long.MAX_VALUE;
 	
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -48,9 +48,9 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 	private static final byte FRONT = 5;
 	private static final byte BACK = 6;
 	
-	private SizeLimitedAnisotropicIntGrid3DBlock gridBlockA;
-	private SizeLimitedAnisotropicIntGrid3DBlock gridBlockB;
-	private int initialValue;
+	private SizeLimitedAnisotropicLongGrid3DBlock gridBlockA;
+	private SizeLimitedAnisotropicLongGrid3DBlock gridBlockB;
+	private long initialValue;
 	private int currentStep;
 	private int maxX, maxY, maxZ;
 	private File gridFolder;
@@ -63,7 +63,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 	 * @param folderPath
 	 * @throws Exception
 	 */
-	public IntAether3DSwap(int initialValue, long maxGridHeapSize, String folderPath) throws Exception {
+	public Aether3DAsymmetricSectionSwap(long initialValue, long maxGridHeapSize, String folderPath) throws Exception {
 		if (initialValue < 0) {
 			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
 			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(PRIMITIVE_MAX_VALUE)) > 0) {
@@ -73,7 +73,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
-		gridBlockA = new SizeLimitedAnisotropicIntGrid3DBlock(0, maxGridBlockSize);
+		gridBlockA = new SizeLimitedAnisotropicLongGrid3DBlock(0, maxGridBlockSize);
 		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
 		maxX = 1;//we leave a buffer of one position to account for 'negative growth'
 		maxY = 0;
@@ -96,7 +96,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public IntAether3DSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public Aether3DAsymmetricSectionSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		gridFolder = new File(backupPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			throw new FileNotFoundException("Missing grid folder at '" + gridFolder.getAbsolutePath() + "'");
@@ -117,10 +117,10 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 	}
 
-	private SizeLimitedAnisotropicIntGrid3DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicLongGrid3DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedAnisotropicIntGrid3DBlock gridBlock = null;
+		SizeLimitedAnisotropicLongGrid3DBlock gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -139,14 +139,14 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicIntGrid3DBlock) in.readObject();
+			gridBlock = (SizeLimitedAnisotropicLongGrid3DBlock) in.readObject();
 			in.close();
 		}
 		return gridBlock;
 	}
 	
-	private SizeLimitedAnisotropicIntGrid3DBlock loadGridBlock(int minX) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicIntGrid3DBlock gridBlock = loadGridBlockSafe(minX);
+	private SizeLimitedAnisotropicLongGrid3DBlock loadGridBlock(int minX) throws IOException, ClassNotFoundException {
+		SizeLimitedAnisotropicLongGrid3DBlock gridBlock = loadGridBlockSafe(minX);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minX=" + minX + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -154,46 +154,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 	}
 	
-	private SizeLimitedAnisotropicIntGrid3DBlock findGridBlockSafe(int x) throws IOException, ClassNotFoundException {
-		File[] files = gridFolder.listFiles();
-		boolean found = false;
-		SizeLimitedAnisotropicIntGrid3DBlock gridBlock = null;
-		File gridBlockFile = null;
-		for (int i = 0; i < files.length && !found; i++) {
-			File currentFile = files[i];
-			String fileName = currentFile.getName();
-			int fileMinX, fileMaxX;
-			int indexOfSeparator = fileName.indexOf('_');
-			try {
-				//"minX=".length() == 5
-				fileMinX = Integer.parseInt(fileName.substring(5, indexOfSeparator));
-				fileMaxX = Integer.parseInt(fileName.substring(indexOfSeparator + 6, fileName.indexOf('.')));
-				if (x == fileMinX || x == fileMaxX || x > fileMinX && x < fileMaxX) {
-					found = true;
-					gridBlockFile = currentFile;
-				}
-			} catch (NumberFormatException ex) {
-				
-			}
-		}
-		if (found) {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicIntGrid3DBlock) in.readObject();
-			in.close();
-		}
-		return gridBlock;		
-	}
-	
-	private SizeLimitedAnisotropicIntGrid3DBlock findGridBlock(int x) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicIntGrid3DBlock gridBlock = findGridBlockSafe(x);
-		if (gridBlock == null) {
-			throw new FileNotFoundException("No grid block containing x=" + x + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
-		} else {
-			return gridBlock;
-		}
-	}
-	
-	private void saveGridBlock(SizeLimitedAnisotropicIntGrid3DBlock gridBlock) throws FileNotFoundException, IOException {
+	private void saveGridBlock(SizeLimitedAnisotropicLongGrid3DBlock gridBlock) throws FileNotFoundException, IOException {
 		String name = "minX=" + gridBlock.minX + "_maxX=" + gridBlock.maxX + ".ser";
 		String pathName = this.gridFolder.getPath() + File.separator + name;
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
@@ -202,12 +163,12 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		out.close();
 	}
 	
-	private SizeLimitedAnisotropicIntGrid3DBlock loadOrBuildGridBlock(int minX) throws ClassNotFoundException, IOException {		
-		SizeLimitedAnisotropicIntGrid3DBlock gridBlock = loadGridBlockSafe(minX);
+	private SizeLimitedAnisotropicLongGrid3DBlock loadOrBuildGridBlock(int minX) throws ClassNotFoundException, IOException {		
+		SizeLimitedAnisotropicLongGrid3DBlock gridBlock = loadGridBlockSafe(minX);
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedAnisotropicIntGrid3DBlock(minX, maxGridBlockSize);
+			return new SizeLimitedAnisotropicLongGrid3DBlock(minX, maxGridBlockSize);
 		}
 	}
 
@@ -215,14 +176,14 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 	public boolean nextStep() throws Exception {
 		triggerBeforeProcessing();
 		boolean gridChanged = false;		
-		AnisotropicIntGrid3DSlice[] newGridSlices = 
-				new AnisotropicIntGrid3DSlice[] {
+		AnisotropicLongGrid3DSlice[] newGridSlices = 
+				new AnisotropicLongGrid3DSlice[] {
 						null, 
-						new AnisotropicIntGrid3DSlice(0), 
-						new AnisotropicIntGrid3DSlice(1)};
+						new AnisotropicLongGrid3DSlice(0), 
+						new AnisotropicLongGrid3DSlice(1)};
 		if (gridBlockA.minX > 0) {
 			if (gridBlockB != null && gridBlockB.minX == 0) {
-				SizeLimitedAnisotropicIntGrid3DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicLongGrid3DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			} else {
@@ -238,7 +199,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		x++;
 		while (x <= currentMaxX) {
 			while (x <= currentMaxX && x < gridBlockA.maxX) {
-				slideGridSlices(newGridSlices, new AnisotropicIntGrid3DSlice(x + 1));
+				slideGridSlices(newGridSlices, new AnisotropicLongGrid3DSlice(x + 1));
 				anySlicePositionToppled = computeGridSlice(gridBlockA, x, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
@@ -254,18 +215,18 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 				} else {
 					gridBlockB = loadOrBuildGridBlock(x + 1);
 				}
-				slideGridSlices(newGridSlices, new AnisotropicIntGrid3DSlice(x + 1));
+				slideGridSlices(newGridSlices, new AnisotropicLongGrid3DSlice(x + 1));
 				anySlicePositionToppled = computeLastGridSlice(gridBlockA, gridBlockB, x, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
 				x++;
 				if (x <= currentMaxX) {
-					slideGridSlices(newGridSlices, new AnisotropicIntGrid3DSlice(x + 1));
+					slideGridSlices(newGridSlices, new AnisotropicLongGrid3DSlice(x + 1));
 					anySlicePositionToppled = computeFirstGridSlice(gridBlockA, gridBlockB, x, newGridSlices);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
 					processGridBlock(gridBlockA);
-					SizeLimitedAnisotropicIntGrid3DBlock swp = gridBlockA;
+					SizeLimitedAnisotropicLongGrid3DBlock swp = gridBlockA;
 					gridBlockA = gridBlockB;
 					gridBlockB = swp;
 					x++;
@@ -286,11 +247,11 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		return gridChanged;
 	}
 	
-	private void processGridBlock(SizeLimitedAnisotropicIntGrid3DBlock block) throws Exception {
+	private void processGridBlock(SizeLimitedAnisotropicLongGrid3DBlock block) throws Exception {
 		if (block.minX <= maxX) {
-			IntGrid3D subBlock = null;
+			LongGrid3D subBlock = null;
 			if (block.maxX > maxX) {
-				subBlock = new IntSubGrid3DWithXBounds(block, block.minX, maxX);
+				subBlock = new LongSubGrid3DWithXBounds(block, block.minX, maxX);
 			} else {
 				subBlock = block;
 			}
@@ -305,7 +266,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 			processGridBlock(gridBlockA);
 		} else {
 			if (gridBlockA.minX < gridBlockB.minX) {
-				SizeLimitedAnisotropicIntGrid3DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicLongGrid3DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
@@ -342,38 +303,38 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		triggerAfterProcessing();
 	}
 
-	private void slideGridSlices(AnisotropicIntGrid3DSlice[] newGridSlices, AnisotropicIntGrid3DSlice newSlice) {
+	private void slideGridSlices(AnisotropicLongGrid3DSlice[] newGridSlices, AnisotropicLongGrid3DSlice newSlice) {
 		newGridSlices[LEFT] = newGridSlices[CENTER];
 		newGridSlices[CENTER] = newGridSlices[RIGHT];
 		newGridSlices[RIGHT] = newSlice;
 	}
 	
-	private boolean computeGridSlice(SizeLimitedAnisotropicIntGrid3DBlock gridBlock, int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedAnisotropicLongGrid3DBlock gridBlock, int x, AnisotropicLongGrid3DSlice[] newGridSlices) {
 		return computeGridSlice(gridBlock, gridBlock, gridBlock, x, newGridSlices);
 	}
 	
-	private boolean computeLastGridSlice(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock,
-			int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
+	private boolean computeLastGridSlice(SizeLimitedAnisotropicLongGrid3DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid3DBlock rightGridBlock,
+			int x, AnisotropicLongGrid3DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, leftGridBlock, rightGridBlock, x, newGridSlices);
 	}
 	
-	private boolean computeFirstGridSlice(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock,
-			int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
+	private boolean computeFirstGridSlice(SizeLimitedAnisotropicLongGrid3DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid3DBlock rightGridBlock,
+			int x, AnisotropicLongGrid3DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, rightGridBlock, rightGridBlock, x, newGridSlices);
 	}
 
-	private boolean computeGridSlice(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock centerGridBlock, 
-			SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock, int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedAnisotropicLongGrid3DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid3DBlock centerGridBlock, 
+			SizeLimitedAnisotropicLongGrid3DBlock rightGridBlock, int x, AnisotropicLongGrid3DSlice[] newGridSlices) {
 		boolean anyPositionToppled = false;
 		for (int y = 0; y <= x; y++) {
 			for (int z = 0; z <= y; z++) {				
-				int value = centerGridBlock.getValueAtPosition(x, y, z);
-				int rightValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x + 1, y, z);
-				int leftValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x - 1, y, z);
-				int upValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y + 1, z);
-				int downValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y - 1, z);
-				int frontValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z + 1);
-				int backValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z - 1);				
+				long value = centerGridBlock.getValueAtPosition(x, y, z);
+				long rightValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x + 1, y, z);
+				long leftValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x - 1, y, z);
+				long upValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y + 1, z);
+				long downValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y - 1, z);
+				long frontValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z + 1);
+				long backValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z - 1);				
 				boolean positionToppled = computePosition(value, rightValue, leftValue, upValue, downValue, frontValue, backValue, 
 						x, y, z, newGridSlices);
 				anyPositionToppled = anyPositionToppled || positionToppled;
@@ -382,13 +343,13 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		return anyPositionToppled;
 	}
 	
-	private int getValueAtPosition(int centerX, SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock centerGridBlock, 
-			SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock, int x, int y, int z) {
+	private long getValueAtPosition(int centerX, SizeLimitedAnisotropicLongGrid3DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid3DBlock centerGridBlock, 
+			SizeLimitedAnisotropicLongGrid3DBlock rightGridBlock, int x, int y, int z) {
 		int[] asymmetricCoords = getAsymmetricCoords(x, y, z);
 		x = asymmetricCoords[0];
 		y = asymmetricCoords[1];
 		z = asymmetricCoords[2];
-		int value;
+		long value;
 		if (x == centerX) {
 			value = centerGridBlock.getValueAtPosition(x, y, z);
 		} else if (x < centerX) {
@@ -399,9 +360,9 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		return value;
 	}
 	
-	private boolean computePosition(int value, int rightValue, int leftValue, int upValue, int downValue, int frontValue, int backValue, 
-			int x, int y, int z, AnisotropicIntGrid3DSlice[] newGridSlices) {
-		int[] neighborValues = new int[6];
+	private boolean computePosition(long value, long rightValue, long leftValue, long upValue, long downValue, long frontValue, long backValue, 
+			int x, int y, int z, AnisotropicLongGrid3DSlice[] newGridSlices) {
+		long[] neighborValues = new long[6];
 		byte[] neighborDirections = new byte[6];
 		int relevantNeighborCount = 0;
 		if (rightValue < value) {
@@ -443,7 +404,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 				for (int i = relevantNeighborCount - 2; i >= 0; i--) {
 					if (neighborValues[i] < neighborValues[i+1]) {
 						sorted = false;
-						int valSwap = neighborValues[i];
+						long valSwap = neighborValues[i];
 						neighborValues[i] = neighborValues[i+1];
 						neighborValues[i+1] = valSwap;
 						byte dirSwap = neighborDirections[i];
@@ -454,13 +415,13 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 			}
 			//divide
 			boolean isFirstNeighbor = true;
-			int previousNeighborValue = 0;
+			long previousNeighborValue = 0;
 			for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-				int neighborValue = neighborValues[i];
+				long neighborValue = neighborValues[i];
 				if (neighborValue != previousNeighborValue || isFirstNeighbor) {
 					int shareCount = relevantNeighborCount - i + 1;
-					int toShare = value - neighborValue;
-					int share = toShare/shareCount;
+					long toShare = value - neighborValue;
+					long share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 						value = value - toShare + toShare%shareCount + share;
@@ -476,7 +437,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		return toppled;
 	}
 
-	private void addToNeighbor(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, byte direction, int value) {
+	private void addToNeighbor(AnisotropicLongGrid3DSlice[] newGridSlices, int x, int y, int z, byte direction, long value) {
 		switch(direction) {
 		case RIGHT:
 			addRight(newGridSlices, x, y, z, value);
@@ -499,16 +460,16 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 	}
 	
-	private void addRight(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
+	private void addRight(AnisotropicLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		newGridSlices[RIGHT].addValueAtPosition(y, z, value);
 		if (x == maxX - 1) {
 			maxX++;
 		}
 	}
 	
-	private void addLeft(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
+	private void addLeft(AnisotropicLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (x > y) {
-			int valueToAdd = value;
+			long valueToAdd = value;
 			if (y == x - 1) {
 				valueToAdd += value;
 				if (z == y) {
@@ -525,9 +486,9 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 	}
 	
-	private void addUp(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
+	private void addUp(AnisotropicLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (y < x) {
-			int valueToAdd = value;
+			long valueToAdd = value;
 			if (y == x - 1) {
 				valueToAdd += value;
 			}
@@ -538,9 +499,9 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 	}
 	
-	private void addDown(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
+	private void addDown(AnisotropicLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (y > z) {	
-			int valueToAdd = value;
+			long valueToAdd = value;
 			if (z == y - 1) {
 				valueToAdd += value;
 				if (y == 1) {
@@ -551,9 +512,9 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 	}
 	
-	private void addFront(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
+	private void addFront(AnisotropicLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (z < y) {
-			int valueToAdd = value;
+			long valueToAdd = value;
 			if (z == y - 1) {
 				valueToAdd += value;
 				if (x == y) {
@@ -567,9 +528,9 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 		}
 	}
 	
-	private void addBack(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
+	private void addBack(AnisotropicLongGrid3DSlice[] newGridSlices, int x, int y, int z, long value) {
 		if (z > 0) {
-			int valueToAdd = value;
+			long valueToAdd = value;
 			if (z == 1) {
 				valueToAdd += value;
 			}
@@ -586,12 +547,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
 	}
-	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+
 	@Override
 	public long getStep() {
 		return currentStep;
@@ -602,7 +558,7 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public int getInitialValue() {
+	public long getInitialValue() {
 		return initialValue;
 	}
 	
@@ -639,42 +595,12 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 	}
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
-		initialValue = (int) properties.get("initialValue");
+		initialValue = (long) properties.get("initialValue");
 		currentStep = (int) properties.get("currentStep");
 		maxX = (int) properties.get("maxX"); 
 		maxY = (int) properties.get("maxY"); 
 		maxZ = (int) properties.get("maxZ");
 		maxGridBlockSize = (long) properties.get("maxGridBlockSize");
-	}
-
-	@Override
-	public int getValueAtAsymmetricPosition(int x, int y, int z) throws IOException, ClassNotFoundException {
-		int value;
-		//TODO: try to keep blocks contiguous
-		if (x == gridBlockA.minX || x == gridBlockA.maxX || x > gridBlockA.minX && x < gridBlockA.maxX) {
-			value = gridBlockA.getValueAtPosition(x, y, z);
-		} else if (gridBlockB != null && (x == gridBlockB.minX || x == gridBlockB.maxX || x > gridBlockB.minX && x < gridBlockB.maxX)) {
-			value = gridBlockB.getValueAtPosition(x, y, z);
-		} else {
-			saveGridBlock(gridBlockA);
-			gridBlockA = null;
-			gridBlockA = findGridBlock(x);
-			value = gridBlockA.getValueAtPosition(x, y, z);
-		}
-		return value;
-	}
-
-	@Override
-	public int getValueAtPosition(int x, int y, int z) throws IOException, ClassNotFoundException {
-		int[] asymmetricCoords = getAsymmetricCoords(x, y, z);
-		x = asymmetricCoords[0];
-		y = asymmetricCoords[1];
-		z = asymmetricCoords[2];
-		if (x <= maxX) {
-			return getValueAtAsymmetricPosition(x, y, z);
-		} else {
-			return 0;
-		}
 	}
 	
 	private int[] getAsymmetricCoords(int x, int y, int z) {
@@ -699,156 +625,126 @@ public class IntAether3DSwap extends SymmetricActionableEvolvingIntGrid3D {
 			}
 		} while (!sorted);
 		return new int[] {x, y, z};
-	}	
+	}
 	
 	@Override
 	public int getMinX() {
-		return -maxX;
+		return 0;
 	}
 
 	@Override
 	public int getMaxX() {
 		return maxX;
 	}
-
+	
 	@Override
 	public int getMinY() {
-		return -maxX;
+		return 0;
 	}
-
+	
 	@Override
 	public int getMaxY() {
-		return maxX;
+		return maxY;
 	}
 	
 	@Override
 	public int getMinZ() {
-		return -maxX;
+		return 0;
 	}
-
+	
 	@Override
 	public int getMaxZ() {
-		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMinY() {
-		return 0;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getAsymmetricMinZ() {
-		return 0;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
 		return maxZ;
 	}
 	
 	@Override
-	public int getAsymmetricMinXAtY(int y) {
+	public int getMinXAtY(int y) {
 		return y;
 	}
 
 	@Override
-	public int getAsymmetricMinXAtZ(int z) {
+	public int getMinXAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMinX(int y, int z) {
+	public int getMinX(int y, int z) {
 		return Math.max(y, z);
 	}
 
 	@Override
-	public int getAsymmetricMaxXAtY(int y) {
+	public int getMaxXAtY(int y) {
 		return maxX;
 	}
 
 	@Override
-	public int getAsymmetricMaxXAtZ(int z) {
+	public int getMaxXAtZ(int z) {
 		return maxX;
 	}
 
 	@Override
-	public int getAsymmetricMaxX(int y, int z) {
+	public int getMaxX(int y, int z) {
 		return maxX;
 	}
 
 	@Override
-	public int getAsymmetricMinYAtX(int x) {
+	public int getMinYAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getAsymmetricMinYAtZ(int z) {
+	public int getMinYAtZ(int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMinY(int x, int z) {
+	public int getMinY(int x, int z) {
 		return z;
 	}
 
 	@Override
-	public int getAsymmetricMaxYAtX(int x) {
+	public int getMaxYAtX(int x) {
 		return Math.min(maxY, x);
 	}
 
 	@Override
-	public int getAsymmetricMaxYAtZ(int z) {
+	public int getMaxYAtZ(int z) {
 		return maxY;
 	}
 
 	@Override
-	public int getAsymmetricMaxY(int x, int z) {
+	public int getMaxY(int x, int z) {
 		return Math.min(maxY, x);
 	}
 
 	@Override
-	public int getAsymmetricMinZAtX(int x) {
+	public int getMinZAtX(int x) {
 		return 0;
 	}
 
 	@Override
-	public int getAsymmetricMinZAtY(int y) {
+	public int getMinZAtY(int y) {
 		return 0;
 	}
 
 	@Override
-	public int getAsymmetricMinZ(int x, int y) {
+	public int getMinZ(int x, int y) {
 		return 0;
 	}
 
 	@Override
-	public int getAsymmetricMaxZAtX(int x) {
+	public int getMaxZAtX(int x) {
 		return Math.min(maxZ, x);
 	}
 
 	@Override
-	public int getAsymmetricMaxZAtY(int y) {
+	public int getMaxZAtY(int y) {
 		return Math.min(maxZ, y);
 	}
 
 	@Override
-	public int getAsymmetricMaxZ(int x, int y) {
+	public int getMaxZ(int x, int y) {
 		return Math.min(maxZ, y);
 	}
-	
+
 }

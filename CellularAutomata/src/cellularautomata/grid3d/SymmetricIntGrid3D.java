@@ -31,6 +31,6 @@ public interface SymmetricIntGrid3D extends IntGrid3D, SymmetricGrid3D {
 
 	@Override
 	default IntGrid3D asymmetricSection() {
-		return new AsymmetricIntGridSection3D(this);
+		return new AsymmetricIntGridSection3D<SymmetricIntGrid3D>(this);
 	}
 }

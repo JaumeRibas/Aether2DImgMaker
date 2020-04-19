@@ -52,12 +52,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		long[][][] newGrid = null;
 		if (xBoundReached) {
@@ -170,6 +165,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 		return newGridSlice;
 	}
 	
+	@Override
 	public long getValueAtPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
@@ -200,6 +196,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 		}
 	}
 	
+	@Override
 	public long getValueAtAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
@@ -264,11 +261,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 		return getAsymmetricMaxX();
 	}	
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

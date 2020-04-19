@@ -18,36 +18,10 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid2d.IntGrid2D;
 
-public class IntGrid4DYZCrossSection implements IntGrid2D {
-
-	private IntGrid4D source;
-	private int y;
-	private int z;
+public class IntGrid4DYZCrossSection extends Grid4DYZCrossSection<IntGrid4D> implements IntGrid2D {
 	
 	public IntGrid4DYZCrossSection(IntGrid4D source, int y, int z) {
-		this.source = source;
-		this.y = y;
-		this.z = z;
-	}
-
-	@Override
-	public int getMinX() {
-		return source.getMinW();
-	}
-
-	@Override
-	public int getMaxX() {
-		return source.getMaxW();
-	}
-
-	@Override
-	public int getMinY() {
-		return source.getMinX();
-	}
-
-	@Override
-	public int getMaxY() {
-		return source.getMaxX();
+		super(source, y, z);
 	}
 
 	@Override

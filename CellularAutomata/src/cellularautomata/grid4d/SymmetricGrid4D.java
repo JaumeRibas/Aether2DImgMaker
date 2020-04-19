@@ -149,6 +149,8 @@ public interface SymmetricGrid4D extends Grid4D {
 	 * 
 	 * @return a 4D grid
 	 */
-	Grid4D asymmetricSection();
+	default Grid4D asymmetricSection() {
+		return new AsymmetricGridSection4D<SymmetricGrid4D>(this);
+	}
 
 }

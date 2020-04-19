@@ -194,9 +194,15 @@ public interface Grid4D extends Grid {
 		return getMaxY();
 	}	
 
-	Grid2D crossSectionAtYZ(int y, int z);
+	default Grid2D crossSectionAtYZ(int y, int z) {
+		return new Grid4DYZCrossSection<Grid4D>(this, y, z);
+	}
 
-	Grid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ);
+	default Grid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new SubGrid4D<Grid4D>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
 	
-	Grid3D crossSectionAtZ(int z);
+	default Grid3D crossSectionAtZ(int z) {
+		return new Grid4DZCrossSection<Grid4D>(this, z);
+	}
 }

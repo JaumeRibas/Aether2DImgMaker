@@ -26,7 +26,7 @@ import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
 public class ShortAether4DAxialRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-201", "D:/data/test"};//debug
+		args = new String[]{"-1000", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -61,17 +61,17 @@ public class ShortAether4DAxialRegionEvenOddImgMaker {
 					finished = !ca.nextStep();
 					System.out.println("step: " + ca.getStep());
 				}
-				ColorMapper colorMapper = new GrayscaleMapper(0);
+				ColorMapper grayscaleMapper = new GrayscaleMapper(0);
 				EvolvingShortGrid3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
 				String imagesPath = path + axialRegion.getSubFolderPath() + "/img";
 				String backupPath = path + ca.getSubFolderPath() + "/backups";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, scanInitialZIndex, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, grayscaleMapper, grayscaleMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
 					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, grayscaleMapper, grayscaleMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
 				System.err.println("Initial value out of range.");

@@ -16,11 +16,11 @@
  */
 package cellularautomata.evolvinggrid;
 
-import cellularautomata.grid.ActionableSymmetricGrid;
-import cellularautomata.grid.SymmetricGridProcessor;
+import cellularautomata.grid.ActionableGrid;
+import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid4d.Grid4D;
 import cellularautomata.grid4d.LongGrid4D;
-import cellularautomata.grid4d.SymmetricLongGrid4D;
 
-public abstract class SymmetricActionableEvolvingLongGrid4D extends ActionableSymmetricGrid<SymmetricGridProcessor<LongGrid4D>, LongGrid4D> implements SymmetricLongGrid4D, EvolvingLongGrid4D {
-	
+public abstract class ActionableEvolvingLongGrid4D extends ActionableGrid<GridProcessor<LongGrid4D>, LongGrid4D> implements EvolvingModel, Grid4D {
+
 }

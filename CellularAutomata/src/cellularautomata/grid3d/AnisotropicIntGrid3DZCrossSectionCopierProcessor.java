@@ -20,9 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import cellularautomata.grid.SymmetricGridProcessor;
 
-public class IsotropicIntGrid3DZCrossSectionCopierProcessor implements SymmetricGridProcessor<IntGrid3D> {
+import cellularautomata.grid.GridProcessor;
+
+public class AnisotropicIntGrid3DZCrossSectionCopierProcessor implements GridProcessor<IntGrid3D> {
 
 	private Map<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>> copyRequests = new HashMap<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>>();
 	private Map<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>> copies = new HashMap<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>>();
@@ -31,11 +32,11 @@ public class IsotropicIntGrid3DZCrossSectionCopierProcessor implements Symmetric
 		copyRequests.put(crossSectionZ, new ArrayList<AnisotropicIntGrid3DZCrossSectionBlock>());
 	}
 	
-	public ActionableSymmetricIntGrid3DZCrossSectionCopy getCopy(int crossSectionZ) {
+	public ActionableAnisotropicIntGrid3DZCrossSectionCopy getCopy(int crossSectionZ) {
 		if (copies.containsKey(crossSectionZ)) {
 			List<AnisotropicIntGrid3DZCrossSectionBlock> copyBlocks = copies.get(crossSectionZ);
 			if (copyBlocks.size() > 0) {
-				return new ActionableSymmetricIntGrid3DZCrossSectionCopy(
+				return new ActionableAnisotropicIntGrid3DZCrossSectionCopy(
 						(AnisotropicIntGrid3DZCrossSectionBlock[])copyBlocks.toArray(new AnisotropicIntGrid3DZCrossSectionBlock[0]), 
 						crossSectionZ);
 			}

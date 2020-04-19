@@ -16,12 +16,11 @@
  */
 package cellularautomata.grid2d;
 
-public abstract class AsymmetricGridSection2D implements Grid2D {
+public class AsymmetricGridSection2D<G extends SymmetricGrid2D> implements Grid2D {
 
-	protected SymmetricGrid2D source;
+	protected G source;
 	
-	public AsymmetricGridSection2D(SymmetricGrid2D grid) {
-		super();
+	public AsymmetricGridSection2D(G grid) {
 		this.source = grid;
 	}
 

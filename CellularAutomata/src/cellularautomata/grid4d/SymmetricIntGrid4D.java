@@ -31,7 +31,7 @@ public interface SymmetricIntGrid4D extends IntGrid4D, SymmetricGrid4D {
 
 	@Override
 	default IntGrid4D asymmetricSection() {
-		return new AsymmetricIntGridSection4D(this);
+		return new AsymmetricIntGridSection4D<SymmetricIntGrid4D>(this);
 	}
 
 }

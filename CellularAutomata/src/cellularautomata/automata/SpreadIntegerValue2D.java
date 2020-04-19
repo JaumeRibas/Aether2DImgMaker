@@ -59,12 +59,7 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		long[][] newGrid = null;
 		if (xBoundReached) {
@@ -172,6 +167,7 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 		return newGridSlice;
 	}
 	
+	@Override
 	public long getValueAtPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
@@ -188,31 +184,32 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 		}
 	}
 	
+	@Override
 	public long getValueAtAsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	
+	@Override
 	public int getAsymmetricMinX() {
 		return 0;
 	}
 
+	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
 	}
 	
+	@Override
 	public int getAsymmetricMinY() {
 		return 0;
 	}
 	
+	@Override
 	public int getAsymmetricMaxY() {
 		return maxY;
 	}
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

@@ -18,54 +18,10 @@ package cellularautomata.grid3d;
 
 import cellularautomata.grid2d.ShortGrid2D;
 
-public class ShortGrid3DXCrossSection implements ShortGrid2D {
-
-	private ShortGrid3D source;
-	private int x;
+public class ShortGrid3DXCrossSection extends Grid3DXCrossSection<ShortGrid3D> implements ShortGrid2D {
 	
 	public ShortGrid3DXCrossSection(ShortGrid3D source, int x) {
-		this.source = source;
-		this.x = x;
-	}
-
-	@Override
-	public int getMinX() {
-		return source.getMinZAtX(x);
-	}
-	
-	@Override
-	public int getMinX(int y) {
-		return source.getMinZ(x, y);
-	}
-	
-	@Override
-	public int getMaxX() {
-		return source.getMaxZAtX(x);
-	}
-	
-	@Override
-	public int getMaxX(int y) {
-		return source.getMaxZ(x, y);
-	}
-	
-	@Override
-	public int getMinY() {
-		return source.getMinYAtX(x);
-	}
-	
-	@Override
-	public int getMinY(int x) {
-		return source.getMinY(this.x, x);
-	}
-	
-	@Override
-	public int getMaxY() {
-		return source.getMaxYAtX(x);
-	}
-	
-	@Override
-	public int getMaxY(int x) {
-		return source.getMaxY(this.x, x);
+		super(source, x);
 	}
 
 	@Override

@@ -72,12 +72,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		long[][][] newGrid = null;
 		newGrid = new long[grid.length][][];
@@ -284,6 +279,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 		return newGridSlice;
 	}
 	
+	@Override
 	public long getValueAtPosition(int x, int y, int z){
 		x = getEnclosedCoord(x);
 		y = getEnclosedCoord(y);
@@ -325,6 +321,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 		return coord;
 	}
 	
+	@Override
 	public long getValueAtAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
@@ -389,11 +386,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 		return getAsymmetricMaxX();
 	}	
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

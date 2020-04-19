@@ -20,13 +20,13 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether3DSwap;
-import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
+import cellularautomata.automata.Aether3DAsymmetricSectionSwap;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
 
 public class Aether3DEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-200", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -71,13 +71,11 @@ public class Aether3DEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			SymmetricActionableEvolvingLongGrid3D ca;
+			ActionableEvolvingLongGrid3D ca;
 			if (isRestore) {
-				ca = new Aether3DSwap(initValOrBackupPath, path);
+				ca = new Aether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new Aether3DSwap(initialValue, Long.parseLong("8589934592"), path);//8GiB
-//				ca = new Aether3DSwap(initialValue, Long.parseLong("10737418240"), path);//10GiB
-//				ca = new Aether3DSwap(initialValue, Long.parseLong("1048576"), path);//1MiB
+				ca = new Aether3DAsymmetricSectionSwap(initialValue, Constants.EIGHT_GB, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {

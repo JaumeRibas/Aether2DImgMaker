@@ -16,15 +16,15 @@
  */
 package cellularautomata.grid2d;
 
-public class AsymmetricIntGridSection2D extends AsymmetricGridSection2D implements IntGrid2D {
+public class AsymmetricIntGridSection2D<G extends SymmetricIntGrid2D> extends AsymmetricGridSection2D<G> implements IntGrid2D {
 	
-	public AsymmetricIntGridSection2D(SymmetricIntGrid2D grid) {
+	public AsymmetricIntGridSection2D(G grid) {
 		super(grid);
 	}
 
 	@Override
 	public int getValueAtPosition(int x, int y) throws Exception {
-		return ((SymmetricIntGrid2D) source).getValueAtAsymmetricPosition(x, y);
+		return source.getValueAtAsymmetricPosition(x, y);
 	}
 
 }

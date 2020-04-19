@@ -35,6 +35,6 @@ public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 
 	@Override
 	default LongGrid4D asymmetricSection() {
-		return new AsymmetricLongGridSection4D(this);
+		return new AsymmetricLongGridSection4D<SymmetricLongGrid4D>(this);
 	}
 }

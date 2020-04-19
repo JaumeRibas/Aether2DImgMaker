@@ -86,12 +86,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		currentStep = data.currentStep;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		long[][][][] newGrid = null;
@@ -256,6 +251,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		};
 	}
 	
+	@Override
 	public long getValueAtPosition(int w, int x, int y, int z){
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
@@ -273,11 +269,6 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		}
 	}
 	
-	/**
-	 * Returns the smallest w-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest w of a nonzero value at the current step
-	 */
 	@Override
 	public int getMinW() {
 		int arrayMinW = - originIndex;
@@ -289,12 +280,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		}
 		return valuesMinW;
 	}
-	
-	/**
-	 * Returns the largest w-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest w of a nonzero value at the current step
-	 */
+
 	@Override
 	public int getMaxW() {
 		int arrayMaxW = grid.length - 1 - originIndex;
@@ -306,12 +292,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		}
 		return valuesMaxW;
 	}
-	
-	/**
-	 * Returns the smallest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest x of a nonzero value at the current step
-	 */
+
 	@Override
 	public int getMinX() {
 		int arrayMinX = - originIndex;
@@ -323,12 +304,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		}
 		return valuesMinX;
 	}
-	
-	/**
-	 * Returns the largest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest x of a nonzero value at the current step
-	 */
+
 	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
@@ -553,12 +529,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 	public long getValueAtAsymmetricPosition(int w, int x, int y, int z) {
 		return getValueAtPosition(w, x, y, z);
 	}
-	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+
 	@Override
 	public long getStep() {
 		return currentStep;

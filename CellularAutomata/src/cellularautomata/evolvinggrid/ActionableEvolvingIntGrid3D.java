@@ -14,11 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid;
+package cellularautomata.evolvinggrid;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.ActionableGrid;
+import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid3d.Grid3D;
+import cellularautomata.grid3d.IntGrid3D;
 
+public abstract class ActionableEvolvingIntGrid3D extends ActionableGrid<GridProcessor<IntGrid3D>, IntGrid3D> implements EvolvingModel, Grid3D {
 
-public abstract class ActionableSymmetricGrid<P extends SymmetricGridProcessor<G>, G extends Grid> extends ActionableGrid<P, G> {
-	
 }

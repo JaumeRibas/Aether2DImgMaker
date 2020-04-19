@@ -120,7 +120,7 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	
 	@Override
 	default IntGrid2D crossSectionAtZ(int z) {
-		return new IntGrid3DZCrossSection(this, z);
+		return new IntGrid3DZCrossSection<IntGrid3D>(this, z);
 	}
 	
 	@Override

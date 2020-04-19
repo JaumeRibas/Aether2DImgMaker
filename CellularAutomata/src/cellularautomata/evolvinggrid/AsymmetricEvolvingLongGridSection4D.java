@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import cellularautomata.grid4d.AsymmetricLongGridSection4D;
 
-public class AsymmetricEvolvingLongGridSection4D extends AsymmetricLongGridSection4D implements EvolvingLongGrid4D {
+public class AsymmetricEvolvingLongGridSection4D extends AsymmetricLongGridSection4D<SymmetricEvolvingLongGrid4D> implements EvolvingLongGrid4D {
 
 	public AsymmetricEvolvingLongGridSection4D(SymmetricEvolvingLongGrid4D source) {
 		super(source);
@@ -13,27 +13,27 @@ public class AsymmetricEvolvingLongGridSection4D extends AsymmetricLongGridSecti
 
 	@Override
 	public boolean nextStep() throws Exception {
-		return ((SymmetricEvolvingLongGrid4D) source).nextStep();
+		return source.nextStep();
 	}
 
 	@Override
 	public long getStep() {
-		return ((SymmetricEvolvingLongGrid4D) source).getStep();
+		return source.getStep();
 	}
 
 	@Override
 	public String getName() {
-		return ((SymmetricEvolvingLongGrid4D) source).getName() + "_asymmetric_section";
+		return source.getName() + "_asymmetric_section";
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return ((SymmetricEvolvingLongGrid4D) source).getSubFolderPath() + "/asymmetric_section";
+		return source.getSubFolderPath() + "/asymmetric_section";
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		((SymmetricEvolvingLongGrid4D) source).backUp(backupPath, backupName);
+		source.backUp(backupPath, backupName);
 	}
 
 }

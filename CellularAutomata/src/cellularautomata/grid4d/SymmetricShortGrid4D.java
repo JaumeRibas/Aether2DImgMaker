@@ -31,6 +31,6 @@ public interface SymmetricShortGrid4D extends ShortGrid4D, SymmetricGrid4D {
 
 	@Override
 	default ShortGrid4D asymmetricSection() {
-		return new AsymmetricShortGridSection4D(this);
+		return new AsymmetricShortGridSection4D<SymmetricShortGrid4D>(this);
 	}
 }

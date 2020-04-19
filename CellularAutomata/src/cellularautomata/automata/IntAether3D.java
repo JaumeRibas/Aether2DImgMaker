@@ -89,12 +89,7 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D {
 		currentStep = data.currentStep;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		int[][][] newGrid = null;
 		if (boundsReached) {
@@ -313,6 +308,7 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D {
 		return newGridSlice;
 	}
 	
+	@Override
 	public int getValueAtPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
@@ -343,6 +339,7 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D {
 		}
 	}
 	
+	@Override
 	public int getValueAtAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
@@ -407,11 +404,7 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D {
 		return getAsymmetricMaxX();
 	}	
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

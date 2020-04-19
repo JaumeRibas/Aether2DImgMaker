@@ -41,6 +41,6 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	
 	@Override
 	default IntGrid2D asymmetricSection() {
-		return new AsymmetricIntGridSection2D(this);
+		return new AsymmetricIntGridSection2D<SymmetricIntGrid2D>(this);
 	}
 }

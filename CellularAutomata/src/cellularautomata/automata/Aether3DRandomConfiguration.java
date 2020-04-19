@@ -103,12 +103,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		int[][][] newGrid = null;
@@ -271,6 +266,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		};
 	}
 	
+	@Override
 	public int getValueAtPosition(int x, int y, int z){	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -290,11 +286,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		}
 	}
 	
-	/**
-	 * Returns the smallest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMinX() {
 		int arrayMinX = - originIndex;
 		int valuesMinX;
@@ -306,11 +298,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		return valuesMinX;
 	}
 	
-	/**
-	 * Returns the largest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
@@ -322,6 +310,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		return valuesMaxX;
 	}
 	
+	@Override
 	public int getMinY() {
 		int arrayMinY = - originIndex;
 		int valuesMinY;
@@ -333,6 +322,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		return valuesMinY;
 	}
 	
+	@Override
 	public int getMaxY() {
 		int arrayMaxY = grid.length - 1 - originIndex;
 		int valuesMaxY;
@@ -344,6 +334,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		return valuesMaxY;
 	}
 	
+	@Override
 	public int getMinZ() {
 		int arrayMinZ = - originIndex;
 		int valuesMinZ;
@@ -355,6 +346,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		return valuesMinZ;
 	}
 	
+	@Override
 	public int getMaxZ() {
 		int arrayMaxZ = grid.length - 1 - originIndex;
 		int valuesMaxZ;
@@ -366,11 +358,7 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 		return valuesMaxZ;
 	}
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

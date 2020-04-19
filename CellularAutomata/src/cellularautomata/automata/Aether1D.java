@@ -58,6 +58,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 		currentStep = 0;
 	}
 	
+	@Override
 	public boolean nextStep(){
 		long[] newGrid = null;
 		if (boundsReached) {

@@ -18,11 +18,11 @@ package caimgmaker;
 
 import caimgmaker.colormap.ColorGrid2D;
 import caimgmaker.colormap.ColorMapper;
-import cellularautomata.grid.SymmetricGridProcessor;
+import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid3d.IntGrid3D;
 
-public class SymmetricIntGrid3DXCrossSectionEvenOddImgMakerProcessor implements SymmetricGridProcessor<IntGrid3D> {
+public class IntGrid3DXCrossSectionEvenOddImgMakerProcessor implements GridProcessor<IntGrid3D> {
 
 	private int x;
 	private boolean imagesMade = false;
@@ -33,7 +33,7 @@ public class SymmetricIntGrid3DXCrossSectionEvenOddImgMakerProcessor implements 
 	private int imageHeight;
 	private boolean isEven;
 
-	public SymmetricIntGrid3DXCrossSectionEvenOddImgMakerProcessor(int x, ColorMapper colorMapper, String imgsPath,
+	public IntGrid3DXCrossSectionEvenOddImgMakerProcessor(int x, ColorMapper colorMapper, String imgsPath,
 			String imgsName, boolean isEven, int imageWidth, int imageHeight) {
 		this.x = x;
 		this.colorMapper = colorMapper;

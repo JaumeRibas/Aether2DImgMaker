@@ -95,12 +95,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the automaton and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		int[][] newGrid = null;
@@ -230,13 +225,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		};
 	}
 	
-	/**
-	 * Returns the value at a given position for the current step
-	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @return the value at (x,y)
-	 */
+	@Override
 	public int getValueAtPosition(int x, int y){
 		if (x < 0 || x > grid.length - 1 
 				|| y < 0 || y > grid[0].length - 1) {
@@ -248,11 +237,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		}
 	}
 	
-	/**
-	 * Returns the smallest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMinX() {
 		int arrayMinX = 0;
 		int valuesMinX;
@@ -264,11 +249,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		return valuesMinX;
 	}
 	
-	/**
-	 * Returns the largest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1;
 		int valuesMaxX;
@@ -280,11 +261,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		return valuesMaxX;
 	}
 	
-	/**
-	 * Returns the smallest y-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest y of a nonzero value at the current step
-	 */
+	@Override
 	public int getMinY() {
 		int arrayMinY = 0;
 		int valuesMinY;
@@ -296,11 +273,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		return valuesMinY;
 	}
 	
-	/**
-	 * Returns the largest y-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest y of a nonzero value at the current step
-	 */
+	@Override
 	public int getMaxY() {
 		int arrayMaxY = grid[0].length - 1;
 		int valuesMaxY;
@@ -312,11 +285,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 		return valuesMaxY;
 	}
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

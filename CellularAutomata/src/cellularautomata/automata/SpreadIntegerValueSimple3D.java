@@ -88,12 +88,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		currentStep = data.currentStep;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		long[][][] newGrid = null;
@@ -220,6 +215,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		return changed;
 	}
 	
+	@Override
 	public long getValueAtPosition(int x, int y, int z){	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -234,11 +230,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		}
 	}
 	
-	/**
-	 * Returns the smallest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the smallest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMinX() {
 		int arrayMinX = - originIndex;
 		int valuesMinX;
@@ -250,11 +242,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		return valuesMinX;
 	}
 	
-	/**
-	 * Returns the largest x-coordinate of a nonzero value at the current step
-	 * 
-	 * @return the largest x of a nonzero value at the current step
-	 */
+	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
@@ -266,6 +254,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		return valuesMaxX;
 	}
 	
+	@Override
 	public int getMinY() {
 		int arrayMinY = - originIndex;
 		int valuesMinY;
@@ -277,6 +266,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		return valuesMinY;
 	}
 	
+	@Override
 	public int getMaxY() {
 		int arrayMaxY = grid[0].length - 1 - originIndex;
 		int valuesMaxY;
@@ -288,6 +278,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		return valuesMaxY;
 	}
 	
+	@Override
 	public int getMinZ() {
 		int arrayMinZ = - originIndex;
 		int valuesMinZ;
@@ -299,6 +290,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		return valuesMinZ;
 	}
 	
+	@Override
 	public int getMaxZ() {
 		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
 		int valuesMaxZ;
@@ -310,39 +302,42 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		return valuesMaxZ;
 	}
 	
+	@Override
 	public int getAsymmetricMinX() {
 		return 0;
 	}
 
+	@Override
 	public int getAsymmetricMaxX() {
 		return getMaxX();
 	}
 
+	@Override
 	public int getAsymmetricMinY() {
 		return 0;
 	}
 
+	@Override
 	public int getAsymmetricMaxY() {
 		return getMaxY();
 	}
 
+	@Override
 	public int getAsymmetricMinZ() {
 		return 0;
 	}
 
+	@Override
 	public int getAsymmetricMaxZ() {
 		return getMaxZ();
 	}
 
+	@Override
 	public long getValueAtAsymmetricPosition(int x, int y, int z) {
 		return getValueAtPosition(x, y, z);
 	}
 	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

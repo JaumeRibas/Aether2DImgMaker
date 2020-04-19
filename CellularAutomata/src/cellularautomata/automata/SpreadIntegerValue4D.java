@@ -76,12 +76,6 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D {
 		currentStep = data.currentStep;
 	}
 	
-	/**
-	 * Computes the next step of the algorithm and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
 	@Override
 	public boolean nextStep(){
 		long[][][][] newGrid = null;
@@ -508,12 +502,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D {
 	public int getAsymmetricMaxY(int w, int x, int z) {
 		return Math.min(getAsymmetricMaxY(), x);
 	}
-	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+
 	@Override
 	public long getStep() {
 		return currentStep;

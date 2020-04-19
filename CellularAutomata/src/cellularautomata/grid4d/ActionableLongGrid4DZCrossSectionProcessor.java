@@ -14,19 +14,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.grid4d;
 
 import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.ActionableSymmetricGrid;
 import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid.SymmetricGridProcessor;
-import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid3d.LongGrid3D;
 
-public class ActionableSymmetricLongGrid3DZCrossSectionProcessor extends ActionableGrid<GridProcessor<LongGrid2D>, LongGrid2D> implements SymmetricGridProcessor<LongGrid3D> {
+public class ActionableLongGrid4DZCrossSectionProcessor extends ActionableGrid<GridProcessor<LongGrid3D>, LongGrid3D> implements GridProcessor<LongGrid4D> {
 
-	private ActionableSymmetricGrid<SymmetricGridProcessor<LongGrid3D>, LongGrid3D> source;
+	private ActionableGrid<GridProcessor<LongGrid4D>, LongGrid4D> source;
 	private int z;
-	
+
 	public int getZ() {
 		return z;
 	}
@@ -34,8 +32,8 @@ public class ActionableSymmetricLongGrid3DZCrossSectionProcessor extends Actiona
 	public void setZ(int z) {
 		this.z = z;
 	}
-	
-	public ActionableSymmetricLongGrid3DZCrossSectionProcessor(ActionableSymmetricGrid<SymmetricGridProcessor<LongGrid3D>, LongGrid3D> source, int z) {
+
+	public ActionableLongGrid4DZCrossSectionProcessor(ActionableGrid<GridProcessor<LongGrid4D>, LongGrid4D> source, int z) {
 		this.source = source;
 		this.z = z;
 	}
@@ -51,7 +49,7 @@ public class ActionableSymmetricLongGrid3DZCrossSectionProcessor extends Actiona
 	}
 
 	@Override
-	public void processGridBlock(LongGrid3D gridBlock) throws Exception {
+	public void processGridBlock(LongGrid4D gridBlock) throws Exception {
 		if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
 			triggerProcessGridBlock(gridBlock.crossSectionAtZ(z));
 		}
@@ -61,5 +59,5 @@ public class ActionableSymmetricLongGrid3DZCrossSectionProcessor extends Actiona
 	public void processGrid() throws Exception {
 		source.processGrid();
 	}
-
+	
 }

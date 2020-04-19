@@ -16,15 +16,15 @@
  */
 package cellularautomata.grid3d;
 
-public class AsymmetricIntGridSection3D extends AsymmetricGridSection3D implements IntGrid3D {
+public class AsymmetricIntGridSection3D<G extends SymmetricIntGrid3D> extends AsymmetricGridSection3D<G> implements IntGrid3D {
 	
-	public AsymmetricIntGridSection3D(SymmetricIntGrid3D grid) {
+	public AsymmetricIntGridSection3D(G grid) {
 		super(grid);
 	}
 
 	@Override
 	public int getValueAtPosition(int x, int y, int z) throws Exception {
-		return ((SymmetricIntGrid3D) source).getValueAtAsymmetricPosition(x, y, z);
+		return source.getValueAtAsymmetricPosition(x, y, z);
 	}
 
 }

@@ -66,6 +66,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		currentStep = 0;
 	}
 	
+	@Override
 	public boolean nextStep(){
 		long[][] newGrid = null;
 		if (boundsReached) {
@@ -229,6 +230,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		}
 	}
 	
+	@Override
 	public long getValueAtPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;

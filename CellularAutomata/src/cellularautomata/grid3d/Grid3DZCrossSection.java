@@ -16,38 +16,56 @@
  */
 package cellularautomata.grid3d;
 
-import java.io.Serializable;
+import cellularautomata.grid2d.Grid2D;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid2d.IntGrid2D;
+public class Grid3DZCrossSection<G extends Grid3D> implements Grid2D {
 
-public class ActionableSymmetricIntGrid3DZCrossSectionCopy extends ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2151281544490932379L;
+	protected G source;
+	protected int z;
 	
-	private AnisotropicIntGrid3DZCrossSectionBlock[] blocks;
-	private int z;
-
-	public int getZ() {
-		return z;
-	}
-
-	public ActionableSymmetricIntGrid3DZCrossSectionCopy(AnisotropicIntGrid3DZCrossSectionBlock[] blocks, int z) {
-		this.blocks = blocks;
+	public Grid3DZCrossSection(G source, int z) {
+		this.source = source;
 		this.z = z;
 	}
 
 	@Override
-	public void processGrid() throws Exception {
-		triggerBeforeProcessing();
-		for (AnisotropicIntGrid3DZCrossSectionBlock block : blocks) {
-			triggerProcessGridBlock(block);
-		}
-		triggerAfterProcessing();
+	public int getMinX() {
+		return source.getMinXAtZ(z);
+	}
+	
+	@Override
+	public int getMinX(int y) {
+		return source.getMinX(y, z);
+	}
+	
+	@Override
+	public int getMaxX() {
+		return source.getMaxXAtZ(z);
+	}
+	
+	@Override
+	public int getMaxX(int y) {
+		return source.getMaxX(y, z);
+	}
+	
+	@Override
+	public int getMinY() {
+		return source.getMinYAtZ(z);
+	}
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinY(x, z);
+	}
+	
+	@Override
+	public int getMaxY() {
+		return source.getMaxYAtZ(z);
+	}
+	
+	@Override
+	public int getMaxY(int x) {
+		return source.getMaxY(x, z);
 	}
 
 }

@@ -16,13 +16,12 @@
  */
 package cellularautomata.grid1d;
 
-public abstract class AsymmetricGridSection1D implements Grid1D {
+public class AsymmetricGridSection1D<G extends SymmetricGrid1D> implements Grid1D {
 
-	protected SymmetricGrid1D source;
+	protected G source;
 	
-	public AsymmetricGridSection1D(SymmetricGrid1D grid) {
-		super();
-		this.source = grid;
+	public AsymmetricGridSection1D(G source) {
+		this.source = source;
 	}
 
 	@Override

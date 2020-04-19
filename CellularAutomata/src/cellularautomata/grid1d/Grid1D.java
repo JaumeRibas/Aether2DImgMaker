@@ -41,5 +41,7 @@ public interface Grid1D extends Grid {
 	 * @param maxX
 	 * @return a {@link Grid1D} decorating the current grid 
 	 */
-	Grid1D subGrid(int minX, int maxX);
+	default Grid1D subGrid(int minX, int maxX) {
+		return new SubGrid1D<Grid1D>(this, minX, maxX);
+	}
 }

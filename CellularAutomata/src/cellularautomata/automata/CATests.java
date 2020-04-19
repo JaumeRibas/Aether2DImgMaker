@@ -35,11 +35,11 @@ import cellularautomata.evolvinggrid.EvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.EvolvingModel;
 import cellularautomata.evolvinggrid.EvolvingShortGrid;
 import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
-import cellularautomata.evolvinggrid.SymmetricActionableEvolvingIntGrid3D;
-import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid3D;
-import cellularautomata.evolvinggrid.SymmetricActionableEvolvingLongGrid4D;
+import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid4D;
-import cellularautomata.grid.SymmetricGridProcessor;
+import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
@@ -179,35 +179,12 @@ public class CATests {
 		race(new EvolvingModel[] { siv1, siv2 });
 	}
 	
-	public static void takeSamples() {
-		try {
-			System.out.println("Loading backup");
-			IntAether3DSwap ca = new IntAether3DSwap("D:/data/Aether3D/-1073741823/backups/IntAether3DSwap_9997", "D:/data/test");
-			System.out.println("Taking samples");
-			System.out.println("Sample 1 (170,59):" + ca.getValueAtPosition(170, 59, 0));
-			System.out.println("Sample 2 (181,66):" + ca.getValueAtPosition(181, 66, 0));
-			System.out.println("Sample 3 (385,134):" + ca.getValueAtPosition(385, 134, 0));
-			System.out.println("Sample 4 (421,174):" + ca.getValueAtPosition(421, 174, 0));
-			System.out.println("Sample 5 (638,225):" + ca.getValueAtPosition(638, 225, 0));
-			System.out.println("Sample 6 (658,245):" + ca.getValueAtPosition(658, 245, 0));
-			System.out.println("Sample 7 (779,370):" + ca.getValueAtPosition(779, 370, 0));
-			System.out.println("Sample 8 (807,396):" + ca.getValueAtPosition(807, 396, 0));
-			System.out.println("Sample 9 (3565,90):" + ca.getValueAtPosition(3565, 90, 0));
-			System.out.println("Sample 10 (3577,102):" + ca.getValueAtPosition(3577, 102, 0));
-			System.out.println("Sample 11 (3653,314):" + ca.getValueAtPosition(3653, 314, 0));
-			System.out.println("Sample 12 (3657,374):" + ca.getValueAtPosition(3657, 374, 0));
-			System.out.println("Finished");
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static void generateBackup() {
-		IntAether3DSwap ca;
+		IntAether3DAsymmetricSectionSwap ca;
 		String path = "D:/data/test";
 		int initialValue = -1000;
 		try {
-			ca = new IntAether3DSwap(initialValue, 1024 * 100, path);
+			ca = new IntAether3DAsymmetricSectionSwap(initialValue, 1024 * 100, path);
 			for (int i = 0; i < 100; i++) {
 				ca.nextStep();
 				System.out.println("step " + ca.getStep());
@@ -221,11 +198,11 @@ public class CATests {
 	}
 	
 	public static void testAdvance() {
-		IntAether3DSwap ca;
+		IntAether3DAsymmetricSectionSwap ca;
 		String path = "D:/data/test";
 		int initialValue = -1000;
 		try {
-			ca = new IntAether3DSwap(initialValue, 1024 * 500, path);//1MiB
+			ca = new IntAether3DAsymmetricSectionSwap(initialValue, 1024 * 500, path);
 			while (ca.nextStep()) {
 				System.out.println("step " + ca.getStep());
 			}
@@ -399,12 +376,12 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(SymmetricActionableEvolvingIntGrid3D ca1, EvolvingLongGrid3D ca2) {
+	public static void compare(ActionableEvolvingIntGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
 			boolean finished2 = false;
-			SymmetricGridProcessor<IntGrid3D> comparator = new SymmetricGridProcessor<IntGrid3D>() {
+			GridProcessor<IntGrid3D> comparator = new GridProcessor<IntGrid3D>() {
 				
 				@Override
 				public void processGridBlock(IntGrid3D gridBlock) throws Exception {
@@ -449,12 +426,12 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(SymmetricActionableEvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2) {
+	public static void compare(ActionableEvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
 			boolean finished2 = false;
-			SymmetricGridProcessor<LongGrid3D> comparator = new SymmetricGridProcessor<LongGrid3D>() {
+			GridProcessor<LongGrid3D> comparator = new GridProcessor<LongGrid3D>() {
 				
 				@Override
 				public void processGridBlock(LongGrid3D gridBlock) throws Exception {
@@ -463,7 +440,7 @@ public class CATests {
 							for (int y = gridBlock.getMinY(x, z); y <= gridBlock.getMaxY(x, z); y++) {
 								if (gridBlock.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 									System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-											+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z) 
+											+ ca1.getClass().getSimpleName() + ":" + gridBlock.getValueAtPosition(x, y, z) 
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z));
 								}	
 							}	
@@ -499,12 +476,12 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(SymmetricActionableEvolvingLongGrid4D ca1, EvolvingLongGrid4D ca2) {
+	public static void compare(ActionableEvolvingLongGrid4D ca1, EvolvingLongGrid4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
 			boolean finished2 = false;
-			SymmetricGridProcessor<LongGrid4D> comparator = new SymmetricGridProcessor<LongGrid4D>() {
+			GridProcessor<LongGrid4D> comparator = new GridProcessor<LongGrid4D>() {
 				
 				@Override
 				public void processGridBlock(LongGrid4D gridBlock) throws Exception {
@@ -512,9 +489,9 @@ public class CATests {
 						for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
 							for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
 								for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
-									if (ca1.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
+									if (gridBlock.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
 										System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
-												+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(w, x, y, z) 
+												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getValueAtPosition(w, x, y, z) 
 												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(w, x, y, z));
 									}
 								}

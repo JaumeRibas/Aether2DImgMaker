@@ -127,8 +127,8 @@ public abstract class IntGridRegion implements GridRegion {
 		}
 		int maxVerticalCoordinate = getUpperBound(verticalAxis, immutablePartialCoordinates);
 		int minVerticalCoordinate = getLowerBound(verticalAxis, immutablePartialCoordinates);
-		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, immutablePartialCoordinates);
-		int minHorizontalCoordinate = getLowerBound(horizontalAxis, immutablePartialCoordinates);
+//		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, immutablePartialCoordinates);
+//		int minHorizontalCoordinate = getLowerBound(horizontalAxis, immutablePartialCoordinates);
 		StringBuilder strBuilder = new StringBuilder();
 		//TODO use directions
 		Coordinates immutableCoordinates = new Coordinates(coordinatesArray);
@@ -138,8 +138,8 @@ public abstract class IntGridRegion implements GridRegion {
 			int localMinHorizontalCoordinate = getLowerBound(horizontalAxis, immutablePartialCoordinates);
 			int localMaxHorizontalCoordinate = getUpperBound(horizontalAxis, immutablePartialCoordinates);
 			//TODO use margins
-			int localHorizontalMarginLowerEnd = localMinHorizontalCoordinate - minHorizontalCoordinate;
-			int localHorizontalMarginUpperEnd = maxHorizontalCoordinate - localMaxHorizontalCoordinate;
+//			int localHorizontalMarginLowerEnd = localMinHorizontalCoordinate - minHorizontalCoordinate;
+//			int localHorizontalMarginUpperEnd = maxHorizontalCoordinate - localMaxHorizontalCoordinate;
 			for (int horizontalCoordinate = localMinHorizontalCoordinate; horizontalCoordinate <= localMaxHorizontalCoordinate; horizontalCoordinate++) {
 				coordinatesArray[horizontalAxis] = horizontalCoordinate;
 				strBuilder.append(getValue(immutableCoordinates)).append(",");

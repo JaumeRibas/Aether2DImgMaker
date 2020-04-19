@@ -31,6 +31,6 @@ public interface SymmetricLongGrid3D extends LongGrid3D, SymmetricGrid3D {
 
 	@Override
 	default LongGrid3D asymmetricSection() {
-		return new AsymmetricLongGridSection3D(this);
+		return new AsymmetricLongGridSection3D<SymmetricLongGrid3D>(this);
 	}
 }

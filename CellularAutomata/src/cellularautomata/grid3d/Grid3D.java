@@ -296,10 +296,16 @@ public interface Grid3D extends Grid {
 	 * @param maxZ
 	 * @return a {@link Grid2D} decorating the current grid 
 	 */
-	Grid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ);
+	default Grid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new SubGrid3D<Grid3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
 	
-	Grid2D crossSectionAtZ(int z);
+	default Grid2D crossSectionAtZ(int z) {
+		return new Grid3DZCrossSection<Grid3D>(this, z);
+	}
 	
-	Grid2D crossSectionAtX(int x);
+	default Grid2D crossSectionAtX(int x) {
+		return new Grid3DXCrossSection<Grid3D>(this, x);
+	}
 
 }

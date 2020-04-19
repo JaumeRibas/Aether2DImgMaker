@@ -71,12 +71,7 @@ public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Computes the next step of the automaton and returns whether
-	 * or not the state of the grid changed. 
-	 *  
-	 * @return true if the state of the grid changed or false otherwise
-	 */
+	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		long[] newGrid = null;
