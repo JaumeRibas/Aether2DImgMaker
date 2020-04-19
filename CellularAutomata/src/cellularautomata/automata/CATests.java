@@ -485,10 +485,10 @@ public class CATests {
 				
 				@Override
 				public void processGridBlock(LongGrid4D gridBlock) throws Exception {
-					for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-						for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
-							for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
-								for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
+					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
+						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
+							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
+								for (int w = gridBlock.getMinW(x,y,z); w <= gridBlock.getMaxW(x,y,z); w++) {
 									if (gridBlock.getValueAtPosition(w, x, y, z) != ca2.getValueAtPosition(w, x, y, z)) {
 										System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getValueAtPosition(w, x, y, z) 
