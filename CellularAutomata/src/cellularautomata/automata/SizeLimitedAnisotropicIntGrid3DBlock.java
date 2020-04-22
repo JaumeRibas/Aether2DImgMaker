@@ -14,11 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.automata;
 
 import java.io.Serializable;
 
 import cellularautomata.grid.Constants;
+import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
+import cellularautomata.grid3d.IntGrid3D;
 
 public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializable {
 
@@ -29,8 +31,8 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 
 	public static final int MIN_LENGTH = 2;
 
-	public int maxX;
-	public int minX;
+	protected int maxX;
+	protected int minX;
 	private AnisotropicIntGrid3DSlice[] slices;
 
 	public SizeLimitedAnisotropicIntGrid3DBlock(int minX, long maxBytes) {
@@ -46,16 +48,19 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 		}
 	}
 
-	public void setValueAtPosition(int x, int y, int z, int initialValue) {
+	protected void setValueAtPosition(int x, int y, int z, int initialValue) {
 		slices[x - minX].setValueAtPosition(y, z, initialValue);			
 	}
 
 	@Override
 	public int getValueAtPosition(int x, int y, int z) {
+		if (slices == null) {
+			throw new UnsupportedOperationException("The grid block is no longer available.");
+		}
 		return slices[x - minX].getValueAtPosition(y, z);
 	}
 
-	public void setSlice(int x, AnisotropicIntGrid3DSlice slice) {
+	protected void setSlice(int x, AnisotropicIntGrid3DSlice slice) {
 		slices[x - minX] = slice;
 	}
 	
@@ -198,6 +203,10 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 	@Override
 	public int getMaxZ(int x, int y) {
 		return Math.min(maxX, y);
+	}
+
+	protected void free() {
+		slices = null;
 	}
 	
 }

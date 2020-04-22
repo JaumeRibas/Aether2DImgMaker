@@ -14,11 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid4d;
+package cellularautomata.automata;
 
 import java.io.Serializable;
 
 import cellularautomata.grid.Constants;
+import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
+import cellularautomata.grid4d.LongGrid4D;
 
 public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serializable {
 
@@ -29,8 +31,8 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 
 	public static final int MIN_LENGTH = 2;
 
-	public int maxW;
-	public int minW;
+	protected int maxW;
+	protected int minW;
 	private AnisotropicLongGrid4DSlice[] slices;
 
 	public SizeLimitedAnisotropicLongGrid4DBlock(int minW, long maxBytes) {
@@ -46,16 +48,19 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 		}
 	}
 
-	public void setValueAtPosition(int w, int x, int y, int z, long initialValue) {
+	protected void setValueAtPosition(int w, int x, int y, int z, long initialValue) {
 		slices[w - minW].setValueAtPosition(x, y, z, initialValue);			
 	}
 
 	@Override
 	public long getValueAtPosition(int w, int x, int y, int z) {
+		if (slices == null) {
+			throw new UnsupportedOperationException("The grid block is no longer available.");
+		}
 		return slices[w - minW].getValueAtPosition(x, y, z);
 	}
 
-	public void setSlice(int x, AnisotropicLongGrid4DSlice slice) {
+	protected void setSlice(int x, AnisotropicLongGrid4DSlice slice) {
 		slices[x - minW] = slice;
 	}
 	
@@ -237,6 +242,10 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 	@Override
 	public int getMaxY(int w, int x, int z) {
 		return Math.min(maxW, x);
+	}
+
+	protected void free() {
+		slices = null;
 	}
 	
 }

@@ -31,7 +31,6 @@ import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
-import cellularautomata.grid4d.SizeLimitedAnisotropicLongGrid4DBlock;
 
 public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D {
 
@@ -190,7 +189,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				gridBlockB = swp;
 			} else {
 				saveGridBlock(gridBlockA);
-				gridBlockA = null;
+				gridBlockA.free();
 				gridBlockA = loadGridBlock(0);
 			}
 		}
@@ -211,7 +210,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				if (gridBlockB != null) {
 					if (gridBlockB.minW != w + 1) {
 						saveGridBlock(gridBlockB);
-						gridBlockB = null;
+						gridBlockB.free();
 						gridBlockB = loadOrBuildGridBlock(w + 1);
 					}
 				} else {
@@ -281,12 +280,12 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				//and save the other
 				saveGridBlock(gridBlockA);
 				if (gridBlockB.minW > 0) {
-					gridBlockA = null;
+					gridBlockA.free();
 					gridBlockA = loadGridBlock(0);
 					processGridBlock(gridBlockA);
 					while (gridBlockA.maxW < gridBlockB.minW - 1) {
 						int nextW = gridBlockA.maxW + 1;
-						gridBlockA = null;
+						gridBlockA.free();
 						gridBlockA = loadGridBlock(nextW);
 						processGridBlock(gridBlockA);
 					}
@@ -295,7 +294,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				int previousMaxW = gridBlockB.maxW;			
 				while (previousMaxW < maxX) {
 					int nextW = previousMaxW + 1;
-					gridBlockA = null;
+					gridBlockA.free();
 					gridBlockA = loadGridBlock(nextW);
 					processGridBlock(gridBlockA);
 					previousMaxW = gridBlockA.maxW;

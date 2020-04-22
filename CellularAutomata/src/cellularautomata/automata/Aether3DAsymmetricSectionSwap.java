@@ -31,7 +31,6 @@ import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
 import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
 import cellularautomata.grid3d.LongSubGrid3DWithXBounds;
-import cellularautomata.grid3d.SizeLimitedAnisotropicLongGrid3DBlock;
 
 public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D {
 
@@ -188,7 +187,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				gridBlockB = swp;
 			} else {
 				saveGridBlock(gridBlockA);
-				gridBlockA = null;
+				gridBlockA.free();
 				gridBlockA = loadGridBlock(0);
 			}
 		}
@@ -209,7 +208,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				if (gridBlockB != null) {
 					if (gridBlockB.minX != x + 1) {
 						saveGridBlock(gridBlockB);
-						gridBlockB = null;
+						gridBlockB.free();
 						gridBlockB = loadOrBuildGridBlock(x + 1);
 					}
 				} else {
@@ -279,12 +278,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				//and save the other
 				saveGridBlock(gridBlockA);
 				if (gridBlockB.minX > 0) {
-					gridBlockA = null;
+					gridBlockA.free();
 					gridBlockA = loadGridBlock(0);
 					processGridBlock(gridBlockA);
 					while (gridBlockA.maxX < gridBlockB.minX - 1) {
 						int nextX = gridBlockA.maxX + 1;
-						gridBlockA = null;
+						gridBlockA.free();
 						gridBlockA = loadGridBlock(nextX);
 						processGridBlock(gridBlockA);
 					}
@@ -293,7 +292,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				int previousMaxX = gridBlockB.maxX;			
 				while (previousMaxX < maxX) {
 					int nextX = previousMaxX + 1;
-					gridBlockA = null;
+					gridBlockA.free();
 					gridBlockA = loadGridBlock(nextX);
 					processGridBlock(gridBlockA);
 					previousMaxX = gridBlockA.maxX;

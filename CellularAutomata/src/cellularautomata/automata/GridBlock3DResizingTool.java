@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.automata;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +23,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
 
 public class GridBlock3DResizingTool {
 	

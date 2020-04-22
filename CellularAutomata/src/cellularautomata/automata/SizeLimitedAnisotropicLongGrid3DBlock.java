@@ -14,11 +14,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.automata;
 
 import java.io.Serializable;
 
 import cellularautomata.grid.Constants;
+import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
+import cellularautomata.grid3d.LongGrid3D;
 
 public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Serializable {
 
@@ -29,15 +31,15 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Serial
 
 	public static final int MIN_LENGTH = 2;
 
-	public int maxX;
-	public int minX;
+	protected int maxX;
+	protected int minX;
 	private AnisotropicLongGrid3DSlice[] slices;
 
 	public SizeLimitedAnisotropicLongGrid3DBlock(int minX, long maxBytes) {
 		this.minX = minX;
 		int xLength = getMaxXLength(minX, maxBytes);
 		if (xLength < 2) {
-			throw new OutOfMemoryError("Grid with min x of" + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
+			throw new OutOfMemoryError("Grid with min x of " + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
 		}
 		slices = new AnisotropicLongGrid3DSlice[xLength];
 		maxX = minX + xLength - 1;
@@ -46,16 +48,19 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Serial
 		}
 	}
 
-	public void setValueAtPosition(int x, int y, int z, long initialValue) {
+	protected void setValueAtPosition(int x, int y, int z, long initialValue) {
 		slices[x - minX].setValueAtPosition(y, z, initialValue);			
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y, int z) {
+	public long getValueAtPosition(int x, int y, int z) throws UnsupportedOperationException {
+		if (slices == null) {
+			throw new UnsupportedOperationException("The grid block is no longer available.");
+		}
 		return slices[x - minX].getValueAtPosition(y, z);
 	}
 
-	public void setSlice(int x, AnisotropicLongGrid3DSlice slice) {
+	protected void setSlice(int x, AnisotropicLongGrid3DSlice slice) {
 		slices[x - minX] = slice;
 	}
 	
@@ -198,6 +203,10 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Serial
 	@Override
 	public int getMaxZ(int x, int y) {
 		return Math.min(maxX, y);
+	}
+
+	protected void free() {
+		slices = null;
 	}
 	
 }
