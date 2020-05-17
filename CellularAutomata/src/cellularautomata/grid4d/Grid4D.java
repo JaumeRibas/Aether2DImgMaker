@@ -202,6 +202,17 @@ public interface Grid4D extends Grid {
 		return new SubGrid4D<Grid4D>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
+	/**
+	 * <p>Returns a 3D grid decorating the current one to show only the positions whose z coordinate is equal to the passed value.</p>
+	 * <p>It is important to note that due to the use of the names '<strong>w</strong>', '<strong>x</strong>', '<strong>y</strong>' and '<strong>z</strong>' 
+	 * for the 4D coordinates and '<strong>x</strong>', '<strong>y</strong>' and '<strong>z</strong>' for the 3D coordinates, 
+	 * there is a mismatch between the names of the coordinates in the 3D cross section and those of the same coordinates in the source 4D grid. 
+	 * The source's '<strong>w</strong>' coordinate becomes the cross section's '<strong>x</strong>' coordinate, the '<strong>x</strong>' becomes the 
+	 * '<strong>y</strong>' and the '<strong>y</strong>' becomes the '<strong>z</strong>'.</p>
+	 * 
+	 * @param z
+	 * @return
+	 */
 	default Grid3D crossSectionAtZ(int z) {
 		return new Grid4DZCrossSection<Grid4D>(this, z);
 	}
