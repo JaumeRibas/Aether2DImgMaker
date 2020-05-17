@@ -113,7 +113,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 			FileUtils.cleanDirectory(gridFolder);
 		}
 		FileUtils.copyDirectory(gridBackupFolder, gridFolder);
-		if (maxX > gridBlockA.maxW) {
+		if (maxW > gridBlockA.maxW) {
 			gridBlockB = loadGridBlock(gridBlockA.maxW + 1);
 		}
 	}
@@ -292,7 +292,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				}
 				processGridBlock(gridBlockB);
 				int previousMaxW = gridBlockB.maxW;			
-				while (previousMaxW < maxX) {
+				while (previousMaxW < maxW) {
 					int nextW = previousMaxW + 1;
 					gridBlockA.free();
 					gridBlockA = loadGridBlock(nextW);
