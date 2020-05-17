@@ -1557,7 +1557,7 @@ public class ImgMaker {
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
-		int scanInitialYIndex = ca.crossSectionAtZ(crossSectionZ).getMinZ();
+		int scanInitialYIndex = ca.crossSectionAtZ(crossSectionZ).getMinZ();//the cross section's z axis is the original y axis...
 		createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(ca, crossSectionZ, scanInitialYIndex, scanningColorMapper, 
 			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
