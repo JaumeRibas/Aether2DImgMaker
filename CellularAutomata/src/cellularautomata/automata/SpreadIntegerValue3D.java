@@ -42,9 +42,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 	 */
 	public SpreadIntegerValue3D(long initialValue) {
 		this.initialValue = initialValue;
-		grid = new long[2][][];
-		grid[0] = buildGridSlice(0);
-		grid[1] = buildGridSlice(1);
+		grid = Utils.buildAnisotropic3DLongArray(2);
 		grid[0][0][0] = this.initialValue;
 		maxY = 0;
 		maxZ = 0;
@@ -63,11 +61,11 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 		}
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0);
+		newGrid[0] = Utils.buildAnisotropic2DLongArray(1);
 		for (int x = 0; x < grid.length; x++) {
 			int nextX = x + 1;
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridSlice(nextX);
+				newGrid[nextX] = Utils.buildAnisotropic2DLongArray(nextX + 1);
 			}
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {
@@ -155,14 +153,6 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 		grid = newGrid;
 		currentStep++;
 		return changed;
-	}
-	
-	private long[][] buildGridSlice(int x) {
-		long[][] newGridSlice = new long[x + 1][];
-		for (int y = 0; y < newGridSlice.length; y++) {
-			newGridSlice[y] = new long[y + 1];
-		}
-		return newGridSlice;
 	}
 	
 	@Override

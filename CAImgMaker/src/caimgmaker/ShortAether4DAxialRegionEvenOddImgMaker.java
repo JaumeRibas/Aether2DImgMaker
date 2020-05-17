@@ -26,7 +26,7 @@ import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
 public class ShortAether4DAxialRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-		args = new String[]{"-1000", "D:/data/test"};//debug
+//		args = new String[]{"-1000", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -68,10 +68,10 @@ public class ShortAether4DAxialRegionEvenOddImgMaker {
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, scanInitialZIndex, 
-							0, grayscaleMapper, grayscaleMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, grayscaleMapper, grayscaleMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
 					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, 
-							0, grayscaleMapper, grayscaleMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, grayscaleMapper, grayscaleMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
 				System.err.println("Initial value out of range.");

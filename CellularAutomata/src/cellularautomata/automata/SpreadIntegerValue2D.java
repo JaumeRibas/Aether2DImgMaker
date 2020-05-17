@@ -49,10 +49,8 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 	public SpreadIntegerValue2D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
-		grid = new long[3][];
-		grid[0] = buildGridSlice(0, backgroundValue);
-		grid[1] = buildGridSlice(1, backgroundValue);
-		grid[2] = buildGridSlice(2, backgroundValue);
+		grid = Utils.buildAnisotropic2DLongArray(3);
+		Utils.setAllArrayIndexes(grid, backgroundValue);
 		grid[0][0] = this.initialValue;
 		maxY = 0;
 		xBoundReached = false;
@@ -70,13 +68,14 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 		}
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0, 0);
+		newGrid[0] = new long[1];
 		boolean isFirst = true;
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
-			if (nextX < grid.length) {
-				newGrid[nextX] = buildGridSlice(nextX, 0);
-			} else if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridSlice(nextX, backgroundValue);
+			if (nextX < newGrid.length) {
+				newGrid[nextX] = new long[nextX + 1];
+				if (nextX >= grid.length) {
+					Utils.setAllArrayIndexes(newGrid[nextX], backgroundValue);
+				}
 			}
 			for (int y = 0; y <= x; y++) {
 				long value = grid[x][y];
@@ -155,16 +154,6 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 		grid = newGrid;
 		currentStep++;
 		return changed;
-	}
-	
-	private long[] buildGridSlice(int x, long value) {
-		long[] newGridSlice = new long[x + 1];
-		if (value != 0) {
-			for (int y = 0; y < newGridSlice.length; y++) {
-				newGridSlice[y] = value;
-			}
-		}
-		return newGridSlice;
 	}
 	
 	@Override

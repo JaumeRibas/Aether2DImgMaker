@@ -20,11 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.PositionCommand;
-import cellularautomata2.arrays.RectangularIntArray;
-import cellularautomata2.arrays.SquareIntArray;
-
 public class Test {	
 
 	public static void main(String[] args) {

@@ -62,10 +62,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 		this.side = side;
 		this.halfSide = side/2;
 		this.initialValue = initialValue;
-		grid = new long[halfSide + 1][][];
-		for (int x = 0; x <= halfSide; x++) {
-			grid[x] = buildGridSlice(x);
-		}
+		grid = Utils.buildAnisotropic3DLongArray(halfSide + 1);
 		grid[0][0][0] = this.initialValue;
 		maxY = 0;
 		maxZ = 0;
@@ -77,13 +74,13 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 		long[][][] newGrid = null;
 		newGrid = new long[grid.length][][];
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0);
+		newGrid[0] = Utils.buildAnisotropic2DLongArray(1);
 		boolean first = true;
 		long[] neighborValues = new long[6];
 		byte[] neighborDirections = new byte[6];
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, first = false) {
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridSlice(nextX);
+				newGrid[nextX] = Utils.buildAnisotropic2DLongArray(nextX + 1);
 			}
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {
@@ -269,14 +266,6 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 			}
 			grid[x][y][z-1] += valueToAdd;
 		}	
-	}
-	
-	private long[][] buildGridSlice(int x) {
-		long[][] newGridSlice = new long[x + 1][];
-		for (int y = 0; y < newGridSlice.length; y++) {
-			newGridSlice[y] = new long[y + 1];
-		}
-		return newGridSlice;
 	}
 	
 	@Override

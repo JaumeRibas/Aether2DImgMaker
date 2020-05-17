@@ -14,29 +14,23 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package caimgmaker;
+package cellularautomata.grid;
 
-public class Constants {
-	public static final int HD_WIDTH = 1920;
-	public static final int HD_HEIGHT = 1080;
+public class CAConstants {
+	public static final int ARRAY_SIZE_OVERHEAD = 16;
 	
 	/**
-	 * The bytes in 10 GiB
+	 * The bytes in 1 GiB
 	 */
-	public static final long TEN_GB = Long.parseLong("10737418240");
-	
-	/**
-	 * The bytes in 8 GiB
-	 */
-	public static final long EIGHT_GB = Long.parseLong("8589934592");
-	
-	/**
-	 * The bytes in 500 MiB
-	 */
-	public static final long FIVE_HUNDRED_MB = Long.parseLong("524288000");
+	public static final long ONE_GB = 1073741824;
 	
 	/**
 	 * The bytes in 1 MiB
 	 */
 	public static final long ONE_MB = 1048576;
+	
+	/**
+	 * The bytes in 1 KiB
+	 */
+	public static final long ONE_KB = 1024;
 }

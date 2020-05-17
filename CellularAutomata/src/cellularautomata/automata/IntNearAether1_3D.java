@@ -60,10 +60,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D {
 			}
 		}
 		this.initialValue = initialValue;
-		grid = new int[3][][];
-		grid[0] = buildGridSlice(0);
-		grid[1] = buildGridSlice(1);
-		grid[2] = buildGridSlice(2);
+		grid = Utils.buildAnisotropic3DIntArray(3);
 		grid[0][0][0] = this.initialValue;
 		maxY = 0;
 		maxZ = 0;
@@ -101,13 +98,13 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D {
 		}
 		maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0);
+		newGrid[0] = Utils.buildAnisotropic2DIntArray(1);
 		boolean first = true;
 		int[] neighborValues = new int[6];
 		byte[] neighborDirections = new byte[6];
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, first = false) {
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridSlice(nextX);
+				newGrid[nextX] = Utils.buildAnisotropic2DIntArray(nextX + 1);
 			}
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {
@@ -301,14 +298,6 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D {
 			}
 			grid[x][y][z-1] += valueToAdd;
 		}	
-	}
-	
-	private int[][] buildGridSlice(int x) {
-		int[][] newGridSlice = new int[x + 1][];
-		for (int y = 0; y < newGridSlice.length; y++) {
-			newGridSlice[y] = new int[y + 1];
-		}
-		return newGridSlice;
 	}
 	
 	@Override

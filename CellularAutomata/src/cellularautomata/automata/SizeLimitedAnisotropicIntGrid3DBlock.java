@@ -18,7 +18,7 @@ package cellularautomata.automata;
 
 import java.io.Serializable;
 
-import cellularautomata.grid.Constants;
+import cellularautomata.grid.CAConstants;
 import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
 import cellularautomata.grid3d.IntGrid3D;
 
@@ -69,16 +69,13 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 	}
 	
 	private int getMaxXLength(int minX, long maxBytes) {
-		long size = Constants.ARRAY_SIZE_OVERHEAD;
+		long size = CAConstants.ARRAY_SIZE_OVERHEAD;
 		int xLength = 0;
 		int x = minX;
-		//round up to 8 multiple
-		long reminder = size % 8;
-		long roundedSize = reminder > 0 ? size + 8 - reminder: size;
+		long roundedSize = Utils.roundUpToEightMultiple(size);
 		while (roundedSize <= maxBytes) {
 			size += AnisotropicIntGrid3DSlice.getSliceSize(x) + Integer.BYTES;
-			reminder = size % 8;
-			roundedSize = reminder > 0 ? size + 8 - reminder: size;
+			roundedSize = Utils.roundUpToEightMultiple(size);
 			x++;
 			xLength++;
 		}

@@ -18,7 +18,7 @@ package cellularautomata.automata;
 
 import java.io.Serializable;
 
-import cellularautomata.grid.Constants;
+import cellularautomata.grid.CAConstants;
 import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
 import cellularautomata.grid4d.LongGrid4D;
 
@@ -27,7 +27,7 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6799031287648475914L;
+	private static final long serialVersionUID = 4770835861364964176L;
 
 	public static final int MIN_LENGTH = 2;
 
@@ -69,16 +69,13 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 	}
 	
 	private int getMaxWLength(int minW, long maxBytes) {
-		long size = Constants.ARRAY_SIZE_OVERHEAD;
+		long size = CAConstants.ARRAY_SIZE_OVERHEAD;
 		int wLength = 0;
 		int w = minW;
-		//round up to 8 multiple
-		long reminder = size % 8;
-		long roundedSize = reminder > 0 ? size + 8 - reminder: size;
+		long roundedSize = Utils.roundUpToEightMultiple(size);
 		while (roundedSize <= maxBytes) {
 			size += AnisotropicLongGrid4DSlice.getSliceSize(w) + Long.BYTES;
-			reminder = size % 8;
-			roundedSize = reminder > 0 ? size + 8 - reminder: size;
+			roundedSize = Utils.roundUpToEightMultiple(size);
 			w++;
 			wLength++;
 		}

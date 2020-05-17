@@ -14,8 +14,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid;
+package caimgmaker;
 
-public class Constants {
-	public static final int ARRAY_SIZE_OVERHEAD = 16;
+public class ImgMakerConstants {
+	public static final int HD_WIDTH = 1920;
+	public static final int HD_HEIGHT = 1080;
 }

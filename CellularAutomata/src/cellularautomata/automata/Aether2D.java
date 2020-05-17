@@ -56,10 +56,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 			}
 		}
 		this.initialValue = initialValue;
-		grid = new long[3][];
-		grid[0] = buildGridSlice(0);
-		grid[1] = buildGridSlice(1);
-		grid[2] = buildGridSlice(2);
+		grid = Utils.buildAnisotropic2DLongArray(3);
 		grid[0][0] = initialValue;
 		maxY = 0;
 		boundsReached = false;
@@ -77,13 +74,13 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		}
 		maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0);
+		newGrid[0] = new long[1];
 		boolean isFirst = true;
 		long[] neighborValues = new long[4];
 		byte[] neighborDirections = new byte[4];
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridSlice(nextX);
+				newGrid[nextX] = new long[nextX + 1];
 			}
 			for (int y = 0; y <= x; y++) {
 				long value = this.grid[x][y];
@@ -177,11 +174,6 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 			addDown(grid, x, y, value);
 			break;
 		}
-	}
-	
-	private long[] buildGridSlice(int x) {
-		long[] newGridSlice = new long[x + 1];
-		return newGridSlice;
 	}
 	
 	private void addRight(long[][] grid, int x, int y, long value) {

@@ -20,31 +20,31 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.IntAether3DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
+import cellularautomata.automata.Aether4DAsymmetricSectionSwap;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
+import cellularautomata.grid.CAConstants;
 
-public class IntAether3DImgMaker {
+public class Aether4DSwapAxialRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-2000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"2000", "/home/jaume/Desktop/tests"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
-			int initialValue = 0;
+			long initialValue = 0;
 			boolean isRestore = false;
 			String path;
 			int initialStep = 0;
-			int scanInitialZIndex = 0;
-			boolean isScanInitialZIndexDefined = false;	
+			int scanInitialYIndex = 0;
+			boolean isScanInitialYIndexDefined = false;	
 			long backupLeap = 0;
 			boolean isBackupLeapDefined = false;
-			
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
 				BigInteger tmp = new BigInteger(initValOrBackupPath);
-				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
-						&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
-					initialValue = tmp.intValue();
+				if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
+						&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
+					initialValue = tmp.longValue();
 				} else {
 					System.err.println("Initial value out of range.");
 					return;
@@ -61,8 +61,8 @@ public class IntAether3DImgMaker {
 				if (args.length > 2) {
 					initialStep = Integer.parseInt(args[2]);
 					if (args.length > 3) {
-						scanInitialZIndex = Integer.parseInt(args[3]);
-						isScanInitialZIndexDefined = true;
+						scanInitialYIndex = Integer.parseInt(args[3]);
+						isScanInitialYIndexDefined = true;
 						if (args.length > 4) {
 							backupLeap = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
@@ -72,11 +72,11 @@ public class IntAether3DImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableEvolvingIntGrid3D ca;
+			ActionableEvolvingLongGrid4D ca;
 			if (isRestore) {
-				ca = new IntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
+				ca = new Aether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new IntAether3DAsymmetricSectionSwap(initialValue, Constants.EIGHT_GB, path);
+				ca = new Aether4DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
@@ -91,14 +91,16 @@ public class IntAether3DImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, scanInitialZIndex, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+			if (isScanInitialYIndexDefined) {
+				imgMaker.createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(
+						ca, 0, scanInitialYIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
+				imgMaker.createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(
+						ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			}
-
+			
 		}		
 	}
 	

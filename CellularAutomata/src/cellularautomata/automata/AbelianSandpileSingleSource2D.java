@@ -40,10 +40,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 	 */
 	public AbelianSandpileSingleSource2D(int initialValue) {
 		this.initialValue = initialValue;
-		grid = new int[3][];
-		grid[0] = buildGridSlice(0);
-		grid[1] = buildGridSlice(1);
-		grid[2] = buildGridSlice(2);
+		grid = Utils.buildAnisotropic2DIntArray(3);
 		grid[0][0] = this.initialValue;
 		maxY = 0;
 		xBoundReached = false;
@@ -61,11 +58,11 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 		}
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0);
+		newGrid[0] = new int[1];
 		boolean isFirst = true;
 		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = buildGridSlice(nextX);
+				newGrid[nextX] = new int[nextX + 1];
 			}
 			for (int y = 0; y <= x; y++) {
 				int value = grid[x][y];
@@ -121,11 +118,6 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 		grid = newGrid;
 		currentStep++;
 		return changed;
-	}
-	
-	private int[] buildGridSlice(int x) {
-		int[] newGridSlice = new int[x + 1];
-		return newGridSlice;
 	}
 	
 	@Override

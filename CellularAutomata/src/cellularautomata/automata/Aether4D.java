@@ -61,10 +61,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D {
 			}
 		}
 		this.initialValue = initialValue;
-		grid = new long[3][][][];
-		grid[0] = buildGridSlice(0);
-		grid[1] = buildGridSlice(1);
-		grid[2] = buildGridSlice(2);
+		grid = Utils.buildAnisotropic4DLongArray(3);
 		grid[0][0][0][0] = this.initialValue;
 		maxX = 0;
 		maxY = 0;
@@ -104,13 +101,13 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D {
 		}
 		maxWMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0);
+		newGrid[0] = Utils.buildAnisotropic3DLongArray(1);
 		boolean first = true;
 		long[] neighborValues = new long[8];
 		byte[] neighborDirections = new byte[8];
 		for (int w = 0, nextW = 1; w < grid.length; w++, nextW++, first = false) {
 			if (nextW < newGrid.length) {
-				newGrid[nextW] = buildGridSlice(nextW);
+				newGrid[nextW] = Utils.buildAnisotropic3DLongArray(nextW + 1);
 			}
 			for (int x = 0; x <= w; x++) {
 				for (int y = 0; y <= x; y++) {
@@ -360,17 +357,6 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D {
 			}
 			grid[w][x][y][z-1] += valueToAdd;
 		}
-	}
-	
-	private long[][][] buildGridSlice(int w) {
-		long[][][] newGridSlice = new long[w + 1][][];
-		for (int x = 0; x < newGridSlice.length; x++) {
-			newGridSlice[x] = new long[x + 1][];
-			for (int y = 0; y < newGridSlice[x].length; y++) {
-				newGridSlice[x][y] = new long[y + 1];
-			}
-		}
-		return newGridSlice;
 	}
 	
 	@Override

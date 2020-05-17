@@ -64,5 +64,173 @@ public class Utils {
 			return sourceValue; 
 		}
 	}
+	
+	public static long[][][][] buildAnisotropic4DLongArray(int side) {
+		long[][][][] anisotropic4DArray = new long[side][][][];
+		for (int w = 0; w < anisotropic4DArray.length; w++) {
+			anisotropic4DArray[w] = buildAnisotropic3DLongArray(w + 1);
+		}
+		return anisotropic4DArray;
+	}
+	
+	public static long[][][] buildAnisotropic3DLongArray(int side) {
+		long[][][] anisotropic3DArray = new long[side][][];
+		for (int x = 0; x < anisotropic3DArray.length; x++) {
+			anisotropic3DArray[x] = buildAnisotropic2DLongArray(x + 1);
+		}
+		return anisotropic3DArray;
+	}
+	
+	public static long[][] buildAnisotropic2DLongArray(int side) {
+		long[][] anisotropic2DArray = new long[side][];
+		for (int x = 0; x < anisotropic2DArray.length; x++) {
+			anisotropic2DArray[x] = new long[x + 1];
+		}
+		return anisotropic2DArray;
+	}
+	
+	public static int[][][][] buildAnisotropic4DIntArray(int side) {
+		int[][][][] anisotropic4DArray = new int[side][][][];
+		for (int w = 0; w < anisotropic4DArray.length; w++) {
+			anisotropic4DArray[w] = buildAnisotropic3DIntArray(w + 1);
+		}
+		return anisotropic4DArray;
+	}
+	
+	public static int[][][] buildAnisotropic3DIntArray(int side) {
+		int[][][] anisotropic3DArray = new int[side][][];
+		for (int x = 0; x < anisotropic3DArray.length; x++) {
+			anisotropic3DArray[x] = buildAnisotropic2DIntArray(x + 1);
+		}
+		return anisotropic3DArray;
+	}
+	
+	public static int[][] buildAnisotropic2DIntArray(int side) {
+		int[][] anisotropic2DArray = new int[side][];
+		for (int x = 0; x < anisotropic2DArray.length; x++) {
+			anisotropic2DArray[x] = new int[x + 1];
+		}
+		return anisotropic2DArray;
+	}
+	
+	public static short[][][][] buildAnisotropic4DShortArray(int side) {
+		short[][][][] anisotropic4DArray = new short[side][][][];
+		for (int w = 0; w < anisotropic4DArray.length; w++) {
+			anisotropic4DArray[w] = buildAnisotropic3DShortArray(w + 1);
+		}
+		return anisotropic4DArray;
+	}
+	
+	public static short[][][] buildAnisotropic3DShortArray(int side) {
+		short[][][] anisotropic3DArray = new short[side][][];
+		for (int x = 0; x < anisotropic3DArray.length; x++) {
+			anisotropic3DArray[x] = buildAnisotropic2DShortArray(x + 1);
+		}
+		return anisotropic3DArray;
+	}
+	
+	public static short[][] buildAnisotropic2DShortArray(int side) {
+		short[][] anisotropic2DArray = new short[side][];
+		for (int x = 0; x < anisotropic2DArray.length; x++) {
+			anisotropic2DArray[x] = new short[x + 1];
+		}
+		return anisotropic2DArray;
+	}
+	
+	public static void setAllArrayIndexes(long[] array, long value) {
+		for (int i = 0; i < array.length; i++) {
+			array[i] = value;
+		}
+	}
+	
+	public static void setAllArrayIndexes(long[][] array, long value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(long[][][] array, long value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(long[][][][] array, long value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(int[] array, int value) {
+		for (int i = 0; i < array.length; i++) {
+			array[i] = value;
+		}
+	}
+	
+	public static void setAllArrayIndexes(int[][] array, int value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(int[][][] array, int value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(int[][][][] array, int value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(short[] array, short value) {
+		for (int i = 0; i < array.length; i++) {
+			array[i] = value;
+		}
+	}
+	
+	public static void setAllArrayIndexes(short[][] array, short value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(short[][][] array, short value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static void setAllArrayIndexes(short[][][][] array, short value) {
+		for (int i = 0; i < array.length; i++) {
+			setAllArrayIndexes(array[i], value);
+		}
+	}
+	
+	public static long roundUpToEightMultiple(long value) {
+		long reminder = value % 8;
+		if (reminder > 0) {
+			value += 8 - reminder;
+		}
+		return value;
+	}
+	
+	public static long getAnisotropicGridVolume(int dimension, int side) {
+		switch (dimension) {
+			case 0:
+				return 1;
+			case 1://this case could be omitted
+				return side;
+			default:
+				int volume = 0;
+				dimension--;
+				for (int i = 1; i <= side; i++) {
+					volume += getAnisotropicGridVolume(dimension, i);
+				}
+				return volume;
+		}
+	}
 
 }

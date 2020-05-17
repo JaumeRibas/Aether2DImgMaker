@@ -61,10 +61,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D {
 			}
 		}
 		this.initialValue = initialValue;
-		grid = new short[3][][][];
-		grid[0] = buildGridSlice(0);
-		grid[1] = buildGridSlice(1);
-		grid[2] = buildGridSlice(2);
+		grid = Utils.buildAnisotropic4DShortArray(3);
 		grid[0][0][0][0] = this.initialValue;
 		maxX = 0;
 		maxY = 0;
@@ -104,13 +101,13 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D {
 		}
 		maxWMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = buildGridSlice(0);
+		newGrid[0] = Utils.buildAnisotropic3DShortArray(1);
 		boolean first = true;
 		short[] neighborValues = new short[8];
 		byte[] neighborDirections = new byte[8];
 		for (int w = 0, nextW = 1; w < grid.length; w++, nextW++, first = false) {
 			if (nextW < newGrid.length) {
-				newGrid[nextW] = buildGridSlice(nextW);
+				newGrid[nextW] = Utils.buildAnisotropic3DShortArray(nextW + 1);
 			}
 			for (int x = 0; x <= w; x++) {
 				for (int y = 0; y <= x; y++) {
@@ -360,17 +357,6 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D {
 			}
 			grid[w][x][y][z-1] += valueToAdd;
 		}
-	}
-	
-	private short[][][] buildGridSlice(int w) {
-		short[][][] newGridSlice = new short[w + 1][][];
-		for (int x = 0; x < newGridSlice.length; x++) {
-			newGridSlice[x] = new short[x + 1][];
-			for (int y = 0; y < newGridSlice[x].length; y++) {
-				newGridSlice[x][y] = new short[y + 1];
-			}
-		}
-		return newGridSlice;
 	}
 
 	@Override

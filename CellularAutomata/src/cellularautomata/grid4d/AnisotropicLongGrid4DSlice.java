@@ -18,58 +18,44 @@ package cellularautomata.grid4d;
 
 import java.io.Serializable;
 
-import cellularautomata.grid.Constants;
+import cellularautomata.automata.Utils;
+import cellularautomata.grid.CAConstants;
 
 public class AnisotropicLongGrid4DSlice implements Serializable {
-
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 594103704894753794L;
+	private static final long serialVersionUID = -4048142974007302517L;
 
 	private static final int PRIMITIVE_SIZE = Long.BYTES;
 
-	private long[] data;
+	private long[][][] data;
 	
 	public AnisotropicLongGrid4DSlice(int w) {
-		data = new long[getIndex(w, w, w) + 1];
+		data = Utils.buildAnisotropic3DLongArray(w + 1);
 	}
 
 	public void setValueAtPosition(int x, int y, int z, long value) {
-		data[getIndex(x, y, z)] = value;	
+		data[x][y][z] = value;	
 	}
 	
 	public long getValueAtPosition(int x, int y, int z) {
-		return data[getIndex(x, y, z)];
+		return data[x][y][z];
 	}
 	
 	public void addValueAtPosition(int x, int y, int z, long value) {
-		data[getIndex(x, y, z)] += value;
-	}
-	
-	private static int getIndex(int x, int y, int z) {
-		return (int) (getVolume(3, x) + getVolume(2, y) + z);
-	}
-	
-	public static long getVolume(int dimension, int side) {
-		if (dimension == 1) {
-			return side;
-		} else {
-			int volume = 0;
-			dimension--;
-			for (int i = 1; i <= side; i++) {
-				volume += getVolume(dimension, i);
-			}
-			return volume;
-		}
+		data[x][y][z] += value;
 	}
 	
 	public static long getSliceSize(int w) {
-		long size = (getIndex(w, w, w) + 1) * PRIMITIVE_SIZE + Constants.ARRAY_SIZE_OVERHEAD;
-		//round up to 8 multiple
-		long reminder = size % 8;
-		if (reminder > 0) {
-			size += 8 - reminder;
+		int wPlusOne = w + 1;
+		long size = Utils.roundUpToEightMultiple(wPlusOne * Integer.BYTES + CAConstants.ARRAY_SIZE_OVERHEAD);
+		for (int i = 1; i <= wPlusOne; i++) {
+			size += Utils.roundUpToEightMultiple(i * Integer.BYTES + CAConstants.ARRAY_SIZE_OVERHEAD);
+			for (int j = 1; j <= i; j++) {
+				size += Utils.roundUpToEightMultiple(j * PRIMITIVE_SIZE + CAConstants.ARRAY_SIZE_OVERHEAD);
+			}
 		}
 		return size;
 	}

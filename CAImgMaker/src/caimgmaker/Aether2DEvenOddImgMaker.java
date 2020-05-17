@@ -54,7 +54,7 @@ public class Aether2DEvenOddImgMaker {
 			ColorMapper colorMapper = new HueWithBackgroundMapper(0, Color.BLACK);
 			path += ca.getSubFolderPath() + "/img";	
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createEvenOddImages(ca, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, path);
+			imgMaker.createEvenOddImages(ca, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path);
 		}		
 	}
 	

@@ -64,14 +64,14 @@ public class SpreadIntegerValue4DAxialRegionImgMaker {
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				String backupPath = path + ca.getSubFolderPath() + "/backups";
 				EvolvingLongGrid3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
-				String imagesPath = path + axialRegion.getSubFolderPath() + "/img";
+				String imagesPath = path + ca.getSubFolderPath() + "/axial_region/img";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionImages(axialRegion, scanInitialZIndex, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
 					imgMaker.createScanningAndCrossSectionImages(axialRegion, 
-							0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
 				System.err.println("Initial value out of range.");

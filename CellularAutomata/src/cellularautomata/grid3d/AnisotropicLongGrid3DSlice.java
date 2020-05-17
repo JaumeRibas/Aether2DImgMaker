@@ -18,7 +18,8 @@ package cellularautomata.grid3d;
 
 import java.io.Serializable;
 
-import cellularautomata.grid.Constants;
+import cellularautomata.automata.Utils;
+import cellularautomata.grid.CAConstants;
 
 public class AnisotropicLongGrid3DSlice implements Serializable {
 	
@@ -52,13 +53,8 @@ public class AnisotropicLongGrid3DSlice implements Serializable {
 	}
 	
 	public static long getSliceSize(int x) {
-		long size = (getIndex(x, x) + 1) * PRIMITIVE_SIZE + Constants.ARRAY_SIZE_OVERHEAD;
-		//round up to 8 multiple
-		long reminder = size % 8;
-		if (reminder > 0) {
-			size += 8 - reminder;
-		}
-		return size;
+		long size = (getIndex(x, x) + 1) * PRIMITIVE_SIZE + CAConstants.ARRAY_SIZE_OVERHEAD;
+		return Utils.roundUpToEightMultiple(size);
 	}
 	
 }

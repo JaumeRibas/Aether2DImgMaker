@@ -22,11 +22,12 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether3DAsymmetricSectionSwap;
 import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
+import cellularautomata.grid.CAConstants;
 
-public class IntAether3DXScan {
+public class IntAether3DSwapZEvenOddScan {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-2000", "371", "D:/data/test"};//debug
+//		args = new String[]{"-3000", "9999999", "D:/data/test"};//debug
 		if (args.length < 2) {
 			System.err.println("You must specify an initial value and a step to scan.");
 		} else {
@@ -63,7 +64,7 @@ public class IntAether3DXScan {
 			if (isRestore) {
 				ca = new IntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new IntAether3DAsymmetricSectionSwap(initialValue, Constants.EIGHT_GB, path);
+				ca = new IntAether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < step && !finished) {
@@ -73,8 +74,7 @@ public class IntAether3DXScan {
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createAsymmetricSectionXScanningImages(ca, colorMapper, Constants.HD_HEIGHT/2, Constants.HD_HEIGHT/2, 
-					path + "/img");
+			imgMaker.createZScanningEvenOddImagesFromAsymmetricSection(ca, colorMapper, path + "/img");
 
 		}		
 	}

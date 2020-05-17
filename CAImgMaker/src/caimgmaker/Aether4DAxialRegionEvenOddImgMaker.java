@@ -20,86 +20,63 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether4DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
+import cellularautomata.automata.Aether4D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 
 public class Aether4DAxialRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-500", "D:/data/test"};//debug
+//		args = new String[]{"2000", "/home/jaume/Desktop/tests"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
-			long initialValue = 0;
-			boolean isRestore = false;
-			String path;
-			int initialStep = 0;
-			int scanInitialYIndex = 0;
-			boolean isScanInitialYIndexDefined = false;	
-			long backupLeap = 0;
-			boolean isBackupLeapDefined = false;
-			String initValOrBackupPath = args[0];
-			if (initValOrBackupPath.matches("-?\\d+")) {
-				BigInteger tmp = new BigInteger(initValOrBackupPath);
-				if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
-						&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
-					initialValue = tmp.longValue();
-				} else {
-					System.err.println("Initial value out of range.");
-					return;
-				}
-			} else {
-				isRestore = true;
-			}
-			if (args.length > 1) {
-				path = args[1];
-				char lastCharacter = path.charAt(path.length() - 1); 
-				if (lastCharacter != '/' && lastCharacter != '\\') {
-					path += "/";
-				}
-				if (args.length > 2) {
-					initialStep = Integer.parseInt(args[2]);
-					if (args.length > 3) {
-						scanInitialYIndex = Integer.parseInt(args[3]);
-						isScanInitialYIndexDefined = true;
-						if (args.length > 4) {
-							backupLeap = Long.parseLong(args[4]);
-							isBackupLeapDefined = true;
+			long initialValue;
+			int scanInitialZIndex = 0;
+			boolean isScanInitialZIndexDefined = false;
+			BigInteger tmp = new BigInteger(args[0]);
+			if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
+					&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
+				initialValue = tmp.longValue();
+				SymmetricEvolvingLongGrid4D ca = new Aether4D(initialValue);
+				String path;
+				int initialStep = 0;
+				if (args.length > 1) {
+					path = args[1];
+					char lastCharacter = path.charAt(path.length() - 1); 
+					if (lastCharacter != '/' && lastCharacter != '\\') {
+						path += "/";
+					}
+					if (args.length > 2) {
+						initialStep = Integer.parseInt(args[2]);
+						if (args.length > 3) {
+							scanInitialZIndex = Integer.parseInt(args[3]);
+							isScanInitialZIndexDefined = true;
 						}
 					}
+				} else {
+					path = "./";
+				}
+				boolean finished = false;
+				while (ca.getStep() < initialStep && !finished) {
+					finished = !ca.nextStep();
+					System.out.println("step: " + ca.getStep());
+				}
+				ColorMapper colorMapper = new GrayscaleMapper(0);
+				String backupPath = path + ca.getSubFolderPath() + "/backups";
+				EvolvingLongGrid3D axialRegion = ca.asymmetricSection().crossSectionAtZ(0);
+				String imagesPath = path + ca.getSubFolderPath() + "/axial_region/img";
+				ImgMaker imgMaker = new ImgMaker();
+				if (isScanInitialZIndexDefined) {
+					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, scanInitialZIndex, 
+							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
+				} else {
+					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, 
+							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
-				path = "./";
+				System.err.println("Initial value out of range.");
 			}
-			ActionableEvolvingLongGrid4D ca;
-			if (isRestore) {
-				ca = new Aether4DAsymmetricSectionSwap(initValOrBackupPath, path);
-			} else {
-				ca = new Aether4DAsymmetricSectionSwap(initialValue, Constants.EIGHT_GB, path);
-			}
-			boolean finished = false;
-			while (ca.getStep() < initialStep && !finished) {
-				finished = !ca.nextStep();
-				System.out.println("step: " + ca.getStep());
-			}
-			path += ca.getSubFolderPath();
-			ColorMapper colorMapper = new GrayscaleMapper(0);
-			ImgMaker imgMaker = null;
-			if (isBackupLeapDefined) {
-				imgMaker = new ImgMaker(backupLeap);
-			} else {
-				imgMaker = new ImgMaker();
-			}
-			if (isScanInitialYIndexDefined) {
-				imgMaker.createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(
-						ca, 0, scanInitialYIndex, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
-					path + "/z=0/img", path + "/backups");
-			} else {
-				imgMaker.createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(
-						ca, 0, colorMapper, colorMapper, Constants.HD_WIDTH/2, Constants.HD_HEIGHT/2, 
-					path + "/z=0/img", path + "/backups");
-			}
-			
 		}		
 	}
 	
