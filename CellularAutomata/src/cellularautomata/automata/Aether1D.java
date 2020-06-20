@@ -29,9 +29,6 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	
 	private long initialValue;
 	private long currentStep;
-	
-	/** Whether or not the values reached the bounds of the array */
-	private boolean boundsReached;
 	private int maxX;
 	
 	/**
@@ -51,20 +48,13 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 		grid = new long[5];
 		grid[0] = initialValue;
 		maxX = 1;//at the smallest size it won't be exact
-		boundsReached = false;
 		currentStep = 0;
 	}
 	
 	@Override
 	public boolean nextStep(){
-		boolean changed = false;
-		long[] newGrid = null;
-		if (boundsReached) {
-			boundsReached = false;
-			newGrid = new long[grid.length + 1];
-		} else {
-			newGrid = new long[grid.length];
-		}
+		long[] newGrid = new long[maxX + 4];
+		boolean changed = false, boundsReached = false;
 		int edge = grid.length - 1;
 		long currentValue, positiveNeighborValue, negativeNeighborValue;
 		//x = 0
