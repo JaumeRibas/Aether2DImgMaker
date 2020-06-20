@@ -24,9 +24,6 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
 
 public class Aether1D implements SymmetricEvolvingLongGrid1D {	
 
-	private static final byte RIGHT = 1;
-	private static final byte LEFT = 0;
-	
 	/** A 1D array representing the grid */
 	private long[] grid;
 	
@@ -35,8 +32,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
-
-	private int maxXMinusOne;
+	private int maxX;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -52,14 +48,16 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 			}
 		}
 		this.initialValue = initialValue;
-		grid = new long[3];
+		grid = new long[5];
 		grid[0] = initialValue;
+		maxX = 1;//at the smallest size it won't be exact
 		boundsReached = false;
 		currentStep = 0;
 	}
 	
 	@Override
 	public boolean nextStep(){
+		boolean changed = false;
 		long[] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
@@ -67,100 +65,271 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 		} else {
 			newGrid = new long[grid.length];
 		}
-		maxXMinusOne = newGrid.length - 2;
-		boolean changed = false;
-		long[] neighborValues = new long[2];
-		byte[] neighborDirections = new byte[2];
-		for (int x = 0; x < grid.length; x++) {
-			long value = this.grid[x];
-			int relevantNeighborCount = 0;
-			long neighborValue;
-			neighborValue = getValueAtPosition(x + 1);
-			if (neighborValue < value) {
-				neighborValues[relevantNeighborCount] = neighborValue;
-				neighborDirections[relevantNeighborCount] = RIGHT;
-				relevantNeighborCount++;
-			}
-			neighborValue = getValueAtPosition(x - 1);
-			if (neighborValue < value) {
-				neighborValues[relevantNeighborCount] = neighborValue;
-				neighborDirections[relevantNeighborCount] = LEFT;
-				relevantNeighborCount++;
-			}
-			
-			if (relevantNeighborCount > 0) {
-				//sort
-				boolean sorted = false;
-				while (!sorted) {
-					sorted = true;
-					for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-						if (neighborValues[i] < neighborValues[i+1]) {
-							sorted = false;
-							long valSwap = neighborValues[i];
-							neighborValues[i] = neighborValues[i+1];
-							neighborValues[i+1] = valSwap;
-							byte dirSwap = neighborDirections[i];
-							neighborDirections[i] = neighborDirections[i+1];
-							neighborDirections[i+1] = dirSwap;
-						}
+		int edge = grid.length - 1;
+		long currentValue, positiveNeighborValue, negativeNeighborValue;
+		//x = 0
+		currentValue = grid[0];
+		positiveNeighborValue = grid[1];
+		if (positiveNeighborValue < currentValue) {
+			long toShare = currentValue - positiveNeighborValue;
+			long share = toShare/3;
+			if (share > 0) {
+				changed = true;
+				newGrid[0] += currentValue - toShare + share + toShare%3;
+				newGrid[1] += share;
+			} else {
+				newGrid[0] += currentValue;
+			}			
+		} else {
+			newGrid[0] += currentValue;
+		}
+		//x = 1
+		//reuse values obtained previously
+		negativeNeighborValue = currentValue;
+		currentValue = positiveNeighborValue;
+		positiveNeighborValue = grid[2];
+		if (negativeNeighborValue < currentValue) {
+			if (positiveNeighborValue < currentValue) {
+				if (negativeNeighborValue == positiveNeighborValue) {
+					// pn == nn < current
+					long toShare = currentValue - positiveNeighborValue; 
+					long share = toShare/3;
+					if (share > 0) {
+						changed = true;
 					}
+					newGrid[0] += share + share;//one more for the symmetric position at the other side
+					newGrid[1] += currentValue - toShare + share + toShare%3;
+					newGrid[2] += share;
+				} else if (negativeNeighborValue < positiveNeighborValue) {
+					// nn < pn < current
+					long toShare = currentValue - positiveNeighborValue; 
+					long share = toShare/3;
+					if (share > 0) {
+						changed = true;
+					}
+					newGrid[0] += share + share;//one more for the symmetric position at the other side
+					newGrid[2] += share;
+					long currentRemainingValue = currentValue - share - share;
+					toShare = currentRemainingValue - negativeNeighborValue; 
+					share = toShare/2;
+					if (share > 0) {
+						changed = true;
+					}
+					newGrid[0] += share + share;//one more for the symmetric position at the other side
+					newGrid[1] += currentRemainingValue - toShare + share + toShare%2;
+				} else {
+					// pn < nn < current
+					long toShare = currentValue - negativeNeighborValue; 
+					long share = toShare/3;
+					if (share > 0) {
+						changed = true;
+					}
+					newGrid[0] += share + share;//one more for the symmetric position at the other side
+					newGrid[2] += share;
+					long currentRemainingValue = currentValue - share - share;
+					toShare = currentRemainingValue - positiveNeighborValue; 
+					share = toShare/2;
+					if (share > 0) {
+						changed = true;
+					}
+					newGrid[1] += currentRemainingValue - toShare + share + toShare%2;
+					newGrid[2] += share;
 				}
-				//divide
-				boolean isFirstNeighbor = true;
-				long previousNeighborValue = 0;
-				for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-					neighborValue = neighborValues[i];
-					if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-						int shareCount = relevantNeighborCount - i + 1;
-						long toShare = value - neighborValue;
-						long share = toShare/shareCount;
-						if (share != 0) {
+			} else {
+				// nn < current <= pn
+				long toShare = currentValue - negativeNeighborValue; 
+				long share = toShare/2;
+				if (share > 0) {
+					changed = true;
+				}
+				newGrid[0] += share + share;//one more for the symmetric position at the other side
+				newGrid[1] += currentValue - toShare + share + toShare%2;
+			}
+		} else {
+			if (positiveNeighborValue < currentValue) {
+				// pn < current <= nn
+				long toShare = currentValue - positiveNeighborValue; 
+				long share = toShare/2;
+				if (share > 0) {
+					changed = true;
+				}
+				newGrid[1] += currentValue - toShare + share + toShare%2;
+				newGrid[2] += share;
+			} else {
+				newGrid[1] += currentValue;
+			}
+		}
+		//2 >= x < edge - 2
+		int edgeMinusTwo = edge - 2;
+		int x = 2, xMinusOne = 1, xPlusOne = 3;
+		for (; x < edgeMinusTwo; x++, xMinusOne++, xPlusOne++) {
+			//reuse values obtained previously
+			negativeNeighborValue = currentValue;
+			currentValue = positiveNeighborValue;
+			positiveNeighborValue = grid[xPlusOne];
+			if (negativeNeighborValue < currentValue) {
+				if (positiveNeighborValue < currentValue) {
+					if (negativeNeighborValue == positiveNeighborValue) {
+						// pn == nn < current
+						long toShare = currentValue - positiveNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
 							changed = true;
-							value = value - toShare + toShare%shareCount + share;
-							for (int j = i; j < relevantNeighborCount; j++) {
-								addToNeighbor(newGrid, x, neighborDirections[j], share);
-							}
 						}
-						previousNeighborValue = neighborValue;
+						newGrid[xMinusOne] += share;
+						newGrid[x] += currentValue - toShare + share + toShare%3;
+						newGrid[xPlusOne] += share;
+					} else if (negativeNeighborValue < positiveNeighborValue) {
+						// nn < pn < current
+						long toShare = currentValue - positiveNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							changed = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[xPlusOne] += share;
+						long currentRemainingValue = currentValue - share - share;
+						toShare = currentRemainingValue - negativeNeighborValue; 
+						share = toShare/2;
+						if (share > 0) {
+							changed = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
+					} else {
+						// pn < nn < current
+						long toShare = currentValue - negativeNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							changed = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[xPlusOne] += share;
+						long currentRemainingValue = currentValue - share - share;
+						toShare = currentRemainingValue - positiveNeighborValue; 
+						share = toShare/2;
+						if (share > 0) {
+							changed = true;
+						}
+						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
+						newGrid[xPlusOne] += share;
 					}
-				}	
-			}					
-			newGrid[x] += value;
+				} else {
+					// nn < current <= pn
+					long toShare = currentValue - negativeNeighborValue; 
+					long share = toShare/2;
+					if (share > 0) {
+						changed = true;
+					}
+					newGrid[xMinusOne] += share;
+					newGrid[x] += currentValue - toShare + share + toShare%2;
+				}
+			} else {
+				if (positiveNeighborValue < currentValue) {
+					// pn < current <= nn
+					long toShare = currentValue - positiveNeighborValue; 
+					long share = toShare/2;
+					if (share > 0) {
+						changed = true;
+					}
+					newGrid[x] += currentValue - toShare + share + toShare%2;
+					newGrid[xPlusOne] += share;
+				} else {
+					newGrid[x] += currentValue;
+				}
+			}
+		}
+		//edge - 2 >= x <= edge
+		for (; x < edge; x++, xMinusOne++, xPlusOne++) {
+			//reuse values obtained previously
+			negativeNeighborValue = currentValue;
+			currentValue = positiveNeighborValue;
+			positiveNeighborValue = grid[xPlusOne];
+			if (negativeNeighborValue < currentValue) {
+				if (positiveNeighborValue < currentValue) {
+					if (negativeNeighborValue == positiveNeighborValue) {
+						// pn == nn < current
+						long toShare = currentValue - positiveNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							changed = true;
+							boundsReached = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[x] += currentValue - toShare + share + toShare%3;
+						newGrid[xPlusOne] += share;
+					} else if (negativeNeighborValue < positiveNeighborValue) {
+						// nn < pn < current
+						long toShare = currentValue - positiveNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							changed = true;
+							boundsReached = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[xPlusOne] += share;
+						long currentRemainingValue = currentValue - share - share;
+						toShare = currentRemainingValue - negativeNeighborValue; 
+						share = toShare/2;
+						if (share > 0) {
+							changed = true;
+							boundsReached = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
+					} else {
+						// pn < nn < current
+						long toShare = currentValue - negativeNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							changed = true;
+							boundsReached = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[xPlusOne] += share;
+						long currentRemainingValue = currentValue - share - share;
+						toShare = currentRemainingValue - positiveNeighborValue; 
+						share = toShare/2;
+						if (share > 0) {
+							changed = true;
+							boundsReached = true;
+						}
+						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
+						newGrid[xPlusOne] += share;
+					}
+				} else {
+					// nn < current <= pn
+					long toShare = currentValue - negativeNeighborValue; 
+					long share = toShare/2;
+					if (share > 0) {
+						changed = true;
+						boundsReached = true;
+					}
+					newGrid[xMinusOne] += share;
+					newGrid[x] += currentValue - toShare + share + toShare%2;
+				}
+			} else {
+				if (positiveNeighborValue < currentValue) {
+					// pn < current <= nn
+					long toShare = currentValue - positiveNeighborValue; 
+					long share = toShare/2;
+					if (share > 0) {
+						changed = true;
+						boundsReached = true;
+					}
+					newGrid[x] += currentValue - toShare + share + toShare%2;
+					newGrid[xPlusOne] += share;
+				} else {
+					newGrid[x] += currentValue;
+				}
+			}
 		}
 		grid = newGrid;
+		if (boundsReached) {
+			maxX++;
+		}
 		currentStep++;
 		return changed;
-	}
-	
-	private void addToNeighbor(long grid[], int x, byte direction, long value) {
-		switch(direction) {
-		case RIGHT:
-			addRight(grid, x, value);
-			break;
-		case LEFT:
-			addLeft(grid, x, value);
-			break;
-		}
-	}
-	
-	private void addRight(long[] grid, int x, long value) {
-		grid[x+1] += value;
-		if (x >= maxXMinusOne) {
-			boundsReached = true;
-		}
-	}
-	
-	private void addLeft(long[] grid, int x, long value) {
-		if (x > 0) {
-			long valueToAdd = value;
-			if (x == 1) {
-				valueToAdd += value;							
-			}
-			grid[x-1] += valueToAdd;
-		}
-		if (x >= maxXMinusOne) {
-			boundsReached = true;
-		}
 	}
 	
 	@Override
@@ -180,7 +349,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return grid.length - 1;
+		return maxX;
 	}
 	
 	/**
