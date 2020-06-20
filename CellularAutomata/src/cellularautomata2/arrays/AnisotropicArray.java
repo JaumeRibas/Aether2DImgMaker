@@ -1,7 +1,7 @@
 package cellularautomata2.arrays;
 
 /**
- * An array with the shape of an anisotropic sub-region of square-like multidimensional shape with isotropic symmetry around a center position.
+ * An array with the shape of an asymmetric sub-region of a square-like multidimensional shape with isotropic symmetry around a center position.
  * Its positions are those that meet this condition: side >= coord 1 >= coord 2... >= coord n >= 0
  * 
  * @author Jaume
