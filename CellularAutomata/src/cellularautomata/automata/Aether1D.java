@@ -54,7 +54,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	@Override
 	public boolean nextStep(){
 		long[] newGrid = new long[maxX + 4];
-		boolean changed = false, boundsReached = false;
+		boolean changed = false;
 		int edge = grid.length - 1;
 		long currentValue, greaterXNeighborValue, smallerXNeighborValue;
 		//x = 0
@@ -151,175 +151,101 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 		}
 		//2 >= x < edge - 2
 		int edgeMinusTwo = edge - 2;
-		int x = 2, xMinusOne = 1, xPlusOne = 3;
-		for (; x < edgeMinusTwo; x++, xMinusOne++, xPlusOne++) {
-			//reuse values obtained previously
-			smallerXNeighborValue = currentValue;
-			currentValue = greaterXNeighborValue;
-			greaterXNeighborValue = grid[xPlusOne];
-			if (smallerXNeighborValue < currentValue) {
-				if (greaterXNeighborValue < currentValue) {
-					if (smallerXNeighborValue == greaterXNeighborValue) {
-						// gn == sn < current
-						long toShare = currentValue - greaterXNeighborValue; 
-						long share = toShare/3;
-						if (share > 0) {
-							changed = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[x] += currentValue - toShare + share + toShare%3;
-						newGrid[xPlusOne] += share;
-					} else if (smallerXNeighborValue < greaterXNeighborValue) {
-						// sn < gn < current
-						long toShare = currentValue - greaterXNeighborValue; 
-						long share = toShare/3;
-						if (share > 0) {
-							changed = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[xPlusOne] += share;
-						long currentRemainingValue = currentValue - share - share;
-						toShare = currentRemainingValue - smallerXNeighborValue; 
-						share = toShare/2;
-						if (share > 0) {
-							changed = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
-					} else {
-						// gn < sn < current
-						long toShare = currentValue - smallerXNeighborValue; 
-						long share = toShare/3;
-						if (share > 0) {
-							changed = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[xPlusOne] += share;
-						long currentRemainingValue = currentValue - share - share;
-						toShare = currentRemainingValue - greaterXNeighborValue; 
-						share = toShare/2;
-						if (share > 0) {
-							changed = true;
-						}
-						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
-						newGrid[xPlusOne] += share;
-					}
-				} else {
-					// sn < current <= gn
-					long toShare = currentValue - smallerXNeighborValue; 
-					long share = toShare/2;
-					if (share > 0) {
-						changed = true;
-					}
-					newGrid[xMinusOne] += share;
-					newGrid[x] += currentValue - toShare + share + toShare%2;
-				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gn < current <= sn
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/2;
-					if (share > 0) {
-						changed = true;
-					}
-					newGrid[x] += currentValue - toShare + share + toShare%2;
-					newGrid[xPlusOne] += share;
-				} else {
-					newGrid[x] += currentValue;
-				}
-			}
+		if (toppleRangeBeyondX1(newGrid, 2, edgeMinusTwo)) {
+			changed = true;
 		}
-		//edge - 2 >= x <= edge
-		for (; x < edge; x++, xMinusOne++, xPlusOne++) {
-			//reuse values obtained previously
-			smallerXNeighborValue = currentValue;
-			currentValue = greaterXNeighborValue;
-			greaterXNeighborValue = grid[xPlusOne];
-			if (smallerXNeighborValue < currentValue) {
-				if (greaterXNeighborValue < currentValue) {
-					if (smallerXNeighborValue == greaterXNeighborValue) {
-						// gn == sn < current
-						long toShare = currentValue - greaterXNeighborValue; 
-						long share = toShare/3;
-						if (share > 0) {
-							changed = true;
-							boundsReached = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[x] += currentValue - toShare + share + toShare%3;
-						newGrid[xPlusOne] += share;
-					} else if (smallerXNeighborValue < greaterXNeighborValue) {
-						// sn < gn < current
-						long toShare = currentValue - greaterXNeighborValue; 
-						long share = toShare/3;
-						if (share > 0) {
-							changed = true;
-							boundsReached = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[xPlusOne] += share;
-						long currentRemainingValue = currentValue - share - share;
-						toShare = currentRemainingValue - smallerXNeighborValue; 
-						share = toShare/2;
-						if (share > 0) {
-							changed = true;
-							boundsReached = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
-					} else {
-						// gn < sn < current
-						long toShare = currentValue - smallerXNeighborValue; 
-						long share = toShare/3;
-						if (share > 0) {
-							changed = true;
-							boundsReached = true;
-						}
-						newGrid[xMinusOne] += share;
-						newGrid[xPlusOne] += share;
-						long currentRemainingValue = currentValue - share - share;
-						toShare = currentRemainingValue - greaterXNeighborValue; 
-						share = toShare/2;
-						if (share > 0) {
-							changed = true;
-							boundsReached = true;
-						}
-						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
-						newGrid[xPlusOne] += share;
-					}
-				} else {
-					// sn < current <= gn
-					long toShare = currentValue - smallerXNeighborValue; 
-					long share = toShare/2;
-					if (share > 0) {
-						changed = true;
-						boundsReached = true;
-					}
-					newGrid[xMinusOne] += share;
-					newGrid[x] += currentValue - toShare + share + toShare%2;
-				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gn < current <= sn
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/2;
-					if (share > 0) {
-						changed = true;
-						boundsReached = true;
-					}
-					newGrid[x] += currentValue - toShare + share + toShare%2;
-					newGrid[xPlusOne] += share;
-				} else {
-					newGrid[x] += currentValue;
-				}
-			}
-		}
-		grid = newGrid;
-		if (boundsReached) {
+		//edge - 2 >= x < edge
+		if (toppleRangeBeyondX1(newGrid, edgeMinusTwo, edge)) {
+			changed = true;
 			maxX++;
 		}
+		grid = newGrid;
 		currentStep++;
 		return changed;
+	}
+	
+	private boolean toppleRangeBeyondX1(long[] newGrid, int minX, int maxX) {
+		boolean anyToppled = false;
+		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
+		long smallerXNeighborValue, currentValue = grid[xMinusOne], greaterXNeighborValue = grid[x];
+		for (; x < maxX; x++, xMinusOne++, xPlusOne++) {
+			//reuse values obtained previously
+			smallerXNeighborValue = currentValue;
+			currentValue = greaterXNeighborValue;
+			greaterXNeighborValue = grid[xPlusOne];
+			if (smallerXNeighborValue < currentValue) {
+				if (greaterXNeighborValue < currentValue) {
+					if (smallerXNeighborValue == greaterXNeighborValue) {
+						// gn == sn < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							anyToppled = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[x] += currentValue - toShare + share + toShare%3;
+						newGrid[xPlusOne] += share;
+					} else if (smallerXNeighborValue < greaterXNeighborValue) {
+						// sn < gn < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							anyToppled = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[xPlusOne] += share;
+						long currentRemainingValue = currentValue - share - share;
+						toShare = currentRemainingValue - smallerXNeighborValue; 
+						share = toShare/2;
+						if (share > 0) {
+							anyToppled = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
+					} else {
+						// gn < sn < current
+						long toShare = currentValue - smallerXNeighborValue; 
+						long share = toShare/3;
+						if (share > 0) {
+							anyToppled = true;
+						}
+						newGrid[xMinusOne] += share;
+						newGrid[xPlusOne] += share;
+						long currentRemainingValue = currentValue - share - share;
+						toShare = currentRemainingValue - greaterXNeighborValue; 
+						share = toShare/2;
+						if (share > 0) {
+							anyToppled = true;
+						}
+						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
+						newGrid[xPlusOne] += share;
+					}
+				} else {
+					// sn < current <= gn
+					long toShare = currentValue - smallerXNeighborValue; 
+					long share = toShare/2;
+					if (share > 0) {
+						anyToppled = true;
+					}
+					newGrid[xMinusOne] += share;
+					newGrid[x] += currentValue - toShare + share + toShare%2;
+				}
+			} else {
+				if (greaterXNeighborValue < currentValue) {
+					// gn < current <= sn
+					long toShare = currentValue - greaterXNeighborValue; 
+					long share = toShare/2;
+					if (share > 0) {
+						anyToppled = true;
+					}
+					newGrid[x] += currentValue - toShare + share + toShare%2;
+					newGrid[xPlusOne] += share;
+				} else {
+					newGrid[x] += currentValue;
+				}
+			}
+		}
+		return anyToppled;
 	}
 	
 	@Override
