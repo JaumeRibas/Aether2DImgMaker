@@ -55,7 +55,6 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	public boolean nextStep(){
 		long[] newGrid = new long[maxX + 4];
 		boolean changed = false;
-		int edge = grid.length - 1;
 		long currentValue, greaterXNeighborValue, smallerXNeighborValue;
 		//x = 0
 		currentValue = grid[0];
@@ -63,7 +62,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 		if (greaterXNeighborValue < currentValue) {
 			long toShare = currentValue - greaterXNeighborValue;
 			long share = toShare/3;
-			if (share > 0) {
+			if (share != 0) {
 				changed = true;
 				newGrid[0] += currentValue - toShare + share + toShare%3;
 				newGrid[1] += share;
@@ -84,7 +83,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 					// gn == sn < current
 					long toShare = currentValue - greaterXNeighborValue; 
 					long share = toShare/3;
-					if (share > 0) {
+					if (share != 0) {
 						changed = true;
 					}
 					newGrid[0] += share + share;//one more for the symmetric position at the other side
@@ -94,7 +93,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 					// sn < gn < current
 					long toShare = currentValue - greaterXNeighborValue; 
 					long share = toShare/3;
-					if (share > 0) {
+					if (share != 0) {
 						changed = true;
 					}
 					newGrid[0] += share + share;//one more for the symmetric position at the other side
@@ -102,7 +101,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 					long currentRemainingValue = currentValue - share - share;
 					toShare = currentRemainingValue - smallerXNeighborValue; 
 					share = toShare/2;
-					if (share > 0) {
+					if (share != 0) {
 						changed = true;
 					}
 					newGrid[0] += share + share;//one more for the symmetric position at the other side
@@ -111,7 +110,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 					// gn < sn < current
 					long toShare = currentValue - smallerXNeighborValue; 
 					long share = toShare/3;
-					if (share > 0) {
+					if (share != 0) {
 						changed = true;
 					}
 					newGrid[0] += share + share;//one more for the symmetric position at the other side
@@ -119,7 +118,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 					long currentRemainingValue = currentValue - share - share;
 					toShare = currentRemainingValue - greaterXNeighborValue; 
 					share = toShare/2;
-					if (share > 0) {
+					if (share != 0) {
 						changed = true;
 					}
 					newGrid[1] += currentRemainingValue - toShare + share + toShare%2;
@@ -129,7 +128,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 				// sn < current <= gn
 				long toShare = currentValue - smallerXNeighborValue; 
 				long share = toShare/2;
-				if (share > 0) {
+				if (share != 0) {
 					changed = true;
 				}
 				newGrid[0] += share + share;//one more for the symmetric position at the other side
@@ -140,7 +139,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 				// gn < current <= sn
 				long toShare = currentValue - greaterXNeighborValue; 
 				long share = toShare/2;
-				if (share > 0) {
+				if (share != 0) {
 					changed = true;
 				}
 				newGrid[1] += currentValue - toShare + share + toShare%2;
@@ -150,6 +149,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 			}
 		}
 		//2 >= x < edge - 2
+		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
 		if (toppleRangeBeyondX1(newGrid, 2, edgeMinusTwo)) {
 			changed = true;
@@ -179,7 +179,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 						// gn == sn < current
 						long toShare = currentValue - greaterXNeighborValue; 
 						long share = toShare/3;
-						if (share > 0) {
+						if (share != 0) {
 							anyToppled = true;
 						}
 						newGrid[xMinusOne] += share;
@@ -189,7 +189,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 						// sn < gn < current
 						long toShare = currentValue - greaterXNeighborValue; 
 						long share = toShare/3;
-						if (share > 0) {
+						if (share != 0) {
 							anyToppled = true;
 						}
 						newGrid[xMinusOne] += share;
@@ -197,7 +197,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 						long currentRemainingValue = currentValue - share - share;
 						toShare = currentRemainingValue - smallerXNeighborValue; 
 						share = toShare/2;
-						if (share > 0) {
+						if (share != 0) {
 							anyToppled = true;
 						}
 						newGrid[xMinusOne] += share;
@@ -206,7 +206,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 						// gn < sn < current
 						long toShare = currentValue - smallerXNeighborValue; 
 						long share = toShare/3;
-						if (share > 0) {
+						if (share != 0) {
 							anyToppled = true;
 						}
 						newGrid[xMinusOne] += share;
@@ -214,7 +214,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 						long currentRemainingValue = currentValue - share - share;
 						toShare = currentRemainingValue - greaterXNeighborValue; 
 						share = toShare/2;
-						if (share > 0) {
+						if (share != 0) {
 							anyToppled = true;
 						}
 						newGrid[x] += currentRemainingValue - toShare + share + toShare%2;
@@ -224,7 +224,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 					// sn < current <= gn
 					long toShare = currentValue - smallerXNeighborValue; 
 					long share = toShare/2;
-					if (share > 0) {
+					if (share != 0) {
 						anyToppled = true;
 					}
 					newGrid[xMinusOne] += share;
@@ -235,7 +235,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 					// gn < current <= sn
 					long toShare = currentValue - greaterXNeighborValue; 
 					long share = toShare/2;
-					if (share > 0) {
+					if (share != 0) {
 						anyToppled = true;
 					}
 					newGrid[x] += currentValue - toShare + share + toShare%2;

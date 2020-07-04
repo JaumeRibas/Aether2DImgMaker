@@ -23,25 +23,15 @@ import java.math.BigInteger;
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
 
 public class Aether2D implements SymmetricEvolvingLongGrid2D {
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
 
 	/** A 2D array representing the grid */
 	private long[][] grid;
 	
 	private long initialValue;
 	private long currentStep;
-	
-	/** Whether or not the values reached the bounds of the array */
-	private boolean boundsReached;
-
+	private int maxX;
 	private int maxY;
 
-	private int maxXMinusOne;
-	
 	/**
 	 * Creates an instance with the given initial value.
 	 * 
@@ -56,169 +46,1343 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 			}
 		}
 		this.initialValue = initialValue;
-		grid = Utils.buildAnisotropic2DLongArray(3);
+		grid = Utils.buildAnisotropic2DLongArray(6);
 		grid[0][0] = initialValue;
+		maxX = 3;// at the smallest size it won't be exact
 		maxY = 0;
-		boundsReached = false;
 		currentStep = 0;
 	}
 	
 	@Override
 	public boolean nextStep(){
-		long[][] newGrid = null;
-		if (boundsReached) {
-			boundsReached = false;
-			newGrid = new long[grid.length + 1][];
-		} else {
-			newGrid = new long[grid.length][];
-		}
-		maxXMinusOne = newGrid.length - 2;
+		long[][] newGrid = new long[maxX + 3][];
 		boolean changed = false;
-		newGrid[0] = new long[1];
-		boolean isFirst = true;
-		long[] neighborValues = new long[4];
-		byte[] neighborDirections = new byte[4];
-		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
-			if (nextX < newGrid.length) {
-				newGrid[nextX] = new long[nextX + 1];
-			}
-			for (int y = 0; y <= x; y++) {
-				long value = this.grid[x][y];
-				int relevantNeighborCount = 0;
-				long neighborValue;
-				neighborValue = getValueAtPosition(x + 1, y);
-				if (neighborValue < value) {
-					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = RIGHT;
-					relevantNeighborCount++;
-				}
-				neighborValue = getValueAtPosition(x - 1, y);
-				if (neighborValue < value) {
-					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = LEFT;
-					relevantNeighborCount++;
-				}
-				neighborValue = getValueAtPosition(x, y + 1);
-				if (neighborValue < value) {
-					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = UP;
-					relevantNeighborCount++;
-				}
-				neighborValue = getValueAtPosition(x, y - 1);
-				if (neighborValue < value) {
-					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = DOWN;
-					relevantNeighborCount++;
-				}
-				
-				if (relevantNeighborCount > 0) {
-					//sort
-					boolean sorted = false;
-					while (!sorted) {
-						sorted = true;
-						for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-							if (neighborValues[i] < neighborValues[i+1]) {
-								sorted = false;
-								long valSwap = neighborValues[i];
-								neighborValues[i] = neighborValues[i+1];
-								neighborValues[i+1] = valSwap;
-								byte dirSwap = neighborDirections[i];
-								neighborDirections[i] = neighborDirections[i+1];
-								neighborDirections[i+1] = dirSwap;
-							}
-						}
+		long currentValue, greaterXNeighborValue;
+		long[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
+		long[] newSmallerXSlice = null, newCurrentXSlice = new long[1], newGreaterXSlice = new long[2];// build new grid progressively to save memory 
+		newGrid[0] = newCurrentXSlice;
+		newGrid[1] = newGreaterXSlice;
+		// x = 0, y = 0
+		currentValue = currentXSlice[0];
+		greaterXNeighborValue = greaterXSlice[0];
+		if (greaterXNeighborValue < currentValue) {
+			long toShare = currentValue - greaterXNeighborValue;
+			long share = toShare/5;
+			if (share != 0) {
+				changed = true;
+				newCurrentXSlice[0] += currentValue - toShare + share + toShare%5;
+				newGreaterXSlice[0] += share;
+			} else {
+				newCurrentXSlice[0] += currentValue;
+			}			
+		} else {
+			newCurrentXSlice[0] += currentValue;
+		}		
+		// x = 1, y = 0
+		// smallerXSlice = currentXSlice; // not needed here
+		currentXSlice = greaterXSlice;
+		greaterXSlice = grid[2];
+		newSmallerXSlice = newCurrentXSlice;
+		newCurrentXSlice = newGreaterXSlice;
+		newGreaterXSlice = new long[3];
+		newGrid[2] = newGreaterXSlice;
+		long[][] newXSlices = new long[][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		long[] relevantAsymmetricNeighborValues = new long[4];
+		int[][] relevantAsymmetricNeighborCoords = new int[4][2];
+		int[] relevantAsymmetricNeighborShareMultipliers = new int[4];// to compensate for omitted symmetric positions
+		int[] relevantAsymmetricNeighborSymmetryCounts = new int[4];// to compensate for omitted symmetric positions
+		// reuse values obtained previously
+		long smallerXNeighborValue = currentValue;
+		currentValue = greaterXNeighborValue;
+		greaterXNeighborValue = greaterXSlice[0];
+		long greaterYNeighborValue = currentXSlice[1];
+		if (smallerXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;// this is the index of the new slice: 0->newSmallerXSlice, 1->newCurrentXSlice, 2->newGreaterXSlice
+			nc[1] = 0;// this is the actual y coordinate
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			changed = true;
+		}
+		// x = 1, y = 1
+		// reuse values obtained previously
+		long smallerYNeighborValue = currentValue;
+		currentValue = greaterYNeighborValue;
+		greaterXNeighborValue = greaterXSlice[1];
+		if (smallerYNeighborValue < currentValue) {
+			if (greaterXNeighborValue < currentValue) {
+				if (smallerYNeighborValue == greaterXNeighborValue) {
+					// gx = sy < current
+					long toShare = currentValue - greaterXNeighborValue; 
+					long share = toShare/5;
+					if (share != 0) {
+						changed = true;
 					}
-					//divide
-					boolean isFirstNeighbor = true;
-					long previousNeighborValue = 0;
-					for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-						neighborValue = neighborValues[i];
-						if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-							int shareCount = relevantNeighborCount - i + 1;
-							long toShare = value - neighborValue;
-							long share = toShare/shareCount;
-							if (share != 0) {
-								changed = true;
-								value = value - toShare + toShare%shareCount + share;
-								for (int j = i; j < relevantNeighborCount; j++) {
-									addToNeighbor(newGrid, x, y, neighborDirections[j], share);
-								}
-							}
-							previousNeighborValue = neighborValue;
-						}
-					}	
+					newCurrentXSlice[0] += share + share;// one more for the symmetric position at the other side
+					newCurrentXSlice[1] += currentValue - toShare + share + toShare%5;
+					newGreaterXSlice[1] += share;
+				} else if (smallerYNeighborValue < greaterXNeighborValue) {
+					// sy < gx < current
+					long toShare = currentValue - greaterXNeighborValue; 
+					long share = toShare/5;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[0] += share + share;
+					newGreaterXSlice[1] += share;
+					long currentRemainingValue = currentValue - 4*share;
+					toShare = currentRemainingValue - smallerYNeighborValue; 
+					share = toShare/3;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[0] += share + share;
+					newCurrentXSlice[1] += currentRemainingValue - toShare + share + toShare%3;
+				} else {
+					// gx < sy < current
+					long toShare = currentValue - smallerYNeighborValue; 
+					long share = toShare/5;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[0] += share + share;
+					newGreaterXSlice[1] += share;
+					long currentRemainingValue = currentValue - 4*share;
+					toShare = currentRemainingValue - greaterXNeighborValue; 
+					share = toShare/3;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[1] += currentRemainingValue - toShare + share + toShare%3;
+					newGreaterXSlice[1] += share;
 				}
-				newGrid[x][y] += value;
+			} else {
+				// sy < current <= gx
+				long toShare = currentValue - smallerYNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					changed = true;
+				}
+				newCurrentXSlice[0] += share + share;
+				newCurrentXSlice[1] += currentValue - toShare + share + toShare%3;
 			}
-			if (!isFirst) {
-				grid[x-1] = null;
+		} else {
+			if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sy
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					changed = true;
+				}
+				newCurrentXSlice[1] += currentValue - toShare + share + toShare%3;
+				newGreaterXSlice[1] += share;
+			} else {
+				newCurrentXSlice[1] += currentValue;
 			}
+		}
+		grid[0] = null;// free old grid progressively to save memory
+		// x = 2, y = 0
+		smallerXSlice = currentXSlice;
+		currentXSlice = greaterXSlice;
+		greaterXSlice = grid[3];
+		newSmallerXSlice = newCurrentXSlice;
+		newCurrentXSlice = newGreaterXSlice;
+		newGreaterXSlice = new long[4];		
+		newGrid[3] = newGreaterXSlice;
+		newXSlices[0] = newSmallerXSlice;
+		newXSlices[1] = newCurrentXSlice;
+		newXSlices[2] = newGreaterXSlice;
+		relevantAsymmetricNeighborCount = 0;
+		relevantNeighborCount = 0;
+		// reuse values obtained previously
+		greaterYNeighborValue = greaterXNeighborValue;
+		currentValue = currentXSlice[0];
+		greaterXNeighborValue = greaterXSlice[0];
+		smallerXNeighborValue = smallerXSlice[0];
+		if (smallerXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			changed = true;
+		}
+		// x = 2, y = 1
+		relevantAsymmetricNeighborCount = 0;
+		// reuse values obtained previously
+		smallerYNeighborValue = currentValue;
+		currentValue = greaterYNeighborValue;
+		greaterYNeighborValue = currentXSlice[2];
+		smallerXNeighborValue = smallerXSlice[1];
+		greaterXNeighborValue = greaterXSlice[1];
+		if (smallerXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 2;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
+			changed = true;
+		}
+		// x = 2, y = 2
+		// reuse values obtained previously
+		smallerYNeighborValue = currentValue;
+		currentValue = greaterYNeighborValue;
+		greaterXNeighborValue = greaterXSlice[2];
+		if (smallerYNeighborValue < currentValue) {
+			if (greaterXNeighborValue < currentValue) {
+				if (smallerYNeighborValue == greaterXNeighborValue) {
+					// gx = sy < current
+					long toShare = currentValue - greaterXNeighborValue; 
+					long share = toShare/5;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[1] += share;
+					newCurrentXSlice[2] += currentValue - toShare + share + toShare%5;
+					newGreaterXSlice[2] += share;
+				} else if (smallerYNeighborValue < greaterXNeighborValue) {
+					// sy < gx < current
+					long toShare = currentValue - greaterXNeighborValue; 
+					long share = toShare/5;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[1] += share;
+					newGreaterXSlice[2] += share;
+					long currentRemainingValue = currentValue - 4*share;
+					toShare = currentRemainingValue - smallerYNeighborValue; 
+					share = toShare/3;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[1] += share;
+					newCurrentXSlice[2] += currentRemainingValue - toShare + share + toShare%3;
+				} else {
+					// gx < sy < current
+					long toShare = currentValue - smallerYNeighborValue; 
+					long share = toShare/5;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[1] += share;
+					newGreaterXSlice[2] += share;
+					long currentRemainingValue = currentValue - 4*share;
+					toShare = currentRemainingValue - greaterXNeighborValue; 
+					share = toShare/3;
+					if (share != 0) {
+						changed = true;
+					}
+					newCurrentXSlice[2] += currentRemainingValue - toShare + share + toShare%3;
+					newGreaterXSlice[2] += share;
+				}
+			} else {
+				// sy < current <= gx
+				long toShare = currentValue - smallerYNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					changed = true;
+				}
+				newCurrentXSlice[1] += share;
+				newCurrentXSlice[2] += currentValue - toShare + share + toShare%3;
+			}
+		} else {
+			if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sy
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					changed = true;
+				}
+				newCurrentXSlice[2] += currentValue - toShare + share + toShare%3;
+				newGreaterXSlice[2] += share;
+			} else {
+				newCurrentXSlice[2] += currentValue;
+			}
+		}
+		grid[1] = null;
+		// 3 >= x < edge - 2
+		int edge = grid.length - 1;
+		int edgeMinusTwo = edge - 2;
+		long[][] xSlices = new long[][] {null, currentXSlice, greaterXSlice};
+		newXSlices[1] = newCurrentXSlice;
+		newXSlices[2] = newGreaterXSlice;
+		if (toppleRangeBeyondX2(xSlices, newXSlices, newGrid, 3, edgeMinusTwo, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse this arrays?
+			changed = true;
+		}
+		//edge - 2 >= x < edge
+		if (toppleRangeBeyondX2(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
+			changed = true;
+			maxX++;
+		}
+		if (newGrid.length > grid.length) {
+			newGrid[grid.length] = new long[newGrid.length];
 		}
 		grid = newGrid;
 		currentStep++;
 		return changed;
 	}
 	
-	private void addToNeighbor(long grid[][], int x, int y, byte direction, long value) {
-		switch(direction) {
-		case RIGHT:
-			addRight(grid, x, y, value);
-			break;
-		case LEFT:
-			addLeft(grid, x, y, value);
-			break;
-		case UP:
-			addUp(grid, x, y, value);
-			break;
-		case DOWN:
-			addDown(grid, x, y, value);
-			break;
-		}
-	}
-	
-	private void addRight(long[][] grid, int x, int y, long value) {
-		grid[x+1][y] += value;
-		if (x >= maxXMinusOne) {
-			boundsReached = true;
-		}
-	}
-	
-	private void addLeft(long[][] grid, int x, int y, long value) {
-		if (x > y) {
-			long valueToAdd = value;
-			if (x == y + 1) {
-				valueToAdd += value;
-				if (x == 1) {
-					valueToAdd += 2*value;							
+	private boolean toppleRangeBeyondX2(long[][] xSlices, long[][] newXSlices, long[][] newGrid, int minX, int maxX, 
+			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+			int[] relevantAsymmetricNeighborSymmetryCounts) {
+		boolean anyToppled = false;
+		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
+		long[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
+		long[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
+		for (; x < maxX; x++, xMinusOne++, xPlusOne++, xPlusTwo++) {
+			// y = 0;
+			smallerXSlice = currentXSlice;
+			currentXSlice = greaterXSlice;
+			greaterXSlice = grid[xPlusOne];
+			newSmallerXSlice = newCurrentXSlice;
+			newCurrentXSlice = newGreaterXSlice;
+			newGreaterXSlice = new long[xPlusTwo];		
+			newGrid[xPlusOne] = newGreaterXSlice;
+			newXSlices[0] = newSmallerXSlice;
+			newXSlices[1] = newCurrentXSlice;
+			newXSlices[2] = newGreaterXSlice;
+			int relevantAsymmetricNeighborCount = 0;
+			int relevantNeighborCount = 0;
+			long currentValue = currentXSlice[0];
+			long greaterYNeighborValue = currentXSlice[1];
+			long smallerXNeighborValue = smallerXSlice[0];
+			long greaterXNeighborValue = greaterXSlice[0];
+			if (smallerXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 0;
+				nc[1] = 0;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+				relevantNeighborCount++;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 2;
+				nc[1] = 0;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+				relevantNeighborCount++;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = 1;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+				relevantNeighborCount += 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, 
+					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+				anyToppled = true;
+			}
+			// y = 1
+			relevantAsymmetricNeighborCount = 0;
+			// reuse values obtained previously
+			long smallerYNeighborValue = currentValue;
+			currentValue = greaterYNeighborValue;
+			greaterYNeighborValue = currentXSlice[2];
+			smallerXNeighborValue = smallerXSlice[1];
+			greaterXNeighborValue = greaterXSlice[1];
+			if (smallerXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 0;
+				nc[1] = 1;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 2;
+				nc[1] = 1;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (smallerYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = 0;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = 2;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
+				anyToppled = true;
+			}
+			// 2 >= y < x - 1
+			int y = 2, yMinusOne = y - 1, yPlusOne = y + 1;
+			for (; y < xMinusOne; y++, yMinusOne++, yPlusOne++) {
+				relevantAsymmetricNeighborCount = 0;
+				// reuse values obtained previously
+				smallerYNeighborValue = currentValue;
+				currentValue = greaterYNeighborValue;
+				greaterYNeighborValue = currentXSlice[yPlusOne];
+				smallerXNeighborValue = smallerXSlice[y];
+				greaterXNeighborValue = greaterXSlice[y];
+				if (smallerXNeighborValue < currentValue) {
+					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+					nc[0] = 0;
+					nc[1] = y;
+					relevantAsymmetricNeighborCount++;
+				}
+				if (greaterXNeighborValue < currentValue) {
+					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+					nc[0] = 2;
+					nc[1] = y;
+					relevantAsymmetricNeighborCount++;
+				}
+				if (smallerYNeighborValue < currentValue) {
+					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+					nc[0] = 1;
+					nc[1] = yMinusOne;
+					relevantAsymmetricNeighborCount++;
+				}
+				if (greaterYNeighborValue < currentValue) {
+					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+					nc[0] = 1;
+					nc[1] = yPlusOne;
+					relevantAsymmetricNeighborCount++;
+				}
+				if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, 
+						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount)) {
+					anyToppled = true;
 				}
 			}
-			grid[x-1][y] += valueToAdd;
+			// y = x - 1
+			relevantAsymmetricNeighborCount = 0;
+			// reuse values obtained previously
+			smallerYNeighborValue = currentValue;
+			currentValue = greaterYNeighborValue;
+			greaterYNeighborValue = currentXSlice[yPlusOne];
+			smallerXNeighborValue = smallerXSlice[y];
+			greaterXNeighborValue = greaterXSlice[y];
+			if (smallerXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 0;
+				nc[1] = y;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 2;
+				nc[1] = y;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (smallerYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = yMinusOne;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = yPlusOne;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
+				anyToppled = true;
+			}
+			// y = x
+			yMinusOne = y;
+			y = x;
+			// reuse values obtained previously
+			smallerYNeighborValue = currentValue;
+			currentValue = greaterYNeighborValue;
+			greaterXNeighborValue = greaterXSlice[y];
+			if (smallerYNeighborValue < currentValue) {
+				if (greaterXNeighborValue < currentValue) {
+					if (smallerYNeighborValue == greaterXNeighborValue) {
+						// gx = sy < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							anyToppled = true;
+						}
+						newCurrentXSlice[yMinusOne] += share;
+						newCurrentXSlice[y] += currentValue - toShare + share + toShare%5;
+						newGreaterXSlice[y] += share;
+					} else if (smallerYNeighborValue < greaterXNeighborValue) {
+						// sy < gx < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							anyToppled = true;
+						}
+						newCurrentXSlice[yMinusOne] += share;
+						newGreaterXSlice[y] += share;
+						long currentRemainingValue = currentValue - 4*share;
+						toShare = currentRemainingValue - smallerYNeighborValue; 
+						share = toShare/3;
+						if (share != 0) {
+							anyToppled = true;
+						}
+						newCurrentXSlice[yMinusOne] += share;
+						newCurrentXSlice[y] += currentRemainingValue - toShare + share + toShare%3;
+					} else {
+						// gx < sy < current
+						long toShare = currentValue - smallerYNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							anyToppled = true;
+						}
+						newCurrentXSlice[yMinusOne] += share;
+						newGreaterXSlice[y] += share;
+						long currentRemainingValue = currentValue - 4*share;
+						toShare = currentRemainingValue - greaterXNeighborValue; 
+						share = toShare/3;
+						if (share != 0) {
+							anyToppled = true;
+						}
+						newCurrentXSlice[y] += currentRemainingValue - toShare + share + toShare%3;
+						newGreaterXSlice[y] += share;
+					}
+				} else {
+					// sy < current <= gx
+					long toShare = currentValue - smallerYNeighborValue; 
+					long share = toShare/3;
+					if (share != 0) {
+						anyToppled = true;
+					}
+					newCurrentXSlice[yMinusOne] += share;
+					newCurrentXSlice[y] += currentValue - toShare + share + toShare%3;
+				}
+			} else {
+				if (greaterXNeighborValue < currentValue) {
+					// gx < current <= sy
+					long toShare = currentValue - greaterXNeighborValue; 
+					long share = toShare/3;
+					if (share != 0) {
+						anyToppled = true;
+					}
+					newCurrentXSlice[y] += currentValue - toShare + share + toShare%3;
+					newGreaterXSlice[y] += share;
+				} else {
+					newCurrentXSlice[y] += currentValue;
+				}
+			}
+			grid[xMinusOne] = null;
 		}
-		if (x >= maxXMinusOne) {
-			boundsReached = true;
+		xSlices[1] = currentXSlice;
+		xSlices[2] = greaterXSlice;
+		newXSlices[1] = newCurrentXSlice;
+		newXSlices[2] = newGreaterXSlice;
+		return anyToppled;
+	}
+	
+	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
+			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
+		boolean toppled = false;
+		switch (neighborCount) {
+			case 4:
+				sort4NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
+						neighborCoords, neighborShareMultipliers, neighborCount);
+				break;
+			case 3:
+				sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
+						neighborCoords, neighborShareMultipliers, neighborCount);
+				break;
+			case 2:
+				long n0Val = neighborValues[0], n1Val = neighborValues[1];
+				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
+				int n0Mult = neighborShareMultipliers[0], n1Mult = neighborShareMultipliers[1];
+				int shareCount = 3;
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					long toShare = value - n1Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					shareCount = 2;
+					long currentRemainingValue = value - 2*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				} else {
+					// n1Val < n0Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					shareCount = 2;
+					long currentRemainingValue = value - 2*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				}
+				break;
+			case 1:
+				long toShare = value - neighborValues[0];
+				long share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%2 + share;
+					int[] nc = neighborCoords[0];
+					newXSlices[nc[0]][nc[1]] += share * neighborShareMultipliers[0];
+				}
+				// no break
+			default: // 0
+				newXSlices[1][y] += value;
+		}
+		return toppled;
+	}
+	
+	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
+			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
+		boolean toppled = false;
+		boolean isFirstNeighbor = true;
+		long previousNeighborValue = 0;
+		for (int i = 0, shareCount = neighborCount + 1; i < neighborCount; i++, shareCount--, isFirstNeighbor = false) {
+			long neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+				long toShare = value - neighborValue;
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < neighborCount; j++) {
+						int[] nc = neighborCoords[j];
+						newXSlices[nc[0]][nc[1]] += share * neighborShareMultipliers[j];
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+		}
+		newXSlices[1][y] += value;
+		return toppled;
+	}
+	
+	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
+			int[][] neighborCoords, int neighborCount) {
+		boolean toppled = false;
+		switch (neighborCount) {
+			case 4:
+				sort4NeighborsByValueDesc(neighborValues, neighborCoords);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
+						neighborCoords, neighborCount);
+				break;
+			case 3:
+				sort3NeighborsByValueDesc(neighborValues, neighborCoords);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
+						neighborCoords, neighborCount);
+				break;
+			case 2:
+				long n0Val = neighborValues[0], n1Val = neighborValues[1];
+				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
+				int shareCount = 3;
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					long toShare = value - n1Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					shareCount = 2;
+					long currentRemainingValue = value - 2*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				} else {
+					// n1Val < n0Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					shareCount = 2;
+					long currentRemainingValue = value - 2*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				}
+				break;
+			case 1:
+				long toShare = value - neighborValues[0];
+				long share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%2 + share;
+					int[] nc = neighborCoords[0];
+					newXSlices[nc[0]][nc[1]] += share;
+				}
+				// no break
+			default: // 0
+				newXSlices[1][y] += value;
+		}
+		return toppled;
+	}
+	
+	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
+			int[][] neighborCoords, int neighborCount) {
+		boolean toppled = false;
+		boolean isFirstNeighbor = true;
+		long previousNeighborValue = 0;
+		for (int i = 0, shareCount = neighborCount + 1; i < neighborCount; i++, shareCount--, isFirstNeighbor = false) {
+			long neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+				long toShare = value - neighborValue;
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < neighborCount; j++) {
+						int[] nc = neighborCoords[j];
+						newXSlices[nc[0]][nc[1]] += share;
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+		}
+		newXSlices[1][y] += value;
+		return toppled;
+	}
+	
+	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		switch (asymmetricNeighborCount) {
+			case 4:
+				sort4NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
+						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				break;
+			case 3:
+				sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
+						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				break;
+			case 2:
+				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
+				int shareCount = neighborCount + 1;
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					long toShare = value - n1Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					shareCount -= asymmetricNeighborSymmetryCounts[1];
+					long currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				} else {
+					// n1Val < n0Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					shareCount -= asymmetricNeighborSymmetryCounts[0];
+					long currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]][n1Coords[1]] += share;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				}
+				break;
+			case 1:
+				shareCount = neighborCount + 1;
+				long toShare = value - asymmetricNeighborValues[0];
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					int[] nc = asymmetricNeighborCoords[0];
+					newXSlices[nc[0]][nc[1]] += share;
+				}
+				// no break
+			default: // 0
+				newXSlices[1][y] += value;
+		}
+		return toppled;
+	}
+	
+	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		boolean isFirstNeighbor = true;
+		long previousNeighborValue = 0;
+		int shareCount = neighborCount + 1;
+		for (int i = 0; i < asymmetricNeighborCount; i++, isFirstNeighbor = false) {
+			long neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+				long toShare = value - neighborValue;
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < asymmetricNeighborCount; j++) {
+						int[] nc = asymmetricNeighborCoords[j];
+						newXSlices[nc[0]][nc[1]] += share;
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+			shareCount -= asymmetricNeighborSymmetryCounts[i];
+		}
+		newXSlices[1][y] += value;
+		return toppled;
+	}
+	
+	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] aymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
+			int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		switch (asymmetricNeighborCount) {
+			case 4:
+				sort4NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, aymmetricNeighborValues, 
+						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				break;
+			case 3:
+				sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, aymmetricNeighborValues, 
+						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				break;
+			case 2:
+				long n0Val = aymmetricNeighborValues[0], n1Val = aymmetricNeighborValues[1];
+				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
+				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
+				int shareCount = neighborCount + 1;
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					long toShare = value - n1Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					shareCount -= asymmetricNeighborSymmetryCounts[1];
+					long currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				} else {
+					// n1Val < n0Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					shareCount -= asymmetricNeighborSymmetryCounts[0];
+					long currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
+					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
+				}				
+				break;
+			case 1:
+				shareCount = neighborCount + 1;
+				long toShare = value - aymmetricNeighborValues[0];
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					int[] nc = asymmetricNeighborCoords[0];
+					newXSlices[nc[0]][nc[1]] += share * asymmetricNeighborShareMultipliers[0];
+				}
+				// no break
+			default: // 0
+				newXSlices[1][y] += value;
+		}
+		return toppled;
+	}
+	
+	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
+			int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		boolean isFirstNeighbor = true;
+		long previousNeighborValue = 0;
+		int shareCount = neighborCount + 1;
+		for (int i = 0; i < asymmetricNeighborCount; i++, isFirstNeighbor = false) {
+			long neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+				long toShare = value - neighborValue;
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < asymmetricNeighborCount; j++) {
+						int[] nc = asymmetricNeighborCoords[j];
+						newXSlices[nc[0]][nc[1]] += share * asymmetricNeighborShareMultipliers[j];
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+			shareCount -= asymmetricNeighborSymmetryCounts[i];
+		}
+		newXSlices[1][y] += value;
+		return toppled;
+	}
+
+	private void sort4NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
+			int[] otherNeighborIntegerField) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int i = 2; i >= 0; i--) {
+				if (neighborValues[i] < neighborValues[i+1]) {
+					sorted = false;
+					long valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[i+1];
+					neighborValues[i+1] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[i+1];
+					neighborCoords[i+1] = coordSwap;
+					int otherSwap = otherNeighborIntegerField[i];
+					otherNeighborIntegerField[i] = otherNeighborIntegerField[i+1];
+					otherNeighborIntegerField[i+1] = otherSwap;
+				}
+			}
 		}
 	}
 	
-	private void addUp(long[][] grid, int x, int y, long value) {
-		if (y < x) {
-			long valueToAdd = value;
-			if (y == x - 1) {
-				valueToAdd += value;
+	private void sort4NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
+			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int i = 2, j = 3; i >= 0; i--, j--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					long valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+					int multiplierSwap = neighborShareMultipliers[i];
+					neighborShareMultipliers[i] = neighborShareMultipliers[j];
+					neighborShareMultipliers[j] = multiplierSwap;
+					int symmetrySwap = neighborSymmetryCounts[i];
+					neighborSymmetryCounts[i] = neighborSymmetryCounts[j];
+					neighborSymmetryCounts[j] = symmetrySwap;
+				}
 			}
-			int yy = y+1;
-			grid[x][yy] += valueToAdd;
-			if (yy > maxY)
-				maxY = yy;
 		}
 	}
 	
-	private void addDown(long[][] grid, int x, int y, long value) {
-		if (y > 0) {
-			long valueToAdd = value;
-			if (y == 1) {
-				valueToAdd += value;
+	private void sort4NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int i = 2; i >= 0; i--) {
+				if (neighborValues[i] < neighborValues[i+1]) {
+					sorted = false;
+					long valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[i+1];
+					neighborValues[i+1] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[i+1];
+					neighborCoords[i+1] = coordSwap;
+				}
 			}
-			grid[x][y-1] += valueToAdd;
+		}
+	}
+	
+	private void sort3NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
+			int[] otherNeighborIntegerField) {
+		long n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		if (n0 >= n1) {
+			if (n1 < n2) {
+				if (n0 >= n2) { 
+					// n0 >= n2 > n1
+					neighborValues[1] = n2;
+					neighborValues[2] = n1;
+					int[] coordSwap = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[2];
+					neighborCoords[2] = coordSwap;
+					int otherSwap = otherNeighborIntegerField[1];
+					otherNeighborIntegerField[1] = otherNeighborIntegerField[2];
+					otherNeighborIntegerField[2] = otherSwap;
+				} else {
+					// n2 > n0 >= n1
+					neighborValues[0] = n2;
+					neighborValues[1] = n0;
+					neighborValues[2] = n1;
+					int[] auxCoord = neighborCoords[2];
+					neighborCoords[2] = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[0];
+					neighborCoords[0] = auxCoord;
+					int auxOther = otherNeighborIntegerField[2];
+					otherNeighborIntegerField[2] = otherNeighborIntegerField[1];
+					otherNeighborIntegerField[1] = otherNeighborIntegerField[0];
+					otherNeighborIntegerField[0] = auxOther;
+				}
+			}
+		} else if (n1 >= n2) {
+			if (n0 >= n2) {
+				// n1 > n0 >= n2
+				neighborValues[0] = n1;
+				neighborValues[1] = n0;
+				int[] coordSwap = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = coordSwap;
+				int otherSwap = otherNeighborIntegerField[0];
+				otherNeighborIntegerField[0] = otherNeighborIntegerField[1];
+				otherNeighborIntegerField[1] = otherSwap;
+			} else {
+				// n1 >= n2 > n0
+				neighborValues[0] = n1;
+				neighborValues[1] = n2;
+				neighborValues[2] = n0;
+				int[] auxCoord = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = neighborCoords[2];
+				neighborCoords[2] = auxCoord;
+				int auxOther = otherNeighborIntegerField[0];
+				otherNeighborIntegerField[0] = otherNeighborIntegerField[1];
+				otherNeighborIntegerField[1] = otherNeighborIntegerField[2];
+				otherNeighborIntegerField[2] = auxOther;
+			}
+		} else {
+			// n2 > n1 > n0
+			neighborValues[0] = n2;
+			neighborValues[2] = n0;
+			int[] coordSwap = neighborCoords[0];
+			neighborCoords[0] = neighborCoords[2];
+			neighborCoords[2] = coordSwap;
+			int otherSwap = otherNeighborIntegerField[0];
+			otherNeighborIntegerField[0] = otherNeighborIntegerField[2];
+			otherNeighborIntegerField[2] = otherSwap;
+		}
+	}
+	
+	private void sort3NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
+			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
+		long n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		if (n0 >= n1) {
+			if (n1 < n2) {
+				if (n0 >= n2) { 
+					// n0 >= n2 > n1
+					neighborValues[1] = n2;
+					neighborValues[2] = n1;
+					int[] coordSwap = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[2];
+					neighborCoords[2] = coordSwap;
+					int multiplierSwap = neighborShareMultipliers[1];
+					neighborShareMultipliers[1] = neighborShareMultipliers[2];
+					neighborShareMultipliers[2] = multiplierSwap;
+					int symmetrySwap = neighborSymmetryCounts[1];
+					neighborSymmetryCounts[1] = neighborSymmetryCounts[2];
+					neighborSymmetryCounts[2] = symmetrySwap;
+				} else {
+					// n2 > n0 >= n1
+					neighborValues[0] = n2;
+					neighborValues[1] = n0;
+					neighborValues[2] = n1;
+					int[] auxCoord = neighborCoords[2];
+					neighborCoords[2] = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[0];
+					neighborCoords[0] = auxCoord;
+					int auxMultiplier = neighborShareMultipliers[2];
+					neighborShareMultipliers[2] = neighborShareMultipliers[1];
+					neighborShareMultipliers[1] = neighborShareMultipliers[0];
+					neighborShareMultipliers[0] = auxMultiplier;
+					int auxSymmetry = neighborSymmetryCounts[2];
+					neighborSymmetryCounts[2] = neighborSymmetryCounts[1];
+					neighborSymmetryCounts[1] = neighborSymmetryCounts[0];
+					neighborSymmetryCounts[0] = auxSymmetry;
+				}
+			}
+		} else if (n1 >= n2) {
+			if (n0 >= n2) {
+				// n1 > n0 >= n2
+				neighborValues[0] = n1;
+				neighborValues[1] = n0;
+				int[] coordSwap = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = coordSwap;
+				int multiplierSwap = neighborShareMultipliers[0];
+				neighborShareMultipliers[0] = neighborShareMultipliers[1];
+				neighborShareMultipliers[1] = multiplierSwap;
+				int symmetrySwap = neighborSymmetryCounts[0];
+				neighborSymmetryCounts[0] = neighborSymmetryCounts[1];
+				neighborSymmetryCounts[1] = symmetrySwap;
+			} else {
+				// n1 >= n2 > n0
+				neighborValues[0] = n1;
+				neighborValues[1] = n2;
+				neighborValues[2] = n0;
+				int[] auxCoord = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = neighborCoords[2];
+				neighborCoords[2] = auxCoord;
+				int auxMultiplier = neighborShareMultipliers[0];
+				neighborShareMultipliers[0] = neighborShareMultipliers[1];
+				neighborShareMultipliers[1] = neighborShareMultipliers[2];
+				neighborShareMultipliers[2] = auxMultiplier;
+				int auxSymmetry = neighborSymmetryCounts[0];
+				neighborSymmetryCounts[0] = neighborSymmetryCounts[1];
+				neighborSymmetryCounts[1] = neighborSymmetryCounts[2];
+				neighborSymmetryCounts[2] = auxSymmetry;
+			}
+		} else {
+			// n2 > n1 > n0
+			neighborValues[0] = n2;
+			neighborValues[2] = n0;
+			int[] coordSwap = neighborCoords[0];
+			neighborCoords[0] = neighborCoords[2];
+			neighborCoords[2] = coordSwap;
+			int multiplierSwap = neighborShareMultipliers[0];
+			neighborShareMultipliers[0] = neighborShareMultipliers[2];
+			neighborShareMultipliers[2] = multiplierSwap;
+			int symmetrySwap = neighborSymmetryCounts[0];
+			neighborSymmetryCounts[0] = neighborSymmetryCounts[2];
+			neighborSymmetryCounts[2] = symmetrySwap;
+		}
+	}
+	
+	private void sort3NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords) {
+		long n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		if (n0 >= n1) {
+			if (n1 < n2) {
+				if (n0 >= n2) { 
+					// n0 >= n2 > n1
+					neighborValues[1] = n2;
+					neighborValues[2] = n1;
+					int[] coordSwap = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[2];
+					neighborCoords[2] = coordSwap;
+				} else {
+					// n2 > n0 >= n1
+					neighborValues[0] = n2;
+					neighborValues[1] = n0;
+					neighborValues[2] = n1;
+					int[] auxCoord = neighborCoords[2];
+					neighborCoords[2] = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[0];
+					neighborCoords[0] = auxCoord;
+				}
+			}
+		} else if (n1 >= n2) {
+			if (n0 >= n2) {
+				// n1 > n0 >= n2
+				neighborValues[0] = n1;
+				neighborValues[1] = n0;
+				int[] coordSwap = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = coordSwap;
+			} else {
+				// n1 >= n2 > n0
+				neighborValues[0] = n1;
+				neighborValues[1] = n2;
+				neighborValues[2] = n0;
+				int[] auxCoord = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = neighborCoords[2];
+				neighborCoords[2] = auxCoord;
+			}
+		} else {
+			// n2 > n1 > n0
+			neighborValues[0] = n2;
+			neighborValues[2] = n0;
+			int[] coordSwap = neighborCoords[0];
+			neighborCoords[0] = neighborCoords[2];
+			neighborCoords[2] = coordSwap;
 		}
 	}
 	
@@ -226,17 +1390,19 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	public long getValueAtPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
+		long value = 0;
 		if (y > x) {
-			int swp = y;
-			y = x;
-			x = swp;
-		}
-		if (x < grid.length 
-				&& y < grid[x].length) {
-			return grid[x][y];
+			if (y < grid.length 
+					&& x < grid[y].length) {
+				value = grid[y][x];
+			}
 		} else {
-			return 0;
+			if (x < grid.length 
+					&& y < grid[x].length) {
+				value = grid[x][y];
+			}
 		}
+		return value;
 	}
 	
 	@Override
@@ -251,7 +1417,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return grid.length - 1;
+		return maxX;
 	}
 	
 	@Override
