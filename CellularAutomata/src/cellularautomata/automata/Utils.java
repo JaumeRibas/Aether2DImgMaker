@@ -58,8 +58,12 @@ public class Utils {
 			throw new IllegalArgumentException("Grid dimension must be greater than zero.");
 		}
 		if (sourceValue.compareTo(BigInteger.ZERO) < 0) {
-			BigInteger two = BigInteger.valueOf(2);
-			return sourceValue.add(sourceValue.negate().divide(two).multiply(BigInteger.valueOf(gridDimension).multiply(two).add(BigInteger.ONE))).abs();
+			if (gridDimension > 1) {
+				BigInteger two = BigInteger.valueOf(2);
+				return sourceValue.add(sourceValue.negate().divide(two).multiply(BigInteger.valueOf(gridDimension).multiply(two).add(BigInteger.ONE))).abs();
+			} else {
+				return sourceValue.negate();
+			}
 		} else {
 			return sourceValue; 
 		}
