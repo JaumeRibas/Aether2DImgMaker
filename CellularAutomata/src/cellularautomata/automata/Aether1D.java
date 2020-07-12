@@ -47,13 +47,13 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 		this.initialValue = initialValue;
 		grid = new long[5];
 		grid[0] = initialValue;
-		maxX = 1;//at the smallest size it won't be exact
+		maxX = 2;
 		currentStep = 0;
 	}
 	
 	@Override
 	public boolean nextStep(){
-		long[] newGrid = new long[maxX + 4];
+		long[] newGrid = new long[maxX + 3];
 		boolean changed = false;
 		long currentValue, greaterXNeighborValue, smallerXNeighborValue;
 		//x = 0
