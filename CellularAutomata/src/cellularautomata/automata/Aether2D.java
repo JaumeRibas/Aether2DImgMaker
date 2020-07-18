@@ -30,7 +30,6 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	private long initialValue;
 	private long currentStep;
 	private int maxX;
-	private int maxY;
 
 	/**
 	 * Creates an instance with the given initial value.
@@ -48,8 +47,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic2DLongArray(6);
 		grid[0][0] = initialValue;
-		maxX = 3;// at the smallest size it won't be exact
-		maxY = 0;
+		maxX = 3;
 		currentStep = 0;
 	}
 	
@@ -1427,7 +1425,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	
 	@Override
 	public int getAsymmetricMaxY() {
-		return maxY;
+		return maxX;
 	}
 	
 	/**
