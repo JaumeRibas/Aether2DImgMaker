@@ -18,7 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,12 +51,8 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public AetherSimple4D(long initialValue) {
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < Long.valueOf("-2635249153387078803")) {//to prevent overflow of long type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -2,635,249,153,387,078,803. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		int side = 5;

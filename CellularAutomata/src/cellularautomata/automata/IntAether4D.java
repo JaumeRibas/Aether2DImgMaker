@@ -18,8 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-
 import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid4D;
 
 public class IntAether4D implements SymmetricEvolvingIntGrid4D {
@@ -53,12 +51,8 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public IntAether4D(int initialValue) {
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Integer.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < -613566757) {//to prevent overflow of int type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -613,566,757. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic4DIntArray(3);

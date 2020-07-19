@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.math.BigInteger;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
@@ -64,12 +63,8 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 	 * @throws Exception
 	 */
 	public Aether4DAsymmetricSectionSwap(long initialValue, long maxGridHeapSize, String folderPath) throws Exception {
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(PRIMITIVE_MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + PRIMITIVE_MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < Long.valueOf("-2635249153387078803")) {//to prevent overflow of long type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -2,635,249,153,387,078,803. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;

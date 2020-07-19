@@ -18,8 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-
 import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid3D;
 
 public class IntAether3D implements SymmetricEvolvingIntGrid3D {
@@ -51,12 +49,8 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public IntAether3D(int initialValue) {
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Integer.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < -858993459) {//to prevent overflow of int type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -858,993,459. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DIntArray(3);

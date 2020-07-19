@@ -18,7 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,12 +57,8 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 	 */
 	public AetherSimple3D(long initialValue) {
 		//safety check to prevent exceeding the data type's max value
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < Long.valueOf("-3689348814741910323")) {
+			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		//initial side of the array, will be increased as needed

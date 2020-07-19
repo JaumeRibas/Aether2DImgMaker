@@ -18,8 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
 
 public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
@@ -52,12 +50,8 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 	public Aether3DEnclosed(long initialValue, int side) {
 		if (side%2 == 0)
 			throw new UnsupportedOperationException("Only uneven sides are supported.");
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < Long.valueOf("-3689348814741910323")) {//to prevent overflow of long type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
 		}
 		this.side = side;
 		this.halfSide = side/2;

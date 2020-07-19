@@ -1,4 +1,3 @@
-
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
     Copyright (C) 2017-2020 Jaume Ribas
 
@@ -19,8 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
 
 public class Aether3D implements SymmetricEvolvingLongGrid3D {
@@ -52,12 +49,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public Aether3D(long initialValue) {
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < Long.valueOf("-3689348814741910323")) {//to prevent overflow of long type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DLongArray(3);
@@ -303,28 +296,40 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
-		//sort coordinates
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
+		if (x >= y) {
+			if (y >= z) {
+				//x >= y >= z
+				if (x < grid.length) {
+					return grid[x][y][z];
+				}
+			} else if (x >= z) { 
+				//x >= z > y
+				if (x < grid.length) {
+					return grid[x][z][y];
+				}
+			} else {
+				//z > x >= y
+				if (z < grid.length) {
+					return grid[z][x][y];
+				}
 			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
+		} else if (y >= z) {
+			if (y < grid.length) {
+				if (x >= z) {
+					//y > x >= z
+					return grid[y][x][z];
+				} else {
+					//y >= z > x
+					return grid[y][z][x];
+				}
 			}
-		} while (!sorted);
-		if (x < grid.length) {
-			return grid[x][y][z];
 		} else {
-			return 0;
+			// z > y > x
+			if (z < grid.length) {
+				return grid[z][y][x];
+			}
 		}
+		return 0;
 	}
 	
 	@Override

@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.math.BigInteger;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
@@ -63,12 +62,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	 * @throws Exception
 	 */
 	public IntAether3DAsymmetricSectionSwap(int initialValue, long maxGridHeapSize, String folderPath) throws Exception {
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(PRIMITIVE_MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + PRIMITIVE_MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < -858993459) {//to prevent overflow of int type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -858,993,459. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;

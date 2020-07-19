@@ -18,8 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
 
 public class Aether1D implements SymmetricEvolvingLongGrid1D {	
@@ -37,13 +35,9 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public Aether1D(long initialValue) {
-		if (initialValue < 0) {
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(1, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
-		}
+		if (initialValue < Long.valueOf("-9223372036854775807")) {//to prevent overflow of long type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -9,223,372,036,854,775,807. Use a greater initial value or a different implementation.");
+	    }
 		this.initialValue = initialValue;
 		grid = new long[5];
 		grid[0] = initialValue;
