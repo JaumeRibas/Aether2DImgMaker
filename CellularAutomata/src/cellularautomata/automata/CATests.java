@@ -19,7 +19,9 @@ package cellularautomata.automata;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,10 +54,369 @@ import cellularautomata.grid4d.ShortGrid4D;
 public class CATests {
 	
 	public static void main(String[] args) throws Exception {
-		long initialValue = 1000000;
-		Aether2D ae1 = new Aether2D(initialValue);
-		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
-		compare(ae1, ae2);
+//		long initialValue = -100;
+//		Aether3D ae1 = new Aether3D(Long.valueOf("-4611686018427387903"));
+//		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
+//		compare(ae2, ae1);
+//		findAEMinAllowedValues();
+//		checkTotalValueConservation(ae1);
+//		stepByStep(ae1.crossSectionAtZ(0));
+		asymmetricPositionsNeighbors();
+	}
+	
+	public static void findAsymmetricPositionsCloseToTheEdge() {
+		int size = 15;
+		System.out.println(" x | y | z | a | b");
+		System.out.println("-------------------");
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y <= x; y++) {
+				for (int z = 0; z <= y; z++) {
+					int[] coords = new int[] {x, y, z};
+					int[] greaterXNeighborCoords = new int[] {x+1, y, z};
+					int[] smallerXNeighborCoords = new int[] {x-1, y, z};
+					int[] greaterYNeighborCoords = new int[] {x, y+1, z};
+					int[] smallerYNeighborCoords = new int[] {x, y-1, z};
+					int[] greaterZNeighborCoords = new int[] {x, y, z+1};
+					int[] smallerZNeighborCoords = new int[] {x, y, z-1};
+					int outsideNeighborCount = 0;
+					int insideNeihborWithNeighborsSymmetricToCurrentPositionCount = 0;
+					if (isOutsideAsymmetricSection(greaterXNeighborCoords)) {
+						outsideNeighborCount++;
+					} else {
+						if (getSymmetricNeighborsCount(greaterXNeighborCoords, coords) > 0) {
+							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
+						} 
+					}
+					if (isOutsideAsymmetricSection(smallerXNeighborCoords)) {
+						outsideNeighborCount++;
+					} else {
+						if (getSymmetricNeighborsCount(smallerXNeighborCoords, coords) > 0) {
+							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
+						} 
+					}
+					if (isOutsideAsymmetricSection(greaterYNeighborCoords)) {
+						outsideNeighborCount++;
+					} else {
+						if (getSymmetricNeighborsCount(greaterYNeighborCoords, coords) > 0) {
+							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
+						} 
+					}
+					if (isOutsideAsymmetricSection(smallerYNeighborCoords)) {
+						outsideNeighborCount++;
+					} else {
+						if (getSymmetricNeighborsCount(smallerYNeighborCoords, coords) > 0) {
+							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
+						} 
+					}
+					if (isOutsideAsymmetricSection(greaterZNeighborCoords)) {
+						outsideNeighborCount++;
+					} else {
+						if (getSymmetricNeighborsCount(greaterZNeighborCoords, coords) > 0) {
+							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
+						} 
+					}
+					if (isOutsideAsymmetricSection(smallerZNeighborCoords)) {
+						outsideNeighborCount++;
+					} else {
+						if (getSymmetricNeighborsCount(smallerZNeighborCoords, coords) > 0) {
+							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
+						} 
+					}
+					System.out.println(" " + x + " | " + y + " | " + z + " | " + outsideNeighborCount 
+							+ " | " + insideNeihborWithNeighborsSymmetricToCurrentPositionCount);
+				}
+				System.out.println();
+			}
+			System.out.println(System.lineSeparator()+System.lineSeparator());
+		}
+	}
+	
+	public static void asymmetricPositionsNeighbors() {
+		int size = 15;
+		System.out.println(" x | y | z | Neighborhood");
+		System.out.println("-------------------------");
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y <= x; y++) {
+				for (int z = 0; z <= y; z++) {
+					int[] coords = new int[] {x, y, z};
+					int[] greaterXNeighborCoords = new int[] {x+1, y, z};
+					int[] smallerXNeighborCoords = new int[] {x-1, y, z};
+					int[] greaterYNeighborCoords = new int[] {x, y+1, z};
+					int[] smallerYNeighborCoords = new int[] {x, y-1, z};
+					int[] greaterZNeighborCoords = new int[] {x, y, z+1};
+					int[] smallerZNeighborCoords = new int[] {x, y, z-1};
+					int greaterXNeighborSymmetries = 1;
+					int smallerXNeighborSymmetries = 1;
+					int greaterYNeighborSymmetries = 1;
+					int smallerYNeighborSymmetries = 1;
+					int greaterZNeighborSymmetries = 1;
+					int smallerZNeighborSymmetries = 1;
+					int greaterXNeighborWeight = 1;
+					int smallerXNeighborWeight = 1;
+					int greaterYNeighborWeight = 1;
+					int smallerYNeighborWeight = 1;
+					int greaterZNeighborWeight = 1;
+					int smallerZNeighborWeight = 1;
+					List<String> neighbors = new ArrayList<String>();
+					int[] nc = greaterXNeighborCoords;
+					if (isOutsideAsymmetricSection(nc)) {
+						greaterXNeighborSymmetries = 0;
+					} else {
+						greaterXNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+						greaterXNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+					}
+					nc = smallerXNeighborCoords;
+					if (isOutsideAsymmetricSection(nc)) {
+						smallerXNeighborSymmetries = 0;
+					} else {
+						smallerXNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+						smallerXNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+					}
+					nc = greaterYNeighborCoords;
+					if (isOutsideAsymmetricSection(nc)) {
+						greaterYNeighborSymmetries = 0;
+					} else {
+						greaterYNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+						greaterYNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+					}
+					nc = smallerYNeighborCoords;
+					if (isOutsideAsymmetricSection(nc)) {
+						smallerYNeighborSymmetries = 0;
+					} else {
+						smallerYNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+						smallerYNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+					}
+					nc = greaterZNeighborCoords;
+					if (isOutsideAsymmetricSection(nc)) {
+						greaterZNeighborSymmetries = 0;
+					} else {
+						greaterZNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+						greaterZNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+					}
+					nc = smallerZNeighborCoords;
+					if (isOutsideAsymmetricSection(nc)) {
+						smallerZNeighborSymmetries = 0;
+					} else {
+						smallerZNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+						smallerZNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+					}
+					
+					if (greaterXNeighborSymmetries > 0) {
+						String neighbor = "GX";
+						if (greaterXNeighborWeight > 1) {
+							neighbor = neighbor + "(" + greaterXNeighborWeight + ")";
+						}
+						if (greaterXNeighborSymmetries > 1) {
+							neighbor = greaterXNeighborSymmetries + "*" + neighbor;
+						}
+						neighbors.add(neighbor);
+					}
+					if (smallerXNeighborSymmetries > 0) {
+						String neighbor = "SX";
+						if (smallerXNeighborWeight > 1) {
+							neighbor = neighbor + "(" + smallerXNeighborWeight + ")";
+						}
+						if (smallerXNeighborSymmetries > 1) {
+							neighbor = smallerXNeighborSymmetries + "*" + neighbor;
+						}
+						neighbors.add(neighbor);
+					}
+					if (greaterYNeighborSymmetries > 0) {
+						String neighbor = "GY";
+						if (greaterYNeighborWeight > 1) {
+							neighbor = neighbor + "(" + greaterYNeighborWeight + ")";
+						}
+						if (greaterYNeighborSymmetries > 1) {
+							neighbor = greaterYNeighborSymmetries + "*" + neighbor;
+						}
+						neighbors.add(neighbor);
+					}
+					if (smallerYNeighborSymmetries > 0) {
+						String neighbor = "SY";
+						if (smallerYNeighborWeight > 1) {
+							neighbor = neighbor + "(" + smallerYNeighborWeight + ")";
+						}
+						if (smallerYNeighborSymmetries > 1) {
+							neighbor = smallerYNeighborSymmetries + "*" + neighbor;
+						}
+						neighbors.add(neighbor);
+					}
+					if (greaterZNeighborSymmetries > 0) {
+						String neighbor = "GZ";
+						if (greaterZNeighborWeight > 1) {
+							neighbor = neighbor + "(" + greaterZNeighborWeight + ")";
+						}
+						if (greaterZNeighborSymmetries > 1) {
+							neighbor = greaterZNeighborSymmetries + "*" + neighbor;
+						}
+						neighbors.add(neighbor);
+					}
+					if (smallerZNeighborSymmetries > 0) {
+						String neighbor = "SZ";
+						if (smallerZNeighborWeight > 1) {
+							neighbor = neighbor + "(" + smallerZNeighborWeight + ")";
+						}
+						if (smallerZNeighborSymmetries > 1) {
+							neighbor = smallerZNeighborSymmetries + "*" + neighbor;
+						}
+						neighbors.add(neighbor);
+					}					
+					
+					System.out.println(" " + x + " | " + y + " | " + z + " | " + String.join(", ", neighbors));
+				}
+				System.out.println();
+			}
+			System.out.println(System.lineSeparator() + System.lineSeparator());
+		}
+	}
+	
+	private static boolean isOutsideAsymmetricSection(int[] coords) {
+		for (int i = 0; i < coords.length; i++) {
+			if (coords[i] < 0) {
+				return true;
+			}
+		}
+		int lengthMinusOne = coords.length - 1;
+		for (int i = 0; i < lengthMinusOne; i++) {
+			if (coords[i] < coords[i + 1]) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static int getSymmetricNeighborsCount(int[] coords, int[] compareCoords) {
+		int x = coords[0], y = coords[1], z = coords[2];
+		int[] greaterXNeighborCoords = new int[] {x+1, y, z};
+		int[] smallerXNeighborCoords = new int[] {x-1, y, z};
+		int[] greaterYNeighborCoords = new int[] {x, y+1, z};
+		int[] smallerYNeighborCoords = new int[] {x, y-1, z};
+		int[] greaterZNeighborCoords = new int[] {x, y, z+1};
+		int[] smallerZNeighborCoords = new int[] {x, y, z-1};
+		int count = 0;
+		if (!Arrays.equals(greaterXNeighborCoords, compareCoords)) {
+			if (Arrays.equals(getAsymmetricCoords(greaterXNeighborCoords), compareCoords)) {
+				count++;
+			}
+		}
+		if (!Arrays.equals(smallerXNeighborCoords, compareCoords)) {
+			if (Arrays.equals(getAsymmetricCoords(smallerXNeighborCoords), compareCoords)) {
+				count++;
+			}
+		}
+		if (!Arrays.equals(greaterYNeighborCoords, compareCoords)) {
+			if (Arrays.equals(getAsymmetricCoords(greaterYNeighborCoords), compareCoords)) {
+				count++;
+			}
+		}
+		if (!Arrays.equals(smallerYNeighborCoords, compareCoords)) {
+			if (Arrays.equals(getAsymmetricCoords(smallerYNeighborCoords), compareCoords)) {
+				count++;
+			}
+		}
+		if (!Arrays.equals(greaterZNeighborCoords, compareCoords)) {
+			if (Arrays.equals(getAsymmetricCoords(greaterZNeighborCoords), compareCoords)) {
+				count++;
+			}
+		}
+		if (!Arrays.equals(smallerZNeighborCoords, compareCoords)) {
+			if (Arrays.equals(getAsymmetricCoords(smallerZNeighborCoords), compareCoords)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	private static int[] getAsymmetricCoords(int[] coords){	
+		int x = coords[0], y = coords[1], z = coords[2];
+		if (x < 0) x = -x;
+		if (y < 0) y = -y;
+		if (z < 0) z = -z;
+		if (x >= y) {
+			if (y >= z) {
+				//x >= y >= z
+				return new int[]{x, y, z};
+			} else if (x >= z) { 
+				//x >= z > y
+				return new int[]{x, z, y};
+			} else {
+				//z > x >= y
+				return new int[]{z, x, y};
+			}
+		} else if (y >= z) {
+			if (x >= z) {
+				//y > x >= z
+				return new int[]{y, x, z};
+			} else {
+				//y >= z > x
+				return new int[]{y, z, x};
+			}
+		} else {
+			// z > y > x
+			return new int[]{z, y, x};
+		}
+	}
+	
+	public static void findAEMinAllowedValues() {
+		//System.out.println(Integer.BYTES);
+		/*System.out.println(Long.MIN_VALUE);
+		return;*/
+		BigInteger num = BigInteger.valueOf(1);
+		BigInteger singleSourceValue = BigInteger.valueOf(-9365);
+		BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, singleSourceValue);
+		while (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Short.MAX_VALUE)) > 0) {
+			singleSourceValue = singleSourceValue.add(num);
+			maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, singleSourceValue);
+		}
+		System.out.println(singleSourceValue);
+//		System.out.println(Integer.MIN_VALUE);
+//		System.out.println(Integer.MAX_VALUE);
+	}
+	
+	public static void testAether3DEnclosed2() {
+		int side = 31;
+		int initialValue = -10000;
+		Aether3DEnclosed2 ae1 = new Aether3DEnclosed2(side, side, side, initialValue, side/2, side/2, side/2);
+		Aether3DEnclosed ae2 = new Aether3DEnclosed(initialValue, side);
+//		checkTotalValueConservation(ae1);
+//		stepByStep(ae2);
+		compareWithOffset(ae1, ae2, side/2 + 1, side/2 + 1, side/2 + 1);
+	}
+	
+	public static void compareWithOffset(EvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2, int xOffset, int yOffset, int zOffset) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+//				System.out.println("Comparing step " + ca1.getStep());
+				for (int z = ca1.getMinZ(), z2 = z + zOffset; z <= ca1.getMaxZ(); z++, z2++) {
+					for (int y = ca1.getMinYAtZ(z), y2 = y + yOffset; y <= ca1.getMaxYAtZ(z); y++, y2++) {
+						for (int x = ca1.getMinX(y,z), x2 = x + xOffset; x <= ca1.getMaxX(y,z); x++, x2++) {
+							if (ca1.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x2, y2, z2)) {
+								equal = false;
+								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+										+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z) 
+										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x2, y2, z2));
+								return;
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void testAsymmetricSection() {
@@ -221,11 +582,15 @@ public class CATests {
 			while (!finished1 && !finished2) {
 				//System.out.println("step " + ca1.getStep());
 				for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
-					if (ca1.getValueAtPosition(x) != ca2.getValueAtPosition(x)) {
+					System.out.println(x);
+					long a = ca1.getValueAtPosition(x);
+					long b = ca2.getValueAtPosition(x);
+					if (a != b) {
 						equal = false;
 						System.out.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
-								+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x) 
-								+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x));
+								+ ca1.getClass().getSimpleName() + ":" + a 
+								+ " != " + ca2.getClass().getSimpleName() + ":" + b);
+						//return;
 					}
 				}
 				finished1 = !ca1.nextStep();
@@ -323,7 +688,7 @@ public class CATests {
 							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y) 
 									+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y));
-							return;
+							//return;
 						}
 					}	
 				}
@@ -333,6 +698,9 @@ public class CATests {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal) {
+					return;
 				}
 			}
 			if (equal)
@@ -899,7 +1267,7 @@ public class CATests {
 		}
 	}	
 	
-	public static void race(EvolvingModel[] cas) {
+	public static void race(EvolvingModel... cas) {
 		try {
 			long millis;
 			for (EvolvingModel ca : cas) {

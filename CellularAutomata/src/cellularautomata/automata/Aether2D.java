@@ -669,17 +669,17 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return anyToppled;
 	}
 	
-	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
 			case 4:
-				sort4NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+				Utils.sort4NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
 						neighborCoords, neighborShareMultipliers, neighborCount);
 				break;
 			case 3:
-				sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
 						neighborCoords, neighborShareMultipliers, neighborCount);
 				break;
@@ -752,7 +752,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		boolean isFirstNeighbor = true;
@@ -777,17 +777,17 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
 			case 4:
-				sort4NeighborsByValueDesc(neighborValues, neighborCoords);
+				Utils.sort4NeighborsByValueDesc(neighborValues, neighborCoords);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
 						neighborCoords, neighborCount);
 				break;
 			case 3:
-				sort3NeighborsByValueDesc(neighborValues, neighborCoords);
+				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
 						neighborCoords, neighborCount);
 				break;
@@ -859,7 +859,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		boolean isFirstNeighbor = true;
@@ -884,17 +884,17 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 4:
-				sort4NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				Utils.sort4NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 3:
-				sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
@@ -967,7 +967,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		boolean isFirstNeighbor = true;
@@ -994,18 +994,18 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private boolean topplePosition(long[][] newXSlices, long value, int y, long[] aymmetricNeighborValues,
+	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] aymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 4:
-				sort4NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				Utils.sort4NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, aymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 3:
-				sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				Utils.sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, aymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
@@ -1079,7 +1079,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -1105,277 +1105,6 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		}
 		newXSlices[1][y] += value;
 		return toppled;
-	}
-
-	private void sort4NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
-			int[] otherNeighborIntegerField) {
-		// TODO faster sorting algorithm?
-		boolean sorted = false;
-		while (!sorted) {
-			sorted = true;
-			for (int i = 2; i >= 0; i--) {
-				if (neighborValues[i] < neighborValues[i+1]) {
-					sorted = false;
-					long valSwap = neighborValues[i];
-					neighborValues[i] = neighborValues[i+1];
-					neighborValues[i+1] = valSwap;
-					int[] coordSwap = neighborCoords[i];
-					neighborCoords[i] = neighborCoords[i+1];
-					neighborCoords[i+1] = coordSwap;
-					int otherSwap = otherNeighborIntegerField[i];
-					otherNeighborIntegerField[i] = otherNeighborIntegerField[i+1];
-					otherNeighborIntegerField[i+1] = otherSwap;
-				}
-			}
-		}
-	}
-	
-	private void sort4NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
-			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
-		// TODO faster sorting algorithm?
-		boolean sorted = false;
-		while (!sorted) {
-			sorted = true;
-			for (int i = 2, j = 3; i >= 0; i--, j--) {
-				if (neighborValues[i] < neighborValues[j]) {
-					sorted = false;
-					long valSwap = neighborValues[i];
-					neighborValues[i] = neighborValues[j];
-					neighborValues[j] = valSwap;
-					int[] coordSwap = neighborCoords[i];
-					neighborCoords[i] = neighborCoords[j];
-					neighborCoords[j] = coordSwap;
-					int multiplierSwap = neighborShareMultipliers[i];
-					neighborShareMultipliers[i] = neighborShareMultipliers[j];
-					neighborShareMultipliers[j] = multiplierSwap;
-					int symmetrySwap = neighborSymmetryCounts[i];
-					neighborSymmetryCounts[i] = neighborSymmetryCounts[j];
-					neighborSymmetryCounts[j] = symmetrySwap;
-				}
-			}
-		}
-	}
-	
-	private void sort4NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords) {
-		// TODO faster sorting algorithm?
-		boolean sorted = false;
-		while (!sorted) {
-			sorted = true;
-			for (int i = 2; i >= 0; i--) {
-				if (neighborValues[i] < neighborValues[i+1]) {
-					sorted = false;
-					long valSwap = neighborValues[i];
-					neighborValues[i] = neighborValues[i+1];
-					neighborValues[i+1] = valSwap;
-					int[] coordSwap = neighborCoords[i];
-					neighborCoords[i] = neighborCoords[i+1];
-					neighborCoords[i+1] = coordSwap;
-				}
-			}
-		}
-	}
-	
-	private void sort3NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
-			int[] otherNeighborIntegerField) {
-		long n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
-		if (n0 >= n1) {
-			if (n1 < n2) {
-				if (n0 >= n2) { 
-					// n0 >= n2 > n1
-					neighborValues[1] = n2;
-					neighborValues[2] = n1;
-					int[] coordSwap = neighborCoords[1];
-					neighborCoords[1] = neighborCoords[2];
-					neighborCoords[2] = coordSwap;
-					int otherSwap = otherNeighborIntegerField[1];
-					otherNeighborIntegerField[1] = otherNeighborIntegerField[2];
-					otherNeighborIntegerField[2] = otherSwap;
-				} else {
-					// n2 > n0 >= n1
-					neighborValues[0] = n2;
-					neighborValues[1] = n0;
-					neighborValues[2] = n1;
-					int[] auxCoord = neighborCoords[2];
-					neighborCoords[2] = neighborCoords[1];
-					neighborCoords[1] = neighborCoords[0];
-					neighborCoords[0] = auxCoord;
-					int auxOther = otherNeighborIntegerField[2];
-					otherNeighborIntegerField[2] = otherNeighborIntegerField[1];
-					otherNeighborIntegerField[1] = otherNeighborIntegerField[0];
-					otherNeighborIntegerField[0] = auxOther;
-				}
-			}
-		} else if (n1 >= n2) {
-			if (n0 >= n2) {
-				// n1 > n0 >= n2
-				neighborValues[0] = n1;
-				neighborValues[1] = n0;
-				int[] coordSwap = neighborCoords[0];
-				neighborCoords[0] = neighborCoords[1];
-				neighborCoords[1] = coordSwap;
-				int otherSwap = otherNeighborIntegerField[0];
-				otherNeighborIntegerField[0] = otherNeighborIntegerField[1];
-				otherNeighborIntegerField[1] = otherSwap;
-			} else {
-				// n1 >= n2 > n0
-				neighborValues[0] = n1;
-				neighborValues[1] = n2;
-				neighborValues[2] = n0;
-				int[] auxCoord = neighborCoords[0];
-				neighborCoords[0] = neighborCoords[1];
-				neighborCoords[1] = neighborCoords[2];
-				neighborCoords[2] = auxCoord;
-				int auxOther = otherNeighborIntegerField[0];
-				otherNeighborIntegerField[0] = otherNeighborIntegerField[1];
-				otherNeighborIntegerField[1] = otherNeighborIntegerField[2];
-				otherNeighborIntegerField[2] = auxOther;
-			}
-		} else {
-			// n2 > n1 > n0
-			neighborValues[0] = n2;
-			neighborValues[2] = n0;
-			int[] coordSwap = neighborCoords[0];
-			neighborCoords[0] = neighborCoords[2];
-			neighborCoords[2] = coordSwap;
-			int otherSwap = otherNeighborIntegerField[0];
-			otherNeighborIntegerField[0] = otherNeighborIntegerField[2];
-			otherNeighborIntegerField[2] = otherSwap;
-		}
-	}
-	
-	private void sort3NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords,
-			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
-		long n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
-		if (n0 >= n1) {
-			if (n1 < n2) {
-				if (n0 >= n2) { 
-					// n0 >= n2 > n1
-					neighborValues[1] = n2;
-					neighborValues[2] = n1;
-					int[] coordSwap = neighborCoords[1];
-					neighborCoords[1] = neighborCoords[2];
-					neighborCoords[2] = coordSwap;
-					int multiplierSwap = neighborShareMultipliers[1];
-					neighborShareMultipliers[1] = neighborShareMultipliers[2];
-					neighborShareMultipliers[2] = multiplierSwap;
-					int symmetrySwap = neighborSymmetryCounts[1];
-					neighborSymmetryCounts[1] = neighborSymmetryCounts[2];
-					neighborSymmetryCounts[2] = symmetrySwap;
-				} else {
-					// n2 > n0 >= n1
-					neighborValues[0] = n2;
-					neighborValues[1] = n0;
-					neighborValues[2] = n1;
-					int[] auxCoord = neighborCoords[2];
-					neighborCoords[2] = neighborCoords[1];
-					neighborCoords[1] = neighborCoords[0];
-					neighborCoords[0] = auxCoord;
-					int auxMultiplier = neighborShareMultipliers[2];
-					neighborShareMultipliers[2] = neighborShareMultipliers[1];
-					neighborShareMultipliers[1] = neighborShareMultipliers[0];
-					neighborShareMultipliers[0] = auxMultiplier;
-					int auxSymmetry = neighborSymmetryCounts[2];
-					neighborSymmetryCounts[2] = neighborSymmetryCounts[1];
-					neighborSymmetryCounts[1] = neighborSymmetryCounts[0];
-					neighborSymmetryCounts[0] = auxSymmetry;
-				}
-			}
-		} else if (n1 >= n2) {
-			if (n0 >= n2) {
-				// n1 > n0 >= n2
-				neighborValues[0] = n1;
-				neighborValues[1] = n0;
-				int[] coordSwap = neighborCoords[0];
-				neighborCoords[0] = neighborCoords[1];
-				neighborCoords[1] = coordSwap;
-				int multiplierSwap = neighborShareMultipliers[0];
-				neighborShareMultipliers[0] = neighborShareMultipliers[1];
-				neighborShareMultipliers[1] = multiplierSwap;
-				int symmetrySwap = neighborSymmetryCounts[0];
-				neighborSymmetryCounts[0] = neighborSymmetryCounts[1];
-				neighborSymmetryCounts[1] = symmetrySwap;
-			} else {
-				// n1 >= n2 > n0
-				neighborValues[0] = n1;
-				neighborValues[1] = n2;
-				neighborValues[2] = n0;
-				int[] auxCoord = neighborCoords[0];
-				neighborCoords[0] = neighborCoords[1];
-				neighborCoords[1] = neighborCoords[2];
-				neighborCoords[2] = auxCoord;
-				int auxMultiplier = neighborShareMultipliers[0];
-				neighborShareMultipliers[0] = neighborShareMultipliers[1];
-				neighborShareMultipliers[1] = neighborShareMultipliers[2];
-				neighborShareMultipliers[2] = auxMultiplier;
-				int auxSymmetry = neighborSymmetryCounts[0];
-				neighborSymmetryCounts[0] = neighborSymmetryCounts[1];
-				neighborSymmetryCounts[1] = neighborSymmetryCounts[2];
-				neighborSymmetryCounts[2] = auxSymmetry;
-			}
-		} else {
-			// n2 > n1 > n0
-			neighborValues[0] = n2;
-			neighborValues[2] = n0;
-			int[] coordSwap = neighborCoords[0];
-			neighborCoords[0] = neighborCoords[2];
-			neighborCoords[2] = coordSwap;
-			int multiplierSwap = neighborShareMultipliers[0];
-			neighborShareMultipliers[0] = neighborShareMultipliers[2];
-			neighborShareMultipliers[2] = multiplierSwap;
-			int symmetrySwap = neighborSymmetryCounts[0];
-			neighborSymmetryCounts[0] = neighborSymmetryCounts[2];
-			neighborSymmetryCounts[2] = symmetrySwap;
-		}
-	}
-	
-	private void sort3NeighborsByValueDesc(long[] neighborValues, int[][] neighborCoords) {
-		long n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
-		if (n0 >= n1) {
-			if (n1 < n2) {
-				if (n0 >= n2) { 
-					// n0 >= n2 > n1
-					neighborValues[1] = n2;
-					neighborValues[2] = n1;
-					int[] coordSwap = neighborCoords[1];
-					neighborCoords[1] = neighborCoords[2];
-					neighborCoords[2] = coordSwap;
-				} else {
-					// n2 > n0 >= n1
-					neighborValues[0] = n2;
-					neighborValues[1] = n0;
-					neighborValues[2] = n1;
-					int[] auxCoord = neighborCoords[2];
-					neighborCoords[2] = neighborCoords[1];
-					neighborCoords[1] = neighborCoords[0];
-					neighborCoords[0] = auxCoord;
-				}
-			}
-		} else if (n1 >= n2) {
-			if (n0 >= n2) {
-				// n1 > n0 >= n2
-				neighborValues[0] = n1;
-				neighborValues[1] = n0;
-				int[] coordSwap = neighborCoords[0];
-				neighborCoords[0] = neighborCoords[1];
-				neighborCoords[1] = coordSwap;
-			} else {
-				// n1 >= n2 > n0
-				neighborValues[0] = n1;
-				neighborValues[1] = n2;
-				neighborValues[2] = n0;
-				int[] auxCoord = neighborCoords[0];
-				neighborCoords[0] = neighborCoords[1];
-				neighborCoords[1] = neighborCoords[2];
-				neighborCoords[2] = auxCoord;
-			}
-		} else {
-			// n2 > n1 > n0
-			neighborValues[0] = n2;
-			neighborValues[2] = n0;
-			int[] coordSwap = neighborCoords[0];
-			neighborCoords[0] = neighborCoords[2];
-			neighborCoords[2] = coordSwap;
-		}
 	}
 	
 	@Override
