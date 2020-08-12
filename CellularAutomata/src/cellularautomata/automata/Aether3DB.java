@@ -136,8 +136,9 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, newXSlices, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts)) {
+		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 2, y = 1, z = 0
@@ -148,8 +149,9 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6(currentValue, greaterXNeighborValue, smallerXNeighborValue, smallerYNeighborValue, 
-				greaterYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
@@ -160,9 +162,10 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 2, y = 2, z = 0
@@ -183,9 +186,10 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType9(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+				greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 2, y = 2, z = 2
@@ -193,7 +197,8 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[2][2];
-		if (topplePositionType10(2, greaterXNeighborValue, smallerZNeighborValue, currentValue, newCurrentXSlice, newGreaterXSlice)) {
+		if (topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+				newGreaterXSlice)) {
 			changed = true;
 		}
 		grid[1] = null;
@@ -212,8 +217,9 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, newXSlices, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts)) {
+		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 1, z = 0
@@ -224,8 +230,9 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType11(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
@@ -236,20 +243,23 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType12(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 2, z = 0
 		currentValue = currentXSlice[2][0];
 		greaterXNeighborValue = greaterXSlice[2][0];
 		smallerXNeighborValue = smallerXSlice[2][0];
+		// reuse values obtained previously
+		smallerYNeighborValue = smallerZNeighborValue;
+		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		smallerYNeighborValue = currentXSlice[1][0];
-		greaterZNeighborValue = currentXSlice[2][1];
-		if (topplePositionType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
@@ -262,9 +272,10 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType14(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, 
-				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 			changed = true;
 		}		
 		// x = 3, y = 2, z = 2
@@ -274,9 +285,10 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType15(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 3, z = 0
@@ -284,9 +296,9 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		greaterXNeighborValue = greaterXSlice[3][0];
 		smallerYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[3][1];
-		if (topplePositionType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
-				newXSlices)) {
+		if (topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 3, z = 1
@@ -296,9 +308,10 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][2];
-		if (topplePositionType16(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 3, z = 2
@@ -308,9 +321,10 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][3];
-		if (topplePositionType17(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+				greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 3, z = 3
@@ -318,7 +332,8 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[3][3];
-		if (topplePositionType10(3, greaterXNeighborValue, smallerZNeighborValue, currentValue, newCurrentXSlice, newGreaterXSlice)) {
+		if (topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+				newGreaterXSlice)) {
 			changed = true;
 		}
 		grid[2] = null;
@@ -337,8 +352,9 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, newXSlices, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts)) {
+		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 4, y = 1, z = 0
@@ -349,8 +365,9 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType11(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
@@ -361,22 +378,23 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType12(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 4, y = 2, z = 0
-		// reuse values obtained previously
-		smallerYNeighborValue = smallerZNeighborValue;
-		greaterZNeighborValue = greaterYNeighborValue;
 		currentValue = currentXSlice[2][0];
 		greaterXNeighborValue = greaterXSlice[2][0];
 		smallerXNeighborValue = smallerXSlice[2][0];
+		// reuse values obtained previously
+		smallerYNeighborValue = smallerZNeighborValue;
+		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		if (topplePositionType18(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+		if (topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		
@@ -385,6 +403,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		return changed;
 	}
 
+	//checked
 	private static boolean topplePositionType1(long currentValue, long greaterXNeighborValue, long[][] newCurrentXSlice, 
 			long[][] newGreaterXSlice) {
 		boolean changed = false;
@@ -403,7 +422,8 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		}
 		return changed;
 	}
-
+	
+	//checked
 	private static boolean topplePositionType2(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
 			long greaterYNeighborValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
@@ -450,6 +470,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		}
 	}
 
+	//checked
 	private static boolean topplePositionType3(long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
@@ -496,6 +517,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		}
 	}
 
+	//checked
 	private static boolean topplePositionType4(long currentValue, long greaterXNeighborValue, long smallerZNeighborValue, 
 			long[][] newCurrentXSlice, long[][] newGreaterXSlice) {
 		boolean changed = false;
@@ -573,9 +595,11 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		return changed;
 	}
 	
-	private static boolean topplePositionType5(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long[][][] newXSlices, long[] relevantAsymmetricNeighborValues, 
-			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts) {
+	//checked
+	private static boolean topplePositionType5(long currentValue, long greaterXNeighborValue, 
+			long smallerXNeighborValue, long greaterYNeighborValue, long[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
+			long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -616,126 +640,70 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		}
 	};
 
-	private static boolean topplePositionType6(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long smallerYNeighborValue, long greaterZNeighborValue, 
-			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
-		int relevantAsymmetricNeighborCount = 0;
-		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = 1;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 0;
-			nc[1] = 1;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 0;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private static boolean topplePositionType7(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long smallerZNeighborValue, long[] relevantAsymmetricNeighborValues, 
+	//checked
+	private static boolean topplePositionType6(int y, long currentValue, long gXValue, long sXValue, 
+			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, 
+			long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
-			nc[1] = 1;
-			nc[2] = 1;
+			nc[1] = y;
+			nc[2] = 0;
 			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
-			nc[1] = 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 3;
+			nc[1] = y;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 1;
+			nc[1] = y + 1;
 			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 1, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			return true;
 		} else {
@@ -743,6 +711,67 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		}
 	}
 
+	//checked
+	private static boolean topplePositionType7(int coord, long currentValue, long gXValue, long sXValue, 
+			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, 
+			int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	//checked
 	private static boolean topplePositionType8(int y, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices ) {
@@ -786,57 +815,59 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType9(long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
-			long greaterZNeighborValue, long smallerZNeighborValue, long[] relevantAsymmetricNeighborValues, 
-			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
+	//checked
+	private static boolean topplePositionType9(int y, int z, long currentValue, long gXValue, long sYValue, 
+			int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, 
+			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
+			long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
-			nc[1] = 2;
-			nc[2] = 1;
+			nc[1] = y;
+			nc[2] = z;
 			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
-			nc[1] = 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			nc[1] = y - 1;
+			nc[2] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 2;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 3;
+			nc[1] = y;
+			nc[2] = z + 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			nc[1] = y;
+			nc[2] = z - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 2, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			return true;
 		} else {
@@ -844,10 +875,10 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType10(int coord, long greaterXNeighborValue, long smallerZNeighborValue, long currentValue, 
-			long[][] newCurrentXSlice, long[][] newGreaterXSlice) {
+	//checked
+	private static boolean topplePositionType10(int coord, long currentValue, long greaterXNeighborValue, 
+			long smallerZNeighborValue, long[][] newCurrentXSlice, long[][] newGreaterXSlice) {
 		boolean changed = false;
-		int coordMinusOne = coord - 1;
 		if (smallerZNeighborValue < currentValue) {
 			if (greaterXNeighborValue < currentValue) {
 				if (smallerZNeighborValue == greaterXNeighborValue) {
@@ -857,11 +888,12 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 					if (share != 0) {
 						changed = true;
 					}
-					newCurrentXSlice[coord][coordMinusOne] += share;
+					newCurrentXSlice[coord][coord - 1] += share;
 					newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%7;
 					newGreaterXSlice[coord][coord] += share;
 				} else if (smallerZNeighborValue < greaterXNeighborValue) {
 					// sz < gx < current
+					int coordMinusOne = coord - 1;
 					long toShare = currentValue - greaterXNeighborValue; 
 					long share = toShare/7;
 					if (share != 0) {
@@ -884,7 +916,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 					if (share != 0) {
 						changed = true;
 					}
-					newCurrentXSlice[coord][coordMinusOne] += share;
+					newCurrentXSlice[coord][coord - 1] += share;
 					newGreaterXSlice[coord][coord] += share;
 					long currentRemainingValue = currentValue - 6*share;
 					toShare = currentRemainingValue - greaterXNeighborValue; 
@@ -902,7 +934,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 				if (share != 0) {
 					changed = true;
 				}
-				newCurrentXSlice[coord][coordMinusOne] += share;
+				newCurrentXSlice[coord][coord - 1] += share;
 				newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%4;
 			}
 		} else {
@@ -922,10 +954,80 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		return changed;
 	}
 
-	private static boolean topplePositionType11(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long smallerYNeighborValue, long greaterZNeighborValue, 
-			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
+	//checked
+	private static boolean topplePositionType11(int y, int z, long currentValue, long gXValue, long sXValue, 
+			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, 
+			long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantNeighborValues, int[][] relevantNeighborCoords, 
+			int[] relevantNeighborShareMultipliers, 
+			long[][][] newXSlices) {
+		int relevantNeighborCount = 0;
+		if (gXValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount ] = gXValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = 1;
+			relevantNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = sXValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 0;
+			nc[1] = y;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = sXShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = gYValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y + 1;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = gYShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = sYValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = sYShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = gZValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z + 1;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = gZShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = sZValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z - 1;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborShareMultipliers, relevantNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	//checked
+	private static boolean topplePositionType12(int y, long currentValue, long greaterXNeighborValue, 
+			long smallerXNeighborValue, long greaterYNeighborValue, long smallerYNeighborValue, 
+			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
 			long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
@@ -933,136 +1035,8 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount ] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
-			nc[1] = 1;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount ++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 0;
-			nc[1] = 1;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 0;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private static boolean topplePositionType12(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long smallerZNeighborValue, long[] relevantAsymmetricNeighborValues, 
-			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
-		int relevantAsymmetricNeighborCount = 0;
-		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount ] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount ++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 0;
-			nc[1] = 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 1;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (topplePosition(newXSlices, currentValue, 1, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private static boolean topplePositionType13(int y, long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long smallerYNeighborValue, long greaterZNeighborValue, 
-			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
-		int relevantAsymmetricNeighborCount = 0;
-		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
 			nc[1] = y;
 			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
@@ -1073,7 +1047,6 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 0;
 			nc[1] = y;
 			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
@@ -1084,7 +1057,6 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 1;
 			nc[1] = y + 1;
 			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
@@ -1095,7 +1067,6 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 1;
 			nc[1] = y - 1;
 			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
@@ -1106,92 +1077,24 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 1;
 			nc[1] = y;
 			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private static boolean topplePositionType14(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long smallerYNeighborValue, long greaterZNeighborValue, long smallerZNeighborValue, 
+	//checked
+	private static boolean topplePositionType13(int coord, long currentValue, long greaterXNeighborValue, 
+			long smallerXNeighborValue, long greaterYNeighborValue, long smallerZNeighborValue, 
 			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, long[][][] newXSlices) {
-		int relevantAsymmetricNeighborCount = 0;
-		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = 2;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-		}
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 0;
-			nc[1] = 2;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount++;
-		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 3;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount++;
-		}
-		if (smallerYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount++;
-		}
-		if (greaterZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 2;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount++;
-		}
-		if (smallerZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 2;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount++;
-		}
-		if (topplePosition(newXSlices, currentValue, 2, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private static boolean topplePositionType15(int coord, long currentValue, long greaterXNeighborValue, 
-			long smallerXNeighborValue,	long greaterYNeighborValue, long smallerZNeighborValue, 
-			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			long[][][] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -1200,7 +1103,6 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 2;
 			nc[1] = coord;
 			nc[2] = coord;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
@@ -1211,7 +1113,6 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 0;
 			nc[1] = coord;
 			nc[2] = coord;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 3;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
@@ -1222,7 +1123,6 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 1;
 			nc[1] = coord + 1;
 			nc[2] = coord;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
@@ -1233,22 +1133,22 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 1;
 			nc[1] = coord;
 			nc[2] = coord - 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
 		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private static boolean topplePositionType16(int y, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
-			long greaterZNeighborValue, long smallerZNeighborValue, long[] relevantAsymmetricNeighborValues, 
-			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+	//checked
+	private static boolean topplePositionType14(int y, int z, long currentValue, long greaterXNeighborValue, 
+			long smallerYNeighborValue,	long greaterZNeighborValue, long smallerZNeighborValue, 
+			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
@@ -1257,8 +1157,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
 			nc[1] = y;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			nc[2] = z;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
@@ -1268,8 +1167,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
 			nc[1] = y - 1;
-			nc[2] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			nc[2] = z;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
@@ -1279,69 +1177,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
 			nc[1] = y;
-			nc[2] = 2;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = y;
-			nc[2] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (topplePosition(newXSlices, currentValue, y, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	private static boolean topplePositionType17(int y, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
-			long greaterZNeighborValue, long smallerZNeighborValue, long[] relevantAsymmetricNeighborValues, 
-			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
-		int z = y - 1;
-		int yMinusOne = z;
-		int zPlusOne = y;
-		int relevantAsymmetricNeighborCount = 0;
-		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = y;
-			nc[2] = z;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = yMinusOne;
-			nc[2] = z;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = y;
-			nc[2] = zPlusOne;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 3;
+			nc[2] = z + 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
@@ -1352,82 +1188,184 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			nc[0] = 1;
 			nc[1] = y;
 			nc[2] = z - 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
 			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
 		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private static boolean topplePositionType18(int y, long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
-			long greaterYNeighborValue, long smallerYNeighborValue, long greaterZNeighborValue, 
-			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, 
-			long[][][] newXSlices) {
-		int relevantAsymmetricNeighborCount = 0;
+	//checked
+	private static boolean topplePositionType15(int y, int z, long currentValue, long greaterXNeighborValue, 
+			long smallerXNeighborValue,	long greaterYNeighborValue, long smallerYNeighborValue, 
+			long greaterZNeighborValue, long smallerZNeighborValue, long[] relevantNeighborValues, 
+			int[][] relevantNeighborCoords, long[][][] newXSlices) {
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount ] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			relevantNeighborValues[relevantNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 2;
 			nc[1] = y;
-			nc[2] = 0;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount ++;
-			relevantAsymmetricNeighborCount++;
+			nc[2] = z;
+			relevantNeighborCount++;
 		}
 		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			relevantNeighborValues[relevantNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 0;
 			nc[1] = y;
-			nc[2] = 0;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			nc[2] = z;
 			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			relevantNeighborValues[relevantNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
 			nc[1] = y + 1;
-			nc[2] = 0;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			nc[2] = z;
 			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
 		}
 		if (smallerYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			relevantNeighborValues[relevantNeighborCount] = smallerYNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
 			nc[1] = y - 1;
-			nc[2] = 0;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			nc[2] = z;
 			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterZNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			relevantNeighborValues[relevantNeighborCount] = greaterZNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
 			nc[1] = y;
-			nc[2] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
+			nc[2] = z + 1;
+			relevantNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+		if (smallerZNeighborValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = smallerZNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z - 1;
+			relevantNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborCount)) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	private static boolean topplePosition(long[][][] newXSlices, long value, int y, int z, long[] neighborValues,
+			int[][] neighborCoords, int neighborCount) {
+		boolean toppled = false;
+		switch (neighborCount) {
+			case 3:
+				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, 
+						neighborCoords, 3);
+				break;
+			case 2:
+				long n0Val = neighborValues[0], n1Val = neighborValues[1];
+				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
+					newXSlices[1][y][z] += value - toShare + share + toShare%3;
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					long toShare = value - n1Val; 
+					long share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
+					long currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/2;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
+					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%2;
+				} else {
+					// n1Val < n0Val < value
+					long toShare = value - n0Val; 
+					long share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
+					long currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/2;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
+					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%2;
+				}				
+				break;
+			case 1:
+				long toShare = value - neighborValues[0];
+				long share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%2 + share;
+					int[] nc = neighborCoords[0];
+					newXSlices[nc[0]][nc[1]][nc[2]] += share;
+				}
+				// no break
+			case 0: 
+				newXSlices[1][y][z] += value;
+				break;
+			default: // 6, 5, 4
+				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, neighborCoords, 
+						neighborCount);
+		}
+		return toppled;
+	}
+	
+	private static boolean topplePositionSortedNeighbors(long[][][] newXSlices, long value, int y, int z, 
+			long[] neighborValues, int[][] neighborCoords, int neighborCount) {
+		boolean toppled = false;
+		boolean isFirstNeighbor = true;
+		long previousNeighborValue = 0;
+		int shareCount = neighborCount + 1;
+		for (int i = 0; i < neighborCount; i++, isFirstNeighbor = false) {
+			long neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+				long toShare = value - neighborValue;
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < neighborCount; j++) {
+						int[] nc = neighborCoords[j];
+						newXSlices[nc[0]][nc[1]][nc[2]] += share;
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+			shareCount--;
+		}
+		newXSlices[1][y][z] += value;
+		return toppled;
 	}
 	
 	private static boolean topplePosition(long[][][] newXSlices, long value, int y, int z, long[] aymmetricNeighborValues,

@@ -237,6 +237,25 @@ public class Utils {
 		}
 	}
 	
+	public static void sortNeighborsByValueDesc(int neighborCount, long[] neighborValues, int[][] neighborCoords) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; i--, j--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					long valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+				}
+			}
+		}
+	}
+	
 	public static void sortNeighborsByValueDesc(int neighborCount, long[] neighborValues, int[][] neighborCoords,
 			int[] otherNeighborIntegerField) {
 		// TODO faster sorting algorithm?
