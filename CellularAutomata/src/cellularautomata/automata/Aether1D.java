@@ -162,7 +162,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
 		long smallerXNeighborValue, currentValue = grid[xMinusOne], greaterXNeighborValue = grid[x];
-		for (; x < maxX; x++, xMinusOne++, xPlusOne++) {
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
 			//reuse values obtained previously
 			smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;

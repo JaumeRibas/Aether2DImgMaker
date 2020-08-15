@@ -54,80 +54,27 @@ import cellularautomata.grid4d.ShortGrid4D;
 public class CATests {
 	
 	public static void main(String[] args) throws Exception {
-//		long initialValue = -100;
-//		Aether3D ae1 = new Aether3D(Long.valueOf("-4611686018427387903"));
-//		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
-//		compare(ae2, ae1);
-//		findAEMinAllowedValues();
+		long initialValue = -100;
+		Aether3DB ae1 = new Aether3DB(initialValue);
+		AetherSimple3D ae2 = new AetherSimple3D(initialValue);
+		compare(ae2, ae1);
 //		checkTotalValueConservation(ae1);
 //		stepByStep(ae1.crossSectionAtZ(0));
-		asymmetricPositionsNeighbors();
+//		for (int i = 0; i < 4; i++) {
+//			ae2.nextStep();
+//		}
+//		System.out.println(ae2.getStep());
+//		printVonNeumannNeighborhood(ae2, 2, 1, 0);
 	}
 	
-	public static void findAsymmetricPositionsCloseToTheEdge() {
-		int size = 15;
-		System.out.println(" x | y | z | a | b");
-		System.out.println("-------------------");
-		for (int x = 0; x < size; x++) {
-			for (int y = 0; y <= x; y++) {
-				for (int z = 0; z <= y; z++) {
-					int[] coords = new int[] {x, y, z};
-					int[] greaterXNeighborCoords = new int[] {x+1, y, z};
-					int[] smallerXNeighborCoords = new int[] {x-1, y, z};
-					int[] greaterYNeighborCoords = new int[] {x, y+1, z};
-					int[] smallerYNeighborCoords = new int[] {x, y-1, z};
-					int[] greaterZNeighborCoords = new int[] {x, y, z+1};
-					int[] smallerZNeighborCoords = new int[] {x, y, z-1};
-					int outsideNeighborCount = 0;
-					int insideNeihborWithNeighborsSymmetricToCurrentPositionCount = 0;
-					if (isOutsideAsymmetricSection(greaterXNeighborCoords)) {
-						outsideNeighborCount++;
-					} else {
-						if (getSymmetricNeighborsCount(greaterXNeighborCoords, coords) > 0) {
-							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
-						} 
-					}
-					if (isOutsideAsymmetricSection(smallerXNeighborCoords)) {
-						outsideNeighborCount++;
-					} else {
-						if (getSymmetricNeighborsCount(smallerXNeighborCoords, coords) > 0) {
-							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
-						} 
-					}
-					if (isOutsideAsymmetricSection(greaterYNeighborCoords)) {
-						outsideNeighborCount++;
-					} else {
-						if (getSymmetricNeighborsCount(greaterYNeighborCoords, coords) > 0) {
-							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
-						} 
-					}
-					if (isOutsideAsymmetricSection(smallerYNeighborCoords)) {
-						outsideNeighborCount++;
-					} else {
-						if (getSymmetricNeighborsCount(smallerYNeighborCoords, coords) > 0) {
-							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
-						} 
-					}
-					if (isOutsideAsymmetricSection(greaterZNeighborCoords)) {
-						outsideNeighborCount++;
-					} else {
-						if (getSymmetricNeighborsCount(greaterZNeighborCoords, coords) > 0) {
-							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
-						} 
-					}
-					if (isOutsideAsymmetricSection(smallerZNeighborCoords)) {
-						outsideNeighborCount++;
-					} else {
-						if (getSymmetricNeighborsCount(smallerZNeighborCoords, coords) > 0) {
-							insideNeihborWithNeighborsSymmetricToCurrentPositionCount++;
-						} 
-					}
-					System.out.println(" " + x + " | " + y + " | " + z + " | " + outsideNeighborCount 
-							+ " | " + insideNeihborWithNeighborsSymmetricToCurrentPositionCount);
-				}
-				System.out.println();
-			}
-			System.out.println(System.lineSeparator()+System.lineSeparator());
+	public static void printVonNeumannNeighborhood(LongGrid3D grid, int x, int y, int z) {
+		try {
+			System.out.println("center: " + grid.getValueAtPosition(x, y, z) 
+				+ ", gx: " + grid.getValueAtPosition(x + 1, y, z) + ", sx: " + grid.getValueAtPosition(x - 1, y, z) 
+				+ ", gy: " + grid.getValueAtPosition(x, y + 1, z) + ", sy: " + grid.getValueAtPosition(x, y - 1, z)
+				+ ", gz: " + grid.getValueAtPosition(x, y, z + 1) + ", sz: " + grid.getValueAtPosition(x, y, z - 1));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -1142,7 +1089,6 @@ public class CATests {
 								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getValueAtPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getValueAtPosition(x, y, z));
-								return;
 							}
 						}	
 					}	
@@ -1154,6 +1100,8 @@ public class CATests {
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
+				if (!equal)
+					return;
 			}
 			if (equal)
 				System.out.println("Equal");
@@ -1198,6 +1146,17 @@ public class CATests {
 			} else {
 				System.out.println("The total value remained constant!");
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void printTotalValueEvolution(EvolvingLongGrid ca) {
+		try {
+			do {
+				System.out.println("step " + ca.getStep() + ": " + ca.getTotalValue());
+			}
+			while (ca.nextStep());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -402,7 +402,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		long[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		long[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		for (; x < maxX; x++, xMinusOne++, xPlusOne++, xPlusTwo++) {
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
 			// y = 0;
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;
@@ -496,8 +496,8 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 				anyToppled = true;
 			}
 			// 2 >= y < x - 1
-			int y = 2, yMinusOne = y - 1, yPlusOne = y + 1;
-			for (; y < xMinusOne; y++, yMinusOne++, yPlusOne++) {
+			int y = 2, yMinusOne = 1, yPlusOne = 3;
+			for (; y < xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				relevantAsymmetricNeighborCount = 0;
 				// reuse values obtained previously
 				smallerYNeighborValue = currentValue;
