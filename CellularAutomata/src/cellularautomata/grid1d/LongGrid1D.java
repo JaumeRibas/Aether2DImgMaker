@@ -78,15 +78,6 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	
 	@Override
 	default LongGrid1D subGrid(int minX, int maxX) {
-		return subGrid(minX, maxX, false);
-	}
-	
-	default LongGrid1D subGrid(int minX, int maxX, boolean allowOverflow) {
-		if (!allowOverflow && (minX < getMinX() || minX > getMaxX() 
-				|| maxX < getMinX() || maxX > getMaxX()))
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
-		if (minX > maxX)
-			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new LongSubGrid1D<LongGrid1D>(this, minX, maxX);
 	}
 }
