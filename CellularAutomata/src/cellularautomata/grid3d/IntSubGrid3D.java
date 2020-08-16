@@ -16,9 +16,9 @@
  */
 package cellularautomata.grid3d;
 
-public class IntSubGrid3D extends SubGrid3D<IntGrid3D> implements IntGrid3D {
+public class IntSubGrid3D<G extends IntGrid3D> extends SubGrid3D<G> implements IntGrid3D {
 
-	public IntSubGrid3D(IntGrid3D source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public IntSubGrid3D(G source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 

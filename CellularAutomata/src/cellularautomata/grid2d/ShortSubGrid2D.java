@@ -16,9 +16,9 @@
  */
 package cellularautomata.grid2d;
 
-public class ShortSubGrid2D extends SubGrid2D<ShortGrid2D> implements ShortGrid2D {
+public class ShortSubGrid2D<G extends ShortGrid2D> extends SubGrid2D<G> implements ShortGrid2D {
 
-	public ShortSubGrid2D(ShortGrid2D source, int minX, int maxX, int minY, int maxY) {
+	public ShortSubGrid2D(G source, int minX, int maxX, int minY, int maxY) {
 		super(source, minX, maxX, minY, maxY);
 	}
 

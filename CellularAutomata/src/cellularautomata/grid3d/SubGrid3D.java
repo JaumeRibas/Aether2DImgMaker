@@ -37,20 +37,33 @@ public class SubGrid3D<G extends Grid3D> implements Grid3D {
 		if (minZ > maxZ) {
 			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
 		}
+		this.source = source;
+		if (!getActualBounds(minX, maxX, minY, maxY, minZ, maxZ))
+			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+	}
+	
+	protected boolean getActualBounds(int minX, int maxX, int minY, 
+			int maxY, int minZ, int maxZ) {
 		int sourceMinX = source.getMinX();
 		int sourceMaxX = source.getMaxX();
 		int sourceMinY = source.getMinY();
 		int sourceMaxY = source.getMaxY();
 		int sourceMinZ = source.getMinZ();
 		int sourceMaxZ = source.getMaxZ();
-		//TODO validate that passed bounds are within source bounds
-		this.source = source;
-		this.minX = Math.max(minX, sourceMinX);
-		this.maxX = Math.min(maxX, sourceMaxX);
-		this.minY = Math.max(minY, sourceMinY);
-		this.maxY = Math.min(maxY, sourceMaxY);
-		this.minZ = Math.max(minZ, sourceMinZ);
-		this.maxZ = Math.min(maxZ, sourceMaxZ);
+		if (minX > sourceMaxX || maxX < sourceMinX
+				|| minY > sourceMaxY || maxY < sourceMinY
+				|| minZ > sourceMaxZ || maxZ < sourceMinZ) {
+			return false;
+		} else {
+			//TODO validate that passed bounds are within local bounds
+			this.minX = Math.max(minX, sourceMinX);
+			this.maxX = Math.min(maxX, sourceMaxX);
+			this.minY = Math.max(minY, sourceMinY);
+			this.maxY = Math.min(maxY, sourceMaxY);
+			this.minZ = Math.max(minZ, sourceMinZ);
+			this.maxZ = Math.min(maxZ, sourceMaxZ);
+			return true;
+		}
 	}
 
 	@Override

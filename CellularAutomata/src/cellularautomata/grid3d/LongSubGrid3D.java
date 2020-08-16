@@ -16,9 +16,9 @@
  */
 package cellularautomata.grid3d;
 
-public class LongSubGrid3D extends SubGrid3D<LongGrid3D> implements LongGrid3D {
+public class LongSubGrid3D<G extends LongGrid3D> extends SubGrid3D<G> implements LongGrid3D {
 
-	public LongSubGrid3D(LongGrid3D source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public LongSubGrid3D(G source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 

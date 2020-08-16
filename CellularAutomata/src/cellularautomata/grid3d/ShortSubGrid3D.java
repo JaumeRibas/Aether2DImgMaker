@@ -16,9 +16,9 @@
  */
 package cellularautomata.grid3d;
 
-public class ShortSubGrid3D extends SubGrid3D<ShortGrid3D> implements ShortGrid3D {
+public class ShortSubGrid3D<G extends ShortGrid3D> extends SubGrid3D<G> implements ShortGrid3D {
 
-	public ShortSubGrid3D(ShortGrid3D source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public ShortSubGrid3D(G source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 

@@ -19,23 +19,27 @@ package cellularautomata.evolvinggrid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid1d.LongSubGrid1D;
+import cellularautomata.grid2d.IntSubGrid2D;
 
-public class EvolvingLongSubGrid1D extends LongSubGrid1D<EvolvingLongGrid1D> implements EvolvingLongGrid1D {
-	
+public class EvolvingIntSubGrid2D extends IntSubGrid2D<EvolvingIntGrid2D> implements EvolvingIntGrid2D {
+
 	protected int absoluteMinX;
 	protected int absoluteMaxX;
+	protected int absoluteMinY;
+	protected int absoluteMaxY;
 	
-	public EvolvingLongSubGrid1D(EvolvingLongGrid1D source, int minX, int maxX) {
-		super(source, minX, maxX);
+	public EvolvingIntSubGrid2D(EvolvingIntGrid2D source, int minX, int maxX, int minY, int maxY) {
+		super(source, minX, maxX, minY, maxY);
 		this.absoluteMaxX = maxX;
 		this.absoluteMinX = minX;
+		this.absoluteMaxY = maxY;
+		this.absoluteMinY = minY;
 	}
 
 	@Override
 	public boolean nextStep() throws Exception {
 		boolean changed = source.nextStep();
-		if (!getActualBounds(absoluteMinX, absoluteMaxX)) {
+		if (!getActualBounds(absoluteMinX, absoluteMaxX, absoluteMinY, absoluteMaxY)) {
 			throw new UnsupportedOperationException("Sub-grid bounds outside of grid bounds.");
 		}
 		return changed;
@@ -48,17 +52,19 @@ public class EvolvingLongSubGrid1D extends LongSubGrid1D<EvolvingLongGrid1D> imp
 
 	@Override
 	public String getName() {
-		return source.getName() + "_minX=" + absoluteMinX + "_maxX=" + absoluteMaxX;
+		return source.getName() + "_minX=" + absoluteMinX + "_maxX=" + absoluteMaxX 
+				+ "_minY=" + absoluteMinY + "_maxY=" + absoluteMaxY;
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return source.getSubFolderPath() + "/minX=" + absoluteMinX + "_maxX=" + absoluteMaxX;
+		return source.getSubFolderPath() + "/minX=" + absoluteMinX + "_maxX=" + absoluteMaxX 
+				+ "_minY=" + absoluteMinY + "_maxY=" + absoluteMaxY;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		source.backUp(backupPath, backupName);
 	}
-	
+
 }

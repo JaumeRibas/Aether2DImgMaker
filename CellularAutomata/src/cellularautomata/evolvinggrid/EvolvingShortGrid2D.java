@@ -19,5 +19,8 @@ package cellularautomata.evolvinggrid;
 import cellularautomata.grid2d.ShortGrid2D;
 
 public interface EvolvingShortGrid2D extends ShortGrid2D, EvolvingShortGrid {
-
+	@Override
+	default EvolvingShortGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
+		return new EvolvingShortSubGrid2D(this, minX, maxX, minY, maxY);
+	}
 }

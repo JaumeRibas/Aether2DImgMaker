@@ -19,10 +19,10 @@ package cellularautomata.grid2d;
 public class SubGrid2D<G extends Grid2D> implements Grid2D {
 	
 	protected G source;
-	private int minX;
-	private int maxX;
-	private int minY;
-	private int maxY;
+	protected int minX;
+	protected int maxX;
+	protected int minY;
+	protected int maxY;
 	
 	public SubGrid2D(G source, int minX, int maxX, int minY, int maxY) {
 		if (minX > maxX) {
@@ -32,6 +32,12 @@ public class SubGrid2D<G extends Grid2D> implements Grid2D {
 			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
 		}
 		this.source = source;
+		if (!getActualBounds(minX, maxX, minY, maxY)) {
+			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+		}
+	}
+	
+	protected boolean getActualBounds(int minX, int maxX, int minY, int maxY) {
 		boolean outOfBounds = false;
 		int sourceMinX = source.getMinX();
 		int sourceMaxX = source.getMaxX();
@@ -72,10 +78,8 @@ public class SubGrid2D<G extends Grid2D> implements Grid2D {
 				this.minX = Math.max(this.minX, minXWithinBounds);
 				this.maxX = Math.min(this.maxX, maxXWithinBounds);
 			}
-		}		
-		if (outOfBounds) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
 		}
+		return !outOfBounds;
 	}
 
 	@Override

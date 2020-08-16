@@ -105,16 +105,7 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	
 	@Override
 	default ShortGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		if (minX < getMinX() || minX > getMaxX() 
-				|| maxX < getMinX() || maxX > getMaxX()
-				|| minY < getMinY() || minY > getMaxY() 
-				|| maxY < getMinY() || maxY > getMaxY()
-				|| minZ < getMinZ() || minZ > getMaxZ() 
-				|| maxZ < getMinZ() || maxZ > getMaxZ())
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
-		if (minX > maxX || minY > maxY || minZ > maxZ)
-			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
-		return new ShortSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
+		return new ShortSubGrid3D<ShortGrid3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override

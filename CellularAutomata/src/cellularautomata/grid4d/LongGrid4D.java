@@ -116,17 +116,6 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	
 	@Override
 	default LongGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		if (minW < getMinW() || minW > getMaxW() 
-				|| maxW < getMinW() || maxW > getMaxW()
-				|| minX < getMinX() || minX > getMaxX() 
-				|| maxX < getMinX() || maxX > getMaxX()
-				|| minY < getMinY() || minY > getMaxY() 
-				|| maxY < getMinY() || maxY > getMaxY()
-				|| minZ < getMinZ() || minZ > getMaxZ() 
-				|| maxZ < getMinZ() || maxZ > getMaxZ())
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
-		if (minX > maxX || minY > maxY || minZ > maxZ)
-			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
 		return new LongSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	

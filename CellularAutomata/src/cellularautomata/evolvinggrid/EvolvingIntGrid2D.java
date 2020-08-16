@@ -19,5 +19,8 @@ package cellularautomata.evolvinggrid;
 import cellularautomata.grid2d.IntGrid2D;
 
 public interface EvolvingIntGrid2D extends IntGrid2D, EvolvingIntGrid {
-	
+	@Override
+	default EvolvingIntGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
+		return new EvolvingIntSubGrid2D(this, minX, maxX, minY, maxY);
+	}
 }

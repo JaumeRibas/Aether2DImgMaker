@@ -19,5 +19,8 @@ package cellularautomata.evolvinggrid;
 import cellularautomata.grid2d.LongGrid2D;
 
 public interface EvolvingLongGrid2D extends LongGrid2D, EvolvingLongGrid {
-	
+	@Override
+	default EvolvingLongGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
+		return new EvolvingLongSubGrid2D(this, minX, maxX, minY, maxY);
+	}
 }
