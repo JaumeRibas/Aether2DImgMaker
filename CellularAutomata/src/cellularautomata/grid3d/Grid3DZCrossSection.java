@@ -24,6 +24,9 @@ public class Grid3DZCrossSection<G extends Grid3D> implements Grid2D {
 	protected int z;
 	
 	public Grid3DZCrossSection(G source, int z) {
+		if (z > source.getMaxZ() || z < source.getMinZ()) {
+			throw new IllegalArgumentException("Z coordinate outside of grid bounds.");
+		}
 		this.source = source;
 		this.z = z;
 	}

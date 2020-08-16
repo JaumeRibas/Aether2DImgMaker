@@ -13,7 +13,11 @@ public class EvolvingIntGrid4DZCrossSection extends IntGrid4DZCrossSection<Evolv
 
 	@Override
 	public boolean nextStep() throws Exception {
-		return source.nextStep();
+		boolean changed = source.nextStep();
+		if (z > source.getMaxZ() || z < source.getMinZ()) {
+			throw new UnsupportedOperationException("Z coordinate outside of grid bounds.");
+		}
+		return changed;
 	}
 
 	@Override

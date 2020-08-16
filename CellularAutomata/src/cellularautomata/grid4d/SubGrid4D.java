@@ -50,7 +50,12 @@ public class SubGrid4D<G extends Grid4D> implements Grid4D {
 		int sourceMaxY = source.getMaxY();
 		int sourceMinZ = source.getMinZ();
 		int sourceMaxZ = source.getMaxZ();
-		//TODO validate that passed bounds are within source bounds
+		if (minW > sourceMaxW || maxW < sourceMinW 
+				|| minX > sourceMaxX || maxX < sourceMinX
+				|| minY > sourceMaxY || maxY < sourceMinY
+				|| minZ > sourceMaxZ || maxZ < sourceMinZ)
+			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+		//TODO validate that passed bounds are within local bounds
 		this.source = source;
 		this.minW = Math.max(minW, sourceMinW);
 		this.maxW = Math.min(maxW, sourceMaxW);

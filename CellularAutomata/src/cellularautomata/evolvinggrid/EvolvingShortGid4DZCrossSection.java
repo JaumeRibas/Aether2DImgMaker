@@ -13,7 +13,11 @@ public class EvolvingShortGid4DZCrossSection extends ShortGrid4DZCrossSection<Ev
 
 	@Override
 	public boolean nextStep() throws Exception {
-		return source.nextStep();
+		boolean changed = source.nextStep();
+		if (z > source.getMaxZ() || z < source.getMinZ()) {
+			throw new UnsupportedOperationException("Z coordinate outside of grid bounds.");
+		}
+		return changed;
 	}
 
 	@Override
