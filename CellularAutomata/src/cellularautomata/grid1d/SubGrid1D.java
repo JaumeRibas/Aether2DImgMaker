@@ -26,14 +26,22 @@ public class SubGrid1D<G extends Grid1D> implements Grid1D {
 		if (minX > maxX) {
 			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
 		}
+		this.source = source;
+		if (!getActualBounds(minX, maxX)) {
+			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+		}
+	}
+	
+	protected boolean getActualBounds(int minX, int maxX) {
 		int sourceMinX = source.getMinX();
 		int sourceMaxX = source.getMaxX();
 		if (minX > sourceMaxX || maxX < sourceMinX) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			return false;
+		} else {
+			this.minX = Math.max(minX, sourceMinX);
+			this.maxX = Math.min(maxX, sourceMaxX);
+			return true;
 		}
-		this.source = source;
-		this.minX = Math.max(minX, sourceMinX);
-		this.maxX = Math.min(maxX, sourceMaxX);
 	}
 
 	@Override

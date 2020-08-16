@@ -22,14 +22,23 @@ import java.io.IOException;
 import cellularautomata.grid1d.LongSubGrid1D;
 
 public class EvolvingLongSubGrid1D<G extends EvolvingLongGrid1D> extends LongSubGrid1D<G> implements EvolvingLongGrid1D {
-
+	
+	protected int absoluteMinX;
+	protected int absoluteMaxX;
+	
 	public EvolvingLongSubGrid1D(G source, int minX, int maxX) {
 		super(source, minX, maxX);
+		this.absoluteMaxX = maxX;
+		this.absoluteMinX = minX;
 	}
 
 	@Override
 	public boolean nextStep() throws Exception {
-		return source.nextStep();
+		boolean changed = source.nextStep();
+		if (!getActualBounds(absoluteMinX, absoluteMaxX)) {
+			throw new UnsupportedOperationException("Sub-grid bounds outside of grid bounds.");
+		}
+		return changed;
 	}
 
 	@Override
@@ -39,12 +48,12 @@ public class EvolvingLongSubGrid1D<G extends EvolvingLongGrid1D> extends LongSub
 
 	@Override
 	public String getName() {
-		return source.getName() + "_minX=" + minX + "_maxX=" + maxX;
+		return source.getName() + "_minX=" + absoluteMinX + "_maxX=" + absoluteMaxX;
 	}
 
 	@Override
 	public String getSubFolderPath() {
-		return source.getSubFolderPath() + "/minX=" + minX + "_maxX=" + maxX;
+		return source.getSubFolderPath() + "/minX=" + absoluteMinX + "_maxX=" + absoluteMaxX;
 	}
 
 	@Override
