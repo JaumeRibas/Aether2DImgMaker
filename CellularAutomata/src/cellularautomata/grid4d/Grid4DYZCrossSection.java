@@ -32,22 +32,22 @@ public class Grid4DYZCrossSection<G extends Grid4D> implements Grid2D {
 
 	@Override
 	public int getMinX() {
-		return source.getMinW();
+		return source.getMinWAtYZ(y, z);
 	}
 
 	@Override
 	public int getMaxX() {
-		return source.getMaxW();
+		return source.getMaxWAtYZ(y, z);
 	}
 
 	@Override
 	public int getMinY() {
-		return source.getMinX();
+		return source.getMinXAtYZ(y, z);
 	}
 
 	@Override
 	public int getMaxY() {
-		return source.getMaxX();
+		return source.getMaxXAtYZ(y, z);
 	}
 
 }
