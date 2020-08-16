@@ -54,17 +54,10 @@ import cellularautomata.grid4d.ShortGrid4D;
 public class CATests {
 	
 	public static void main(String[] args) throws Exception {
-		long initialValue = -100;
-		Aether3DB ae1 = new Aether3DB(initialValue);
-		AetherSimple3D ae2 = new AetherSimple3D(initialValue);
-		compare(ae2, ae1);
-//		checkTotalValueConservation(ae1);
-//		stepByStep(ae1.crossSectionAtZ(0));
-//		for (int i = 0; i < 4; i++) {
-//			ae2.nextStep();
-//		}
-//		System.out.println(ae2.getStep());
-//		printVonNeumannNeighborhood(ae2, 2, 1, 0);
+		long initialValue = 100000;
+		Aether2D ae1 = new Aether2D(initialValue);
+		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
+		compare(ae1, ae2);
 	}
 	
 	public static void printVonNeumannNeighborhood(LongGrid3D grid, int x, int y, int z) {
