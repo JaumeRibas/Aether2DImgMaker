@@ -322,7 +322,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][3];
 		if (topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
-				greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
+				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -471,14 +471,14 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 					anyToppled = true;
 				}
 				// z = 1
-				greaterXNeighborValue = greaterXSlice[3][1];
-				smallerXNeighborValue = smallerXSlice[3][1];
-				greaterYNeighborValue = currentXSlice[4][1];
-				smallerYNeighborValue = currentXSlice[2][1];
+				greaterXNeighborValue = greaterXSlice[y][1];
+				smallerXNeighborValue = smallerXSlice[y][1];
+				greaterYNeighborValue = currentXSlice[yPlusOne][1];
+				smallerYNeighborValue = currentXSlice[yMinusOne][1];
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterZNeighborValue = currentXSlice[3][2];
+				greaterZNeighborValue = currentXSlice[y][2];
 				if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -542,7 +542,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			greaterYNeighborValue = currentXSlice[yPlusOne][0];
 			smallerYNeighborValue = currentXSlice[yMinusOne][0];
 			greaterZNeighborValue = currentXSlice[y][1];
-			if (topplePositionType6(3, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionType6(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -557,7 +557,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][2];
-			if (topplePositionType11(3, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -591,7 +591,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][zPlusOne];
-			if (topplePositionType11(3, 2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -602,11 +602,11 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			// y = x - 1, z = y
 			greaterXNeighborValue = greaterXSlice[y][z];
 			smallerXNeighborValue = smallerXSlice[y][z];
-			greaterYNeighborValue = currentXSlice[y][z];
+			greaterYNeighborValue = currentXSlice[yPlusOne][z];
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType7(3, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+			if (topplePositionType7(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -631,7 +631,7 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][2];
-			if (topplePositionType9(4, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+			if (topplePositionType9(y, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -1611,14 +1611,25 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 	private static boolean topplePositionSortedNeighbors(long[][][] newXSlices, long value, int y, int z, 
 			long[] neighborValues, int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
 		int shareCount = neighborCount + 1;
-		for (int i = 0; i < neighborCount; i++, isFirstNeighbor = false) {
-			long neighborValue = neighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		long neighborValue = neighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < neighborCount; j++) {
+				int[] nc = neighborCoords[j];
+				newXSlices[nc[0]][nc[1]][nc[2]] += share;
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount--;
+		for (int i = 1; i < neighborCount; i++) {
+			neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -1725,14 +1736,25 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
 		int shareCount = neighborCount + 1;
-		for (int i = 0; i < asymmetricNeighborCount; i++, isFirstNeighbor = false) {
-			long neighborValue = asymmetricNeighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		long neighborValue = asymmetricNeighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < asymmetricNeighborCount; j++) {
+				int[] nc = asymmetricNeighborCoords[j];
+				newXSlices[nc[0]][nc[1]][nc[2]] += share * asymmetricNeighborShareMultipliers[j];
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount -= asymmetricNeighborSymmetryCounts[0];
+		for (int i = 1; i < asymmetricNeighborCount; i++) {
+			neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -1833,14 +1855,25 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 	private static boolean topplePositionSortedNeighbors(long[][][] newXSlices, long value, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
 		int shareCount = neighborCount + 1;
-		for (int i = 0; i < neighborCount; i++, isFirstNeighbor = false) {
-			long neighborValue = neighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		long neighborValue = neighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < neighborCount; j++) {
+				int[] nc = neighborCoords[j];
+				newXSlices[nc[0]][nc[1]][nc[2]] += share * neighborShareMultipliers[j];
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount--;
+		for (int i = 1; i < neighborCount; i++) {
+			neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -1946,14 +1979,25 @@ public class Aether3DB implements SymmetricEvolvingLongGrid3D {
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
 		int shareCount = neighborCount + 1;
-		for (int i = 0; i < asymmetricNeighborCount; i++, isFirstNeighbor = false) {
-			long neighborValue = asymmetricNeighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		long neighborValue = asymmetricNeighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < asymmetricNeighborCount; j++) {
+				int[] nc = asymmetricNeighborCoords[j];
+				newXSlices[nc[0]][nc[1]][nc[2]] += share;
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount -= asymmetricNeighborSymmetryCounts[0];
+		for (int i = 1; i < asymmetricNeighborCount; i++) {
+			neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
