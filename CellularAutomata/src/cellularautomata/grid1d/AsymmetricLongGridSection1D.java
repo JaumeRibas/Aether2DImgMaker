@@ -16,7 +16,7 @@
  */
 package cellularautomata.grid1d;
 
-public class AsymmetricLongGridSection1D<G extends SymmetricLongGrid1D> extends AsymmetricGridSection1D<G> implements LongGrid1D{
+public class AsymmetricLongGridSection1D<G extends SymmetricLongGrid1D> extends AsymmetricGridSection1D<G> implements LongGrid1D {
 	
 	public AsymmetricLongGridSection1D(G grid) {
 		super(grid);
