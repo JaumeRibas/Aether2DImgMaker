@@ -16,9 +16,9 @@
  */
 package cellularautomata.grid1d;
 
-public class LongSubGrid1D extends SubGrid1D<LongGrid1D> implements LongGrid1D {
+public class LongSubGrid1D<G extends LongGrid1D> extends SubGrid1D<G> implements LongGrid1D {
 
-	public LongSubGrid1D(LongGrid1D source, int minX, int maxX) {
+	public LongSubGrid1D(G source, int minX, int maxX) {
 		super(source, minX, maxX);
 	}
 

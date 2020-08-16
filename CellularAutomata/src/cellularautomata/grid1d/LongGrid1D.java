@@ -87,6 +87,6 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
 		if (minX > maxX)
 			throw new IllegalArgumentException("Transposed bounds. Check argument order.");
-		return new LongSubGrid1D(this, minX, maxX);
+		return new LongSubGrid1D<LongGrid1D>(this, minX, maxX);
 	}
 }

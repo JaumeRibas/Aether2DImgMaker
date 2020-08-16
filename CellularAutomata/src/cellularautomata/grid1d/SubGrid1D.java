@@ -19,8 +19,8 @@ package cellularautomata.grid1d;
 public class SubGrid1D<G extends Grid1D> implements Grid1D {
 	
 	protected G source;
-	private int minX;
-	private int maxX;
+	protected int minX;
+	protected int maxX;
 	
 	public SubGrid1D(G source, int minX, int maxX) {
 		if (minX > maxX) {
