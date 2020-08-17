@@ -34,7 +34,7 @@ public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {
 	private static final byte RIGHT = 2;
 	private static final byte LEFT = 3;
 	
-	/** A 2D array representing the grid */
+	/** A 1D array representing the grid */
 	private long[] grid;
 	
 	private long initialValue;

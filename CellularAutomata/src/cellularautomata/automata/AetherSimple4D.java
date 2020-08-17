@@ -23,6 +23,12 @@ import java.util.List;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 
+/**
+ * A simplified implementation of the Aether cellular automaton for review and testing purposes
+ * 
+ * @author Jaume
+ *
+ */
 public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {	
 	
 	private static final byte W_POSITIVE = 0;
@@ -34,6 +40,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 	private static final byte Z_POSITIVE = 6;
 	private static final byte Z_NEGATIVE = 7;
 	
+	/** 4D array representing the grid **/
 	private long[][][][] grid;
 	
 	private long initialValue;
