@@ -21,6 +21,9 @@ import java.io.IOException;
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
 
 public class Aether3D implements SymmetricEvolvingLongGrid3D {
+	
+	//debug
+//	private static HashSet<Integer> coverage = new HashSet<Integer>();
 
 	/** A 3D array representing the grid */
 	private long[][][] grid;
@@ -684,11 +687,19 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 		newXSlices[2] = newGreaterXSlice;
 		return anyToppled;
 	}
+	
+	//debug
+//	public static void printCoverage() {
+//		for (Integer line : coverage) {
+//			System.out.println(line);
+//		}
+//	}
 
 	private static boolean topplePositionType1(long currentValue, long greaterXNeighborValue, long[][] newCurrentXSlice, 
 			long[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (greaterXNeighborValue < currentValue) {
+//			coverage.add(new Exception().getStackTrace()[0].getLineNumber());//debug
 			long toShare = currentValue - greaterXNeighborValue;
 			long share = toShare/7;
 			if (share != 0) {
@@ -1597,7 +1608,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 					newXSlices[nc[0]][nc[1]][nc[2]] += share;
 				}
 				// no break
-			case 0: 
+			case 0:
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
@@ -1720,7 +1731,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 					newXSlices[nc[0]][nc[1]][nc[2]] += share * asymmetricNeighborShareMultipliers[0];
 				}
 				// no break
-			case 0: 
+			case 0:
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
@@ -1840,7 +1851,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 					newXSlices[nc[0]][nc[1]][nc[2]] += share * neighborShareMultipliers[0];
 				}
 				// no break
-			case 0: 
+			case 0:
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
@@ -1963,7 +1974,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 					newXSlices[nc[0]][nc[1]][nc[2]] += share;
 				}
 				// no break
-			case 0: 
+			case 0:
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
