@@ -311,18 +311,18 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int i = 2; i >= 0; i--) {
-				if (neighborValues[i] < neighborValues[i+1]) {
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					long valSwap = neighborValues[i];
-					neighborValues[i] = neighborValues[i+1];
-					neighborValues[i+1] = valSwap;
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
 					int[] coordSwap = neighborCoords[i];
-					neighborCoords[i] = neighborCoords[i+1];
-					neighborCoords[i+1] = coordSwap;
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
 					int otherSwap = otherNeighborIntegerField[i];
-					otherNeighborIntegerField[i] = otherNeighborIntegerField[i+1];
-					otherNeighborIntegerField[i+1] = otherSwap;
+					otherNeighborIntegerField[i] = otherNeighborIntegerField[j];
+					otherNeighborIntegerField[j] = otherSwap;
 				}
 			}
 		}
@@ -359,15 +359,15 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int i = 2; i >= 0; i--) {
-				if (neighborValues[i] < neighborValues[i+1]) {
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					long valSwap = neighborValues[i];
-					neighborValues[i] = neighborValues[i+1];
-					neighborValues[i+1] = valSwap;
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
 					int[] coordSwap = neighborCoords[i];
-					neighborCoords[i] = neighborCoords[i+1];
-					neighborCoords[i+1] = coordSwap;
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
 				}
 			}
 		}
@@ -650,18 +650,18 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int i = 2; i >= 0; i--) {
-				if (neighborValues[i] < neighborValues[i+1]) {
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					int valSwap = neighborValues[i];
-					neighborValues[i] = neighborValues[i+1];
-					neighborValues[i+1] = valSwap;
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
 					int[] coordSwap = neighborCoords[i];
-					neighborCoords[i] = neighborCoords[i+1];
-					neighborCoords[i+1] = coordSwap;
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
 					int otherSwap = otherNeighborIntegerField[i];
-					otherNeighborIntegerField[i] = otherNeighborIntegerField[i+1];
-					otherNeighborIntegerField[i+1] = otherSwap;
+					otherNeighborIntegerField[i] = otherNeighborIntegerField[j];
+					otherNeighborIntegerField[j] = otherSwap;
 				}
 			}
 		}
@@ -698,15 +698,15 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int i = 2; i >= 0; i--) {
-				if (neighborValues[i] < neighborValues[i+1]) {
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					int valSwap = neighborValues[i];
-					neighborValues[i] = neighborValues[i+1];
-					neighborValues[i+1] = valSwap;
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
 					int[] coordSwap = neighborCoords[i];
-					neighborCoords[i] = neighborCoords[i+1];
-					neighborCoords[i+1] = coordSwap;
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
 				}
 			}
 		}
