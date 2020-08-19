@@ -369,7 +369,7 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D {
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		int[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		int[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		for (; x < maxX; x++, xMinusOne++, xPlusOne++, xPlusTwo++) {
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
 			// y = 0, z = 0
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;

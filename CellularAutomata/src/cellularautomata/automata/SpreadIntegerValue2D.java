@@ -70,7 +70,7 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 		boolean changed = false;
 		newGrid[0] = new long[1];
 		boolean isFirst = true;
-		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
+		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, isFirst = false) {
 			if (nextX < newGrid.length) {
 				newGrid[nextX] = new long[nextX + 1];
 				if (nextX >= grid.length) {

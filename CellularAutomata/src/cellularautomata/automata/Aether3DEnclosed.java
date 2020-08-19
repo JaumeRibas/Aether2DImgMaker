@@ -72,7 +72,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 		boolean first = true;
 		long[] neighborValues = new long[6];
 		byte[] neighborDirections = new byte[6];
-		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, first = false) {
+		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, first = false) {
 			if (nextX < newGrid.length) {
 				newGrid[nextX] = Utils.buildAnisotropic2DLongArray(nextX + 1);
 			}

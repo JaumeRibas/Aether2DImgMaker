@@ -101,7 +101,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 		newGrid[0] = Utils.buildAnisotropic2DIntArray(1);
 		boolean first = true;
 		byte[] neighborDirections = new byte[6];
-		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, first = false) {
+		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, first = false) {
 			if (nextX < newGrid.length) {
 				newGrid[nextX] = Utils.buildAnisotropic2DIntArray(nextX + 1);
 			}

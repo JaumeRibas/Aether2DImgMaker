@@ -371,7 +371,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		long[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		long[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		for (; x < maxX; x++, xMinusOne++, xPlusOne++, xPlusTwo++) {
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
 			// y = 0, z = 0
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;

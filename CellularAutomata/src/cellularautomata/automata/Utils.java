@@ -242,7 +242,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int j = neighborCount - 1, i = j - 1; i >= 0; i--, j--) {
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					long valSwap = neighborValues[i];
@@ -262,7 +262,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int j = neighborCount - 1, i = j - 1; i >= 0; i--, j--) {
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					long valSwap = neighborValues[i];
@@ -285,7 +285,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int j = neighborCount - 1, i = j - 1; i >= 0; i--, j--) {
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					long valSwap = neighborValues[i];
@@ -334,7 +334,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int i = 2, j = 3; i >= 0; i--, j--) {
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					long valSwap = neighborValues[i];
@@ -581,7 +581,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int j = neighborCount - 1, i = j - 1; i >= 0; i--, j--) {
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					int valSwap = neighborValues[i];
@@ -601,7 +601,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int j = neighborCount - 1, i = j - 1; i >= 0; i--, j--) {
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					int valSwap = neighborValues[i];
@@ -624,7 +624,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int j = neighborCount - 1, i = j - 1; i >= 0; i--, j--) {
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					int valSwap = neighborValues[i];
@@ -673,7 +673,7 @@ public class Utils {
 		boolean sorted = false;
 		while (!sorted) {
 			sorted = true;
-			for (int i = 2, j = 3; i >= 0; i--, j--) {
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
 				if (neighborValues[i] < neighborValues[j]) {
 					sorted = false;
 					int valSwap = neighborValues[i];

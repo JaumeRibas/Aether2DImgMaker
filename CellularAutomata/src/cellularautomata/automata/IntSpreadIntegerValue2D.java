@@ -70,7 +70,7 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D {
 		boolean changed = false;
 		newGrid[0] = new int[1];
 		boolean isFirst = true;
-		for (int x = 0, nextX = 1; x < grid.length; x++, nextX++, isFirst = false) {
+		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, isFirst = false) {
 			if (nextX < newGrid.length) {
 				newGrid[nextX] = new int[nextX + 1];
 				if (nextX >= grid.length) {
