@@ -41,7 +41,6 @@ import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid4D;
-import cellularautomata.grid.CAConstants;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid2d.IntGrid2D;
@@ -56,10 +55,9 @@ public class CATests {
 	
 	public static void main(String[] args) throws Exception {
 		long initialValue = 100000;
-		Aether3DAsymmetricSectionSwapB ae1 = new Aether3DAsymmetricSectionSwapB(initialValue, CAConstants.ONE_MB, "D:\\data\\test");
-		AetherSimple3D ae2 = new AetherSimple3D(initialValue);
-		compare(ae1, ae2.asymmetricSection());
-//		stepByStep(ae1);
+		Aether2D ae1 = new Aether2D(initialValue);
+		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
+		compare(ae1, ae2);
 	}
 	
 	public static void timeIntAether3D(int singleSource) {
