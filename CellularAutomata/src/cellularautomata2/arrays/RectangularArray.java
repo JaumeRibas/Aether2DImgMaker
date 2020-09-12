@@ -76,7 +76,7 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	}
 	
 	public static long getVolume(int[] sizes) {
-		int volume = 1;
+		long volume = 1;
 		for (int i = 0; i < sizes.length; i++) {
 			volume *= sizes[i];
 		}

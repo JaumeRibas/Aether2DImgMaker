@@ -43,7 +43,7 @@ public abstract class AnisotropicArray extends SquareArray {
 		if (dimension == 1) {
 			return side;
 		} else {
-			int volume = 0;
+			long volume = 0;
 			dimension--;
 			for (int i = 1; i <= side; i++) {
 				volume += getVolume(dimension, i);
