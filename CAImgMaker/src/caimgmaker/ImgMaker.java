@@ -904,15 +904,15 @@ public class ImgMaker {
 	
 	public void createScanningAndCrossSectionImages(EvolvingShortGrid3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
-			String path) throws Exception {
+			String path, String backupPath) throws Exception {
 				
 		int scanInitialZIndex = ca.getMinZ();
 		createScanningAndCrossSectionImages(ca, scanInitialZIndex, crossSectionZ, scanningColorMapper, 
-			crossSectionColorMapper, minWidth, minHeight, path);	
+			crossSectionColorMapper, minWidth, minHeight, path, backupPath);	
 	}
 	
 	public void createScanningAndCrossSectionImages(EvolvingShortGrid3D ca, int scanInitialZIndex, int crossSectionZ, 
-			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path) throws Exception {
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -976,7 +976,7 @@ public class ImgMaker {
 				backupRequested = false;
 			}
 			if (backUp) {
-				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);					
+				ca.backUp(backupPath, ca.getClass().getSimpleName() + "_" + currentStep);					
 			}
 			currentStep++;
 			if (!caFinished) {

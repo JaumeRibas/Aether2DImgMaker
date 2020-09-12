@@ -916,5 +916,342 @@ public class Utils {
 	}
 	
 	
+	public static void sortNeighborsByValueDesc(int neighborCount, short[] neighborValues, int[][] neighborCoords) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					short valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+				}
+			}
+		}
+	}
+	
+	public static void sortNeighborsByValueDesc(int neighborCount, short[] neighborValues, int[][] neighborCoords,
+			int[] otherNeighborIntegerField) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					short valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+					int otherSwap = otherNeighborIntegerField[i];
+					otherNeighborIntegerField[i] = otherNeighborIntegerField[j];
+					otherNeighborIntegerField[j] = otherSwap;
+				}
+			}
+		}
+	}
+	
+	public static void sortNeighborsByValueDesc(int neighborCount, short[] neighborValues, int[][] neighborCoords,
+			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int j = neighborCount - 1, i = j - 1; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					short valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+					int multiplierSwap = neighborShareMultipliers[i];
+					neighborShareMultipliers[i] = neighborShareMultipliers[j];
+					neighborShareMultipliers[j] = multiplierSwap;
+					int symmetrySwap = neighborSymmetryCounts[i];
+					neighborSymmetryCounts[i] = neighborSymmetryCounts[j];
+					neighborSymmetryCounts[j] = symmetrySwap;
+				}
+			}
+		}
+	}
 
+	public static void sort4NeighborsByValueDesc(short[] neighborValues, int[][] neighborCoords,
+			int[] otherNeighborIntegerField) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					short valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+					int otherSwap = otherNeighborIntegerField[i];
+					otherNeighborIntegerField[i] = otherNeighborIntegerField[j];
+					otherNeighborIntegerField[j] = otherSwap;
+				}
+			}
+		}
+	}
+	
+	public static void sort4NeighborsByValueDesc(short[] neighborValues, int[][] neighborCoords,
+			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					short valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+					int multiplierSwap = neighborShareMultipliers[i];
+					neighborShareMultipliers[i] = neighborShareMultipliers[j];
+					neighborShareMultipliers[j] = multiplierSwap;
+					int symmetrySwap = neighborSymmetryCounts[i];
+					neighborSymmetryCounts[i] = neighborSymmetryCounts[j];
+					neighborSymmetryCounts[j] = symmetrySwap;
+				}
+			}
+		}
+	}
+	
+	public static void sort4NeighborsByValueDesc(short[] neighborValues, int[][] neighborCoords) {
+		// TODO faster sorting algorithm?
+		boolean sorted = false;
+		while (!sorted) {
+			sorted = true;
+			for (int i = 2, j = 3; i >= 0; j = i, i--) {
+				if (neighborValues[i] < neighborValues[j]) {
+					sorted = false;
+					short valSwap = neighborValues[i];
+					neighborValues[i] = neighborValues[j];
+					neighborValues[j] = valSwap;
+					int[] coordSwap = neighborCoords[i];
+					neighborCoords[i] = neighborCoords[j];
+					neighborCoords[j] = coordSwap;
+				}
+			}
+		}
+	}
+	
+	public static void sort3NeighborsByValueDesc(short[] neighborValues, int[][] neighborCoords,
+			int[] otherNeighborIntegerField) {
+		short n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		if (n0 >= n1) {
+			if (n1 < n2) {
+				if (n0 >= n2) { 
+					// n0 >= n2 > n1
+					neighborValues[1] = n2;
+					neighborValues[2] = n1;
+					int[] coordSwap = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[2];
+					neighborCoords[2] = coordSwap;
+					int otherSwap = otherNeighborIntegerField[1];
+					otherNeighborIntegerField[1] = otherNeighborIntegerField[2];
+					otherNeighborIntegerField[2] = otherSwap;
+				} else {
+					// n2 > n0 >= n1
+					neighborValues[0] = n2;
+					neighborValues[1] = n0;
+					neighborValues[2] = n1;
+					int[] auxCoord = neighborCoords[2];
+					neighborCoords[2] = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[0];
+					neighborCoords[0] = auxCoord;
+					int auxOther = otherNeighborIntegerField[2];
+					otherNeighborIntegerField[2] = otherNeighborIntegerField[1];
+					otherNeighborIntegerField[1] = otherNeighborIntegerField[0];
+					otherNeighborIntegerField[0] = auxOther;
+				}
+			}
+		} else if (n1 >= n2) {
+			if (n0 >= n2) {
+				// n1 > n0 >= n2
+				neighborValues[0] = n1;
+				neighborValues[1] = n0;
+				int[] coordSwap = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = coordSwap;
+				int otherSwap = otherNeighborIntegerField[0];
+				otherNeighborIntegerField[0] = otherNeighborIntegerField[1];
+				otherNeighborIntegerField[1] = otherSwap;
+			} else {
+				// n1 >= n2 > n0
+				neighborValues[0] = n1;
+				neighborValues[1] = n2;
+				neighborValues[2] = n0;
+				int[] auxCoord = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = neighborCoords[2];
+				neighborCoords[2] = auxCoord;
+				int auxOther = otherNeighborIntegerField[0];
+				otherNeighborIntegerField[0] = otherNeighborIntegerField[1];
+				otherNeighborIntegerField[1] = otherNeighborIntegerField[2];
+				otherNeighborIntegerField[2] = auxOther;
+			}
+		} else {
+			// n2 > n1 > n0
+			neighborValues[0] = n2;
+			neighborValues[2] = n0;
+			int[] coordSwap = neighborCoords[0];
+			neighborCoords[0] = neighborCoords[2];
+			neighborCoords[2] = coordSwap;
+			int otherSwap = otherNeighborIntegerField[0];
+			otherNeighborIntegerField[0] = otherNeighborIntegerField[2];
+			otherNeighborIntegerField[2] = otherSwap;
+		}
+	}
+	
+	public static void sort3NeighborsByValueDesc(short[] neighborValues, int[][] neighborCoords,
+			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
+		short n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		if (n0 >= n1) {
+			if (n1 < n2) {
+				if (n0 >= n2) { 
+					// n0 >= n2 > n1
+					neighborValues[1] = n2;
+					neighborValues[2] = n1;
+					int[] coordSwap = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[2];
+					neighborCoords[2] = coordSwap;
+					int multiplierSwap = neighborShareMultipliers[1];
+					neighborShareMultipliers[1] = neighborShareMultipliers[2];
+					neighborShareMultipliers[2] = multiplierSwap;
+					int symmetrySwap = neighborSymmetryCounts[1];
+					neighborSymmetryCounts[1] = neighborSymmetryCounts[2];
+					neighborSymmetryCounts[2] = symmetrySwap;
+				} else {
+					// n2 > n0 >= n1
+					neighborValues[0] = n2;
+					neighborValues[1] = n0;
+					neighborValues[2] = n1;
+					int[] auxCoord = neighborCoords[2];
+					neighborCoords[2] = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[0];
+					neighborCoords[0] = auxCoord;
+					int auxMultiplier = neighborShareMultipliers[2];
+					neighborShareMultipliers[2] = neighborShareMultipliers[1];
+					neighborShareMultipliers[1] = neighborShareMultipliers[0];
+					neighborShareMultipliers[0] = auxMultiplier;
+					int auxSymmetry = neighborSymmetryCounts[2];
+					neighborSymmetryCounts[2] = neighborSymmetryCounts[1];
+					neighborSymmetryCounts[1] = neighborSymmetryCounts[0];
+					neighborSymmetryCounts[0] = auxSymmetry;
+				}
+			}
+		} else if (n1 >= n2) {
+			if (n0 >= n2) {
+				// n1 > n0 >= n2
+				neighborValues[0] = n1;
+				neighborValues[1] = n0;
+				int[] coordSwap = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = coordSwap;
+				int multiplierSwap = neighborShareMultipliers[0];
+				neighborShareMultipliers[0] = neighborShareMultipliers[1];
+				neighborShareMultipliers[1] = multiplierSwap;
+				int symmetrySwap = neighborSymmetryCounts[0];
+				neighborSymmetryCounts[0] = neighborSymmetryCounts[1];
+				neighborSymmetryCounts[1] = symmetrySwap;
+			} else {
+				// n1 >= n2 > n0
+				neighborValues[0] = n1;
+				neighborValues[1] = n2;
+				neighborValues[2] = n0;
+				int[] auxCoord = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = neighborCoords[2];
+				neighborCoords[2] = auxCoord;
+				int auxMultiplier = neighborShareMultipliers[0];
+				neighborShareMultipliers[0] = neighborShareMultipliers[1];
+				neighborShareMultipliers[1] = neighborShareMultipliers[2];
+				neighborShareMultipliers[2] = auxMultiplier;
+				int auxSymmetry = neighborSymmetryCounts[0];
+				neighborSymmetryCounts[0] = neighborSymmetryCounts[1];
+				neighborSymmetryCounts[1] = neighborSymmetryCounts[2];
+				neighborSymmetryCounts[2] = auxSymmetry;
+			}
+		} else {
+			// n2 > n1 > n0
+			neighborValues[0] = n2;
+			neighborValues[2] = n0;
+			int[] coordSwap = neighborCoords[0];
+			neighborCoords[0] = neighborCoords[2];
+			neighborCoords[2] = coordSwap;
+			int multiplierSwap = neighborShareMultipliers[0];
+			neighborShareMultipliers[0] = neighborShareMultipliers[2];
+			neighborShareMultipliers[2] = multiplierSwap;
+			int symmetrySwap = neighborSymmetryCounts[0];
+			neighborSymmetryCounts[0] = neighborSymmetryCounts[2];
+			neighborSymmetryCounts[2] = symmetrySwap;
+		}
+	}
+	
+	public static void sort3NeighborsByValueDesc(short[] neighborValues, int[][] neighborCoords) {
+		short n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		if (n0 >= n1) {
+			if (n1 < n2) {
+				if (n0 >= n2) { 
+					// n0 >= n2 > n1
+					neighborValues[1] = n2;
+					neighborValues[2] = n1;
+					int[] coordSwap = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[2];
+					neighborCoords[2] = coordSwap;
+				} else {
+					// n2 > n0 >= n1
+					neighborValues[0] = n2;
+					neighborValues[1] = n0;
+					neighborValues[2] = n1;
+					int[] auxCoord = neighborCoords[2];
+					neighborCoords[2] = neighborCoords[1];
+					neighborCoords[1] = neighborCoords[0];
+					neighborCoords[0] = auxCoord;
+				}
+			}
+		} else if (n1 >= n2) {
+			if (n0 >= n2) {
+				// n1 > n0 >= n2
+				neighborValues[0] = n1;
+				neighborValues[1] = n0;
+				int[] coordSwap = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = coordSwap;
+			} else {
+				// n1 >= n2 > n0
+				neighborValues[0] = n1;
+				neighborValues[1] = n2;
+				neighborValues[2] = n0;
+				int[] auxCoord = neighborCoords[0];
+				neighborCoords[0] = neighborCoords[1];
+				neighborCoords[1] = neighborCoords[2];
+				neighborCoords[2] = auxCoord;
+			}
+		} else {
+			// n2 > n1 > n0
+			neighborValues[0] = n2;
+			neighborValues[2] = n0;
+			int[] coordSwap = neighborCoords[0];
+			neighborCoords[0] = neighborCoords[2];
+			neighborCoords[2] = coordSwap;
+		}
+	}
 }
