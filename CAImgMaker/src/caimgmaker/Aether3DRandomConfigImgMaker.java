@@ -91,9 +91,10 @@ public class Aether3DRandomConfigImgMaker {
 				path = "./";
 			}
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			path += ca.getSubFolderPath() + "/img";	
+			path += ca.getSubFolderPath();	
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path);
+			imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+					path + "/img", path + "/backups");
 		}		
 	}
 	

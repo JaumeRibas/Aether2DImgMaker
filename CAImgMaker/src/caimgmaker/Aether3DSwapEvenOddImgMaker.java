@@ -37,7 +37,7 @@ public class Aether3DSwapEvenOddImgMaker {
 			int initialStep = 0;
 			int scanInitialZIndex = 0;
 			boolean isScanInitialZIndexDefined = false;	
-			long backupLeap = 0;
+			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
@@ -64,7 +64,7 @@ public class Aether3DSwapEvenOddImgMaker {
 						scanInitialZIndex = Integer.parseInt(args[3]);
 						isScanInitialZIndexDefined = true;
 						if (args.length > 4) {
-							backupLeap = Long.parseLong(args[4]);
+							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
 						}
 					}
@@ -87,7 +87,7 @@ public class Aether3DSwapEvenOddImgMaker {
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new ImgMaker(backupLeap);
+				imgMaker = new ImgMaker(millisecondsBetweenBackups);
 			} else {
 				imgMaker = new ImgMaker();
 			}

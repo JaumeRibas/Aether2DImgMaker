@@ -66,7 +66,7 @@ import cellularautomata.grid.IntGridEvenOddMinAndMaxProcessor;
 public class ImgMaker {
 	
 	private long imgsPerFolder = 10000;
-	private long backupLeap;
+	private long millisecondsBetweenBackups;
 	private boolean saveBackupsAutomatically = true;
 	private volatile boolean backupRequested = false;
 	
@@ -74,8 +74,8 @@ public class ImgMaker {
 		saveBackupsAutomatically = false;
 	}
 	
-	public ImgMaker(long backupLeap) {
-		this.backupLeap = backupLeap;
+	public ImgMaker(long millisecondsBetweenBackups) {
+		this.millisecondsBetweenBackups = millisecondsBetweenBackups;
 	}
 	
 	public void createImages(EvolvingLongGrid2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {	
@@ -300,7 +300,7 @@ public class ImgMaker {
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		String imgPath = path + "/z_scan/";
 		int scanZ = ca.getMinZ();
 		do {
@@ -327,7 +327,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -371,22 +371,22 @@ public class ImgMaker {
 	
 	public void createScanningAndCrossSectionImages(EvolvingIntGrid3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
-			String path) throws Exception {
+			String path, String backupPath) throws Exception {
 				
 		int scanInitialZIndex = ca.getMinZ();
 		createScanningAndCrossSectionImages(ca, scanInitialZIndex, crossSectionZ, scanningColorMapper, 
-			crossSectionColorMapper, minWidth, minHeight, path);	
+			crossSectionColorMapper, minWidth, minHeight, path, backupPath);	
 	}
 	
 	public void createScanningAndCrossSectionImages(EvolvingIntGrid3D ca, int scanInitialZIndex, int crossSectionZ, 
-			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path) throws Exception {
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String path, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		String caName = ca.getName();
 		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
@@ -435,7 +435,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -443,7 +443,7 @@ public class ImgMaker {
 				backupRequested = false;
 			}
 			if (backUp) {
-				ca.backUp(path + "/backups", ca.getClass().getSimpleName() + "_" + currentStep);					
+				ca.backUp(backupPath, ca.getClass().getSimpleName() + "_" + currentStep);					
 			}
 			currentStep++;
 			if (!caFinished) {
@@ -475,7 +475,7 @@ public class ImgMaker {
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
@@ -546,7 +546,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -590,7 +590,7 @@ public class ImgMaker {
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
@@ -661,7 +661,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -705,7 +705,7 @@ public class ImgMaker {
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
@@ -790,7 +790,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -832,7 +832,7 @@ public class ImgMaker {
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		String caName = ca.getName();
 		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
@@ -881,7 +881,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -919,7 +919,7 @@ public class ImgMaker {
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		String caName = ca.getName();
 		String scanImgPath = path + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
@@ -968,7 +968,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -1009,7 +1009,7 @@ public class ImgMaker {
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
@@ -1077,7 +1077,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -1124,13 +1124,13 @@ public class ImgMaker {
 		long currentStep = ca.getStep();
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z_scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/asymmetric_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		
 		ActionableLongGrid3DZCrossSectionProcessor scan = new ActionableLongGrid3DZCrossSectionProcessor(ca, scanZ);
 		ActionableLongGrid3DZCrossSectionProcessor xSection = new ActionableLongGrid3DZCrossSectionProcessor(ca, crossSectionZ);
@@ -1192,7 +1192,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -1240,7 +1240,7 @@ public class ImgMaker {
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
@@ -1365,7 +1365,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -1415,7 +1415,7 @@ public class ImgMaker {
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
@@ -1525,7 +1525,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {
@@ -1574,7 +1574,7 @@ public class ImgMaker {
 		boolean isEvenStep = currentStep%2 == 0;
 		int numberedFolder = (int) (currentStep/imgsPerFolder);
 		int folderImageCount = (int) (currentStep%imgsPerFolder);
-		long nextBckTime = System.currentTimeMillis() + backupLeap;
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 		int scanY = scanInitialYIndex;
 		
 		String caName = ca.getName();
@@ -1693,7 +1693,7 @@ public class ImgMaker {
 			if (saveBackupsAutomatically) {
 				backUp = System.currentTimeMillis() >= nextBckTime;
 				if (backUp) {
-					nextBckTime += backupLeap;
+					nextBckTime += millisecondsBetweenBackups;
 				}
 			}
 			if (backupRequested) {

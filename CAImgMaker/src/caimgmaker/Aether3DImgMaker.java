@@ -20,14 +20,13 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether3DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
-import cellularautomata.grid.CAConstants;
+import cellularautomata.automata.Aether3D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 
 public class Aether3DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-1073741823", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -37,7 +36,7 @@ public class Aether3DImgMaker {
 			int initialStep = 0;
 			int scanInitialZIndex = 0;
 			boolean isScanInitialZIndexDefined = false;	
-			long backupLeap = 0;
+			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
@@ -64,7 +63,7 @@ public class Aether3DImgMaker {
 						scanInitialZIndex = Integer.parseInt(args[3]);
 						isScanInitialZIndexDefined = true;
 						if (args.length > 4) {
-							backupLeap = Long.parseLong(args[4]);
+							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
 						}
 					}
@@ -72,33 +71,32 @@ public class Aether3DImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableEvolvingLongGrid3D ca;
+			EvolvingLongGrid3D ca;
 			if (isRestore) {
-				ca = new Aether3DAsymmetricSectionSwap(initValOrBackupPath, path);
+				ca = new Aether3D(initValOrBackupPath).asymmetricSection();
 			} else {
-				ca = new Aether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
+				ca = new Aether3D(initialValue).asymmetricSection();
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
+			path += ca.getSubFolderPath();
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new ImgMaker(backupLeap);
+				imgMaker = new ImgMaker(millisecondsBetweenBackups);
 			} else {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, scanInitialZIndex, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
+				imgMaker.createScanningAndCrossSectionImages(ca, 0, scanInitialZIndex, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
-				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
+				imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
-			
 		}		
 	}
 	

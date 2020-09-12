@@ -20,12 +20,14 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether3DEnclosed2;
+import cellularautomata.automata.Aether3DAsymmetricSectionSwap;
+import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
+import cellularautomata.grid.CAConstants;
 
-public class Aether3DEnclosed2EvenOddImgMaker {
+public class Aether3DSwapImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-1073741823", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -40,9 +42,9 @@ public class Aether3DEnclosed2EvenOddImgMaker {
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
 				BigInteger tmp = new BigInteger(initValOrBackupPath);
-				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
-						&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
-					initialValue = tmp.intValue();
+				if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
+						&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
+					initialValue = tmp.longValue();
 				} else {
 					System.err.println("Initial value out of range.");
 					return;
@@ -70,12 +72,11 @@ public class Aether3DEnclosed2EvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			Aether3DEnclosed2 ca;
-			int side = 50;
+			ActionableEvolvingLongGrid3D ca;
 			if (isRestore) {
-				ca = new Aether3DEnclosed2(initValOrBackupPath);
+				ca = new Aether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new Aether3DEnclosed2(side, side, side, initialValue, side/2, side/2, side/2);
+				ca = new Aether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
@@ -91,12 +92,13 @@ public class Aether3DEnclosed2EvenOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionEvenOddImages(ca, scanInitialZIndex, side/2, colorMapper, colorMapper, side, side, 
-					path + "/img", path + "/backups");
+				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, scanInitialZIndex, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionEvenOddImages(ca, side/2, colorMapper, colorMapper, side, side, 
-					path + "/img", path + "/backups");
-			}	
+				imgMaker.createScanningAndCrossSectionImagesFromAsymmetricSection(ca, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
+			}
+			
 		}		
 	}
 	

@@ -36,7 +36,7 @@ public class IntNearAether2_3DImgMaker {
 			int initialStep = 0;
 			int scanInitialZIndex = 0;
 			boolean isScanInitialZIndexDefined = false;	
-			long backupLeap = 0;
+			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			
 			String initValOrBackupPath = args[0];
@@ -64,7 +64,7 @@ public class IntNearAether2_3DImgMaker {
 						scanInitialZIndex = Integer.parseInt(args[3]);
 						isScanInitialZIndexDefined = true;
 						if (args.length > 4) {
-							backupLeap = Long.parseLong(args[4]);
+							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
 						}
 					}
@@ -87,16 +87,17 @@ public class IntNearAether2_3DImgMaker {
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new ImgMaker(backupLeap);
+				imgMaker = new ImgMaker(millisecondsBetweenBackups);
 			} else {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImages(ca, 0, scanInitialZIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path);
+				imgMaker.createScanningAndCrossSectionImages(ca, 0, scanInitialZIndex, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path);
+				imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
-
 		}		
 	}
 	

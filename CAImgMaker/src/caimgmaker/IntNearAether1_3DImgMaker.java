@@ -26,7 +26,7 @@ import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
 public class IntNearAether1_3DImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{(-(Integer.MAX_VALUE/2)) + "", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-1000000" + "", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -36,7 +36,7 @@ public class IntNearAether1_3DImgMaker {
 			int initialStep = 0;
 			int scanInitialZIndex = 0;
 			boolean isScanInitialZIndexDefined = false;	
-			long backupLeap = 0;
+			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			
 			String initValOrBackupPath = args[0];
@@ -64,7 +64,7 @@ public class IntNearAether1_3DImgMaker {
 						scanInitialZIndex = Integer.parseInt(args[3]);
 						isScanInitialZIndexDefined = true;
 						if (args.length > 4) {
-							backupLeap = Long.parseLong(args[4]);
+							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
 						}
 					}
@@ -83,20 +83,21 @@ public class IntNearAether1_3DImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getSubFolderPath() + "/img";
+			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new ImgMaker(backupLeap);
+				imgMaker = new ImgMaker(millisecondsBetweenBackups);
 			} else {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImages(ca, 0, scanInitialZIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path);
+				imgMaker.createScanningAndCrossSectionImages(ca, 0, scanInitialZIndex, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path);
+				imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
-
 		}		
 	}
 	

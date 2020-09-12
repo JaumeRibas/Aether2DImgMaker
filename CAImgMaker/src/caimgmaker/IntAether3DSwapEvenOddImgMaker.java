@@ -23,7 +23,7 @@ import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.IntAether3DAsymmetricSectionSwap;
 import cellularautomata.grid.CAConstants;
 
-public class IntAether3DEvenOddImgMaker {
+public class IntAether3DSwapEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
@@ -36,7 +36,7 @@ public class IntAether3DEvenOddImgMaker {
 			int initialStep = 0;
 			int scanInitialZIndex = 0;
 			boolean isScanInitialZIndexDefined = false;	
-			long backupLeap = 0;
+			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
@@ -63,7 +63,7 @@ public class IntAether3DEvenOddImgMaker {
 						scanInitialZIndex = Integer.parseInt(args[3]);
 						isScanInitialZIndexDefined = true;
 						if (args.length > 4) {
-							backupLeap = Long.parseLong(args[4]);
+							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
 						}
 					}
@@ -86,7 +86,7 @@ public class IntAether3DEvenOddImgMaker {
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new ImgMaker(backupLeap);
+				imgMaker = new ImgMaker(millisecondsBetweenBackups);
 			} else {
 				imgMaker = new ImgMaker();
 			}

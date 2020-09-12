@@ -37,7 +37,7 @@ public class Aether4DSwapAxialRegionEvenOddImgMaker {
 			int initialStep = 0;
 			int scanInitialYIndex = 0;
 			boolean isScanInitialYIndexDefined = false;	
-			long backupLeap = 0;
+			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
@@ -64,7 +64,7 @@ public class Aether4DSwapAxialRegionEvenOddImgMaker {
 						scanInitialYIndex = Integer.parseInt(args[3]);
 						isScanInitialYIndexDefined = true;
 						if (args.length > 4) {
-							backupLeap = Long.parseLong(args[4]);
+							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
 						}
 					}
@@ -87,7 +87,7 @@ public class Aether4DSwapAxialRegionEvenOddImgMaker {
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
-				imgMaker = new ImgMaker(backupLeap);
+				imgMaker = new ImgMaker(millisecondsBetweenBackups);
 			} else {
 				imgMaker = new ImgMaker();
 			}
