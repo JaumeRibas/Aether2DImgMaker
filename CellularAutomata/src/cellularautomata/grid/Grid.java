@@ -16,4 +16,10 @@
  */
 package cellularautomata.grid;
 
+/**
+ * A region of a grid whose shape and orientation is such that no line parallel to an axis crosses its bounds in more than two places.
+ *  
+ * @author Jaume
+ *
+ */
 public interface Grid {}

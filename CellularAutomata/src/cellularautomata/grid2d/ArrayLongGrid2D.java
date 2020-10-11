@@ -3,19 +3,19 @@ package cellularautomata.grid2d;
 import java.io.Serializable;
 
 /**
- * Represents a fixed size 2D region of an integer grid backed by a 2D int array.
+ * Represents a fixed size 2D region of an integer grid backed by a 2D long array.
  * The shape and orientation of the region is such that no line parallel to an axis crosses its bounds in more than two places.
  * 
  * @author Jaume
  *
  */
-public class ArrayIntGrid2D implements IntGrid2D, Serializable {
-	
+public class ArrayLongGrid2D implements LongGrid2D, Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 278226012753314721L;
-	private int[][] values;
+	private static final long serialVersionUID = 4476906442768367020L;
+	private long[][] values;
 	private int minX;
 	private int maxX;
 	private int[] localYMinima;
@@ -30,9 +30,9 @@ public class ArrayIntGrid2D implements IntGrid2D, Serializable {
 	 * 
 	 * @param minX the smallest x-coordinate within the region
 	 * @param localYMinima an array of the smallest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
-	 * @param values a 2D int array containing the values of the region
+	 * @param values a 2D long array containing the values of the region
 	 */
-	public ArrayIntGrid2D(int minX, int[] localYMinima, int[][] values) {
+	public ArrayLongGrid2D(int minX, int[] localYMinima, long[][] values) {
 		if (localYMinima.length != values.length) {
 			throw new IllegalArgumentException("Local y minima's length must be equal to values' length.");
 		}
@@ -92,7 +92,7 @@ public class ArrayIntGrid2D implements IntGrid2D, Serializable {
 	 * @param localYMinima an array of the smallest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
 	 * @param localYMaxima an array of the greatest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
 	 */
-	public ArrayIntGrid2D(int minX, int[] localYMinima, int[] localYMaxima) {
+	public ArrayLongGrid2D(int minX, int[] localYMinima, int[] localYMaxima) {
 		if (localYMinima.length != localYMaxima.length) {
 			throw new IllegalArgumentException("Local y minima's length must be equal to maxima's length.");
 		}
@@ -107,7 +107,7 @@ public class ArrayIntGrid2D implements IntGrid2D, Serializable {
 		this.minX = minX;
 		maxX = (int)longMaxX;
 		this.localYMinima = localYMinima;
-		values = new int[localYMinima.length][];
+		values = new long[localYMinima.length][];
 		boolean maximaDescending = false;
 		boolean minimaAscending = false;
 		int previousLocalMinY = localYMinima[0];
@@ -143,7 +143,7 @@ public class ArrayIntGrid2D implements IntGrid2D, Serializable {
 			} else if (localMaxY > maxY) {
 				maxY = localMaxY;
 			}
-			values[i] = new int[localMaxY - localMinY + 1];
+			values[i] = new long[localMaxY - localMinY + 1];
 			previousLocalMinY = localMinY;
 			previousLocalMaxY = localMaxY;
 		}
@@ -228,19 +228,19 @@ public class ArrayIntGrid2D implements IntGrid2D, Serializable {
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y) {
+	public long getValueAtPosition(int x, int y) {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		return values[i][j];
 	}
 	
-	public void setValueAtPosition(int x, int y, int value) {
+	public void setValueAtPosition(int x, int y, long value) {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		values[i][j] = value;
 	}
 	
-	public int addAndGetValueAtPosition(int x, int y, int value) {
+	public long addAndGetValueAtPosition(int x, int y, long value) {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		return values[i][j] += value;

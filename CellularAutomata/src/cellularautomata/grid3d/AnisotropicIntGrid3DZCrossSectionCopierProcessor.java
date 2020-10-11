@@ -25,10 +25,14 @@ import cellularautomata.grid.GridProcessor;
 
 public class AnisotropicIntGrid3DZCrossSectionCopierProcessor implements GridProcessor<IntGrid3D> {
 
+	private boolean isProcessing = false; 
 	private Map<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>> copyRequests = new HashMap<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>>();
 	private Map<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>> copies = new HashMap<Integer, List<AnisotropicIntGrid3DZCrossSectionBlock>>();
 	
 	public void requestCopy(int crossSectionZ) {
+		if (isProcessing) {
+			throw new UnsupportedOperationException("Copies cannot be requested while the copier is processing.");
+		}
 		copyRequests.put(crossSectionZ, new ArrayList<AnisotropicIntGrid3DZCrossSectionBlock>());
 	}
 	
@@ -46,6 +50,7 @@ public class AnisotropicIntGrid3DZCrossSectionCopierProcessor implements GridPro
 
 	@Override
 	public void beforeProcessing() throws Exception {
+		isProcessing = true;
 		copies.clear();
 	}
 
@@ -64,6 +69,7 @@ public class AnisotropicIntGrid3DZCrossSectionCopierProcessor implements GridPro
 			copies.put(copyZ, copyRequests.get(copyZ));
 		}
 		copyRequests.clear();
+		isProcessing = false;
 	}
 	
 }

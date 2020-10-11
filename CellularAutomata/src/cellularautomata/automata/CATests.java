@@ -43,11 +43,13 @@ import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid4D;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
+import cellularautomata.grid2d.ArrayIntGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.LongGrid3D;
+import cellularautomata.grid3d.LongGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
 
@@ -58,6 +60,95 @@ public class CATests {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compare(ae1, ae2);
+	}
+	
+	public static void testArrayIntGrid2D() throws Exception {
+		Aether2D ae2 = new Aether2D(100000);
+		EvolvingLongGrid2D ae1 = ae2.asymmetricSection();
+		while (ae1.nextStep());
+		//compare extrema parameters with grid bounds
+		int minX = ae1.getMinX();
+		int maxX = ae1.getMaxX();
+		int size = maxX - minX + 1;
+		int[] localYMaxima = new int[size];
+		int[] localYMinima = new int[size];
+		for (int x = minX, i = 0; x <= maxX; x++, i++) {
+			localYMaxima[i] = ae1.getMaxY(x);
+			localYMinima[i] = ae1.getMinY(x);
+		}
+		ArrayIntGrid2D a = new ArrayIntGrid2D(minX, localYMinima, localYMaxima);
+		if (a.getMaxX() != maxX) {
+			System.out.println("Error");
+			return;
+		}
+		if (a.getMinX() != minX) {
+			System.out.println("Error");
+			return;
+		}
+		for (int x = minX; x <= maxX; x++) {
+			if (a.getMaxY(x) != ae1.getMaxY(x)) {
+				System.out.println("Error");
+				return;
+			}
+			if (a.getMinY(x) != ae1.getMinY(x)) {
+				System.out.println("Error");
+				return;
+			}
+		}
+		if (a.getMaxY() != ae1.getMaxY()) {
+			System.out.println("Error");
+			return;
+		}
+		if (a.getMinY() != ae1.getMinY()) {
+			System.out.println("Error");
+			return;
+		}
+		int maxY = ae1.getMaxY();
+		for (int y = ae1.getMinY(); y <= maxY; y++) {
+			if (a.getMaxX(y) != ae1.getMaxX(y)) {
+				System.out.println("Error");
+				return;
+			}
+			if (a.getMinX(y) != ae1.getMinX(y)) {
+				System.out.println("Error");
+				return;
+			}
+		}
+		//set, get and addAndGet values
+		for (int y = ae1.getMinY(); y <= maxY; y++) {
+			int localMaxX = ae1.getMaxX(y);
+			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
+				a.setValueAtPosition(x, y, (int) ae1.getValueAtPosition(x, y));
+			}
+		}
+		for (int y = ae1.getMinY(); y <= maxY; y++) {
+			int localMaxX = ae1.getMaxX(y);
+			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
+				if (a.getValueAtPosition(x, y) != ae1.getValueAtPosition(x, y)) {
+					System.out.println("Error");
+					return;
+				}
+			}
+		}
+		for (int y = ae1.getMinY(); y <= maxY; y++) {
+			int localMaxX = ae1.getMaxX(y);
+			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
+				if (a.addAndGetValueAtPosition(x, y, 3) != ae1.getValueAtPosition(x, y) + 3) {
+					System.out.println("Error");
+					return;
+				}
+			}
+		}
+		for (int y = ae1.getMinY(); y <= maxY; y++) {
+			int localMaxX = ae1.getMaxX(y);
+			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
+				if (a.getValueAtPosition(x, y) != ae1.getValueAtPosition(x, y) + 3) {
+					System.out.println("Error");
+					return;
+				}
+			}
+		}
+		System.out.println("Passed!");
 	}
 	
 	public static void timeIntAether3D(int singleSource) {
@@ -753,7 +844,7 @@ public class CATests {
 					for (int x = gridBlock.getMinX(); x <= gridBlock.getMaxX(); x++) {
 						for (int z = gridBlock.getMinZAtX(x); z <= gridBlock.getMaxZAtX(x); z++) {
 							for (int y = gridBlock.getMinY(x, z); y <= gridBlock.getMaxY(x, z); y++) {
-								System.out.println("Comparing position (" + x + ", " + y + ", " + z + ")");
+//								System.out.println("Comparing position (" + x + ", " + y + ", " + z + ")");
 								if (gridBlock.getValueAtPosition(x, y, z) != ca2.getValueAtPosition(x, y, z)) {
 									System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 											+ ca1.getClass().getSimpleName() + ":" + gridBlock.getValueAtPosition(x, y, z) 
@@ -1228,6 +1319,27 @@ public class CATests {
 		}
 	}	
 	
+	public static void stepByStepZCrossSection(ActionableEvolvingLongGrid3D ca, int z) {
+		try {
+			Scanner s = new Scanner(System.in);
+			LongGrid3DZCrossSectionCopierProcessor copier = new LongGrid3DZCrossSectionCopierProcessor();
+			ca.addProcessor(copier);
+			copier.requestCopy(z);
+			ca.processGrid();
+			do {
+				System.out.println("step " + ca.getStep());
+				LongGrid2D crossSectionCopy = copier.getCopy(z);
+				printAsGrid(crossSectionCopy, 0);
+				System.out.println("total value " + crossSectionCopy.getTotalValue());
+				s.nextLine();
+				copier.requestCopy(z);
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void race(EvolvingModel... cas) {
 		try {
 			long millis;
@@ -1241,31 +1353,16 @@ public class CATests {
 		}
 	}
 	
-	public static void printAsGrid(LongGrid2D m, long backgroundValue) throws Exception {
-		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
-		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
-	}
-	
-	public static void printAsGrid(LongGrid1D m, long backgroundValue) {
-		int maxX = m.getMaxX(), minX = m.getMinX();
-		printAsGrid(m, minX, maxX, backgroundValue);
-	}
-	
-	public static void printAsGrid(IntGrid2D m, int backgroundValue) throws Exception {
-		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
-		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
-	}
-	
-	public static void printAsGrid(ShortGrid2D m, short backgroundValue) throws Exception {
-		int maxX = m.getMaxX(), maxY = m.getMaxY(), minX = m.getMinX(), minY = m.getMinY();
-		printAsGrid(m, minX, maxX, minY, maxY, backgroundValue);
-	}
-	
-	public static void printAsGrid(LongGrid2D m, int minX, int maxX, int minY, int maxY, long backgroundValue) throws Exception {
+	public static void printAsGrid(LongGrid2D grid, long backgroundValue) throws Exception {
 		int maxDigits = 3;
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
 		for (int y = maxY; y >= minY; y--) {
-			for (int x = minX; x <= maxX; x++) {
-				int digits = Long.toString(m.getValueAtPosition(x, y)).length();
+			int localMaxX = grid.getMaxX(y);
+			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
+				int digits = Long.toString(grid.getValueAtPosition(x, y)).length();
 				if (digits > maxDigits)
 					maxDigits = digits;
 			}
@@ -1280,23 +1377,34 @@ public class CATests {
 		}
 		for (int y = maxY; y >= minY; y--) {
 			System.out.println(headFoot);
-			for (int x = minX; x <= maxX; x++) {
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			for (; x <= localMaxX; x++) {
 				String strVal = " ";
-				long val = m.getValueAtPosition(x, y);
+				long val = grid.getValueAtPosition(x, y);
 				if (val != backgroundValue) {
 					strVal = val + "";
 				}
 				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
 			}
 			System.out.println("|");
 		}
 		System.out.println(headFoot);
 	}
 	
-	public static void printAsGrid(LongGrid1D m, int minX, int maxX, long backgroundValue) {
+	public static void printAsGrid(LongGrid1D grid, long backgroundValue) {
 		int maxDigits = 3;
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
 		for (int x = minX; x <= maxX; x++) {
-			int digits = Long.toString(m.getValueAtPosition(x)).length();
+			int digits = Long.toString(grid.getValueAtPosition(x)).length();
 			if (digits > maxDigits)
 				maxDigits = digits;
 		}
@@ -1311,7 +1419,7 @@ public class CATests {
 		System.out.println(headFoot);
 		for (int x = minX; x <= maxX; x++) {
 			String strVal = " ";
-			long val = m.getValueAtPosition(x);
+			long val = grid.getValueAtPosition(x);
 			if (val != backgroundValue) {
 				strVal = val + "";
 			}
@@ -1321,11 +1429,16 @@ public class CATests {
 		System.out.println(headFoot);
 	}
 	
-	public static void printAsGrid(IntGrid2D m, int minX, int maxX, int minY, int maxY, int backgroundValue) throws Exception {
+	public static void printAsGrid(IntGrid2D grid, int backgroundValue) throws Exception {
 		int maxDigits = 3;
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
 		for (int y = maxY; y >= minY; y--) {
-			for (int x = minX; x <= maxX; x++) {
-				int digits = Long.toString(m.getValueAtPosition(x, y)).length();
+			int localMaxX = grid.getMaxX(y);
+			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
+				int digits = Long.toString(grid.getValueAtPosition(x, y)).length();
 				if (digits > maxDigits)
 					maxDigits = digits;
 			}
@@ -1340,24 +1453,38 @@ public class CATests {
 		}
 		for (int y = maxY; y >= minY; y--) {
 			System.out.println(headFoot);
-			for (int x = minX; x <= maxX; x++) {
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			for (; x <= localMaxX; x++) {
 				String strVal = " ";
-				int val = m.getValueAtPosition(x, y);
+				long val = grid.getValueAtPosition(x, y);
 				if (val != backgroundValue) {
 					strVal = val + "";
 				}
 				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
 			}
 			System.out.println("|");
 		}
 		System.out.println(headFoot);
 	}
 	
-	public static void printAsGrid(ShortGrid2D m, int minX, int maxX, int minY, int maxY, short backgroundValue) throws Exception {
+	public static void printAsGrid(ShortGrid2D grid, short backgroundValue) throws Exception {
 		int maxDigits = 3;
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
 		for (int y = maxY; y >= minY; y--) {
-			for (int x = minX; x <= maxX; x++) {
-				int digits = Long.toString(m.getValueAtPosition(x, y)).length();
+			int localMaxX = grid.getMaxX(y);
+			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
+				int digits = Long.toString(grid.getValueAtPosition(x, y)).length();
 				if (digits > maxDigits)
 					maxDigits = digits;
 			}
@@ -1372,13 +1499,22 @@ public class CATests {
 		}
 		for (int y = maxY; y >= minY; y--) {
 			System.out.println(headFoot);
-			for (int x = minX; x <= maxX; x++) {
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			for (; x <= localMaxX; x++) {
 				String strVal = " ";
-				long val = m.getValueAtPosition(x, y);
+				long val = grid.getValueAtPosition(x, y);
 				if (val != backgroundValue) {
 					strVal = val + "";
 				}
 				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
 			}
 			System.out.println("|");
 		}

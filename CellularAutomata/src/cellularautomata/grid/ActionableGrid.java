@@ -22,6 +22,16 @@ import java.util.Set;
 import cellularautomata.grid.Grid;
 
 //TODO try to make it more standard. Perhaps using the Iterable interface. 
+/**
+ * A grid that can be processed progressively in chunks (blocks).
+ * The cuts between blocks are perpendicular to the x-axis.
+ * The blocks are processed in order from the one at the lower x end until the one at the greater x end.
+ * 
+ * @author Jaume
+ *
+ * @param <P>
+ * @param <G>
+ */
 public abstract class ActionableGrid<P extends GridProcessor<G>, G extends Grid> {
 	
 	protected Set<P> processors;
