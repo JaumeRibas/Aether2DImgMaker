@@ -19,22 +19,22 @@ package caimgmaker;
 import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
-import caimgmaker.colormap.HueMapper;
-import cellularautomata.automata.ShortAether3D;
-import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
+import caimgmaker.colormap.GrayscaleMapper;
+import cellularautomata.automata.IntAether3D;
+import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
 
-public class ShortAether3DImgMaker {
+public class IntAether3DEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
-			short initialValue = 0;
+			int initialValue = 0;
 			boolean isRestore = false;
 			String path;
 			int initialStep = 0;
-			int scanInitialZIndex = 0;
+			int xScanInitialIndex = 0;
 			boolean isScanInitialZIndexDefined = false;	
 			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
@@ -43,7 +43,7 @@ public class ShortAether3DImgMaker {
 				BigInteger tmp = new BigInteger(initValOrBackupPath);
 				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
 						&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
-					initialValue = tmp.shortValue();
+					initialValue = tmp.intValue();
 				} else {
 					System.err.println("Initial value out of range.");
 					return;
@@ -60,7 +60,7 @@ public class ShortAether3DImgMaker {
 				if (args.length > 2) {
 					initialStep = Integer.parseInt(args[2]);
 					if (args.length > 3) {
-						scanInitialZIndex = Integer.parseInt(args[3]);
+						xScanInitialIndex = Integer.parseInt(args[3]);
 						isScanInitialZIndexDefined = true;
 						if (args.length > 4) {
 							millisecondsBetweenBackups = Long.parseLong(args[4]);
@@ -71,18 +71,18 @@ public class ShortAether3DImgMaker {
 			} else {
 				path = "./";
 			}
-			EvolvingShortGrid3D ca;
+			EvolvingIntGrid3D ca;
 			if (isRestore) {
-				ca = new ShortAether3D(initValOrBackupPath).asymmetricSection();
+				ca = new IntAether3D(initValOrBackupPath).asymmetricSection();
 			} else {
-				ca = new ShortAether3D(initialValue).asymmetricSection();
+				ca = new IntAether3D(initialValue).asymmetricSection();
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			ColorMapper colorMapper = new HueMapper();
+			ColorMapper colorMapper = new GrayscaleMapper(0);
 			path += ca.getSubFolderPath();
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
@@ -91,10 +91,10 @@ public class ShortAether3DImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImages(ca, 0, scanInitialZIndex, colorMapper, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, xScanInitialIndex, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
-				imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
 		}		
