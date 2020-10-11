@@ -1647,18 +1647,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] aymmetricNeighborValues,
+	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 3:
-				Utils.sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, 
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				short n0Val = aymmetricNeighborValues[0], n1Val = aymmetricNeighborValues[1];
+				short n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
 				int shareCount = neighborCount + 1;
@@ -1712,7 +1712,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				int toShare = value - aymmetricNeighborValues[0];
+				int toShare = value - asymmetricNeighborValues[0];
 				int share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
@@ -1725,9 +1725,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
-				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;
@@ -1891,18 +1891,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] aymmetricNeighborValues,
+	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 3:
-				Utils.sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, 
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				short n0Val = aymmetricNeighborValues[0], n1Val = aymmetricNeighborValues[1];
+				short n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int shareCount = neighborCount + 1;
 				if (n0Val == n1Val) {
@@ -1955,7 +1955,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				int toShare = value - aymmetricNeighborValues[0];
+				int toShare = value - asymmetricNeighborValues[0];
 				int share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
@@ -1968,9 +1968,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
-				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;

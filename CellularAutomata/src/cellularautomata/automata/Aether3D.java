@@ -1657,18 +1657,18 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(long[][][] newXSlices, long value, int y, int z, long[] aymmetricNeighborValues,
+	private static boolean topplePosition(long[][][] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 3:
-				Utils.sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, 
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				long n0Val = aymmetricNeighborValues[0], n1Val = aymmetricNeighborValues[1];
+				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
 				int shareCount = neighborCount + 1;
@@ -1722,7 +1722,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				long toShare = value - aymmetricNeighborValues[0];
+				long toShare = value - asymmetricNeighborValues[0];
 				long share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
@@ -1735,9 +1735,9 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
-				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;
@@ -1901,18 +1901,18 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(long[][][] newXSlices, long value, int y, int z, long[] aymmetricNeighborValues,
+	private static boolean topplePosition(long[][][] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 3:
-				Utils.sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, 
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				long n0Val = aymmetricNeighborValues[0], n1Val = aymmetricNeighborValues[1];
+				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int shareCount = neighborCount + 1;
 				if (n0Val == n1Val) {
@@ -1965,7 +1965,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				long toShare = value - aymmetricNeighborValues[0];
+				long toShare = value - asymmetricNeighborValues[0];
 				long share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
@@ -1978,9 +1978,9 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 				newXSlices[1][y][z] += value;
 				break;
 			default: // 6, 5, 4
-				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, aymmetricNeighborValues, asymmetricNeighborCoords, 
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;

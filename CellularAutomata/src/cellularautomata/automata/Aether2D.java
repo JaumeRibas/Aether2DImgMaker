@@ -994,23 +994,23 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] aymmetricNeighborValues,
+	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 4:
-				Utils.sort4NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, aymmetricNeighborValues, 
+				Utils.sort4NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 3:
-				Utils.sort3NeighborsByValueDesc(aymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, aymmetricNeighborValues, 
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				long n0Val = aymmetricNeighborValues[0], n1Val = aymmetricNeighborValues[1];
+				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
 				int shareCount = neighborCount + 1;
@@ -1064,7 +1064,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				long toShare = value - aymmetricNeighborValues[0];
+				long toShare = value - asymmetricNeighborValues[0];
 				long share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
