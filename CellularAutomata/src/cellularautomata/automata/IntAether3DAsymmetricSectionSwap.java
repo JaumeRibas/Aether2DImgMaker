@@ -26,31 +26,25 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
-import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
 import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
+import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
 
 public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3D {
 
-	public static final long PRIMITIVE_MAX_VALUE = Integer.MAX_VALUE;
-	
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
 	
 	private static final byte LEFT = 0;
 	private static final byte CENTER = 1;
 	private static final byte RIGHT = 2;
-	private static final byte UP = 3;
-	private static final byte DOWN = 4;	
-	private static final byte FRONT = 5;
-	private static final byte BACK = 6;
 	
 	private SizeLimitedAnisotropicIntGrid3DBlock gridBlockA;
 	private SizeLimitedAnisotropicIntGrid3DBlock gridBlockB;
 	private int initialValue;
 	private int currentStep;
-	private int maxX, maxY, maxZ;
+	private int maxX;
 	private File gridFolder;
 	private long maxGridBlockSize;
 	
@@ -68,10 +62,11 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
 		gridBlockA = new SizeLimitedAnisotropicIntGrid3DBlock(0, maxGridBlockSize);
+		if (gridBlockA.maxX < 6) {
+			throw new IllegalArgumentException("Passed heap space limit is too small.");
+		}
 		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
-		maxX = 1;//we leave a buffer of one position to account for 'negative growth'
-		maxY = 0;
-		maxZ = 0;
+		maxX = 4;
 		currentStep = 0;
 		gridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
@@ -169,8 +164,12 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	@Override
 	public boolean nextStep() throws Exception {
 		triggerBeforeProcessing();
-		boolean gridChanged = false;		
-		AnisotropicIntGrid3DSlice[] newGridSlices = 
+		boolean gridChanged = false;
+		int[] relevantAsymmetricNeighborValues = new int[6];
+		int[][] relevantAsymmetricNeighborCoords = new int[6][3];
+		int[] relevantAsymmetricNeighborShareMultipliers = new int[6];// to compensate for omitted symmetric positions
+		int[] relevantAsymmetricNeighborSymmetryCounts = new int[6];// to compensate for omitted symmetric positions		
+		AnisotropicIntGrid3DSlice[] newXSlices = 
 				new AnisotropicIntGrid3DSlice[] {
 						null, 
 						new AnisotropicIntGrid3DSlice(0), 
@@ -187,16 +186,25 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 			}
 		}
 		int currentMaxX = maxX;//it can change during computing
-		int x = 0;
-		boolean anySlicePositionToppled = computeGridSlice(gridBlockA, 0, newGridSlices);
+		boolean anySlicePositionToppled = toppleRangeFromZeroToThree(gridBlockA, newXSlices, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts);
 		gridChanged = gridChanged || anySlicePositionToppled;
-		x++;
+		int x = 4;
+		AnisotropicIntGrid3DSlice[] xSlices = new AnisotropicIntGrid3DSlice[] {
+				null,
+				gridBlockA.getSlice(3),
+				gridBlockA.getSlice(4)};
+//		newXSlices[1] = newCurrentXSlice;
+//		newXSlices[2] = newGreaterXSlice;
 		while (x <= currentMaxX) {
 			while (x <= currentMaxX && x < gridBlockA.maxX) {
-				slideGridSlices(newGridSlices, new AnisotropicIntGrid3DSlice(x + 1));
-				anySlicePositionToppled = computeGridSlice(gridBlockA, x, newGridSlices);
+				slideGridSlices(newXSlices, new AnisotropicIntGrid3DSlice(x + 1));
+				anySlicePositionToppled = toppleSliceBeyondThree(gridBlockA, x, xSlices, newXSlices, 
+						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 				gridChanged = gridChanged || anySlicePositionToppled;
-				gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
+				gridBlockA.setSlice(x - 1, newXSlices[LEFT]);
 				x++;
 			}
 			if (x <= currentMaxX) {
@@ -209,16 +217,20 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 				} else {
 					gridBlockB = loadOrBuildGridBlock(x + 1);
 				}
-				slideGridSlices(newGridSlices, new AnisotropicIntGrid3DSlice(x + 1));
-				anySlicePositionToppled = computeLastGridSlice(gridBlockA, gridBlockB, x, newGridSlices);
+				slideGridSlices(newXSlices, new AnisotropicIntGrid3DSlice(x + 1));
+				anySlicePositionToppled = toppleLastSliceOfBlock(gridBlockA, gridBlockB, x, xSlices, newXSlices, 
+						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 				gridChanged = gridChanged || anySlicePositionToppled;
-				gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
+				gridBlockA.setSlice(x - 1, newXSlices[LEFT]);
 				x++;
 				if (x <= currentMaxX) {
-					slideGridSlices(newGridSlices, new AnisotropicIntGrid3DSlice(x + 1));
-					anySlicePositionToppled = computeFirstGridSlice(gridBlockA, gridBlockB, x, newGridSlices);
+					slideGridSlices(newXSlices, new AnisotropicIntGrid3DSlice(x + 1));
+					anySlicePositionToppled = toppleFirstSliceOfBlock(gridBlockA, gridBlockB, x, xSlices, newXSlices, 
+							relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+							relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 					gridChanged = gridChanged || anySlicePositionToppled;
-					gridBlockA.setSlice(x - 1, newGridSlices[LEFT]);
+					gridBlockA.setSlice(x - 1, newXSlices[LEFT]);
 					processGridBlock(gridBlockA);
 					SizeLimitedAnisotropicIntGrid3DBlock swp = gridBlockA;
 					gridBlockA = gridBlockB;
@@ -227,13 +239,13 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 				}
 			}
 		}
-		gridBlockA.setSlice(currentMaxX, newGridSlices[CENTER]);
+		gridBlockA.setSlice(currentMaxX, newXSlices[CENTER]);
 		if (currentMaxX == gridBlockA.maxX) {
 			processGridBlock(gridBlockA);
-			gridBlockB.setSlice(currentMaxX + 1, newGridSlices[RIGHT]);
+			gridBlockB.setSlice(currentMaxX + 1, newXSlices[RIGHT]);
 			processGridBlock(gridBlockB);
 		} else {
-			gridBlockA.setSlice(currentMaxX + 1, newGridSlices[RIGHT]);
+			gridBlockA.setSlice(currentMaxX + 1, newXSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
 		currentStep++;
@@ -241,6 +253,1952 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 		return gridChanged;
 	}
 	
+	private boolean toppleRangeFromZeroToThree(SizeLimitedAnisotropicIntGrid3DBlock gridBlock,
+			AnisotropicIntGrid3DSlice[] newXSlices, int[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+			int[] relevantAsymmetricNeighborSymmetryCounts) {
+		boolean changed = false;
+		AnisotropicIntGrid3DSlice smallerXSlice = null, 
+				currentXSlice = gridBlock.getSlice(0), 
+				greaterXSlice = gridBlock.getSlice(1);
+		AnisotropicIntGrid3DSlice newSmallerXSlice = null, 
+				newCurrentXSlice = newXSlices[1], 
+				newGreaterXSlice = newXSlices[2];
+		// x = 0, y = 0, z = 0
+		int currentValue = currentXSlice.getValueAtPosition(0, 0);
+		int greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
+		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
+			changed = true;
+		}
+		// x = 1, y = 0, z = 0
+		// smallerXSlice = currentXSlice; // not needed here
+		currentXSlice = greaterXSlice;
+		greaterXSlice = gridBlock.getSlice(2);
+		newSmallerXSlice = newCurrentXSlice;
+		newCurrentXSlice = newGreaterXSlice;
+		newGreaterXSlice = new AnisotropicIntGrid3DSlice(3);
+		newXSlices[0] = newSmallerXSlice;
+		newXSlices[1] = newCurrentXSlice;
+		newXSlices[2] = newGreaterXSlice;
+		// reuse values obtained previously
+		int smallerXNeighborValue = currentValue;
+		currentValue = greaterXNeighborValue;
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
+		int greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		if (topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 1, y = 1, z = 0
+		// reuse values obtained previously
+		int smallerYNeighborValue = currentValue;
+		currentValue = greaterYNeighborValue;
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
+		int greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		if (topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 1, y = 1, z = 1
+		// reuse values obtained previously
+		int smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
+		if (topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
+			changed = true;
+		}
+		gridBlock.setSlice(0, newSmallerXSlice);
+		// x = 2, y = 0, z = 0
+		smallerXSlice = currentXSlice;
+		currentXSlice = greaterXSlice;
+		greaterXSlice = gridBlock.getSlice(3);
+		newSmallerXSlice = newCurrentXSlice;
+		newCurrentXSlice = newGreaterXSlice;
+		newGreaterXSlice = new AnisotropicIntGrid3DSlice(4);
+		newXSlices[0] = newSmallerXSlice;
+		newXSlices[1] = newCurrentXSlice;
+		newXSlices[2] = newGreaterXSlice;
+		currentValue = currentXSlice.getValueAtPosition(0, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(0, 0);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 2, y = 1, z = 0
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 0);
+		// reuse values obtained previously
+		smallerYNeighborValue = currentValue;
+		currentValue = greaterYNeighborValue;
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 2, y = 1, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 2, y = 2, z = 0
+		currentValue = currentXSlice.getValueAtPosition(2, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 0);
+		// reuse values obtained previously
+		smallerYNeighborValue = smallerZNeighborValue;
+		greaterZNeighborValue = greaterYNeighborValue;
+		if (topplePositionType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
+				newXSlices)) {
+			changed = true;
+		}
+		// x = 2, y = 2, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 1);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		if (topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+				greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 2, y = 2, z = 2
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 2);
+		if (topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+				newGreaterXSlice)) {
+			changed = true;
+		}
+		gridBlock.setSlice(1, newSmallerXSlice);
+		// x = 3, y = 0, z = 0
+		smallerXSlice = currentXSlice;
+		currentXSlice = greaterXSlice;
+		greaterXSlice = gridBlock.getSlice(4);
+		newSmallerXSlice = newCurrentXSlice;
+		newCurrentXSlice = newGreaterXSlice;
+		newGreaterXSlice = new AnisotropicIntGrid3DSlice(5);
+		newXSlices[0] = newSmallerXSlice;
+		newXSlices[1] = newCurrentXSlice;
+		newXSlices[2] = newGreaterXSlice;
+		currentValue = currentXSlice.getValueAtPosition(0, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(0, 0);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 1, z = 0
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 0);
+		// reuse values obtained previously
+		smallerYNeighborValue = currentValue;
+		currentValue = greaterYNeighborValue;
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 1, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 2, z = 0
+		currentValue = currentXSlice.getValueAtPosition(2, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 0);
+		// reuse values obtained previously
+		smallerYNeighborValue = smallerZNeighborValue;
+		greaterZNeighborValue = greaterYNeighborValue;
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 0);
+		if (topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 2, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 1);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 1);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 1);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 2, z = 2
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 2);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 2);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 2);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		if (topplePositionType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 3, z = 0
+		currentValue = currentXSlice.getValueAtPosition(3, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 0);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(3, 1);
+		if (topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 3, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 1);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(3, 2);
+		if (topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 3, z = 2
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 2);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(3, 3);
+		if (topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			changed = true;
+		}
+		// x = 3, y = 3, z = 3
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 3);
+		if (topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+				newGreaterXSlice)) {
+			changed = true;
+		}
+		gridBlock.setSlice(2, newSmallerXSlice);
+		return changed;
+	}
+
+	private boolean toppleSliceBeyondThree(SizeLimitedAnisotropicIntGrid3DBlock gridBlock, int x, AnisotropicIntGrid3DSlice[] xSlices, 
+			AnisotropicIntGrid3DSlice[] newXSlices, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
+		return toppleSliceBeyondThree(gridBlock, gridBlock, gridBlock, x, xSlices, newXSlices, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
+	}
+	
+	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock,
+			int x, AnisotropicIntGrid3DSlice[] xSlices, AnisotropicIntGrid3DSlice[] newXSlices, int[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
+		return toppleSliceBeyondThree(leftGridBlock, leftGridBlock, rightGridBlock, x, xSlices, newXSlices, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
+	}
+	
+	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock,
+			int x, AnisotropicIntGrid3DSlice[] xSlices, AnisotropicIntGrid3DSlice[] newXSlices, int[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
+		return toppleSliceBeyondThree(leftGridBlock, rightGridBlock, rightGridBlock, x, xSlices, newXSlices, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
+	}
+	
+	private boolean toppleSliceBeyondThree(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock centerGridBlock, 
+			SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock, int x, AnisotropicIntGrid3DSlice[] xSlices, AnisotropicIntGrid3DSlice[] newXSlices, 
+			int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+			int[] relevantAsymmetricNeighborSymmetryCounts) {
+		boolean anyToppled = false;
+		int xPlusOne = x + 1;
+		AnisotropicIntGrid3DSlice smallerXSlice = xSlices[1], 
+				currentXSlice = xSlices[2], 
+				greaterXSlice = rightGridBlock.getSlice(xPlusOne);
+		AnisotropicIntGrid3DSlice newCurrentXSlice = newXSlices[1], 
+				newGreaterXSlice = newXSlices[2];
+		// y = 0, z = 0
+		int currentValue = currentXSlice.getValueAtPosition(0, 0);
+		int greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
+		int smallerXNeighborValue = smallerXSlice.getValueAtPosition(0, 0);
+		int greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		// y = 1, z = 0
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 0);
+		// reuse values obtained previously
+		int smallerYNeighborValue = currentValue;
+		currentValue = greaterYNeighborValue;
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
+		int greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		// y = 1, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		// reuse values obtained previously
+		int smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		// y = 2, z = 0
+		currentValue = currentXSlice.getValueAtPosition(2, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 0);
+		// reuse values obtained previously
+		smallerYNeighborValue = smallerZNeighborValue;
+		greaterZNeighborValue = greaterYNeighborValue;
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 0);
+		if (topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		// y = 2, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 1);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 1);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 1);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+			anyToppled = true;
+		}
+		// y = 2, z = 2
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 2);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 2);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 2);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		if (topplePositionType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		int y = 3, yMinusOne = 2, yPlusOne = 4;
+		for (int lastY = x - 2; y <= lastY;) {
+			// z = 0
+			currentValue = currentXSlice.getValueAtPosition(y, 0);
+			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 0);
+			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 0);
+			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 0);
+			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 0);
+			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 1);
+			if (topplePositionType12(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
+					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+				anyToppled = true;
+			}
+			// z = 1
+			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 1);
+			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 1);
+			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 1);
+			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 1);
+			// reuse values obtained previously
+			smallerZNeighborValue = currentValue;
+			currentValue = greaterZNeighborValue;
+			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 2);
+			if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
+					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+				anyToppled = true;
+			}
+			int z = 2, zPlusOne = 3;
+			for (int lastZ = y - 2; z <= lastZ;) {
+				greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+				smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
+				greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+				smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+				// reuse values obtained previously
+				smallerZNeighborValue = currentValue;
+				currentValue = greaterZNeighborValue;
+				greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+				if (topplePositionType15(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
+						greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
+						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, newXSlices)) {
+					anyToppled = true;
+				}
+				z = zPlusOne;
+				zPlusOne++;
+			}
+			// z = y - 1
+			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
+			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+			// reuse values obtained previously
+			smallerZNeighborValue = currentValue;
+			currentValue = greaterZNeighborValue;
+			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+			if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
+					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+				anyToppled = true;
+			}
+			// z = y
+			z = zPlusOne;
+			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
+			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+			// reuse values obtained previously
+			smallerZNeighborValue = currentValue;
+			currentValue = greaterZNeighborValue;
+			if (topplePositionType13(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+				anyToppled = true;
+			}				 
+			yMinusOne = y;
+			y = yPlusOne;
+			yPlusOne++;
+		}
+		// y = x - 1, z = 0
+		currentValue = currentXSlice.getValueAtPosition(y, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 0);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 0);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 0);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 0);
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 1);
+		if (topplePositionType6(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		// y = x - 1, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 1);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 1);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 1);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 2);
+		if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+			anyToppled = true;
+		}
+		int z = 2, zPlusOne = 3, lastZ = y - 2;
+		for(; z <= lastZ;) {
+			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
+			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+			// reuse values obtained previously
+			smallerZNeighborValue = currentValue;
+			currentValue = greaterZNeighborValue;
+			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+			if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
+					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+				anyToppled = true;
+			}
+			z = zPlusOne;
+			zPlusOne++;
+		}
+		// y = x - 1, z = y - 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+		if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
+			anyToppled = true;
+		}
+		z = zPlusOne;
+		zPlusOne++;
+		// y = x - 1, z = y
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
+		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		if (topplePositionType7(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		yMinusOne = y;
+		y = yPlusOne;
+		// y = x, z = 0
+		currentValue = currentXSlice.getValueAtPosition(y, 0);
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 0);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 0);
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 1);
+		if (topplePositionType8(y, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		// y = x, z = 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 1);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 1);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 2);
+		if (topplePositionType9(y, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		z = 2;
+		zPlusOne = 3;
+		lastZ++;
+		for(; z <= lastZ; z = zPlusOne, zPlusOne++) {
+			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+			// reuse values obtained previously
+			smallerZNeighborValue = currentValue;
+			currentValue = greaterZNeighborValue;
+			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+			if (topplePositionType14(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
+					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, 
+					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+				anyToppled = true;
+			}
+		}			
+		// y = x, z = y - 1
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+		if (topplePositionType9(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
+			anyToppled = true;
+		}
+		z = zPlusOne;
+		// y = x, z = y
+		// reuse values obtained previously
+		smallerZNeighborValue = currentValue;
+		currentValue = greaterZNeighborValue;
+		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+		if (topplePositionType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+				newGreaterXSlice)) {
+			anyToppled = true;
+		}
+		if (anyToppled && x > maxX - 2) {
+			maxX++;
+		}
+		xSlices[0] = smallerXSlice;
+		xSlices[1] = currentXSlice;
+		xSlices[2] = greaterXSlice;
+		return anyToppled;
+	}
+	
+	private static boolean topplePositionType1(int currentValue, int greaterXNeighborValue, AnisotropicIntGrid3DSlice newCurrentXSlice, 
+			AnisotropicIntGrid3DSlice newGreaterXSlice) {
+		boolean toppled = false;
+		if (greaterXNeighborValue < currentValue) {
+//			coverage.add(new Exception().getStackTrace()[0].getLineNumber());//debug
+			int toShare = currentValue - greaterXNeighborValue;
+			int share = toShare/7;
+			if (share != 0) {
+				toppled = true;
+				newCurrentXSlice.addValueAtPosition(0, 0, currentValue - toShare + share + toShare%7);
+				newGreaterXSlice.addValueAtPosition(0, 0, share);
+			} else {
+				newCurrentXSlice.addValueAtPosition(0, 0, currentValue);
+			}			
+		} else {
+			newCurrentXSlice.addValueAtPosition(0, 0, currentValue);
+		}
+		return toppled;
+	}
+
+	private static boolean topplePositionType2(int currentValue, int greaterXNeighborValue, int smallerXNeighborValue, 
+			int greaterYNeighborValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;// this is the index of the new slice: 0->newSmallerXSlice, 1->newCurrentXSlice, 2->newGreaterXSlice
+			nc[1] = 0;// this is the actual y coordinate
+			nc[2] = 0;// this is the actual z coordinate
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = 0;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 6;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
+			relevantNeighborCount += 4;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType3(int currentValue, int greaterXNeighborValue, int smallerYNeighborValue, 
+			int greaterZNeighborValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
+			AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 0;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterZNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 3;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType4(int currentValue, int greaterXNeighborValue, int smallerZNeighborValue, 
+			AnisotropicIntGrid3DSlice newCurrentXSlice, AnisotropicIntGrid3DSlice newGreaterXSlice) {
+		boolean toppled = false;
+		if (smallerZNeighborValue < currentValue) {
+			if (greaterXNeighborValue < currentValue) {
+				if (smallerZNeighborValue == greaterXNeighborValue) {
+					// gx = sz < current
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/7;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(1, 0, share + share);// one more for the symmetric position at the other side
+					newCurrentXSlice.addValueAtPosition(1, 1, currentValue - toShare + share + toShare%7);
+					newGreaterXSlice.addValueAtPosition(1, 1, share);
+				} else if (smallerZNeighborValue < greaterXNeighborValue) {
+					// sz < gx < current
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/7;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(1, 0, share + share);
+					newGreaterXSlice.addValueAtPosition(1, 1, share);
+					int currentRemainingValue = currentValue - 6*share;
+					toShare = currentRemainingValue - smallerZNeighborValue; 
+					share = toShare/4;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(1, 0, share + share);
+					newCurrentXSlice.addValueAtPosition(1, 1, currentRemainingValue - toShare + share + toShare%4);
+				} else {
+					// gx < sz < current
+					int toShare = currentValue - smallerZNeighborValue; 
+					int share = toShare/7;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(1, 0, share + share);
+					newGreaterXSlice.addValueAtPosition(1, 1, share);
+					int currentRemainingValue = currentValue - 6*share;
+					toShare = currentRemainingValue - greaterXNeighborValue; 
+					share = toShare/4;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(1, 1, currentRemainingValue - toShare + share + toShare%4);
+					newGreaterXSlice.addValueAtPosition(1, 1, share);
+				}
+			} else {
+				// sz < current <= gx
+				int toShare = currentValue - smallerZNeighborValue; 
+				int share = toShare/4;
+				if (share != 0) {
+					toppled = true;
+				}
+				newCurrentXSlice.addValueAtPosition(1, 0, share + share);
+				newCurrentXSlice.addValueAtPosition(1, 1, currentValue - toShare + share + toShare%4);
+			}
+		} else {
+			if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sz
+				int toShare = currentValue - greaterXNeighborValue; 
+				int share = toShare/4;
+				if (share != 0) {
+					toppled = true;
+				}
+				newCurrentXSlice.addValueAtPosition(1, 1, currentValue - toShare + share + toShare%4);
+				newGreaterXSlice.addValueAtPosition(1, 1, share);
+			} else {
+				newCurrentXSlice.addValueAtPosition(1, 1, currentValue);
+			}
+		}
+		return toppled;
+	}
+
+	private static boolean topplePositionType5(int currentValue, int greaterXNeighborValue, 
+			int smallerXNeighborValue, int greaterYNeighborValue, int[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
+			AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 0;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = 0;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
+			relevantNeighborCount += 4;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	private static boolean topplePositionType6(int y, int currentValue, int gXValue, int sXValue, 
+			int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, 
+			int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = y;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y + 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType7(int coord, int currentValue, int gXValue, int sXValue, 
+			int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, 
+			int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType8(int y, int currentValue, int greaterXNeighborValue, int smallerYNeighborValue, 
+			int greaterZNeighborValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid3DSlice[] newXSlices ) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterZNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType9(int y, int z, int currentValue, int gXValue, int sYValue, 
+			int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, 
+			int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
+			AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z + 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType10(int coord, int currentValue, int greaterXNeighborValue, 
+			int smallerZNeighborValue, AnisotropicIntGrid3DSlice newCurrentXSlice, AnisotropicIntGrid3DSlice newGreaterXSlice) {
+		boolean toppled = false;
+		if (smallerZNeighborValue < currentValue) {
+			if (greaterXNeighborValue < currentValue) {
+				if (smallerZNeighborValue == greaterXNeighborValue) {
+					// gx = sz < current
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/7;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(coord, coord - 1, share);
+					newCurrentXSlice.addValueAtPosition(coord, coord, currentValue - toShare + share + toShare%7);
+					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+				} else if (smallerZNeighborValue < greaterXNeighborValue) {
+					// sz < gx < current
+					int coordMinusOne = coord - 1;
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/7;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(coord, coordMinusOne, share);
+					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+					int currentRemainingValue = currentValue - 6*share;
+					toShare = currentRemainingValue - smallerZNeighborValue; 
+					share = toShare/4;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(coord, coordMinusOne, share);
+					newCurrentXSlice.addValueAtPosition(coord, coord, currentRemainingValue - toShare + share + toShare%4);
+				} else {
+					// gx < sz < current
+					int toShare = currentValue - smallerZNeighborValue; 
+					int share = toShare/7;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(coord, coord - 1, share);
+					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+					int currentRemainingValue = currentValue - 6*share;
+					toShare = currentRemainingValue - greaterXNeighborValue; 
+					share = toShare/4;
+					if (share != 0) {
+						toppled = true;
+					}
+					newCurrentXSlice.addValueAtPosition(coord, coord, currentRemainingValue - toShare + share + toShare%4);
+					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+				}
+			} else {
+				// sz < current <= gx
+				int toShare = currentValue - smallerZNeighborValue; 
+				int share = toShare/4;
+				if (share != 0) {
+					toppled = true;
+				}
+				newCurrentXSlice.addValueAtPosition(coord, coord - 1, share);
+				newCurrentXSlice.addValueAtPosition(coord, coord, currentValue - toShare + share + toShare%4);
+			}
+		} else {
+			if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sz
+				int toShare = currentValue - greaterXNeighborValue; 
+				int share = toShare/4;
+				if (share != 0) {
+					toppled = true;
+				}
+				newCurrentXSlice.addValueAtPosition(coord, coord, currentValue - toShare + share + toShare%4);
+				newGreaterXSlice.addValueAtPosition(coord, coord, share);
+			} else {
+				newCurrentXSlice.addValueAtPosition(coord, coord, currentValue);
+			}
+		}
+		return toppled;
+	}
+
+	private static boolean topplePositionType11(int y, int z, int currentValue, int gXValue, int sXValue, 
+			int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, 
+			int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantNeighborValues, int[][] relevantNeighborCoords, 
+			int[] relevantNeighborShareMultipliers, 
+			AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantNeighborCount = 0;
+		if (gXValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount ] = gXValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = 1;
+			relevantNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = sXValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 0;
+			nc[1] = y;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = sXShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = gYValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y + 1;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = gYShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = sYValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = z;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = sYShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = gZValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z + 1;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = gZShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = sZValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z - 1;
+			relevantNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborShareMultipliers, relevantNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType12(int y, int currentValue, int greaterXNeighborValue, 
+			int smallerXNeighborValue, int greaterYNeighborValue, int smallerYNeighborValue, 
+			int greaterZNeighborValue, int[] relevantAsymmetricNeighborValues, 
+			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
+			AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount ] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = y;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y + 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterZNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType13(int coord, int currentValue, int greaterXNeighborValue, 
+			int smallerXNeighborValue, int greaterYNeighborValue, int smallerZNeighborValue, 
+			int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerZNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType14(int y, int z, int currentValue, int greaterXNeighborValue, 
+			int smallerYNeighborValue,	int greaterZNeighborValue, int smallerZNeighborValue, 
+			int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerYNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (greaterZNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z + 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (smallerZNeighborValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount++;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean topplePositionType15(int y, int z, int currentValue, int greaterXNeighborValue, 
+			int smallerXNeighborValue,	int greaterYNeighborValue, int smallerYNeighborValue, 
+			int greaterZNeighborValue, int smallerZNeighborValue, int[] relevantNeighborValues, 
+			int[][] relevantNeighborCoords, AnisotropicIntGrid3DSlice[] newXSlices) {
+		int relevantNeighborCount = 0;
+		if (greaterXNeighborValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = greaterXNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 2;
+			nc[1] = y;
+			nc[2] = z;
+			relevantNeighborCount++;
+		}
+		if (smallerXNeighborValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = smallerXNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 0;
+			nc[1] = y;
+			nc[2] = z;
+			relevantNeighborCount++;
+		}
+		if (greaterYNeighborValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = greaterYNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y + 1;
+			nc[2] = z;
+			relevantNeighborCount++;
+		}
+		if (smallerYNeighborValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = smallerYNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y - 1;
+			nc[2] = z;
+			relevantNeighborCount++;
+		}
+		if (greaterZNeighborValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = greaterZNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z + 1;
+			relevantNeighborCount++;
+		}
+		if (smallerZNeighborValue < currentValue) {
+			relevantNeighborValues[relevantNeighborCount] = smallerZNeighborValue;
+			int[] nc = relevantNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = y;
+			nc[2] = z - 1;
+			relevantNeighborCount++;
+		}
+		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborCount)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private static boolean topplePosition(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] neighborValues,
+			int[][] neighborCoords, int neighborCount) {
+		boolean toppled = false;
+		switch (neighborCount) {
+			case 3:
+				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, 
+						neighborCoords, 3);
+				break;
+			case 2:
+				int n0Val = neighborValues[0], n1Val = neighborValues[1];
+				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%3);
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					int toShare = value - n1Val; 
+					int share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/2;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+				} else {
+					// n1Val < n0Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/2;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+				}				
+				break;
+			case 1:
+				int toShare = value - neighborValues[0];
+				int share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%2 + share;
+					int[] nc = neighborCoords[0];
+					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+				}
+				// no break
+			case 0:
+				newXSlices[1].addValueAtPosition(y, z, value);
+				break;
+			default: // 6, 5, 4
+				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, neighborCoords, 
+						neighborCount);
+		}
+		return toppled;
+	}
+	
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, 
+			int[] neighborValues, int[][] neighborCoords, int neighborCount) {
+		boolean toppled = false;
+		int shareCount = neighborCount + 1;
+		int neighborValue = neighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < neighborCount; j++) {
+				int[] nc = neighborCoords[j];
+				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount--;
+		for (int i = 1; i < neighborCount; i++) {
+			neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < neighborCount; j++) {
+						int[] nc = neighborCoords[j];
+						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+			shareCount--;
+		}
+		newXSlices[1].addValueAtPosition(y, z, value);
+		return toppled;
+	}
+	
+	private static boolean topplePosition(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] asymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
+			int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		switch (asymmetricNeighborCount) {
+			case 3:
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
+						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				break;
+			case 2:
+				int n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
+				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
+				int shareCount = neighborCount + 1;
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%shareCount);
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					int toShare = value - n1Val; 
+					int share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					shareCount -= asymmetricNeighborSymmetryCounts[1];
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+				} else {
+					// n1Val < n0Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					shareCount -= asymmetricNeighborSymmetryCounts[0];
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+				}				
+				break;
+			case 1:
+				shareCount = neighborCount + 1;
+				int toShare = value - asymmetricNeighborValues[0];
+				int share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					int[] nc = asymmetricNeighborCoords[0];
+					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[0]);
+				}
+				// no break
+			case 0:
+				newXSlices[1].addValueAtPosition(y, z, value);
+				break;
+			default: // 6, 5, 4
+				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
+						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+		}
+		return toppled;
+	}
+	
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] asymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
+			int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		int shareCount = neighborCount + 1;
+		int neighborValue = asymmetricNeighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < asymmetricNeighborCount; j++) {
+				int[] nc = asymmetricNeighborCoords[j];
+				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[j]);
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount -= asymmetricNeighborSymmetryCounts[0];
+		for (int i = 1; i < asymmetricNeighborCount; i++) {
+			neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < asymmetricNeighborCount; j++) {
+						int[] nc = asymmetricNeighborCoords[j];
+						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[j]);
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+			shareCount -= asymmetricNeighborSymmetryCounts[i];
+		}
+		newXSlices[1].addValueAtPosition(y, z, value);
+		return toppled;
+	}
+	
+	private static boolean topplePosition(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] neighborValues,
+			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
+		boolean toppled = false;
+		switch (neighborCount) {
+			case 3:
+				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, 
+						neighborCoords, neighborShareMultipliers, 3);
+				break;
+			case 2:
+				int n0Val = neighborValues[0], n1Val = neighborValues[1];
+				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
+				int n0Mult = neighborShareMultipliers[0], n1Mult = neighborShareMultipliers[1];
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%3);
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					int toShare = value - n1Val; 
+					int share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/2;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+				} else {
+					// n1Val < n0Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/3;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/2;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+				}				
+				break;
+			case 1:
+				int toShare = value - neighborValues[0];
+				int share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%2 + share;
+					int[] nc = neighborCoords[0];
+					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * neighborShareMultipliers[0]);
+				}
+				// no break
+			case 0:
+				newXSlices[1].addValueAtPosition(y, z, value);
+				break;
+			default: // 6, 5, 4
+				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords, 
+						neighborShareMultipliers);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, neighborCoords, 
+						neighborShareMultipliers, neighborCount);
+		}
+		return toppled;
+	}
+	
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] neighborValues,
+			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
+		boolean toppled = false;
+		int shareCount = neighborCount + 1;
+		int neighborValue = neighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < neighborCount; j++) {
+				int[] nc = neighborCoords[j];
+				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * neighborShareMultipliers[j]);
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount--;
+		for (int i = 1; i < neighborCount; i++) {
+			neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < neighborCount; j++) {
+						int[] nc = neighborCoords[j];
+						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * neighborShareMultipliers[j]);
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+			shareCount--;
+		}
+		newXSlices[1].addValueAtPosition(y, z, value);
+		return toppled;
+	}
+	
+	private static boolean topplePosition(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] asymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
+			int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		switch (asymmetricNeighborCount) {
+			case 3:
+				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
+						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				break;
+			case 2:
+				int n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
+				int shareCount = neighborCount + 1;
+				if (n0Val == n1Val) {
+					// n0Val = n1Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%shareCount);
+				} else if (n0Val < n1Val) {
+					// n0Val < n1Val < value
+					int toShare = value - n1Val; 
+					int share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					shareCount -= asymmetricNeighborSymmetryCounts[1];
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n0Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+				} else {
+					// n1Val < n0Val < value
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					shareCount -= asymmetricNeighborSymmetryCounts[0];
+					int currentRemainingValue = value - neighborCount*share;
+					toShare = currentRemainingValue - n1Val;
+					share = toShare/shareCount;
+					if (share != 0) {
+						toppled = true;
+					}
+					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+				}				
+				break;
+			case 1:
+				shareCount = neighborCount + 1;
+				int toShare = value - asymmetricNeighborValues[0];
+				int share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					int[] nc = asymmetricNeighborCoords[0];
+					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+				}
+				// no break
+			case 0:
+				newXSlices[1].addValueAtPosition(y, z, value);
+				break;
+			default: // 6, 5, 4
+				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
+						asymmetricNeighborSymmetryCounts);
+				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+						asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+		}
+		return toppled;
+	}
+	
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] asymmetricNeighborValues,
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
+			int neighborCount, int asymmetricNeighborCount) {
+		boolean toppled = false;
+		int shareCount = neighborCount + 1;
+		int neighborValue = asymmetricNeighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < asymmetricNeighborCount; j++) {
+				int[] nc = asymmetricNeighborCoords[j];
+				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount -= asymmetricNeighborSymmetryCounts[0];
+		for (int i = 1; i < asymmetricNeighborCount; i++) {
+			neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+					value = value - toShare + toShare%shareCount + share;
+					for (int j = i; j < asymmetricNeighborCount; j++) {
+						int[] nc = asymmetricNeighborCoords[j];
+						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+					}
+				}
+				previousNeighborValue = neighborValue;
+			}
+			shareCount -= asymmetricNeighborSymmetryCounts[i];
+		}
+		newXSlices[1].addValueAtPosition(y, z, value);
+		return toppled;
+	}
+
 	private void processGridBlock(SizeLimitedAnisotropicIntGrid3DBlock block) throws Exception {
 		if (block.minX <= maxX) {
 			IntGrid3D subBlock = null;
@@ -302,235 +2260,6 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 		newGridSlices[CENTER] = newGridSlices[RIGHT];
 		newGridSlices[RIGHT] = newSlice;
 	}
-	
-	private boolean computeGridSlice(SizeLimitedAnisotropicIntGrid3DBlock gridBlock, int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
-		return computeGridSlice(gridBlock, gridBlock, gridBlock, x, newGridSlices);
-	}
-	
-	private boolean computeLastGridSlice(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock,
-			int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
-		return computeGridSlice(leftGridBlock, leftGridBlock, rightGridBlock, x, newGridSlices);
-	}
-	
-	private boolean computeFirstGridSlice(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock,
-			int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
-		return computeGridSlice(leftGridBlock, rightGridBlock, rightGridBlock, x, newGridSlices);
-	}
-
-	private boolean computeGridSlice(SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock centerGridBlock, 
-			SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock, int x, AnisotropicIntGrid3DSlice[] newGridSlices) {
-		boolean anyPositionToppled = false;
-		for (int y = 0; y <= x; y++) {
-			for (int z = 0; z <= y; z++) {				
-				int value = centerGridBlock.getValueAtPosition(x, y, z);
-				int rightValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x + 1, y, z);
-				int leftValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x - 1, y, z);
-				int upValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y + 1, z);
-				int downValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y - 1, z);
-				int frontValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z + 1);
-				int backValue = getValueAtPosition(x, leftGridBlock, centerGridBlock, rightGridBlock, x, y, z - 1);				
-				boolean positionToppled = computePosition(value, rightValue, leftValue, upValue, downValue, frontValue, backValue, 
-						x, y, z, newGridSlices);
-				anyPositionToppled = anyPositionToppled || positionToppled;
-			}
-		}
-		return anyPositionToppled;
-	}
-	
-	private int getValueAtPosition(int centerX, SizeLimitedAnisotropicIntGrid3DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid3DBlock centerGridBlock, 
-			SizeLimitedAnisotropicIntGrid3DBlock rightGridBlock, int x, int y, int z) {
-		int[] asymmetricCoords = getAsymmetricCoords(x, y, z);
-		x = asymmetricCoords[0];
-		y = asymmetricCoords[1];
-		z = asymmetricCoords[2];
-		int value;
-		if (x == centerX) {
-			value = centerGridBlock.getValueAtPosition(x, y, z);
-		} else if (x < centerX) {
-			value = leftGridBlock.getValueAtPosition(x, y, z);
-		} else {
-			value = rightGridBlock.getValueAtPosition(x, y, z);
-		}
-		return value;
-	}
-	
-	private boolean computePosition(int value, int rightValue, int leftValue, int upValue, int downValue, int frontValue, int backValue, 
-			int x, int y, int z, AnisotropicIntGrid3DSlice[] newGridSlices) {
-		int[] neighborValues = new int[6];
-		byte[] neighborDirections = new byte[6];
-		int relevantNeighborCount = 0;
-		if (rightValue < value) {
-			neighborValues[relevantNeighborCount] = rightValue;
-			neighborDirections[relevantNeighborCount] = RIGHT;
-			relevantNeighborCount++;
-		}
-		if (leftValue < value) {
-			neighborValues[relevantNeighborCount] = leftValue;
-			neighborDirections[relevantNeighborCount] = LEFT;
-			relevantNeighborCount++;
-		}
-		if (upValue < value) {
-			neighborValues[relevantNeighborCount] = upValue;
-			neighborDirections[relevantNeighborCount] = UP;
-			relevantNeighborCount++;
-		}
-		if (downValue < value) {
-			neighborValues[relevantNeighborCount] = downValue;
-			neighborDirections[relevantNeighborCount] = DOWN;
-			relevantNeighborCount++;
-		}
-		if (frontValue < value) {
-			neighborValues[relevantNeighborCount] = frontValue;
-			neighborDirections[relevantNeighborCount] = FRONT;
-			relevantNeighborCount++;
-		}
-		if (backValue < value) {
-			neighborValues[relevantNeighborCount] = backValue;
-			neighborDirections[relevantNeighborCount] = BACK;
-			relevantNeighborCount++;
-		}
-		boolean toppled = false;
-		if (relevantNeighborCount > 0) {
-			//sort
-			boolean sorted = false;
-			while (!sorted) {
-				sorted = true;
-				for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-					if (neighborValues[i] < neighborValues[i+1]) {
-						sorted = false;
-						int valSwap = neighborValues[i];
-						neighborValues[i] = neighborValues[i+1];
-						neighborValues[i+1] = valSwap;
-						byte dirSwap = neighborDirections[i];
-						neighborDirections[i] = neighborDirections[i+1];
-						neighborDirections[i+1] = dirSwap;
-					}
-				}
-			}
-			//divide
-			boolean isFirstNeighbor = true;
-			int previousNeighborValue = 0;
-			for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-				int neighborValue = neighborValues[i];
-				if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-					int shareCount = relevantNeighborCount - i + 1;
-					int toShare = value - neighborValue;
-					int share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-						value = value - toShare + toShare%shareCount + share;
-						for (int j = i; j < relevantNeighborCount; j++) {
-							addToNeighbor(newGridSlices, x, y, z, neighborDirections[j], share);
-						}
-					}
-					previousNeighborValue = neighborValue;
-				}
-			}	
-		}					
-		newGridSlices[CENTER].addValueAtPosition(y, z, value);
-		return toppled;
-	}
-
-	private void addToNeighbor(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, byte direction, int value) {
-		switch(direction) {
-		case RIGHT:
-			addRight(newGridSlices, x, y, z, value);
-			break;
-		case LEFT:
-			addLeft(newGridSlices, x, y, z, value);
-			break;
-		case UP:
-			addUp(newGridSlices, x, y, z, value);
-			break;
-		case DOWN:
-			addDown(newGridSlices, x, y, z, value);
-			break;
-		case FRONT:
-			addFront(newGridSlices, x, y, z, value);
-			break;
-		case BACK:
-			addBack(newGridSlices, x, y, z, value);
-			break;
-		}
-	}
-	
-	private void addRight(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
-		newGridSlices[RIGHT].addValueAtPosition(y, z, value);
-		if (x == maxX - 1) {
-			maxX++;
-		}
-	}
-	
-	private void addLeft(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
-		if (x > y) {
-			int valueToAdd = value;
-			if (y == x - 1) {
-				valueToAdd += value;
-				if (z == y) {
-					valueToAdd += value;
-					if (x == 1) {
-						valueToAdd += 3*value;
-					}
-				}
-			}
-			newGridSlices[LEFT].addValueAtPosition(y, z, valueToAdd);
-		}
-		if (x == maxX) {
-			maxX++;
-		}
-	}
-	
-	private void addUp(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
-		if (y < x) {
-			int valueToAdd = value;
-			if (y == x - 1) {
-				valueToAdd += value;
-			}
-			int yy = y+1;
-			newGridSlices[CENTER].addValueAtPosition(yy, z, valueToAdd);
-			if (yy > maxY)
-				maxY = yy;
-		}
-	}
-	
-	private void addDown(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
-		if (y > z) {	
-			int valueToAdd = value;
-			if (z == y - 1) {
-				valueToAdd += value;
-				if (y == 1) {
-					valueToAdd += 2*value;
-				}
-			}
-			newGridSlices[CENTER].addValueAtPosition(y - 1, z, valueToAdd);
-		}
-	}
-	
-	private void addFront(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
-		if (z < y) {
-			int valueToAdd = value;
-			if (z == y - 1) {
-				valueToAdd += value;
-				if (x == y) {
-					valueToAdd += value;
-				}
-			}
-			int zz = z+1;
-			newGridSlices[CENTER].addValueAtPosition(y, zz, valueToAdd);
-			if (zz > maxZ)
-				maxZ = zz;
-		}
-	}
-	
-	private void addBack(AnisotropicIntGrid3DSlice[] newGridSlices, int x, int y, int z, int value) {
-		if (z > 0) {
-			int valueToAdd = value;
-			if (z == 1) {
-				valueToAdd += value;
-			}
-			newGridSlices[CENTER].addValueAtPosition(y, z - 1, valueToAdd);
-		}	
-	}
 
 	@Override
 	public String getName() {
@@ -541,12 +2270,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
 	}
-	
-	/**
-	 * Returns the current step
-	 * 
-	 * @return the current step
-	 */
+
 	@Override
 	public long getStep() {
 		return currentStep;
@@ -557,7 +2281,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public int getInitialValue() {
+	public long getInitialValue() {
 		return initialValue;
 	}
 	
@@ -587,8 +2311,6 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 		properties.put("initialValue", initialValue);
 		properties.put("currentStep", currentStep);
 		properties.put("maxX", maxX);
-		properties.put("maxY", maxY);
-		properties.put("maxZ", maxZ);
 		properties.put("maxGridBlockSize", maxGridBlockSize);
 		return properties;
 	}
@@ -596,35 +2318,9 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (int) properties.get("initialValue");
 		currentStep = (int) properties.get("currentStep");
-		maxX = (int) properties.get("maxX"); 
-		maxY = (int) properties.get("maxY"); 
-		maxZ = (int) properties.get("maxZ");
+		maxX = (int) properties.get("maxX");
 		maxGridBlockSize = (long) properties.get("maxGridBlockSize");
 	}
-	
-	private int[] getAsymmetricCoords(int x, int y, int z) {
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		//sort coordinates
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-		} while (!sorted);
-		return new int[] {x, y, z};
-	}	
 	
 	@Override
 	public int getMinX() {
@@ -643,7 +2339,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	
 	@Override
 	public int getMaxY() {
-		return maxY;
+		return maxX;
 	}
 	
 	@Override
@@ -653,7 +2349,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	
 	@Override
 	public int getMaxZ() {
-		return maxZ;
+		return maxX;
 	}
 	
 	@Override
@@ -703,17 +2399,17 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 
 	@Override
 	public int getMaxYAtX(int x) {
-		return Math.min(maxY, x);
+		return x;
 	}
 
 	@Override
 	public int getMaxYAtZ(int z) {
-		return maxY;
+		return maxX;
 	}
 
 	@Override
 	public int getMaxY(int x, int z) {
-		return Math.min(maxY, x);
+		return x;
 	}
 
 	@Override
@@ -733,17 +2429,17 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 
 	@Override
 	public int getMaxZAtX(int x) {
-		return Math.min(maxZ, x);
+		return x;
 	}
 
 	@Override
 	public int getMaxZAtY(int y) {
-		return Math.min(maxZ, y);
+		return y;
 	}
 
 	@Override
 	public int getMaxZ(int x, int y) {
-		return Math.min(maxZ, y);
+		return y;
 	}
-	
+
 }
