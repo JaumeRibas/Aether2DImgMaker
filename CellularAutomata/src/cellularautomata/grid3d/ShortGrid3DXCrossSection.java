@@ -18,9 +18,9 @@ package cellularautomata.grid3d;
 
 import cellularautomata.grid2d.ShortGrid2D;
 
-public class ShortGrid3DXCrossSection extends Grid3DXCrossSection<ShortGrid3D> implements ShortGrid2D {
+public class ShortGrid3DXCrossSection<G extends ShortGrid3D> extends Grid3DXCrossSection<G> implements ShortGrid2D {
 	
-	public ShortGrid3DXCrossSection(ShortGrid3D source, int x) {
+	public ShortGrid3DXCrossSection(G source, int x) {
 		super(source, x);
 	}
 

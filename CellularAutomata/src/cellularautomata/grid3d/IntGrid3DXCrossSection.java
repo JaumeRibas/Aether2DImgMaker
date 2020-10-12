@@ -18,9 +18,9 @@ package cellularautomata.grid3d;
 
 import cellularautomata.grid2d.IntGrid2D;
 
-public class IntGrid3DXCrossSection extends Grid3DXCrossSection<IntGrid3D> implements IntGrid2D {
+public class IntGrid3DXCrossSection<G extends IntGrid3D> extends Grid3DXCrossSection<G> implements IntGrid2D {
 	
-	public IntGrid3DXCrossSection(IntGrid3D source, int x) {
+	public IntGrid3DXCrossSection(G source, int x) {
 		super(source, x);
 	}
 

@@ -25,6 +25,11 @@ public interface EvolvingLongGrid3D extends LongGrid3D, EvolvingLongGrid {
 	}
 	
 	@Override
+	default EvolvingLongGrid2D crossSectionAtX(int x) {
+		return new EvolvingLongGrid3DXCrossSection(this, x);
+	}
+	
+	@Override
 	default EvolvingLongGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new EvolvingLongSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}

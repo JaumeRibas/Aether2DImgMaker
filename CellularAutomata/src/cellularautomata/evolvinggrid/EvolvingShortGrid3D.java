@@ -23,6 +23,11 @@ public interface EvolvingShortGrid3D extends ShortGrid3D, EvolvingShortGrid {
 	default EvolvingShortGrid2D crossSectionAtZ(int z) {
 		return new EvolvingShortGrid3DZCrossSection(this, z);
 	}
+
+	@Override
+	default EvolvingShortGrid2D crossSectionAtX(int x) {
+		return new EvolvingShortGrid3DXCrossSection(this, x);
+	}
 	
 	@Override
 	default EvolvingShortGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {

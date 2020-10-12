@@ -116,7 +116,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	
 	@Override
 	default LongGrid2D crossSectionAtX(int x) {
-		return new LongGrid3DXCrossSection(this, x);
+		return new LongGrid3DXCrossSection<LongGrid3D>(this, x);
 	}
 
 }

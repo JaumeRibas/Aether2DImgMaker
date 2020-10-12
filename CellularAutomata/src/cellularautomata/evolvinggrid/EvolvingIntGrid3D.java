@@ -25,6 +25,11 @@ public interface EvolvingIntGrid3D extends IntGrid3D, EvolvingIntGrid {
 	}
 	
 	@Override
+	default EvolvingIntGrid2D crossSectionAtX(int x) {
+		return new EvolvingIntGrid3DXCrossSection(this, x);
+	}
+	
+	@Override
 	default EvolvingIntGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new EvolvingIntSubGrid3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}

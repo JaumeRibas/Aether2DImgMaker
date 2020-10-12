@@ -115,6 +115,6 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	
 	@Override
 	default ShortGrid2D crossSectionAtX(int x) {
-		return new ShortGrid3DXCrossSection(this, x);
+		return new ShortGrid3DXCrossSection<ShortGrid3D>(this, x);
 	}
 }
