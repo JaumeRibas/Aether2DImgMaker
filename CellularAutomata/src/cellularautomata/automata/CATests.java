@@ -43,11 +43,12 @@ import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid4D;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
-import cellularautomata.grid2d.ArrayIntGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.grid3d.IntGrid3DXCrossSectionCopierProcessor;
+import cellularautomata.grid3d.IntGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid3d.LongGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid4d.LongGrid4D;
@@ -60,95 +61,6 @@ public class CATests {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compare(ae1, ae2);
-	}
-	
-	public static void testArrayIntGrid2D() throws Exception {
-		Aether2D ae2 = new Aether2D(100000);
-		EvolvingLongGrid2D ae1 = ae2.asymmetricSection();
-		while (ae1.nextStep());
-		//compare extrema parameters with grid bounds
-		int minX = ae1.getMinX();
-		int maxX = ae1.getMaxX();
-		int size = maxX - minX + 1;
-		int[] localYMaxima = new int[size];
-		int[] localYMinima = new int[size];
-		for (int x = minX, i = 0; x <= maxX; x++, i++) {
-			localYMaxima[i] = ae1.getMaxY(x);
-			localYMinima[i] = ae1.getMinY(x);
-		}
-		ArrayIntGrid2D a = new ArrayIntGrid2D(minX, localYMinima, localYMaxima);
-		if (a.getMaxX() != maxX) {
-			System.out.println("Error");
-			return;
-		}
-		if (a.getMinX() != minX) {
-			System.out.println("Error");
-			return;
-		}
-		for (int x = minX; x <= maxX; x++) {
-			if (a.getMaxY(x) != ae1.getMaxY(x)) {
-				System.out.println("Error");
-				return;
-			}
-			if (a.getMinY(x) != ae1.getMinY(x)) {
-				System.out.println("Error");
-				return;
-			}
-		}
-		if (a.getMaxY() != ae1.getMaxY()) {
-			System.out.println("Error");
-			return;
-		}
-		if (a.getMinY() != ae1.getMinY()) {
-			System.out.println("Error");
-			return;
-		}
-		int maxY = ae1.getMaxY();
-		for (int y = ae1.getMinY(); y <= maxY; y++) {
-			if (a.getMaxX(y) != ae1.getMaxX(y)) {
-				System.out.println("Error");
-				return;
-			}
-			if (a.getMinX(y) != ae1.getMinX(y)) {
-				System.out.println("Error");
-				return;
-			}
-		}
-		//set, get and addAndGet values
-		for (int y = ae1.getMinY(); y <= maxY; y++) {
-			int localMaxX = ae1.getMaxX(y);
-			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
-				a.setValueAtPosition(x, y, (int) ae1.getValueAtPosition(x, y));
-			}
-		}
-		for (int y = ae1.getMinY(); y <= maxY; y++) {
-			int localMaxX = ae1.getMaxX(y);
-			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
-				if (a.getValueAtPosition(x, y) != ae1.getValueAtPosition(x, y)) {
-					System.out.println("Error");
-					return;
-				}
-			}
-		}
-		for (int y = ae1.getMinY(); y <= maxY; y++) {
-			int localMaxX = ae1.getMaxX(y);
-			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
-				if (a.addAndGetValueAtPosition(x, y, 3) != ae1.getValueAtPosition(x, y) + 3) {
-					System.out.println("Error");
-					return;
-				}
-			}
-		}
-		for (int y = ae1.getMinY(); y <= maxY; y++) {
-			int localMaxX = ae1.getMaxX(y);
-			for (int x = ae1.getMinX(y); x <= localMaxX; x++) {
-				if (a.getValueAtPosition(x, y) != ae1.getValueAtPosition(x, y) + 3) {
-					System.out.println("Error");
-					return;
-				}
-			}
-		}
-		System.out.println("Passed!");
 	}
 	
 	public static void timeIntAether3D(int singleSource) {
@@ -576,39 +488,6 @@ public class CATests {
 		SpreadIntegerValue1D siv1 = new SpreadIntegerValue1D(initialValue, 0);
 		SingleSourceLongSandpile1D siv2 = new SingleSourceLongSandpile1D(new SpreadIntegerValueRules(), initialValue);
 		race(new EvolvingModel[] { siv1, siv2 });
-	}
-	
-	public static void generateBackup() {
-		IntAether3DAsymmetricSectionSwap ca;
-		String path = "D:/data/test";
-		int initialValue = -1000;
-		try {
-			ca = new IntAether3DAsymmetricSectionSwap(initialValue, 1024 * 100, path);
-			for (int i = 0; i < 100; i++) {
-				ca.nextStep();
-				System.out.println("step " + ca.getStep());
-			}
-			String backupPath = path + "/" + ca.getSubFolderPath() + "/backup";
-			System.out.println("Backing up at " + backupPath);
-			ca.backUp(backupPath, ca.getName() + "_" + ca.getStep());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void testAdvance() {
-		IntAether3DAsymmetricSectionSwap ca;
-		String path = "D:/data/test";
-		int initialValue = -1000;
-		try {
-			ca = new IntAether3DAsymmetricSectionSwap(initialValue, 1024 * 500, path);
-			while (ca.nextStep()) {
-				System.out.println("step " + ca.getStep());
-			}
-			System.out.println("Finished");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public static void compare(EvolvingLongGrid1D ca1, EvolvingLongGrid1D ca2) {
@@ -1329,10 +1208,58 @@ public class CATests {
 			do {
 				System.out.println("step " + ca.getStep());
 				LongGrid2D crossSectionCopy = copier.getCopy(z);
-				printAsGrid(crossSectionCopy, 0);
-				System.out.println("total value " + crossSectionCopy.getTotalValue());
+				if (crossSectionCopy != null) {
+					printAsGrid(crossSectionCopy, 0);
+					System.out.println("total value " + crossSectionCopy.getTotalValue());
+				}
 				s.nextLine();
 				copier.requestCopy(z);
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}	
+	
+	public static void stepByStepZCrossSection(ActionableEvolvingIntGrid3D ca, int z) {
+		try {
+			Scanner s = new Scanner(System.in);
+			IntGrid3DZCrossSectionCopierProcessor copier = new IntGrid3DZCrossSectionCopierProcessor();
+			ca.addProcessor(copier);
+			copier.requestCopy(z);
+			ca.processGrid();
+			do {
+				System.out.println("step " + ca.getStep());
+				IntGrid2D crossSectionCopy = copier.getCopy(z);
+				if (crossSectionCopy != null) {
+					printAsGrid(crossSectionCopy, 0);
+					System.out.println("total value " + crossSectionCopy.getTotalValue());
+				}
+				s.nextLine();
+				copier.requestCopy(z);
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}	
+	
+	public static void stepByStepXCrossSection(ActionableEvolvingIntGrid3D ca, int x) {
+		try {
+			Scanner s = new Scanner(System.in);
+			IntGrid3DXCrossSectionCopierProcessor copier = new IntGrid3DXCrossSectionCopierProcessor();
+			ca.addProcessor(copier);
+			copier.requestCopy(x);
+			ca.processGrid();
+			do {
+				System.out.println("step " + ca.getStep());
+				IntGrid2D crossSectionCopy = copier.getCopy(x);
+				if (crossSectionCopy != null) {
+					printAsGrid(crossSectionCopy, 0);
+					System.out.println("total value " + crossSectionCopy.getTotalValue());
+				}
+				s.nextLine();
+				copier.requestCopy(x);
 			} while (ca.nextStep());
 			s.close();
 		} catch (Exception e) {
