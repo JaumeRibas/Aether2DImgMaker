@@ -85,70 +85,6 @@ public class ArrayLongGrid2D implements LongGrid2D, Serializable {
 		}
 	}
 	
-	/**
-	 * Constructs an {@code ArrayIntGrid2D} with the specified bounds
-	 * 
-	 * @param minX the smallest x-coordinate within the region
-	 * @param localYMinima an array of the smallest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
-	 * @param localYMaxima an array of the greatest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
-	 */
-	public ArrayLongGrid2D(int minX, int[] localYMinima, int[] localYMaxima) {
-		if (localYMinima.length != localYMaxima.length) {
-			throw new IllegalArgumentException("Local y minima's length must be equal to maxima's length.");
-		}
-		if (localYMinima.length == 0) {
-			throw new IllegalArgumentException("Local y minima's length cannot be 0.");
-		}
-		long longMaxX = (long)localYMinima.length + minX - 1;
-		if (longMaxX > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException(
-					"Resulting max x (" + longMaxX + ") is too big. It cannot be bigger than " + Integer.MAX_VALUE + ".");
-		}
-		this.minX = minX;
-		maxX = (int)longMaxX;
-		this.localYMinima = localYMinima;
-		values = new long[localYMinima.length][];
-		boolean maximaDescending = false;
-		boolean minimaAscending = false;
-		int previousLocalMinY = localYMinima[0];
-		int previousLocalMaxY = localYMaxima[0];
-		minY = previousLocalMinY;
-		maxY = previousLocalMaxY;
-		for (int i = 0; i < values.length; i++) {
-			int localMinY = localYMinima[i];
-			int localMaxY = localYMaxima[i];
-			if (localMinY > localMaxY) {
-				throw new IllegalArgumentException("Local min y greater than local max y at index " + i);
-			}
-			long size = (long)localMaxY - localMinY + 1;
-			if (size > Integer.MAX_VALUE) {
-				throw new IllegalArgumentException(
-						"Size in y at index " + i + " (" + size + ") is too big. It cannot be bigger than " + Integer.MAX_VALUE + ".");
-			}
-			if (minimaAscending) {
-				if (localMinY < previousLocalMinY) {
-					throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
-				}
-			} else if (localMinY > previousLocalMinY) {
-				minimaAscending = true;
-			} else if (localMinY < minY) {
-				minY = localMinY;
-			}
-			if (maximaDescending) {
-				if (localMaxY > previousLocalMaxY) {
-					throw new IllegalArgumentException("Unsupported local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
-				}
-			} else if (localMaxY < previousLocalMaxY) {
-				maximaDescending = true;
-			} else if (localMaxY > maxY) {
-				maxY = localMaxY;
-			}
-			values[i] = new long[localMaxY - localMinY + 1];
-			previousLocalMinY = localMinY;
-			previousLocalMaxY = localMaxY;
-		}
-	}
-
 	@Override
 	public int getMinX() {
 		return minX;
@@ -232,17 +168,5 @@ public class ArrayLongGrid2D implements LongGrid2D, Serializable {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		return values[i][j];
-	}
-	
-	public void setValueAtPosition(int x, int y, long value) {
-		int i = x - minX;
-		int j = y - localYMinima[i];
-		values[i][j] = value;
-	}
-	
-	public long addAndGetValueAtPosition(int x, int y, long value) {
-		int i = x - minX;
-		int j = y - localYMinima[i];
-		return values[i][j] += value;
 	}
 }
