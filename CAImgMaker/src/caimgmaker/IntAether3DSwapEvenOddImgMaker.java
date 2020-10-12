@@ -34,7 +34,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 			boolean isRestore = false;
 			String path;
 			int initialStep = 0;
-			int scanInitialZIndex = 0;
+			int scanXInitialIndex = 0;
 			boolean isScanInitialZIndexDefined = false;	
 			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
@@ -60,7 +60,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 				if (args.length > 2) {
 					initialStep = Integer.parseInt(args[2]);
 					if (args.length > 3) {
-						scanInitialZIndex = Integer.parseInt(args[3]);
+						scanXInitialIndex = Integer.parseInt(args[3]);
 						isScanInitialZIndexDefined = true;
 						if (args.length > 4) {
 							millisecondsBetweenBackups = Long.parseLong(args[4]);
@@ -76,6 +76,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 				ca = new IntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
 				ca = new IntAether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
+//				ca = new IntAether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_MB*8, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
@@ -91,11 +92,11 @@ public class IntAether3DSwapEvenOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
-					path + "/img", path + "/backups");
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, scanXInitialIndex, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionAsymmetricEvenOddImages(ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
-					path + "/img", path + "/backups");
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}	
 		}		
 	}

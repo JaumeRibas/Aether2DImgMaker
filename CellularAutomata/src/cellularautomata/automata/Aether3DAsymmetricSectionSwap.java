@@ -859,7 +859,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				newGreaterXSlice)) {
 			anyToppled = true;
 		}
-		if (anyToppled && x > maxX - 2) {
+		if (anyToppled && x > maxX - 1) {
 			maxX++;
 		}
 		xSlices[0] = smallerXSlice;
@@ -2268,7 +2268,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+		return getName() + "/" + initialValue + "/asymmetric_section";
 	}
 
 	@Override

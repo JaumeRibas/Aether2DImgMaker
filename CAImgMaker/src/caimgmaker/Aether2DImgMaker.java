@@ -52,7 +52,7 @@ public class Aether2DImgMaker {
 			ColorMapper colorMapper = new HueMapper();
 			path += ca.getSubFolderPath() + "/img";	
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createImages(ca, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path);
+			imgMaker.createImages(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path);
 		}		
 	}
 	

@@ -56,6 +56,8 @@ import cellularautomata.grid3d.ActionableAnisotropicIntGrid3DZCrossSectionCopy;
 import cellularautomata.grid3d.ActionableSymmetricIntGrid3DZCrossSectionProcessor;
 import cellularautomata.grid3d.ActionableLongGrid3DZCrossSectionProcessor;
 import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.grid3d.IntGrid3DXCrossSectionCopierProcessor;
+import cellularautomata.grid3d.IntGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid4d.ActionableLongGrid4DZCrossSectionProcessor;
 import cellularautomata.grid3d.AnisotropicIntGrid3DZCrossSectionCopierProcessor;
@@ -348,7 +350,7 @@ public class ImgMaker {
 	public void createAether3DLastStepsCrossSectionImages(ColorMapper colorMapper, int minWidth, int minHeight, String path) throws Exception {
 		int i = 0;
 		String imgPath = path + "/" + new Aether3D(0).getName() 
-				+ "/img/lats_steps/asymetric_section/" + colorMapper.getClass().getSimpleName();
+				+ "/img/lats_steps/asymmetric_section/" + colorMapper.getClass().getSimpleName();
 		while (true) {
 			long initialValue = i;
 			System.out.println("Initial value: " + initialValue);
@@ -1503,6 +1505,129 @@ public class ImgMaker {
 			currentStep++;
 			isEvenStep = !isEvenStep;
 			System.out.println();
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
+	}
+	
+	public void createXScanningAndZCrossSectionEvenOddImages(ActionableEvolvingIntGrid3D ca, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
+			String imagesPath, String backupPath) throws Exception {
+				
+		int xScanInitialIndex = ca.getMaxX();
+		createXScanningAndZCrossSectionEvenOddImages(ca, xScanInitialIndex, crossSectionZ, scanningColorMapper, 
+			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
+	}
+	
+	public void createXScanningAndZCrossSectionEvenOddImages(ActionableEvolvingIntGrid3D ca, int xScanInitialIndex, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		
+		long currentStep = ca.getStep();
+		boolean isEvenStep = currentStep%2 == 0;
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
+		int scanX = xScanInitialIndex;
+		
+		String caName = ca.getName();
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/x_scan/";
+		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
+				+ "/z=" + crossSectionZ + "/";
+		IntGrid3DZCrossSectionCopierProcessor zCopier = new IntGrid3DZCrossSectionCopierProcessor();
+		IntGrid3DXCrossSectionCopierProcessor xCopier = new IntGrid3DXCrossSectionCopierProcessor();
+		ca.addProcessor(zCopier);
+		ca.addProcessor(xCopier);
+		zCopier.requestCopy(crossSectionZ);
+		xCopier.requestCopy(scanX);
+		ca.processGrid();
+		do {
+			System.out.println("Step: " + currentStep);
+			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
+					minY = ca.getMinY(), maxY = ca.getMaxY();
+			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
+			System.out.println("Scan x: " + scanX);
+			IntGrid2D scan = xCopier.getCopy(scanX);
+			IntGrid2D crossSection = zCopier.getCopy(crossSectionZ);
+			
+			int[] evenScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMaxValue(true);
+			int[] evenXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMaxValue(true);
+			int[] oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMaxValue(false);
+			int[] oddXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMaxValue(false);
+			System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
+			System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
+			System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue[0] + ", max value: " + evenXSectionMinAndMaxValue[1]);
+			System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue[0] + ", max value: " + oddXSectionMinAndMaxValue[1]);
+			
+			ColorGrid2D evenScanColorGrid = scanningColorMapper.getMappedGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
+			ColorGrid2D oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
+			ColorGrid2D evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
+			ColorGrid2D oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
+			
+			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
+			if (isEvenStep) {
+				evenXSectionFolder = "even";
+				oddXSectionFolder = "odd";
+				if (scanX%2 == 0) {
+					evenScanFolder = "even";
+					oddScanFolder = "odd";
+				} else {
+					evenScanFolder = "odd";
+					oddScanFolder = "even";
+				}
+			} else {
+				evenXSectionFolder = "odd";
+				oddXSectionFolder = "even";
+				if (scanX%2 != 0) {
+					evenScanFolder = "even";
+					oddScanFolder = "odd";
+				} else {
+					evenScanFolder = "odd";
+					oddScanFolder = "even";
+				}
+			}
+			createEvenOddImageLeftToRight(evenScanColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+							scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			createEvenOddImageLeftToRight(oddScanColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+							scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			createEvenOddImageLeftToRight(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+							crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			createEvenOddImageLeftToRight(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+							crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}		
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += millisecondsBetweenBackups;
+				}
+			}
+			if (backupRequested) {
+				backUp = true;
+				backupRequested = false;
+			}
+			if (backUp) {
+				String backupName = ca.getClass().getSimpleName() + "_" + currentStep;
+				System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
+				ca.backUp(backupPath, backupName);		
+				System.out.println("Backing up finished");
+			}
+			scanX--;
+			if (scanX < ca.getMinZ())
+				scanX = ca.getMaxZ();			
+			currentStep++;
+			isEvenStep = !isEvenStep;
+			System.out.println();
+			xCopier.requestCopy(scanX);
+			zCopier.requestCopy(crossSectionZ);
 		} while (ca.nextStep());
 		System.out.println("Finished!");
 		stdIn.stop();

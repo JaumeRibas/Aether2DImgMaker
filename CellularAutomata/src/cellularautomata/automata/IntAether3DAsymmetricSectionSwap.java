@@ -859,7 +859,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 				newGreaterXSlice)) {
 			anyToppled = true;
 		}
-		if (anyToppled && x > maxX - 2) {
+		if (anyToppled && x > maxX - 1) {
 			maxX++;
 		}
 		xSlices[0] = smallerXSlice;
@@ -2268,7 +2268,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3
 	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+		return getName() + "/" + initialValue + "/asymmetric_section";
 	}
 
 	@Override
