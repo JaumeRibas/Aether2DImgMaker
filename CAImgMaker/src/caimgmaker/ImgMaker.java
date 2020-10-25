@@ -510,8 +510,13 @@ public class ImgMaker {
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
-				evenXSectionFolder = "even";
-				oddXSectionFolder = "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 == 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -520,8 +525,13 @@ public class ImgMaker {
 					oddScanFolder = "even";
 				}
 			} else {
-				evenXSectionFolder = "odd";
-				oddXSectionFolder = "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 != 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -625,8 +635,13 @@ public class ImgMaker {
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
-				evenXSectionFolder = "even";
-				oddXSectionFolder = "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanX%2 == 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -635,8 +650,13 @@ public class ImgMaker {
 					oddScanFolder = "even";
 				}
 			} else {
-				evenXSectionFolder = "odd";
-				oddXSectionFolder = "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanX%2 != 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -740,8 +760,13 @@ public class ImgMaker {
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
-				evenXSectionFolder = "even";
-				oddXSectionFolder = "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 == 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -750,8 +775,13 @@ public class ImgMaker {
 					oddScanFolder = "even";
 				}
 			} else {
-				evenXSectionFolder = "odd";
-				oddXSectionFolder = "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 != 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -851,10 +881,17 @@ public class ImgMaker {
 			String evenXSectionPath, oddXSectionPath, evenScanPath, oddScanPath;
 			ColorMapper evenXSectionMapper, oddXSectionMapper, evenScanMapper, oddScanMapper;
 			if (isEvenStep) {
-				evenXSectionMapper = evenColorMapper;
-				oddXSectionMapper = oddColorMapper;	
-				evenXSectionPath = evenImgPath + crossSectionFolder + "even";
-				oddXSectionPath = oddImgPath + crossSectionFolder + "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionMapper = evenColorMapper;
+					oddXSectionMapper = oddColorMapper;	
+					evenXSectionPath = evenImgPath + crossSectionFolder + "even";
+					oddXSectionPath = oddImgPath + crossSectionFolder + "odd";
+				} else {
+					evenXSectionMapper = oddColorMapper;
+					oddXSectionMapper = evenColorMapper;
+					evenXSectionPath = oddImgPath + crossSectionFolder + "odd";
+					oddXSectionPath = evenImgPath + crossSectionFolder + "even";
+				}
 				if (scanZ%2 == 0) {
 					evenScanMapper = evenColorMapper;
 					oddScanMapper = oddColorMapper;
@@ -867,10 +904,17 @@ public class ImgMaker {
 					oddScanPath = evenImgPath + "/z_scan/even";
 				}
 			} else {
-				evenXSectionMapper = oddColorMapper;
-				oddXSectionMapper = evenColorMapper;
-				evenXSectionPath = oddImgPath + crossSectionFolder + "odd";
-				oddXSectionPath = evenImgPath + crossSectionFolder + "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionMapper = evenColorMapper;
+					oddXSectionMapper = oddColorMapper;	
+					evenXSectionPath = evenImgPath + crossSectionFolder + "even";
+					oddXSectionPath = oddImgPath + crossSectionFolder + "odd";
+				} else {
+					evenXSectionMapper = oddColorMapper;
+					oddXSectionMapper = evenColorMapper;
+					evenXSectionPath = oddImgPath + crossSectionFolder + "odd";
+					oddXSectionPath = evenImgPath + crossSectionFolder + "even";
+				}
 				if (scanZ%2 != 0) {
 					evenScanMapper = evenColorMapper;
 					oddScanMapper = oddColorMapper;
@@ -1426,8 +1470,13 @@ public class ImgMaker {
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
-				evenXSectionFolder = "even";
-				oddXSectionFolder = "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 == 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -1436,8 +1485,13 @@ public class ImgMaker {
 					oddScanFolder = "even";
 				}
 			} else {
-				evenXSectionFolder = "odd";
-				oddXSectionFolder = "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 != 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -1569,8 +1623,13 @@ public class ImgMaker {
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
-				evenXSectionFolder = "even";
-				oddXSectionFolder = "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanX%2 == 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -1579,8 +1638,13 @@ public class ImgMaker {
 					oddScanFolder = "even";
 				}
 			} else {
-				evenXSectionFolder = "odd";
-				oddXSectionFolder = "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanX%2 != 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -1705,8 +1769,13 @@ public class ImgMaker {
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
-				evenXSectionFolder = "even";
-				oddXSectionFolder = "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 == 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -1715,8 +1784,13 @@ public class ImgMaker {
 					oddScanFolder = "even";
 				}
 			} else {
-				evenXSectionFolder = "odd";
-				oddXSectionFolder = "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanZ%2 != 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -1873,8 +1947,13 @@ public class ImgMaker {
 			
 			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
-				evenXSectionFolder = "even";
-				oddXSectionFolder = "odd";
+				if (crossSectionZ%2 == 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanY%2 == 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
@@ -1883,8 +1962,13 @@ public class ImgMaker {
 					oddScanFolder = "even";
 				}
 			} else {
-				evenXSectionFolder = "odd";
-				oddXSectionFolder = "even";
+				if (crossSectionZ%2 != 0) {
+					evenXSectionFolder = "even";
+					oddXSectionFolder = "odd";
+				} else {
+					evenXSectionFolder = "odd";
+					oddXSectionFolder = "even";
+				}
 				if (scanY%2 != 0) {
 					evenScanFolder = "even";
 					oddScanFolder = "odd";
