@@ -73,7 +73,7 @@ public class ArrayLongGrid2D implements LongGrid2D, Serializable {
 			}
 			if (maximaDescending) {
 				if (localMaxY > previousLocalMaxY) {
-					throw new IllegalArgumentException("Unsupported values array. " + UNSUPPORTED_SHAPE_ERROR);
+					throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
 				}
 			} else if (localMaxY < previousLocalMaxY) {
 				maximaDescending = true;
