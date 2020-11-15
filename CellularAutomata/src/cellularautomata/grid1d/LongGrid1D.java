@@ -47,14 +47,8 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 		int maxX = getMaxX(), minX = getMinX();
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		boolean isPositionEven = minX%2 == 0;
-		if (isEven) { 
-			if (!isPositionEven) {
-				minX++;
-			}
-		} else {
-			if (isPositionEven) {
-				minX++;
-			}
+		if (isPositionEven != isEven) {
+			minX++;
 		}
 		for (int x = minX; x <= maxX; x+=2) {
 			long value = getValueAtPosition(x);

@@ -68,14 +68,8 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					boolean isPositionEven = (minW+x+y+z)%2 == 0;
-					if (isEven) { 
-						if (!isPositionEven) {
-							minW++;
-						}
-					} else {
-						if (isPositionEven) {
-							minW++;
-						}
+					if (isPositionEven != isEven) {
+						minW++;
 					}
 					for (int w = minW; w <= maxW; w+=2) {
 						long value = getValueAtPosition(w, x, y, z);

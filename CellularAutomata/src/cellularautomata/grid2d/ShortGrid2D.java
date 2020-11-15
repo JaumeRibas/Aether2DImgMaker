@@ -56,14 +56,8 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 			int minY = getMinY(x);
 			int maxY = getMaxY(x);
 			boolean isPositionEven = (minY+x)%2 == 0;
-			if (isEven) { 
-				if (!isPositionEven) {
-					minY++;
-				}
-			} else {
-				if (isPositionEven) {
-					minY++;
-				}
+			if (isPositionEven != isEven) {
+				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
 				short value = getValueAtPosition(x, y);

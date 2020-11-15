@@ -65,14 +65,8 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				boolean isPositionEven = (minZ+x+y)%2 == 0;
-				if (isEven) { 
-					if (!isPositionEven) {
-						minZ++;
-					}
-				} else {
-					if (isPositionEven) {
-						minZ++;
-					}
+				if (isPositionEven != isEven) {
+					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
 					long value = getValueAtPosition(x, y, z);

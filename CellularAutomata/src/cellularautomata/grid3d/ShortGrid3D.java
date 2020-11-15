@@ -64,14 +64,8 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				boolean isPositionEven = (minZ+x+y)%2 == 0;
-				if (isEven) { 
-					if (!isPositionEven) {
-						minZ++;
-					}
-				} else {
-					if (isPositionEven) {
-						minZ++;
-					}
+				if (isPositionEven != isEven) {
+					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
 					short value = getValueAtPosition(x, y, z);
