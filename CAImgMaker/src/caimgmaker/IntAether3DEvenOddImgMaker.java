@@ -91,7 +91,7 @@ public class IntAether3DEvenOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, xScanInitialIndex, colorMapper, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, xScanInitialIndex, 0, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
 				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, colorMapper, colorMapper, 
