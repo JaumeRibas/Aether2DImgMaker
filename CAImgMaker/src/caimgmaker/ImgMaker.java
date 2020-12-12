@@ -2431,14 +2431,8 @@ public class ImgMaker {
 				framedRegionMinYAtX = minY;
 			}
 			boolean isPositionEven = (framedRegionMinYAtX+x)%2 == 0;
-			if (isEven) { 
-				if (!isPositionEven) {
-					framedRegionMinYAtX++;
-				}
-			} else {
-				if (isPositionEven) {
-					framedRegionMinYAtX++;
-				}
+			if (isEven != isPositionEven) { 
+				framedRegionMinYAtX++;
 			}
 			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
 				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y+=2, yy+=2) {
@@ -2581,14 +2575,8 @@ public class ImgMaker {
 			int localMinX = grid.getMinX(y);
 			int localMaxX = grid.getMaxX(y);
 			boolean isPositionEven = (localMinX+y)%2 == 0;
-			if (isEven) { 
-				if (!isPositionEven) {
-					localMinX++;
-				}
-			} else {
-				if (isPositionEven) {
-					localMinX++;
-				}
+			if (isEven != isPositionEven) { 
+				localMinX++;
 			}
 			int localLeftMargin = (localMinX - minX)  * gridPositionSize;
 			int localRightMargin = rightMargin + ((maxX - localMaxX) * gridPositionSize);
@@ -2677,16 +2665,9 @@ public class ImgMaker {
 				framedGridMaxXAtY = maxX;
 			}
 			boolean isPositionEven = (framedGridMinXAtY+y)%2 == 0;
-			if (isEven) { 
-				if (!isPositionEven) {
-					framedGridMinXAtY++;
-					gridLeftMargin += gridPositionSize;
-				}
-			} else {
-				if (isPositionEven) {
-					framedGridMinXAtY++;
-					gridLeftMargin += gridPositionSize;
-				}
+			if (isEven != isPositionEven) { 
+				framedGridMinXAtY++;
+				gridLeftMargin += gridPositionSize;
 			}
 			for (int i = 0; i < gridPositionSize; i++) {
 				dataIndex += gridLeftMargin * 3;

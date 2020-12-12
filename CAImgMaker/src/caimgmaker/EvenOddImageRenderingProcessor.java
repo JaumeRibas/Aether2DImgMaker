@@ -109,14 +109,8 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ColorGrid2D
 				framedRegionMinYAtX = minY;
 			}
 			boolean isPositionEven = (framedRegionMinYAtX+x)%2 == 0;
-			if (isEven) { 
-				if (!isPositionEven) {
-					framedRegionMinYAtX++;
-				}
-			} else {
-				if (isPositionEven) {
-					framedRegionMinYAtX++;
-				}
+			if (isEven != isPositionEven) { 
+				framedRegionMinYAtX++;
 			}
 			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
 				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y+=2, yy+=2) {

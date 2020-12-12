@@ -26,7 +26,7 @@ import cellularautomata.grid.CAConstants;
 public class IntAether3DSwapEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-858993459", "D:/data/test", "0", "0"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -35,7 +35,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 			String path;
 			int initialStep = 0;
 			int scanXInitialIndex = 0;
-			boolean isScanInitialZIndexDefined = false;	
+			boolean isScanInitialXIndexDefined = false;	
 			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			String initValOrBackupPath = args[0];
@@ -61,7 +61,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 					initialStep = Integer.parseInt(args[2]);
 					if (args.length > 3) {
 						scanXInitialIndex = Integer.parseInt(args[3]);
-						isScanInitialZIndexDefined = true;
+						isScanInitialXIndexDefined = true;
 						if (args.length > 4) {
 							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
@@ -91,11 +91,12 @@ public class IntAether3DSwapEvenOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			if (isScanInitialZIndexDefined) {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, scanXInitialIndex, 0, colorMapper, colorMapper, 
+			final int crossSectionZ = 0;
+			if (isScanInitialXIndexDefined) {
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, scanXInitialIndex, crossSectionZ, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, colorMapper, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, crossSectionZ, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}	
 		}		
