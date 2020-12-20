@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import cellularautomata.evolvinggrid.EvolvingIntGrid;
 import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
@@ -61,6 +62,38 @@ public class CATests {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compare(ae1, ae2);
+	}
+	
+	public static void testSort() {
+		int testCount = 1000000;
+		int arrayLength = 6;
+		
+		int lengthMinusOne = arrayLength - 1;
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		boolean error = false;
+		int[][] array2 = new int[arrayLength][];
+		for (int i = 0; i < testCount; i++) {
+			int[] array = new int[arrayLength];
+			for (int j = 0; j < arrayLength; j++) {
+				array[j] = random.nextInt();
+			}
+			Utils.sortNeighborsByValueDesc(arrayLength, array, array2);
+			error = false;
+//			System.out.println(Arrays.toString(array));
+			for (int j = 0; j < lengthMinusOne; j++) {
+				if (array[j] <array[j + 1]) {
+					System.out.println("Error!");
+					error = true;
+					break;
+				}
+			}
+			if (error) {
+				break;
+			}
+		}
+		if (!error) {
+			System.out.println("Success!");
+		}
 	}
 	
 	public static void timeIntAether3D(int singleSource) {
