@@ -1,6 +1,6 @@
 
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2020 Jaume Ribas
+    Copyright (C) 2017-2021 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
