@@ -23,9 +23,9 @@ import cellularautomata.grid2d.IntGrid2D;
 public class ColorMappedIntGrid2D implements ColorGrid2D {
 
 	protected IntGrid2D source;
-	protected LongColorMap colorMap;
+	protected IntColorMap colorMap;
 	
-	public ColorMappedIntGrid2D(IntGrid2D source, LongColorMap colorMap) {
+	public ColorMappedIntGrid2D(IntGrid2D source, IntColorMap colorMap) {
 		this.source = source;
 		this.colorMap = colorMap;
 	}

@@ -22,9 +22,4 @@ public interface LongBoundedColorMap extends LongColorMap {
 
 	long getMinValue();
 	
-	void setMinValue(long value) throws Exception;
-	
-	void setMaxValue(long value) throws Exception;
-	
-	void setValueRange(long min, long max) throws Exception;
 }

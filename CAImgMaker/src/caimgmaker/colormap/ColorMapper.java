@@ -16,32 +16,22 @@
  */
 package caimgmaker.colormap;
 
-import cellularautomata.grid2d.Grid2D;
+import java.math.BigInteger;
+
+import cellularautomata.grid2d.BigIntGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 
-public abstract class ColorMapper {
-		
-	public abstract ColorMappedLongGrid2D getMappedLongGrid(LongGrid2D grid, long minValue, long maxValue);
-	public abstract ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue);
-	public abstract ColorMappedShortGrid2D getMappedShortGrid(ShortGrid2D grid, short minValue, short maxValue);
+public interface ColorMapper {
 	
-	public ColorGrid2D getMappedGrid(Grid2D grid, long minValue, long maxValue) {
-		ColorGrid2D mappedGrid = null;
-		if (grid instanceof LongGrid2D) {
-			mappedGrid = getMappedLongGrid((LongGrid2D)grid, minValue, maxValue);
-		}  else if (grid instanceof IntGrid2D) {
-			mappedGrid = getMappedIntGrid((IntGrid2D)grid, (int)minValue, (int)maxValue);
-		} else if (grid instanceof ShortGrid2D) {
-			mappedGrid = getMappedShortGrid((ShortGrid2D)grid, (short)minValue, (short)maxValue);
-		} else {
-			throw new IllegalArgumentException(
-					"Missing else if branch for Grid2D subtype " 
-							+ grid.getClass().getSimpleName() + ".");
-		}
-		return mappedGrid;
-	}
+	public abstract ColorGrid2D getMappedGrid(BigIntGrid2D grid, BigInteger minValue, BigInteger maxValue);
+	
+	public abstract ColorGrid2D getMappedGrid(LongGrid2D grid, long minValue, long maxValue);
+	
+	public abstract ColorGrid2D getMappedGrid(IntGrid2D grid, int minValue, int maxValue);
+	
+	public abstract ColorGrid2D getMappedGrid(ShortGrid2D grid, short minValue, short maxValue);
 	
 //	/**
 //	 * Return the color mapper's name in a format that can be used in file names

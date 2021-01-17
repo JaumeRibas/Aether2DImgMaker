@@ -18,14 +18,14 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-import cellularautomata.grid2d.ShortGrid2D;
+import cellularautomata.grid2d.BigIntGrid2D;
 
-public class ColorMappedShortGrid2D implements ColorGrid2D {
+public class ColorMappedBigIntGrid2D implements ColorGrid2D {
 
-	protected ShortGrid2D source;
-	protected IntColorMap colorMap;
+	protected BigIntGrid2D source;
+	protected BigIntColorMap colorMap;
 	
-	public ColorMappedShortGrid2D(ShortGrid2D source, IntColorMap colorMap) {
+	public ColorMappedBigIntGrid2D(BigIntGrid2D source, BigIntColorMap colorMap) {
 		this.source = source;
 		this.colorMap = colorMap;
 	}

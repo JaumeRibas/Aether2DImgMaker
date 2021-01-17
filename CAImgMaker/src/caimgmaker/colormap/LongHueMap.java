@@ -19,6 +19,7 @@ package caimgmaker.colormap;
 import java.awt.Color;
 
 public class LongHueMap implements LongBoundedColorMap {
+	
 	private long minValue;
 	private long maxValue;
 	private double hueIncreasePerUnit;
@@ -26,33 +27,16 @@ public class LongHueMap implements LongBoundedColorMap {
 	private static final int HUE_MARGIN = 255 - HUE_RANGE;
 	
 	public LongHueMap(long minValue, long maxValue) {
-		setValueRange(minValue, maxValue);
-	}
-	
-	@Override
-	public void setValueRange(long min, long max) {
-		if (minValue != min || maxValue != max) {
-			minValue = min;
-			maxValue = max;
-			long range = maxValue - minValue + 1;
-			if (range > 1) {
-				this.hueIncreasePerUnit = (double)HUE_RANGE/(range - 1);
-			} else {
-				this.hueIncreasePerUnit = 0;
-			} 
+		this.minValue = minValue;
+		this.maxValue = maxValue;
+		long range = maxValue - minValue;
+		if (range > 0) {
+			this.hueIncreasePerUnit = (double)HUE_RANGE/range;
+		} else {
+			this.hueIncreasePerUnit = 0;
 		}
 	}
-
-	@Override
-	public void setMinValue(long value) {
-		setValueRange(value, maxValue);
-	}
 	
-	@Override
-	public void setMaxValue(long value) {
-		setValueRange(minValue, value);
-	}
-
 	@Override
 	public long getMaxValue() {
 		return maxValue;

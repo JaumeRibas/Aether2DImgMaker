@@ -18,21 +18,21 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-public class LongUnboundedColorMap implements LongBoundedColorMap {
+public class IntUnboundedColorMap implements IntBoundedColorMap {
 	
-	private long minValue;
-	private long maxValue;
-	private LongColorMap colorMap;
+	private int minValue;
+	private int maxValue;
+	private IntColorMap colorMap;
 	private Color outOfLowerBoundColor;
 	private Color outOfUpperBoundColor;
 	
-	public LongUnboundedColorMap(LongColorMap colorMap, long minValue, long maxValue, 
+	public IntUnboundedColorMap(IntColorMap colorMap, int minValue, int maxValue, 
 			Color outOfLowerBoundColor, Color outOfUpperBoundColor) {
 		this.colorMap = colorMap;
 		this.outOfLowerBoundColor = outOfLowerBoundColor;
 		this.outOfUpperBoundColor = outOfUpperBoundColor;
 		if (minValue > maxValue) {
-			long swap = minValue;
+			int swap = minValue;
 			minValue = maxValue;
 			maxValue = swap;
 		}
@@ -41,7 +41,7 @@ public class LongUnboundedColorMap implements LongBoundedColorMap {
 	}
 	
 	@Override
-	public Color getColor(long value) throws Exception {
+	public Color getColor(int value) throws Exception {
 		if (value < minValue) {
 			return outOfLowerBoundColor;
 		} else if (value > maxValue) {
@@ -52,12 +52,12 @@ public class LongUnboundedColorMap implements LongBoundedColorMap {
 	}
 
 	@Override
-	public long getMaxValue() {
+	public int getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
-	public long getMinValue() {
+	public int getMinValue() {
 		return minValue;
 	}
 

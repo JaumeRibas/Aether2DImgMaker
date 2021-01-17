@@ -18,47 +18,44 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-public class LongUnboundedColorMap implements LongBoundedColorMap {
+public class IntHueMap implements IntBoundedColorMap {
 	
-	private long minValue;
-	private long maxValue;
-	private LongColorMap colorMap;
-	private Color outOfLowerBoundColor;
-	private Color outOfUpperBoundColor;
+	private int minValue;
+	private int maxValue;
+	private double hueIncreasePerUnit;
+	private static final int HUE_RANGE = 220;
+	public static final int HUE_MARGIN = 255 - HUE_RANGE;
 	
-	public LongUnboundedColorMap(LongColorMap colorMap, long minValue, long maxValue, 
-			Color outOfLowerBoundColor, Color outOfUpperBoundColor) {
-		this.colorMap = colorMap;
-		this.outOfLowerBoundColor = outOfLowerBoundColor;
-		this.outOfUpperBoundColor = outOfUpperBoundColor;
-		if (minValue > maxValue) {
-			long swap = minValue;
-			minValue = maxValue;
-			maxValue = swap;
-		}
+	public IntHueMap(int minValue, int maxValue) {
 		this.minValue = minValue;
 		this.maxValue = maxValue;
+		long range = maxValue - minValue;
+		if (range > 0) {
+			this.hueIncreasePerUnit = (double)HUE_RANGE/range;
+		} else {
+			this.hueIncreasePerUnit = 0;
+		}
 	}
 	
 	@Override
-	public Color getColor(long value) throws Exception {
-		if (value < minValue) {
-			return outOfLowerBoundColor;
-		} else if (value > maxValue) {
-			return outOfUpperBoundColor;
-		} else {
-			return colorMap.getColor(value);
-		}
-	}
-
-	@Override
-	public long getMaxValue() {
+	public int getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
-	public long getMinValue() {
+	public int getMinValue() {
 		return minValue;
 	}
 
+	
+	@Override
+	public Color getColor(int value) throws IllegalArgumentException {
+		if (value < minValue || value > maxValue ) 
+			throw new IllegalArgumentException("Value " + value + " outside range [" + minValue + ", " + maxValue + "]");
+		float hue = (float) (((value - minValue)*hueIncreasePerUnit + HUE_MARGIN)/255);
+		hue = (hue + (float)1/6)%1;
+		hue = 1 - hue;
+		Color color = new Color(Color.HSBtoRGB(hue, 1, 1));
+		return color;
+	}
 }

@@ -18,20 +18,20 @@ package caimgmaker.colormap;
 
 import cellularautomata.grid.ActionableGrid;
 import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid2d.IntGrid2D;
 
-public class ActionableLongGrid2DColorMapperProcessor extends ActionableGrid<GridProcessor<ColorGrid2D>, ColorGrid2D> implements GridProcessor<LongGrid2D> {
+public class ActionableIntGrid2DColorMapperProcessor extends ActionableGrid<GridProcessor<ColorGrid2D>, ColorGrid2D> implements GridProcessor<IntGrid2D> {
 	
 	private ColorMapper colorMapper;
-	private ActionableGrid<GridProcessor<LongGrid2D>, LongGrid2D> source;
-	private long minValue;
-	private long maxValue;
+	private ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> source;
+	private int minValue;
+	private int maxValue;
 	
-	public void setMinValue(long value) {
+	public void setMinValue(int value) {
 		minValue = value;
 	}
 	
-	public void setMaxValue(long value) {
+	public void setMaxValue(int value) {
 		maxValue = value;
 	}
 
@@ -43,8 +43,8 @@ public class ActionableLongGrid2DColorMapperProcessor extends ActionableGrid<Gri
 		return minValue;
 	}
 	
-	public ActionableLongGrid2DColorMapperProcessor(ActionableGrid<GridProcessor<LongGrid2D>, LongGrid2D> source, 
-			ColorMapper colorMapper, long minValue, long maxValue) {
+	public ActionableIntGrid2DColorMapperProcessor(ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> source, 
+			ColorMapper colorMapper, int minValue, int maxValue) {
 		this.source = source;
 		this.colorMapper = colorMapper;
 		this.minValue = minValue;
@@ -57,7 +57,7 @@ public class ActionableLongGrid2DColorMapperProcessor extends ActionableGrid<Gri
 	}
 
 	@Override
-	public void processGridBlock(LongGrid2D gridBlock) throws Exception {
+	public void processGridBlock(IntGrid2D gridBlock) throws Exception {
 		triggerProcessGridBlock(colorMapper.getMappedGrid(gridBlock, minValue, maxValue));
 	}
 

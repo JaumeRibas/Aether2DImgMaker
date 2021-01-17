@@ -17,39 +17,73 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
+import java.math.BigInteger;
 
+import cellularautomata.grid2d.BigIntGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 
-public class GrayscaleWithBackgroundMapper extends ColorMapper {
+public class GrayscaleWithBackgroundMapper implements ColorMapper {
 
 	private int minBrightness;
-	private long backgroundValue;
+	private BigInteger backgroundValue;
 	private Color backgroundColor;
 	
 	public GrayscaleWithBackgroundMapper(int minBrightness, long backgroundValue, Color backgroundColor) {
 		this.minBrightness = minBrightness;
-		this.backgroundValue = backgroundValue;
+		this.backgroundValue = BigInteger.valueOf(backgroundValue);
 		this.backgroundColor = backgroundColor;
 	}
 	
-	@Override
-	public ColorMappedLongGrid2D getMappedLongGrid(LongGrid2D grid, long minValue, long maxValue) {
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, backgroundValue, backgroundColor);
+	public GrayscaleWithBackgroundMapper(int minBrightness, BigInteger backgroundValue, Color backgroundColor) {
+		this.minBrightness = minBrightness;
+		this.backgroundValue = backgroundValue;
+		this.backgroundColor = backgroundColor;
 	}
 
 	@Override
-	public ColorMappedIntGrid2D getMappedIntGrid(IntGrid2D grid, int minValue, int maxValue) {
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (int) backgroundValue, backgroundColor);
+	public ColorGrid2D getMappedGrid(BigIntGrid2D grid, BigInteger minValue, BigInteger maxValue) {
+		BigIntColorMap colorMap = null;
+		if (minValue.equals(maxValue)) {
+			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+		} else {
+			colorMap = new BigIntGrayscaleMap(minValue, maxValue, minBrightness);
+		}
+		return new ColorMappedBigIntGrid2DWithBackground(grid, colorMap, backgroundValue, backgroundColor);
 	}
 	
 	@Override
-	public ColorMappedShortGrid2D getMappedShortGrid(ShortGrid2D grid, short minValue, short maxValue) {
-		LongGrayscaleMap colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
-		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, (short) backgroundValue, backgroundColor);
+	public ColorGrid2D getMappedGrid(LongGrid2D grid, long minValue, long maxValue) {
+		LongColorMap colorMap = null;
+		if (minValue == maxValue) {
+			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+		} else {
+			colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
+		}
+		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, backgroundValue.longValue(), backgroundColor);
+	}
+
+	@Override
+	public ColorGrid2D getMappedGrid(IntGrid2D grid, int minValue, int maxValue) {
+		IntColorMap colorMap = null;
+		if (minValue == maxValue) {
+			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+		} else {
+			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
+		}
+		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, backgroundValue.intValue(), backgroundColor);
+	}
+	
+	@Override
+	public ColorGrid2D getMappedGrid(ShortGrid2D grid, short minValue, short maxValue) {
+		IntColorMap colorMap = null;
+		if (minValue == maxValue) {
+			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+		} else {
+			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
+		}
+		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, backgroundValue.shortValue(), backgroundColor);
 	}
 
 }

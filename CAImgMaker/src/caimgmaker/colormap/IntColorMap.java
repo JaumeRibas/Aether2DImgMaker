@@ -18,26 +18,7 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-import cellularautomata.grid2d.IntGrid2D;
-
-public class ColorMappedIntGrid2DWithBackground extends ColorMappedIntGrid2D {
-
-	protected int backgroundValue;
-	protected Color backgroundColor;
-	
-	public ColorMappedIntGrid2DWithBackground(IntGrid2D grid, IntColorMap colorMap, 
-			int backgroundValue, Color backgroundColor) {
-		super(grid, colorMap);
-		this.backgroundColor = backgroundColor;
-		this.backgroundValue = backgroundValue;
-	}
-
-	@Override
-	public Color getColorAtPosition(int x, int y) throws Exception {
-		int value = source.getValueAtPosition(x, y);
-		if (value == backgroundValue) {
-			return backgroundColor;
-		}
-		return colorMap.getColor(value);
-	}
+//ColorGridRegion1D?
+public interface IntColorMap {
+	Color getColor(int value) throws Exception;
 }

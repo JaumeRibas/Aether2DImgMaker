@@ -28,13 +28,6 @@ public class LongPrecomputedColorMap implements LongBoundedColorMap {
 		computeColors();
 	}
 	
-	public void setValueRange(long min, long max) throws Exception {
-		if (colorMap.getMinValue() != min || colorMap.getMaxValue() != max) {
-			colorMap.setValueRange(min, max);
-			computeColors();
-		}
-	}
-	
 	private void computeColors() throws Exception {
 		long minValue = colorMap.getMinValue(), maxValue = colorMap.getMaxValue();
 		long lRange = maxValue - minValue + 1;
@@ -59,20 +52,6 @@ public class LongPrecomputedColorMap implements LongBoundedColorMap {
 			return colors[(int)(value - colorMap.getMinValue())];
 		} else {
 			return colorMap.getColor(value);
-		}
-	}
-	
-	public void setMinValue(long value) throws Exception {
-		if (colorMap.getMinValue() != value) {
-			colorMap.setMinValue(value);
-			computeColors();
-		}
-	}
-	
-	public void setMaxValue(long value) throws Exception {
-		if (colorMap.getMaxValue() != value) {
-			colorMap.setMaxValue(value);
-			computeColors();
 		}
 	}
 

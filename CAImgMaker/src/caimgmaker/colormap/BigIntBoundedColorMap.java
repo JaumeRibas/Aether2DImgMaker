@@ -16,28 +16,12 @@
  */
 package caimgmaker.colormap;
 
-import java.awt.Color;
+import java.math.BigInteger;
 
-import cellularautomata.grid2d.IntGrid2D;
+public interface BigIntBoundedColorMap extends BigIntColorMap {
 
-public class ColorMappedIntGrid2DWithBackground extends ColorMappedIntGrid2D {
+	BigInteger getMaxValue();
 
-	protected int backgroundValue;
-	protected Color backgroundColor;
+	BigInteger getMinValue();
 	
-	public ColorMappedIntGrid2DWithBackground(IntGrid2D grid, IntColorMap colorMap, 
-			int backgroundValue, Color backgroundColor) {
-		super(grid, colorMap);
-		this.backgroundColor = backgroundColor;
-		this.backgroundValue = backgroundValue;
-	}
-
-	@Override
-	public Color getColorAtPosition(int x, int y) throws Exception {
-		int value = source.getValueAtPosition(x, y);
-		if (value == backgroundValue) {
-			return backgroundColor;
-		}
-		return colorMap.getColor(value);
-	}
 }

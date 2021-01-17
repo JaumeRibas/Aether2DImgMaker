@@ -17,49 +17,53 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 
-public class LongGrayscaleMap implements LongBoundedColorMap {
+public class BigIntGrayscaleMap implements BigIntBoundedColorMap {
 	
-	private long minValue;
-	private long maxValue;
-	private double range;
+	private BigInteger minValue;
+	private BigInteger maxValue;
+	private BigDecimal range;
 	private float minBrightness;
-	private int brightnessRange;
+	private BigInteger brightnessRange;
 	
-	public LongGrayscaleMap(long minValue, long maxValue, int minBrightness) {
+	public BigIntGrayscaleMap(BigInteger minValue, BigInteger maxValue, int minBrightness) {
 		if (minBrightness < 0 || minBrightness > 255) {
 			throw new IllegalArgumentException("The minimum brightness is out of the [0, 255] range");
 		}
 		this.minBrightness = minBrightness;
-		brightnessRange = 255-minBrightness;
-		if (minValue == maxValue) {
+		brightnessRange = BigInteger.valueOf(255-minBrightness);
+		if (minValue.equals(maxValue)) {
 			throw new IllegalArgumentException("Minumim and maximum values cannot be equal.");
-		} else if (minValue > maxValue) {
-			long swap = minValue;
+		} else if (minValue.compareTo(maxValue) > 0) {
+			BigInteger swap = minValue;
 			minValue = maxValue;
 			maxValue = swap;
 		}
 		this.minValue = minValue;
 		this.maxValue = maxValue;
-		range = maxValue - minValue;
+		range = new BigDecimal(maxValue.subtract(minValue));
 	}
 	
 	@Override
-	public Color getColor(long value) throws IllegalArgumentException {
-		if (value < minValue || value > maxValue)
+	public Color getColor(BigInteger value) throws IllegalArgumentException {
+		if (value.compareTo(minValue) < 0 || value.compareTo(maxValue) > 0)
 			throw new IllegalArgumentException("The value " + value + " is out of the [" + minValue + ", " + maxValue + "] range");
-		float brightness = (float) ((brightnessRange * ((value - minValue)/range) + minBrightness)/255);
+		float brightness = (new BigDecimal(brightnessRange.multiply(value.subtract(minValue)))
+				.divide(range, RoundingMode.HALF_UP).floatValue() + minBrightness)/255;
 		Color color = new Color(Color.HSBtoRGB(0, 0, brightness));
 		return color;
 	}
 
 	@Override
-	public long getMaxValue() {
+	public BigInteger getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
-	public long getMinValue() {
+	public BigInteger getMinValue() {
 		return minValue;
 	}
 

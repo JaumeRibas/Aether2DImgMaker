@@ -18,15 +18,15 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-public class LongGrayscaleMap implements LongBoundedColorMap {
+public class IntGrayscaleMap implements IntBoundedColorMap {
 	
-	private long minValue;
-	private long maxValue;
+	private int minValue;
+	private int maxValue;
 	private double range;
 	private float minBrightness;
 	private int brightnessRange;
 	
-	public LongGrayscaleMap(long minValue, long maxValue, int minBrightness) {
+	public IntGrayscaleMap(int minValue, int maxValue, int minBrightness) {
 		if (minBrightness < 0 || minBrightness > 255) {
 			throw new IllegalArgumentException("The minimum brightness is out of the [0, 255] range");
 		}
@@ -35,7 +35,7 @@ public class LongGrayscaleMap implements LongBoundedColorMap {
 		if (minValue == maxValue) {
 			throw new IllegalArgumentException("Minumim and maximum values cannot be equal.");
 		} else if (minValue > maxValue) {
-			long swap = minValue;
+			int swap = minValue;
 			minValue = maxValue;
 			maxValue = swap;
 		}
@@ -45,7 +45,7 @@ public class LongGrayscaleMap implements LongBoundedColorMap {
 	}
 	
 	@Override
-	public Color getColor(long value) throws IllegalArgumentException {
+	public Color getColor(int value) throws IllegalArgumentException {
 		if (value < minValue || value > maxValue)
 			throw new IllegalArgumentException("The value " + value + " is out of the [" + minValue + ", " + maxValue + "] range");
 		float brightness = (float) ((brightnessRange * ((value - minValue)/range) + minBrightness)/255);
@@ -54,12 +54,12 @@ public class LongGrayscaleMap implements LongBoundedColorMap {
 	}
 
 	@Override
-	public long getMaxValue() {
+	public int getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
-	public long getMinValue() {
+	public int getMinValue() {
 		return minValue;
 	}
 

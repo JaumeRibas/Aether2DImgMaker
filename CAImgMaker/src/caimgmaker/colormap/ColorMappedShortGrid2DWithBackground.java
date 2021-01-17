@@ -25,7 +25,7 @@ public class ColorMappedShortGrid2DWithBackground extends ColorMappedShortGrid2D
 	protected short backgroundValue;
 	protected Color backgroundColor;
 	
-	public ColorMappedShortGrid2DWithBackground(ShortGrid2D grid, LongColorMap colorMap, 
+	public ColorMappedShortGrid2DWithBackground(ShortGrid2D grid, IntColorMap colorMap, 
 			short backgroundValue, Color backgroundColor) {
 		super(grid, colorMap);
 		this.backgroundColor = backgroundColor;
