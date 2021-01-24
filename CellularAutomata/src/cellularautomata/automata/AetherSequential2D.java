@@ -235,7 +235,7 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x, int y){	
+	public long getFromPosition(int x, int y){	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 

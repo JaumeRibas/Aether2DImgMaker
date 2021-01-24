@@ -202,7 +202,7 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x, int y){	
+	public long getFromPosition(int x, int y){	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 
@@ -298,8 +298,8 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 	}
 
 	@Override
-	public long getValueAtAsymmetricPosition(int x, int y) {
-		return getValueAtPosition(x, y);
+	public long getFromAsymmetricPosition(int x, int y) {
+		return getFromPosition(x, y);
 	}
 
 	@Override

@@ -18,10 +18,10 @@ package cellularautomata.grid;
 
 public interface LongGrid extends Grid {
 
-	long[] getMinAndMaxValue() throws Exception;
+	long[] getMinAndMax() throws Exception;
 	
-	long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception;
+	long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception;
 	
-	long getTotalValue() throws Exception;
+	long getTotal() throws Exception;
 	
 }

@@ -109,49 +109,49 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D {
 						short value = grid[w][x][y][z];
 						int relevantNeighborCount = 0;
 						short neighborValue;
-						neighborValue = getValueAtPosition(w + 1, x, y, z);
+						neighborValue = getFromPosition(w + 1, x, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = W_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAtPosition(w - 1, x, y, z);
+						neighborValue = getFromPosition(w - 1, x, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = W_NEGATIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAtPosition(w, x + 1, y, z);
+						neighborValue = getFromPosition(w, x + 1, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = X_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAtPosition(w, x - 1, y, z);
+						neighborValue = getFromPosition(w, x - 1, y, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = X_NEGATIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAtPosition(w, x, y + 1, z);
+						neighborValue = getFromPosition(w, x, y + 1, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Y_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAtPosition(w, x, y - 1, z);
+						neighborValue = getFromPosition(w, x, y - 1, z);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Y_NEGATIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAtPosition(w, x, y, z + 1);
+						neighborValue = getFromPosition(w, x, y, z + 1);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Z_POSITIVE;
 							relevantNeighborCount++;
 						}
-						neighborValue = getValueAtPosition(w, x, y, z - 1);
+						neighborValue = getFromPosition(w, x, y, z - 1);
 						if (neighborValue < value) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Z_NEGATIVE;
@@ -354,7 +354,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D {
 	}
 
 	@Override
-	public short getValueAtPosition(int w, int x, int y, int z){	
+	public short getFromPosition(int w, int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -393,7 +393,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D {
 	}
 
 	@Override
-	public short getValueAtAsymmetricPosition(int w, int x, int y, int z){	
+	public short getFromAsymmetricPosition(int w, int x, int y, int z){	
 		if (w < grid.length 
 				&& x < grid[w].length 
 				&& y < grid[w][x].length 

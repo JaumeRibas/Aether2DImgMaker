@@ -25,7 +25,7 @@ public class LongGridMinAndMaxProcessor<G extends LongGrid> implements GridProce
 		if (minAndMax == null) {
 			minAndMax = new long[]{Long.MAX_VALUE, Long.MIN_VALUE};
 		}
-		long[] blockMinAndMax = gridBlock.getMinAndMaxValue();
+		long[] blockMinAndMax = gridBlock.getMinAndMax();
 		if (blockMinAndMax[0] < minAndMax[0]) minAndMax[0] = blockMinAndMax[0];
 		if (blockMinAndMax[1] > minAndMax[1]) minAndMax[1] = blockMinAndMax[1];
 	}

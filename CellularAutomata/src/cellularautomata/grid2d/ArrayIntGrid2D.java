@@ -164,7 +164,7 @@ public class ArrayIntGrid2D implements IntGrid2D, Serializable {
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y) {
+	public int getFromPosition(int x, int y) {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		return values[i][j];

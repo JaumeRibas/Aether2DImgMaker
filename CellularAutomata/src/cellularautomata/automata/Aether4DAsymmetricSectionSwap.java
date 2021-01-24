@@ -325,15 +325,15 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 		for (int x = 0; x <= w; x++) {
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {				
-					long value = centerGridBlock.getValueAtPosition(w, x, y, z);
-					long upperWNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w + 1, x, y, z);
-					long lowerWNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w - 1, x, y, z);
-					long upperXNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x + 1, y, z);
-					long lowerXNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x - 1, y, z);
-					long upperYNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y + 1, z);
-					long lowerYNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y - 1, z);
-					long upperZNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z + 1);
-					long lowerZNeighborValue = getValueAtPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z - 1);				
+					long value = centerGridBlock.getFromPosition(w, x, y, z);
+					long upperWNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w + 1, x, y, z);
+					long lowerWNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w - 1, x, y, z);
+					long upperXNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x + 1, y, z);
+					long lowerXNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x - 1, y, z);
+					long upperYNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y + 1, z);
+					long lowerYNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y - 1, z);
+					long upperZNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z + 1);
+					long lowerZNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z - 1);				
 					boolean positionToppled = computePosition(value, 
 							upperWNeighborValue, lowerWNeighborValue, 
 							upperXNeighborValue, lowerXNeighborValue, 
@@ -347,7 +347,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 		return anyPositionToppled;
 	}
 	
-	private long getValueAtPosition(int centerW, SizeLimitedAnisotropicLongGrid4DBlock lowerWGridBlock, 
+	private long getFromPosition(int centerW, SizeLimitedAnisotropicLongGrid4DBlock lowerWGridBlock, 
 			SizeLimitedAnisotropicLongGrid4DBlock centerGridBlock, SizeLimitedAnisotropicLongGrid4DBlock upperWGridBlock, int w, int x, int y, int z) {
 		int[] asymmetricCoords = getAsymmetricCoords(w, x, y, z);
 		w = asymmetricCoords[0];
@@ -356,11 +356,11 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 		z = asymmetricCoords[3];
 		long value;
 		if (w == centerW) {
-			value = centerGridBlock.getValueAtPosition(w, x, y, z);
+			value = centerGridBlock.getFromPosition(w, x, y, z);
 		} else if (w < centerW) {
-			value = lowerWGridBlock.getValueAtPosition(w, x, y, z);
+			value = lowerWGridBlock.getFromPosition(w, x, y, z);
 		} else {
-			value = upperWGridBlock.getValueAtPosition(w, x, y, z);
+			value = upperWGridBlock.getFromPosition(w, x, y, z);
 		}
 		return value;
 	}
@@ -452,7 +452,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				}
 			}	
 		}					
-		newGridSlices[1].addValueAtPosition(x, y, z, value);
+		newGridSlices[1].addToPosition(x, y, z, value);
 		return toppled;
 	}
 
@@ -485,7 +485,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 		}
 	}
 	private void addToWPositive(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
-		newGridSlices[2].addValueAtPosition(x, y, z, value);
+		newGridSlices[2].addToPosition(x, y, z, value);
 		if (w == maxW - 1) {
 			maxW++;
 		}
@@ -506,7 +506,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 					}
 				}
 			}
-			newGridSlices[0].addValueAtPosition(x, y, z, valueToAdd);
+			newGridSlices[0].addToPosition(x, y, z, valueToAdd);
 		}
 		if (w == maxW) {
 			maxW++;
@@ -520,7 +520,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				valueToAdd += value;
 			}
 			int xx = x+1;
-			newGridSlices[1].addValueAtPosition(xx, y, z, valueToAdd);
+			newGridSlices[1].addToPosition(xx, y, z, valueToAdd);
 			if (xx > maxX)
 				maxX = xx;
 		}
@@ -538,7 +538,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 					}
 				}
 			}
-			newGridSlices[1].addValueAtPosition(x-1, y, z, valueToAdd);
+			newGridSlices[1].addToPosition(x-1, y, z, valueToAdd);
 		}
 	}
 
@@ -552,7 +552,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				}
 			}
 			int yy = y+1;
-			newGridSlices[1].addValueAtPosition(x, yy, z, valueToAdd);
+			newGridSlices[1].addToPosition(x, yy, z, valueToAdd);
 			if (yy > maxY)
 				maxY = yy;
 		}
@@ -567,7 +567,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 					valueToAdd += 2*value;
 				}
 			}
-			newGridSlices[1].addValueAtPosition(x, y-1, z, valueToAdd);
+			newGridSlices[1].addToPosition(x, y-1, z, valueToAdd);
 		}
 	}
 
@@ -584,7 +584,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 				}
 			}
 			int zz = z+1;
-			newGridSlices[1].addValueAtPosition(x, y, zz, valueToAdd);
+			newGridSlices[1].addToPosition(x, y, zz, valueToAdd);
 			if (zz > maxZ)
 				maxZ = zz;
 		}
@@ -596,7 +596,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 			if (z == 1) {
 				valueToAdd += value;
 			}
-			newGridSlices[1].addValueAtPosition(x, y, z-1, valueToAdd);
+			newGridSlices[1].addToPosition(x, y, z-1, valueToAdd);
 		}
 	}
 

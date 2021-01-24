@@ -49,15 +49,15 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 	}
 
 	protected void setValueAtPosition(int w, int x, int y, int z, long initialValue) {
-		slices[w - minW].setValueAtPosition(x, y, z, initialValue);			
+		slices[w - minW].setAtPosition(x, y, z, initialValue);			
 	}
 
 	@Override
-	public long getValueAtPosition(int w, int x, int y, int z) {
+	public long getFromPosition(int w, int x, int y, int z) {
 		if (slices == null) {
 			throw new UnsupportedOperationException("The grid block is no longer available.");
 		}
-		return slices[w - minW].getValueAtPosition(x, y, z);
+		return slices[w - minW].getFromPosition(x, y, z);
 	}
 
 	protected void setSlice(int x, AnisotropicLongGrid4DSlice slice) {

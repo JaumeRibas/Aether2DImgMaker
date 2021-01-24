@@ -32,20 +32,20 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */
-	long getValueAtPosition(int w, int x, int y, int z) throws Exception;
+	long getFromPosition(int w, int x, int y, int z) throws Exception;
 
 	@Override
-	default long[] getMinAndMaxValue() throws Exception {
+	default long[] getMinAndMax() throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		long maxValue = getValueAtPosition(minW, minX, minY, minZ), minValue = maxValue;
+		long maxValue = getFromPosition(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						long value = getValueAtPosition(w, x, y, z);
+						long value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -58,7 +58,7 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	}
 	
 	@Override
-	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
@@ -72,7 +72,7 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 						minW++;
 					}
 					for (int w = minW; w <= maxW; w+=2) {
-						long value = getValueAtPosition(w, x, y, z);
+						long value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -85,7 +85,7 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	}
 	
 	@Override
-	default long getTotalValue() throws Exception {
+	default long getTotal() throws Exception {
 		long total = 0;
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
@@ -95,7 +95,7 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						total += getValueAtPosition(w, x, y, z);
+						total += getFromPosition(w, x, y, z);
 					}
 				}	
 			}	

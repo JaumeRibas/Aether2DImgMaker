@@ -75,8 +75,8 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 		byte[] neighborDirections = new byte[]{RIGHT, LEFT};
 		for (int x = 0; x < grid.length; x++) {
 			long centerValue = this.grid[x];
-			long rightValue = getValueAtPosition(x + 1);
-			long leftValue = getValueAtPosition(x - 1);
+			long rightValue = getFromPosition(x + 1);
+			long leftValue = getFromPosition(x - 1);
 			neighborValues[0] = rightValue;
 			neighborValues[1] = leftValue;
 			LongTopplingResult topplingResult = rules.topplePosition(centerValue, neighborValues);
@@ -133,7 +133,7 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x){	
+	public long getFromPosition(int x){	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
 			return grid[x];
@@ -187,7 +187,7 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 	}
 
 	@Override
-	public long getValueAtAsymmetricPosition(int x) {
+	public long getFromAsymmetricPosition(int x) {
 		return grid[x];
 	}
 

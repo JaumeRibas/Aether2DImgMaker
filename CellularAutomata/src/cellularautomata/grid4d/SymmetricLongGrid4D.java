@@ -31,7 +31,7 @@ public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 	 * @throws ClassNotFoundException 
 	 * @throws IOException 
 	 */
-	long getValueAtAsymmetricPosition(int w, int x, int y, int z) throws Exception;
+	long getFromAsymmetricPosition(int w, int x, int y, int z) throws Exception;
 
 	@Override
 	default LongGrid4D asymmetricSection() {

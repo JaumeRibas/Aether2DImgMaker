@@ -2026,7 +2026,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x, int y, int z){	
+	public long getFromPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -2067,7 +2067,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public long getValueAtAsymmetricPosition(int x, int y, int z){	
+	public long getFromAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	

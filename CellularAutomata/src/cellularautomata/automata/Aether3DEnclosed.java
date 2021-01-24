@@ -81,37 +81,37 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 					long value = grid[x][y][z];
 					int relevantNeighborCount = 0;
 					long neighborValue;
-					neighborValue = getValueAtPosition(x + 1, y, z);
+					neighborValue = getFromPosition(x + 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = RIGHT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x - 1, y, z);
+					neighborValue = getFromPosition(x - 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = LEFT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y + 1, z);
+					neighborValue = getFromPosition(x, y + 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = UP;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y - 1, z);
+					neighborValue = getFromPosition(x, y - 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = DOWN;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y, z + 1);
+					neighborValue = getFromPosition(x, y, z + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = FRONT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y, z - 1);
+					neighborValue = getFromPosition(x, y, z - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = BACK;
@@ -263,7 +263,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x, int y, int z){
+	public long getFromPosition(int x, int y, int z){
 		x = getEnclosedCoord(x);
 		y = getEnclosedCoord(y);
 		z = getEnclosedCoord(z);
@@ -305,7 +305,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public long getValueAtAsymmetricPosition(int x, int y, int z){	
+	public long getFromAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	

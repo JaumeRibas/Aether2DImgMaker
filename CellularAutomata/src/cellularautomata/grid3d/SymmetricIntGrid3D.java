@@ -27,7 +27,7 @@ public interface SymmetricIntGrid3D extends IntGrid3D, SymmetricGrid3D {
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */
-	int getValueAtAsymmetricPosition(int x, int y, int z) throws Exception;
+	int getFromAsymmetricPosition(int x, int y, int z) throws Exception;
 
 	@Override
 	default IntGrid3D asymmetricSection() {

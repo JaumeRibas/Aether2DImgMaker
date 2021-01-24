@@ -137,37 +137,37 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 					int value = grid[x][y][z];
 					int relevantNeighborCount = 0;
 					int neighborValue;
-					neighborValue = getValueAtIndex(x + 1, y, z);
+					neighborValue = getFromIndex(x + 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = RIGHT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtIndex(x - 1, y, z);
+					neighborValue = getFromIndex(x - 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = LEFT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtIndex(x, y + 1, z);
+					neighborValue = getFromIndex(x, y + 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = UP;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtIndex(x, y - 1, z);
+					neighborValue = getFromIndex(x, y - 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = DOWN;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtIndex(x, y, z + 1);
+					neighborValue = getFromIndex(x, y, z + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = FRONT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtIndex(x, y, z - 1);
+					neighborValue = getFromIndex(x, y, z - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = BACK;
@@ -267,14 +267,14 @@ public class Aether3DRandomConfiguration implements EvolvingIntGrid3D {
 	}
 	
 	@Override
-	public int getValueAtPosition(int x, int y, int z){	
+	public int getFromPosition(int x, int y, int z){	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
-		return getValueAtIndex(arrayX, arrayY, arrayZ);
+		return getFromIndex(arrayX, arrayY, arrayZ);
 	}
 	
-	private int getValueAtIndex(int arrayX, int arrayY, int arrayZ){
+	private int getFromIndex(int arrayX, int arrayY, int arrayZ){
 		if (arrayX < 0 || arrayX > grid.length - 1 
 				|| arrayY < 0 || arrayY > grid.length - 1
 				|| arrayZ < 0 || arrayZ > grid.length - 1) {

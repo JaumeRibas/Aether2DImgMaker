@@ -28,17 +28,17 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	 * @return the value at (x,y)
 	 * @throws Exception 
 	 */
-	public abstract long getValueAtPosition(int x, int y) throws Exception;
+	public abstract long getFromPosition(int x, int y) throws Exception;
 	
 	@Override
-	default long[] getMinAndMaxValue() throws Exception {
+	default long[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				long value = getValueAtPosition(x, y);
+				long value = getFromPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -49,7 +49,7 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	}
 	
 	@Override
-	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -60,7 +60,7 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
-				long value = getValueAtPosition(x, y);
+				long value = getFromPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -71,14 +71,14 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	}
 	
 	@Override
-	default long getTotalValue() throws Exception {
+	default long getTotal() throws Exception {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				total += getValueAtPosition(x, y);
+				total += getFromPosition(x, y);
 			}	
 		}
 		return total;

@@ -24,8 +24,8 @@ public class IntSubGrid4D extends SubGrid4D<IntGrid4D> implements IntGrid4D {
 	}
 
 	@Override
-	public int getValueAtPosition(int w, int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(w, x, y, z);
+	public int getFromPosition(int w, int x, int y, int z) throws Exception {
+		return source.getFromPosition(w, x, y, z);
 	}
 
 }

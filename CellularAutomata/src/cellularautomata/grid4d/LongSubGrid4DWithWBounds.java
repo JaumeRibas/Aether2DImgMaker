@@ -23,8 +23,8 @@ public class LongSubGrid4DWithWBounds extends SubGrid4DWithWBounds<LongGrid4D> i
 	}
 
 	@Override
-	public long getValueAtPosition(int w, int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(w, x, y, z);
+	public long getFromPosition(int w, int x, int y, int z) throws Exception {
+		return source.getFromPosition(w, x, y, z);
 	}
 
 }

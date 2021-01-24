@@ -17,9 +17,8 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import java.math.BigInteger;
 
-public class SolidColorMap implements IntColorMap, LongColorMap, BigIntColorMap {
+public class SolidColorMap<T> implements IntColorMap, LongColorMap, ColorMap<T> {
 	
 	private Color color;
 	
@@ -33,7 +32,7 @@ public class SolidColorMap implements IntColorMap, LongColorMap, BigIntColorMap 
 	}
 
 	@Override
-	public Color getColor(BigInteger value) throws Exception {
+	public Color getColor(T value) throws Exception {
 		return color;
 	}
 

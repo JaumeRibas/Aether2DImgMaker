@@ -16,10 +16,12 @@
  */
 package caimgmaker;
 
-import caimgmaker.colormap.ColorGrid2D;
+import java.awt.Color;
+
 import caimgmaker.colormap.ColorMapper;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid2d.IntGrid2D;
+import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid3d.IntGrid3D;
 
 public class IntGrid3DXCrossSectionEvenOddImgMakerProcessor implements GridProcessor<IntGrid3D> {
@@ -59,10 +61,10 @@ public class IntGrid3DXCrossSectionEvenOddImgMakerProcessor implements GridProce
 		if (!imagesMade) {
 			if(x >= gridBlock.getMinX() && x <= gridBlock.getMaxX()) {
 				IntGrid2D xSection = gridBlock.crossSectionAtX(x);			
-				int[] evenMinAndMaxValue = xSection.getEvenOddPositionsMinAndMaxValue(isEven);
-				ColorGrid2D colorGrid = colorMapper.getMappedGrid(xSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+				int[] evenMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(isEven);
+				ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
 				ImgMaker.createImageFromEvenOrOddPositions(isEven, colorGrid, imageWidth, imageHeight, imgsPath + "even/", imgsName);
-				int[] oddMinAndMaxValue = xSection.getEvenOddPositionsMinAndMaxValue(!isEven);
+				int[] oddMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(!isEven);
 				colorGrid = colorMapper.getMappedGrid(xSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 				ImgMaker.createImageFromEvenOrOddPositions(!isEven, colorGrid, imageWidth, imageHeight, imgsPath + "odd/", imgsName);
 				imagesMade = true;

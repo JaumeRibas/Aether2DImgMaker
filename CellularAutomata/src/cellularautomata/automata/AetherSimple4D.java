@@ -254,7 +254,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int w, int x, int y, int z){
+	public long getFromPosition(int w, int x, int y, int z){
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -528,8 +528,8 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 	}
 
 	@Override
-	public long getValueAtAsymmetricPosition(int w, int x, int y, int z) {
-		return getValueAtPosition(w, x, y, z);
+	public long getFromAsymmetricPosition(int w, int x, int y, int z) {
+		return getFromPosition(w, x, y, z);
 	}
 
 	@Override

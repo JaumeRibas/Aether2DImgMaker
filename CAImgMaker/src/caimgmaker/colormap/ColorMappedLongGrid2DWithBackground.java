@@ -33,8 +33,8 @@ public class ColorMappedLongGrid2DWithBackground extends ColorMappedLongGrid2D {
 	}
 
 	@Override
-	public Color getColorAtPosition(int x, int y) throws Exception {
-		long value = source.getValueAtPosition(x, y);
+	public Color getFromPosition(int x, int y) throws Exception {
+		long value = source.getFromPosition(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}

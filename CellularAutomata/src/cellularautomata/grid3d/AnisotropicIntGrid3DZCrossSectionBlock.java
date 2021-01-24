@@ -47,14 +47,14 @@ public class AnisotropicIntGrid3DZCrossSectionBlock implements Serializable, Int
 		int i = 0;
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = z; y <= x; y++) {
-				data[i] = block.getValueAtPosition(x, y, z);
+				data[i] = block.getFromPosition(x, y, z);
 				i++;
 			}
 		}
 	}
 	
 	@Override
-	public int getValueAtPosition(int x, int y) {
+	public int getFromPosition(int x, int y) {
 		return data[getIndex(x, y)];
 	}
 	

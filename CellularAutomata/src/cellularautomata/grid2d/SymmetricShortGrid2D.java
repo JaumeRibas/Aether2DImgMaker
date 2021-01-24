@@ -34,7 +34,7 @@ public interface SymmetricShortGrid2D extends ShortGrid2D, SymmetricGrid2D {
 	 * @param y the position on the y-coordinate
 	 * @return the {@link long} value at (x,y)
 	 */
-	short getValueAtAsymmetricPosition(int x, int y);
+	short getFromAsymmetricPosition(int x, int y);
 	
 	@Override
 	default ShortGrid2D asymmetricSection() {

@@ -36,15 +36,15 @@ public class AnisotropicLongGrid4DSlice implements Serializable {
 		data = Utils.buildAnisotropic3DLongArray(w + 1);
 	}
 
-	public void setValueAtPosition(int x, int y, int z, long value) {
+	public void setAtPosition(int x, int y, int z, long value) {
 		data[x][y][z] = value;	
 	}
 	
-	public long getValueAtPosition(int x, int y, int z) {
+	public long getFromPosition(int x, int y, int z) {
 		return data[x][y][z];
 	}
 	
-	public void addValueAtPosition(int x, int y, int z, long value) {
+	public void addToPosition(int x, int y, int z, long value) {
 		data[x][y][z] += value;
 	}
 	

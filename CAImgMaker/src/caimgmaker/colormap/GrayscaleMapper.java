@@ -17,12 +17,12 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import java.math.BigInteger;
-
-import cellularautomata.grid2d.BigIntGrid2D;
+import cellularautomata.grid2d.NumberGrid2D;
+import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
+import cellularautomata.numbers.BigInt;
 
 public class GrayscaleMapper implements ColorMapper {
 
@@ -47,24 +47,24 @@ public class GrayscaleMapper implements ColorMapper {
 	}
 
 	@Override
-	public ColorGrid2D getMappedGrid(BigIntGrid2D grid, BigInteger minValue, BigInteger maxValue) {
-		BigIntColorMap colorMap = null;
+	public ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<BigInt> grid, BigInt minValue, BigInt maxValue) {
+		ColorMap<BigInt> colorMap = null;
 		if (minValue.equals(maxValue)) {
-			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+			colorMap = new SolidColorMap<BigInt>(new Color(0, 0, minBrightness/255));
 		} else {
 			colorMap = new BigIntGrayscaleMap(minValue, maxValue, minBrightness);
 		}
 		if (outOfLowerBoundColor != null) {
 			colorMap = new BigIntUnboundedColorMap(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedBigIntGrid2D(grid, colorMap);
+		return new ColorMappedGrid2D<BigInt>(grid, colorMap);
 	}
 
 	@Override
-	public ColorGrid2D getMappedGrid(LongGrid2D grid, long minValue, long maxValue) {
+	public ObjectGrid2D<Color> getMappedGrid(LongGrid2D grid, long minValue, long maxValue) {
 		LongColorMap colorMap = null;
 		if (minValue == maxValue) {
-			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
 		} else {
 			colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		}
@@ -75,10 +75,10 @@ public class GrayscaleMapper implements ColorMapper {
 	}
 
 	@Override
-	public ColorGrid2D getMappedGrid(IntGrid2D grid, int minValue, int maxValue) {
+	public ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue) {
 		IntColorMap colorMap = null;
 		if (minValue == maxValue) {
-			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
 		} else {
 			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
 		}
@@ -89,10 +89,10 @@ public class GrayscaleMapper implements ColorMapper {
 	}
 	
 	@Override
-	public ColorGrid2D getMappedGrid(ShortGrid2D grid, short minValue, short maxValue) {
+	public ObjectGrid2D<Color> getMappedGrid(ShortGrid2D grid, short minValue, short maxValue) {
 		IntColorMap colorMap = null;
 		if (minValue == maxValue) {
-			colorMap = new SolidColorMap(new Color(0, 0, minBrightness/255));
+			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
 		} else {
 			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
 		}

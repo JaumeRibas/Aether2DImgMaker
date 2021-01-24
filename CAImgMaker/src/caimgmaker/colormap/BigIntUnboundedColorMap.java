@@ -17,23 +17,23 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
-import java.math.BigInteger;
+import cellularautomata.numbers.BigInt;
 
-public class BigIntUnboundedColorMap implements BigIntBoundedColorMap {
+public class BigIntUnboundedColorMap implements BoundedColorMap<BigInt> {
 	
-	private BigInteger minValue;
-	private BigInteger maxValue;
-	private BigIntColorMap colorMap;
+	private BigInt minValue;
+	private BigInt maxValue;
+	private ColorMap<BigInt> colorMap;
 	private Color outOfLowerBoundColor;
 	private Color outOfUpperBoundColor;
 	
-	public BigIntUnboundedColorMap(BigIntColorMap colorMap, BigInteger minValue, BigInteger maxValue, 
+	public BigIntUnboundedColorMap(ColorMap<BigInt> colorMap, BigInt minValue, BigInt maxValue, 
 			Color outOfLowerBoundColor, Color outOfUpperBoundColor) {
 		this.colorMap = colorMap;
 		this.outOfLowerBoundColor = outOfLowerBoundColor;
 		this.outOfUpperBoundColor = outOfUpperBoundColor;
 		if (minValue.compareTo(maxValue) > 0) {
-			BigInteger swap = minValue;
+			BigInt swap = minValue;
 			minValue = maxValue;
 			maxValue = swap;
 		}
@@ -41,7 +41,7 @@ public class BigIntUnboundedColorMap implements BigIntBoundedColorMap {
 		this.maxValue = maxValue;
 	}
 	
-	public Color getColor(BigInteger value) throws Exception {
+	public Color getColor(BigInt value) throws Exception {
 		if (value.compareTo(minValue) < 0) {
 			return outOfLowerBoundColor;
 		} else if (value.compareTo(maxValue) > 0) {
@@ -52,12 +52,12 @@ public class BigIntUnboundedColorMap implements BigIntBoundedColorMap {
 	}
 
 	@Override
-	public BigInteger getMaxValue() {
+	public BigInt getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
-	public BigInteger getMinValue() {
+	public BigInt getMinValue() {
 		return minValue;
 	}
 

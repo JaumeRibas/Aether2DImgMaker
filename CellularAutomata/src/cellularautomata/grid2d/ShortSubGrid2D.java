@@ -23,8 +23,8 @@ public class ShortSubGrid2D<G extends ShortGrid2D> extends SubGrid2D<G> implemen
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(x, y);
+	public short getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(x, y);
 	}
 
 }

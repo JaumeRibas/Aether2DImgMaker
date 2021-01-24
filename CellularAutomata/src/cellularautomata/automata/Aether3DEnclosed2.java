@@ -233,7 +233,7 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x, int y, int z){
+	public long getFromPosition(int x, int y, int z){
 		return grid[x][y][z];
 	}
 	

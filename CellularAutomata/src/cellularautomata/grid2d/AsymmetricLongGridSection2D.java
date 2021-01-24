@@ -23,8 +23,8 @@ public class AsymmetricLongGridSection2D<G extends SymmetricLongGrid2D> extends 
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtAsymmetricPosition(x, y);
+	public long getFromPosition(int x, int y) throws Exception {
+		return source.getFromAsymmetricPosition(x, y);
 	}
 
 }

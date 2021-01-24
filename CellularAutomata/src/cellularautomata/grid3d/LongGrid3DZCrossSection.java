@@ -25,8 +25,8 @@ public class LongGrid3DZCrossSection<G extends LongGrid3D> extends Grid3DZCrossS
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(x, y, z);
+	public long getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(x, y, z);
 	}
 
 }

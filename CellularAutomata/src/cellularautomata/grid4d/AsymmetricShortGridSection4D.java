@@ -23,8 +23,8 @@ public class AsymmetricShortGridSection4D<G extends SymmetricShortGrid4D> extend
 	}
 
 	@Override
-	public short getValueAtPosition(int w, int x, int y, int z) throws Exception {
-		return source.getValueAtAsymmetricPosition(w, x, y, z);
+	public short getFromPosition(int w, int x, int y, int z) throws Exception {
+		return source.getFromAsymmetricPosition(w, x, y, z);
 	}
 
 }

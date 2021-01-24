@@ -26,7 +26,7 @@ public interface SymmetricShortGrid3D extends ShortGrid3D, SymmetricGrid3D {
 	 * @param z the position on the z-coordinate
 	 * @return the value at (x,y,z)
 	 */
-	short getValueAtAsymmetricPosition(int x, int y, int z);
+	short getFromAsymmetricPosition(int x, int y, int z);
 
 	@Override
 	default ShortGrid3D asymmetricSection() {

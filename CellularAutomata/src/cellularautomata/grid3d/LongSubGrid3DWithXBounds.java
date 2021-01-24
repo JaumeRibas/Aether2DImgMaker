@@ -37,8 +37,8 @@ public class LongSubGrid3DWithXBounds implements LongGrid3D {
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(x, y, z);
+	public long getFromPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(x, y, z);
 	}
 
 	@Override

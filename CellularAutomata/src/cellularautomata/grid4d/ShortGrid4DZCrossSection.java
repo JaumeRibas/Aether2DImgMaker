@@ -25,7 +25,7 @@ public class ShortGrid4DZCrossSection<G extends ShortGrid4D> extends Grid4DZCros
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(x, y, z, this.z);
+	public short getFromPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(x, y, z, this.z);
 	}
 }

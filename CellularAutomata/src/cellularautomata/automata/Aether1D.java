@@ -243,7 +243,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x){	
+	public long getFromPosition(int x){	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
 			return grid[x];
@@ -302,7 +302,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	}
 
 	@Override
-	public long getValueAtAsymmetricPosition(int x) {
+	public long getFromAsymmetricPosition(int x) {
 		return grid[x];
 	}
 }

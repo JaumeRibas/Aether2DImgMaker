@@ -16,11 +16,13 @@
  */
 package caimgmaker;
 
-import caimgmaker.colormap.ColorGrid2D;
+import java.awt.Color;
+
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether2D;
 import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.SubareaGrid;
 
 public class Aether2DLastStepsImgMaker {
@@ -66,9 +68,9 @@ public class Aether2DLastStepsImgMaker {
 					int framedGridMinY = subareasY * imageHeight;
 					int framedGridMaxY = framedGridMinY + imageHeight - 1;
 					LongGrid2D subarea = subareaGrid.getSubareaAtPosition(subareasX, subareasY);
-					long[] minAndMaxValue = subarea.getMinAndMaxValue();
+					long[] minAndMaxValue = subarea.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-					ColorGrid2D colorGrid = colorMapper.getMappedGrid(subarea, minAndMaxValue[0], minAndMaxValue[1]);
+					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(subarea, minAndMaxValue[0], minAndMaxValue[1]);
 					ImgMaker.createImage(colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
 							imageWidth, imageHeight, imgPath + subareasX + "," + subareasY, 
 							ae.getName() + "_" + initialValue + ".png");

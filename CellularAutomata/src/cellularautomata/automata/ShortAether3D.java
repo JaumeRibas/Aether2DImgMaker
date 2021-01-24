@@ -2016,7 +2016,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 	}
 	
 	@Override
-	public short getValueAtPosition(int x, int y, int z){	
+	public short getFromPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -2057,7 +2057,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D {
 	}
 	
 	@Override
-	public short getValueAtAsymmetricPosition(int x, int y, int z){	
+	public short getFromAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	

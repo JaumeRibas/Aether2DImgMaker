@@ -32,10 +32,10 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */
-	int getValueAtPosition(int w, int x, int y, int z) throws Exception;
+	int getFromPosition(int w, int x, int y, int z) throws Exception;
 
 	@Override
-	default int[] getMinAndMaxValue() throws Exception {
+	default int[] getMinAndMax() throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
@@ -45,7 +45,7 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						int value = getValueAtPosition(w, x, y, z);
+						int value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -58,7 +58,7 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	}
 	
 	@Override
-	default int[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
@@ -72,7 +72,7 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 						minW++;
 					}
 					for (int w = minW; w <= maxW; w+=2) {
-						int value = getValueAtPosition(w, x, y, z);
+						int value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -85,7 +85,7 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	}
 	
 	@Override
-	default int getTotalValue() throws Exception {
+	default int getTotal() throws Exception {
 		int total = 0;
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
@@ -95,7 +95,7 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						total += getValueAtPosition(w, x, y, z);
+						total += getFromPosition(w, x, y, z);
 					}
 				}	
 			}	

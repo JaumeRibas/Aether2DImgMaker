@@ -16,11 +16,15 @@
  */
 package caimgmaker.colormap;
 
+import java.awt.Color;
+
 import cellularautomata.grid.ActionableGrid;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid2d.IntGrid2D;
+import cellularautomata.grid2d.ObjectGrid2D;
 
-public class ActionableIntGrid2DColorMapperProcessor extends ActionableGrid<GridProcessor<ColorGrid2D>, ColorGrid2D> implements GridProcessor<IntGrid2D> {
+public class ActionableIntGrid2DColorMapperProcessor extends ActionableGrid<GridProcessor<ObjectGrid2D<Color>>, ObjectGrid2D<Color>> 
+	implements GridProcessor<IntGrid2D> {
 	
 	private ColorMapper colorMapper;
 	private ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> source;

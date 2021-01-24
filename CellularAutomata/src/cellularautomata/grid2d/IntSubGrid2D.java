@@ -23,8 +23,8 @@ public class IntSubGrid2D<G extends IntGrid2D> extends SubGrid2D<G> implements I
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(x, y);
+	public int getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(x, y);
 	}
 
 }

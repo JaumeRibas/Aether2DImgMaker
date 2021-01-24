@@ -30,10 +30,10 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */
-	long getValueAtPosition(int x, int y, int z) throws Exception;
+	long getFromPosition(int x, int y, int z) throws Exception;
 
 	@Override
-	default long[] getMinAndMaxValue() throws Exception {
+	default long[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -43,7 +43,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					long value = getValueAtPosition(x, y, z);
+					long value = getFromPosition(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -55,7 +55,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	}
 	
 	@Override
-	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		long minValue = Long.MAX_VALUE, maxValue = Long.MIN_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -69,7 +69,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
-					long value = getValueAtPosition(x, y, z);
+					long value = getFromPosition(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -81,7 +81,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	}
 	
 	@Override
-	default long getTotalValue() throws Exception {
+	default long getTotal() throws Exception {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		for (int x = minX; x <= maxX; x++) {
@@ -91,7 +91,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					total += getValueAtPosition(x, y, z);
+					total += getFromPosition(x, y, z);
 				}
 			}
 		}

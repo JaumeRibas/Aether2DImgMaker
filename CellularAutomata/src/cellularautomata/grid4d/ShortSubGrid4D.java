@@ -24,8 +24,8 @@ public class ShortSubGrid4D extends SubGrid4D<ShortGrid4D> implements ShortGrid4
 	}
 
 	@Override
-	public short getValueAtPosition(int w, int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(w, x, y, z);
+	public short getFromPosition(int w, int x, int y, int z) throws Exception {
+		return source.getFromPosition(w, x, y, z);
 	}
 
 }

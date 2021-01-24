@@ -23,8 +23,8 @@ public class AsymmetricLongGridSection1D<G extends SymmetricLongGrid1D> extends 
 	}
 
 	@Override
-	public long getValueAtPosition(int x) {
-		return source.getValueAtAsymmetricPosition(x);
+	public long getFromPosition(int x) {
+		return source.getFromAsymmetricPosition(x);
 	}
 
 }

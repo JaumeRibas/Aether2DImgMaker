@@ -23,8 +23,8 @@ public class AsymmetricIntGridSection4D<G extends SymmetricIntGrid4D> extends As
 	}
 
 	@Override
-	public int getValueAtPosition(int w, int x, int y, int z) throws Exception {
-		return source.getValueAtAsymmetricPosition(w, x, y, z);
+	public int getFromPosition(int w, int x, int y, int z) throws Exception {
+		return source.getFromAsymmetricPosition(w, x, y, z);
 	}
 
 }

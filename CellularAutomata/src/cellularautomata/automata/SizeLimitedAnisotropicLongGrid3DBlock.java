@@ -49,15 +49,15 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Serial
 	}
 
 	protected void setValueAtPosition(int x, int y, int z, long initialValue) {
-		slices[x - minX].setValueAtPosition(y, z, initialValue);			
+		slices[x - minX].setAtPosition(y, z, initialValue);			
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y, int z) throws UnsupportedOperationException {
+	public long getFromPosition(int x, int y, int z) throws UnsupportedOperationException {
 		if (slices == null) {
 			throw new UnsupportedOperationException("The grid block is no longer available.");
 		}
-		return slices[x - minX].getValueAtPosition(y, z);
+		return slices[x - minX].getFromPosition(y, z);
 	}
 
 	protected void setSlice(int x, AnisotropicLongGrid3DSlice slice) {

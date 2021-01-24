@@ -25,7 +25,7 @@ public class IntGridMinAndMaxProcessor<G extends IntGrid> implements GridProcess
 		if (minAndMax == null) {
 			minAndMax = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
 		}
-		int[] blockMinAndMax = gridBlock.getMinAndMaxValue();
+		int[] blockMinAndMax = gridBlock.getMinAndMax();
 		if (blockMinAndMax[0] < minAndMax[0]) minAndMax[0] = blockMinAndMax[0];
 		if (blockMinAndMax[1] > minAndMax[1]) minAndMax[1] = blockMinAndMax[1];
 	}

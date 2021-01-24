@@ -16,12 +16,11 @@
  */
 package caimgmaker;
 
-import java.math.BigInteger;
-
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.BigIntAether3D;
-import cellularautomata.evolvinggrid.EvolvingBigIntGrid3D;
+import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
+import cellularautomata.numbers.BigInt;
 
 public class BigIntAether3DEvenOddImgMaker {
 	
@@ -30,7 +29,7 @@ public class BigIntAether3DEvenOddImgMaker {
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
-			BigInteger initialValue = null;
+			BigInt initialValue = null;
 			boolean isRestore = false;
 			String path;
 			int initialStep = 0;
@@ -40,7 +39,7 @@ public class BigIntAether3DEvenOddImgMaker {
 			boolean isBackupLeapDefined = false;
 			String initValOrBackupPath = args[0];
 			if (initValOrBackupPath.matches("-?\\d+")) {
-				initialValue = new BigInteger(initValOrBackupPath);
+				initialValue = new BigInt(initValOrBackupPath);
 			} else {
 				isRestore = true;
 			}
@@ -64,7 +63,7 @@ public class BigIntAether3DEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			EvolvingBigIntGrid3D ca;
+			EvolvingNumberGrid3D<BigInt> ca;
 			if (isRestore) {
 				ca = new BigIntAether3D(initValOrBackupPath).asymmetricSection();
 			} else {

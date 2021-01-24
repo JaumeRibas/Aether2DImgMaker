@@ -25,8 +25,8 @@ public class ShortGrid3DXCrossSection<G extends ShortGrid3D> extends Grid3DXCros
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(this.x, y, x);
+	public short getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(this.x, y, x);
 	}
 
 }

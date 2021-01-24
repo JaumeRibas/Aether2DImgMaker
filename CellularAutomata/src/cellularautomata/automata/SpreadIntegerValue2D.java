@@ -80,10 +80,10 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 			for (int y = 0; y <= x; y++) {
 				long value = grid[x][y];
 				if (value != 0) {
-					long up = getValueAtPosition(x, y + 1);
-					long down = getValueAtPosition(x, y - 1); 
-					long left = getValueAtPosition(x - 1, y);
-					long right = getValueAtPosition(x + 1, y);
+					long up = getFromPosition(x, y + 1);
+					long down = getFromPosition(x, y - 1); 
+					long left = getFromPosition(x - 1, y);
+					long right = getFromPosition(x + 1, y);
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
 					//if the current position is equal to its neighbors the algorithm has no effect
@@ -157,7 +157,7 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x, int y){	
+	public long getFromPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -174,7 +174,7 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 	}
 	
 	@Override
-	public long getValueAtAsymmetricPosition(int x, int y){	
+	public long getFromAsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	

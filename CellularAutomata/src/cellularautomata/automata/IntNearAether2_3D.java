@@ -111,7 +111,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 					int relevantNeighborCount = 0;
 					int neighborValue;
 					int biggestSmallerNeighborValue = Integer.MIN_VALUE;
-					neighborValue = getValueAtPosition(x + 1, y, z);
+					neighborValue = getFromPosition(x + 1, y, z);
 					if (neighborValue < value) {
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
@@ -119,7 +119,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 						neighborDirections[relevantNeighborCount] = RIGHT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x - 1, y, z);
+					neighborValue = getFromPosition(x - 1, y, z);
 					if (neighborValue < value) {
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
@@ -127,7 +127,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 						neighborDirections[relevantNeighborCount] = LEFT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y + 1, z);
+					neighborValue = getFromPosition(x, y + 1, z);
 					if (neighborValue < value) {
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
@@ -135,7 +135,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 						neighborDirections[relevantNeighborCount] = UP;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y - 1, z);
+					neighborValue = getFromPosition(x, y - 1, z);
 					if (neighborValue < value) {
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
@@ -143,7 +143,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 						neighborDirections[relevantNeighborCount] = DOWN;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y, z + 1);
+					neighborValue = getFromPosition(x, y, z + 1);
 					if (neighborValue < value) {
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
@@ -151,7 +151,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 						neighborDirections[relevantNeighborCount] = FRONT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y, z - 1);
+					neighborValue = getFromPosition(x, y, z - 1);
 					if (neighborValue < value) {
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
@@ -287,7 +287,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 	}
 	
 	@Override
-	public int getValueAtPosition(int x, int y, int z){	
+	public int getFromPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -318,7 +318,7 @@ public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
 	}
 	
 	@Override
-	public int getValueAtAsymmetricPosition(int x, int y, int z){	
+	public int getFromAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	

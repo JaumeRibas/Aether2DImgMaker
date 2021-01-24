@@ -23,8 +23,8 @@ public class LongSubGrid3D<G extends LongGrid3D> extends SubGrid3D<G> implements
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(x, y, z);
+	public long getFromPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(x, y, z);
 	}
 
 }

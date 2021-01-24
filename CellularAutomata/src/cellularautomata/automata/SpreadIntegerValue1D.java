@@ -70,8 +70,8 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 		for (int x = 0; x < grid.length; x++) {
 			long value = grid[x];
 			if (value != 0) {
-				long left = getValueAtPosition(x - 1);
-				long right = getValueAtPosition(x + 1);
+				long left = getFromPosition(x - 1);
+				long right = getFromPosition(x + 1);
 				boolean isRightEqual = value == right, isLeftEqual = value == left;
 				//if the current position is equal to its neighbors the algorithm has no effect
 				if (!(isRightEqual && isLeftEqual)) {
@@ -114,7 +114,7 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x){	
+	public long getFromPosition(int x){	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
 			return grid[x];
@@ -124,7 +124,7 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 	}
 	
 	@Override
-	public long getValueAtAsymmetricPosition(int x){	
+	public long getFromAsymmetricPosition(int x){	
 		return grid[x];
 	}
 	

@@ -37,7 +37,7 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	 * @return the {@link int} value at (x,y)
 	 * @throws Exception 
 	 */
-	int getValueAtAsymmetricPosition(int x, int y) throws Exception;
+	int getFromAsymmetricPosition(int x, int y) throws Exception;
 	
 	@Override
 	default IntGrid2D asymmetricSection() {

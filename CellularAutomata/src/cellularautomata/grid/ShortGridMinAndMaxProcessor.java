@@ -25,7 +25,7 @@ public class ShortGridMinAndMaxProcessor<G extends ShortGrid> implements GridPro
 		if (minAndMax == null) {
 			minAndMax = new short[]{Short.MAX_VALUE, Short.MIN_VALUE};
 		}
-		short[] blockMinAndMax = gridBlock.getMinAndMaxValue();
+		short[] blockMinAndMax = gridBlock.getMinAndMax();
 		if (blockMinAndMax[0] < minAndMax[0]) minAndMax[0] = blockMinAndMax[0];
 		if (blockMinAndMax[1] > minAndMax[1]) minAndMax[1] = blockMinAndMax[1];
 	}

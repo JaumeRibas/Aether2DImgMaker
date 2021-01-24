@@ -240,7 +240,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int w, int x, int y, int z){	
+	public long getFromPosition(int w, int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -279,7 +279,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D {
 	}
 	
 	@Override
-	public long getValueAtAsymmetricPosition(int w, int x, int y, int z){	
+	public long getFromAsymmetricPosition(int w, int x, int y, int z){	
 		if (w < grid.length 
 				&& x < grid[w].length 
 				&& y < grid[w][x].length 

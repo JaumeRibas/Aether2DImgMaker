@@ -265,8 +265,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				newCurrentXSlice = newXSlices[1], 
 				newGreaterXSlice = newXSlices[2];
 		// x = 0, y = 0, z = 0
-		long currentValue = currentXSlice.getValueAtPosition(0, 0);
-		long greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
+		long currentValue = currentXSlice.getFromPosition(0, 0);
+		long greaterXNeighborValue = greaterXSlice.getFromPosition(0, 0);
 		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
 		}
@@ -283,8 +283,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		// reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
-		long greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(0, 0);
+		long greaterYNeighborValue = currentXSlice.getFromPosition(1, 0);
 		if (topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -294,8 +294,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
-		long greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 0);
+		long greaterZNeighborValue = currentXSlice.getFromPosition(1, 1);
 		if (topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -305,7 +305,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 1);
 		if (topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
 		}
@@ -320,23 +320,23 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
-		currentValue = currentXSlice.getValueAtPosition(0, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(0, 0);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		currentValue = currentXSlice.getFromPosition(0, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(0, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(0, 0);
+		greaterYNeighborValue = currentXSlice.getFromPosition(1, 0);
 		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 2, y = 1, z = 0
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(1, 0);
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(2, 0);
+		greaterZNeighborValue = currentXSlice.getFromPosition(1, 1);
 		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -344,9 +344,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 2, y = 1, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 1);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 1);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(2, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -357,8 +357,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 2, y = 2, z = 0
-		currentValue = currentXSlice.getValueAtPosition(2, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 0);
+		currentValue = currentXSlice.getFromPosition(2, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 0);
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
@@ -368,12 +368,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 2, y = 2, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 1);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 1);
+		smallerYNeighborValue = currentXSlice.getFromPosition(1, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		greaterZNeighborValue = currentXSlice.getFromPosition(2, 2);
 		if (topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
@@ -384,7 +384,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 2);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 2);
 		if (topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
@@ -400,23 +400,23 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
-		currentValue = currentXSlice.getValueAtPosition(0, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(0, 0);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		currentValue = currentXSlice.getFromPosition(0, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(0, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(0, 0);
+		greaterYNeighborValue = currentXSlice.getFromPosition(1, 0);
 		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 1, z = 0
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(1, 0);
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(2, 0);
+		greaterZNeighborValue = currentXSlice.getFromPosition(1, 1);
 		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -424,9 +424,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 3, y = 1, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 1);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 1);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(2, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -437,13 +437,13 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 3, y = 2, z = 0
-		currentValue = currentXSlice.getValueAtPosition(2, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 0);
+		currentValue = currentXSlice.getFromPosition(2, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(2, 0);
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 0);
+		greaterYNeighborValue = currentXSlice.getFromPosition(3, 0);
 		if (topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -451,14 +451,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 3, y = 2, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 1);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 1);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 1);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 1);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(2, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(3, 1);
+		smallerYNeighborValue = currentXSlice.getFromPosition(1, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		greaterZNeighborValue = currentXSlice.getFromPosition(2, 2);
 		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -466,9 +466,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 3, y = 2, z = 2
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 2);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 2);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 2);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 2);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(2, 2);
+		greaterYNeighborValue = currentXSlice.getFromPosition(3, 2);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -479,22 +479,22 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 3, y = 3, z = 0
-		currentValue = currentXSlice.getValueAtPosition(3, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 0);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(3, 1);
+		currentValue = currentXSlice.getFromPosition(3, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(3, 0);
+		smallerYNeighborValue = currentXSlice.getFromPosition(2, 0);
+		greaterZNeighborValue = currentXSlice.getFromPosition(3, 1);
 		if (topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
 		}
 		// x = 3, y = 3, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 1);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(3, 1);
+		smallerYNeighborValue = currentXSlice.getFromPosition(2, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(3, 2);
+		greaterZNeighborValue = currentXSlice.getFromPosition(3, 2);
 		if (topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
@@ -502,12 +502,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			changed = true;
 		}
 		// x = 3, y = 3, z = 2
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 2);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(3, 2);
+		smallerYNeighborValue = currentXSlice.getFromPosition(2, 2);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(3, 3);
+		greaterZNeighborValue = currentXSlice.getFromPosition(3, 3);
 		if (topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
@@ -518,7 +518,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(3, 3);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(3, 3);
 		if (topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
@@ -563,23 +563,23 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		AnisotropicLongGrid3DSlice newCurrentXSlice = newXSlices[1], 
 				newGreaterXSlice = newXSlices[2];
 		// y = 0, z = 0
-		long currentValue = currentXSlice.getValueAtPosition(0, 0);
-		long greaterXNeighborValue = greaterXSlice.getValueAtPosition(0, 0);
-		long smallerXNeighborValue = smallerXSlice.getValueAtPosition(0, 0);
-		long greaterYNeighborValue = currentXSlice.getValueAtPosition(1, 0);
+		long currentValue = currentXSlice.getFromPosition(0, 0);
+		long greaterXNeighborValue = greaterXSlice.getFromPosition(0, 0);
+		long smallerXNeighborValue = smallerXSlice.getFromPosition(0, 0);
+		long greaterYNeighborValue = currentXSlice.getFromPosition(1, 0);
 		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			anyToppled = true;
 		}
 		// y = 1, z = 0
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(1, 0);
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 0);
-		long greaterZNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(2, 0);
+		long greaterZNeighborValue = currentXSlice.getFromPosition(1, 1);
 		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -587,9 +587,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			anyToppled = true;
 		}
 		// y = 1, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(1, 1);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(1, 1);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(2, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(1, 1);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(1, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(2, 1);
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -600,27 +600,27 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			anyToppled = true;
 		}
 		// y = 2, z = 0
-		currentValue = currentXSlice.getValueAtPosition(2, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 0);
+		currentValue = currentXSlice.getFromPosition(2, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(2, 0);
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 0);
+		greaterYNeighborValue = currentXSlice.getFromPosition(3, 0);
 		if (topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			anyToppled = true;
 		}
 		// y = 2, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 1);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 1);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 1);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(1, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 1);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(2, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(3, 1);
+		smallerYNeighborValue = currentXSlice.getFromPosition(1, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(2, 2);
+		greaterZNeighborValue = currentXSlice.getFromPosition(2, 2);
 		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -628,9 +628,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			anyToppled = true;
 		}
 		// y = 2, z = 2
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(2, 2);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(2, 2);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(3, 2);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(2, 2);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(2, 2);
+		greaterYNeighborValue = currentXSlice.getFromPosition(3, 2);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -642,26 +642,26 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		int y = 3, yMinusOne = 2, yPlusOne = 4;
 		for (int lastY = x - 2; y <= lastY;) {
 			// z = 0
-			currentValue = currentXSlice.getValueAtPosition(y, 0);
-			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 0);
-			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 0);
-			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 0);
-			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 0);
-			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 1);
+			currentValue = currentXSlice.getFromPosition(y, 0);
+			greaterXNeighborValue = greaterXSlice.getFromPosition(y, 0);
+			smallerXNeighborValue = smallerXSlice.getFromPosition(y, 0);
+			greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, 0);
+			smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, 0);
+			greaterZNeighborValue = currentXSlice.getFromPosition(y, 1);
 			if (topplePositionType12(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
 			}
 			// z = 1
-			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 1);
-			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 1);
-			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 1);
-			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 1);
+			greaterXNeighborValue = greaterXSlice.getFromPosition(y, 1);
+			smallerXNeighborValue = smallerXSlice.getFromPosition(y, 1);
+			greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, 1);
+			smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, 1);
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 2);
+			greaterZNeighborValue = currentXSlice.getFromPosition(y, 2);
 			if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -670,14 +670,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			}
 			int z = 2, zPlusOne = 3;
 			for (int lastZ = y - 2; z <= lastZ;) {
-				greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-				smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
-				greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
-				smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+				greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+				smallerXNeighborValue = smallerXSlice.getFromPosition(y, z);
+				greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, z);
+				smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, z);
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+				greaterZNeighborValue = currentXSlice.getFromPosition(y, zPlusOne);
 				if (topplePositionType15(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
 						greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, newXSlices)) {
@@ -687,14 +687,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				zPlusOne++;
 			}
 			// z = y - 1
-			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
-			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
-			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+			greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+			smallerXNeighborValue = smallerXSlice.getFromPosition(y, z);
+			greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, z);
+			smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, z);
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+			greaterZNeighborValue = currentXSlice.getFromPosition(y, zPlusOne);
 			if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -703,9 +703,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			}
 			// z = y
 			z = zPlusOne;
-			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
-			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+			greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+			smallerXNeighborValue = smallerXSlice.getFromPosition(y, z);
+			greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, z);
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -719,12 +719,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			yPlusOne++;
 		}
 		// y = x - 1, z = 0
-		currentValue = currentXSlice.getValueAtPosition(y, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 0);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 0);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 0);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 0);
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 1);
+		currentValue = currentXSlice.getFromPosition(y, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, 0);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(y, 0);
+		greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, 0);
+		smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, 0);
+		greaterZNeighborValue = currentXSlice.getFromPosition(y, 1);
 		if (topplePositionType6(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -732,14 +732,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			anyToppled = true;
 		}
 		// y = x - 1, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 1);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, 1);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, 1);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, 1);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(y, 1);
+		greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, 1);
+		smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 2);
+		greaterZNeighborValue = currentXSlice.getFromPosition(y, 2);
 		if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -748,14 +748,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		}
 		int z = 2, zPlusOne = 3, lastZ = y - 2;
 		for(; z <= lastZ;) {
-			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-			smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
-			greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
-			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+			greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+			smallerXNeighborValue = smallerXSlice.getFromPosition(y, z);
+			greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, z);
+			smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, z);
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+			greaterZNeighborValue = currentXSlice.getFromPosition(y, zPlusOne);
 			if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -766,14 +766,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			zPlusOne++;
 		}
 		// y = x - 1, z = y - 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(y, z);
+		greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, z);
+		smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, z);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+		greaterZNeighborValue = currentXSlice.getFromPosition(y, zPlusOne);
 		if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -783,9 +783,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		z = zPlusOne;
 		zPlusOne++;
 		// y = x - 1, z = y
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-		smallerXNeighborValue = smallerXSlice.getValueAtPosition(y, z);
-		greaterYNeighborValue = currentXSlice.getValueAtPosition(yPlusOne, z);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+		smallerXNeighborValue = smallerXSlice.getFromPosition(y, z);
+		greaterYNeighborValue = currentXSlice.getFromPosition(yPlusOne, z);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -798,22 +798,22 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		yMinusOne = y;
 		y = yPlusOne;
 		// y = x, z = 0
-		currentValue = currentXSlice.getValueAtPosition(y, 0);
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 0);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 0);
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 1);
+		currentValue = currentXSlice.getFromPosition(y, 0);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, 0);
+		smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, 0);
+		greaterZNeighborValue = currentXSlice.getFromPosition(y, 1);
 		if (topplePositionType8(y, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			anyToppled = true;
 		}
 		// y = x, z = 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, 1);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, 1);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, 1);
+		smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, 1);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, 2);
+		greaterZNeighborValue = currentXSlice.getFromPosition(y, 2);
 		if (topplePositionType9(y, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
@@ -824,12 +824,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		zPlusOne = 3;
 		lastZ++;
 		for(; z <= lastZ; z = zPlusOne, zPlusOne++) {
-			greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-			smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+			greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+			smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, z);
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+			greaterZNeighborValue = currentXSlice.getFromPosition(y, zPlusOne);
 			if (topplePositionType14(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
 					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -837,12 +837,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			}
 		}			
 		// y = x, z = y - 1
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
-		smallerYNeighborValue = currentXSlice.getValueAtPosition(yMinusOne, z);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
+		smallerYNeighborValue = currentXSlice.getFromPosition(yMinusOne, z);
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterZNeighborValue = currentXSlice.getValueAtPosition(y, zPlusOne);
+		greaterZNeighborValue = currentXSlice.getFromPosition(y, zPlusOne);
 		if (topplePositionType9(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
@@ -854,7 +854,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterXNeighborValue = greaterXSlice.getValueAtPosition(y, z);
+		greaterXNeighborValue = greaterXSlice.getFromPosition(y, z);
 		if (topplePositionType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			anyToppled = true;
@@ -877,13 +877,13 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			long share = toShare/7;
 			if (share != 0) {
 				toppled = true;
-				newCurrentXSlice.addValueAtPosition(0, 0, currentValue - toShare + share + toShare%7);
-				newGreaterXSlice.addValueAtPosition(0, 0, share);
+				newCurrentXSlice.addToPosition(0, 0, currentValue - toShare + share + toShare%7);
+				newGreaterXSlice.addToPosition(0, 0, share);
 			} else {
-				newCurrentXSlice.addValueAtPosition(0, 0, currentValue);
+				newCurrentXSlice.addToPosition(0, 0, currentValue);
 			}			
 		} else {
-			newCurrentXSlice.addValueAtPosition(0, 0, currentValue);
+			newCurrentXSlice.addToPosition(0, 0, currentValue);
 		}
 		return toppled;
 	}
@@ -993,9 +993,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(1, 0, share + share);// one more for the symmetric position at the other side
-					newCurrentXSlice.addValueAtPosition(1, 1, currentValue - toShare + share + toShare%7);
-					newGreaterXSlice.addValueAtPosition(1, 1, share);
+					newCurrentXSlice.addToPosition(1, 0, share + share);// one more for the symmetric position at the other side
+					newCurrentXSlice.addToPosition(1, 1, currentValue - toShare + share + toShare%7);
+					newGreaterXSlice.addToPosition(1, 1, share);
 				} else if (smallerZNeighborValue < greaterXNeighborValue) {
 					// sz < gx < current
 					long toShare = currentValue - greaterXNeighborValue; 
@@ -1003,16 +1003,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(1, 0, share + share);
-					newGreaterXSlice.addValueAtPosition(1, 1, share);
+					newCurrentXSlice.addToPosition(1, 0, share + share);
+					newGreaterXSlice.addToPosition(1, 1, share);
 					long currentRemainingValue = currentValue - 6*share;
 					toShare = currentRemainingValue - smallerZNeighborValue; 
 					share = toShare/4;
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(1, 0, share + share);
-					newCurrentXSlice.addValueAtPosition(1, 1, currentRemainingValue - toShare + share + toShare%4);
+					newCurrentXSlice.addToPosition(1, 0, share + share);
+					newCurrentXSlice.addToPosition(1, 1, currentRemainingValue - toShare + share + toShare%4);
 				} else {
 					// gx < sz < current
 					long toShare = currentValue - smallerZNeighborValue; 
@@ -1020,16 +1020,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(1, 0, share + share);
-					newGreaterXSlice.addValueAtPosition(1, 1, share);
+					newCurrentXSlice.addToPosition(1, 0, share + share);
+					newGreaterXSlice.addToPosition(1, 1, share);
 					long currentRemainingValue = currentValue - 6*share;
 					toShare = currentRemainingValue - greaterXNeighborValue; 
 					share = toShare/4;
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(1, 1, currentRemainingValue - toShare + share + toShare%4);
-					newGreaterXSlice.addValueAtPosition(1, 1, share);
+					newCurrentXSlice.addToPosition(1, 1, currentRemainingValue - toShare + share + toShare%4);
+					newGreaterXSlice.addToPosition(1, 1, share);
 				}
 			} else {
 				// sz < current <= gx
@@ -1038,8 +1038,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				if (share != 0) {
 					toppled = true;
 				}
-				newCurrentXSlice.addValueAtPosition(1, 0, share + share);
-				newCurrentXSlice.addValueAtPosition(1, 1, currentValue - toShare + share + toShare%4);
+				newCurrentXSlice.addToPosition(1, 0, share + share);
+				newCurrentXSlice.addToPosition(1, 1, currentValue - toShare + share + toShare%4);
 			}
 		} else {
 			if (greaterXNeighborValue < currentValue) {
@@ -1049,10 +1049,10 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				if (share != 0) {
 					toppled = true;
 				}
-				newCurrentXSlice.addValueAtPosition(1, 1, currentValue - toShare + share + toShare%4);
-				newGreaterXSlice.addValueAtPosition(1, 1, share);
+				newCurrentXSlice.addToPosition(1, 1, currentValue - toShare + share + toShare%4);
+				newGreaterXSlice.addToPosition(1, 1, share);
 			} else {
-				newCurrentXSlice.addValueAtPosition(1, 1, currentValue);
+				newCurrentXSlice.addToPosition(1, 1, currentValue);
 			}
 		}
 		return toppled;
@@ -1345,9 +1345,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(coord, coord - 1, share);
-					newCurrentXSlice.addValueAtPosition(coord, coord, currentValue - toShare + share + toShare%7);
-					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+					newCurrentXSlice.addToPosition(coord, coord - 1, share);
+					newCurrentXSlice.addToPosition(coord, coord, currentValue - toShare + share + toShare%7);
+					newGreaterXSlice.addToPosition(coord, coord, share);
 				} else if (smallerZNeighborValue < greaterXNeighborValue) {
 					// sz < gx < current
 					int coordMinusOne = coord - 1;
@@ -1356,16 +1356,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(coord, coordMinusOne, share);
-					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+					newCurrentXSlice.addToPosition(coord, coordMinusOne, share);
+					newGreaterXSlice.addToPosition(coord, coord, share);
 					long currentRemainingValue = currentValue - 6*share;
 					toShare = currentRemainingValue - smallerZNeighborValue; 
 					share = toShare/4;
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(coord, coordMinusOne, share);
-					newCurrentXSlice.addValueAtPosition(coord, coord, currentRemainingValue - toShare + share + toShare%4);
+					newCurrentXSlice.addToPosition(coord, coordMinusOne, share);
+					newCurrentXSlice.addToPosition(coord, coord, currentRemainingValue - toShare + share + toShare%4);
 				} else {
 					// gx < sz < current
 					long toShare = currentValue - smallerZNeighborValue; 
@@ -1373,16 +1373,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(coord, coord - 1, share);
-					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+					newCurrentXSlice.addToPosition(coord, coord - 1, share);
+					newGreaterXSlice.addToPosition(coord, coord, share);
 					long currentRemainingValue = currentValue - 6*share;
 					toShare = currentRemainingValue - greaterXNeighborValue; 
 					share = toShare/4;
 					if (share != 0) {
 						toppled = true;
 					}
-					newCurrentXSlice.addValueAtPosition(coord, coord, currentRemainingValue - toShare + share + toShare%4);
-					newGreaterXSlice.addValueAtPosition(coord, coord, share);
+					newCurrentXSlice.addToPosition(coord, coord, currentRemainingValue - toShare + share + toShare%4);
+					newGreaterXSlice.addToPosition(coord, coord, share);
 				}
 			} else {
 				// sz < current <= gx
@@ -1391,8 +1391,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				if (share != 0) {
 					toppled = true;
 				}
-				newCurrentXSlice.addValueAtPosition(coord, coord - 1, share);
-				newCurrentXSlice.addValueAtPosition(coord, coord, currentValue - toShare + share + toShare%4);
+				newCurrentXSlice.addToPosition(coord, coord - 1, share);
+				newCurrentXSlice.addToPosition(coord, coord, currentValue - toShare + share + toShare%4);
 			}
 		} else {
 			if (greaterXNeighborValue < currentValue) {
@@ -1402,10 +1402,10 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 				if (share != 0) {
 					toppled = true;
 				}
-				newCurrentXSlice.addValueAtPosition(coord, coord, currentValue - toShare + share + toShare%4);
-				newGreaterXSlice.addValueAtPosition(coord, coord, share);
+				newCurrentXSlice.addToPosition(coord, coord, currentValue - toShare + share + toShare%4);
+				newGreaterXSlice.addToPosition(coord, coord, share);
 			} else {
-				newCurrentXSlice.addValueAtPosition(coord, coord, currentValue);
+				newCurrentXSlice.addToPosition(coord, coord, currentValue);
 			}
 		}
 		return toppled;
@@ -1733,9 +1733,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
-					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%3);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addToPosition(y, z, value - toShare + share + toShare%3);
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
 					long toShare = value - n1Val; 
@@ -1743,16 +1743,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n0Val;
 					share = toShare/2;
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
 				} else {
 					// n1Val < n0Val < value
 					long toShare = value - n0Val; 
@@ -1760,16 +1760,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n1Val;
 					share = toShare/2;
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
 				}				
 				break;
 			case 1:
@@ -1779,11 +1779,11 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					toppled = true;
 					value = value - toShare + toShare%2 + share;
 					int[] nc = neighborCoords[0];
-					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+					newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 				}
 				// no break
 			case 0:
-				newXSlices[1].addValueAtPosition(y, z, value);
+				newXSlices[1].addToPosition(y, z, value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords);
@@ -1805,7 +1805,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < neighborCount; j++) {
 				int[] nc = neighborCoords[j];
-				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 			}
 		}
 		long previousNeighborValue = neighborValue;
@@ -1820,14 +1820,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < neighborCount; j++) {
 						int[] nc = neighborCoords[j];
-						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+						newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount--;
 		}
-		newXSlices[1].addValueAtPosition(y, z, value);
+		newXSlices[1].addToPosition(y, z, value);
 		return toppled;
 	}
 	
@@ -1853,9 +1853,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
-					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%shareCount);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addToPosition(y, z, value - toShare + share + toShare%shareCount);
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
 					long toShare = value - n1Val; 
@@ -1863,8 +1863,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n0Val;
@@ -1872,8 +1872,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
 				} else {
 					// n1Val < n0Val < value
 					long toShare = value - n0Val; 
@@ -1881,8 +1881,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n1Val;
@@ -1890,8 +1890,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
 				}				
 				break;
 			case 1:
@@ -1902,11 +1902,11 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					int[] nc = asymmetricNeighborCoords[0];
-					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[0]);
+					newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[0]);
 				}
 				// no break
 			case 0:
-				newXSlices[1].addValueAtPosition(y, z, value);
+				newXSlices[1].addToPosition(y, z, value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
@@ -1930,7 +1930,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
 				int[] nc = asymmetricNeighborCoords[j];
-				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[j]);
+				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[j]);
 			}
 		}
 		long previousNeighborValue = neighborValue;
@@ -1945,14 +1945,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < asymmetricNeighborCount; j++) {
 						int[] nc = asymmetricNeighborCoords[j];
-						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[j]);
+						newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[j]);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount -= asymmetricNeighborSymmetryCounts[i];
 		}
-		newXSlices[1].addValueAtPosition(y, z, value);
+		newXSlices[1].addToPosition(y, z, value);
 		return toppled;
 	}
 	
@@ -1976,9 +1976,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
-					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%3);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addToPosition(y, z, value - toShare + share + toShare%3);
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
 					long toShare = value - n1Val; 
@@ -1986,16 +1986,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n0Val;
 					share = toShare/2;
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
 				} else {
 					// n1Val < n0Val < value
 					long toShare = value - n0Val; 
@@ -2003,16 +2003,16 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share*n0Mult);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share*n0Mult);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n1Val;
 					share = toShare/2;
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share*n1Mult);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share*n1Mult);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%2);
 				}				
 				break;
 			case 1:
@@ -2022,11 +2022,11 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					toppled = true;
 					value = value - toShare + toShare%2 + share;
 					int[] nc = neighborCoords[0];
-					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * neighborShareMultipliers[0]);
+					newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * neighborShareMultipliers[0]);
 				}
 				// no break
 			case 0:
-				newXSlices[1].addValueAtPosition(y, z, value);
+				newXSlices[1].addToPosition(y, z, value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords, 
@@ -2049,7 +2049,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < neighborCount; j++) {
 				int[] nc = neighborCoords[j];
-				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * neighborShareMultipliers[j]);
+				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * neighborShareMultipliers[j]);
 			}
 		}
 		long previousNeighborValue = neighborValue;
@@ -2064,14 +2064,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < neighborCount; j++) {
 						int[] nc = neighborCoords[j];
-						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share * neighborShareMultipliers[j]);
+						newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * neighborShareMultipliers[j]);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount--;
 		}
-		newXSlices[1].addValueAtPosition(y, z, value);
+		newXSlices[1].addToPosition(y, z, value);
 		return toppled;
 	}
 	
@@ -2096,9 +2096,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
-					newXSlices[1].addValueAtPosition(y, z, value - toShare + share + toShare%shareCount);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addToPosition(y, z, value - toShare + share + toShare%shareCount);
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
 					long toShare = value - n1Val; 
@@ -2106,8 +2106,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n0Val;
@@ -2115,8 +2115,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
 				} else {
 					// n1Val < n0Val < value
 					long toShare = value - n0Val; 
@@ -2124,8 +2124,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]].addValueAtPosition(n0Coords[1], n0Coords[2], share);
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[n0Coords[0]].addToPosition(n0Coords[1], n0Coords[2], share);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
 					long currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n1Val;
@@ -2133,8 +2133,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					if (share != 0) {
 						toppled = true;
 					}
-					newXSlices[n1Coords[0]].addValueAtPosition(n1Coords[1], n1Coords[2], share);
-					newXSlices[1].addValueAtPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
+					newXSlices[n1Coords[0]].addToPosition(n1Coords[1], n1Coords[2], share);
+					newXSlices[1].addToPosition(y, z, currentRemainingValue - toShare + share + toShare%shareCount);
 				}				
 				break;
 			case 1:
@@ -2145,11 +2145,11 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					int[] nc = asymmetricNeighborCoords[0];
-					newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+					newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 				}
 				// no break
 			case 0:
-				newXSlices[1].addValueAtPosition(y, z, value);
+				newXSlices[1].addToPosition(y, z, value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
@@ -2173,7 +2173,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
 				int[] nc = asymmetricNeighborCoords[j];
-				newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 			}
 		}
 		long previousNeighborValue = neighborValue;
@@ -2188,14 +2188,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < asymmetricNeighborCount; j++) {
 						int[] nc = asymmetricNeighborCoords[j];
-						newXSlices[nc[0]].addValueAtPosition(nc[1], nc[2], share);
+						newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount -= asymmetricNeighborSymmetryCounts[i];
 		}
-		newXSlices[1].addValueAtPosition(y, z, value);
+		newXSlices[1].addToPosition(y, z, value);
 		return toppled;
 	}
 

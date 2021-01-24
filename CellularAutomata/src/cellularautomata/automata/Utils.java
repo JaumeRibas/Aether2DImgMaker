@@ -25,6 +25,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 
+import cellularautomata.numbers.BigInt;
+
 public class Utils {
 	
 	public static Object deserializeFromFile(String pathName) throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -69,29 +71,29 @@ public class Utils {
 		}
 	}
 	
-	public static BigInteger[][][][] buildAnisotropic4DBigIntArray(int side) {
-		BigInteger[][][][] anisotropic4DArray = new BigInteger[side][][][];
+	public static BigInt[][][][] buildAnisotropic4DBigIntArray(int side) {
+		BigInt[][][][] anisotropic4DArray = new BigInt[side][][][];
 		for (int w = 0; w < anisotropic4DArray.length; w++) {
 			anisotropic4DArray[w] = buildAnisotropic3DBigIntArray(w + 1);
 		}
 		return anisotropic4DArray;
 	}
 	
-	public static BigInteger[][][] buildAnisotropic3DBigIntArray(int side) {
-		BigInteger[][][] anisotropic3DArray = new BigInteger[side][][];
+	public static BigInt[][][] buildAnisotropic3DBigIntArray(int side) {
+		BigInt[][][] anisotropic3DArray = new BigInt[side][][];
 		for (int x = 0; x < anisotropic3DArray.length; x++) {
 			anisotropic3DArray[x] = buildAnisotropic2DBigIntArray(x + 1);
 		}
 		return anisotropic3DArray;
 	}
 	
-	public static BigInteger[][] buildAnisotropic2DBigIntArray(int side) {
-		BigInteger[][] anisotropic2DArray = new BigInteger[side][];
+	public static BigInt[][] buildAnisotropic2DBigIntArray(int side) {
+		BigInt[][] anisotropic2DArray = new BigInt[side][];
 		for (int x = 0; x < anisotropic2DArray.length; x++) {
 			int length = x + 1;
-			BigInteger[] array = new BigInteger[length];
+			BigInt[] array = new BigInt[length];
 			for (int i = 0; i < length; i++) {
-				array[i] = BigInteger.ZERO;
+				array[i] = BigInt.ZERO;
 			}
 			anisotropic2DArray[x] = array;
 		}
@@ -266,19 +268,19 @@ public class Utils {
 		}
 	}
 	
-	public static void sortNeighborsByValueDesc(int neighborCount, BigInteger[] neighborValues, int[][] neighborCoords) {
+	public static <T extends Comparable<T>> void sortNeighborsByValueDesc(int neighborCount, T[] neighborValues, int[][] neighborCoords) {
 		int neighborCountMinusOne = neighborCount - 1;
 		for (int i = 0; i < neighborCountMinusOne; i++) {
-			BigInteger max = neighborValues[i];
+			T max = neighborValues[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < neighborCount; j++) {
-				BigInteger value = neighborValues[j];
+				T value = neighborValues[j];
 				if (value.compareTo(max) > 0) {
 					max = value;
 					swapPosition = j;
 				}
 			}
-			BigInteger valSwap = neighborValues[i];
+			T valSwap = neighborValues[i];
 			neighborValues[i] = neighborValues[swapPosition];
 			neighborValues[swapPosition] = valSwap;
 			int[] coordSwap = neighborCoords[i];
@@ -287,20 +289,20 @@ public class Utils {
 		}
 	}
 	
-	public static void sortNeighborsByValueDesc(int neighborCount, BigInteger[] neighborValues, int[][] neighborCoords,
+	public static <T extends Comparable<T>> void sortNeighborsByValueDesc(int neighborCount, T[] neighborValues, int[][] neighborCoords,
 			int[] otherNeighborIntegerField) {
 		int neighborCountMinusOne = neighborCount - 1;
 		for (int i = 0; i < neighborCountMinusOne; i++) {
-			BigInteger max = neighborValues[i];
+			T max = neighborValues[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < neighborCount; j++) {
-				BigInteger value = neighborValues[j];
+				T value = neighborValues[j];
 				if (value.compareTo(max) > 0) {
 					max = value;
 					swapPosition = j;
 				}
 			}
-			BigInteger valSwap = neighborValues[i];
+			T valSwap = neighborValues[i];
 			neighborValues[i] = neighborValues[swapPosition];
 			neighborValues[swapPosition] = valSwap;
 			int[] coordSwap = neighborCoords[i];
@@ -312,20 +314,20 @@ public class Utils {
 		}
 	}
 	
-	public static void sortNeighborsByValueDesc(int neighborCount, BigInteger[] neighborValues, int[][] neighborCoords,
+	public static <T extends Comparable<T>> void sortNeighborsByValueDesc(int neighborCount, T[] neighborValues, int[][] neighborCoords,
 			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
 		int neighborCountMinusOne = neighborCount - 1;
 		for (int i = 0; i < neighborCountMinusOne; i++) {
-			BigInteger max = neighborValues[i];
+			T max = neighborValues[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < neighborCount; j++) {
-				BigInteger value = neighborValues[j];
+				T value = neighborValues[j];
 				if (value.compareTo(max) > 0) {
 					max = value;
 					swapPosition = j;
 				}
 			}
-			BigInteger valSwap = neighborValues[i];
+			T valSwap = neighborValues[i];
 			neighborValues[i] = neighborValues[swapPosition];
 			neighborValues[swapPosition] = valSwap;
 			int[] coordSwap = neighborCoords[i];
@@ -411,9 +413,9 @@ public class Utils {
 		}
 	}
 	
-	public static void sort3NeighborsByValueDesc(BigInteger[] neighborValues, int[][] neighborCoords,
+	public static <T extends Comparable<T>> void sort3NeighborsByValueDesc(T[] neighborValues, int[][] neighborCoords,
 			int[] otherNeighborIntegerField) {
-		BigInteger n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		T n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
 		if (n0.compareTo(n1) >= 0) {
 			if (n1.compareTo(n2) < 0) {
 				if (n0.compareTo(n2) >= 0) { 
@@ -479,9 +481,9 @@ public class Utils {
 		}
 	}
 	
-	public static void sort3NeighborsByValueDesc(BigInteger[] neighborValues, int[][] neighborCoords,
+	public static <T extends Comparable<T>> void sort3NeighborsByValueDesc(T[] neighborValues, int[][] neighborCoords,
 			int[] neighborShareMultipliers, int[] neighborSymmetryCounts) {
-		BigInteger n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+		T n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
 		if (n0.compareTo(n1) >= 0) {
 			if (n1.compareTo(n2) < 0) {
 				if (n0.compareTo(n2) >= 0) { 
@@ -564,8 +566,8 @@ public class Utils {
 		}
 	}
 	
-	public static void sort3NeighborsByValueDesc(BigInteger[] neighborValues, int[][] neighborCoords) {
-		BigInteger n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
+	public static <T extends Comparable<T>> void sort3NeighborsByValueDesc(T[] neighborValues, int[][] neighborCoords) {
+		T n0 = neighborValues[0], n1 = neighborValues[1], n2 = neighborValues[2];
 		if (n0.compareTo(n1) >= 0) {
 			if (n1.compareTo(n2) < 0) {
 				if (n0.compareTo(n2) >= 0) { 

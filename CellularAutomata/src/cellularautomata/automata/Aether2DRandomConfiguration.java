@@ -122,25 +122,25 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 				//Get a list of the neighbors whose value is smaller than the one at the current position
 				int relevantNeighborCount = 0;
 				int neighborValue;
-				neighborValue = getValueAtPosition(x + 1, y);
+				neighborValue = getFromPosition(x + 1, y);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = RIGHT;
 					relevantNeighborCount++;
 				}
-				neighborValue = getValueAtPosition(x - 1, y);
+				neighborValue = getFromPosition(x - 1, y);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = LEFT;
 					relevantNeighborCount++;
 				}
-				neighborValue = getValueAtPosition(x, y + 1);
+				neighborValue = getFromPosition(x, y + 1);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = UP;
 					relevantNeighborCount++;
 				}
-				neighborValue = getValueAtPosition(x, y - 1);
+				neighborValue = getFromPosition(x, y - 1);
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = DOWN;
@@ -226,7 +226,7 @@ public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {
 	}
 	
 	@Override
-	public int getValueAtPosition(int x, int y){
+	public int getFromPosition(int x, int y){
 		if (x < 0 || x > grid.length - 1 
 				|| y < 0 || y > grid[0].length - 1) {
 			//If the entered position is outside the array the value will be 0

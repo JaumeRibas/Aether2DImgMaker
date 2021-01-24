@@ -18,10 +18,10 @@ package cellularautomata.grid;
 
 public interface ShortGrid extends Grid {
 
-	short[] getMinAndMaxValue() throws Exception;
+	short[] getMinAndMax() throws Exception;
 	
-	short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception;
+	short[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception;
 	
-	short getTotalValue() throws Exception;
+	short getTotal() throws Exception;
 	
 }

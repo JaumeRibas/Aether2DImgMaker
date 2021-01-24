@@ -28,16 +28,16 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	 * @return the value at (x,y)
 	 * @throws Exception 
 	 */
-	int getValueAtPosition(int x, int y) throws Exception;
+	int getFromPosition(int x, int y) throws Exception;
 	
-	default int[] getMinAndMaxValue() throws Exception {
+	default int[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				int value = getValueAtPosition(x, y);
+				int value = getFromPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -48,7 +48,7 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	}
 	
 	@Override
-	default int[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -59,7 +59,7 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
-				int value = getValueAtPosition(x, y);
+				int value = getFromPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -70,14 +70,14 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	}
 	
 	@Override
-	default int getTotalValue() throws Exception {
+	default int getTotal() throws Exception {
 		int total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				total += getValueAtPosition(x, y);
+				total += getFromPosition(x, y);
 			}	
 		}
 		return total;

@@ -36,15 +36,15 @@ public class AnisotropicIntGrid3DSlice implements Serializable {
 		data = new int[getIndex(x, x) + 1];
 	}
 
-	public void setValueAtPosition(int y, int z, int value) {
+	public void setAtPosition(int y, int z, int value) {
 		data[getIndex(y, z)] = value;	
 	}
 	
-	public int getValueAtPosition(int y, int z) {
+	public int getFromPosition(int y, int z) {
 		return data[getIndex(y, z)];
 	}
 	
-	public void addValueAtPosition(int y, int z, int value) {
+	public void addToPosition(int y, int z, int value) {
 		data[getIndex(y, z)] += value;
 	}
 	

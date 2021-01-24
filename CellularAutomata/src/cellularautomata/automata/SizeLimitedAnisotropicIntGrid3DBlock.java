@@ -49,15 +49,15 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 	}
 
 	protected void setValueAtPosition(int x, int y, int z, int initialValue) {
-		slices[x - minX].setValueAtPosition(y, z, initialValue);			
+		slices[x - minX].setAtPosition(y, z, initialValue);			
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y, int z) {
+	public int getFromPosition(int x, int y, int z) {
 		if (slices == null) {
 			throw new UnsupportedOperationException("The grid block is no longer available.");
 		}
-		return slices[x - minX].getValueAtPosition(y, z);
+		return slices[x - minX].getFromPosition(y, z);
 	}
 
 	protected void setSlice(int x, AnisotropicIntGrid3DSlice slice) {

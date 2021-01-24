@@ -28,17 +28,17 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 	 * @return the value at (x,y)
 	 * @throws Exception 
 	 */
-	short getValueAtPosition(int x, int y) throws Exception;
+	short getFromPosition(int x, int y) throws Exception;
 	
 	@Override
-	default short[] getMinAndMaxValue() throws Exception {
+	default short[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		short maxValue = Short.MIN_VALUE, minValue = Short.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				short value = getValueAtPosition(x, y);
+				short value = getFromPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -49,7 +49,7 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 	}
 	
 	@Override
-	default short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default short[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		short maxValue = Short.MIN_VALUE, minValue = Short.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -60,7 +60,7 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
-				short value = getValueAtPosition(x, y);
+				short value = getFromPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
 				if (value < minValue)
@@ -71,14 +71,14 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 	}
 	
 	@Override
-	default short getTotalValue() throws Exception {
+	default short getTotal() throws Exception {
 		short total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				total += getValueAtPosition(x, y);
+				total += getFromPosition(x, y);
 			}	
 		}
 		return total;

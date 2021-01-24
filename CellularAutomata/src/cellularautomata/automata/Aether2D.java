@@ -1108,7 +1108,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	}
 	
 	@Override
-	public long getValueAtPosition(int x, int y){	
+	public long getFromPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		long value = 0;
@@ -1127,7 +1127,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	}
 	
 	@Override
-	public long getValueAtAsymmetricPosition(int x, int y){	
+	public long getFromAsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	

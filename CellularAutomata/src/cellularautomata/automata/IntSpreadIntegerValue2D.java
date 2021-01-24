@@ -80,10 +80,10 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D {
 			for (int y = 0; y <= x; y++) {
 				int value = grid[x][y];
 				if (value != 0) {
-					int up = getValueAtPosition(x, y + 1);
-					int down = getValueAtPosition(x, y - 1); 
-					int left = getValueAtPosition(x - 1, y);
-					int right = getValueAtPosition(x + 1, y);
+					int up = getFromPosition(x, y + 1);
+					int down = getFromPosition(x, y - 1); 
+					int left = getFromPosition(x - 1, y);
+					int right = getFromPosition(x + 1, y);
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
 					//if the current position is equal to its neighbors the algorithm has no effect
@@ -157,7 +157,7 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D {
 	}
 	
 	@Override
-	public int getValueAtPosition(int x, int y){	
+	public int getFromPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -174,7 +174,7 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D {
 	}
 	
 	@Override
-	public int getValueAtAsymmetricPosition(int x, int y){	
+	public int getFromAsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	

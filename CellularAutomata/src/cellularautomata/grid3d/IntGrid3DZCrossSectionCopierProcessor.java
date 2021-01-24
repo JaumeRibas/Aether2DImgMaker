@@ -82,7 +82,7 @@ public class IntGrid3DZCrossSectionCopierProcessor implements GridProcessor<IntG
 					copyData.localYMinima.add(localMinY);
 					int[] slice = new int[localMaxY - localMinY + 1];
 					for (int y = localMinY, i = 0; y <= localMaxY; y++, i++) {
-						slice[i] = gridBlock.getValueAtPosition(x, y, copyZ);
+						slice[i] = gridBlock.getFromPosition(x, y, copyZ);
 					}
 					copyData.values.add(slice);
 				}

@@ -32,20 +32,20 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */
-	short getValueAtPosition(int w, int x, int y, int z) throws Exception;
+	short getFromPosition(int w, int x, int y, int z) throws Exception;
 
 	@Override
-	default short[] getMinAndMaxValue() throws Exception {
+	default short[] getMinAndMax() throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
 				maxZ = getMaxZ(), minZ = getMinZ();
-		short maxValue = getValueAtPosition(minW, minX, minY, minZ), minValue = maxValue;
+		short maxValue = getFromPosition(minW, minX, minY, minZ), minValue = maxValue;
 		for (int z = minZ; z <= maxZ; z++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						short value = getValueAtPosition(w, x, y, z);
+						short value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -58,7 +58,7 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	}
 	
 	@Override
-	default short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default short[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
 				maxY = getMaxY(), minY = getMinY(),
@@ -72,7 +72,7 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 						minW++;
 					}
 					for (int w = minW; w <= maxW; w+=2) {
-						short value = getValueAtPosition(w, x, y, z);
+						short value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
 						if (value < minValue)
@@ -85,7 +85,7 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	}
 	
 	@Override
-	default short getTotalValue() throws Exception {
+	default short getTotal() throws Exception {
 		short total = 0;
 		int maxW = getMaxW(), minW = getMinW(),
 				maxX = getMaxX(), minX = getMinX(), 
@@ -95,7 +95,7 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 			for (int y = minY; y <= maxY; y++) {
 				for (int x = minX; x <= maxX; x++) {
 					for (int w = minW; w <= maxW; w++) {
-						total += getValueAtPosition(w, x, y, z);
+						total += getFromPosition(w, x, y, z);
 					}
 				}	
 			}	

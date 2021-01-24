@@ -27,7 +27,7 @@ public interface SymmetricLongGrid3D extends LongGrid3D, SymmetricGrid3D {
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */
-	long getValueAtAsymmetricPosition(int x, int y, int z) throws Exception;
+	long getFromAsymmetricPosition(int x, int y, int z) throws Exception;
 
 	@Override
 	default LongGrid3D asymmetricSection() {

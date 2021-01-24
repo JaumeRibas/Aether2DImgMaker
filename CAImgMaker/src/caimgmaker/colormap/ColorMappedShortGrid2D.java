@@ -18,9 +18,10 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
+import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 
-public class ColorMappedShortGrid2D implements ColorGrid2D {
+public class ColorMappedShortGrid2D implements ObjectGrid2D<Color> {
 
 	protected ShortGrid2D source;
 	protected IntColorMap colorMap;
@@ -71,7 +72,7 @@ public class ColorMappedShortGrid2D implements ColorGrid2D {
 	}
 
 	@Override
-	public Color getColorAtPosition(int x, int y) throws Exception {
-		return colorMap.getColor(source.getValueAtPosition(x, y));
+	public Color getFromPosition(int x, int y) throws Exception {
+		return colorMap.getColor(source.getFromPosition(x, y));
 	}
 }

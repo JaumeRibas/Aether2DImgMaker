@@ -23,8 +23,8 @@ public class IntSubGrid3D<G extends IntGrid3D> extends SubGrid3D<G> implements I
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(x, y, z);
+	public int getFromPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(x, y, z);
 	}
 
 }

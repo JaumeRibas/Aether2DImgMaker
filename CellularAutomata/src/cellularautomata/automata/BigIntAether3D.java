@@ -12,28 +12,28 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    aBigInteger with this program.  If not, see <http://www.gnu.org/licenses/>
+    aBigInt with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingBigIntGrid3D;
+import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid3D;
+import cellularautomata.numbers.BigInt;
 
-public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
+public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt> {
 	
-	private static final BigInteger TWO = BigInteger.valueOf(2);
-	private static final BigInteger THREE = BigInteger.valueOf(3);
-	private static final BigInteger FOUR = BigInteger.valueOf(4);
-	private static final BigInteger SIX = BigInteger.valueOf(6);
-	private static final BigInteger SEVEN = BigInteger.valueOf(7);
+	private static final BigInt TWO = BigInt.valueOf(2);
+	private static final BigInt THREE = BigInt.valueOf(3);
+	private static final BigInt FOUR = BigInt.valueOf(4);
+	private static final BigInt SIX = BigInt.valueOf(6);
+	private static final BigInt SEVEN = BigInt.valueOf(7);
 
 	/** A 3D array representing the grid */
-	private BigInteger[][][] grid;
+	private BigInt[][][] grid;
 	
-	private BigInteger initialValue;
+	private BigInt initialValue;
 	private long step;
 	
 	private int maxX;
@@ -43,7 +43,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public BigIntAether3D(BigInteger initialValue) {
+	public BigIntAether3D(BigInt initialValue) {
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DBigIntArray(7);
 		grid[0][0][0] = this.initialValue;
@@ -69,17 +69,17 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 	
 	@Override
 	public boolean nextStep(){
-		BigInteger[][][] newGrid = new BigInteger[maxX + 3][][];
+		BigInt[][][] newGrid = new BigInt[maxX + 3][][];
 		boolean changed = false;
-		BigInteger[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
-		BigInteger[][] newSmallerXSlice = null, 
+		BigInt[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
+		BigInt[][] newSmallerXSlice = null, 
 				newCurrentXSlice = Utils.buildAnisotropic2DBigIntArray(1), 
 				newGreaterXSlice = Utils.buildAnisotropic2DBigIntArray(2);// build new grid progressively to save memory
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0, z = 0
-		BigInteger currentValue = currentXSlice[0][0];
-		BigInteger greaterXNeighborValue = greaterXSlice[0][0];
+		BigInt currentValue = currentXSlice[0][0];
+		BigInt greaterXNeighborValue = greaterXSlice[0][0];
 		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
 		}
@@ -91,16 +91,16 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		newCurrentXSlice = newGreaterXSlice;
 		newGreaterXSlice = Utils.buildAnisotropic2DBigIntArray(3);
 		newGrid[2] = newGreaterXSlice;
-		BigInteger[][][] newXSlices = new BigInteger[][][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
-		BigInteger[] relevantAsymmetricNeighborValues = new BigInteger[6];
+		BigInt[][][] newXSlices = new BigInt[][][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
+		BigInt[] relevantAsymmetricNeighborValues = new BigInt[6];
 		int[][] relevantAsymmetricNeighborCoords = new int[6][3];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[6];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[6];// to compensate for omitted symmetric positions
 		// reuse values obtained previously
-		BigInteger smallerXNeighborValue = currentValue;
+		BigInt smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = greaterXSlice[0][0];
-		BigInteger greaterYNeighborValue = currentXSlice[1][0];
+		BigInt greaterYNeighborValue = currentXSlice[1][0];
 		if (topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -108,10 +108,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 		// x = 1, y = 1, z = 0
 		// reuse values obtained previously
-		BigInteger smallerYNeighborValue = currentValue;
+		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][0];
-		BigInteger greaterZNeighborValue = currentXSlice[1][1];
+		BigInt greaterZNeighborValue = currentXSlice[1][1];
 		if (topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -119,7 +119,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 		// x = 1, y = 1, z = 1
 		// reuse values obtained previously
-		BigInteger smallerZNeighborValue = currentValue;
+		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][1];
 		if (topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
@@ -345,7 +345,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		// 4 >= x < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
-		BigInteger[][][] xSlices = new BigInteger[][][] {null, currentXSlice, greaterXSlice};
+		BigInt[][][] xSlices = new BigInt[][][] {null, currentXSlice, greaterXSlice};
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
 		if (toppleRangeBeyondX3(xSlices, newXSlices, newGrid, 4, edgeMinusTwo, 
@@ -366,13 +366,13 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return changed;
 	}
 	
-	private boolean toppleRangeBeyondX3(BigInteger[][][] xSlices, BigInteger[][][] newXSlices, BigInteger[][][] newGrid, int minX, int maxX, 
-			BigInteger[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+	private boolean toppleRangeBeyondX3(BigInt[][][] xSlices, BigInt[][][] newXSlices, BigInt[][][] newGrid, int minX, int maxX, 
+			BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
-		BigInteger[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
-		BigInteger[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
+		BigInt[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
+		BigInt[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
 			// y = 0, z = 0
 			smallerXSlice = currentXSlice;
@@ -385,10 +385,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 			newXSlices[0] = newSmallerXSlice;
 			newXSlices[1] = newCurrentXSlice;
 			newXSlices[2] = newGreaterXSlice;
-			BigInteger currentValue = currentXSlice[0][0];
-			BigInteger greaterXNeighborValue = greaterXSlice[0][0];
-			BigInteger smallerXNeighborValue = smallerXSlice[0][0];
-			BigInteger greaterYNeighborValue = currentXSlice[1][0];
+			BigInt currentValue = currentXSlice[0][0];
+			BigInt greaterXNeighborValue = greaterXSlice[0][0];
+			BigInt smallerXNeighborValue = smallerXSlice[0][0];
+			BigInt greaterYNeighborValue = currentXSlice[1][0];
 			if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -398,10 +398,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 			greaterXNeighborValue = greaterXSlice[1][0];
 			smallerXNeighborValue = smallerXSlice[1][0];
 			// reuse values obtained previously
-			BigInteger smallerYNeighborValue = currentValue;
+			BigInt smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[2][0];
-			BigInteger greaterZNeighborValue = currentXSlice[1][1];
+			BigInt greaterZNeighborValue = currentXSlice[1][1];
 			if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
@@ -413,7 +413,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 			smallerXNeighborValue = smallerXSlice[1][1];
 			greaterYNeighborValue = currentXSlice[2][1];
 			// reuse values obtained previously
-			BigInteger smallerZNeighborValue = currentValue;
+			BigInt smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
@@ -690,14 +690,14 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return anyToppled;
 	}
 
-	private static boolean topplePositionType1(BigInteger currentValue, BigInteger greaterXNeighborValue, BigInteger[][] newCurrentXSlice, 
-			BigInteger[][] newGreaterXSlice) {
+	private static boolean topplePositionType1(BigInt currentValue, BigInt greaterXNeighborValue, BigInt[][] newCurrentXSlice, 
+			BigInt[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			BigInteger toShare = currentValue.subtract(greaterXNeighborValue);
-			BigInteger[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-			BigInteger share = shareAndReminder[0];
-			if (!share.equals(BigInteger.ZERO)) {
+			BigInt toShare = currentValue.subtract(greaterXNeighborValue);
+			BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
+			BigInt share = shareAndReminder[0];
+			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
 				newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				newGreaterXSlice[0][0] = newGreaterXSlice[0][0].add(share);
@@ -710,9 +710,9 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(BigInteger currentValue, BigInteger greaterXNeighborValue, BigInteger smallerXNeighborValue, 
-			BigInteger greaterYNeighborValue, BigInteger[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInteger[][][] newXSlices) {
+	private static boolean topplePositionType2(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerXNeighborValue, 
+			BigInt greaterYNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -756,9 +756,9 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType3(BigInteger currentValue, BigInteger greaterXNeighborValue, BigInteger smallerYNeighborValue, 
-			BigInteger greaterZNeighborValue, BigInteger[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInteger[][][] newXSlices) {
+	private static boolean topplePositionType3(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerYNeighborValue, 
+			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -802,17 +802,17 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType4(BigInteger currentValue, BigInteger greaterXNeighborValue, BigInteger smallerZNeighborValue, 
-			BigInteger[][] newCurrentXSlice, BigInteger[][] newGreaterXSlice) {
+	private static boolean topplePositionType4(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerZNeighborValue, 
+			BigInt[][] newCurrentXSlice, BigInt[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
-					BigInteger toShare = currentValue.subtract(greaterXNeighborValue);
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = currentValue.subtract(greaterXNeighborValue);
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);// one more for the symmetric position at the other side
@@ -820,38 +820,38 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
-					BigInteger toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
-					BigInteger currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
 					shareAndReminder = toShare.divideAndRemainder(FOUR);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
 					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else {
 					// gx < sz < current
-					BigInteger toShare = currentValue.subtract(smallerZNeighborValue); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
-					BigInteger currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
 					shareAndReminder = toShare.divideAndRemainder(FOUR);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
@@ -859,10 +859,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 				}
 			} else {
 				// sz < current <= gx
-				BigInteger toShare = currentValue.subtract(smallerZNeighborValue); 
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
 				newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
@@ -871,10 +871,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		} else {
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gx < current <= sz
-				BigInteger toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
 				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
@@ -886,10 +886,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 
-	private static boolean topplePositionType5(BigInteger currentValue, BigInteger greaterXNeighborValue, 
-			BigInteger smallerXNeighborValue, BigInteger greaterYNeighborValue, BigInteger[] relevantAsymmetricNeighborValues, 
+	private static boolean topplePositionType5(BigInt currentValue, BigInt greaterXNeighborValue, 
+			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
-			BigInteger[][][] newXSlices) {
+			BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -930,11 +930,11 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	};
 
-	private static boolean topplePositionType6(int y, BigInteger currentValue, BigInteger gXValue, BigInteger sXValue, 
-			int sXShareMultiplier, BigInteger gYValue, int gYShareMultiplier, BigInteger sYValue, int sYShareMultiplier, 
-			BigInteger gZValue, int gZShareMultiplier, BigInteger[] relevantAsymmetricNeighborValues, 
+	private static boolean topplePositionType6(int y, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
+			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, 
+			BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, BigInteger[][][] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gXValue.compareTo(currentValue) < 0) {
@@ -1000,11 +1000,11 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType7(int coord, BigInteger currentValue, BigInteger gXValue, BigInteger sXValue, 
-			int sXShareMultiplier, BigInteger gYValue, int gYShareMultiplier, BigInteger sZValue, 
-			int sZShareMultiplier, BigInteger[] relevantAsymmetricNeighborValues, 
+	private static boolean topplePositionType7(int coord, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
+			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, 
+			int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, BigInteger[][][] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gXValue.compareTo(currentValue) < 0) {
@@ -1059,9 +1059,9 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType8(int y, BigInteger currentValue, BigInteger greaterXNeighborValue, BigInteger smallerYNeighborValue, 
-			BigInteger greaterZNeighborValue, BigInteger[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, BigInteger[][][] newXSlices ) {
+	private static boolean topplePositionType8(int y, BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerYNeighborValue, 
+			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -1102,11 +1102,11 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType9(int y, int z, BigInteger currentValue, BigInteger gXValue, BigInteger sYValue, 
-			int sYShareMultiplier, BigInteger gZValue, int gZShareMultiplier, BigInteger sZValue, int sZShareMultiplier, 
-			BigInteger[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+	private static boolean topplePositionType9(int y, int z, BigInt currentValue, BigInt gXValue, BigInt sYValue, 
+			int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, 
+			BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			BigInteger[][][] newXSlices) {
+			BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gXValue.compareTo(currentValue) < 0) {
@@ -1161,18 +1161,18 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType10(int coord, BigInteger currentValue, BigInteger greaterXNeighborValue, 
-			BigInteger smallerZNeighborValue, BigInteger[][] newCurrentXSlice, BigInteger[][] newGreaterXSlice) {
+	private static boolean topplePositionType10(int coord, BigInt currentValue, BigInt greaterXNeighborValue, 
+			BigInt smallerZNeighborValue, BigInt[][] newCurrentXSlice, BigInt[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			int coordMinusOne = coord - 1;
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
-					BigInteger toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
@@ -1180,38 +1180,38 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
-					BigInteger toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
-					BigInteger currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
 					shareAndReminder = toShare.divideAndRemainder(FOUR);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
 					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else {
 					// gx < sz < current
-					BigInteger toShare = currentValue.subtract(smallerZNeighborValue); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
-					BigInteger currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
 					shareAndReminder = toShare.divideAndRemainder(FOUR);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
@@ -1219,10 +1219,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 				}
 			} else {
 				// sz < current <= gx
-				BigInteger toShare = currentValue.subtract(smallerZNeighborValue); 
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
 				newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
@@ -1231,10 +1231,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		} else {
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gx < current <= sz
-				BigInteger toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
 				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
@@ -1246,11 +1246,11 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 
-	private static boolean topplePositionType11(int y, int z, BigInteger currentValue, BigInteger gXValue, BigInteger sXValue, 
-			int sXShareMultiplier, BigInteger gYValue, int gYShareMultiplier, BigInteger sYValue, int sYShareMultiplier, 
-			BigInteger gZValue, int gZShareMultiplier, BigInteger sZValue, int sZShareMultiplier, BigInteger[] relevantNeighborValues, int[][] relevantNeighborCoords, 
+	private static boolean topplePositionType11(int y, int z, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
+			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, 
+			BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantNeighborValues, int[][] relevantNeighborCoords, 
 			int[] relevantNeighborShareMultipliers, 
-			BigInteger[][][] newXSlices) {
+			BigInt[][][] newXSlices) {
 		int relevantNeighborCount = 0;
 		if (gXValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount ] = gXValue;
@@ -1314,11 +1314,11 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType12(int y, BigInteger currentValue, BigInteger greaterXNeighborValue, 
-			BigInteger smallerXNeighborValue, BigInteger greaterYNeighborValue, BigInteger smallerYNeighborValue, 
-			BigInteger greaterZNeighborValue, BigInteger[] relevantAsymmetricNeighborValues, 
+	private static boolean topplePositionType12(int y, BigInt currentValue, BigInt greaterXNeighborValue, 
+			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt smallerYNeighborValue, 
+			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			BigInteger[][][] newXSlices) {
+			BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -1380,10 +1380,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType13(int coord, BigInteger currentValue, BigInteger greaterXNeighborValue, 
-			BigInteger smallerXNeighborValue, BigInteger greaterYNeighborValue, BigInteger smallerZNeighborValue, 
-			BigInteger[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, BigInteger[][][] newXSlices) {
+	private static boolean topplePositionType13(int coord, BigInt currentValue, BigInt greaterXNeighborValue, 
+			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt smallerZNeighborValue, 
+			BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -1434,10 +1434,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType14(int y, int z, BigInteger currentValue, BigInteger greaterXNeighborValue, 
-			BigInteger smallerYNeighborValue,	BigInteger greaterZNeighborValue, BigInteger smallerZNeighborValue, 
-			BigInteger[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, BigInteger[][][] newXSlices) {
+	private static boolean topplePositionType14(int y, int z, BigInt currentValue, BigInt greaterXNeighborValue, 
+			BigInt smallerYNeighborValue,	BigInt greaterZNeighborValue, BigInt smallerZNeighborValue, 
+			BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -1488,10 +1488,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 
-	private static boolean topplePositionType15(int y, int z, BigInteger currentValue, BigInteger greaterXNeighborValue, 
-			BigInteger smallerXNeighborValue,	BigInteger greaterYNeighborValue, BigInteger smallerYNeighborValue, 
-			BigInteger greaterZNeighborValue, BigInteger smallerZNeighborValue, BigInteger[] relevantNeighborValues, 
-			int[][] relevantNeighborCoords, BigInteger[][][] newXSlices) {
+	private static boolean topplePositionType15(int y, int z, BigInt currentValue, BigInt greaterXNeighborValue, 
+			BigInt smallerXNeighborValue,	BigInt greaterYNeighborValue, BigInt smallerYNeighborValue, 
+			BigInt greaterZNeighborValue, BigInt smallerZNeighborValue, BigInt[] relevantNeighborValues, 
+			int[][] relevantNeighborCoords, BigInt[][][] newXSlices) {
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = greaterXNeighborValue;
@@ -1549,7 +1549,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		}
 	}
 	
-	private static boolean topplePosition(BigInteger[][][] newXSlices, BigInteger value, int y, int z, BigInteger[] neighborValues,
+	private static boolean topplePosition(BigInt[][][] newXSlices, BigInt value, int y, int z, BigInt[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -1559,14 +1559,14 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 						neighborCoords, 3);
 				break;
 			case 2:
-				BigInteger n0Val = neighborValues[0], n1Val = neighborValues[1];
+				BigInt n0Val = neighborValues[0], n1Val = neighborValues[1];
 				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
@@ -1574,38 +1574,38 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					BigInteger toShare = value.subtract(n1Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n1Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
 					shareAndReminder = toShare.divideAndRemainder(TWO);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else {
 					// n1Val < n0Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
 					shareAndReminder = toShare.divideAndRemainder(TWO);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
@@ -1613,10 +1613,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 				}				
 				break;
 			case 1:
-				BigInteger toShare = value.subtract(neighborValues[0]);
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(TWO);
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = value.subtract(neighborValues[0]);
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(TWO);
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					int[] nc = neighborCoords[0];
@@ -1634,15 +1634,15 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(BigInteger[][][] newXSlices, BigInteger value, int y, int z, 
-			BigInteger[] neighborValues, int[][] neighborCoords, int neighborCount) {
+	private static boolean topplePositionSortedNeighbors(BigInt[][][] newXSlices, BigInt value, int y, int z, 
+			BigInt[] neighborValues, int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		BigInteger neighborValue = neighborValues[0];
-		BigInteger toShare = value.subtract(neighborValue);
-		BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-		BigInteger share = shareAndReminder[0];
-		if (!share.equals(BigInteger.ZERO)) {
+		BigInt neighborValue = neighborValues[0];
+		BigInt toShare = value.subtract(neighborValue);
+		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndReminder[0];
+		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
 			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 			for (int j = 0; j < neighborCount; j++) {
@@ -1650,15 +1650,15 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 			}
 		}
-		BigInteger previousNeighborValue = neighborValue;
+		BigInt previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 				share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					for (int j = i; j < neighborCount; j++) {
@@ -1674,7 +1674,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(BigInteger[][][] newXSlices, BigInteger value, int y, int z, BigInteger[] asymmetricNeighborValues,
+	private static boolean topplePosition(BigInt[][][] newXSlices, BigInt value, int y, int z, BigInt[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -1685,73 +1685,73 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				BigInteger n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				BigInt n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
 				int shareCount = neighborCount + 1;
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					BigInteger toShare = value.subtract(n1Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n1Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else {
 					// n1Val < n0Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				}				
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				BigInteger toShare = value.subtract(asymmetricNeighborValues[0]);
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = value.subtract(asymmetricNeighborValues[0]);
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					int[] nc = asymmetricNeighborCoords[0];
-					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInteger.valueOf(asymmetricNeighborShareMultipliers[0])));
+					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(asymmetricNeighborShareMultipliers[0])));
 				}
 				// no break
 			case 0:
@@ -1766,37 +1766,37 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(BigInteger[][][] newXSlices, BigInteger value, int y, int z, BigInteger[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(BigInt[][][] newXSlices, BigInt value, int y, int z, BigInt[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		BigInteger neighborValue = asymmetricNeighborValues[0];
-		BigInteger toShare = value.subtract(neighborValue);
-		BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-		BigInteger share = shareAndReminder[0];
-		if (!share.equals(BigInteger.ZERO)) {
+		BigInt neighborValue = asymmetricNeighborValues[0];
+		BigInt toShare = value.subtract(neighborValue);
+		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndReminder[0];
+		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
 			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
 				int[] nc = asymmetricNeighborCoords[j];
-				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInteger.valueOf(asymmetricNeighborShareMultipliers[j])));
+				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(asymmetricNeighborShareMultipliers[j])));
 			}
 		}
-		BigInteger previousNeighborValue = neighborValue;
+		BigInt previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[0];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 				share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					for (int j = i; j < asymmetricNeighborCount; j++) {
 						int[] nc = asymmetricNeighborCoords[j];
-						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInteger.valueOf(asymmetricNeighborShareMultipliers[j])));
+						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(asymmetricNeighborShareMultipliers[j])));
 					}
 				}
 				previousNeighborValue = neighborValue;
@@ -1807,7 +1807,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(BigInteger[][][] newXSlices, BigInteger value, int y, int z, BigInteger[] neighborValues,
+	private static boolean topplePosition(BigInt[][][] newXSlices, BigInt value, int y, int z, BigInt[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -1817,69 +1817,69 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 						neighborCoords, neighborShareMultipliers, 3);
 				break;
 			case 2:
-				BigInteger n0Val = neighborValues[0], n1Val = neighborValues[1];
+				BigInt n0Val = neighborValues[0], n1Val = neighborValues[1];
 				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
 				int n0Mult = neighborShareMultipliers[0], n1Mult = neighborShareMultipliers[1];
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					BigInteger toShare = value.subtract(n1Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n1Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
 					shareAndReminder = toShare.divideAndRemainder(TWO);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else {
 					// n1Val < n0Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInteger.valueOf(n0Mult)));
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
 					shareAndReminder = toShare.divideAndRemainder(TWO);
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInteger.valueOf(n1Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				}				
 				break;
 			case 1:
-				BigInteger toShare = value.subtract(neighborValues[0]);
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(TWO);
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = value.subtract(neighborValues[0]);
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(TWO);
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					int[] nc = neighborCoords[0];
-					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInteger.valueOf(neighborShareMultipliers[0])));
+					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(neighborShareMultipliers[0])));
 				}
 				// no break
 			case 0:
@@ -1894,36 +1894,36 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(BigInteger[][][] newXSlices, BigInteger value, int y, int z, BigInteger[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(BigInt[][][] newXSlices, BigInt value, int y, int z, BigInt[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		BigInteger neighborValue = neighborValues[0];
-		BigInteger toShare = value.subtract(neighborValue);
-		BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-		BigInteger share = shareAndReminder[0];
-		if (!share.equals(BigInteger.ZERO)) {
+		BigInt neighborValue = neighborValues[0];
+		BigInt toShare = value.subtract(neighborValue);
+		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndReminder[0];
+		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
 			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 			for (int j = 0; j < neighborCount; j++) {
 				int[] nc = neighborCoords[j];
-				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInteger.valueOf(neighborShareMultipliers[j])));
+				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(neighborShareMultipliers[j])));
 			}
 		}
-		BigInteger previousNeighborValue = neighborValue;
+		BigInt previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 				share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					for (int j = i; j < neighborCount; j++) {
 						int[] nc = neighborCoords[j];
-						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInteger.valueOf(neighborShareMultipliers[j])));
+						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(neighborShareMultipliers[j])));
 					}
 				}
 				previousNeighborValue = neighborValue;
@@ -1934,7 +1934,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePosition(BigInteger[][][] newXSlices, BigInteger value, int y, int z, BigInteger[] asymmetricNeighborValues,
+	private static boolean topplePosition(BigInt[][][] newXSlices, BigInt value, int y, int z, BigInt[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -1945,15 +1945,15 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				BigInteger n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				BigInt n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int shareCount = neighborCount + 1;
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
@@ -1961,40 +1961,40 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					BigInteger toShare = value.subtract(n1Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n1Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
 				} else {
 					// n1Val < n0Val < value
-					BigInteger toShare = value.subtract(n0Val); 
-					BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-					BigInteger share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					BigInt toShare = value.subtract(n0Val); 
+					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndReminder[0];
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					BigInteger currentRemainingValue = value.subtract(share.multiply(BigInteger.valueOf(neighborCount)));
+					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndReminder[0];
-					if (!share.equals(BigInteger.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
@@ -2003,10 +2003,10 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				BigInteger toShare = value.subtract(asymmetricNeighborValues[0]);
-				BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-				BigInteger share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				BigInt toShare = value.subtract(asymmetricNeighborValues[0]);
+				BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				BigInt share = shareAndReminder[0];
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					int[] nc = asymmetricNeighborCoords[0];
@@ -2025,16 +2025,16 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(BigInteger[][][] newXSlices, BigInteger value, int y, int z, BigInteger[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(BigInt[][][] newXSlices, BigInt value, int y, int z, BigInt[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		BigInteger neighborValue = asymmetricNeighborValues[0];
-		BigInteger toShare = value.subtract(neighborValue);
-		BigInteger[] shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
-		BigInteger share = shareAndReminder[0];
-		if (!share.equals(BigInteger.ZERO)) {
+		BigInt neighborValue = asymmetricNeighborValues[0];
+		BigInt toShare = value.subtract(neighborValue);
+		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndReminder[0];
+		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
 			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
@@ -2042,15 +2042,15 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 			}
 		}
-		BigInteger previousNeighborValue = neighborValue;
+		BigInt previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[0];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInteger.valueOf(shareCount));
+				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 				share = shareAndReminder[0];
-				if (!share.equals(BigInteger.ZERO)) {
+				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
 					for (int j = i; j < asymmetricNeighborCount; j++) {
@@ -2067,7 +2067,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 	}
 	
 	@Override
-	public BigInteger getValueAtPosition(int x, int y, int z){	
+	public BigInt getFromPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -2104,11 +2104,11 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 				return grid[z][y][x];
 			}
 		}
-		return BigInteger.ZERO;
+		return BigInt.ZERO;
 	}
 	
 	@Override
-	public BigInteger getValueAtAsymmetricPosition(int x, int y, int z){	
+	public BigInt getFromAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	
@@ -2271,7 +2271,7 @@ public class BigIntAether3D implements SymmetricEvolvingBigIntGrid3D {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public BigInteger getInitialValue() {
+	public BigInt getInitialValue() {
 		return initialValue;
 	}	
 	

@@ -121,7 +121,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 	}
 	
 	@Override
-	public int getValueAtPosition(int x, int y){	
+	public int getFromPosition(int x, int y){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -138,7 +138,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 	}
 	
 	@Override
-	public int getValueAtAsymmetricPosition(int x, int y){	
+	public int getFromAsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
 	

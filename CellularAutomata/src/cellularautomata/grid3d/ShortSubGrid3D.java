@@ -23,8 +23,8 @@ public class ShortSubGrid3D<G extends ShortGrid3D> extends SubGrid3D<G> implemen
 	}
 
 	@Override
-	public short getValueAtPosition(int x, int y, int z) throws Exception {
-		return source.getValueAtPosition(x, y, z);
+	public short getFromPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(x, y, z);
 	}
 
 }

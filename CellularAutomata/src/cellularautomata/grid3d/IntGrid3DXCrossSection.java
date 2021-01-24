@@ -25,8 +25,8 @@ public class IntGrid3DXCrossSection<G extends IntGrid3D> extends Grid3DXCrossSec
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(this.x, y, x);
+	public int getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(this.x, y, x);
 	}
 
 }

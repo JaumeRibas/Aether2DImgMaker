@@ -33,8 +33,8 @@ public class ColorMappedIntGrid2DWithBackground extends ColorMappedIntGrid2D {
 	}
 
 	@Override
-	public Color getColorAtPosition(int x, int y) throws Exception {
-		int value = source.getValueAtPosition(x, y);
+	public Color getFromPosition(int x, int y) throws Exception {
+		int value = source.getFromPosition(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}

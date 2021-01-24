@@ -30,9 +30,9 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */
-	short getValueAtPosition(int x, int y, int z) throws Exception;
+	short getFromPosition(int x, int y, int z) throws Exception;
 
-	default short[] getMinAndMaxValue() throws Exception {
+	default short[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		short maxValue = Short.MIN_VALUE, minValue = Short.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -42,7 +42,7 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					short value = getValueAtPosition(x, y, z);
+					short value = getFromPosition(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
 					if (value < minValue)
@@ -54,7 +54,7 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	}
 	
 	@Override
-	default short[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default short[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		short evenMinValue = Short.MAX_VALUE, evenMaxValue = Short.MIN_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -68,7 +68,7 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
-					short value = getValueAtPosition(x, y, z);
+					short value = getFromPosition(x, y, z);
 					if (value > evenMaxValue)
 						evenMaxValue = value;
 					if (value < evenMinValue)
@@ -80,7 +80,7 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	}
 	
 	@Override
-	default short getTotalValue() throws Exception {
+	default short getTotal() throws Exception {
 		short total = 0;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		for (int x = minX; x <= maxX; x++) {
@@ -90,7 +90,7 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					total += getValueAtPosition(x, y, z);
+					total += getFromPosition(x, y, z);
 				}	
 			}	
 		}

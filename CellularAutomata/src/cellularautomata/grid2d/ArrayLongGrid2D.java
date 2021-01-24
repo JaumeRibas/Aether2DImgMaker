@@ -164,7 +164,7 @@ public class ArrayLongGrid2D implements LongGrid2D, Serializable {
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) {
+	public long getFromPosition(int x, int y) {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		return values[i][j];

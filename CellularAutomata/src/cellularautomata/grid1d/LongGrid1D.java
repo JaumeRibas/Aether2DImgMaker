@@ -26,14 +26,14 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	 * @param x the position on the x-coordinate
 	 * @return the value at (x)
 	 */
-	long getValueAtPosition(int x);
+	long getFromPosition(int x);
 	
 	@Override
-	default long[] getMinAndMaxValue() {
+	default long[] getMinAndMax() {
 		int maxX = getMaxX(), minX = getMinX();
-		long maxValue = getValueAtPosition(minX), minValue = maxValue;
+		long maxValue = getFromPosition(minX), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
-			long value = getValueAtPosition(x);
+			long value = getFromPosition(x);
 			if (value > maxValue)
 				maxValue = value;
 			if (value < minValue)
@@ -43,7 +43,7 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	}
 	
 	@Override
-	default long[] getEvenOddPositionsMinAndMaxValue(boolean isEven) throws Exception {
+	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		boolean isPositionEven = minX%2 == 0;
@@ -51,7 +51,7 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 			minX++;
 		}
 		for (int x = minX; x <= maxX; x+=2) {
-			long value = getValueAtPosition(x);
+			long value = getFromPosition(x);
 			if (value > maxValue)
 				maxValue = value;
 			if (value < minValue)
@@ -61,11 +61,11 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	}
 	
 	@Override
-	default long getTotalValue() {
+	default long getTotal() {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX();
 		for (int x = minX; x <= maxX; x++) {
-			total += getValueAtPosition(x);
+			total += getFromPosition(x);
 		}
 		return total;
 	}

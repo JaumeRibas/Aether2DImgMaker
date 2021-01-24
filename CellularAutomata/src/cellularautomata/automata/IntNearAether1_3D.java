@@ -111,37 +111,37 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D {
 					int value = grid[x][y][z];
 					int relevantNeighborCount = 0;
 					int neighborValue;
-					neighborValue = getValueAtPosition(x + 1, y, z);
+					neighborValue = getFromPosition(x + 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = RIGHT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x - 1, y, z);
+					neighborValue = getFromPosition(x - 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = LEFT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y + 1, z);
+					neighborValue = getFromPosition(x, y + 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = UP;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y - 1, z);
+					neighborValue = getFromPosition(x, y - 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = DOWN;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y, z + 1);
+					neighborValue = getFromPosition(x, y, z + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = FRONT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getValueAtPosition(x, y, z - 1);
+					neighborValue = getFromPosition(x, y, z - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = BACK;
@@ -301,7 +301,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D {
 	}
 	
 	@Override
-	public int getValueAtPosition(int x, int y, int z){	
+	public int getFromPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -332,7 +332,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D {
 	}
 	
 	@Override
-	public int getValueAtAsymmetricPosition(int x, int y, int z){	
+	public int getFromAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	

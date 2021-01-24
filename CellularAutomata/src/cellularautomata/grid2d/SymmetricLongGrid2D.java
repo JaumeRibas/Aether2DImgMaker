@@ -35,7 +35,7 @@ public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	 * @return the {@link long} value at (x,y)
 	 * @throws Exception 
 	 */
-	long getValueAtAsymmetricPosition(int x, int y) throws Exception;
+	long getFromAsymmetricPosition(int x, int y) throws Exception;
 	
 	@Override
 	default LongGrid2D asymmetricSection() {

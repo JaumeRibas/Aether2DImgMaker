@@ -25,8 +25,8 @@ public class IntGrid4DYZCrossSection extends Grid4DYZCrossSection<IntGrid4D> imp
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(x, y, this.y, z);
+	public int getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(x, y, this.y, z);
 	}
 
 }

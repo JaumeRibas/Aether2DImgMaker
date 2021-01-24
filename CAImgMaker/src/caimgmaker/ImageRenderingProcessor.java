@@ -16,12 +16,13 @@
  */
 package caimgmaker;
 
+import java.awt.Color;
 import java.io.IOException;
 
-import caimgmaker.colormap.ColorGrid2D;
 import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid2d.ObjectGrid2D;
 
-public class ImageRenderingProcessor implements GridProcessor<ColorGrid2D> {
+public class ImageRenderingProcessor implements GridProcessor<ObjectGrid2D<Color>> {
 
 	private int minX;
 	private int maxX;
@@ -75,7 +76,7 @@ public class ImageRenderingProcessor implements GridProcessor<ColorGrid2D> {
 	}
 
 	@Override
-	public void processGridBlock(ColorGrid2D gridBlock) throws Exception {
+	public void processGridBlock(ObjectGrid2D<Color> gridBlock) throws Exception {
 		int regionMinX = gridBlock.getMinX();
 		int regionMaxX = gridBlock.getMaxX();
 		int framedRegionMinX, framedRegionMaxX;
@@ -108,7 +109,7 @@ public class ImageRenderingProcessor implements GridProcessor<ColorGrid2D> {
 					
 			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
 				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y++, yy++) {
-					java.awt.Color c = gridBlock.getColorAtPosition(x, y);
+					java.awt.Color c = gridBlock.getFromPosition(x, y);
 					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 					
 					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;

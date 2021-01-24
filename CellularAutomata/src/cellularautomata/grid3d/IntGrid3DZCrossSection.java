@@ -25,8 +25,8 @@ public class IntGrid3DZCrossSection<G extends IntGrid3D> extends Grid3DZCrossSec
 	}
 
 	@Override
-	public int getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(x, y, z);
+	public int getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(x, y, z);
 	}
 
 }

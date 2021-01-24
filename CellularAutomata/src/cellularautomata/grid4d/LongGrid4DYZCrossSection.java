@@ -25,8 +25,8 @@ public class LongGrid4DYZCrossSection extends Grid4DYZCrossSection<LongGrid4D> i
 	}
 
 	@Override
-	public long getValueAtPosition(int x, int y) throws Exception {
-		return source.getValueAtPosition(x, y, this.y, z);
+	public long getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(x, y, this.y, z);
 	}
 
 }
