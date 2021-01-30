@@ -16,38 +16,48 @@
  */
 package cellularautomata.grid3d;
 
-import java.io.Serializable;
-
 import cellularautomata.grid.ActionableGrid;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid2d.IntGrid2D;
 
-public class ActionableAnisotropicIntGrid3DZCrossSectionCopy extends ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> implements Serializable {
+public class ActionableIntGrid3DZCrossSectionProcessor extends ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> implements GridProcessor<IntGrid3D> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2151281544490932379L;
-	
-	private AnisotropicIntGrid3DZCrossSectionBlock[] blocks;
+	private ActionableGrid<GridProcessor<IntGrid3D>, IntGrid3D> source;
 	private int z;
 
 	public int getZ() {
 		return z;
 	}
 
-	public ActionableAnisotropicIntGrid3DZCrossSectionCopy(AnisotropicIntGrid3DZCrossSectionBlock[] blocks, int z) {
-		this.blocks = blocks;
+	public void setZ(int z) {
+		this.z = z;
+	}
+
+	public ActionableIntGrid3DZCrossSectionProcessor(ActionableGrid<GridProcessor<IntGrid3D>, IntGrid3D> source, int z) {
+		this.source = source;
 		this.z = z;
 	}
 
 	@Override
-	public void processGrid() throws Exception {
-		triggerBeforeProcessing();
-		for (AnisotropicIntGrid3DZCrossSectionBlock block : blocks) {
-			triggerProcessGridBlock(block);
-		}
-		triggerAfterProcessing();
+	public void beforeProcessing() throws Exception {
+		triggerBeforeProcessing();		
 	}
 
+	@Override
+	public void afterProcessing() throws Exception {
+		triggerAfterProcessing();		
+	}
+
+	@Override
+	public void processGridBlock(IntGrid3D gridBlock) throws Exception {
+		if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
+			triggerProcessGridBlock(gridBlock.crossSectionAtZ(z));
+		}
+	}
+	
+	@Override
+	public void processGrid() throws Exception {
+		source.processGrid();
+	}
+	
 }
