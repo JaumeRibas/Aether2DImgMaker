@@ -62,24 +62,6 @@ public class SpreadIntegerValueSimple4D implements SymmetricEvolvingLongGrid4D {
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
-	}	
-	
-	/**
-	 * Creates an instance restoring a backup
-	 * 
-	 * @param backupPath the path to the backup file to restore.
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
-	 * @throws FileNotFoundException 
-	 */
-	public SpreadIntegerValueSimple4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		SpreadIntegerValueSimple4D data = (SpreadIntegerValueSimple4D) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		backgroundValue = data.backgroundValue;
-		grid = data.grid;
-		originIndex = data.originIndex;
-		boundsReached = data.boundsReached;
-		currentStep = data.currentStep;
 	}
 	
 	@Override
@@ -623,6 +605,6 @@ public class SpreadIntegerValueSimple4D implements SymmetricEvolvingLongGrid4D {
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		throw new UnsupportedOperationException();
 	}
 }

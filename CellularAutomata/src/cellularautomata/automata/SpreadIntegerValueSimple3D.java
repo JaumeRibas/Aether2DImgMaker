@@ -70,24 +70,6 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Creates an instance restoring a backup
-	 * 
-	 * @param backupPath the path to the backup file to restore.
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
-	 * @throws FileNotFoundException 
-	 */
-	public SpreadIntegerValueSimple3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		SpreadIntegerValueSimple3D data = (SpreadIntegerValueSimple3D) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		backgroundValue = data.backgroundValue;
-		grid = data.grid;
-		originIndex = data.originIndex;
-		boundsReached = data.boundsReached;
-		currentStep = data.currentStep;
-	}
-	
 	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step

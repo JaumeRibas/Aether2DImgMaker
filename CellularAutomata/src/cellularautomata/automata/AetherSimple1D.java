@@ -88,26 +88,26 @@ public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {
 			//Get the position's value
 			long value = grid[x];
 			//Get a list of the neighbors whose value is smaller than the one at the current position
-			List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(2);						
+			List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(2);						
 			long neighborValue;
 			if (x < grid.length - 1)
 				neighborValue = grid[x + 1];
 			else
 				neighborValue = 0;
 			if (neighborValue < value)
-				neighbors.add(new LongNeighbor(RIGHT, neighborValue));
+				neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
 			if (x > 0)
 				neighborValue = grid[x - 1];
 			else
 				neighborValue = 0;
 			if (neighborValue < value)
-				neighbors.add(new LongNeighbor(LEFT, neighborValue));
+				neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
 
 			//If there are any
 			if (neighbors.size() > 0) {
 				if (neighbors.size() > 1) {
 					//Sort them by value in ascending order
-					LongNeighbor next = neighbors.get(1);
+					Neighbor<Long> next = neighbors.get(1);
 					if (neighbors.get(0).getValue() > next.getValue()) {
 						neighbors.remove(1);
 						neighbors.add(0, next);
@@ -128,7 +128,7 @@ public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {
 							changed = true;
 							//the center keeps the remainder and one share
 							value = value - toShare + toShare%shareCount + share;
-							for (LongNeighbor n : neighbors) {
+							for (Neighbor<Long> n : neighbors) {
 								int nc = getNeighborCoordinates(x, n.getDirection());
 								newGrid[nc + indexOffset] += share;
 							}

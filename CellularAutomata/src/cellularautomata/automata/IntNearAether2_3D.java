@@ -18,11 +18,17 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigInteger;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid3D;
 
-public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D {
+public class IntNearAether2_3D implements SymmetricEvolvingIntGrid3D, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8988793559626431761L;
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;

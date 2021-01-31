@@ -16,39 +16,33 @@
  */
 package caimgmaker;
 
-import java.math.BigInteger;
+import org.apache.commons.math3.fraction.BigFraction;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether3DEnclosed2;
+import cellularautomata.automata.Aether3DInfinity;
+import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 
-public class Aether3DEnclosed2EvenOddImgMaker {
+public class Aether3DInfinityOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-1000000", "D:/data/test"};//, "150", "30", "10000"};//debug
+		args = new String[]{"-", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
-			long initialValue = 0;
+			boolean isPositive = false;
+			boolean isRestore = false;
 			String path;
 			int initialStep = 0;
-			int scanInitialZIndex = 0;
-			boolean isScanInitialZIndexDefined = false;	
+			int xScanInitialIndex = 0;
+			boolean isScanInitialXIndexDefined = false;	
 			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
-			String strInitialValue = args[0];
-			if (strInitialValue.matches("-?\\d+")) {
-				BigInteger tmp = new BigInteger(strInitialValue);
-				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
-						&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
-					initialValue = tmp.intValue();
-				} else {
-					System.err.println("Initial value out of range.");
-					return;
-				}
+			String initValOrBackupPath = args[0];
+			if (initValOrBackupPath.matches("\\+|-")) {
+				isPositive = initValOrBackupPath.equals("+");
 			} else {
-				System.err.println("Initial value '" + strInitialValue + "' is not a valid integer.");
-				return;
+				isRestore = true;
 			}
 			if (args.length > 1) {
 				path = args[1];
@@ -59,8 +53,8 @@ public class Aether3DEnclosed2EvenOddImgMaker {
 				if (args.length > 2) {
 					initialStep = Integer.parseInt(args[2]);
 					if (args.length > 3) {
-						scanInitialZIndex = Integer.parseInt(args[3]);
-						isScanInitialZIndexDefined = true;
+						xScanInitialIndex = Integer.parseInt(args[3]);
+						isScanInitialXIndexDefined = true;
 						if (args.length > 4) {
 							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
@@ -70,29 +64,32 @@ public class Aether3DEnclosed2EvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			Aether3DEnclosed2 ca;
-			int side = 50;
-			ca = new Aether3DEnclosed2(side, side, side, initialValue, side/2, side/2, side/2);
+			EvolvingNumberGrid3D<BigFraction> ca;
+			if (isRestore) {
+				ca = new Aether3DInfinity(initValOrBackupPath).asymmetricSection();
+			} else {
+				ca = new Aether3DInfinity(isPositive).asymmetricSection();
+			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
+			path += ca.getSubFolderPath();
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
 				imgMaker = new ImgMaker(millisecondsBetweenBackups);
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionEvenOddImages(ca, scanInitialZIndex, side/2, colorMapper, colorMapper, side, side, 
-					path + "/img", path + "/backups");
+			if (isScanInitialXIndexDefined) {
+				imgMaker.createXScanningAndZCrossSectionOddImages(ca, xScanInitialIndex, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
-				imgMaker.createScanningAndCrossSectionEvenOddImages(ca, side/2, colorMapper, colorMapper, side, side, 
-					path + "/img", path + "/backups");
-			}	
+				imgMaker.createXScanningAndZCrossSectionOddImages(ca, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
+			}
 		}		
 	}
 	

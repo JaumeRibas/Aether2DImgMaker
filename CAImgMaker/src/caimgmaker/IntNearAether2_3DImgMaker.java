@@ -83,7 +83,7 @@ public class IntNearAether2_3DImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getSubFolderPath() + "/img";
+			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {

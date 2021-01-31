@@ -22,6 +22,7 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.HueWithBackgroundMapper;
 import cellularautomata.automata.Aether2D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
+import cellularautomata.numbers.BigInt;
 
 public class Aether2DEvenOddImgMaker {
 	
@@ -51,7 +52,7 @@ public class Aether2DEvenOddImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			ColorMapper colorMapper = new HueWithBackgroundMapper(0, Color.BLACK);
+			ColorMapper colorMapper = new HueWithBackgroundMapper<BigInt>(BigInt.ZERO, Color.BLACK);
 			path += ca.getSubFolderPath() + "/img";	
 			ImgMaker imgMaker = new ImgMaker();
 			imgMaker.createEvenOddImages(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path);

@@ -92,44 +92,44 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 				for (int z = 0; z < grid[0][0].length; z++) {
 					long value = grid[x][y][z];
 					//make list of von Neumann neighbors with value smaller than current position's value
-					List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(6);						
+					List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(6);						
 					long neighborValue;
 					if (x < grid.length - 1)
 						neighborValue = grid[x + 1][y][z];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(RIGHT, neighborValue));
+						neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
 					if (x > 0)
 						neighborValue = grid[x - 1][y][z];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(LEFT, neighborValue));
+						neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
 					if (y < grid[x].length - 1)
 						neighborValue = grid[x][y + 1][z];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(UP, neighborValue));
+						neighbors.add(new Neighbor<Long>(UP, neighborValue));
 					if (y > 0)
 						neighborValue = grid[x][y - 1][z];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(DOWN, neighborValue));
+						neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
 					if (z < grid[x][y].length - 1)
 						neighborValue = grid[x][y][z + 1];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(FRONT, neighborValue));
+						neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
 					if (z > 0)
 						neighborValue = grid[x][y][z - 1];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new LongNeighbor(BACK, neighborValue));
+						neighbors.add(new Neighbor<Long>(BACK, neighborValue));
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
@@ -137,7 +137,7 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 						while (!sorted) {
 							sorted = true;
 							for (int i = neighbors.size() - 2; i >= 0; i--) {
-								LongNeighbor next = neighbors.get(i+1);
+								Neighbor<Long> next = neighbors.get(i+1);
 								if (neighbors.get(i).getValue() > next.getValue()) {
 									sorted = false;
 									neighbors.remove(i+1);
@@ -159,7 +159,7 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 									checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
 									changed = true;
 									value = value - toShare + toShare%shareCount + share;
-									for (LongNeighbor neighbor : neighbors) {
+									for (Neighbor<Long> neighbor : neighbors) {
 										int[] nc = getNeighborCoordinates(x, y, z, neighbor.getDirection());
 										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
 										//difference with AE
@@ -358,7 +358,7 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

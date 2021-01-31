@@ -17,6 +17,9 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
+import org.apache.commons.math3.FieldElement;
+import org.apache.commons.math3.fraction.BigFraction;
+
 import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
@@ -24,30 +27,35 @@ import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.numbers.BigInt;
 
-public class HueWithBackgroundMapper implements ColorMapper {
+public class HueWithBackgroundMapper<A extends Number & FieldElement<A> & Comparable<A>> implements ColorMapper {
 
-	private BigInt backgroundValue;
+	private A backgroundValue;
 	private Color backgroundColor;
 	
-	public HueWithBackgroundMapper(long backgroundValue, Color backgroundColor) {
-		this.backgroundValue = BigInt.valueOf(backgroundValue);
-		this.backgroundColor = backgroundColor;
-	}
-	
-	public HueWithBackgroundMapper(BigInt backgroundValue, Color backgroundColor) {
+	public HueWithBackgroundMapper(A backgroundValue, Color backgroundColor) {
 		this.backgroundValue = backgroundValue;
 		this.backgroundColor = backgroundColor;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
-	public ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<BigInt> grid, BigInt minValue, BigInt maxValue) {
-		ColorMap<BigInt> colorMap = null;
+	public <T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue) {
+		ColorMap<T> colorMap = null;
 		if (minValue.equals(maxValue)) {
-			colorMap = new SolidColorMap<BigInt>(getEmptyColor());
+			colorMap = new SolidColorMap<T>(getEmptyColor());
 		} else {
-			colorMap = new BigIntHueMap(minValue, maxValue);
+			if (minValue instanceof BigInt) {
+				colorMap = (ColorMap<T>) new BigIntHueMap((BigInt)minValue, (BigInt)maxValue);
+			}  else if (minValue instanceof BigFraction) {
+				colorMap = (ColorMap<T>) new BigFractionHueMap((BigFraction)minValue, (BigFraction)maxValue);
+			} else {
+				throw new UnsupportedOperationException(
+						"Missing " + ColorMap.class.getSimpleName() + "<"
+								+ minValue.getClass().getSimpleName() + "> implementation for " 
+								+ HueWithBackgroundMapper.class.getSimpleName());
+			} 
 		}
-		return new ColorMappedGrid2DWithBackground<BigInt>(grid, colorMap, backgroundValue, backgroundColor);
+		return new ColorMappedGrid2DWithBackground<T>(grid, colorMap, (T) backgroundValue, backgroundColor);//TODO review casting
 	}
 
 	@Override

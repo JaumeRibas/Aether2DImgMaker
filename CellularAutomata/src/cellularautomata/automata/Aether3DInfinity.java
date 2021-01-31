@@ -12,43 +12,45 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>
+    aBigFraction with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 package cellularautomata.automata;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid3D;
+import org.apache.commons.math3.fraction.BigFraction;
 
-public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable {
+import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid3D;
+
+/**
+ * An implementation that produces a pattern equivalent to the one produced by Aether when the initial value tends to infinity. 
+ * 
+ * @author Jaume
+ *
+ */
+public class Aether3DInfinity implements SymmetricEvolvingNumberGrid3D<BigFraction>, Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 585325613149940449L;
+	private static final long serialVersionUID = -2530829980428894317L;
 
 	/** A 3D array representing the grid */
-	private short[][][] grid;
+	private BigFraction[][][] grid;
 	
-	private short initialValue;
-	private long step;
+	private int step;
+	private final boolean isPositive;
+	private boolean isEvenStep = true;
 	
 	private int maxX;
 	
-	/**
-	 * Creates an instance with the given initial value
-	 * 
-	 * @param initialValue the value at the origin at step 0
-	 */
-	public ShortAether3D(short initialValue) {
-		if (initialValue < -9363) {//to prevent overflow of short type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -9,363. Use a greater initial value or a different implementation.");
-		}
-		this.initialValue = initialValue;
-		grid = Utils.buildAnisotropic3DShortArray(7);
-		grid[0][0][0] = this.initialValue;
+	public Aether3DInfinity(boolean isPositive) {
+		this.isPositive = isPositive;
+		grid = Utils.buildAnisotropic3DBigFractionArray(7);
+		grid[0][0][0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		maxX = 4;
 		step = 0;
 	}
@@ -61,9 +63,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public ShortAether3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		ShortAether3D data = (ShortAether3D) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
+	public Aether3DInfinity(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Aether3DInfinity data = (Aether3DInfinity) Utils.deserializeFromFile(backupPath);
+		isPositive = data.isPositive;
 		grid = data.grid;
 		maxX = data.maxX;
 		step = data.step;
@@ -71,62 +73,53 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 	
 	@Override
 	public boolean nextStep(){
-		short[][][] newGrid = new short[maxX + 3][][];
-		boolean changed = false;
-		short[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
-		short[][] newSmallerXSlice = null, 
-				newCurrentXSlice = Utils.buildAnisotropic2DShortArray(1), 
-				newGreaterXSlice = Utils.buildAnisotropic2DShortArray(2);// build new grid progressively to save memory
+		BigFraction[][][] newGrid = new BigFraction[maxX + 3][][];
+		BigFraction[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
+		BigFraction[][] newSmallerXSlice = null, 
+				newCurrentXSlice = Utils.buildAnisotropic2DBigFractionArray(1), 
+				newGreaterXSlice = Utils.buildAnisotropic2DBigFractionArray(2);// build new grid progressively to save memory
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0, z = 0
-		short currentValue = currentXSlice[0][0];
-		short greaterXNeighborValue = greaterXSlice[0][0];
-		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
-			changed = true;
-		}
+		BigFraction currentValue = currentXSlice[0][0];
+		BigFraction greaterXNeighborValue = greaterXSlice[0][0];
+		topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice);
 		// x = 1, y = 0, z = 0
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[2];
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = Utils.buildAnisotropic2DShortArray(3);
+		newGreaterXSlice = Utils.buildAnisotropic2DBigFractionArray(3);
 		newGrid[2] = newGreaterXSlice;
-		short[][][] newXSlices = new short[][][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
-		short[] relevantAsymmetricNeighborValues = new short[6];
+		BigFraction[][][] newXSlices = new BigFraction[][][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
+		BigFraction[] relevantAsymmetricNeighborValues = new BigFraction[6];
 		int[][] relevantAsymmetricNeighborCoords = new int[6][3];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[6];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[6];// to compensate for omitted symmetric positions
 		// reuse values obtained previously
-		short smallerXNeighborValue = currentValue;
+		BigFraction smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = greaterXSlice[0][0];
-		short greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		BigFraction greaterYNeighborValue = currentXSlice[1][0];
+		topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 1, y = 1, z = 0
 		// reuse values obtained previously
-		short smallerYNeighborValue = currentValue;
+		BigFraction smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][0];
-		short greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		BigFraction greaterZNeighborValue = currentXSlice[1][1];
+		topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 1, y = 1, z = 1
 		// reuse values obtained previously
-		short smallerZNeighborValue = currentValue;
+		BigFraction smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][1];
-		if (topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
-			changed = true;
-		}
+		topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice);
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0, z = 0
 		smallerXSlice = currentXSlice;
@@ -134,7 +127,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		greaterXSlice = grid[3];
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = Utils.buildAnisotropic2DShortArray(4);
+		newGreaterXSlice = Utils.buildAnisotropic2DBigFractionArray(4);
 		newGrid[3] = newGreaterXSlice;
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
@@ -143,11 +136,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 2, y = 1, z = 0
 		greaterXNeighborValue = greaterXSlice[1][0];
 		smallerXNeighborValue = smallerXSlice[1][0];
@@ -156,12 +147,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 2, y = 1, z = 1
 		greaterXNeighborValue = greaterXSlice[1][1];
 		smallerXNeighborValue = smallerXSlice[1][1];
@@ -169,23 +158,19 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 2, y = 2, z = 0
 		currentValue = currentXSlice[2][0];
 		greaterXNeighborValue = greaterXSlice[2][0];
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
-		if (topplePositionType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		topplePositionType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
-				newXSlices)) {
-			changed = true;
-		}
+				newXSlices);
 		// x = 2, y = 2, z = 1
 		greaterXNeighborValue = greaterXSlice[2][1];
 		smallerYNeighborValue = currentXSlice[1][1];
@@ -193,21 +178,17 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 2, y = 2, z = 2
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[2][2];
-		if (topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
-				newGreaterXSlice)) {
-			changed = true;
-		}
+		topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+				newGreaterXSlice);
 		grid[1] = null;
 		// x = 3, y = 0, z = 0
 		smallerXSlice = currentXSlice;
@@ -215,7 +196,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		greaterXSlice = grid[4];
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = Utils.buildAnisotropic2DShortArray(5);
+		newGreaterXSlice = Utils.buildAnisotropic2DBigFractionArray(5);
 		newGrid[4] = newGreaterXSlice;
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
@@ -224,11 +205,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 1, z = 0
 		greaterXNeighborValue = greaterXSlice[1][0];
 		smallerXNeighborValue = smallerXSlice[1][0];
@@ -237,12 +216,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 1, z = 1
 		greaterXNeighborValue = greaterXSlice[1][1];
 		smallerXNeighborValue = smallerXSlice[1][1];
@@ -250,12 +227,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 2, z = 0
 		currentValue = currentXSlice[2][0];
 		greaterXNeighborValue = greaterXSlice[2][0];
@@ -264,12 +239,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		if (topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 2, z = 1
 		greaterXNeighborValue = greaterXSlice[2][1];
 		smallerXNeighborValue = smallerXSlice[2][1];
@@ -279,12 +252,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborShareMultipliers, newXSlices);
 		// x = 3, y = 2, z = 2
 		greaterXNeighborValue = greaterXSlice[2][2];
 		smallerXNeighborValue = smallerXSlice[2][2];
@@ -292,22 +263,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		topplePositionType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 3, z = 0
 		currentValue = currentXSlice[3][0];
 		greaterXNeighborValue = greaterXSlice[3][0];
 		smallerYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[3][1];
-		if (topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 3, z = 1
 		greaterXNeighborValue = greaterXSlice[3][1];
 		smallerYNeighborValue = currentXSlice[2][1];
@@ -315,12 +282,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][2];
-		if (topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+		topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 3, z = 2
 		greaterXNeighborValue = greaterXSlice[3][2];
 		smallerYNeighborValue = currentXSlice[2][2];
@@ -328,53 +293,48 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][3];
-		if (topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-			changed = true;
-		}
+				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// x = 3, y = 3, z = 3
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[3][3];
-		if (topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
-				newGreaterXSlice)) {
-			changed = true;
-		}
+		topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+				newGreaterXSlice);
 		grid[2] = null;
 		// 4 >= x < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
-		short[][][] xSlices = new short[][][] {null, currentXSlice, greaterXSlice};
+		BigFraction[][][] xSlices = new BigFraction[][][] {null, currentXSlice, greaterXSlice};
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
-		if (toppleRangeBeyondX3(xSlices, newXSlices, newGrid, 4, edgeMinusTwo, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse this arrays?
-			changed = true;
-		}
+		toppleRangeBeyondX3(xSlices, newXSlices, newGrid, 4, edgeMinusTwo, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts); // is it faster to reuse this arrays?
 		//edge - 2 >= x < edge
-		if (toppleRangeBeyondX3(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
-			changed = true;
-			maxX++;
-		}
+		toppleRangeBeyondX3(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborSymmetryCounts);
 		if (newGrid.length > grid.length) {
-			newGrid[grid.length] = Utils.buildAnisotropic2DShortArray(newGrid.length);
+			newGrid[grid.length] = Utils.buildAnisotropic2DBigFractionArray(newGrid.length);
 		}
 		grid = newGrid;
+		maxX++;
 		step++;
-		return changed;
+		isEvenStep = !isEvenStep;
+		return true;
 	}
 	
-	private boolean toppleRangeBeyondX3(short[][][] xSlices, short[][][] newXSlices, short[][][] newGrid, int minX, int maxX, 
-			short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+	private boolean toppleRangeBeyondX3(BigFraction[][][] xSlices, BigFraction[][][] newXSlices, BigFraction[][][] newGrid, int minX, int maxX, 
+			BigFraction[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
-		short[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
-		short[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
+		BigFraction[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
+		BigFraction[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
 			// y = 0, z = 0
 			smallerXSlice = currentXSlice;
@@ -382,47 +342,41 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			greaterXSlice = grid[xPlusOne];
 			newSmallerXSlice = newCurrentXSlice;
 			newCurrentXSlice = newGreaterXSlice;
-			newGreaterXSlice = Utils.buildAnisotropic2DShortArray(xPlusTwo);
+			newGreaterXSlice = Utils.buildAnisotropic2DBigFractionArray(xPlusTwo);
 			newGrid[xPlusOne] = newGreaterXSlice;
 			newXSlices[0] = newSmallerXSlice;
 			newXSlices[1] = newCurrentXSlice;
 			newXSlices[2] = newGreaterXSlice;
-			short currentValue = currentXSlice[0][0];
-			short greaterXNeighborValue = greaterXSlice[0][0];
-			short smallerXNeighborValue = smallerXSlice[0][0];
-			short greaterYNeighborValue = currentXSlice[1][0];
-			if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			BigFraction currentValue = currentXSlice[0][0];
+			BigFraction greaterXNeighborValue = greaterXSlice[0][0];
+			BigFraction smallerXNeighborValue = smallerXSlice[0][0];
+			BigFraction greaterYNeighborValue = currentXSlice[1][0];
+			topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// y = 1, z = 0
 			greaterXNeighborValue = greaterXSlice[1][0];
 			smallerXNeighborValue = smallerXSlice[1][0];
 			// reuse values obtained previously
-			short smallerYNeighborValue = currentValue;
+			BigFraction smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[2][0];
-			short greaterZNeighborValue = currentXSlice[1][1];
-			if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			BigFraction greaterZNeighborValue = currentXSlice[1][1];
+			topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// y = 1, z = 1
 			greaterXNeighborValue = greaterXSlice[1][1];
 			smallerXNeighborValue = smallerXSlice[1][1];
 			greaterYNeighborValue = currentXSlice[2][1];
 			// reuse values obtained previously
-			short smallerZNeighborValue = currentValue;
+			BigFraction smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// y = 2, z = 0
 			currentValue = currentXSlice[2][0];
 			greaterXNeighborValue = greaterXSlice[2][0];
@@ -431,11 +385,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			smallerYNeighborValue = smallerZNeighborValue;
 			greaterZNeighborValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[3][0];
-			if (topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
-					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// y = 2, z = 1
 			greaterXNeighborValue = greaterXSlice[2][1];
 			smallerXNeighborValue = smallerXSlice[2][1];
@@ -445,12 +397,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[2][2];
-			if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborShareMultipliers, newXSlices);
 			// y = 2, z = 2
 			greaterXNeighborValue = greaterXSlice[2][2];
 			smallerXNeighborValue = smallerXSlice[2][2];
@@ -458,11 +408,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			topplePositionType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			int y = 3, yMinusOne = 2, yPlusOne = 4;
 			for (int lastY = x - 2; y <= lastY;) {
 				// z = 0
@@ -472,11 +420,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 				greaterYNeighborValue = currentXSlice[yPlusOne][0];
 				smallerYNeighborValue = currentXSlice[yMinusOne][0];
 				greaterZNeighborValue = currentXSlice[y][1];
-				if (topplePositionType12(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				topplePositionType12(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
-						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-					anyToppled = true;
-				}
+						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 				// z = 1
 				greaterXNeighborValue = greaterXSlice[y][1];
 				smallerXNeighborValue = smallerXSlice[y][1];
@@ -486,12 +432,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][2];
-				if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
-					anyToppled = true;
-				}
+						relevantAsymmetricNeighborShareMultipliers, newXSlices);
 				int z = 2, zPlusOne = 3;
 				for (int lastZ = y - 2; z <= lastZ;) {
 					greaterXNeighborValue = greaterXSlice[y][z];
@@ -502,11 +446,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
 					greaterZNeighborValue = currentXSlice[y][zPlusOne];
-					if (topplePositionType15(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
+					topplePositionType15(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
-							relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, newXSlices)) {
-						anyToppled = true;
-					}
+							relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, newXSlices);
 					z = zPlusOne;
 					zPlusOne++;
 				}
@@ -519,12 +461,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][zPlusOne];
-				if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
-					anyToppled = true;
-				}
+						relevantAsymmetricNeighborShareMultipliers, newXSlices);
 				// z = y
 				z = zPlusOne;
 				greaterXNeighborValue = greaterXSlice[y][z];
@@ -533,11 +473,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				if (topplePositionType13(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				topplePositionType13(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-						relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-					anyToppled = true;
-				}				 
+						relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 				yMinusOne = y;
 				y = yPlusOne;
 				yPlusOne++;
@@ -549,12 +487,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			greaterYNeighborValue = currentXSlice[yPlusOne][0];
 			smallerYNeighborValue = currentXSlice[yMinusOne][0];
 			greaterZNeighborValue = currentXSlice[y][1];
-			if (topplePositionType6(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			topplePositionType6(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// y = x - 1, z = 1
 			greaterXNeighborValue = greaterXSlice[y][1];
 			smallerXNeighborValue = smallerXSlice[y][1];
@@ -564,12 +500,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][2];
-			if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborShareMultipliers, newXSlices);
 			int z = 2, zPlusOne = 3, lastZ = y - 2;
 			for(; z <= lastZ;) {
 				greaterXNeighborValue = greaterXSlice[y][z];
@@ -580,12 +514,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][zPlusOne];
-				if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
-					anyToppled = true;
-				}
+						relevantAsymmetricNeighborShareMultipliers, newXSlices);
 				z = zPlusOne;
 				zPlusOne++;
 			}
@@ -598,12 +530,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][zPlusOne];
-			if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborShareMultipliers, newXSlices);
 			z = zPlusOne;
 			zPlusOne++;
 			// y = x - 1, z = y
@@ -613,12 +543,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType7(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+			topplePositionType7(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			yMinusOne = y;
 			y = yPlusOne;
 			// y = x, z = 0
@@ -626,11 +554,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			greaterXNeighborValue = greaterXSlice[y][0];
 			smallerYNeighborValue = currentXSlice[yMinusOne][0];
 			greaterZNeighborValue = currentXSlice[y][1];
-			if (topplePositionType8(y, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			topplePositionType8(y, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// y = x, z = 1
 			greaterXNeighborValue = greaterXSlice[y][1];
 			smallerYNeighborValue = currentXSlice[yMinusOne][1];
@@ -638,12 +564,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][2];
-			if (topplePositionType9(y, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+			topplePositionType9(y, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			z = 2;
 			zPlusOne = 3;
 			lastZ++;
@@ -654,11 +578,9 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][zPlusOne];
-				if (topplePositionType14(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
+				topplePositionType14(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, 
-						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-					anyToppled = true;
-				}
+						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			}			
 			// y = x, z = y - 1
 			greaterXNeighborValue = greaterXSlice[y][z];
@@ -667,22 +589,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][zPlusOne];
-			if (topplePositionType9(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+			topplePositionType9(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 					greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
-				anyToppled = true;
-			}
+					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			z = zPlusOne;
 			// y = x, z = y
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterXNeighborValue = greaterXSlice[y][z];
-			if (topplePositionType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
-					newGreaterXSlice)) {
-				anyToppled = true;
-			}
+			topplePositionType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+					newGreaterXSlice);
 			grid[xMinusOne] = null;
 		}
 		xSlices[1] = currentXSlice;
@@ -692,31 +610,24 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		return anyToppled;
 	}
 
-	private static boolean topplePositionType1(short currentValue, short greaterXNeighborValue, short[][] newCurrentXSlice, 
-			short[][] newGreaterXSlice) {
-		boolean toppled = false;
-		if (greaterXNeighborValue < currentValue) {
-			int toShare = currentValue - greaterXNeighborValue;
-			int share = toShare/7;
-			if (share != 0) {
-				toppled = true;
-				newCurrentXSlice[0][0] += currentValue - toShare + share + toShare%7;
-				newGreaterXSlice[0][0] += share;
-			} else {
-				newCurrentXSlice[0][0] += currentValue;
-			}			
+	private static void topplePositionType1(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction[][] newCurrentXSlice, 
+			BigFraction[][] newGreaterXSlice) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+			BigFraction toShare = currentValue.subtract(greaterXNeighborValue);
+			BigFraction share = toShare.divide(7);
+			newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue).subtract(toShare).add(share);
+			newGreaterXSlice[0][0] = newGreaterXSlice[0][0].add(share);		
 		} else {
-			newCurrentXSlice[0][0] += currentValue;
+			newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue);
 		}
-		return toppled;
 	}
 
-	private static boolean topplePositionType2(short currentValue, short greaterXNeighborValue, short smallerXNeighborValue, 
-			short greaterYNeighborValue, short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, short[][][] newXSlices) {
+	private static void topplePositionType2(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerXNeighborValue, 
+			BigFraction greaterYNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;// this is the index of the new slice: 0->newSmallerXSlice, 1->newCurrentXSlice, 2->newGreaterXSlice
@@ -727,7 +638,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerXNeighborValue < currentValue) {
+		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -738,7 +649,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterYNeighborValue < currentValue) {
+		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -749,20 +660,17 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(short currentValue, short greaterXNeighborValue, short smallerYNeighborValue, 
-			short greaterZNeighborValue, short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, short[][][] newXSlices) {
+	private static void topplePositionType3(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerYNeighborValue, 
+			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -773,7 +681,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerYNeighborValue < currentValue) {
+		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -784,7 +692,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterZNeighborValue < currentValue) {
+		if (greaterZNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -795,98 +703,72 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(short currentValue, short greaterXNeighborValue, short smallerZNeighborValue, 
-			short[][] newCurrentXSlice, short[][] newGreaterXSlice) {
-		boolean toppled = false;
-		if (smallerZNeighborValue < currentValue) {
-			if (greaterXNeighborValue < currentValue) {
-				if (smallerZNeighborValue == greaterXNeighborValue) {
+	private static void topplePositionType4(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerZNeighborValue, 
+			BigFraction[][] newCurrentXSlice, BigFraction[][] newGreaterXSlice) {
+		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
+			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
-					int toShare = currentValue - greaterXNeighborValue; 
-					int share = toShare/7;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[1][0] += share + share;// one more for the symmetric position at the other side
-					newCurrentXSlice[1][1] += currentValue - toShare + share + toShare%7;
-					newGreaterXSlice[1][1] += share;
-				} else if (smallerZNeighborValue < greaterXNeighborValue) {
+					BigFraction toShare = currentValue.subtract(greaterXNeighborValue);
+					BigFraction share = toShare.divide(7);
+					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);// one more for the symmetric position at the other side
+					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share);
+					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
+				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
-					int toShare = currentValue - greaterXNeighborValue; 
-					int share = toShare/7;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[1][0] += share + share;
-					newGreaterXSlice[1][1] += share;
-					int currentRemainingValue = currentValue - 6*share;
-					toShare = currentRemainingValue - smallerZNeighborValue; 
-					share = toShare/4;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[1][0] += share + share;
-					newCurrentXSlice[1][1] += currentRemainingValue - toShare + share + toShare%4;
+					BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+					BigFraction share = toShare.divide(7);
+					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
+					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
+					BigFraction currentRemainingValue = currentValue.subtract(share.multiply(6));
+					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
+					share = toShare.divide(4);
+					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
+					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share);
 				} else {
 					// gx < sz < current
-					int toShare = currentValue - smallerZNeighborValue; 
-					int share = toShare/7;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[1][0] += share + share;
-					newGreaterXSlice[1][1] += share;
-					int currentRemainingValue = currentValue - 6*share;
-					toShare = currentRemainingValue - greaterXNeighborValue; 
-					share = toShare/4;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[1][1] += currentRemainingValue - toShare + share + toShare%4;
-					newGreaterXSlice[1][1] += share;
+					BigFraction toShare = currentValue.subtract(smallerZNeighborValue); 
+					BigFraction share = toShare.divide(7);
+					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
+					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
+					BigFraction currentRemainingValue = currentValue.subtract(share.multiply(6));
+					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
+					share = toShare.divide(4);
+					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share);
+					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 				}
 			} else {
 				// sz < current <= gx
-				int toShare = currentValue - smallerZNeighborValue; 
-				int share = toShare/4;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentXSlice[1][0] += share + share;
-				newCurrentXSlice[1][1] += currentValue - toShare + share + toShare%4;
+				BigFraction toShare = currentValue.subtract(smallerZNeighborValue); 
+				BigFraction share = toShare.divide(4);
+				newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
+				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share);
 			}
 		} else {
-			if (greaterXNeighborValue < currentValue) {
+			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gx < current <= sz
-				int toShare = currentValue - greaterXNeighborValue; 
-				int share = toShare/4;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentXSlice[1][1] += currentValue - toShare + share + toShare%4;
-				newGreaterXSlice[1][1] += share;
+				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+				BigFraction share = toShare.divide(4);
+				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share);
+				newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 			} else {
-				newCurrentXSlice[1][1] += currentValue;
+				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue);
 			}
 		}
-		return toppled;
 	}
 
-	private static boolean topplePositionType5(short currentValue, short greaterXNeighborValue, 
-			short smallerXNeighborValue, short greaterYNeighborValue, short[] relevantAsymmetricNeighborValues, 
+	private static void topplePositionType5(BigFraction currentValue, BigFraction greaterXNeighborValue, 
+			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
-			short[][][] newXSlices) {
+			BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -896,7 +778,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerXNeighborValue < currentValue) {
+		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -906,7 +788,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterYNeighborValue < currentValue) {
+		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -916,22 +798,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	};
 
-	private static boolean topplePositionType6(int y, short currentValue, short gXValue, short sXValue, 
-			int sXShareMultiplier, short gYValue, int gYShareMultiplier, short sYValue, int sYShareMultiplier, 
-			short gZValue, int gZShareMultiplier, short[] relevantAsymmetricNeighborValues, 
+	private static void topplePositionType6(int y, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
+			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sYValue, int sYShareMultiplier, 
+			BigFraction gZValue, int gZShareMultiplier, BigFraction[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, short[][][] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (gXValue < currentValue) {
+		if (gXValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -942,7 +820,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (sXValue < currentValue) {
+		if (sXValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -953,7 +831,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (gYValue < currentValue) {
+		if (gYValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -964,7 +842,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (sYValue < currentValue) {
+		if (sYValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -975,7 +853,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (gZValue < currentValue) {
+		if (gZValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -986,22 +864,19 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType7(int coord, short currentValue, short gXValue, short sXValue, 
-			int sXShareMultiplier, short gYValue, int gYShareMultiplier, short sZValue, 
-			int sZShareMultiplier, short[] relevantAsymmetricNeighborValues, 
+	private static void topplePositionType7(int coord, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
+			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sZValue, 
+			int sZShareMultiplier, BigFraction[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, short[][][] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (gXValue < currentValue) {
+		if (gXValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -1012,7 +887,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (sXValue < currentValue) {
+		if (sXValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -1023,7 +898,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (gYValue < currentValue) {
+		if (gYValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1034,7 +909,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (sZValue < currentValue) {
+		if (sZValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1045,20 +920,17 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int y, short currentValue, short greaterXNeighborValue, short smallerYNeighborValue, 
-			short greaterZNeighborValue, short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, short[][][] newXSlices ) {
+	private static void topplePositionType8(int y, BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerYNeighborValue, 
+			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -1068,7 +940,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerYNeighborValue < currentValue) {
+		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1078,7 +950,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterZNeighborValue < currentValue) {
+		if (greaterZNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1088,22 +960,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int y, int z, short currentValue, short gXValue, short sYValue, 
-			int sYShareMultiplier, short gZValue, int gZShareMultiplier, short sZValue, int sZShareMultiplier, 
-			short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+	private static void topplePositionType9(int y, int z, BigFraction currentValue, BigFraction gXValue, BigFraction sYValue, 
+			int sYShareMultiplier, BigFraction gZValue, int gZShareMultiplier, BigFraction sZValue, int sZShareMultiplier, 
+			BigFraction[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			short[][][] newXSlices) {
+			BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (gXValue < currentValue) {
+		if (gXValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -1114,7 +982,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (sYValue < currentValue) {
+		if (sYValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1125,7 +993,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (gZValue < currentValue) {
+		if (gZValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1136,7 +1004,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (sZValue < currentValue) {
+		if (sZValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1147,99 +1015,73 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int coord, short currentValue, short greaterXNeighborValue, 
-			short smallerZNeighborValue, short[][] newCurrentXSlice, short[][] newGreaterXSlice) {
-		boolean toppled = false;
-		if (smallerZNeighborValue < currentValue) {
-			if (greaterXNeighborValue < currentValue) {
-				if (smallerZNeighborValue == greaterXNeighborValue) {
+	private static void topplePositionType10(int coord, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+			BigFraction smallerZNeighborValue, BigFraction[][] newCurrentXSlice, BigFraction[][] newGreaterXSlice) {
+		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
+			int coordMinusOne = coord - 1;
+			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
-					int toShare = currentValue - greaterXNeighborValue; 
-					int share = toShare/7;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[coord][coord - 1] += share;
-					newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%7;
-					newGreaterXSlice[coord][coord] += share;
-				} else if (smallerZNeighborValue < greaterXNeighborValue) {
+					BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+					BigFraction share = toShare.divide(7);
+					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
+					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share);
+					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
+				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
-					int coordMinusOne = coord - 1;
-					int toShare = currentValue - greaterXNeighborValue; 
-					int share = toShare/7;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[coord][coordMinusOne] += share;
-					newGreaterXSlice[coord][coord] += share;
-					int currentRemainingValue = currentValue - 6*share;
-					toShare = currentRemainingValue - smallerZNeighborValue; 
-					share = toShare/4;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[coord][coordMinusOne] += share;
-					newCurrentXSlice[coord][coord] += currentRemainingValue - toShare + share + toShare%4;
+					BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+					BigFraction share = toShare.divide(7);
+					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
+					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
+					BigFraction currentRemainingValue = currentValue.subtract(share.multiply(6));
+					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
+					share = toShare.divide(4);
+					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
+					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share);
 				} else {
 					// gx < sz < current
-					int toShare = currentValue - smallerZNeighborValue; 
-					int share = toShare/7;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[coord][coord - 1] += share;
-					newGreaterXSlice[coord][coord] += share;
-					int currentRemainingValue = currentValue - 6*share;
-					toShare = currentRemainingValue - greaterXNeighborValue; 
-					share = toShare/4;
-					if (share != 0) {
-						toppled = true;
-					}
-					newCurrentXSlice[coord][coord] += currentRemainingValue - toShare + share + toShare%4;
-					newGreaterXSlice[coord][coord] += share;
+					BigFraction toShare = currentValue.subtract(smallerZNeighborValue); 
+					BigFraction share = toShare.divide(7);
+					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
+					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
+					BigFraction currentRemainingValue = currentValue.subtract(share.multiply(6));
+					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
+					share = toShare.divide(4);
+					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share);
+					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 				}
 			} else {
 				// sz < current <= gx
-				int toShare = currentValue - smallerZNeighborValue; 
-				int share = toShare/4;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentXSlice[coord][coord - 1] += share;
-				newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%4;
+				BigFraction toShare = currentValue.subtract(smallerZNeighborValue); 
+				BigFraction share = toShare.divide(4);
+				newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
+				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share);
 			}
 		} else {
-			if (greaterXNeighborValue < currentValue) {
+			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gx < current <= sz
-				int toShare = currentValue - greaterXNeighborValue; 
-				int share = toShare/4;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%4;
-				newGreaterXSlice[coord][coord] += share;
+				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+				BigFraction share = toShare.divide(4);
+				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share);
+				newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 			} else {
-				newCurrentXSlice[coord][coord] += currentValue;
+				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue);
 			}
 		}
-		return toppled;
 	}
 
-	private static boolean topplePositionType11(int y, int z, short currentValue, short gXValue, short sXValue, 
-			int sXShareMultiplier, short gYValue, int gYShareMultiplier, short sYValue, int sYShareMultiplier, 
-			short gZValue, int gZShareMultiplier, short sZValue, int sZShareMultiplier, short[] relevantNeighborValues, int[][] relevantNeighborCoords, 
+	private static void topplePositionType11(int y, int z, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
+			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sYValue, int sYShareMultiplier, 
+			BigFraction gZValue, int gZShareMultiplier, BigFraction sZValue, int sZShareMultiplier, BigFraction[] relevantNeighborValues, int[][] relevantNeighborCoords, 
 			int[] relevantNeighborShareMultipliers, 
-			short[][][] newXSlices) {
+			BigFraction[][][] newXSlices) {
 		int relevantNeighborCount = 0;
-		if (gXValue < currentValue) {
+		if (gXValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount ] = gXValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 2;
@@ -1248,7 +1090,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborShareMultipliers[relevantNeighborCount] = 1;
 			relevantNeighborCount++;
 		}
-		if (sXValue < currentValue) {
+		if (sXValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = sXValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 0;
@@ -1257,7 +1099,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborShareMultipliers[relevantNeighborCount] = sXShareMultiplier;
 			relevantNeighborCount++;
 		}
-		if (gYValue < currentValue) {
+		if (gYValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = gYValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1266,7 +1108,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborShareMultipliers[relevantNeighborCount] = gYShareMultiplier;
 			relevantNeighborCount++;
 		}
-		if (sYValue < currentValue) {
+		if (sYValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = sYValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1275,7 +1117,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborShareMultipliers[relevantNeighborCount] = sYShareMultiplier;
 			relevantNeighborCount++;
 		}
-		if (gZValue < currentValue) {
+		if (gZValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = gZValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1284,7 +1126,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborShareMultipliers[relevantNeighborCount] = gZShareMultiplier;
 			relevantNeighborCount++;
 		}
-		if (sZValue < currentValue) {
+		if (sZValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = sZValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1293,22 +1135,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
 			relevantNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
-				relevantNeighborShareMultipliers, relevantNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int y, short currentValue, short greaterXNeighborValue, 
-			short smallerXNeighborValue, short greaterYNeighborValue, short smallerYNeighborValue, 
-			short greaterZNeighborValue, short[] relevantAsymmetricNeighborValues, 
+	private static void topplePositionType12(int y, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction smallerYNeighborValue, 
+			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			short[][][] newXSlices) {
+			BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount ] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -1318,7 +1156,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerXNeighborValue < currentValue) {
+		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -1328,7 +1166,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterYNeighborValue < currentValue) {
+		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1338,7 +1176,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerYNeighborValue < currentValue) {
+		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1348,7 +1186,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterZNeighborValue < currentValue) {
+		if (greaterZNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1358,22 +1196,18 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
+		topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
-				relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int coord, short currentValue, short greaterXNeighborValue, 
-			short smallerXNeighborValue, short greaterYNeighborValue, short smallerZNeighborValue, 
-			short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, short[][][] newXSlices) {
+	private static void topplePositionType13(int coord, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction smallerZNeighborValue, 
+			BigFraction[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -1383,7 +1217,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerXNeighborValue < currentValue) {
+		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -1393,7 +1227,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterYNeighborValue < currentValue) {
+		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1403,7 +1237,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerZNeighborValue < currentValue) {
+		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1413,21 +1247,17 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int y, int z, short currentValue, short greaterXNeighborValue, 
-			short smallerYNeighborValue,	short greaterZNeighborValue, short smallerZNeighborValue, 
-			short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, short[][][] newXSlices) {
+	private static void topplePositionType14(int y, int z, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+			BigFraction smallerYNeighborValue,	BigFraction greaterZNeighborValue, BigFraction smallerZNeighborValue, 
+			BigFraction[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -1437,7 +1267,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerYNeighborValue < currentValue) {
+		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1447,7 +1277,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (greaterZNeighborValue < currentValue) {
+		if (greaterZNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterZNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1457,7 +1287,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (smallerZNeighborValue < currentValue) {
+		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerZNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -1467,20 +1297,16 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int y, int z, short currentValue, short greaterXNeighborValue, 
-			short smallerXNeighborValue,	short greaterYNeighborValue, short smallerYNeighborValue, 
-			short greaterZNeighborValue, short smallerZNeighborValue, short[] relevantNeighborValues, 
-			int[][] relevantNeighborCoords, short[][][] newXSlices) {
+	private static void topplePositionType15(int y, int z, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+			BigFraction smallerXNeighborValue,	BigFraction greaterYNeighborValue, BigFraction smallerYNeighborValue, 
+			BigFraction greaterZNeighborValue, BigFraction smallerZNeighborValue, BigFraction[] relevantNeighborValues, 
+			int[][] relevantNeighborCoords, BigFraction[][][] newXSlices) {
 		int relevantNeighborCount = 0;
-		if (greaterXNeighborValue < currentValue) {
+		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 2;
@@ -1488,7 +1314,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			nc[2] = z;
 			relevantNeighborCount++;
 		}
-		if (smallerXNeighborValue < currentValue) {
+		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 0;
@@ -1496,7 +1322,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			nc[2] = z;
 			relevantNeighborCount++;
 		}
-		if (greaterYNeighborValue < currentValue) {
+		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1504,7 +1330,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			nc[2] = z;
 			relevantNeighborCount++;
 		}
-		if (smallerYNeighborValue < currentValue) {
+		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = smallerYNeighborValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1512,7 +1338,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			nc[2] = z;
 			relevantNeighborCount++;
 		}
-		if (greaterZNeighborValue < currentValue) {
+		if (greaterZNeighborValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = greaterZNeighborValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1520,7 +1346,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			nc[2] = z + 1;
 			relevantNeighborCount++;
 		}
-		if (smallerZNeighborValue < currentValue) {
+		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			relevantNeighborValues[relevantNeighborCount] = smallerZNeighborValue;
 			int[] nc = relevantNeighborCoords[relevantNeighborCount];
 			nc[0] = 1;
@@ -1528,501 +1354,409 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 			nc[2] = z - 1;
 			relevantNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
-				relevantNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborCount);
 	}
 	
-	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] neighborValues,
+	private static void topplePosition(BigFraction[][][] newXSlices, BigFraction value, int y, int z, BigFraction[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
-		boolean toppled = false;
 		switch (neighborCount) {
 			case 3:
 				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, 
 						neighborCoords, 3);
 				break;
 			case 2:
-				short n0Val = neighborValues[0], n1Val = neighborValues[1];
+				BigFraction n0Val = neighborValues[0], n1Val = neighborValues[1];
 				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
-				if (n0Val == n1Val) {
+				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
-					newXSlices[1][y][z] += value - toShare + share + toShare%3;
-				} else if (n0Val < n1Val) {
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(3);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share);
+				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					int toShare = value - n1Val; 
-					int share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%2;
+					BigFraction toShare = value.subtract(n1Val); 
+					BigFraction share = toShare.divide(3);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n0Val);
+					share = toShare.divide(2);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				} else {
 					// n1Val < n0Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%2;
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(3);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n1Val);
+					share = toShare.divide(2);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				}				
 				break;
 			case 1:
-				int toShare = value - neighborValues[0];
-				int share = toShare/2;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%2 + share);
+				BigFraction toShare = value.subtract(neighborValues[0]);
+				BigFraction share = toShare.divide(2);
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					int[] nc = neighborCoords[0];
-					newXSlices[nc[0]][nc[1]][nc[2]] += share;
+					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 				}
 				// no break
 			case 0:
-				newXSlices[1][y][z] += value;
+				newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, neighborCoords, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, neighborCoords, 
 						neighborCount);
 		}
-		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(short[][][] newXSlices, short value, int y, int z, 
-			short[] neighborValues, int[][] neighborCoords, int neighborCount) {
-		boolean toppled = false;
+	private static void topplePositionSortedNeighbors(BigFraction[][][] newXSlices, BigFraction value, int y, int z, 
+			BigFraction[] neighborValues, int[][] neighborCoords, int neighborCount) {
 		int shareCount = neighborCount + 1;
-		short neighborValue = neighborValues[0];
-		int toShare = value - neighborValue;
-		int share = toShare/shareCount;
-		if (share != 0) {
-			toppled = true;
-			value = (short) (value - toShare + toShare%shareCount + share);
+		BigFraction neighborValue = neighborValues[0];
+		BigFraction toShare = value.subtract(neighborValue);
+		BigFraction share = toShare.divide(new BigFraction(shareCount));
+		if (!share.equals(BigFraction.ZERO)) {
+			value = value.subtract(toShare).add(share);
 			for (int j = 0; j < neighborCount; j++) {
 				int[] nc = neighborCoords[j];
-				newXSlices[nc[0]][nc[1]][nc[2]] += share;
+				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 			}
 		}
-		short previousNeighborValue = neighborValue;
+		BigFraction previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
-			if (neighborValue != previousNeighborValue) {
-				toShare = value - neighborValue;
-				share = toShare/shareCount;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%shareCount + share);
+			if (!neighborValue.equals(previousNeighborValue)) {
+				toShare = value.subtract(neighborValue);
+				share = toShare.divide(new BigFraction(shareCount));
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					for (int j = i; j < neighborCount; j++) {
 						int[] nc = neighborCoords[j];
-						newXSlices[nc[0]][nc[1]][nc[2]] += share;
+						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount--;
 		}
-		newXSlices[1][y][z] += value;
-		return toppled;
+		newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 	}
 	
-	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] asymmetricNeighborValues,
+	private static void topplePosition(BigFraction[][][] newXSlices, BigFraction value, int y, int z, BigFraction[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
-		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 3:
 				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				short n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				BigFraction n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
 				int shareCount = neighborCount + 1;
-				if (n0Val == n1Val) {
+				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
-					newXSlices[1][y][z] += value - toShare + share + toShare%shareCount;
-				} else if (n0Val < n1Val) {
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share);
+				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					int toShare = value - n1Val; 
-					int share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
+					BigFraction toShare = value.subtract(n1Val); 
+					BigFraction share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n0Val);
+					share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				} else {
 					// n1Val < n0Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n1Val);
+					share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				}				
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				int toShare = value - asymmetricNeighborValues[0];
-				int share = toShare/shareCount;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%shareCount + share);
+				BigFraction toShare = value.subtract(asymmetricNeighborValues[0]);
+				BigFraction share = toShare.divide(new BigFraction(shareCount));
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					int[] nc = asymmetricNeighborCoords[0];
-					newXSlices[nc[0]][nc[1]][nc[2]] += share * asymmetricNeighborShareMultipliers[0];
+					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(new BigFraction(asymmetricNeighborShareMultipliers[0])));
 				}
 				// no break
 			case 0:
-				newXSlices[1][y][z] += value;
+				newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
-		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(short[][][] newXSlices, short value, int y, int z, short[] asymmetricNeighborValues,
+	private static void topplePositionSortedNeighbors(BigFraction[][][] newXSlices, BigFraction value, int y, int z, BigFraction[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
-		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		short neighborValue = asymmetricNeighborValues[0];
-		int toShare = value - neighborValue;
-		int share = toShare/shareCount;
-		if (share != 0) {
-			toppled = true;
-			value = (short) (value - toShare + toShare%shareCount + share);
+		BigFraction neighborValue = asymmetricNeighborValues[0];
+		BigFraction toShare = value.subtract(neighborValue);
+		BigFraction share = toShare.divide(new BigFraction(shareCount));
+		if (!share.equals(BigFraction.ZERO)) {
+			value = value.subtract(toShare).add(share);
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
 				int[] nc = asymmetricNeighborCoords[j];
-				newXSlices[nc[0]][nc[1]][nc[2]] += share * asymmetricNeighborShareMultipliers[j];
+				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(new BigFraction(asymmetricNeighborShareMultipliers[j])));
 			}
 		}
-		short previousNeighborValue = neighborValue;
+		BigFraction previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[0];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
-			if (neighborValue != previousNeighborValue) {
-				toShare = value - neighborValue;
-				share = toShare/shareCount;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%shareCount + share);
+			if (!neighborValue.equals(previousNeighborValue)) {
+				toShare = value.subtract(neighborValue);
+				share = toShare.divide(new BigFraction(shareCount));
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					for (int j = i; j < asymmetricNeighborCount; j++) {
 						int[] nc = asymmetricNeighborCoords[j];
-						newXSlices[nc[0]][nc[1]][nc[2]] += share * asymmetricNeighborShareMultipliers[j];
+						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(new BigFraction(asymmetricNeighborShareMultipliers[j])));
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount -= asymmetricNeighborSymmetryCounts[i];
 		}
-		newXSlices[1][y][z] += value;
-		return toppled;
+		newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 	}
 	
-	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] neighborValues,
+	private static void topplePosition(BigFraction[][][] newXSlices, BigFraction value, int y, int z, BigFraction[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
-		boolean toppled = false;
 		switch (neighborCount) {
 			case 3:
 				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, 
 						neighborCoords, neighborShareMultipliers, 3);
 				break;
 			case 2:
-				short n0Val = neighborValues[0], n1Val = neighborValues[1];
+				BigFraction n0Val = neighborValues[0], n1Val = neighborValues[1];
 				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
 				int n0Mult = neighborShareMultipliers[0], n1Mult = neighborShareMultipliers[1];
-				if (n0Val == n1Val) {
+				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
-					newXSlices[1][y][z] += value - toShare + share + toShare%3;
-				} else if (n0Val < n1Val) {
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(3);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share);
+				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					int toShare = value - n1Val; 
-					int share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%2;
+					BigFraction toShare = value.subtract(n1Val); 
+					BigFraction share = toShare.divide(3);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n0Val);
+					share = toShare.divide(2);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				} else {
 					// n1Val < n0Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share*n0Mult;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share*n1Mult;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%2;
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(3);
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(new BigFraction(n0Mult)));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n1Val);
+					share = toShare.divide(2);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(new BigFraction(n1Mult)));
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				}				
 				break;
 			case 1:
-				int toShare = value - neighborValues[0];
-				int share = toShare/2;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%2 + share);
+				BigFraction toShare = value.subtract(neighborValues[0]);
+				BigFraction share = toShare.divide(2);
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					int[] nc = neighborCoords[0];
-					newXSlices[nc[0]][nc[1]][nc[2]] += share * neighborShareMultipliers[0];
+					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(new BigFraction(neighborShareMultipliers[0])));
 				}
 				// no break
 			case 0:
-				newXSlices[1][y][z] += value;
+				newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords, 
 						neighborShareMultipliers);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, neighborCoords, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, neighborValues, neighborCoords, 
 						neighborShareMultipliers, neighborCount);
 		}
-		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(short[][][] newXSlices, short value, int y, int z, short[] neighborValues,
+	private static void topplePositionSortedNeighbors(BigFraction[][][] newXSlices, BigFraction value, int y, int z, BigFraction[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
-		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		short neighborValue = neighborValues[0];
-		int toShare = value - neighborValue;
-		int share = toShare/shareCount;
-		if (share != 0) {
-			toppled = true;
-			value = (short) (value - toShare + toShare%shareCount + share);
+		BigFraction neighborValue = neighborValues[0];
+		BigFraction toShare = value.subtract(neighborValue);
+		BigFraction share = toShare.divide(new BigFraction(shareCount));
+		if (!share.equals(BigFraction.ZERO)) {
+			value = value.subtract(toShare).add(share);
 			for (int j = 0; j < neighborCount; j++) {
 				int[] nc = neighborCoords[j];
-				newXSlices[nc[0]][nc[1]][nc[2]] += share * neighborShareMultipliers[j];
+				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(new BigFraction(neighborShareMultipliers[j])));
 			}
 		}
-		short previousNeighborValue = neighborValue;
+		BigFraction previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
-			if (neighborValue != previousNeighborValue) {
-				toShare = value - neighborValue;
-				share = toShare/shareCount;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%shareCount + share);
+			if (!neighborValue.equals(previousNeighborValue)) {
+				toShare = value.subtract(neighborValue);
+				share = toShare.divide(new BigFraction(shareCount));
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					for (int j = i; j < neighborCount; j++) {
 						int[] nc = neighborCoords[j];
-						newXSlices[nc[0]][nc[1]][nc[2]] += share * neighborShareMultipliers[j];
+						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(new BigFraction(neighborShareMultipliers[j])));
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount--;
 		}
-		newXSlices[1][y][z] += value;
-		return toppled;
+		newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 	}
 	
-	private static boolean topplePosition(short[][][] newXSlices, short value, int y, int z, short[] asymmetricNeighborValues,
+	private static void topplePosition(BigFraction[][][] newXSlices, BigFraction value, int y, int z, BigFraction[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
-		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 3:
 				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, 
 						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 				break;
 			case 2:
-				short n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				BigFraction n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int shareCount = neighborCount + 1;
-				if (n0Val == n1Val) {
+				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
-					newXSlices[1][y][z] += value - toShare + share + toShare%shareCount;
-				} else if (n0Val < n1Val) {
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share);
+				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
-					int toShare = value - n1Val; 
-					int share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
+					BigFraction toShare = value.subtract(n1Val); 
+					BigFraction share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n0Val);
+					share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				} else {
 					// n1Val < n0Val < value
-					int toShare = value - n0Val; 
-					int share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] += share;
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
+					BigFraction toShare = value.subtract(n0Val); 
+					BigFraction share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					int currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] += share;
-					newXSlices[1][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+					BigFraction currentRemainingValue = value.subtract(share.multiply(new BigFraction(neighborCount)));
+					toShare = currentRemainingValue.subtract(n1Val);
+					share = toShare.divide(new BigFraction(shareCount));
+					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share);
 				}				
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				int toShare = value - asymmetricNeighborValues[0];
-				int share = toShare/shareCount;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%shareCount + share);
+				BigFraction toShare = value.subtract(asymmetricNeighborValues[0]);
+				BigFraction share = toShare.divide(new BigFraction(shareCount));
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					int[] nc = asymmetricNeighborCoords[0];
-					newXSlices[nc[0]][nc[1]][nc[2]] += share;
+					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 				}
 				// no break
 			case 0:
-				newXSlices[1][y][z] += value;
+				newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 				break;
 			default: // 6, 5, 4
 				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+				topplePositionSortedNeighbors(newXSlices, value, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
 						asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
-		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(short[][][] newXSlices, short value, int y, int z, short[] asymmetricNeighborValues,
+	private static void topplePositionSortedNeighbors(BigFraction[][][] newXSlices, BigFraction value, int y, int z, BigFraction[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
-		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		short neighborValue = asymmetricNeighborValues[0];
-		int toShare = value - neighborValue;
-		int share = toShare/shareCount;
-		if (share != 0) {
-			toppled = true;
-			value = (short) (value - toShare + toShare%shareCount + share);
+		BigFraction neighborValue = asymmetricNeighborValues[0];
+		BigFraction toShare = value.subtract(neighborValue);
+		BigFraction share = toShare.divide(new BigFraction(shareCount));
+		if (!share.equals(BigFraction.ZERO)) {
+			value = value.subtract(toShare).add(share);
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
 				int[] nc = asymmetricNeighborCoords[j];
-				newXSlices[nc[0]][nc[1]][nc[2]] += share;
+				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 			}
 		}
-		short previousNeighborValue = neighborValue;
+		BigFraction previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[0];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
-			if (neighborValue != previousNeighborValue) {
-				toShare = value - neighborValue;
-				share = toShare/shareCount;
-				if (share != 0) {
-					toppled = true;
-					value = (short) (value - toShare + toShare%shareCount + share);
+			if (!neighborValue.equals(previousNeighborValue)) {
+				toShare = value.subtract(neighborValue);
+				share = toShare.divide(new BigFraction(shareCount));				
+				if (!share.equals(BigFraction.ZERO)) {
+					value = value.subtract(toShare).add(share);
 					for (int j = i; j < asymmetricNeighborCount; j++) {
 						int[] nc = asymmetricNeighborCoords[j];
-						newXSlices[nc[0]][nc[1]][nc[2]] += share;
+						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
 			shareCount -= asymmetricNeighborSymmetryCounts[i];
 		}
-		newXSlices[1][y][z] += value;
-		return toppled;
+		newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 	}
 	
 	@Override
-	public short getFromPosition(int x, int y, int z){	
+	public BigFraction getFromPosition(int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -2059,11 +1793,11 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 				return grid[z][y][x];
 			}
 		}
-		return 0;
+		return BigFraction.ZERO;
 	}
 	
 	@Override
-	public short getFromAsymmetricPosition(int x, int y, int z){	
+	public BigFraction getFromAsymmetricPosition(int x, int y, int z){	
 		return grid[x][y][z];
 	}
 	
@@ -2221,15 +1955,6 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 		return step;
 	}
 	
-	/**
-	 * Returns the initial value
-	 * 
-	 * @return the value at the origin at step 0
-	 */
-	public long getInitialValue() {
-		return initialValue;
-	}	
-	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		Utils.serializeToFile(this, backupPath, backupName);
@@ -2242,7 +1967,10 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+		String path = getName() + File.separator;
+		if (!isPositive) path += "-";
+		path += "∞";
+		return path;
 	}
 	
 }

@@ -18,11 +18,17 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 
-public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D {
+public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3247707365013630669L;
+
 	/** A 4D array representing the grid */
 	private long[][][][] grid;
 	

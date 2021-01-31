@@ -17,6 +17,10 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
+
+import org.apache.commons.math3.FieldElement;
+import org.apache.commons.math3.fraction.BigFraction;
+
 import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
@@ -46,18 +50,28 @@ public class GrayscaleMapper implements ColorMapper {
 		this.outOfUpperBoundColor = outOfUpperBoundColor;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<BigInt> grid, BigInt minValue, BigInt maxValue) {
-		ColorMap<BigInt> colorMap = null;
+	public <T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue) {
+		ColorMap<T> colorMap = null;
 		if (minValue.equals(maxValue)) {
-			colorMap = new SolidColorMap<BigInt>(new Color(0, 0, minBrightness/255));
+			colorMap = new SolidColorMap<T>(new Color(0, 0, minBrightness/255));
 		} else {
-			colorMap = new BigIntGrayscaleMap(minValue, maxValue, minBrightness);
+			if (minValue instanceof BigInt) {
+				colorMap = (ColorMap<T>) new BigIntGrayscaleMap((BigInt)minValue, (BigInt)maxValue, minBrightness);
+			}  else if (minValue instanceof BigFraction) {
+				colorMap = (ColorMap<T>) new BigFractionGrayscaleMap((BigFraction)minValue, (BigFraction)maxValue, minBrightness);
+			} else {
+				throw new UnsupportedOperationException(
+						"Missing " + ColorMap.class.getSimpleName() + "<"
+								+ minValue.getClass().getSimpleName() + "> implementation for " 
+								+ GrayscaleMapper.class.getSimpleName());
+			} 
 		}
 		if (outOfLowerBoundColor != null) {
-			colorMap = new BigIntUnboundedColorMap(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
+			colorMap = new UnboundedColorMap<T>(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedGrid2D<BigInt>(grid, colorMap);
+		return new ColorMappedGrid2D<T>(grid, colorMap);
 	}
 
 	@Override

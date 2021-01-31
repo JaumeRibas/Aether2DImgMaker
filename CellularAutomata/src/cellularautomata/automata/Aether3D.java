@@ -18,12 +18,19 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
+
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
 
-public class Aether3D implements SymmetricEvolvingLongGrid3D {
+public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 	
 	//debug
 //	private static HashSet<Integer> coverage = new HashSet<Integer>();
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2382159486781927184L;
 
 	/** A 3D array representing the grid */
 	private long[][][] grid;

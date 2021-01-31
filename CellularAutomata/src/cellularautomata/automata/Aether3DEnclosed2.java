@@ -62,21 +62,6 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 		currentStep = 0;
 	}
 	
-	/**
-	 * Creates an instance restoring a backup
-	 * 
-	 * @param backupPath the path to the backup file to restore.
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
-	 * @throws FileNotFoundException 
-	 */
-	public Aether3DEnclosed2(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Aether3DEnclosed2 data = (Aether3DEnclosed2) Utils.deserializeFromFile(backupPath);
-		singleSourceValue = data.singleSourceValue;
-		grid = data.grid;
-		currentStep = data.currentStep;
-	}
-	
 	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
@@ -283,7 +268,7 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

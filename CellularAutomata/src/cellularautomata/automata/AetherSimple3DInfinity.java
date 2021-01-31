@@ -16,20 +16,18 @@
  */
 package cellularautomata.automata;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
+import org.apache.commons.math3.fraction.BigFraction;
 
-/**
- * A simplified implementation of the Aether cellular automaton for review and testing purposes
- * 
- * @author Jaume
- *
- */
-public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {	
+import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid3D;
+
+
+public class AetherSimple3DInfinity implements SymmetricEvolvingNumberGrid3D<BigFraction> {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -39,10 +37,10 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 	private static final byte BACK = 5;
 	
 	/** 3D array representing the grid **/
-	private long[][][] grid;
+	private BigFraction[][][] grid;
 	
-	private long initialValue;
 	private long currentStep;
+	private boolean isPositive;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -51,21 +49,23 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 	private boolean boundsReached;
 	
 	/**
-	 * Creates an instance with the given initial value
-	 *  
-	 * @param initialValue the value at the origin at step 0
+	 * 
+	 * @param isPositive
 	 */
-	public AetherSimple3D(long initialValue) {
-		//safety check to prevent exceeding the data type's max value
-		if (initialValue < Long.valueOf("-3689348814741910323")) {
-			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
-		}
-		this.initialValue = initialValue;
+	public AetherSimple3DInfinity(boolean isPositive) {
+		this.isPositive = isPositive;
 		//initial side of the array, will be increased as needed
 		int side = 5;
-		grid = new long[side][side][side];
+		grid = new BigFraction[side][side][side];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				for (int k = 0; k < grid[i][j].length; k++) {
+					grid[i][j][k] = BigFraction.ZERO;
+				}
+			}
+		}
 		originIndex = (side - 1)/2;
-		grid[originIndex][originIndex][originIndex] = initialValue;
+		grid[originIndex][originIndex][originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
@@ -74,62 +74,69 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
-		long[][][] newGrid = null;
+		BigFraction[][][] newGrid = null;
 		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2];
+			newGrid = new BigFraction[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2];
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
-			newGrid = new long[grid.length][grid[0].length][grid[0][0].length];
+			newGrid = new BigFraction[grid.length][grid[0].length][grid[0][0].length];
+		}
+		for (int i = 0; i < newGrid.length; i++) {
+			for (int j = 0; j < newGrid[i].length; j++) {
+				for (int k = 0; k < newGrid[i][j].length; k++) {
+					newGrid[i][j][k] = BigFraction.ZERO;
+				}
+			}
 		}
 		boolean changed = false;
 		//For every position
 		for (int x = 0; x < grid.length; x++) {
 			for (int y = 0; y < grid[0].length; y++) {
 				for (int z = 0; z < grid[0][0].length; z++) {
-					long value = grid[x][y][z];
+					BigFraction value = grid[x][y][z];
 					//make list of von Neumann neighbors with value smaller than current position's value
-					List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(6);						
-					long neighborValue;
+					List<Neighbor<BigFraction>> neighbors = new ArrayList<Neighbor<BigFraction>>(6);						
+					BigFraction neighborValue;
 					if (x < grid.length - 1)
 						neighborValue = grid[x + 1][y][z];
 					else
-						neighborValue = 0;
-					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+						neighborValue = BigFraction.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigFraction>(RIGHT, neighborValue));
 					if (x > 0)
 						neighborValue = grid[x - 1][y][z];
 					else
-						neighborValue = 0;
-					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+						neighborValue = BigFraction.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
 					if (y < grid[x].length - 1)
 						neighborValue = grid[x][y + 1][z];
 					else
-						neighborValue = 0;
-					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(UP, neighborValue));
+						neighborValue = BigFraction.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigFraction>(UP, neighborValue));
 					if (y > 0)
 						neighborValue = grid[x][y - 1][z];
 					else
-						neighborValue = 0;
-					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
+						neighborValue = BigFraction.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigFraction>(DOWN, neighborValue));
 					if (z < grid[x][y].length - 1)
 						neighborValue = grid[x][y][z + 1];
 					else
-						neighborValue = 0;
-					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
+						neighborValue = BigFraction.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigFraction>(FRONT, neighborValue));
 					if (z > 0)
 						neighborValue = grid[x][y][z - 1];
 					else
-						neighborValue = 0;
-					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(BACK, neighborValue));
+						neighborValue = BigFraction.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigFraction>(BACK, neighborValue));
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
@@ -137,8 +144,8 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 						while (!sorted) {
 							sorted = true;
 							for (int i = neighbors.size() - 2; i >= 0; i--) {
-								Neighbor<Long> next = neighbors.get(i+1);
-								if (neighbors.get(i).getValue() > next.getValue()) {
+								Neighbor<BigFraction> next = neighbors.get(i+1);
+								if (neighbors.get(i).getValue().compareTo(next.getValue()) > 0) {
 									sorted = false;
 									neighbors.remove(i+1);
 									neighbors.add(i, next);
@@ -147,20 +154,21 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 						}
 						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
-						long previousNeighborValue = 0;
+						BigFraction previousNeighborValue = null;
 						for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
 							neighborValue = neighbors.get(i).getValue();
-							if (neighborValue != previousNeighborValue || isFirst) {
+							if (isFirst || !neighborValue.equals(previousNeighborValue)) {
 								int shareCount = neighbors.size() + 1;
-								long toShare = value - neighborValue;
-								long share = toShare/shareCount;
-								if (share != 0) {
+								BigFraction toShare = value.subtract(neighborValue);
+								BigFraction share = toShare.divide(shareCount);
+								if (!share.equals(BigFraction.ZERO)) {
 									checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
 									changed = true;
-									value = value - toShare + toShare%shareCount + share;
-									for (Neighbor<Long> neighbor : neighbors) {
+									value = value.subtract(toShare).add(share);
+									for (Neighbor<BigFraction> neighbor : neighbors) {
 										int[] nc = getNeighborCoordinates(x, y, z, neighbor.getDirection());
-										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
+										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] = 
+												newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset].add(share);
 									}
 								}
 								previousNeighborValue = neighborValue;
@@ -168,7 +176,8 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 							neighbors.remove(i);
 						}	
 					}					
-					newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value;
+					newGrid[x + indexOffset][y + indexOffset][z + indexOffset] = 
+							newGrid[x + indexOffset][y + indexOffset][z + indexOffset].add(value);
 				}
 			}
 		}
@@ -217,7 +226,7 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y, int z){	
+	public BigFraction getFromPosition(int x, int y, int z){	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
@@ -225,7 +234,7 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 				|| arrayY < 0 || arrayY > grid[0].length - 1
 				|| arrayZ < 0 || arrayZ > grid[0][0].length - 1) {
 			//If the entered position is outside the array the value will be zero
-			return 0;
+			return BigFraction.ZERO;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY][arrayZ];
@@ -335,22 +344,13 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 	}
 
 	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {
+	public BigFraction getFromAsymmetricPosition(int x, int y, int z) {
 		return getFromPosition(x, y, z);
 	}
 	
 	@Override
 	public long getStep() {
 		return currentStep;
-	}
-	
-	/**
-	 * Returns the initial value
-	 * 
-	 * @return the value at the origin at step 0
-	 */
-	public long getInitialValue() {
-		return initialValue;
 	}
 	
 	@Override
@@ -362,10 +362,13 @@ public class AetherSimple3D implements SymmetricEvolvingLongGrid3D {
 	public String getName() {
 		return "Aether3D";
 	}
-
+	
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+		String path = getName() + File.separator;
+		if (!isPositive) path += "-";
+		path += "∞";
+		return path;
 	}
 	
 	@Override

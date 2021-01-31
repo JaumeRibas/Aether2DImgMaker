@@ -69,23 +69,6 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
-	}	
-	
-	/**
-	 * Creates an instance restoring a backup
-	 * 
-	 * @param backupPath the path to the backup file to restore.
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
-	 * @throws FileNotFoundException 
-	 */
-	public AetherSimple4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		AetherSimple4D data = (AetherSimple4D) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		grid = data.grid;
-		originIndex = data.originIndex;
-		boundsReached = data.boundsReached;
-		currentStep = data.currentStep;
 	}
 	
 	@Override
@@ -109,56 +92,56 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 				for (int y = 0; y < grid[0][0].length; y++) {
 					for (int z = 0; z < grid[0][0][0].length; z++) {
 						long value = grid[w][x][y][z];
-						List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(8);						
+						List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(8);						
 						long neighborValue;
 						if (w < grid.length - 1)
 							neighborValue = grid[w + 1][x][y][z];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(W_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(W_POSITIVE, neighborValue));
 						if (w > 0)
 							neighborValue = grid[w - 1][x][y][z];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(W_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(W_NEGATIVE, neighborValue));
 						if (x < grid[w].length - 1)
 							neighborValue = grid[w][x + 1][y][z];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(X_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(X_POSITIVE, neighborValue));
 						if (x > 0)
 							neighborValue = grid[w][x - 1][y][z];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(X_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(X_NEGATIVE, neighborValue));
 						if (y < grid[w][x].length - 1)
 							neighborValue = grid[w][x][y + 1][z];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(Y_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(Y_POSITIVE, neighborValue));
 						if (y > 0)
 							neighborValue = grid[w][x][y - 1][z];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(Y_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(Y_NEGATIVE, neighborValue));
 						if (z < grid[w][x][y].length - 1)
 							neighborValue = grid[w][x][y][z + 1];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(Z_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(Z_POSITIVE, neighborValue));
 						if (z > 0)
 							neighborValue = grid[w][x][y][z - 1];
 						else
 							neighborValue = 0;
 						if (neighborValue < value)
-							neighbors.add(new LongNeighbor(Z_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<Long>(Z_NEGATIVE, neighborValue));
 						
 						if (neighbors.size() > 0) {
 							//sort
@@ -166,7 +149,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 							while (!sorted) {
 								sorted = true;
 								for (int i = neighbors.size() - 2; i >= 0; i--) {
-									LongNeighbor next = neighbors.get(i+1);
+									Neighbor<Long> next = neighbors.get(i+1);
 									if (neighbors.get(i).getValue() > next.getValue()) {
 										sorted = false;
 										neighbors.remove(i+1);
@@ -187,7 +170,7 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 										checkBoundsReached(w + indexOffset, x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
 										changed = true;
 										value = value - toShare + toShare%shareCount + share;
-										for (LongNeighbor neighbor : neighbors) {
+										for (Neighbor<Long> neighbor : neighbors) {
 											int[] nc = getNeighborCoordinates(w, x, y, z, neighbor.getDirection());
 											newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset][nc[3] + indexOffset] += share;
 										}
@@ -558,6 +541,6 @@ public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		throw new UnsupportedOperationException();
 	}
 }

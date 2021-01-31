@@ -18,9 +18,16 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
+
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 
-public class Aether4D implements SymmetricEvolvingLongGrid4D {
+public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8314893471774482651L;
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;

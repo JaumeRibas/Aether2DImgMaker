@@ -365,7 +365,7 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

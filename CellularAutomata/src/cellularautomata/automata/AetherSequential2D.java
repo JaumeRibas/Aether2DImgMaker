@@ -102,32 +102,32 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 		//Get the position's value
 		long topplingValue = grid[topplingPositionXIndex][topplingPositionYIndex];
 		//Get a list of the neighbors whose value is smaller than the one at the current position
-		List<LongNeighbor> neighbors = new ArrayList<LongNeighbor>(4);						
+		List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(4);						
 		long neighborValue;
 		if (topplingPositionXIndex < grid.length - 1)
 			neighborValue = grid[topplingPositionXIndex + 1][topplingPositionYIndex];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
-			neighbors.add(new LongNeighbor(RIGHT, neighborValue));
+			neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
 		if (topplingPositionXIndex > 0)
 			neighborValue = grid[topplingPositionXIndex - 1][topplingPositionYIndex];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
-			neighbors.add(new LongNeighbor(LEFT, neighborValue));
+			neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
 		if (topplingPositionYIndex < grid[topplingPositionXIndex].length - 1)
 			neighborValue = grid[topplingPositionXIndex][topplingPositionYIndex + 1];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
-			neighbors.add(new LongNeighbor(UP, neighborValue));
+			neighbors.add(new Neighbor<Long>(UP, neighborValue));
 		if (topplingPositionYIndex > 0)
 			neighborValue = grid[topplingPositionXIndex][topplingPositionYIndex - 1];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
-			neighbors.add(new LongNeighbor(DOWN, neighborValue));
+			neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
 
 		//If there are any
 		if (neighbors.size() > 0) {
@@ -136,7 +136,7 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 			while (!sorted) {
 				sorted = true;
 				for (int i = neighbors.size() - 2; i >= 0; i--) {
-					LongNeighbor next = neighbors.get(i+1);
+					Neighbor<Long> next = neighbors.get(i+1);
 					if (neighbors.get(i).getValue() > next.getValue()) {
 						sorted = false;
 						neighbors.remove(i+1);
@@ -159,7 +159,7 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 						hasToppled = true;
 						//the center keeps the remainder and one share
 						topplingValue = topplingValue - toShare + toShare%shareCount + share;
-						for (LongNeighbor n : neighbors) {
+						for (Neighbor<Long> n : neighbors) {
 							int[] nc = getNeighborCoordinates(topplingPositionXIndex, topplingPositionYIndex, n.getDirection());
 							newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
 						}

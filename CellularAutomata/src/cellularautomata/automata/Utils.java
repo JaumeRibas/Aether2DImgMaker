@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 
+import org.apache.commons.math3.fraction.BigFraction;
 import cellularautomata.numbers.BigInt;
 
 public class Utils {
@@ -94,6 +95,35 @@ public class Utils {
 			BigInt[] array = new BigInt[length];
 			for (int i = 0; i < length; i++) {
 				array[i] = BigInt.ZERO;
+			}
+			anisotropic2DArray[x] = array;
+		}
+		return anisotropic2DArray;
+	}
+	
+	public static BigFraction[][][][] buildAnisotropic4DBigFractionArray(int side) {
+		BigFraction[][][][] anisotropic4DArray = new BigFraction[side][][][];
+		for (int w = 0; w < anisotropic4DArray.length; w++) {
+			anisotropic4DArray[w] = buildAnisotropic3DBigFractionArray(w + 1);
+		}
+		return anisotropic4DArray;
+	}
+	
+	public static BigFraction[][][] buildAnisotropic3DBigFractionArray(int side) {
+		BigFraction[][][] anisotropic3DArray = new BigFraction[side][][];
+		for (int x = 0; x < anisotropic3DArray.length; x++) {
+			anisotropic3DArray[x] = buildAnisotropic2DBigFractionArray(x + 1);
+		}
+		return anisotropic3DArray;
+	}
+	
+	public static BigFraction[][] buildAnisotropic2DBigFractionArray(int side) {
+		BigFraction[][] anisotropic2DArray = new BigFraction[side][];
+		for (int x = 0; x < anisotropic2DArray.length; x++) {
+			int length = x + 1;
+			BigFraction[] array = new BigFraction[length];
+			for (int i = 0; i < length; i++) {
+				array[i] = BigFraction.ZERO;
 			}
 			anisotropic2DArray[x] = array;
 		}

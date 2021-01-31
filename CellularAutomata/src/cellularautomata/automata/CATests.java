@@ -27,7 +27,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.FieldElement;
-
+import org.apache.commons.math3.fraction.BigFraction;
 import cellularautomata.evolvinggrid.EvolvingIntGrid;
 import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
 import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
@@ -55,6 +55,7 @@ import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
+import cellularautomata.grid3d.BigFractionGrid3DPattern;
 import cellularautomata.grid3d.BigIntGrid3DPattern;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntGrid3DXCrossSectionCopierProcessor;
@@ -1203,6 +1204,88 @@ public class CATests {
 		}
 	}
 	
+	public static void comparePatterns2(EvolvingNumberGrid3D<BigFraction> ca1, EvolvingNumberGrid3D<BigInt> ca2, double maxDifference) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				BigFractionGrid3DPattern p1 = new BigFractionGrid3DPattern(ca1);
+				BigIntGrid3DPattern p2 = new BigIntGrid3DPattern(ca2);
+				System.out.println("Comparing step " + ca1.getStep());
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
+							double val1 = p1.getFromPosition(x, y, z).doubleValue(),
+									val2 = p2.getFromPosition(x, y, z).doubleValue();
+							if (Math.abs(val1 - val2) > maxDifference) {
+								equal = false;
+								System.out.println("Difference in pattern at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+										+ ca2.getClass().getSimpleName() + ":" + val2 
+										+ " != " + ca1.getClass().getSimpleName() + ":" + val1);
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal)
+					return;
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void printAveragePatternDifferenceAtEachStep(EvolvingNumberGrid3D<BigFraction> ca1, EvolvingNumberGrid3D<BigInt> ca2) {
+		try {
+			boolean finished1 = false;
+			boolean finished2 = false;
+			while (!finished1 && !finished2) {
+				System.out.println("Average difference in pattern at step " + ca1.getStep() + ": " + getAveragePatternDifference(ca1, ca2));
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static double getAveragePatternDifference(EvolvingNumberGrid3D<BigFraction> ca1, 
+			EvolvingNumberGrid3D<BigInt> ca2) throws Exception {
+		BigFractionGrid3DPattern p1 = new BigFractionGrid3DPattern(ca1);
+		BigIntGrid3DPattern p2 = new BigIntGrid3DPattern(ca2);
+		double totalDifference = 0;
+		long positionCount = 0;
+		int maxZ = ca1.getMaxZ();
+		for (int z = ca1.getMinZ(); z <= maxZ; z++) {
+			int maxY = ca1.getMaxYAtZ(z);
+			for (int y = ca1.getMinYAtZ(z); y <= maxY; y++) {
+				int minX = ca1.getMinX(y,z);
+				int maxX = ca1.getMaxX(y,z);
+				for (int x = minX; x <= maxX; x++) {
+					double val1 = p1.getFromPosition(x, y, z).doubleValue(),
+							val2 = p2.getFromPosition(x, y, z).doubleValue();
+					double difference = val1 - val2;
+					if (difference < 0) {
+						difference = -difference;
+					}
+					totalDifference += difference;
+					positionCount++;
+				}	
+			}	
+		}
+		return totalDifference/positionCount;
+	}
+	
 	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(EvolvingNumberGrid1D<T> ca1, EvolvingLongGrid1D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -1280,7 +1363,7 @@ public class CATests {
 			boolean finished2 = false;
 			boolean equal = true;
 			while (!finished1 && !finished2) {
-//				System.out.println("Comparing step " + ca1.getStep());
+				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
