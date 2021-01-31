@@ -26,7 +26,7 @@ import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 public class Aether3DInfinityOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-		args = new String[]{"-", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-", "D:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -85,10 +85,10 @@ public class Aether3DInfinityOddImgMaker {
 			}
 			if (isScanInitialXIndexDefined) {
 				imgMaker.createXScanningAndZCrossSectionOddImages(ca, xScanInitialIndex, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
 				imgMaker.createXScanningAndZCrossSectionOddImages(ca, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
 		}		
 	}

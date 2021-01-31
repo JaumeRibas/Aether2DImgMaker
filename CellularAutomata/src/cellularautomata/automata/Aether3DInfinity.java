@@ -1808,7 +1808,7 @@ public class Aether3DInfinity implements SymmetricEvolvingNumberGrid3D<BigFracti
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return maxX;
+		return step;
 	}
 	
 	@Override
@@ -1818,7 +1818,7 @@ public class Aether3DInfinity implements SymmetricEvolvingNumberGrid3D<BigFracti
 	
 	@Override
 	public int getAsymmetricMaxY() {
-		return maxX;
+		return (step + 2)/2 - 1;
 	}
 	
 	@Override
@@ -1828,7 +1828,7 @@ public class Aether3DInfinity implements SymmetricEvolvingNumberGrid3D<BigFracti
 	
 	@Override
 	public int getAsymmetricMaxZ() {
-		return maxX;
+		return getAsymmetricMaxY();
 	}
 	@Override
 	public int getAsymmetricMinXAtY(int y) {
