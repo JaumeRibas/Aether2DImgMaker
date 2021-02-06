@@ -27,13 +27,13 @@ import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.numbers.BigInt;
 
-public class GrayscaleWithBackgroundMapper<A extends Number & FieldElement<A> & Comparable<A>> implements ColorMapper {
+public class GrayscaleWithBackgroundMapper implements ColorMapper {
 
 	private int minBrightness;
-	private A backgroundValue;
+	private Object backgroundValue;
 	private Color backgroundColor;
 	
-	public GrayscaleWithBackgroundMapper(int minBrightness, A backgroundValue, Color backgroundColor) {
+	public GrayscaleWithBackgroundMapper(int minBrightness, Object backgroundValue, Color backgroundColor) {
 		this.minBrightness = minBrightness;
 		this.backgroundValue = backgroundValue;
 		this.backgroundColor = backgroundColor;
@@ -57,7 +57,7 @@ public class GrayscaleWithBackgroundMapper<A extends Number & FieldElement<A> & 
 								+ GrayscaleWithBackgroundMapper.class.getSimpleName());
 			} 
 		}
-		return new ColorMappedGrid2DWithBackground<T>(grid, colorMap, (T) backgroundValue, backgroundColor);//TODO review casting
+		return new ColorMappedGrid2DWithBackground<T>(grid, colorMap, (T) backgroundValue, backgroundColor);
 	}
 	
 	@Override
@@ -68,7 +68,7 @@ public class GrayscaleWithBackgroundMapper<A extends Number & FieldElement<A> & 
 		} else {
 			colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		}
-		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, backgroundValue.longValue(), backgroundColor);
+		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, (Long)backgroundValue, backgroundColor);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class GrayscaleWithBackgroundMapper<A extends Number & FieldElement<A> & 
 		} else {
 			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
 		}
-		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, backgroundValue.intValue(), backgroundColor);
+		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public class GrayscaleWithBackgroundMapper<A extends Number & FieldElement<A> & 
 		} else {
 			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
 		}
-		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, backgroundValue.shortValue(), backgroundColor);
+		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, (Short)backgroundValue, backgroundColor);
 	}
 
 }

@@ -27,12 +27,12 @@ import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.numbers.BigInt;
 
-public class HueWithBackgroundMapper<A extends Number & FieldElement<A> & Comparable<A>> implements ColorMapper {
+public class HueWithBackgroundMapper implements ColorMapper {
 
-	private A backgroundValue;
+	private Object backgroundValue;
 	private Color backgroundColor;
 	
-	public HueWithBackgroundMapper(A backgroundValue, Color backgroundColor) {
+	public HueWithBackgroundMapper(Object backgroundValue, Color backgroundColor) {
 		this.backgroundValue = backgroundValue;
 		this.backgroundColor = backgroundColor;
 	}
@@ -55,7 +55,7 @@ public class HueWithBackgroundMapper<A extends Number & FieldElement<A> & Compar
 								+ HueWithBackgroundMapper.class.getSimpleName());
 			} 
 		}
-		return new ColorMappedGrid2DWithBackground<T>(grid, colorMap, (T) backgroundValue, backgroundColor);//TODO review casting
+		return new ColorMappedGrid2DWithBackground<T>(grid, colorMap, (T) backgroundValue, backgroundColor);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class HueWithBackgroundMapper<A extends Number & FieldElement<A> & Compar
 		} else {
 			colorMap = new LongHueMap(minValue, maxValue);
 		}
-		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, backgroundValue.longValue(), backgroundColor);
+		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, (Long)backgroundValue, backgroundColor);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class HueWithBackgroundMapper<A extends Number & FieldElement<A> & Compar
 		} else {
 			colorMap = new IntHueMap(minValue, maxValue);
 		}
-		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, backgroundValue.intValue(), backgroundColor);
+		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
 	}
 	
 	@Override
@@ -88,7 +88,7 @@ public class HueWithBackgroundMapper<A extends Number & FieldElement<A> & Compar
 		} else {
 			colorMap = new IntHueMap(minValue, maxValue);
 		}
-		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, backgroundValue.shortValue(), backgroundColor);
+		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, (Short)backgroundValue, backgroundColor);
 	}
 	
 	private Color getEmptyColor() {
