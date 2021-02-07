@@ -701,8 +701,8 @@ public class ImgMaker {
 				System.out.println("Backing up finished");
 			}
 			scanX--;
-			if (scanX < ca.getMinZ())
-				scanX = ca.getMaxZ();			
+			if (scanX < ca.getMinX())
+				scanX = ca.getMaxX();			
 			currentStep++;
 			isEvenStep = !isEvenStep;
 			System.out.println();
@@ -829,8 +829,8 @@ public class ImgMaker {
 				System.out.println("Backing up finished");
 			}
 			scanX--;
-			if (scanX < ca.getMinZ())
-				scanX = ca.getMaxZ();			
+			if (scanX < ca.getMinX())
+				scanX = ca.getMaxX();			
 			currentStep++;
 			isEvenStep = !isEvenStep;
 			System.out.println();
@@ -916,8 +916,8 @@ public class ImgMaker {
 				System.out.println("Backing up finished");
 			}
 			scanX--;
-			if (scanX < ca.getMinZ())
-				scanX = ca.getMaxZ();			
+			if (scanX < ca.getMinX())
+				scanX = ca.getMaxX();			
 			currentStep++;
 			isEvenCrossSectionZ = !isEvenCrossSectionZ;
 			System.out.println();
@@ -1719,8 +1719,8 @@ public class ImgMaker {
 				System.out.println("Backing up finished");
 			}
 			scanX--;
-			if (scanX < ca.getMinZ())
-				scanX = ca.getMaxZ();			
+			if (scanX < ca.getMinX())
+				scanX = ca.getMaxX();			
 			currentStep++;
 			isEvenStep = !isEvenStep;
 			System.out.println();
