@@ -701,11 +701,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 		boolean toppled = false;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			BigInt toShare = currentValue.subtract(greaterXNeighborValue);
-			BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-			BigInt share = shareAndReminder[0];
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+			BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
-				newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+				newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				newGreaterXSlice[0][0] = newGreaterXSlice[0][0].add(share);
 			} else {
 				newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue);
@@ -816,19 +816,19 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue);
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);// one more for the symmetric position at the other side
-					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -836,18 +836,18 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
-					shareAndReminder = toShare.divideAndRemainder(FOUR);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
-					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else {
 					// gx < sz < current
 					BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -855,35 +855,35 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
-					shareAndReminder = toShare.divideAndRemainder(FOUR);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 				}
 			} else {
 				// sz < current <= gx
 				BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
 				newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
-				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 			}
 		} else {
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gx < current <= sz
 				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
-				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 			} else {
 				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue);
@@ -1176,19 +1176,19 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
-					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1196,18 +1196,18 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
-					shareAndReminder = toShare.divideAndRemainder(FOUR);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
-					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else {
 					// gx < sz < current
 					BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(SEVEN);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1215,35 +1215,35 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
-					shareAndReminder = toShare.divideAndRemainder(FOUR);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
-					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 				}
 			} else {
 				// sz < current <= gx
 				BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
 				newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
-				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 			}
 		} else {
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gx < current <= sz
 				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(FOUR);
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
-				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 			} else {
 				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue);
@@ -1570,19 +1570,19 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
 					BigInt toShare = value.subtract(n1Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1590,18 +1590,18 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndReminder = toShare.divideAndRemainder(TWO);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else {
 					// n1Val < n0Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1609,22 +1609,22 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndReminder = toShare.divideAndRemainder(TWO);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				}				
 				break;
 			case 1:
 				BigInt toShare = value.subtract(neighborValues[0]);
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(TWO);
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = neighborCoords[0];
 					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 				}
@@ -1646,11 +1646,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 		int shareCount = neighborCount + 1;
 		BigInt neighborValue = neighborValues[0];
 		BigInt toShare = value.subtract(neighborValue);
-		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-		BigInt share = shareAndReminder[0];
+		BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndRemainder[0];
 		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
-			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+			value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 			for (int j = 0; j < neighborCount; j++) {
 				int[] nc = neighborCoords[j];
 				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
@@ -1662,11 +1662,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 			neighborValue = neighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-				share = shareAndReminder[0];
+				shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					for (int j = i; j < neighborCount; j++) {
 						int[] nc = neighborCoords[j];
 						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
@@ -1698,19 +1698,19 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
 					BigInt toShare = value.subtract(n1Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1719,18 +1719,18 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else {
 					// n1Val < n0Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1739,23 +1739,23 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				}				
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
 				BigInt toShare = value.subtract(asymmetricNeighborValues[0]);
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = asymmetricNeighborCoords[0];
 					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(asymmetricNeighborShareMultipliers[0])));
 				}
@@ -1779,11 +1779,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 		int shareCount = neighborCount + 1;
 		BigInt neighborValue = asymmetricNeighborValues[0];
 		BigInt toShare = value.subtract(neighborValue);
-		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-		BigInt share = shareAndReminder[0];
+		BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndRemainder[0];
 		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
-			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+			value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
 				int[] nc = asymmetricNeighborCoords[j];
 				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(asymmetricNeighborShareMultipliers[j])));
@@ -1795,11 +1795,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 			neighborValue = asymmetricNeighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-				share = shareAndReminder[0];
+				shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					for (int j = i; j < asymmetricNeighborCount; j++) {
 						int[] nc = asymmetricNeighborCoords[j];
 						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(asymmetricNeighborShareMultipliers[j])));
@@ -1829,19 +1829,19 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
 					BigInt toShare = value.subtract(n1Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1849,18 +1849,18 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndReminder = toShare.divideAndRemainder(TWO);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share.multiply(BigInt.valueOf(n0Mult)));
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else {
 					// n1Val < n0Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(THREE);
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1868,22 +1868,22 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndReminder = toShare.divideAndRemainder(TWO);
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				}				
 				break;
 			case 1:
 				BigInt toShare = value.subtract(neighborValues[0]);
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(TWO);
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = neighborCoords[0];
 					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(neighborShareMultipliers[0])));
 				}
@@ -1906,11 +1906,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 		int shareCount = neighborCount + 1;
 		BigInt neighborValue = neighborValues[0];
 		BigInt toShare = value.subtract(neighborValue);
-		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-		BigInt share = shareAndReminder[0];
+		BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndRemainder[0];
 		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
-			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+			value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 			for (int j = 0; j < neighborCount; j++) {
 				int[] nc = neighborCoords[j];
 				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(neighborShareMultipliers[j])));
@@ -1922,11 +1922,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 			neighborValue = neighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-				share = shareAndReminder[0];
+				shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					for (int j = i; j < neighborCount; j++) {
 						int[] nc = neighborCoords[j];
 						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share.multiply(BigInt.valueOf(neighborShareMultipliers[j])));
@@ -1957,19 +1957,19 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(value).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
 					BigInt toShare = value.subtract(n1Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1978,18 +1978,18 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]] = newXSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]].add(share);
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				} else {
 					// n1Val < n0Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					BigInt share = shareAndReminder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1998,23 +1998,23 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-					share = shareAndReminder[0];
+					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
-					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndReminder[1]);
+					newXSlices[1][y][z] = newXSlices[1][y][z].add(currentRemainingValue).subtract(toShare).add(share).add(shareAndRemainder[1]);
 				}				
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
 				BigInt toShare = value.subtract(asymmetricNeighborValues[0]);
-				BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-				BigInt share = shareAndReminder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = asymmetricNeighborCoords[0];
 					newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
 				}
@@ -2038,11 +2038,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 		int shareCount = neighborCount + 1;
 		BigInt neighborValue = asymmetricNeighborValues[0];
 		BigInt toShare = value.subtract(neighborValue);
-		BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-		BigInt share = shareAndReminder[0];
+		BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+		BigInt share = shareAndRemainder[0];
 		if (!share.equals(BigInt.ZERO)) {
 			toppled = true;
-			value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+			value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
 				int[] nc = asymmetricNeighborCoords[j];
 				newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
@@ -2054,11 +2054,11 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 			neighborValue = asymmetricNeighborValues[i];
 			if (!neighborValue.equals(previousNeighborValue)) {
 				toShare = value.subtract(neighborValue);
-				shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-				share = shareAndReminder[0];
+				shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+				share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndReminder[1]);
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					for (int j = i; j < asymmetricNeighborCount; j++) {
 						int[] nc = asymmetricNeighborCoords[j];
 						newXSlices[nc[0]][nc[1]][nc[2]] = newXSlices[nc[0]][nc[1]][nc[2]].add(share);
@@ -2135,7 +2135,7 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 	
 	@Override
 	public int getAsymmetricMaxY() {
-		return maxX;
+		return (int) Math.min((step + 2)/2 - 1, maxX);
 	}
 	
 	@Override
@@ -2145,7 +2145,7 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Se
 	
 	@Override
 	public int getAsymmetricMaxZ() {
-		return maxX;
+		return getAsymmetricMaxY();
 	}
 	@Override
 	public int getAsymmetricMinXAtY(int y) {
