@@ -26,7 +26,7 @@ import org.apache.commons.math3.exception.NullArgumentException;
 
 public class BigInt extends Number implements FieldElement<BigInt>, Comparable<BigInt> {
 	
-	private BigInteger value;
+	private final BigInteger value;
 
 	/**
 	 * 
@@ -34,6 +34,7 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 	private static final long serialVersionUID = -3805431693787503905L;
 
 	public static final BigInt ZERO = new BigInt(BigInteger.ZERO);
+	public static final BigInt ONE = new BigInt(BigInteger.ONE);
 
 	public BigInt(BigInteger val) {
 		value = val;
@@ -113,6 +114,14 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 		return new BigInt[] { new BigInt(result[0]), new BigInt(result[1]) };
 	}
 
+	public BigInt power(int arg0) {
+		return new BigInt(value.pow(arg0));
+	}
+
+	public BigInt abs() {
+		return new BigInt(value.abs());
+	}
+
 	public static BigInt valueOf(int arg0) {
 		return new BigInt(BigInteger.valueOf(arg0));
 	}
@@ -150,8 +159,22 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 		return value.toString();
 	}
 	
+	public String toString(int arg0) {
+		return value.toString(arg0);
+	}
+	
 	public boolean equals(BigInt arg0) {
 		return value.equals(arg0.value);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || obj.getClass() != this.getClass()) {
+			return false;
+		}
+		return value.equals(((BigInt)obj).value);
 	}
 
 }
