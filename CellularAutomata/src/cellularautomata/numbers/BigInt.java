@@ -164,6 +164,8 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 	}
 	
 	public boolean equals(BigInt arg0) {
+		if (arg0 == null)
+			return false;
 		return value.equals(arg0.value);
 	}
 	
