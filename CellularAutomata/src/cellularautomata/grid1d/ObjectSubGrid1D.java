@@ -16,13 +16,15 @@
  */
 package cellularautomata.grid1d;
 
-import org.apache.commons.math3.FieldElement;
+public class ObjectSubGrid1D<T, G extends ObjectGrid1D<T>> extends SubGrid1D<G> implements ObjectGrid1D<T> {
 
-public class NumberSubGrid1D<T extends FieldElement<T> & Comparable<T>, G extends NumberGrid1D<T>> 
-	extends ObjectSubGrid1D<T, G> implements NumberGrid1D<T> {
-
-	public NumberSubGrid1D(G source, int minX, int maxX) {
+	public ObjectSubGrid1D(G source, int minX, int maxX) {
 		super(source, minX, maxX);
+	}
+
+	@Override
+	public T getFromPosition(int x) {
+		return source.getFromPosition(x);
 	}
 
 }

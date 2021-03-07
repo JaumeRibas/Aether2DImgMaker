@@ -19,9 +19,8 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigInteger;
-
 import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid3D;
+import cellularautomata.numbers.BigInt;
 
 public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, Serializable {
 	
@@ -59,8 +58,8 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, Serializab
 	public IntNearAether1_3D(int initialValue) {
 		if (initialValue < 0) {
 			//for this algorithm the safety check of Aether can be reused
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
+			BigInt maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInt.valueOf(initialValue));
+			if (maxNeighboringValuesDifference.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
 						+ ") exceeds implementation's limit (" + Integer.MAX_VALUE + "). Use a greater initial value or a different implementation.");
 			}

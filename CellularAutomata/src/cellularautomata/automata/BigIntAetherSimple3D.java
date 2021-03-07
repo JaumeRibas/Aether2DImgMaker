@@ -21,10 +21,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid3D;
 import cellularautomata.numbers.BigInt;
 
-public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {	
+
+public class BigIntAetherSimple3D implements SymmetricEvolvingNumberGrid3D<BigInt> {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -34,10 +35,10 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 	private static final byte BACK = 5;
 	
 	/** 3D array representing the grid **/
-	private long[][][] grid;
+	private BigInt[][][] grid;
 	
-	private long initialValue;
 	private long currentStep;
+	private BigInt initialValue;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -45,25 +46,18 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	/**
-	 * Creates an instance with the given initial value
-	 *  
-	 * @param initialValue the value at the origin at step 0
-	 */
-	public NearAether2Simple3D(long initialValue) {
-		//safety check to prevent exceeding the data type's max value
-		if (initialValue < 0) {
-			//for this algorithm the safety check of Aether can be reused
-			BigInt maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInt.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInt.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
-		}
+	public BigIntAetherSimple3D(BigInt initialValue) {
 		this.initialValue = initialValue;
 		//initial side of the array, will be increased as needed
 		int side = 5;
-		grid = new long[side][side][side];
+		grid = new BigInt[side][side][side];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				for (int k = 0; k < grid[i][j].length; k++) {
+					grid[i][j][k] = BigInt.ZERO;
+				}
+			}
+		}
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
@@ -74,111 +68,111 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 	@Override
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
-		long[][][] newGrid = null;
+		BigInt[][][] newGrid = null;
 		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2];
+			newGrid = new BigInt[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2];
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
-			newGrid = new long[grid.length][grid[0].length][grid[0][0].length];
+			newGrid = new BigInt[grid.length][grid[0].length][grid[0][0].length];
+		}
+		for (int i = 0; i < newGrid.length; i++) {
+			for (int j = 0; j < newGrid[i].length; j++) {
+				for (int k = 0; k < newGrid[i][j].length; k++) {
+					newGrid[i][j][k] = BigInt.ZERO;
+				}
+			}
 		}
 		boolean changed = false;
 		//For every position
 		for (int x = 0; x < grid.length; x++) {
 			for (int y = 0; y < grid[0].length; y++) {
 				for (int z = 0; z < grid[0][0].length; z++) {
-					long value = grid[x][y][z];
+					BigInt value = grid[x][y][z];
 					//make list of von Neumann neighbors with value smaller than current position's value
-					List<Byte> relevantNeighborDirections = new ArrayList<Byte>(6);						
-					long neighborValue;
-					long biggestSmallerNeighborValue = Long.MIN_VALUE;
-					if (x < grid.length - 1) {
+					List<Neighbor<BigInt>> neighbors = new ArrayList<Neighbor<BigInt>>(6);						
+					BigInt neighborValue;
+					if (x < grid.length - 1)
 						neighborValue = grid[x + 1][y][z];
-					} else {
-						neighborValue = 0;
-					}
-					if (neighborValue < value) {
-						if (neighborValue > biggestSmallerNeighborValue) {
-							biggestSmallerNeighborValue = neighborValue;
-						}
-						relevantNeighborDirections.add(RIGHT);
-					}
-					if (x > 0) {
+					else
+						neighborValue = BigInt.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigInt>(RIGHT, neighborValue));
+					if (x > 0)
 						neighborValue = grid[x - 1][y][z];
-					} else {
-						neighborValue = 0;
-					}
-					if (neighborValue < value) {
-						if (neighborValue > biggestSmallerNeighborValue) {
-							biggestSmallerNeighborValue = neighborValue;
-						}
-						relevantNeighborDirections.add(LEFT);
-					}
-					if (y < grid[x].length - 1) {
+					else
+						neighborValue = BigInt.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigInt>(LEFT, neighborValue));
+					if (y < grid[x].length - 1)
 						neighborValue = grid[x][y + 1][z];
-					} else {
-						neighborValue = 0;
-					}
-					if (neighborValue < value) {
-						if (neighborValue > biggestSmallerNeighborValue) {
-							biggestSmallerNeighborValue = neighborValue;
-						}
-						relevantNeighborDirections.add(UP);
-					}
-					if (y > 0) {
+					else
+						neighborValue = BigInt.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigInt>(UP, neighborValue));
+					if (y > 0)
 						neighborValue = grid[x][y - 1][z];
-					} else {
-						neighborValue = 0;
-					}
-					if (neighborValue < value) {
-						if (neighborValue > biggestSmallerNeighborValue) {
-							biggestSmallerNeighborValue = neighborValue;
-						}
-						relevantNeighborDirections.add(DOWN);
-					}
-					if (z < grid[x][y].length - 1) {
+					else
+						neighborValue = BigInt.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigInt>(DOWN, neighborValue));
+					if (z < grid[x][y].length - 1)
 						neighborValue = grid[x][y][z + 1];
-					} else {
-						neighborValue = 0;
-					}
-					if (neighborValue < value) {
-						if (neighborValue > biggestSmallerNeighborValue) {
-							biggestSmallerNeighborValue = neighborValue;
-						}
-						relevantNeighborDirections.add(FRONT);
-					}
-					if (z > 0) {
+					else
+						neighborValue = BigInt.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigInt>(FRONT, neighborValue));
+					if (z > 0)
 						neighborValue = grid[x][y][z - 1];
-					} else {
-						neighborValue = 0;
-					}
-					if (neighborValue < value) {
-						if (neighborValue > biggestSmallerNeighborValue) {
-							biggestSmallerNeighborValue = neighborValue;
-						}
-						relevantNeighborDirections.add(BACK);
-					}
+					else
+						neighborValue = BigInt.ZERO;
+					if (neighborValue.compareTo(value) < 0)
+						neighbors.add(new Neighbor<BigInt>(BACK, neighborValue));
 					
-					if (relevantNeighborDirections.size() > 0) {
-						//apply algorithm rules to redistribute value
-						int shareCount = relevantNeighborDirections.size() + 1;
-						long toShare = value - biggestSmallerNeighborValue;
-						long share = toShare/shareCount;
-						if (share != 0) {
-							neighborValue += share;
-							checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
-							changed = true;
-							value = value - toShare + toShare%shareCount + share;
-							for (Byte neighborDirection : relevantNeighborDirections) {
-								int[] nc = getNeighborCoordinates(x, y, z, neighborDirection);
-								newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
+					if (neighbors.size() > 0) {
+						//sort neighbors by value
+						boolean sorted = false;
+						while (!sorted) {
+							sorted = true;
+							for (int i = neighbors.size() - 2; i >= 0; i--) {
+								Neighbor<BigInt> next = neighbors.get(i+1);
+								if (neighbors.get(i).getValue().compareTo(next.getValue()) > 0) {
+									sorted = false;
+									neighbors.remove(i+1);
+									neighbors.add(i, next);
+								}
 							}
+						}
+						//apply algorithm rules to redistribute value
+						boolean isFirst = true;
+						BigInt previousNeighborValue = null;
+						for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
+							neighborValue = neighbors.get(i).getValue();
+							if (isFirst || !neighborValue.equals(previousNeighborValue)) {
+								int shareCount = neighbors.size() + 1;
+								BigInt toShare = value.subtract(neighborValue);
+								BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+								BigInt share = shareAndRemainder[0];
+								if (!share.equals(BigInt.ZERO)) {
+									checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
+									changed = true;
+									value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
+									for (Neighbor<BigInt> neighbor : neighbors) {
+										int[] nc = getNeighborCoordinates(x, y, z, neighbor.getDirection());
+										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] = 
+												newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset].add(share);
+									}
+								}
+								previousNeighborValue = neighborValue;
+							}
+							neighbors.remove(i);
 						}	
 					}					
-					newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value;
+					newGrid[x + indexOffset][y + indexOffset][z + indexOffset] = 
+							newGrid[x + indexOffset][y + indexOffset][z + indexOffset].add(value);
 				}
 			}
 		}
@@ -227,7 +221,7 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y, int z){	
+	public BigInt getFromPosition(int x, int y, int z){	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
@@ -235,7 +229,7 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 				|| arrayY < 0 || arrayY > grid[0].length - 1
 				|| arrayZ < 0 || arrayZ > grid[0][0].length - 1) {
 			//If the entered position is outside the array the value will be zero
-			return 0;
+			return BigInt.ZERO;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY][arrayZ];
@@ -345,7 +339,7 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 	}
 
 	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {
+	public BigInt getFromAsymmetricPosition(int x, int y, int z) {
 		return getFromPosition(x, y, z);
 	}
 	
@@ -359,9 +353,9 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getInitialValue() {
+	public BigInt getInitialValue() {
 		return initialValue;
-	}
+	}	
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
@@ -370,10 +364,8 @@ public class NearAether2Simple3D implements SymmetricEvolvingLongGrid3D {
 
 	@Override
 	public String getName() {
-		return "NearAether2_3D";
-	}
-
-	@Override
+		return "Aether3D";
+	}@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
 	}

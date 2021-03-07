@@ -20,6 +20,7 @@ import java.awt.Color;
 
 import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
+import org.apache.commons.math3.util.Decimal64;
 
 import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
@@ -61,6 +62,8 @@ public class GrayscaleMapper implements ColorMapper {
 				colorMap = (ColorMap<T>) new BigIntGrayscaleMap((BigInt)minValue, (BigInt)maxValue, minBrightness);
 			}  else if (minValue instanceof BigFraction) {
 				colorMap = (ColorMap<T>) new BigFractionGrayscaleMap((BigFraction)minValue, (BigFraction)maxValue, minBrightness);
+			} else if (minValue instanceof Decimal64) {
+				colorMap = (ColorMap<T>) new Decimal64GrayscaleMap((Decimal64)minValue, (Decimal64)maxValue, minBrightness);
 			} else {
 				throw new UnsupportedOperationException(
 						"Missing " + ColorMap.class.getSimpleName() + "<"

@@ -21,13 +21,13 @@ import org.apache.commons.math3.fraction.BigFraction;
 import cellularautomata.grid.MinAndMax;
 import cellularautomata.numbers.BigInt;
 
-public class BigIntGrid3DPattern implements NumberGrid3D<BigFraction> {
+public class BigIntGrid3DPattern<T extends NumberGrid3D<BigInt>> implements NumberGrid3D<BigFraction> {
 
-	protected NumberGrid3D<BigInt> source;
+	protected T source;
 	protected BigInt min;
 	protected BigInt range;
 	
-	public BigIntGrid3DPattern(NumberGrid3D<BigInt> grid) throws Exception {
+	public BigIntGrid3DPattern(T grid) throws Exception {
 		this.source = grid;
 		MinAndMax<BigInt> minMax = grid.getMinAndMax();
 		min = minMax.getMin();

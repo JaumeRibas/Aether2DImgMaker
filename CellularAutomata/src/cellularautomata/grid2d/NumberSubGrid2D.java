@@ -19,15 +19,10 @@ package cellularautomata.grid2d;
 import org.apache.commons.math3.FieldElement;
 
 public class NumberSubGrid2D<T extends FieldElement<T> & Comparable<T>, G extends NumberGrid2D<T>> 
-	extends SubGrid2D<G> implements NumberGrid2D<T> {
+	extends ObjectSubGrid2D<T, G> implements NumberGrid2D<T> {
 	
 	public NumberSubGrid2D(G source, int minX, int maxX, int minY, int maxY) {
 		super(source, minX, maxX, minY, maxY);
-	}
-
-	@Override
-	public T getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(x, y);
 	}
 
 }

@@ -18,11 +18,11 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
+import cellularautomata.numbers.BigInt;
 
 public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {	
 	
@@ -54,8 +54,8 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 		//safety check to prevent exceeding the data type's max value
 		if (initialValue < 0) {
 			//for this algorithm the safety check of Aether can be reused
-			BigInteger maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInteger.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+			BigInt maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInt.valueOf(initialValue));
+			if (maxNeighboringValuesDifference.compareTo(BigInt.valueOf(Long.MAX_VALUE)) > 0) {
 				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
 						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
 			}

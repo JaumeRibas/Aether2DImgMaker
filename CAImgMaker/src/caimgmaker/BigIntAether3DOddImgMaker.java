@@ -16,13 +16,18 @@
  */
 package caimgmaker;
 
+import java.io.File;
+import java.nio.charset.Charset;
+import java.sql.Timestamp;
+
+import org.apache.commons.io.FileUtils;
+
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.BigIntAether3D;
-import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 import cellularautomata.numbers.BigInt;
 
-public class BigIntAether3DEvenOddImgMaker {
+public class BigIntAether3DOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-1000", "D:/data/test"};//, "150", "30", "10000"};//debug
@@ -63,11 +68,11 @@ public class BigIntAether3DEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			EvolvingNumberGrid3D<BigInt> ca;
+			BigIntAether3D ca;
 			if (isRestore) {
-				ca = new BigIntAether3D(initValOrBackupPath).asymmetricSection();
+				ca = new BigIntAether3D(initValOrBackupPath);
 			} else {
-				ca = new BigIntAether3D(initialValue).asymmetricSection();
+				ca = new BigIntAether3D(initialValue);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
@@ -75,7 +80,8 @@ public class BigIntAether3DEvenOddImgMaker {
 				System.out.println("step: " + ca.getStep());
 			}
 			ColorMapper colorMapper = new GrayscaleMapper(0);
-			path += ca.getSubFolderPath();
+			path += ca.getName() + "/" + new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
+			FileUtils.writeStringToFile(new File(path + "/initialValue.txt"), ca.getInitialValue().toString(), Charset.forName("UTF8"));
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
 				imgMaker = new ImgMaker(millisecondsBetweenBackups);
@@ -83,11 +89,11 @@ public class BigIntAether3DEvenOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialXIndexDefined) {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, xScanInitialIndex, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
+				imgMaker.createXScanningAndZCrossSectionOddImages(ca.asymmetricSection(), xScanInitialIndex, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
+				imgMaker.createXScanningAndZCrossSectionOddImages(ca.asymmetricSection(), 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
 		}		
 	}

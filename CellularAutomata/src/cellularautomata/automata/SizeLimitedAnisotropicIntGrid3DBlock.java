@@ -68,7 +68,7 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 		return slices[x - minX];
 	}
 	
-	private int getMaxXLength(int minX, long maxBytes) {
+	private static int getMaxXLength(int minX, long maxBytes) {
 		long size = CAConstants.ARRAY_SIZE_OVERHEAD;
 		int xLength = 0;
 		int x = minX;

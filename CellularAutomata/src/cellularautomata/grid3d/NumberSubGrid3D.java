@@ -18,15 +18,11 @@ package cellularautomata.grid3d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class NumberSubGrid3D<T extends FieldElement<T> & Comparable<T>, G extends NumberGrid3D<T>> extends SubGrid3D<G> implements NumberGrid3D<T> {
+public class NumberSubGrid3D<T extends FieldElement<T> & Comparable<T>, G extends NumberGrid3D<T>> 
+	extends ObjectSubGrid3D<T, G> implements NumberGrid3D<T> {
 
 	public NumberSubGrid3D(G source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
-
-	@Override
-	public T getFromPosition(int x, int y, int z) throws Exception {
-		return source.getFromPosition(x, y, z);
-	}
-
+	
 }

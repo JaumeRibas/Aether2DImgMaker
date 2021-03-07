@@ -21,15 +21,7 @@ import org.apache.commons.math3.FieldElement;
 import cellularautomata.grid.MinAndMax;
 import cellularautomata.grid.NumberGrid;
 
-public interface NumberGrid1D<T extends FieldElement<T> & Comparable<T>> extends Grid1D, NumberGrid<T> {
-	
-	/**
-	 * Returns the value at a given position
-	 * 
-	 * @param x the position on the x-coordinate
-	 * @return the value at (x)
-	 */
-	T getFromPosition(int x);
+public interface NumberGrid1D<T extends FieldElement<T> & Comparable<T>> extends ObjectGrid1D<T>, NumberGrid<T> {
 	
 	@Override
 	default MinAndMax<T> getMinAndMax() {

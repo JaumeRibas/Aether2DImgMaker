@@ -68,7 +68,7 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 		return slices[w - minW];
 	}
 	
-	private int getMaxWLength(int minW, long maxBytes) {
+	private static int getMaxWLength(int minW, long maxBytes) {
 		long size = CAConstants.ARRAY_SIZE_OVERHEAD;
 		int wLength = 0;
 		int w = minW;
