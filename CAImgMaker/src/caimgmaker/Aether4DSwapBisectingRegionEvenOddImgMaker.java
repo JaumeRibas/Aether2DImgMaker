@@ -24,7 +24,7 @@ import cellularautomata.automata.Aether4DAsymmetricSectionSwap;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.grid.CAConstants;
 
-public class Aether4DSwapAxialRegionEvenOddImgMaker {
+public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"2000", "/home/jaume/Desktop/tests"};//debug

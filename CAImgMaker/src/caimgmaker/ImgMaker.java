@@ -1926,9 +1926,9 @@ public class ImgMaker {
 		int scanY = scanInitialYIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/axial_region/y_scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z=" + crossSectionZ + "/y_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/asymmetric_section/axial_region/" + "y=" + crossSectionY + "/";
+				+ "/asymmetric_section/z=" + crossSectionZ + "/y=" + crossSectionY + "/";
 		
 		ActionableLongGrid4DZCrossSectionProcessor actionable3DCrossSection = 
 				new ActionableLongGrid4DZCrossSectionProcessor(ca, crossSectionZ);

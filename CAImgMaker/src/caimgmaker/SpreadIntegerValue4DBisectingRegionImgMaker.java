@@ -20,14 +20,13 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether4D;
+import cellularautomata.automata.SpreadIntegerValue4D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 
-public class Aether4DAxialRegionEvenOddImgMaker {
+public class SpreadIntegerValue4DBisectingRegionImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"2000", "/home/jaume/Desktop/tests"};//debug
+//		args = new String[]{"2000", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -38,7 +37,7 @@ public class Aether4DAxialRegionEvenOddImgMaker {
 			if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
 					&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
 				initialValue = tmp.longValue();
-				SymmetricEvolvingLongGrid4D ca = new Aether4D(initialValue);
+				SpreadIntegerValue4D ca = new SpreadIntegerValue4D(initialValue);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {
@@ -68,10 +67,10 @@ public class Aether4DAxialRegionEvenOddImgMaker {
 				String imagesPath = path + ca.getSubFolderPath() + "/axial_region/img";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
-					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, scanInitialZIndex, 
+					imgMaker.createScanningAndCrossSectionImages(axialRegion, scanInitialZIndex, 
 							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
-					imgMaker.createScanningAndCrossSectionEvenOddImages(axialRegion, 
+					imgMaker.createScanningAndCrossSectionImages(axialRegion, 
 							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {

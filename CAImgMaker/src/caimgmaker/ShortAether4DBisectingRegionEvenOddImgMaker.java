@@ -23,7 +23,7 @@ import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.ShortAether4D;
 import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
 
-public class ShortAether4DAxialRegionEvenOddImgMaker {
+public class ShortAether4DBisectingRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-1000", "D:/data/test"};//debug
