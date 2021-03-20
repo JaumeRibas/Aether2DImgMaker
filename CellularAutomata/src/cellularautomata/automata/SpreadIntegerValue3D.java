@@ -21,6 +21,12 @@ import java.io.IOException;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 3D with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {	
 
 	/** A 3D array representing the grid */

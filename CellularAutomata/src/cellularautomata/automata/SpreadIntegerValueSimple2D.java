@@ -22,7 +22,7 @@ import java.io.IOException;
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
 
 /**
- * A simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton for review and testing purposes
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
  * 
  * @author Jaume Ribas
  *

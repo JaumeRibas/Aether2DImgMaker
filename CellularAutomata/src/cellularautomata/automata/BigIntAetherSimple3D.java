@@ -24,7 +24,12 @@ import java.util.List;
 import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid3D;
 import cellularautomata.numbers.BigInt;
 
-
+/**
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D, with a single source initial configuration, for review and testing purposes
+ * 
+ * @author Jaume
+ *
+ */
 public class BigIntAetherSimple3D implements SymmetricEvolvingNumberGrid3D<BigInt> {	
 	
 	private static final byte UP = 0;

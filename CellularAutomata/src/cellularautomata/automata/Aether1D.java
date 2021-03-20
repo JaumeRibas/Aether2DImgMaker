@@ -20,6 +20,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class Aether1D implements SymmetricEvolvingLongGrid1D {	
 
 	/** A 1D array representing the grid */

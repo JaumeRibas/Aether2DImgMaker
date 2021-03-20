@@ -22,6 +22,12 @@ import java.io.Serializable;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	
 	/**

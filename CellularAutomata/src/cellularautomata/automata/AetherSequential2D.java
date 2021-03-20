@@ -24,7 +24,7 @@ import java.util.List;
 import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
 
 /**
- * An asynchronous sequential version of the Aether cellular automaton to test whether or not it is abelian
+ * Asynchronous variation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton to test its abelianness
  * 
  * @author Jaume
  *

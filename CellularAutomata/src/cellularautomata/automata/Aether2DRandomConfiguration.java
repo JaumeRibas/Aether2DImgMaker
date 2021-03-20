@@ -23,6 +23,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a random initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class Aether2DRandomConfiguration implements EvolvingIntGrid2D {	
 	
 	private static final byte UP = 0;

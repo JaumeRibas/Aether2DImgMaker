@@ -22,6 +22,12 @@ import java.io.Serializable;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid3D;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class IntAether3D implements SymmetricEvolvingIntGrid3D, Serializable {
 
 	/**

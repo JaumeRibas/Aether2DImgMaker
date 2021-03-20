@@ -31,6 +31,12 @@ import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingIntGrid3D {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";

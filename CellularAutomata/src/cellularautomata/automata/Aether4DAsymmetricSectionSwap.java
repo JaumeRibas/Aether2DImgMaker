@@ -31,6 +31,12 @@ import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D {
 
 	public static final long PRIMITIVE_MAX_VALUE = Long.MAX_VALUE;

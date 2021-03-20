@@ -21,6 +21,12 @@ import java.io.IOException;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid2D;
 
+/**
+ * Implementation of the <a href="https://en.wikipedia.org/wiki/Abelian_sandpile_model">Abelian sandpile</a> cellular automaton in 2D with synchronous toppling and a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D {
 
 	private int[][] grid;
