@@ -52,7 +52,9 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 	private int currentStep;
 	private int maxX;
 	private File gridFolder;
+	private File readWriteGridFolder;
 	private long maxGridBlockSize;
+	private boolean readOnlyMode = false;
 	
 	/**
 	 * 
@@ -92,6 +94,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 	 * @throws FileNotFoundException 
 	 */
 	public Aether3DAsymmetricSectionSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		readOnlyMode = true;
 		gridFolder = new File(backupPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			throw new FileNotFoundException("Missing grid folder at '" + gridFolder.getAbsolutePath() + "'");
@@ -101,15 +104,10 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 		HashMap<String, Object> properties = 
 				(HashMap<String, Object>) Utils.deserializeFromFile(backupPath + File.separator + PROPERTIES_BACKUP_FILE_NAME);
 		setPropertiesFromMap(properties);
-		File gridBackupFolder = gridFolder;
-		gridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
-		if (gridFolder.exists()) {
-			FileUtils.cleanDirectory(gridFolder);
-		}
-		FileUtils.copyDirectory(gridBackupFolder, gridFolder);
 		if (maxX > gridBlockA.maxX) {
 			gridBlockB = loadGridBlock(gridBlockA.maxX + 1);
 		}
+		readWriteGridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
 	private SizeLimitedAnisotropicLongGrid3DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
@@ -169,6 +167,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 
 	@Override
 	public boolean nextStep() throws Exception {
+		if (readOnlyMode) {
+			readOnlyMode = false;
+			if (readWriteGridFolder.exists()) {
+				FileUtils.cleanDirectory(readWriteGridFolder);
+			}
+			FileUtils.copyDirectory(gridFolder, readWriteGridFolder);
+			gridFolder = readWriteGridFolder;
+		}
 		triggerBeforeProcessing();
 		boolean gridChanged = false;
 		long[] relevantAsymmetricNeighborValues = new long[6];
@@ -2235,7 +2241,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			} else { //more than two blocks
 				//I keep the one closest to zero (in case it can be reused when computing the next step)
 				//and save the other
-				saveGridBlock(gridBlockA);
+				if (!readOnlyMode)
+					saveGridBlock(gridBlockA);
 				if (gridBlockB.minX > 0) {
 					gridBlockA.free();
 					gridBlockA = loadGridBlock(0);
@@ -2299,12 +2306,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D 
 			FileUtils.cleanDirectory(backupFolder);
 		} else {
 			backupFolder.mkdirs();
-		}		
-		if (gridBlockA != null) {
-			saveGridBlock(gridBlockA);
 		}
-		if (gridBlockB != null) {
-			saveGridBlock(gridBlockB);
+		if (!readOnlyMode) {
+			if (gridBlockA != null) {
+				saveGridBlock(gridBlockA);
+			}
+			if (gridBlockB != null) {
+				saveGridBlock(gridBlockB);
+			}			
 		}
 		File gridBackupFolder = new File(backupFolderPath + File.separator + GRID_FOLDER_NAME);
 	    FileUtils.copyDirectory(gridFolder, gridBackupFolder);
