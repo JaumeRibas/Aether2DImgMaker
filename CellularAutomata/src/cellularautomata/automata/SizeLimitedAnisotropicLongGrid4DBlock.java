@@ -39,7 +39,7 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 		this.minW = minW;
 		int wLength = getMaxWLength(minW, maxBytes);
 		if (wLength < 2) {
-			throw new OutOfMemoryError("Grid with min w of " + minW + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
+			throw new OutOfMemoryError("Grid block with min w of " + minW + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
 		}
 		slices = new AnisotropicLongGrid4DSlice[wLength];
 		maxW = minW + wLength - 1;

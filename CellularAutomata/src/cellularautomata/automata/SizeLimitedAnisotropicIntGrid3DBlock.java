@@ -39,7 +39,7 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 		this.minX = minX;
 		int xLength = getMaxXLength(minX, maxBytes);
 		if (xLength < 2) {
-			throw new OutOfMemoryError("Grid with min x of " + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
+			throw new OutOfMemoryError("Grid block with min x of " + minX + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
 		}
 		slices = new AnisotropicIntGrid3DSlice[xLength];
 		maxX = minX + xLength - 1;
