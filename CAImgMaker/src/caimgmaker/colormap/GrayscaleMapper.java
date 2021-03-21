@@ -55,7 +55,7 @@ public class GrayscaleMapper implements ColorMapper {
 	@Override
 	public <T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue) {
 		ColorMap<T> colorMap = null;
-		if (minValue == null || maxValue == null || minValue.equals(maxValue)) {
+		if (minValue.equals(maxValue)) {
 			colorMap = new SolidColorMap<T>(new Color(0, 0, minBrightness/255));
 		} else {
 			if (minValue instanceof BigInt) {
