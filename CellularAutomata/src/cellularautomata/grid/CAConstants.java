@@ -20,17 +20,17 @@ public class CAConstants {
 	public static final int ARRAY_SIZE_OVERHEAD = 16;
 	
 	/**
-	 * The bytes in 1 GiB
+	 * Number of bytes in 1 GiB
 	 */
 	public static final long ONE_GB = 1073741824;
 	
 	/**
-	 * The bytes in 1 MiB
+	 * Number of bytes in 1 MiB
 	 */
 	public static final long ONE_MB = 1048576;
 	
 	/**
-	 * The bytes in 1 KiB
+	 * Number of bytes in 1 KiB
 	 */
 	public static final long ONE_KB = 1024;
 }
