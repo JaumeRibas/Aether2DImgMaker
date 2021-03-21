@@ -36,15 +36,18 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 
 	@Override
 	default int[] getMinAndMax() throws Exception {
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
+		int maxW = getMaxW(), minW = getMinW(), maxX, minX, maxY, minY, maxZ, minZ;
+		int minValue = Integer.MAX_VALUE, maxValue = Integer.MIN_VALUE;
+		for (int w = minW; w <= maxW; w++) {
+			minX = getMinXAtW(w);
+			maxX = getMaxXAtW(w);
+			for (int x = minX; x <= maxX; x++) {
+				minY = getMinYAtWX(w, x);
+				maxY = getMaxYAtWX(w, x);
+				for (int y = minY; y <= maxY; y++) {
+					minZ = getMinZ(w, x, y);
+					maxZ = getMaxZ(w, x, y);
+					for (int z = minZ; z <= maxZ; z++) {
 						int value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
@@ -54,7 +57,7 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 				}
 			}
 		}
-		return new int[]{ minValue, maxValue };
+		return new int[]{minValue, maxValue};
 	}
 	
 	@Override
@@ -92,18 +95,21 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	@Override
 	default int getTotal() throws Exception {
 		int total = 0;
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					for (int w = minW; w <= maxW; w++) {
+		int maxW = getMaxW(), minW = getMinW(), maxX, minX, maxY, minY, maxZ, minZ;
+		for (int w = minW; w <= maxW; w++) {
+			minX = getMinXAtW(w);
+			maxX = getMaxXAtW(w);
+			for (int x = minX; x <= maxX; x++) {
+				minY = getMinYAtWX(w, x);
+				maxY = getMaxYAtWX(w, x);
+				for (int y = minY; y <= maxY; y++) {
+					minZ = getMinZ(w, x, y);
+					maxZ = getMaxZ(w, x, y);
+					for (int z = minZ; z <= maxZ; z++) {
 						total += getFromPosition(w, x, y, z);
 					}
-				}	
-			}	
+				}
+			}
 		}
 		return total;
 	}
