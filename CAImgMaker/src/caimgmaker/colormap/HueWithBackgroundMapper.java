@@ -41,7 +41,7 @@ public class HueWithBackgroundMapper implements ColorMapper {
 	@Override
 	public <T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue) {
 		ColorMap<T> colorMap = null;
-		if (minValue.equals(maxValue)) {
+		if (minValue == null || maxValue == null || minValue.equals(maxValue)) {
 			colorMap = new SolidColorMap<T>(getEmptyColor());
 		} else {
 			if (minValue instanceof BigInt) {
