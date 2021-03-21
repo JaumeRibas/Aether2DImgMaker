@@ -44,6 +44,7 @@ import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 import cellularautomata.evolvinggrid.EvolvingShortGrid2D;
 import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
+import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
@@ -65,8 +66,11 @@ import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntGrid3DXCrossSectionCopierProcessor;
 import cellularautomata.grid3d.IntGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.LongGrid3D;
+import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid4d.ActionableLongGrid4DZCrossSectionProcessor;
 import cellularautomata.grid3d.Grid3D;
+import cellularautomata.grid3d.NumberGrid3DXCrossSectionCopierProcessor;
+import cellularautomata.grid3d.NumberGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid.GridProcessor;
 
 public class ImgMaker {
@@ -1723,6 +1727,98 @@ public class ImgMaker {
 				scanX = ca.getMaxX();			
 			currentStep++;
 			isEvenStep = !isEvenStep;
+			System.out.println();
+			xCopier.requestCopy(scanX);
+			zCopier.requestCopy(crossSectionZ);
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
+	}
+	
+	public <T extends FieldElement<T> & Comparable<T>> void createXScanningAndZCrossSectionOddImages(ActionableEvolvingGrid3D<T, NumberGrid3D<T>> ca, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
+			String imagesPath, String backupPath) throws Exception {
+				
+		int xScanInitialIndex = ca.getMaxX();
+		createXScanningAndZCrossSectionOddImages(ca, xScanInitialIndex, crossSectionZ, scanningColorMapper, 
+			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
+	}
+	
+	public <T extends FieldElement<T> & Comparable<T>> void createXScanningAndZCrossSectionOddImages(ActionableEvolvingGrid3D<T, NumberGrid3D<T>> ca, int xScanInitialIndex, int crossSectionZ, 
+			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		
+		long currentStep = ca.getStep();
+		boolean isEvenCrossSectionZ = (currentStep + crossSectionZ)%2 != 0;
+		int numberedFolder = (int) (currentStep/imgsPerFolder);
+		int folderImageCount = (int) (currentStep%imgsPerFolder);
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
+		int scanX = xScanInitialIndex;
+		
+		String caName = ca.getName();
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/x_scan/";
+		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
+				+ "/z=" + crossSectionZ + "/";
+		NumberGrid3DZCrossSectionCopierProcessor<T> zCopier = new NumberGrid3DZCrossSectionCopierProcessor<T>();
+		NumberGrid3DXCrossSectionCopierProcessor<T> xCopier = new NumberGrid3DXCrossSectionCopierProcessor<T>();
+		ca.addProcessor(zCopier);
+		ca.addProcessor(xCopier);
+		zCopier.requestCopy(crossSectionZ);
+		xCopier.requestCopy(scanX);
+		ca.processGrid();
+		do {
+			System.out.println("Step: " + currentStep);
+			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
+					minY = ca.getMinY(), maxY = ca.getMaxY();
+			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
+			System.out.println("Scan x: " + scanX);
+			boolean isEvenScanX = (currentStep + scanX)%2 != 0;
+			NumberGrid2D<T> scan = xCopier.getCopy(scanX);
+			NumberGrid2D<T> crossSection = zCopier.getCopy(crossSectionZ);
+			
+			MinAndMax<T> oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(isEvenScanX);
+			MinAndMax<T> oddXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(isEvenCrossSectionZ);
+			System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue.getMin() + ", max value: " + oddScanMinAndMaxValue.getMax());
+			System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue.getMin() + ", max value: " + oddXSectionMinAndMaxValue.getMax());
+			
+			ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue.getMin(), oddScanMinAndMaxValue.getMax());
+			ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddXSectionMinAndMaxValue.getMin(), oddXSectionMinAndMaxValue.getMax());
+			
+			createEvenOddImageLeftToRight(oddScanColorGrid, isEvenScanX, minX, maxX, minY, maxY, minWidth, minHeight, 
+							scanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
+			createEvenOddImageLeftToRight(oddCrossSectionColorGrid, isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
+							crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
+			
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}		
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += millisecondsBetweenBackups;
+				}
+			}
+			if (backupRequested) {
+				backUp = true;
+				backupRequested = false;
+			}
+			if (backUp) {
+				String backupName = ca.getClass().getSimpleName() + "_" + currentStep;
+				System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
+				ca.backUp(backupPath, backupName);		
+				System.out.println("Backing up finished");
+			}
+			scanX--;
+			if (scanX < ca.getMinX())
+				scanX = ca.getMaxX();			
+			currentStep++;
+			isEvenCrossSectionZ = !isEvenCrossSectionZ;
 			System.out.println();
 			xCopier.requestCopy(scanX);
 			zCopier.requestCopy(crossSectionZ);
