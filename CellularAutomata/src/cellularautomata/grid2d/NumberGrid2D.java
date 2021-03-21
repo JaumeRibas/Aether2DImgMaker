@@ -45,17 +45,33 @@ public interface NumberGrid2D<T extends FieldElement<T> & Comparable<T>> extends
 	@Override
 	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
-		int minY = getMinY(minX);
-		boolean isPositionEven = (minY+minX)%2 == 0;
-		if (isPositionEven != isEven) {
-			minY++;
-		}
-		T maxValue = getFromPosition(minX, minY);
-		T minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinY(x);
+		T maxValue = null;
+		T minValue = null;
+		int x = minX;
+		for (; x <= maxX && maxValue == null; x++) {
+			int minY = getMinY(x);
 			int maxY = getMaxY(x);
-			isPositionEven = (minY+x)%2 == 0;
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isPositionEven != isEven) {
+				minY++;
+			}
+			if (minY <= maxY) {
+				T value = getFromPosition(x, minY);
+				maxValue = value;
+				minValue = value;
+				for (int y = minY + 2; y <= maxY; y+=2) {
+					value = getFromPosition(x, y);
+					if (value.compareTo(maxValue) > 0)
+						maxValue = value;
+					if (value.compareTo(minValue) < 0)
+						minValue = value;
+				}
+			}
+		}
+		for (; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
 			if (isPositionEven != isEven) {
 				minY++;
 			}

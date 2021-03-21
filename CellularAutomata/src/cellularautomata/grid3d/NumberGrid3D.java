@@ -50,22 +50,41 @@ public interface NumberGrid3D<T extends FieldElement<T> & Comparable<T>> extends
 	
 	@Override
 	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
-		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
-		minY = getMinYAtX(minX);
-		minZ = getMinZ(minX, minY);
-		boolean isPositionEven = (minZ + minX + minY)%2 == 0;
-		if (isPositionEven != isEven) {
-			minZ++;
-		}
-		T maxValue = getFromPosition(minX, minY, minZ);
-		T minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
-			minY = getMinYAtX(x);
-			maxY = getMaxYAtX(x);
+		int maxX = getMaxX(), minX = getMinX();
+		T maxValue = null;
+		T minValue = null;
+		int x = minX;
+		for (; x <= maxX && maxValue == null; x++) {
+			int minY = getMinYAtX(x);
+			int maxY = getMaxYAtX(x);
 			for (int y = minY; y <= maxY; y++) {
-				minZ = getMinZ(x, y);
-				maxZ = getMaxZ(x, y);
-				isPositionEven = (minZ+x+y)%2 == 0;
+				int minZ = getMinZ(x, y);
+				int maxZ = getMaxZ(x, y);
+				boolean isPositionEven = (minZ+x+y)%2 == 0;
+				if (isPositionEven != isEven) {
+					minZ++;
+				}
+				if (minZ <= maxZ) {
+					T value = getFromPosition(x, y, minZ);
+					maxValue = value;
+					minValue = value;
+					for (int z = minZ + 2; z <= maxZ; z+=2) {
+						value = getFromPosition(x, y, z);
+						if (value.compareTo(maxValue) > 0)
+							maxValue = value;
+						if (value.compareTo(minValue) < 0)
+							minValue = value;
+					}
+				}
+			}
+		}
+		for (; x <= maxX; x++) {
+			int minY = getMinYAtX(x);
+			int maxY = getMaxYAtX(x);
+			for (int y = minY; y <= maxY; y++) {
+				int minZ = getMinZ(x, y);
+				int maxZ = getMaxZ(x, y);
+				boolean isPositionEven = (minZ+x+y)%2 == 0;
 				if (isPositionEven != isEven) {
 					minZ++;
 				}
