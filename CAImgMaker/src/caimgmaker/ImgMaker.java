@@ -1393,9 +1393,9 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z_scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/asymmetric_section/" + "z=" + crossSectionZ + "/";
+				+ "/" + "z=" + crossSectionZ + "/";
 		
 		ActionableIntGrid3DZCrossSectionProcessor scan = new ActionableIntGrid3DZCrossSectionProcessor(ca, scanZ);
 		ActionableIntGrid3DZCrossSectionProcessor xSection = new ActionableIntGrid3DZCrossSectionProcessor(ca, crossSectionZ);
@@ -1484,16 +1484,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createScanningAndCrossSectionImagesFromAsymmetricSection(ActionableEvolvingLongGrid3D ca, int crossSectionZ, 
+	public void createScanningAndCrossSectionImages(ActionableEvolvingLongGrid3D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int scanInitialZIndex = ca.getMinZ();
-		createScanningAndCrossSectionImagesFromAsymmetricSection(ca, scanInitialZIndex, crossSectionZ, scanningColorMapper, 
+		createScanningAndCrossSectionImages(ca, scanInitialZIndex, crossSectionZ, scanningColorMapper, 
 			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createScanningAndCrossSectionImagesFromAsymmetricSection(ActionableEvolvingLongGrid3D ca, int scanInitialZIndex, int crossSectionZ, 
+	public void createScanningAndCrossSectionImages(ActionableEvolvingLongGrid3D ca, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -1757,9 +1757,9 @@ public class ImgMaker {
 		int scanZ = scanInitialZIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z_scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/z_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/asymmetric_section/" + "z=" + crossSectionZ + "/";
+				+ "/z=" + crossSectionZ + "/";
 		
 		ActionableLongGrid3DZCrossSectionProcessor scan = new ActionableLongGrid3DZCrossSectionProcessor(ca, scanZ);
 		ActionableLongGrid3DZCrossSectionProcessor xSection = new ActionableLongGrid3DZCrossSectionProcessor(ca, crossSectionZ);
@@ -1901,16 +1901,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(ActionableEvolvingLongGrid4D ca, int crossSectionZ, 
+	public void createScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(ActionableEvolvingLongGrid4D ca, int crossSectionZ, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int scanInitialYIndex = ca.crossSectionAtZ(crossSectionZ).getMinZ();//the cross section's z axis is the original y axis...
-		createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(ca, crossSectionZ, scanInitialYIndex, scanningColorMapper, 
+		createScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(ca, crossSectionZ, scanInitialYIndex, scanningColorMapper, 
 			crossSectionColorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createScanningAndCrossSectionEvenOddImagesFromAsymmetricSections3DZCrossSection(ActionableEvolvingLongGrid4D ca, int crossSectionZ, int scanInitialYIndex, 
+	public void createScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(ActionableEvolvingLongGrid4D ca, int crossSectionZ, int scanInitialYIndex, 
 			ColorMapper scanningColorMapper, ColorMapper crossSectionColorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -1926,9 +1926,9 @@ public class ImgMaker {
 		int scanY = scanInitialYIndex;
 		
 		String caName = ca.getName();
-		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/asymmetric_section/z=" + crossSectionZ + "/y_scan/";
+		String scanImgPath = imagesPath + "/" + scanningColorMapper.getClass().getSimpleName() + "/z=" + crossSectionZ + "/y_scan/";
 		String crossSectionImgPath = imagesPath + "/" + crossSectionColorMapper.getClass().getSimpleName() 
-				+ "/asymmetric_section/z=" + crossSectionZ + "/y=" + crossSectionY + "/";
+				+ "/z=" + crossSectionZ + "/y=" + crossSectionY + "/";
 		
 		ActionableLongGrid4DZCrossSectionProcessor actionable3DCrossSection = 
 				new ActionableLongGrid4DZCrossSectionProcessor(ca, crossSectionZ);
@@ -2120,7 +2120,7 @@ public class ImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createAsymmetricSectionXScanningImages(ActionableEvolvingIntGrid3D ca, ColorMapper colorMapper, 
+	public void createXScanningImages(ActionableEvolvingIntGrid3D ca, ColorMapper colorMapper, 
 			int minWidth, int minHeight, String imagesPath) throws Exception {
 		long currentStep = ca.getStep();
 		String caName = ca.getName();
@@ -2160,7 +2160,7 @@ public class ImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createXScanningEvenOddImagesFromAsymmetricSection(ActionableEvolvingIntGrid3D ca, ColorMapper colorMapper, 
+	public void createXScanningEvenOddImages(ActionableEvolvingIntGrid3D ca, ColorMapper colorMapper, 
 			int imageWidth, int imageHeight, String imagesPath) throws Exception {
 		long currentStep = ca.getStep();
 		String caName = ca.getName();
@@ -2491,7 +2491,7 @@ public class ImgMaker {
 		saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
 	}
 	
-	public void createZScanningEvenOddImagesFromAsymmetricSection(ActionableEvolvingIntGrid3D ca,
+	public void createZScanningEvenOddImages(ActionableEvolvingIntGrid3D ca,
 			ColorMapper colorMapper, String imagesPath) throws Exception {
 		long currentStep = ca.getStep();
 		String caName = ca.getName();

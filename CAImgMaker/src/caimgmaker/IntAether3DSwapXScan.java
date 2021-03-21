@@ -74,8 +74,8 @@ public class IntAether3DSwapXScan {
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createAsymmetricSectionXScanningImages(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
-					path + "/img");
+			imgMaker.createXScanningImages(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+					path + "/asymmetric_section/img");
 
 		}		
 	}
