@@ -28,13 +28,18 @@ public interface Grid4D extends Grid {
 	 * @return the smallest w
 	 */
 	int getMinW();
-	
-	/**
-	 * Returns the largest w-coordinate
-	 * 
-	 * @return the largest w
-	 */
-	int getMaxW();
+
+	default int getMinWAtZ(int z) {
+		return getMinW();
+	}
+
+	default int getMinWAtXZ(int x, int z) {
+		return getMinW();
+	}
+
+	default int getMinWAtYZ(int y, int z) {
+		return getMinW();
+	}
 	
 	/**
 	 * Returns the smallest w-coordinate of the grid at (x,y,z).<br/>
@@ -48,6 +53,25 @@ public interface Grid4D extends Grid {
 	 */
 	default int getMinW(int x, int y, int z) {
 		return getMinW();
+	}
+	
+	/**
+	 * Returns the largest w-coordinate
+	 * 
+	 * @return the largest w
+	 */
+	int getMaxW();
+
+	default int getMaxWAtZ(int z) {
+		return getMaxW();
+	}
+
+	default int getMaxWAtXZ(int x, int z) {
+		return getMaxW();
+	}
+
+	default int getMaxWAtYZ(int y, int z) {
+		return getMaxW();
 	}
 	
 	/**
@@ -71,63 +95,8 @@ public interface Grid4D extends Grid {
 	 */
 	int getMinX();
 	
-	/**
-	 * Returns the largest x-coordinate
-	 * 
-	 * @return the largest x
-	 */
-	int getMaxX();
-	
-	/**
-	 * Returns the smallest y-coordinate
-	 * 
-	 * @return the smallest y
-	 */
-	int getMinY();
-	
-	/**
-	 * Returns the largest y-coordinate
-	 * 
-	 * @return the largest y
-	 */
-	int getMaxY();
-	
-	/**
-	 * Returns the smallest z-coordinate
-	 * 
-	 * @return the smallest z
-	 */
-	int getMinZ();
-	
-	/**
-	 * Returns the largest z-coordinate
-	 * 
-	 * @return the largest z
-	 */
-	int getMaxZ();
-
-	default int getMinWAtZ(int z) {
-		return getMinW();
-	}
-
-	default int getMinWAtXZ(int x, int z) {
-		return getMinW();
-	}
-
-	default int getMinWAtYZ(int y, int z) {
-		return getMinW();
-	}
-
-	default int getMaxWAtZ(int z) {
-		return getMaxW();
-	}
-
-	default int getMaxWAtXZ(int x, int z) {
-		return getMaxW();
-	}
-
-	default int getMaxWAtYZ(int y, int z) {
-		return getMaxW();
+	default int getMinXAtW(int w) {
+		return getMinX();
 	}
 
 	default int getMinXAtZ(int z) {
@@ -145,6 +114,17 @@ public interface Grid4D extends Grid {
 	default int getMinX(int w, int y, int z) {
 		return getMinX();
 	}
+	
+	/**
+	 * Returns the largest x-coordinate
+	 * 
+	 * @return the largest x
+	 */
+	int getMaxX();
+	
+	default int getMaxXAtW(int w) {
+		return getMaxX();
+	}
 
 	default int getMaxXAtZ(int z) {
 		return getMaxX();
@@ -161,13 +141,24 @@ public interface Grid4D extends Grid {
 	default int getMaxX(int w, int y, int z) {
 		return getMaxX();
 	}
+	
+	/**
+	 * Returns the smallest y-coordinate
+	 * 
+	 * @return the smallest y
+	 */
+	int getMinY();
 
 	default int getMinYAtZ(int z) {
 		return getMinY();
 	}
+	
+	default int getMinYAtWX(int w, int x) {
+		return getMinY();
+	}
 
-	default int getMaxYAtWZ(int w, int z) {
-		return getMaxY();
+	default int getMinYAtWZ(int w, int z) {
+		return getMinY();
 	}
 
 	default int getMinYAtXZ(int x, int z) {
@@ -177,13 +168,24 @@ public interface Grid4D extends Grid {
 	default int getMinY(int w, int x, int z) {
 		return getMinY();
 	}
-
-	default int getMaxYAtZ(int z) {
+	
+	/**
+	 * Returns the largest y-coordinate
+	 * 
+	 * @return the largest y
+	 */
+	int getMaxY();
+	
+	default int getMaxYAtWX(int w, int x) {
 		return getMaxY();
 	}
 
-	default int getMinYAtWZ(int w, int z) {
-		return getMinY();
+	default int getMaxYAtWZ(int w, int z) {
+		return getMaxY();
+	}
+
+	default int getMaxYAtZ(int z) {
+		return getMaxY();
 	}
 
 	default int getMaxYAtXZ(int x, int z) {
@@ -192,7 +194,29 @@ public interface Grid4D extends Grid {
 
 	default int getMaxY(int w, int x, int z) {
 		return getMaxY();
-	}	
+	}
+	
+	/**
+	 * Returns the smallest z-coordinate
+	 * 
+	 * @return the smallest z
+	 */
+	int getMinZ();
+
+	default int getMinZ(int w, int x, int y) {
+		return getMinZ();
+	}
+	
+	/**
+	 * Returns the largest z-coordinate
+	 * 
+	 * @return the largest z
+	 */
+	int getMaxZ();
+
+	default int getMaxZ(int w, int x, int y) {
+		return getMaxZ();
+	}
 
 	default Grid2D crossSectionAtYZ(int y, int z) {
 		return new Grid4DYZCrossSection<Grid4D>(this, y, z);

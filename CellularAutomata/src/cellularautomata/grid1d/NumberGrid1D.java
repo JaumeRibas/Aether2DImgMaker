@@ -40,21 +40,26 @@ public interface NumberGrid1D<T extends FieldElement<T> & Comparable<T>> extends
 	
 	@Override
 	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		T minValue = null;
+		T maxValue = null;
 		int maxX = getMaxX(), minX = getMinX();
 		boolean isPositionEven = minX%2 == 0;
 		if (isPositionEven != isEven) {
 			minX++;
 		}
-		T minValue = getFromPosition(minX);
-		T maxValue = minValue;
-		for (int x = minX + 2; x <= maxX; x+=2) {
-			T value = getFromPosition(x);
-			if (value.compareTo(minValue) < 0)
-				minValue = value;
-			if (value.compareTo(maxValue) > 0)
-				maxValue = value;
+		if (minX <= maxX) {
+			T value = getFromPosition(minX);
+			minValue = value;
+			maxValue = value;
+			for (int x = minX + 2; x <= maxX; x+=2) {
+				value = getFromPosition(x);
+				if (value.compareTo(minValue) < 0)
+					minValue = value;
+				if (value.compareTo(maxValue) > 0)
+					maxValue = value;
+			}
 		}
-		return new MinAndMax<T>(minValue, maxValue);
+		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
 	}
 	
 	@Override

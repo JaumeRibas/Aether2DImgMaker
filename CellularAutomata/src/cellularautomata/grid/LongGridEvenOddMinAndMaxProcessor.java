@@ -26,18 +26,22 @@ public class LongGridEvenOddMinAndMaxProcessor<G extends LongGrid> implements Gr
 	public void processGridBlock(G gridBlock) throws Exception {
 		//even
 		long[] blockEvenMinAndMax = gridBlock.getEvenOddPositionsMinAndMax(true);
-		if (evenMinAndMax == null) {
-			evenMinAndMax = new long[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+		if (blockEvenMinAndMax != null) {
+			if (evenMinAndMax == null) {
+				evenMinAndMax = new long[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+			}
+			if (blockEvenMinAndMax[0] < evenMinAndMax[0]) evenMinAndMax[0] = blockEvenMinAndMax[0];
+			if (blockEvenMinAndMax[1] > evenMinAndMax[1]) evenMinAndMax[1] = blockEvenMinAndMax[1];			
 		}
-		if (blockEvenMinAndMax[0] < evenMinAndMax[0]) evenMinAndMax[0] = blockEvenMinAndMax[0];
-		if (blockEvenMinAndMax[1] > evenMinAndMax[1]) evenMinAndMax[1] = blockEvenMinAndMax[1];
 		//odd
 		long[] blockOddMinAndMax = gridBlock.getEvenOddPositionsMinAndMax(false);
-		if (oddMinAndMax == null) {
-			oddMinAndMax = new long[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+		if (blockOddMinAndMax != null) {
+			if (oddMinAndMax == null) {
+				oddMinAndMax = new long[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+			}
+			if (blockOddMinAndMax[0] < oddMinAndMax[0]) oddMinAndMax[0] = blockOddMinAndMax[0];
+			if (blockOddMinAndMax[1] > oddMinAndMax[1]) oddMinAndMax[1] = blockOddMinAndMax[1];
 		}
-		if (blockOddMinAndMax[0] < oddMinAndMax[0]) oddMinAndMax[0] = blockOddMinAndMax[0];
-		if (blockOddMinAndMax[1] > oddMinAndMax[1]) oddMinAndMax[1] = blockOddMinAndMax[1];
 	}
 
 	@Override

@@ -56,6 +56,7 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	
 	@Override
 	default int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		int minValue = Integer.MAX_VALUE, maxValue = Integer.MIN_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -69,6 +70,7 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
+					anyPositionMatches = true;
 					int value = getFromPosition(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
@@ -77,7 +79,7 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 				}
 			}
 		}
-		return new int[]{minValue, maxValue};
+		return anyPositionMatches ? new int[]{minValue, maxValue} : null;
 	}
 	
 	@Override

@@ -44,6 +44,7 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	
 	@Override
 	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
 		int maxX = getMaxX(), minX = getMinX();
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		boolean isPositionEven = minX%2 == 0;
@@ -51,13 +52,14 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 			minX++;
 		}
 		for (int x = minX; x <= maxX; x+=2) {
+			anyPositionMatches = true;
 			long value = getFromPosition(x);
 			if (value > maxValue)
 				maxValue = value;
 			if (value < minValue)
 				minValue = value;
 		}
-		return new long[]{ minValue, maxValue };
+		return anyPositionMatches? new long[]{ minValue, maxValue } : null;
 	}
 	
 	@Override

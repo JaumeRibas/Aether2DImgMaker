@@ -97,7 +97,7 @@ public interface NumberGrid3D<T extends FieldElement<T> & Comparable<T>> extends
 				}
 			}
 		}
-		return new MinAndMax<T>(minValue, maxValue);
+		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
 	}
 	
 	@Override

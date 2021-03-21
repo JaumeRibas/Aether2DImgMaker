@@ -21,6 +21,7 @@ import java.awt.Color;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.BigIntAether3D;
+import cellularautomata.evolvinggrid.EvolvingNumberGrid2D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 import cellularautomata.grid.MinAndMax;
 import cellularautomata.grid2d.ObjectGrid2D;
@@ -36,7 +37,7 @@ import cellularautomata.numbers.BigInt;
 public class Aether3DPatternComparingImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-1000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"D:/data/test"};//debug
 		String path;
 		if (args.length > 0) {
 			path = args[0];
@@ -58,11 +59,17 @@ public class Aether3DPatternComparingImgMaker {
 				System.out.println("Computing initial value " + initialValue + " step " + (i+1));
 				ca.nextStep();
 			}
+			EvolvingNumberGrid2D<BigInt> crossSection = ca.crossSectionAtZ(0);
 			//create image
-			MinAndMax<BigInt> minMax = ca.getEvenOddPositionsMinAndMax(false);
-			ObjectGrid2D<Color> mappedGrid = colorMapper.getMappedGrid(ca.crossSectionAtZ(0), minMax.getMin(), minMax.getMax());
-			ImgMaker.createEvenOddImageLeftToRight(mappedGrid, false, mappedGrid.getMinX(), mappedGrid.getMaxX(), mappedGrid.getMinY(), 
-					mappedGrid.getMaxY(), 0, 0, path, "Ae3D" + initialValue + "_" + step + ".png");
+			MinAndMax<BigInt> minMax = crossSection.getEvenOddPositionsMinAndMax(false);
+			if (minMax != null) {
+				ObjectGrid2D<Color> mappedGrid = colorMapper.getMappedGrid(crossSection, minMax.getMin(), minMax.getMax());
+				ImgMaker.createEvenOddImageLeftToRight(mappedGrid, false, mappedGrid.getMinX(), mappedGrid.getMaxX(), mappedGrid.getMinY(), 
+						mappedGrid.getMaxY(), 0, 0, path, "Ae3D" + initialValue + "_" + step + ".png");
+			} else {
+				ImgMaker.createEmptyImage(crossSection.getMinX(), crossSection.getMaxX(), crossSection.getMinY(), 
+						crossSection.getMaxY(), 0, 0, path, "Ae3D" + initialValue + "_" + step + ".png");
+			}			
 			initialValue = initialValue.add(leap);
 		}
 	}

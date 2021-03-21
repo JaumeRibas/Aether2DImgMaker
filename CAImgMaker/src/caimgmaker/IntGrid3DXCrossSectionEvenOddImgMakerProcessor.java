@@ -62,11 +62,21 @@ public class IntGrid3DXCrossSectionEvenOddImgMakerProcessor implements GridProce
 			if(x >= gridBlock.getMinX() && x <= gridBlock.getMaxX()) {
 				IntGrid2D xSection = gridBlock.crossSectionAtX(x);			
 				int[] evenMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(isEven);
-				ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
-				ImgMaker.createImageFromEvenOrOddPositions(isEven, colorGrid, imageWidth, imageHeight, imgsPath + "even/", imgsName);
+				if (evenMinAndMaxValue != null) {
+					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+					ImgMaker.createImageFromEvenOrOddPositions(isEven, colorGrid, imageWidth, imageHeight, imgsPath + "even/", imgsName);
+				} else {
+					ImgMaker.createEmptyImage(xSection.getMinX(), xSection.getMaxX(), xSection.getMinY(), xSection.getMaxY(), 
+							imageWidth, imageHeight, imgsPath + "even/", imgsName);
+				}
 				int[] oddMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(!isEven);
-				colorGrid = colorMapper.getMappedGrid(xSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
-				ImgMaker.createImageFromEvenOrOddPositions(!isEven, colorGrid, imageWidth, imageHeight, imgsPath + "odd/", imgsName);
+				if (oddMinAndMaxValue != null) {
+					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
+					ImgMaker.createImageFromEvenOrOddPositions(!isEven, colorGrid, imageWidth, imageHeight, imgsPath + "odd/", imgsName);
+				} else {
+					ImgMaker.createEmptyImage(xSection.getMinX(), xSection.getMaxX(), xSection.getMinY(), xSection.getMaxY(), 
+							imageWidth, imageHeight, imgsPath + "odd/", imgsName);
+				}				
 				imagesMade = true;
 			}			
 		}

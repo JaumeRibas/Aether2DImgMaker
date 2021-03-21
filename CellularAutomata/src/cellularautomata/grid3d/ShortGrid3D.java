@@ -55,8 +55,9 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 	
 	@Override
 	default short[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
-		short evenMinValue = Short.MAX_VALUE, evenMaxValue = Short.MIN_VALUE;
+		short minValue = Short.MAX_VALUE, maxValue = Short.MIN_VALUE;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinYAtX(x);
 			maxY = getMaxYAtX(x);
@@ -68,15 +69,16 @@ public interface ShortGrid3D extends Grid3D, ShortGrid {
 					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
+					anyPositionMatches = true;
 					short value = getFromPosition(x, y, z);
-					if (value > evenMaxValue)
-						evenMaxValue = value;
-					if (value < evenMinValue)
-						evenMinValue = value;
+					if (value > maxValue)
+						maxValue = value;
+					if (value < minValue)
+						minValue = value;
 				}
 			}
 		}
-		return new short[]{evenMinValue, evenMaxValue};
+		return anyPositionMatches ? new short[]{minValue, maxValue} : null;
 	}
 	
 	@Override

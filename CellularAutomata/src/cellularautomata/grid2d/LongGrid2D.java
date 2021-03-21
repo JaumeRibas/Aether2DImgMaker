@@ -50,6 +50,7 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	
 	@Override
 	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
 		int maxX = getMaxX(), minX = getMinX();
 		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -60,6 +61,7 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
+				anyPositionMatches = true;
 				long value = getFromPosition(x, y);
 				if (value > maxValue)
 					maxValue = value;
@@ -67,7 +69,7 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 					minValue = value;
 			}
 		}
-		return new long[]{ minValue, maxValue };
+		return anyPositionMatches ? new long[]{ minValue, maxValue } : null;
 	}
 	
 	@Override

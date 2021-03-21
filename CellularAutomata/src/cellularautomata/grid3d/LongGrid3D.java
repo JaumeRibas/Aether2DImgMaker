@@ -56,6 +56,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	
 	@Override
 	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		long minValue = Long.MAX_VALUE, maxValue = Long.MIN_VALUE;
 		for (int x = minX; x <= maxX; x++) {
@@ -69,6 +70,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
+					anyPositionMatches = true;
 					long value = getFromPosition(x, y, z);
 					if (value > maxValue)
 						maxValue = value;
@@ -77,7 +79,7 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 				}
 			}
 		}
-		return new long[]{minValue, maxValue};
+		return anyPositionMatches ? new long[]{minValue, maxValue} : null;
 	}
 	
 	@Override

@@ -59,19 +59,24 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	
 	@Override
 	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
+		boolean anyPositionMatches = false;
+		int maxW = getMaxW(), minW = getMinW(), maxX, minX, maxY, minY, maxZ, minZ;
 		long minValue = Long.MAX_VALUE, maxValue = Long.MIN_VALUE;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					boolean isPositionEven = (minW+x+y+z)%2 == 0;
+		for (int w = minW; w <= maxW; w++) {
+			minX = getMinXAtW(w);
+			maxX = getMaxXAtW(w);
+			for (int x = minX; x <= maxX; x++) {
+				minY = getMinYAtWX(w, x);
+				maxY = getMaxYAtWX(w, x);
+				for (int y = minY; y <= maxY; y++) {
+					minZ = getMinZ(w, x, y);
+					maxZ = getMaxZ(w, x, y);
+					boolean isPositionEven = (minZ+w+x+y)%2 == 0;
 					if (isPositionEven != isEven) {
-						minW++;
+						minZ++;
 					}
-					for (int w = minW; w <= maxW; w+=2) {
+					for (int z = minZ; z <= maxZ; z+=2) {
+						anyPositionMatches = true;
 						long value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
@@ -81,7 +86,7 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 				}
 			}
 		}
-		return new long[]{minValue, maxValue};
+		return anyPositionMatches ? new long[]{minValue, maxValue} : null;
 	}
 	
 	@Override

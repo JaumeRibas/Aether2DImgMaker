@@ -59,19 +59,24 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	
 	@Override
 	default int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
-		int maxW = getMaxW(), minW = getMinW(),
-				maxX = getMaxX(), minX = getMinX(), 
-				maxY = getMaxY(), minY = getMinY(),
-				maxZ = getMaxZ(), minZ = getMinZ();
+		boolean anyPositionMatches = false;
+		int maxW = getMaxW(), minW = getMinW(), maxX, minX, maxY, minY, maxZ, minZ;
 		int minValue = Integer.MAX_VALUE, maxValue = Integer.MIN_VALUE;
-		for (int z = minZ; z <= maxZ; z++) {
-			for (int y = minY; y <= maxY; y++) {
-				for (int x = minX; x <= maxX; x++) {
-					boolean isPositionEven = (minW+x+y+z)%2 == 0;
+		for (int w = minW; w <= maxW; w++) {
+			minX = getMinXAtW(w);
+			maxX = getMaxXAtW(w);
+			for (int x = minX; x <= maxX; x++) {
+				minY = getMinYAtWX(w, x);
+				maxY = getMaxYAtWX(w, x);
+				for (int y = minY; y <= maxY; y++) {
+					minZ = getMinZ(w, x, y);
+					maxZ = getMaxZ(w, x, y);
+					boolean isPositionEven = (minZ+w+x+y)%2 == 0;
 					if (isPositionEven != isEven) {
-						minW++;
+						minZ++;
 					}
-					for (int w = minW; w <= maxW; w+=2) {
+					for (int z = minZ; z <= maxZ; z+=2) {
+						anyPositionMatches = true;
 						int value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
 							maxValue = value;
@@ -81,9 +86,9 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 				}
 			}
 		}
-		return new int[]{minValue, maxValue};
+		return anyPositionMatches ? new int[]{minValue, maxValue} : null;
 	}
-	
+
 	@Override
 	default int getTotal() throws Exception {
 		int total = 0;
