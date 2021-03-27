@@ -82,6 +82,7 @@ public class BigIntAether3DSwapOddImgMaker {
 			} else {
 				path = "./";
 			}
+			path += "Aether3D/" + new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
 			BigIntAether3DAsymmetricSectionSwap ca;
 			if (isRestore) {
 				ca = new BigIntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
@@ -93,7 +94,6 @@ public class BigIntAether3DSwapOddImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getName() + "/" + new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
 			FileUtils.writeStringToFile(new File(path + "/initialValue.txt"), ca.getInitialValue().toString(), Charset.forName("UTF8"));
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;

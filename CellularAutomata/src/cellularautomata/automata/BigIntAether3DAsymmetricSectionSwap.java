@@ -78,7 +78,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
 		maxX = 4;
 		currentStep = 0;
-		gridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		gridFolder = new File(folderPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			gridFolder.mkdirs();
 		} else {
