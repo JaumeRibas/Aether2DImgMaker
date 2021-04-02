@@ -53,8 +53,4 @@ public class AnisotropicBigIntGrid3DSlice implements Serializable {
 		return (int)(Math.pow(y, 2) - y)/2 + y + z;
 	}
 	
-	public static long getSliceSize(int x) {
-		return getIndex(x, x) + 1;
-	}
-	
 }

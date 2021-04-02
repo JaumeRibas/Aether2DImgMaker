@@ -31,13 +31,13 @@ import cellularautomata.numbers.BigInt;
 public class BigIntAether3DSwapOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"-3000", "1000000000", "D:/data/test"};//, "150", "30", "10000"};//debug
+//		args = new String[]{"-999999999999999999999999999", "50", "C:/data/test"};//, "150", "30", "10000"};//debug
 		if (args.length < 2) {
-			System.err.println("You must specify an initial value and a maximum grid volume in heap.");
+			System.err.println("You must specify an initial value and a maximum grid side in heap.");
 		} else {
 			BigInt initialValue = null;
 			boolean isRestore = false;
-			long maxGridVolumeInHeap = 0;
+			int maxGridSideInHeap = 0;
 			String path;
 			int initialStep = 0;
 			int scanInitialZIndex = 0;
@@ -52,8 +52,8 @@ public class BigIntAether3DSwapOddImgMaker {
 			}
 			if (args[1].matches("\\d+")) {
 				BigInteger tmp = new BigInteger(args[1]);
-				if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0) {
-					maxGridVolumeInHeap = tmp.longValue();
+				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0) {
+					maxGridSideInHeap = tmp.intValue();
 				} else {
 					System.err.println("Maximum grid volume in heap out of range.");
 					return;
@@ -87,7 +87,7 @@ public class BigIntAether3DSwapOddImgMaker {
 			if (isRestore) {
 				ca = new BigIntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new BigIntAether3DAsymmetricSectionSwap(initialValue, maxGridVolumeInHeap, path);
+				ca = new BigIntAether3DAsymmetricSectionSwap(initialValue, maxGridSideInHeap, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {

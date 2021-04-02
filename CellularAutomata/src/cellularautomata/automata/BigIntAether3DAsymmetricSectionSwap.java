@@ -59,22 +59,22 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 	private int currentStep;
 	private int maxX;
 	private File gridFolder;
-	private long maxGridBlockVolume;
+	private int gridBlockSide;
 	
 	/**
 	 * 
 	 * @param initialValue
-	 * @param maxGridVolumeInHeap the maximum number of grid positions that can be in heap space at any given time. This won't limit the total size of the grid.
+	 * @param maxGridSideInHeap a parameter to limit the amount of heap space occupied by the grid. This won't limit the total size of the grid.
 	 * @param folderPath
 	 * @throws Exception
 	 */
-	public BigIntAether3DAsymmetricSectionSwap(BigInt initialValue, long maxGridVolumeInHeap, String folderPath) throws Exception {
+	public BigIntAether3DAsymmetricSectionSwap(BigInt initialValue, int maxGridSideInHeap, String folderPath) throws Exception {
 		this.initialValue = initialValue;
-		maxGridBlockVolume = maxGridVolumeInHeap/2;
-		gridBlockA = new SizeLimitedAnisotropicBigIntGrid3DBlock(0, maxGridBlockVolume);
-		if (gridBlockA.maxX < 6) {
-			throw new IllegalArgumentException("Passed max grid volume in heap is too small.");
+		gridBlockSide = maxGridSideInHeap/2;
+		if (gridBlockSide < 6) {
+			throw new IllegalArgumentException("Passed max grid side in heap cannot be smaller than 12.");
 		}
+		gridBlockA = new SizeLimitedAnisotropicBigIntGrid3DBlock(0, gridBlockSide);
 		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
 		maxX = 4;
 		currentStep = 0;
@@ -167,7 +167,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedAnisotropicBigIntGrid3DBlock(minX, maxGridBlockVolume);
+			return new SizeLimitedAnisotropicBigIntGrid3DBlock(minX, gridBlockSide);
 		}
 	}
 
@@ -2368,7 +2368,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 		properties.put("initialValue", initialValue);
 		properties.put("currentStep", currentStep);
 		properties.put("maxX", maxX);
-		properties.put("maxGridBlockSize", maxGridBlockVolume);
+		properties.put("gridBlockSide", gridBlockSide);
 		return properties;
 	}
 	
@@ -2376,7 +2376,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 		initialValue = (BigInt) properties.get("initialValue");
 		currentStep = (int) properties.get("currentStep");
 		maxX = (int) properties.get("maxX");
-		maxGridBlockVolume = (long) properties.get("maxGridBlockSize");
+		gridBlockSide = (int) properties.get("gridBlockSide");
 	}
 	
 	@Override

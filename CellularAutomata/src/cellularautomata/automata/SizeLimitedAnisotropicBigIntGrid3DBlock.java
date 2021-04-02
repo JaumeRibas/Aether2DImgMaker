@@ -35,14 +35,13 @@ public class SizeLimitedAnisotropicBigIntGrid3DBlock implements NumberGrid3D<Big
 	protected int minX;
 	private AnisotropicBigIntGrid3DSlice[] slices;
 
-	public SizeLimitedAnisotropicBigIntGrid3DBlock(int minX, long maxVolume) {
+	public SizeLimitedAnisotropicBigIntGrid3DBlock(int minX, int side) {
 		this.minX = minX;
-		int xLength = getMaxXLength(minX, maxVolume);
-		if (xLength < 2) {
-			throw new OutOfMemoryError("Grid block with min x of " + minX + " and mininmum length of " + MIN_LENGTH + " exceeds the max allowed volume (" + maxVolume + ").");
+		if (side < 2) {
+			throw new IllegalArgumentException("Passed side is smaller than minimum (" + MIN_LENGTH + ")");
 		}
-		slices = new AnisotropicBigIntGrid3DSlice[xLength];
-		maxX = minX + xLength - 1;
+		slices = new AnisotropicBigIntGrid3DSlice[side];
+		maxX = minX + side - 1;
 		for (int x = minX, i = 0; x <= maxX; x++, i++) {
 			slices[i] = new AnisotropicBigIntGrid3DSlice(x);
 		}
@@ -66,18 +65,6 @@ public class SizeLimitedAnisotropicBigIntGrid3DBlock implements NumberGrid3D<Big
 	
 	protected AnisotropicBigIntGrid3DSlice getSlice(int x) {
 		return slices[x - minX];
-	}
-	
-	private static int getMaxXLength(int minX, long maxVolume) {
-		long volume = 0;
-		int xLength = 0;
-		int x = minX;
-		while (volume <= maxVolume) {
-			volume += AnisotropicBigIntGrid3DSlice.getSliceSize(x);
-			x++;
-			xLength++;
-		}
-		return xLength - 1;
 	}
 	
 	@Override
