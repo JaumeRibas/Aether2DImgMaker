@@ -28,7 +28,7 @@ import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.numbers.BigInt;
 
 /**
- * Apparently the pattern produced by the Aether model in 3D with a single source tending to negative infinity tends to converge into the same three patterns.
+ * Apparently, the pattern produced by the Aether model, in 3D, with a single source tending to negative infinity, tends to converge into the same three patterns.
  * This can be seen by executing this class. 
  * 
  * @author Jaume
