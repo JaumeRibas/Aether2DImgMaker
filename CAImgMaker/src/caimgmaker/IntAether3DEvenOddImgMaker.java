@@ -35,7 +35,7 @@ public class IntAether3DEvenOddImgMaker {
 			String path;
 			int initialStep = 0;
 			int xScanInitialIndex = 0;
-			boolean isScanInitialZIndexDefined = false;	
+			boolean isScanInitialXIndexDefined = false;	
 			long millisecondsBetweenBackups = 0;
 			boolean isBackupLeapDefined = false;
 			String initValOrBackupPath = args[0];
@@ -61,7 +61,7 @@ public class IntAether3DEvenOddImgMaker {
 					initialStep = Integer.parseInt(args[2]);
 					if (args.length > 3) {
 						xScanInitialIndex = Integer.parseInt(args[3]);
-						isScanInitialZIndexDefined = true;
+						isScanInitialXIndexDefined = true;
 						if (args.length > 4) {
 							millisecondsBetweenBackups = Long.parseLong(args[4]);
 							isBackupLeapDefined = true;
@@ -90,7 +90,7 @@ public class IntAether3DEvenOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			if (isScanInitialZIndexDefined) {
+			if (isScanInitialXIndexDefined) {
 				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, xScanInitialIndex, 0, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
