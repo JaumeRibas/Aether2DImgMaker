@@ -106,7 +106,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 				(HashMap<String, Object>) Utils.deserializeFromFile(backupPath + File.separator + PROPERTIES_BACKUP_FILE_NAME);
 		setPropertiesFromMap(properties);
 		File gridBackupFolder = gridFolder;
-		gridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		gridFolder = new File(folderPath + File.separator + GRID_FOLDER_NAME);
 		if (gridFolder.exists()) {
 			FileUtils.cleanDirectory(gridFolder);
 		}
