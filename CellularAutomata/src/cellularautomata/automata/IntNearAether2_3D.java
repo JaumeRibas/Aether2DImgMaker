@@ -23,7 +23,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid3D;
 import cellularautomata.numbers.BigInt;
 
 /**
- * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase it's uniqueness.
+ * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
  * 
  * @author Jaume
  *
