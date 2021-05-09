@@ -502,6 +502,36 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Serial
 	}
 
 	@Override
+	public int getAsymmetricMinXAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxXAtW(int w) {
+		return Math.min(getAsymmetricMaxX(), w);
+	}
+
+	@Override
+	public int getAsymmetricMinYAtWX(int w, int x) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxYAtWX(int w, int x) {
+		return Math.min(getAsymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getAsymmetricMinZ(int w, int x, int y) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxZ(int w, int x, int y) {
+		return Math.min(getAsymmetricMaxZ(), y);
+	}
+
+	@Override
 	public long getStep() {
 		return currentStep;
 	}

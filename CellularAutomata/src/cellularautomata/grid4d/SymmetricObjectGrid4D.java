@@ -14,15 +14,24 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.grid4d;
 
-import org.apache.commons.math3.FieldElement;
-
-public class AsymmetricNumberGridSection3D<T extends FieldElement<T> & Comparable<T>, G extends SymmetricNumberGrid3D<T>> 
-	extends AsymmetricObjectGridSection3D<T, G> implements NumberGrid3D<T> {
+public interface SymmetricObjectGrid4D<T> extends ObjectGrid4D<T>, SymmetricGrid4D {
 	
-	public AsymmetricNumberGridSection3D(G grid) {
-		super(grid);
-	}
+	/**
+	 * Returns the value at a given position within one of the asymmetric sections
+	 * 
+	 * @param w the position on the w-coordinate
+	 * @param x the position on the x-coordinate
+	 * @param y the position on the y-coordinate
+	 * @param z the position on the z-coordinate
+	 * @return the value at (w,x,y,z)
+	 * @throws Exception 
+	 */
+	T getFromAsymmetricPosition(int w, int x, int y, int z) throws Exception;
 
+	@Override
+	default ObjectGrid4D<T> asymmetricSection() {
+		return new AsymmetricObjectGridSection4D<T, SymmetricObjectGrid4D<T>>(this);
+	}
 }

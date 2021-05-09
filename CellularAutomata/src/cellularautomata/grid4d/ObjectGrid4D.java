@@ -16,22 +16,36 @@
  */
 package cellularautomata.grid4d;
 
-public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
+import cellularautomata.grid2d.ObjectGrid2D;
+import cellularautomata.grid3d.ObjectGrid3D;
 
+public interface ObjectGrid4D<T> extends Grid4D {
+	
 	/**
-	 * Returns the value at a given position within one of the asymmetric sections
+	 * Returns the value at a given position
 	 * 
-	 * @param w the position on the w-coordinate
+	 * @param w the position on the w-coordinate 
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */
-	long getFromAsymmetricPosition(int w, int x, int y, int z) throws Exception;
-
+	T getFromPosition(int w, int x, int y, int z) throws Exception;
+	
 	@Override
-	default LongGrid4D asymmetricSection() {
-		return new AsymmetricLongGridSection4D<SymmetricLongGrid4D>(this);
+	default ObjectGrid2D<T> crossSectionAtYZ(int y, int z) {
+		return new ObjectGrid4DYZCrossSection<T, ObjectGrid4D<T>>(this, y, z);
 	}
+	
+	@Override
+	default ObjectGrid4D<T> subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new ObjectSubGrid4D<T, ObjectGrid4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default ObjectGrid3D<T> crossSectionAtZ(int z) {
+		return new ObjectGrid4DZCrossSection<T, ObjectGrid4D<T>>(this, z);
+	}
+
 }

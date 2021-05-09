@@ -173,20 +173,23 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 						
 						if (relevantNeighborCount > 0) {
 							//sort
-							boolean sorted = false;
-							while (!sorted) {
-								sorted = true;
-								for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-									if (neighborValues[i] < neighborValues[i+1]) {
-										sorted = false;
-										short valSwap = neighborValues[i];
-										neighborValues[i] = neighborValues[i+1];
-										neighborValues[i+1] = valSwap;
-										byte dirSwap = neighborDirections[i];
-										neighborDirections[i] = neighborDirections[i+1];
-										neighborDirections[i+1] = dirSwap;
+							int neighborCountMinusOne = relevantNeighborCount - 1;
+							for (int i = 0; i < neighborCountMinusOne; i++) {
+								short max = neighborValues[i];
+								int swapPosition = i;
+								for (int j = i + 1; j < relevantNeighborCount; j++) {
+									neighborValue = neighborValues[j];
+									if (neighborValue > max) {
+										max = neighborValue;
+										swapPosition = j;
 									}
 								}
+								short valSwap = neighborValues[i];
+								neighborValues[i] = neighborValues[swapPosition];
+								neighborValues[swapPosition] = valSwap;
+								byte dirSwap = neighborDirections[i];
+								neighborDirections[i] = neighborDirections[swapPosition];
+								neighborDirections[swapPosition] = dirSwap;
 							}
 							//divide
 							boolean isFirstNeighbor = true;
@@ -615,6 +618,36 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 	@Override
 	public int getAsymmetricMaxY(int w, int x, int z) {
 		return Math.min(getAsymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getAsymmetricMinXAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxXAtW(int w) {
+		return Math.min(getAsymmetricMaxX(), w);
+	}
+
+	@Override
+	public int getAsymmetricMinYAtWX(int w, int x) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxYAtWX(int w, int x) {
+		return Math.min(getAsymmetricMaxY(), x);
+	}
+
+	@Override
+	public int getAsymmetricMinZ(int w, int x, int y) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxZ(int w, int x, int y) {
+		return Math.min(getAsymmetricMaxZ(), y);
 	}
 	
 	@Override

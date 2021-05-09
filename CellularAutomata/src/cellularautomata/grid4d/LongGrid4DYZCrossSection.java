@@ -18,9 +18,9 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid2d.LongGrid2D;
 
-public class LongGrid4DYZCrossSection extends Grid4DYZCrossSection<LongGrid4D> implements LongGrid2D {
+public class LongGrid4DYZCrossSection<G extends LongGrid4D> extends Grid4DYZCrossSection<G> implements LongGrid2D {
 
-	public LongGrid4DYZCrossSection(LongGrid4D source, int y, int z) {
+	public LongGrid4DYZCrossSection(G source, int y, int z) {
 		super(source, y, z);
 	}
 

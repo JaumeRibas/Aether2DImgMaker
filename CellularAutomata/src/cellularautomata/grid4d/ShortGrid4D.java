@@ -116,7 +116,7 @@ public interface ShortGrid4D extends Grid4D, ShortGrid {
 	
 	@Override
 	default ShortGrid2D crossSectionAtYZ(int y, int z) {
-		return new ShortGrid4DYZCrossSection(this, y, z);
+		return new ShortGrid4DYZCrossSection<ShortGrid4D>(this, y, z);
 	}
 	
 	@Override

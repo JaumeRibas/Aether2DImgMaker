@@ -14,15 +14,27 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.evolvinggrid;
 
 import org.apache.commons.math3.FieldElement;
 
-public class AsymmetricNumberGridSection3D<T extends FieldElement<T> & Comparable<T>, G extends SymmetricNumberGrid3D<T>> 
-	extends AsymmetricObjectGridSection3D<T, G> implements NumberGrid3D<T> {
-	
-	public AsymmetricNumberGridSection3D(G grid) {
-		super(grid);
-	}
+import cellularautomata.grid4d.NumberGrid4D;
 
+public interface EvolvingNumberGrid4D<T extends FieldElement<T> & Comparable<T>> extends NumberGrid4D<T>, EvolvingNumberGrid<T> {
+
+	@Override
+	default EvolvingNumberGrid2D<T> crossSectionAtYZ(int y, int z) {
+		return new EvolvingNumberGrid4DYZCrossSection<T>(this, y, z);
+	}
+	
+	//TODO
+//	@Override
+//	default EvolvingNumberGrid4D<T> subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+//		return new EvolvingNumberSubGrid4D<T, EvolvingNumberGrid4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+//	}
+	
+	@Override
+	default EvolvingNumberGrid3D<T> crossSectionAtZ(int z) {
+		return new EvolvingNumberGrid4DZCrossSection<T>(this, z);
+	}
 }

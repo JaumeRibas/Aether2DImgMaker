@@ -19,6 +19,12 @@ package cellularautomata.evolvinggrid;
 import cellularautomata.grid4d.ShortGrid4D;
 
 public interface EvolvingShortGrid4D extends ShortGrid4D, EvolvingShortGrid {
+	
+	@Override
+	default EvolvingShortGrid2D crossSectionAtYZ(int y, int z) {
+		return new EvolvingShortGrid4DYZCrossSection(this, y, z);
+	}
+	
 	@Override
 	default EvolvingShortGrid3D crossSectionAtZ(int z) {
 		return new EvolvingShortGid4DZCrossSection(this, z);

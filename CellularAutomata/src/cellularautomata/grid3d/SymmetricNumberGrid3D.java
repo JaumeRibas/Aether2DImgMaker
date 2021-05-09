@@ -18,18 +18,7 @@ package cellularautomata.grid3d;
 
 import org.apache.commons.math3.FieldElement;
 
-public interface SymmetricNumberGrid3D<T extends FieldElement<T> & Comparable<T>> extends NumberGrid3D<T>, SymmetricGrid3D {
-	
-	/**
-	 * Returns the value at a given position
-	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @param z the position on the z-coordinate
-	 * @return the value at (x,y,z)
-	 * @throws Exception 
-	 */
-	T getFromAsymmetricPosition(int x, int y, int z) throws Exception;
+public interface SymmetricNumberGrid3D<T extends FieldElement<T> & Comparable<T>> extends NumberGrid3D<T>, SymmetricObjectGrid3D<T> {
 
 	@Override
 	default NumberGrid3D<T> asymmetricSection() {

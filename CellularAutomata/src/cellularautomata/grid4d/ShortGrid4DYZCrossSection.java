@@ -18,9 +18,9 @@ package cellularautomata.grid4d;
 
 import cellularautomata.grid2d.ShortGrid2D;
 
-public class ShortGrid4DYZCrossSection extends Grid4DYZCrossSection<ShortGrid4D> implements ShortGrid2D {
+public class ShortGrid4DYZCrossSection<G extends ShortGrid4D> extends Grid4DYZCrossSection<G> implements ShortGrid2D {
 
-	public ShortGrid4DYZCrossSection(ShortGrid4D source, int y, int z) {
+	public ShortGrid4DYZCrossSection(G source, int y, int z) {
 		super(source, y, z);
 	}
 

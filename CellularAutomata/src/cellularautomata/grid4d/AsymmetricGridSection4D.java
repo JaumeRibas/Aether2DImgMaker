@@ -182,6 +182,36 @@ public class AsymmetricGridSection4D<G extends SymmetricGrid4D> implements Grid4
 	@Override
 	public int getMaxY(int w, int x, int z) {
 		return source.getAsymmetricMaxY(w, x, z);
+	}	
+
+	@Override
+	public int getMinXAtW(int w) {
+		return source.getAsymmetricMinXAtW(w);
+	}
+
+	@Override
+	public int getMaxXAtW(int w) {
+		return source.getAsymmetricMaxXAtW(w);
+	}
+
+	@Override
+	public int getMinYAtWX(int w, int x) {
+		return source.getAsymmetricMinYAtWX(w, x);
+	}
+
+	@Override
+	public int getMaxYAtWX(int w, int x) {
+		return source.getAsymmetricMaxYAtWX(w, x);
+	}
+
+	@Override
+	public int getMinZ(int w, int x, int y) {
+		return source.getAsymmetricMinZ(w, x, y);
+	}
+
+	@Override
+	public int getMaxZ(int w, int x, int y) {
+		return source.getAsymmetricMaxZ(w, x, y);
 	}
 
 }

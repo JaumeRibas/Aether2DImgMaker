@@ -19,13 +19,14 @@ package cellularautomata.grid4d;
 public interface SymmetricShortGrid4D extends ShortGrid4D, SymmetricGrid4D {
 
 	/**
-	 * Returns the value at a given position
+	 * Returns the value at a given position within one of the asymmetric sections
 	 * 
 	 * @param w the position on the w-coordinate
 	 * @param x the position on the x-coordinate
 	 * @param y the position on the y-coordinate
 	 * @param z the position on the z-coordinate
-	 * @return the value at (x,y,z)
+	 * @return the value at (w,x,y,z)
+	 * @throws Exception 
 	 */
 	short getFromAsymmetricPosition(int w, int x, int y, int z);
 

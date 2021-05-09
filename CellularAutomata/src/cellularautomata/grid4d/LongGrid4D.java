@@ -116,7 +116,7 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	
 	@Override
 	default LongGrid2D crossSectionAtYZ(int y, int z) {
-		return new LongGrid4DYZCrossSection(this, y, z);
+		return new LongGrid4DYZCrossSection<LongGrid4D>(this, y, z);
 	}
 	
 	@Override

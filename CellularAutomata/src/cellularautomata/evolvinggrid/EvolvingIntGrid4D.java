@@ -19,6 +19,12 @@ package cellularautomata.evolvinggrid;
 import cellularautomata.grid4d.IntGrid4D;
 
 public interface EvolvingIntGrid4D extends IntGrid4D, EvolvingIntGrid {
+	
+	@Override
+	default EvolvingIntGrid2D crossSectionAtYZ(int y, int z) {
+		return new EvolvingIntGrid4DYZCrossSection(this, y, z);
+	}
+	
 	@Override
 	default EvolvingIntGrid3D crossSectionAtZ(int z) {
 		return new EvolvingIntGrid4DZCrossSection(this, z);

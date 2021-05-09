@@ -21,15 +21,10 @@ import org.apache.commons.math3.FieldElement;
 import cellularautomata.grid2d.NumberGrid2D;
 
 public class NumberGrid3DXCrossSection<T extends FieldElement<T> & Comparable<T>, G extends NumberGrid3D<T>> 
-	extends Grid3DXCrossSection<G> implements NumberGrid2D<T> {
+	extends ObjectGrid3DXCrossSection<T, G> implements NumberGrid2D<T> {
 
 	public NumberGrid3DXCrossSection(G source, int x) {
 		super(source, x);
-	}
-
-	@Override
-	public T getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(this.x, y, x);
 	}
 
 }

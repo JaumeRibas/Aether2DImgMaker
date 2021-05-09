@@ -20,7 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
+import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid4D;
+import cellularautomata.numbers.BigInt;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -28,13 +29,12 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
  * @author Jaume
  *
  */
-public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
+public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Serializable {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8314893471774482651L;
-	
+	private static final long serialVersionUID = 5853970703675608009L;
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;
 	private static final byte X_POSITIVE = 2;
@@ -45,9 +45,9 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	private static final byte Z_NEGATIVE = 7;
 
 	/** A 4D array representing the grid */
-	private long[][][][] grid;
+	private BigInt[][][][] grid;
 	
-	private long initialValue;
+	private BigInt initialValue;
 	private long currentStep;
 	private int maxX;
 	private int maxY;
@@ -63,12 +63,9 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public Aether4D(long initialValue) {
-		if (initialValue < Long.valueOf("-2635249153387078803")) {//to prevent overflow of long type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -2,635,249,153,387,078,803. Use a greater initial value or a different implementation.");
-		}
+	public BigIntAether4D(BigInt initialValue) {
 		this.initialValue = initialValue;
-		grid = Utils.buildAnisotropic4DLongArray(3);
+		grid = Utils.buildAnisotropic4DBigIntArray(3);
 		grid[0][0][0][0] = this.initialValue;
 		maxX = 0;
 		maxY = 0;
@@ -85,8 +82,8 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Aether4D data = (Aether4D) Utils.deserializeFromFile(backupPath);
+	public BigIntAether4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		BigIntAether4D data = (BigIntAether4D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
 		maxX = data.maxX;
@@ -99,73 +96,73 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 
 	@Override
 	public boolean nextStep(){
-		long[][][][] newGrid = null;
+		BigInt[][][][] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 1][][][];
+			newGrid = new BigInt[grid.length + 1][][][];
 		} else {
-			newGrid = new long[grid.length][][][];
+			newGrid = new BigInt[grid.length][][][];
 		}
 		maxWMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = Utils.buildAnisotropic3DLongArray(1);
+		newGrid[0] = Utils.buildAnisotropic3DBigIntArray(1);
 		boolean first = true;
-		long[] neighborValues = new long[8];
+		BigInt[] neighborValues = new BigInt[8];
 		byte[] neighborDirections = new byte[8];
 		for (int w = 0, nextW = 1; w < grid.length; w++, nextW++, first = false) {
 			if (nextW < newGrid.length) {
-				newGrid[nextW] = Utils.buildAnisotropic3DLongArray(nextW + 1);
+				newGrid[nextW] = Utils.buildAnisotropic3DBigIntArray(nextW + 1);
 			}
 			for (int x = 0; x <= w; x++) {
 				for (int y = 0; y <= x; y++) {
 					for (int z = 0; z <= y; z++) {
-						long value = grid[w][x][y][z];
+						BigInt value = grid[w][x][y][z];
 						int relevantNeighborCount = 0;
-						long neighborValue;
+						BigInt neighborValue;
 						neighborValue = getFromPosition(w + 1, x, y, z);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = W_POSITIVE;
 							relevantNeighborCount++;
 						}
 						neighborValue = getFromPosition(w - 1, x, y, z);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = W_NEGATIVE;
 							relevantNeighborCount++;
 						}
 						neighborValue = getFromPosition(w, x + 1, y, z);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = X_POSITIVE;
 							relevantNeighborCount++;
 						}
 						neighborValue = getFromPosition(w, x - 1, y, z);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = X_NEGATIVE;
 							relevantNeighborCount++;
 						}
 						neighborValue = getFromPosition(w, x, y + 1, z);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Y_POSITIVE;
 							relevantNeighborCount++;
 						}
 						neighborValue = getFromPosition(w, x, y - 1, z);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Y_NEGATIVE;
 							relevantNeighborCount++;
 						}
 						neighborValue = getFromPosition(w, x, y, z + 1);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Z_POSITIVE;
 							relevantNeighborCount++;
 						}
 						neighborValue = getFromPosition(w, x, y, z - 1);
-						if (neighborValue < value) {
+						if (neighborValue.compareTo(value) < 0) {
 							neighborValues[relevantNeighborCount] = neighborValue;
 							neighborDirections[relevantNeighborCount] = Z_NEGATIVE;
 							relevantNeighborCount++;
@@ -175,34 +172,35 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 							//sort							
 							int neighborCountMinusOne = relevantNeighborCount - 1;
 							for (int i = 0; i < neighborCountMinusOne; i++) {
-								long max = neighborValues[i];
+								BigInt max = neighborValues[i];
 								int swapPosition = i;
 								for (int j = i + 1; j < relevantNeighborCount; j++) {
 									neighborValue = neighborValues[j];
-									if (neighborValue > max) {
+									if (neighborValue.compareTo(max) > 0) {
 										max = neighborValue;
 										swapPosition = j;
 									}
 								}
-								long valSwap = neighborValues[i];
+								BigInt valSwap = neighborValues[i];
 								neighborValues[i] = neighborValues[swapPosition];
 								neighborValues[swapPosition] = valSwap;
 								byte dirSwap = neighborDirections[i];
 								neighborDirections[i] = neighborDirections[swapPosition];
 								neighborDirections[swapPosition] = dirSwap;
-							}							
+							}
 							//divide
 							boolean isFirstNeighbor = true;
-							long previousNeighborValue = 0;
+							BigInt previousNeighborValue = null;
 							for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
 								neighborValue = neighborValues[i];
-								if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+								if (!neighborValue.equals(previousNeighborValue) || isFirstNeighbor) {
 									int shareCount = relevantNeighborCount - i + 1;
-									long toShare = value - neighborValue;
-									long share = toShare/shareCount;
-									if (share != 0) {
+									BigInt toShare = value.subtract(neighborValue);
+									BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+									BigInt share = shareAndReminder[0];
+									if (!share.equals(BigInt.ZERO)) {
 										changed = true;
-										value = value - toShare + toShare%shareCount + share;
+										value = value.subtract(toShare).add(shareAndReminder[1]).add(share);
 										for (int j = i; j < relevantNeighborCount; j++) {
 											addToNeighbor(newGrid, w, x, y, z, neighborDirections[j], share);
 										}
@@ -211,7 +209,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 								}
 							}	
 						}					
-						newGrid[w][x][y][z] += value;
+						newGrid[w][x][y][z] = newGrid[w][x][y][z].add(value);
 					}
 				}
 			}
@@ -224,7 +222,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		return changed;
 	}
 	
-	private void addToNeighbor(long grid[][][][], int w, int x, int y, int z, byte direction, long value) {
+	private void addToNeighbor(BigInt grid[][][][], int w, int x, int y, int z, byte direction, BigInt value) {
 		switch(direction) {
 		case W_POSITIVE:
 			addToWPositive(grid, w, x, y, z, value);
@@ -253,124 +251,129 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		}
 	}
 	
-	private void addToWPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
-		grid[w+1][x][y][z] += value;
+	private void addToWPositive(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
+		int ww = w+1;
+		grid[ww][x][y][z] = grid[ww][x][y][z].add(value);
 		if (w >= maxWMinusOne) {
 			boundsReached = true;
 		}	
 	}
 				
-	private void addToWNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToWNegative(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
 		if (w > x) {
-			long valueToAdd = value;
+			BigInt valueToAdd = value;
 			if (w == x + 1) {
-				valueToAdd += value;
+				valueToAdd = valueToAdd.add(value);
 				if (x == y) {
-					valueToAdd += value;
+					valueToAdd = valueToAdd.add(value);
 					if (y == z) {
-						valueToAdd += value;
+						valueToAdd = valueToAdd.add(value);
 						if (w == 1) {
-							valueToAdd += 4*value;
+							valueToAdd = valueToAdd.add(value.multiply(4));
 						}
 					}
 				}
 			}
-			grid[w-1][x][y][z] += valueToAdd;
+			int ww = w-1;
+			grid[ww][x][y][z] = grid[ww][x][y][z].add(valueToAdd);
 		}
 		if (w >= maxWMinusOne) {
 			boundsReached = true;
 		}
 	}
 
-	private void addToXPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToXPositive(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
 		if (x < w) {
-			long valueToAdd = value;
+			BigInt valueToAdd = value;
 			if (x == w - 1) {
-				valueToAdd += value;
+				valueToAdd = valueToAdd.add(value);
 			}
 			int xx = x+1;
-			grid[w][xx][y][z] += valueToAdd;
+			grid[w][xx][y][z] = grid[w][xx][y][z].add(valueToAdd);
 			if (xx > maxX)
 				maxX = xx;
 		}
 	}
 
-	private void addToXNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToXNegative(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
 		if (x > y) {
-			long valueToAdd = value;									
+			BigInt valueToAdd = value;									
 			if (y == x - 1) {
-				valueToAdd += value;
+				valueToAdd = valueToAdd.add(value);
 				if (y == z) {
-					valueToAdd += value;
+					valueToAdd = valueToAdd.add(value);
 					if (y == 0) {
-						valueToAdd += 3*value;
+						valueToAdd = valueToAdd.add(value.multiply(3));
 					}
 				}
 			}
-			grid[w][x-1][y][z] += valueToAdd;
+			int xx = x-1;
+			grid[w][xx][y][z] = grid[w][xx][y][z].add(valueToAdd);
 		}
 	}
 
-	private void addToYPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToYPositive(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
 		if (y < x) {
-			long valueToAdd = value;									
+			BigInt valueToAdd = value;									
 			if (y == x - 1) {
-				valueToAdd += value;
+				valueToAdd = valueToAdd.add(value);
 				if (w == x) {
-					valueToAdd += value;
+					valueToAdd = valueToAdd.add(value);
 				}
 			}
 			int yy = y+1;
-			grid[w][x][yy][z] += valueToAdd;
+			grid[w][x][yy][z] = grid[w][x][yy][z].add(valueToAdd);
 			if (yy > maxY)
 				maxY = yy;
 		}
 	}
 
-	private void addToYNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToYNegative(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
 		if (y > z) {	
-			long valueToAdd = value;
+			BigInt valueToAdd = value;
 			if (z == y - 1) {
-				valueToAdd += value;
+				valueToAdd = valueToAdd.add(value);
 				if (y == 1) {
-					valueToAdd += 2*value;
+					valueToAdd = valueToAdd.add(value.multiply(2));
 				}
 			}
-			grid[w][x][y-1][z] += valueToAdd;
+			int yy = y-1;
+			grid[w][x][yy][z] = grid[w][x][yy][z].add(valueToAdd);
 		}
 	}
 
-	private void addToZPositive(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToZPositive(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
 		if (z < y) {
-			long valueToAdd = value;
+			BigInt valueToAdd = value;
 			if (z == y - 1) {
-				valueToAdd += value;
+				valueToAdd = valueToAdd.add(value);
 				if (x == y) {
-					valueToAdd += value;
+					valueToAdd = valueToAdd.add(value);
 					if (w == x) {
-						valueToAdd += value;
+						valueToAdd = valueToAdd.add(value);
 					}
 				}
 			}
 			int zz = z+1;
-			grid[w][x][y][zz] += valueToAdd;
+			grid[w][x][y][zz] = grid[w][x][y][zz].add(valueToAdd);
 			if (zz > maxZ)
 				maxZ = zz;
 		}
 	}
 
-	private void addToZNegative(long[][][][] grid, int w, int x, int y, int z, long value) {
+	private void addToZNegative(BigInt[][][][] grid, int w, int x, int y, int z, BigInt value) {
 		if (z > 0) {
-			long valueToAdd = value;
+			BigInt valueToAdd = value;
 			if (z == 1) {
-				valueToAdd += value;
+				valueToAdd = valueToAdd.add(value);
 			}
-			grid[w][x][y][z-1] += valueToAdd;
+			int zz = z-1;
+			grid[w][x][y][zz] = grid[w][x][y][zz].add(valueToAdd);
 		}
 	}
 	
 	@Override
-	public long getFromPosition(int w, int x, int y, int z){	
+	public BigInt getFromPosition(int w, int x, int y, int z){	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -404,19 +407,19 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				&& z < grid[w][x][y].length) {
 			return grid[w][x][y][z];
 		} else {
-			return 0;
+			return BigInt.ZERO;
 		}
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z){	
+	public BigInt getFromAsymmetricPosition(int w, int x, int y, int z){	
 		if (w < grid.length 
 				&& x < grid[w].length 
 				&& y < grid[w][x].length 
 				&& z < grid[w][x][y].length) {
 			return grid[w][x][y][z];
 		} else {
-			return 0;
+			return BigInt.ZERO;
 		}
 	}
 	
@@ -637,7 +640,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 
 	@Override
 	public int getAsymmetricMaxYAtWX(int w, int x) {
-		return Math.min(getAsymmetricMaxY(), x);//check that x <= w?
+		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override
@@ -660,7 +663,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getIntialValue() {
+	public BigInt getIntialValue() {
 		return initialValue;
 	}
 	

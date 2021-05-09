@@ -14,15 +14,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.grid4d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class AsymmetricNumberGridSection3D<T extends FieldElement<T> & Comparable<T>, G extends SymmetricNumberGrid3D<T>> 
-	extends AsymmetricObjectGridSection3D<T, G> implements NumberGrid3D<T> {
-	
-	public AsymmetricNumberGridSection3D(G grid) {
-		super(grid);
-	}
+public interface SymmetricNumberGrid4D<T extends FieldElement<T> & Comparable<T>> extends NumberGrid4D<T>, SymmetricObjectGrid4D<T> {
 
+	@Override
+	default NumberGrid4D<T> asymmetricSection() {
+		return new AsymmetricNumberGridSection4D<T, SymmetricNumberGrid4D<T>>(this);
+	}
 }

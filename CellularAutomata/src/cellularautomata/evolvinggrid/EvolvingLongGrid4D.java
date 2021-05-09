@@ -19,6 +19,12 @@ package cellularautomata.evolvinggrid;
 import cellularautomata.grid4d.LongGrid4D;
 
 public interface EvolvingLongGrid4D extends LongGrid4D, EvolvingLongGrid {
+	
+	@Override
+	default EvolvingLongGrid2D crossSectionAtYZ(int y, int z) {
+		return new EvolvingLongGrid4DYZCrossSection(this, y, z);
+	}
+	
 	@Override
 	default EvolvingLongGrid3D crossSectionAtZ(int z) {
 		return new EvolvingLongGrid4DZCrossSection(this, z);
