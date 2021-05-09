@@ -16,8 +16,6 @@
  */
 package cellularautomata.grid3d;
 
-import java.math.BigInteger;
-
 public interface SymmetricObjectGrid3D<T> extends ObjectGrid3D<T>, SymmetricGrid3D {
 	
 	/**
@@ -29,7 +27,7 @@ public interface SymmetricObjectGrid3D<T> extends ObjectGrid3D<T>, SymmetricGrid
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */
-	BigInteger getFromAsymmetricPosition(int x, int y, int z) throws Exception;
+	T getFromAsymmetricPosition(int x, int y, int z) throws Exception;
 
 	@Override
 	default ObjectGrid3D<T> asymmetricSection() {

@@ -27,7 +27,7 @@ public class AsymmetricNumberGridSection3D<T extends FieldElement<T> & Comparabl
 
 	@Override
 	public T getFromPosition(int x, int y, int z) throws Exception {
-		return source.getFromPosition(x, y, z);
+		return source.getFromAsymmetricPosition(x, y, z);
 	}
 
 }
