@@ -126,21 +126,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 					
 					if (relevantNeighborCount > 0) {
 						//sort
-						boolean sorted = false;
-						while (!sorted) {
-							sorted = true;
-							for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-								if (neighborValues[i] < neighborValues[i+1]) {
-									sorted = false;
-									long valSwap = neighborValues[i];
-									neighborValues[i] = neighborValues[i+1];
-									neighborValues[i+1] = valSwap;
-									byte dirSwap = neighborDirections[i];
-									neighborDirections[i] = neighborDirections[i+1];
-									neighborDirections[i+1] = dirSwap;
-								}
-							}
-						}
+						Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
 						//divide
 						boolean isFirstNeighbor = true;
 						long previousNeighborValue = 0;

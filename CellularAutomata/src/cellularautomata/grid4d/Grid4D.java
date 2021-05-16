@@ -148,6 +148,10 @@ public interface Grid4D extends Grid {
 	 * @return the smallest y
 	 */
 	int getMinY();
+	
+	default int getMinYAtW(int w) {
+		return getMinY();
+	}
 
 	default int getMinYAtZ(int z) {
 		return getMinY();
@@ -176,6 +180,10 @@ public interface Grid4D extends Grid {
 	 */
 	int getMaxY();
 	
+	default int getMaxYAtW(int w) {
+		return getMaxY();
+	}
+	
 	default int getMaxYAtWX(int w, int x) {
 		return getMaxY();
 	}
@@ -202,6 +210,10 @@ public interface Grid4D extends Grid {
 	 * @return the smallest z
 	 */
 	int getMinZ();
+	
+	default int getMinZAtW(int w) {
+		return getMinZ();
+	}
 
 	default int getMinZ(int w, int x, int y) {
 		return getMinZ();
@@ -213,6 +225,10 @@ public interface Grid4D extends Grid {
 	 * @return the largest z
 	 */
 	int getMaxZ();
+	
+	default int getMaxZAtW(int w) {
+		return getMaxZ();
+	}
 
 	default int getMaxZ(int w, int x, int y) {
 		return getMaxZ();

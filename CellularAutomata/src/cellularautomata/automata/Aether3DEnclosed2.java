@@ -175,21 +175,7 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 					}					
 					if (relevantNeighborCount > 0) {
 						//sort
-						boolean sorted = false;
-						while (!sorted) {
-							sorted = true;
-							for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-								if (neighborValues[i] < neighborValues[i+1]) {
-									sorted = false;
-									long valSwap = neighborValues[i];
-									neighborValues[i] = neighborValues[i+1];
-									neighborValues[i+1] = valSwap;
-									int[] coordSwap = neighborCoordinates[i];
-									neighborCoordinates[i] = neighborCoordinates[i+1];
-									neighborCoordinates[i+1] = coordSwap;
-								}
-							}
-						}
+						Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborCoordinates);
 						//divide
 						boolean isFirstNeighbor = true;
 						long previousNeighborValue = 0;

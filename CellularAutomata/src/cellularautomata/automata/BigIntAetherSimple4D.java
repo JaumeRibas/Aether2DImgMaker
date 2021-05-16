@@ -561,6 +561,26 @@ public class BigIntAetherSimple4D implements SymmetricEvolvingNumberGrid4D<BigIn
 	public int getAsymmetricMaxZ(int w, int x, int y) {
 		return Math.min(getAsymmetricMaxZ(), y);
 	}
+	
+	@Override
+	public int getAsymmetricMinYAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxYAtW(int w) {
+		return Math.min(getAsymmetricMaxY(), w);
+	}
+
+	@Override
+	public int getAsymmetricMinZAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxZAtW(int w) {
+		return Math.min(getAsymmetricMaxZ(), w);
+	}
 
 	@Override
 	public BigInt getFromAsymmetricPosition(int w, int x, int y, int z) {

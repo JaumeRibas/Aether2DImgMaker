@@ -170,24 +170,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 						
 						if (relevantNeighborCount > 0) {
 							//sort							
-							int neighborCountMinusOne = relevantNeighborCount - 1;
-							for (int i = 0; i < neighborCountMinusOne; i++) {
-								BigInt max = neighborValues[i];
-								int swapPosition = i;
-								for (int j = i + 1; j < relevantNeighborCount; j++) {
-									neighborValue = neighborValues[j];
-									if (neighborValue.compareTo(max) > 0) {
-										max = neighborValue;
-										swapPosition = j;
-									}
-								}
-								BigInt valSwap = neighborValues[i];
-								neighborValues[i] = neighborValues[swapPosition];
-								neighborValues[swapPosition] = valSwap;
-								byte dirSwap = neighborDirections[i];
-								neighborDirections[i] = neighborDirections[swapPosition];
-								neighborDirections[swapPosition] = dirSwap;
-							}
+							Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
 							//divide
 							boolean isFirstNeighbor = true;
 							BigInt previousNeighborValue = null;
@@ -651,6 +634,26 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 	@Override
 	public int getAsymmetricMaxZ(int w, int x, int y) {
 		return Math.min(getAsymmetricMaxZ(), y);
+	}
+	
+	@Override
+	public int getAsymmetricMinYAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxYAtW(int w) {
+		return Math.min(getAsymmetricMaxY(), w);
+	}
+
+	@Override
+	public int getAsymmetricMinZAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getAsymmetricMaxZAtW(int w) {
+		return Math.min(getAsymmetricMaxZ(), w);
 	}
 
 	@Override

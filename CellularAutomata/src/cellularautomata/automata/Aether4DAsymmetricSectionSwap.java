@@ -422,22 +422,8 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 		}
 		boolean toppled = false;
 		if (relevantNeighborCount > 0) {
-			//sort
-			boolean sorted = false;
-			while (!sorted) {
-				sorted = true;
-				for (int i = relevantNeighborCount - 2; i >= 0; i--) {
-					if (neighborValues[i] < neighborValues[i+1]) {
-						sorted = false;
-						long valSwap = neighborValues[i];
-						neighborValues[i] = neighborValues[i+1];
-						neighborValues[i+1] = valSwap;
-						byte dirSwap = neighborDirections[i];
-						neighborDirections[i] = neighborDirections[i+1];
-						neighborDirections[i+1] = dirSwap;
-					}
-				}
-			}
+			//sort					
+			Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
 			//divide
 			boolean isFirstNeighbor = true;
 			long previousNeighborValue = 0;
@@ -823,6 +809,16 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 	public int getMaxX(int w, int y, int z) {
 		return Math.min(getMaxX(), w);
 	}
+	
+	@Override
+	public int getMinXAtW(int w) {
+		return 0;
+	}
+	
+	@Override
+	public int getMaxXAtW(int w) {
+		return Math.min(getMaxX(), w);
+	}
 
 	@Override
 	public int getMinYAtZ(int z) {
@@ -862,6 +858,46 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingLongGrid4D 
 	@Override
 	public int getMaxY(int w, int x, int z) {
 		return Math.min(getMaxY(), x);
+	}
+
+	@Override
+	public int getMinYAtWX(int w, int x) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxYAtWX(int w, int x) {
+		return Math.min(getMaxY(), x);
+	}
+
+	@Override
+	public int getMinZ(int w, int x, int y) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxZ(int w, int x, int y) {
+		return Math.min(getMaxZ(), y);
+	}
+	
+	@Override
+	public int getMinYAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxYAtW(int w) {
+		return Math.min(getMaxY(), w);
+	}
+
+	@Override
+	public int getMinZAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxZAtW(int w) {
+		return Math.min(getMaxZ(), w);
 	}
 
 }

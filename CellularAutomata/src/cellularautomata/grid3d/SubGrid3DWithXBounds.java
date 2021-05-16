@@ -21,6 +21,10 @@ public class SubGrid3DWithXBounds<G extends Grid3D> implements Grid3D {
 	protected G source;
 	private int minX;
 	private int maxX;
+	private int minY;
+	private int maxY;
+	private int minZ;
+	private int maxZ;
 	
 	public SubGrid3DWithXBounds(G source, int minX, int maxX) {
 		if (minX > maxX) {
@@ -34,6 +38,28 @@ public class SubGrid3DWithXBounds<G extends Grid3D> implements Grid3D {
 		this.source = source;
 		this.minX = Math.max(minX, sourceMinX);
 		this.maxX = Math.min(maxX, sourceMaxX);
+		minY = source.getMinYAtX(this.minX);
+		maxY = source.getMaxYAtX(this.minX);
+		minZ = source.getMinZAtX(this.minX);
+		maxZ = source.getMaxZAtX(this.minX);
+		for (int x = this.minX + 1; x <= this.maxX; x++) {
+			int localMinY = source.getMinYAtX(x);
+			if (localMinY < minY) {
+				minY = localMinY;
+			}
+			int localMaxY = source.getMaxYAtX(x);
+			if (localMaxY > maxY) {
+				maxY = localMaxY;
+			}
+			int localMinZ = source.getMinZAtX(x);
+			if (localMinZ < minZ) {
+				minZ = localMinZ;
+			}
+			int localMaxZ = source.getMaxZAtX(x);
+			if (localMaxZ > maxZ) {
+				maxZ = localMaxZ;
+			}
+		}
 	}
 
 	@Override
@@ -48,22 +74,22 @@ public class SubGrid3DWithXBounds<G extends Grid3D> implements Grid3D {
 	
 	@Override
 	public int getMinY() {
-		return source.getMinY();
+		return minY;
 	}
 	
 	@Override
 	public int getMaxY() {
-		return source.getMaxY();
+		return maxY;
 	}
 	
 	@Override
 	public int getMinZ() {
-		return source.getMinZ();
+		return minZ;
 	}
 	
 	@Override
 	public int getMaxZ() {
-		return source.getMaxZ();
+		return maxZ;
 	}
 	
 	@Override

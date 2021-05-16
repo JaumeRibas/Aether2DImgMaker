@@ -156,6 +156,14 @@ public interface SymmetricGrid4D extends Grid4D {
 
 	int getAsymmetricMaxZ(int w, int x, int y);
 	
+	int getAsymmetricMinYAtW(int w);
+	
+	int getAsymmetricMaxYAtW(int w);
+	
+	int getAsymmetricMinZAtW(int w);
+	
+	int getAsymmetricMaxZAtW(int w);
+	
 	/**
 	 * Returns an asymmetric section of the grid
 	 * 

@@ -241,6 +241,56 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 		return Math.min(maxW, x);
 	}
 
+	@Override
+	public int getMinYAtWX(int w, int x) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxYAtWX(int w, int x) {
+		return Math.min(getMaxY(), x);
+	}
+
+	@Override
+	public int getMinZ(int w, int x, int y) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxZ(int w, int x, int y) {
+		return Math.min(getMaxZ(), y);
+	}
+	
+	@Override
+	public int getMinXAtW(int w) {
+		return 0;
+	}
+	
+	@Override
+	public int getMaxXAtW(int w) {
+		return Math.min(getMaxX(), w);
+	}
+	
+	@Override
+	public int getMinYAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxYAtW(int w) {
+		return Math.min(getMaxY(), w);
+	}
+
+	@Override
+	public int getMinZAtW(int w) {
+		return 0;
+	}
+
+	@Override
+	public int getMaxZAtW(int w) {
+		return Math.min(getMaxZ(), w);
+	}
+
 	protected void free() {
 		slices = null;
 	}

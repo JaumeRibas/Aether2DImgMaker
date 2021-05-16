@@ -21,6 +21,12 @@ public class SubGrid4DWithWBounds<G extends Grid4D> implements Grid4D {
 	protected G source;
 	private int minW;
 	private int maxW;
+	private int minX;
+	private int maxX;
+	private int minY;
+	private int maxY;
+	private int minZ;
+	private int maxZ;
 	
 	public SubGrid4DWithWBounds(G source, int minW, int maxW) {
 		if (minW > maxW) {
@@ -34,6 +40,38 @@ public class SubGrid4DWithWBounds<G extends Grid4D> implements Grid4D {
 		this.source = source;
 		this.minW = Math.max(minW, sourceMinW);
 		this.maxW = Math.min(maxW, sourceMaxW);
+		minX = source.getMinXAtW(this.minW);
+		maxX = source.getMaxXAtW(this.minW);
+		minY = source.getMinYAtW(this.minW);
+		maxY = source.getMaxYAtW(this.minW);
+		minZ = source.getMinZAtW(this.minW);
+		maxZ = source.getMaxZAtW(this.minW);
+		for (int w = this.minW + 1; w <= this.maxW; w++) {
+			int localMinX = source.getMinXAtW(w);
+			if (localMinX < minX) {
+				minX = localMinX;
+			}
+			int localMaxX = source.getMaxXAtW(w);
+			if (localMaxX > maxX) {
+				maxX = localMaxX;
+			}
+			int localMinY = source.getMinYAtW(w);
+			if (localMinY < minY) {
+				minY = localMinY;
+			}
+			int localMaxY = source.getMaxYAtW(w);
+			if (localMaxY > maxY) {
+				maxY = localMaxY;
+			}
+			int localMinZ = source.getMinZAtW(w);
+			if (localMinZ < minZ) {
+				minZ = localMinZ;
+			}
+			int localMaxZ = source.getMaxZAtW(w);
+			if (localMaxZ > maxZ) {
+				maxZ = localMaxZ;
+			}
+		}
 	}
 
 	@Override
@@ -58,32 +96,32 @@ public class SubGrid4DWithWBounds<G extends Grid4D> implements Grid4D {
 
 	@Override
 	public int getMinX() {
-		return source.getMinX();
+		return minX;
 	}
 
 	@Override
 	public int getMaxX() {
-		return source.getMaxX();
+		return maxX;
 	}
 
 	@Override
 	public int getMinY() {
-		return source.getMinY();
+		return minY;
 	}
 
 	@Override
 	public int getMaxY() {
-		return source.getMaxY();
+		return maxY;
 	}
 
 	@Override
 	public int getMinZ() {
-		return source.getMinZ();
+		return minZ;
 	}
 
 	@Override
 	public int getMaxZ() {
-		return source.getMaxZ();
+		return maxZ;
 	}
 
 	@Override
@@ -194,6 +232,56 @@ public class SubGrid4DWithWBounds<G extends Grid4D> implements Grid4D {
 	@Override
 	public int getMaxY(int w, int x, int z) {
 		return source.getMaxY(w, x, z);
+	}
+
+	@Override
+	public int getMinYAtWX(int w, int x) {
+		return source.getMinYAtWX(w, x);
+	}
+
+	@Override
+	public int getMaxYAtWX(int w, int x) {
+		return source.getMaxYAtWX(w, x);
+	}
+
+	@Override
+	public int getMinZ(int w, int x, int y) {
+		return source.getMinZ(w, x, y);
+	}
+
+	@Override
+	public int getMaxZ(int w, int x, int y) {
+		return source.getMaxZ(w, x, y);
+	}
+
+	@Override
+	public int getMinXAtW(int w) {
+		return source.getMinXAtW(w);
+	}
+	
+	@Override
+	public int getMaxXAtW(int w) {
+		return source.getMaxXAtW(w);
+	}
+
+	@Override
+	public int getMinYAtW(int w) {
+		return source.getMinYAtW(w);
+	}
+	
+	@Override
+	public int getMaxYAtW(int w) {
+		return source.getMaxYAtW(w);
+	}
+	
+	@Override
+	public int getMinZAtW(int w) {
+		return source.getMinZAtW(w);
+	}
+	
+	@Override
+	public int getMaxZAtW(int w) {
+		return source.getMaxZAtW(w);
 	}
 
 }

@@ -697,6 +697,69 @@ public class Utils {
 		}
 	}
 	
+	public static void sortNeighborsByValueDesc(int neighborCount, long[] neighborValues, byte[] neighborDirections) {
+		int neighborCountMinusOne = neighborCount - 1;
+		for (int i = 0; i < neighborCountMinusOne; i++) {
+			long max = neighborValues[i];
+			int swapPosition = i;
+			for (int j = i + 1; j < neighborCount; j++) {
+				long value = neighborValues[j];
+				if (value > max) {
+					max = value;
+					swapPosition = j;
+				}
+			}
+			long valSwap = neighborValues[i];
+			neighborValues[i] = neighborValues[swapPosition];
+			neighborValues[swapPosition] = valSwap;
+			byte directionSwap = neighborDirections[i];
+			neighborDirections[i] = neighborDirections[swapPosition];
+			neighborDirections[swapPosition] = directionSwap;
+		}
+	}
+	
+	public static void sortNeighborsByValueDesc(int neighborCount, BigInt[] neighborValues, byte[] neighborDirections) {
+		int neighborCountMinusOne = neighborCount - 1;
+		for (int i = 0; i < neighborCountMinusOne; i++) {
+			BigInt max = neighborValues[i];
+			int swapPosition = i;
+			for (int j = i + 1; j < neighborCount; j++) {
+				BigInt value = neighborValues[j];
+				if (value.compareTo(max) > 0) {
+					max = value;
+					swapPosition = j;
+				}
+			}
+			BigInt valSwap = neighborValues[i];
+			neighborValues[i] = neighborValues[swapPosition];
+			neighborValues[swapPosition] = valSwap;
+			byte directionSwap = neighborDirections[i];
+			neighborDirections[i] = neighborDirections[swapPosition];
+			neighborDirections[swapPosition] = directionSwap;
+		}
+	}
+	
+	public static void sortNeighborsByValueDesc(int neighborCount, short[] neighborValues, byte[] neighborDirections) {
+		int neighborCountMinusOne = neighborCount - 1;
+		for (int i = 0; i < neighborCountMinusOne; i++) {
+			short max = neighborValues[i];
+			int swapPosition = i;
+			for (int j = i + 1; j < neighborCount; j++) {
+				short value = neighborValues[j];
+				if (value > max) {
+					max = value;
+					swapPosition = j;
+				}
+			}
+			short valSwap = neighborValues[i];
+			neighborValues[i] = neighborValues[swapPosition];
+			neighborValues[swapPosition] = valSwap;
+			byte directionSwap = neighborDirections[i];
+			neighborDirections[i] = neighborDirections[swapPosition];
+			neighborDirections[swapPosition] = directionSwap;
+		}
+	}
+	
 	public static void sortNeighborsByValueDesc(int neighborCount, long[] neighborValues, int[][] neighborCoords,
 			int[] otherNeighborIntegerField) {
 		int neighborCountMinusOne = neighborCount - 1;
@@ -1390,6 +1453,27 @@ public class Utils {
 			int[] coordSwap = neighborCoords[i];
 			neighborCoords[i] = neighborCoords[swapPosition];
 			neighborCoords[swapPosition] = coordSwap;
+		}
+	}
+	
+	public static void sortNeighborsByValueDesc(int neighborCount, int[] neighborValues, byte[] neighborDirections) {
+		int neighborCountMinusOne = neighborCount - 1;
+		for (int i = 0; i < neighborCountMinusOne; i++) {
+			int max = neighborValues[i];
+			int swapPosition = i;
+			for (int j = i + 1; j < neighborCount; j++) {
+				int value = neighborValues[j];
+				if (value > max) {
+					max = value;
+					swapPosition = j;
+				}
+			}
+			int valSwap = neighborValues[i];
+			neighborValues[i] = neighborValues[swapPosition];
+			neighborValues[swapPosition] = valSwap;
+			byte directionSwap = neighborDirections[i];
+			neighborDirections[i] = neighborDirections[swapPosition];
+			neighborDirections[swapPosition] = directionSwap;
 		}
 	}
 	
