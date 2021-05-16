@@ -44,6 +44,7 @@ import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
+import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid1D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid2D;
@@ -67,6 +68,7 @@ import cellularautomata.grid3d.LongGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid3d.ObjectGrid3D;
 import cellularautomata.grid4d.LongGrid4D;
+import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
 import cellularautomata.numbers.BigInt;
 
@@ -882,6 +884,64 @@ public class CATests {
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z));
 								}	
 							}	
+						}
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// do nothing					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// do nothing					
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processGrid();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
+		compare(ActionableEvolvingGrid4D<T, NumberGrid4D<T>> ca1, EvolvingNumberGrid4D<T> ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			GridProcessor<NumberGrid4D<T>> comparator = new GridProcessor<NumberGrid4D<T>>() {
+				
+				@Override
+				public void processGridBlock(NumberGrid4D<T> gridBlock) throws Exception {
+					int minW = gridBlock.getMinW(), maxW = gridBlock.getMaxW();
+					for (int w = minW; w <= maxW; w++) {
+						int minX = gridBlock.getMinXAtW(w), maxX = gridBlock.getMaxXAtW(w);
+						for (int x = minX; x <= maxX; x++) {
+							int minY = gridBlock.getMinYAtWX(w, x), maxY = gridBlock.getMaxYAtWX(w, x);
+							for (int y = minY; y <= maxY; y++) {
+								int minZ = gridBlock.getMinZ(w, x, y), maxZ = gridBlock.getMaxZ(w, x, y);
+								for (int z = minZ; z <= maxZ; z++) {
+									if (!gridBlock.getFromPosition(w, x, y, z).equals(ca2.getFromPosition(w, x, y, z))) {
+										System.out.println("Different value at step " + ca1.getStep() 
+											+ " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(w, x, y, z) 
+												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
+									}	
+								}	
+							}
 						}
 					}						
 				}
