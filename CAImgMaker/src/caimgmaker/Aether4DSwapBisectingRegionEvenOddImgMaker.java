@@ -21,13 +21,14 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether4DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
+import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
 import cellularautomata.grid.CAConstants;
+import cellularautomata.grid4d.LongGrid4D;
 
 public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-//		args = new String[]{"2000", "/home/jaume/Desktop/tests"};//debug
+//		args = new String[]{"2000", "D:/data/test"};//debug
 		if (args.length == 0) {
 			System.err.println("You must specify an initial value.");
 		} else {
@@ -72,7 +73,7 @@ public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableEvolvingLongGrid4D ca;
+			ActionableEvolvingGrid4D<LongGrid4D> ca;
 			if (isRestore) {
 				ca = new Aether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -92,11 +93,11 @@ public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialYIndexDefined) {
-				imgMaker.createScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(
+				imgMaker.createYScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(
 						ca, 0, scanInitialYIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/asymmetric_section/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(
+				imgMaker.createYScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(
 						ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/asymmetric_section/img", path + "/backups");
 			}

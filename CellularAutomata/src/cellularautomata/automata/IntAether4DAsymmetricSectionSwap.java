@@ -27,9 +27,9 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
-import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
-import cellularautomata.grid4d.LongGrid4D;
-import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
+import cellularautomata.grid4d.AnisotropicIntGrid4DSlice;
+import cellularautomata.grid4d.IntGrid4D;
+import cellularautomata.grid4d.IntSubGrid4DWithWBounds;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -37,7 +37,7 @@ import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
  * @author Jaume
  *
  */
-public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<LongGrid4D> {
+public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<IntGrid4D> {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -51,9 +51,9 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 	private static final byte Z_POSITIVE = 6;
 	private static final byte Z_NEGATIVE = 7;
 	
-	private SizeLimitedAnisotropicLongGrid4DBlock gridBlockA;
-	private SizeLimitedAnisotropicLongGrid4DBlock gridBlockB;
-	private long initialValue;
+	private SizeLimitedAnisotropicIntGrid4DBlock gridBlockA;
+	private SizeLimitedAnisotropicIntGrid4DBlock gridBlockB;
+	private int initialValue;
 	private int currentStep;
 	private int maxW, maxX, maxY, maxZ;
 	private File gridFolder;
@@ -66,13 +66,13 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 	 * @param folderPath
 	 * @throws Exception
 	 */
-	public Aether4DAsymmetricSectionSwap(long initialValue, long maxGridHeapSize, String folderPath) throws Exception {
-		if (initialValue < Long.valueOf("-2635249153387078803")) {//to prevent overflow of long type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -2,635,249,153,387,078,803. Use a greater initial value or a different implementation.");
+	public IntAether4DAsymmetricSectionSwap(int initialValue, long maxGridHeapSize, String folderPath) throws Exception {
+		if (initialValue < -613566757) {//to prevent overflow of int type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -613,566,757. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
-		gridBlockA = new SizeLimitedAnisotropicLongGrid4DBlock(0, maxGridBlockSize);
+		gridBlockA = new SizeLimitedAnisotropicIntGrid4DBlock(0, maxGridBlockSize);
 		gridBlockA.setValueAtPosition(0, 0, 0, 0, initialValue);
 		maxW = 1;//we leave a buffer of one position to account for 'negative growth'
 		maxX = 0;
@@ -96,7 +96,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether4DAsymmetricSectionSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public IntAether4DAsymmetricSectionSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		gridFolder = new File(backupPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			throw new FileNotFoundException("Missing grid folder at '" + gridFolder.getAbsolutePath() + "'");
@@ -117,10 +117,10 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private SizeLimitedAnisotropicLongGrid4DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicIntGrid4DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = null;
+		SizeLimitedAnisotropicIntGrid4DBlock gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -139,14 +139,14 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicLongGrid4DBlock) in.readObject();
+			gridBlock = (SizeLimitedAnisotropicIntGrid4DBlock) in.readObject();
 			in.close();
 		}
 		return gridBlock;
 	}
 	
-	private SizeLimitedAnisotropicLongGrid4DBlock loadGridBlock(int minW) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = loadGridBlockSafe(minW);
+	private SizeLimitedAnisotropicIntGrid4DBlock loadGridBlock(int minW) throws IOException, ClassNotFoundException {
+		SizeLimitedAnisotropicIntGrid4DBlock gridBlock = loadGridBlockSafe(minW);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minW=" + minW + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -154,7 +154,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 	
-	private void saveGridBlock(SizeLimitedAnisotropicLongGrid4DBlock gridBlock) throws FileNotFoundException, IOException {
+	private void saveGridBlock(SizeLimitedAnisotropicIntGrid4DBlock gridBlock) throws FileNotFoundException, IOException {
 		String name = "minW=" + gridBlock.minW + "_maxW=" + gridBlock.maxW + ".ser";
 		String pathName = this.gridFolder.getPath() + File.separator + name;
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
@@ -163,12 +163,12 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		out.close();
 	}
 	
-	private SizeLimitedAnisotropicLongGrid4DBlock loadOrBuildGridBlock(int minW) throws ClassNotFoundException, IOException {		
-		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = loadGridBlockSafe(minW);
+	private SizeLimitedAnisotropicIntGrid4DBlock loadOrBuildGridBlock(int minW) throws ClassNotFoundException, IOException {		
+		SizeLimitedAnisotropicIntGrid4DBlock gridBlock = loadGridBlockSafe(minW);
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedAnisotropicLongGrid4DBlock(minW, maxGridBlockSize);
+			return new SizeLimitedAnisotropicIntGrid4DBlock(minW, maxGridBlockSize);
 		}
 	}
 
@@ -176,14 +176,14 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 	public boolean nextStep() throws Exception {
 		triggerBeforeProcessing();
 		boolean gridChanged = false;		
-		AnisotropicLongGrid4DSlice[] newGridSlices = 
-				new AnisotropicLongGrid4DSlice[] {
+		AnisotropicIntGrid4DSlice[] newGridSlices = 
+				new AnisotropicIntGrid4DSlice[] {
 						null, 
-						new AnisotropicLongGrid4DSlice(0), 
-						new AnisotropicLongGrid4DSlice(1)};
+						new AnisotropicIntGrid4DSlice(0), 
+						new AnisotropicIntGrid4DSlice(1)};
 		if (gridBlockA.minW > 0) {
 			if (gridBlockB != null && gridBlockB.minW == 0) {
-				SizeLimitedAnisotropicLongGrid4DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicIntGrid4DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			} else {
@@ -199,7 +199,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		w++;
 		while (w <= currentMaxW) {
 			while (w <= currentMaxW && w < gridBlockA.maxW) {
-				slideGridSlices(newGridSlices, new AnisotropicLongGrid4DSlice(w + 1));
+				slideGridSlices(newGridSlices, new AnisotropicIntGrid4DSlice(w + 1));
 				anySlicePositionToppled = computeGridSlice(gridBlockA, w, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(w - 1, newGridSlices[0]);
@@ -215,18 +215,18 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 				} else {
 					gridBlockB = loadOrBuildGridBlock(w + 1);
 				}
-				slideGridSlices(newGridSlices, new AnisotropicLongGrid4DSlice(w + 1));
+				slideGridSlices(newGridSlices, new AnisotropicIntGrid4DSlice(w + 1));
 				anySlicePositionToppled = computeLastGridSlice(gridBlockA, gridBlockB, w, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(w - 1, newGridSlices[0]);
 				w++;
 				if (w <= currentMaxW) {
-					slideGridSlices(newGridSlices, new AnisotropicLongGrid4DSlice(w + 1));
+					slideGridSlices(newGridSlices, new AnisotropicIntGrid4DSlice(w + 1));
 					anySlicePositionToppled = computeFirstGridSlice(gridBlockA, gridBlockB, w, newGridSlices);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(w - 1, newGridSlices[0]);
 					processGridBlock(gridBlockA);
-					SizeLimitedAnisotropicLongGrid4DBlock swp = gridBlockA;
+					SizeLimitedAnisotropicIntGrid4DBlock swp = gridBlockA;
 					gridBlockA = gridBlockB;
 					gridBlockB = swp;
 					w++;
@@ -247,11 +247,11 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		return gridChanged;
 	}
 	
-	private void processGridBlock(SizeLimitedAnisotropicLongGrid4DBlock block) throws Exception {
+	private void processGridBlock(SizeLimitedAnisotropicIntGrid4DBlock block) throws Exception {
 		if (block.minW <= maxW) {
-			LongGrid4D subBlock = null;
+			IntGrid4D subBlock = null;
 			if (block.maxW > maxW) {
-				subBlock = new LongSubGrid4DWithWBounds(block, block.minW, maxW);
+				subBlock = new IntSubGrid4DWithWBounds(block, block.minW, maxW);
 			} else {
 				subBlock = block;
 			}
@@ -266,7 +266,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 			processGridBlock(gridBlockA);
 		} else {
 			if (gridBlockA.minW < gridBlockB.minW) {
-				SizeLimitedAnisotropicLongGrid4DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicIntGrid4DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
@@ -303,41 +303,41 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		triggerAfterProcessing();
 	}
 
-	private void slideGridSlices(AnisotropicLongGrid4DSlice[] newGridSlices, AnisotropicLongGrid4DSlice newSlice) {
+	private void slideGridSlices(AnisotropicIntGrid4DSlice[] newGridSlices, AnisotropicIntGrid4DSlice newSlice) {
 		newGridSlices[0] = newGridSlices[1];
 		newGridSlices[1] = newGridSlices[2];
 		newGridSlices[2] = newSlice;
 	}
 	
-	private boolean computeGridSlice(SizeLimitedAnisotropicLongGrid4DBlock gridBlock, int w, AnisotropicLongGrid4DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedAnisotropicIntGrid4DBlock gridBlock, int w, AnisotropicIntGrid4DSlice[] newGridSlices) {
 		return computeGridSlice(gridBlock, gridBlock, gridBlock, w, newGridSlices);
 	}
 	
-	private boolean computeLastGridSlice(SizeLimitedAnisotropicLongGrid4DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid4DBlock rightGridBlock,
-			int w, AnisotropicLongGrid4DSlice[] newGridSlices) {
+	private boolean computeLastGridSlice(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock,
+			int w, AnisotropicIntGrid4DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, leftGridBlock, rightGridBlock, w, newGridSlices);
 	}
 	
-	private boolean computeFirstGridSlice(SizeLimitedAnisotropicLongGrid4DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid4DBlock rightGridBlock,
-			int w, AnisotropicLongGrid4DSlice[] newGridSlices) {
+	private boolean computeFirstGridSlice(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock,
+			int w, AnisotropicIntGrid4DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, rightGridBlock, rightGridBlock, w, newGridSlices);
 	}
 
-	private boolean computeGridSlice(SizeLimitedAnisotropicLongGrid4DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid4DBlock centerGridBlock, 
-			SizeLimitedAnisotropicLongGrid4DBlock rightGridBlock, int w, AnisotropicLongGrid4DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock centerGridBlock, 
+			SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock, int w, AnisotropicIntGrid4DSlice[] newGridSlices) {
 		boolean anyPositionToppled = false;
 		for (int x = 0; x <= w; x++) {
 			for (int y = 0; y <= x; y++) {
 				for (int z = 0; z <= y; z++) {				
-					long value = centerGridBlock.getFromPosition(w, x, y, z);
-					long upperWNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w + 1, x, y, z);
-					long lowerWNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w - 1, x, y, z);
-					long upperXNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x + 1, y, z);
-					long lowerXNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x - 1, y, z);
-					long upperYNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y + 1, z);
-					long lowerYNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y - 1, z);
-					long upperZNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z + 1);
-					long lowerZNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z - 1);				
+					int value = centerGridBlock.getFromPosition(w, x, y, z);
+					int upperWNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w + 1, x, y, z);
+					int lowerWNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w - 1, x, y, z);
+					int upperXNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x + 1, y, z);
+					int lowerXNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x - 1, y, z);
+					int upperYNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y + 1, z);
+					int lowerYNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y - 1, z);
+					int upperZNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z + 1);
+					int lowerZNeighborValue = getFromPosition(w, leftGridBlock, centerGridBlock, rightGridBlock, w, x, y, z - 1);				
 					boolean positionToppled = computePosition(value, 
 							upperWNeighborValue, lowerWNeighborValue, 
 							upperXNeighborValue, lowerXNeighborValue, 
@@ -351,14 +351,14 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		return anyPositionToppled;
 	}
 	
-	private long getFromPosition(int centerW, SizeLimitedAnisotropicLongGrid4DBlock lowerWGridBlock, 
-			SizeLimitedAnisotropicLongGrid4DBlock centerGridBlock, SizeLimitedAnisotropicLongGrid4DBlock upperWGridBlock, int w, int x, int y, int z) {
+	private int getFromPosition(int centerW, SizeLimitedAnisotropicIntGrid4DBlock lowerWGridBlock, 
+			SizeLimitedAnisotropicIntGrid4DBlock centerGridBlock, SizeLimitedAnisotropicIntGrid4DBlock upperWGridBlock, int w, int x, int y, int z) {
 		int[] asymmetricCoords = getAsymmetricCoords(w, x, y, z);
 		w = asymmetricCoords[0];
 		x = asymmetricCoords[1];
 		y = asymmetricCoords[2];
 		z = asymmetricCoords[3];
-		long value;
+		int value;
 		if (w == centerW) {
 			value = centerGridBlock.getFromPosition(w, x, y, z);
 		} else if (w < centerW) {
@@ -369,13 +369,13 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		return value;
 	}
 	
-	private boolean computePosition(long value, 
-			long upperWNeighborValue, long lowerWNeighborValue, 
-			long upperXNeighborValue, long lowerXNeighborValue, 
-			long upperYNeighborValue, long lowerYNeighborValue, 
-			long upperZNeighborValue, long lowerZNeighborValue, 
-			int w, int x, int y, int z, AnisotropicLongGrid4DSlice[] newGridSlices) {
-		long[] neighborValues = new long[8];
+	private boolean computePosition(int value, 
+			int upperWNeighborValue, int lowerWNeighborValue, 
+			int upperXNeighborValue, int lowerXNeighborValue, 
+			int upperYNeighborValue, int lowerYNeighborValue, 
+			int upperZNeighborValue, int lowerZNeighborValue, 
+			int w, int x, int y, int z, AnisotropicIntGrid4DSlice[] newGridSlices) {
+		int[] neighborValues = new int[8];
 		byte[] neighborDirections = new byte[8];
 		int relevantNeighborCount = 0;
 		if (upperWNeighborValue < value) {
@@ -424,13 +424,13 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 			Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
 			//divide
 			boolean isFirstNeighbor = true;
-			long previousNeighborValue = 0;
+			int previousNeighborValue = 0;
 			for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-				long neighborValue = neighborValues[i];
+				int neighborValue = neighborValues[i];
 				if (neighborValue != previousNeighborValue || isFirstNeighbor) {
 					int shareCount = relevantNeighborCount - i + 1;
-					long toShare = value - neighborValue;
-					long share = toShare/shareCount;
+					int toShare = value - neighborValue;
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 						value = value - toShare + toShare%shareCount + share;
@@ -446,7 +446,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		return toppled;
 	}
 
-	private void addToNeighbor(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, byte direction, long value) {
+	private void addToNeighbor(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, byte direction, int value) {
 		switch(direction) {
 		case W_POSITIVE:
 			addToWPositive(newGridSlices, w, x, y, z, value);
@@ -474,16 +474,16 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 			break;
 		}
 	}
-	private void addToWPositive(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToWPositive(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		newGridSlices[2].addToPosition(x, y, z, value);
 		if (w == maxW - 1) {
 			maxW++;
 		}
 	}
 				
-	private void addToWNegative(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToWNegative(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		if (w > x) {
-			long valueToAdd = value;
+			int valueToAdd = value;
 			if (w == x + 1) {
 				valueToAdd += value;
 				if (x == y) {
@@ -503,9 +503,9 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private void addToXPositive(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToXPositive(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		if (x < w) {
-			long valueToAdd = value;
+			int valueToAdd = value;
 			if (x == w - 1) {
 				valueToAdd += value;
 			}
@@ -516,9 +516,9 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private void addToXNegative(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToXNegative(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		if (x > y) {
-			long valueToAdd = value;									
+			int valueToAdd = value;									
 			if (y == x - 1) {
 				valueToAdd += value;
 				if (y == z) {
@@ -532,9 +532,9 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private void addToYPositive(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToYPositive(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		if (y < x) {
-			long valueToAdd = value;									
+			int valueToAdd = value;									
 			if (y == x - 1) {
 				valueToAdd += value;
 				if (w == x) {
@@ -548,9 +548,9 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private void addToYNegative(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToYNegative(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		if (y > z) {	
-			long valueToAdd = value;
+			int valueToAdd = value;
 			if (z == y - 1) {
 				valueToAdd += value;
 				if (y == 1) {
@@ -561,9 +561,9 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private void addToZPositive(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToZPositive(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		if (z < y) {
-			long valueToAdd = value;
+			int valueToAdd = value;
 			if (z == y - 1) {
 				valueToAdd += value;
 				if (x == y) {
@@ -580,9 +580,9 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private void addToZNegative(AnisotropicLongGrid4DSlice[] newGridSlices, int w, int x, int y, int z, long value) {
+	private void addToZNegative(AnisotropicIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, int value) {
 		if (z > 0) {
-			long valueToAdd = value;
+			int valueToAdd = value;
 			if (z == 1) {
 				valueToAdd += value;
 			}
@@ -610,7 +610,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getInitialValue() {
+	public int getInitialValue() {
 		return initialValue;
 	}
 	
@@ -648,7 +648,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 	}
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
-		initialValue = (long) properties.get("initialValue");
+		initialValue = (int) properties.get("initialValue");
 		currentStep = (int) properties.get("currentStep");
 		maxW = (int) properties.get("maxW"); 
 		maxX = (int) properties.get("maxX"); 

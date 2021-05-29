@@ -17,11 +17,9 @@
 package cellularautomata.evolvinggrid;
 
 import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid4d.Grid4D;
-import cellularautomata.grid4d.ObjectGrid4D;
 
-public abstract class ActionableEvolvingGrid4D<T, G extends ObjectGrid4D<T>> 
-	extends ActionableGrid<GridProcessor<G>, G> implements EvolvingModel, Grid4D {
+public abstract class ActionableEvolvingGrid4D<G extends Grid4D> 
+	extends ActionableGrid<G> implements EvolvingModel, Grid4D {
 	
 }

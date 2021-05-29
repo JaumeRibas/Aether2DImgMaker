@@ -21,8 +21,9 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether3DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
 import cellularautomata.grid.CAConstants;
+import cellularautomata.grid3d.LongGrid3D;
 
 public class Aether3DSwapImgMaker {
 	
@@ -72,7 +73,7 @@ public class Aether3DSwapImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableEvolvingLongGrid3D ca;
+			ActionableEvolvingGrid3D<LongGrid3D> ca;
 			if (isRestore) {
 				ca = new Aether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -92,10 +93,10 @@ public class Aether3DSwapImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImages(ca, scanInitialZIndex, 0, colorMapper, colorMapper, 
+				imgMaker.createScanningAndCrossSectionImagesFromLongGrid3D(ca, scanInitialZIndex, 0, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionImages(ca, 0, colorMapper, colorMapper, 
+				imgMaker.createScanningAndCrossSectionImagesFromLongGrid3D(ca, 0, colorMapper, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
 			}
 			

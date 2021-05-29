@@ -38,7 +38,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<BigInt, NumberGrid4D<BigInt>> {
+public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<NumberGrid4D<BigInt>> {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";

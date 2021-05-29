@@ -40,9 +40,6 @@ import cellularautomata.evolvinggrid.EvolvingModel;
 import cellularautomata.evolvinggrid.EvolvingShortGrid;
 import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
 import cellularautomata.evolvinggrid.EvolvingShortGrid4D;
-import cellularautomata.evolvinggrid.ActionableEvolvingIntGrid3D;
-import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
-import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid4D;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid;
@@ -50,6 +47,7 @@ import cellularautomata.evolvinggrid.EvolvingNumberGrid1D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid2D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid4D;
+import cellularautomata.grid.CAConstants;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid1d.ObjectGrid1D;
@@ -67,6 +65,7 @@ import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid3d.LongGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid3d.ObjectGrid3D;
+import cellularautomata.grid4d.ActionableGrid4DZCrossSectionProcessor;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
@@ -75,10 +74,20 @@ import cellularautomata.numbers.BigInt;
 public class CATests {
 	
 	public static void main(String[] args) throws Exception {
-		long initialValue = -3000;
-		Aether2D ae1 = new Aether2D(initialValue);
-		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
-		compare(ae1, ae2);
+//		long initialValue = -3000;
+//		Aether2D ae1 = new Aether2D(initialValue);
+//		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
+//		compare(ae1, ae2);
+		Aether4DAsymmetricSectionSwap ca = new Aether4DAsymmetricSectionSwap(-1000, CAConstants.ONE_MB, "D:/data/test");
+		for(int i = 0; i < 10; i++) { ca.nextStep(); }
+		ActionableGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D> test = 
+				new ActionableGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D>(0);
+		LongGrid3DZCrossSectionCopierProcessor copier = new LongGrid3DZCrossSectionCopierProcessor();
+		ca.addProcessor(test);
+		test.addProcessor(copier);
+		copier.requestCopy(0);
+		test.processGrid();
+		printAsGrid(copier.getCopy(0), 0);
 	}
 	
 	public static void testSort() {
@@ -711,7 +720,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(ActionableEvolvingIntGrid3D ca1, EvolvingLongGrid3D ca2) {
+	public static void compare(ActionableEvolvingGrid3D<IntGrid3D> ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -761,7 +770,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(ActionableEvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2) {
+	public static void compare2(ActionableEvolvingGrid3D<LongGrid3D> ca1, EvolvingLongGrid3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -813,7 +822,7 @@ public class CATests {
 		}
 	}
 	
-	public static void compare(ActionableEvolvingLongGrid4D ca1, EvolvingLongGrid4D ca2) {
+	public static void compare(ActionableEvolvingGrid4D<LongGrid4D> ca1, EvolvingLongGrid4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -866,7 +875,7 @@ public class CATests {
 	}
 	
 	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compare(ActionableEvolvingGrid3D<T, NumberGrid3D<T>> ca1, EvolvingNumberGrid3D<T> ca2) {
+		compare(ActionableEvolvingGrid3D<NumberGrid3D<T>> ca1, EvolvingNumberGrid3D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -917,7 +926,7 @@ public class CATests {
 	}
 	
 	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compare(ActionableEvolvingGrid4D<T, NumberGrid4D<T>> ca1, EvolvingNumberGrid4D<T> ca2) {
+		compare(ActionableEvolvingGrid4D<NumberGrid4D<T>> ca1, EvolvingNumberGrid4D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1751,10 +1760,10 @@ public class CATests {
 		}
 	}
 	
-	public static <T, G extends ObjectGrid3D<T>> void stepByStepZCrossSection(ActionableEvolvingGrid3D<T, G> ca, T backgroundValue, int z) {
+	public static <T> void stepByStepZCrossSection(ActionableEvolvingGrid3D<ObjectGrid3D<T>> ca, T backgroundValue, int z) {
 		try {
 			Scanner s = new Scanner(System.in);
-			Grid3DZCrossSectionCopierProcessor<T, G> copier = new Grid3DZCrossSectionCopierProcessor<T, G>();
+			Grid3DZCrossSectionCopierProcessor<T> copier = new Grid3DZCrossSectionCopierProcessor<T>();
 			ca.addProcessor(copier);
 			copier.requestCopy(z);
 			ca.processGrid();
@@ -1773,7 +1782,7 @@ public class CATests {
 		}
 	}	
 	
-	public static void stepByStepZCrossSection(ActionableEvolvingLongGrid3D ca, int z) {
+	public static void stepByStepZCrossSectionOfLongGrid(ActionableEvolvingGrid3D<LongGrid3D> ca, int z) {
 		try {
 			Scanner s = new Scanner(System.in);
 			LongGrid3DZCrossSectionCopierProcessor copier = new LongGrid3DZCrossSectionCopierProcessor();
@@ -1796,7 +1805,7 @@ public class CATests {
 		}
 	}	
 	
-	public static void stepByStepZCrossSection(ActionableEvolvingIntGrid3D ca, int z) {
+	public static void stepByStepZCrossSectionOfIntGrid(ActionableEvolvingGrid3D<IntGrid3D> ca, int z) {
 		try {
 			Scanner s = new Scanner(System.in);
 			IntGrid3DZCrossSectionCopierProcessor copier = new IntGrid3DZCrossSectionCopierProcessor();
@@ -1819,7 +1828,7 @@ public class CATests {
 		}
 	}	
 	
-	public static void stepByStepXCrossSection(ActionableEvolvingIntGrid3D ca, int x) {
+	public static void stepByStepXCrossSection(ActionableEvolvingGrid3D<IntGrid3D> ca, int x) {
 		try {
 			Scanner s = new Scanner(System.in);
 			IntGrid3DXCrossSectionCopierProcessor copier = new IntGrid3DXCrossSectionCopierProcessor();

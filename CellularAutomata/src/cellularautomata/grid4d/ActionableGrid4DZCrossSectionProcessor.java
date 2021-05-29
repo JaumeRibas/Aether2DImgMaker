@@ -14,13 +14,31 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.evolvinggrid;
+package cellularautomata.grid4d;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid.ActionableGridTransformerProcessor;
 import cellularautomata.grid3d.Grid3D;
-import cellularautomata.grid3d.IntGrid3D;
 
-public abstract class ActionableEvolvingIntGrid3D extends ActionableGrid<GridProcessor<IntGrid3D>, IntGrid3D> implements EvolvingModel, Grid3D {
+public class ActionableGrid4DZCrossSectionProcessor<G1 extends Grid4D, G2 extends Grid3D> extends ActionableGridTransformerProcessor<G1, G2> {
 
+	private int z;
+
+	public ActionableGrid4DZCrossSectionProcessor(int z) {
+		this.z = z;
+	}
+	
+	public int getZ() {
+		return z;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected G2 transformGridBlock(G1 gridBlock) {
+		if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
+			return (G2) gridBlock.crossSectionAtZ(z);
+		} else {
+			return null;
+		}
+	}
+	
 }

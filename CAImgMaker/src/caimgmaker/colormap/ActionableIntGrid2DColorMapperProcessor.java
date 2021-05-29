@@ -18,18 +18,15 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid.ActionableGridTransformerProcessor;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 
-public class ActionableIntGrid2DColorMapperProcessor extends ActionableGrid<GridProcessor<ObjectGrid2D<Color>>, ObjectGrid2D<Color>> 
-	implements GridProcessor<IntGrid2D> {
+public class ActionableIntGrid2DColorMapperProcessor extends ActionableGridTransformerProcessor<IntGrid2D, ObjectGrid2D<Color>> {
 	
-	private ColorMapper colorMapper;
-	private ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> source;
-	private int minValue;
-	private int maxValue;
+	protected ColorMapper colorMapper;
+	protected int minValue;
+	protected int maxValue;
 	
 	public void setMinValue(int value) {
 		minValue = value;
@@ -47,32 +44,15 @@ public class ActionableIntGrid2DColorMapperProcessor extends ActionableGrid<Grid
 		return minValue;
 	}
 	
-	public ActionableIntGrid2DColorMapperProcessor(ActionableGrid<GridProcessor<IntGrid2D>, IntGrid2D> source, 
-			ColorMapper colorMapper, int minValue, int maxValue) {
-		this.source = source;
+	public ActionableIntGrid2DColorMapperProcessor(ColorMapper colorMapper, int minValue, int maxValue) {
 		this.colorMapper = colorMapper;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 	}
 
 	@Override
-	public void beforeProcessing() throws Exception {
-		triggerBeforeProcessing();
-	}
-
-	@Override
-	public void processGridBlock(IntGrid2D gridBlock) throws Exception {
-		triggerProcessGridBlock(colorMapper.getMappedGrid(gridBlock, minValue, maxValue));
-	}
-
-	@Override
-	public void afterProcessing() throws Exception {
-		triggerAfterProcessing();
-	}
-
-	@Override
-	public void processGrid() throws Exception {
-		source.processGrid();
+	protected ObjectGrid2D<Color> transformGridBlock(IntGrid2D gridBlock) {
+		return colorMapper.getMappedGrid(gridBlock, minValue, maxValue);
 	}
 
 }

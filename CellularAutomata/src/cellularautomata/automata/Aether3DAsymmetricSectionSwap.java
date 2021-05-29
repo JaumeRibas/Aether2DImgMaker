@@ -27,7 +27,7 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.grid3d.LongGrid3D;
-import cellularautomata.evolvinggrid.ActionableEvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
 import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
 import cellularautomata.grid3d.LongSubGrid3DWithXBounds;
 
@@ -37,7 +37,7 @@ import cellularautomata.grid3d.LongSubGrid3DWithXBounds;
  * @author Jaume
  *
  */
-public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingLongGrid3D {
+public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<LongGrid3D> {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";

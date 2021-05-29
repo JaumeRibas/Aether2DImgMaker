@@ -20,6 +20,14 @@ import cellularautomata.grid.Grid;
 
 public interface GridProcessor<G extends Grid> {
 
+	default void addedToGrid(ActionableGrid<G> grid) {
+		//do nothing
+	}
+	
+	default void removedFromGrid(ActionableGrid<G> grid) {
+		//do nothing
+	}
+	
 	void beforeProcessing() throws Exception;
 
 	void processGridBlock(G gridBlock) throws Exception;

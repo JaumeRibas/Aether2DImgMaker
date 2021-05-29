@@ -14,28 +14,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.grid;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid2d.LongGrid2D;
+public abstract class ActionableGridTransformerProcessor<G1 extends Grid, G2 extends Grid> extends ActionableGrid<G2> implements GridProcessor<G1> {
 
-public class ActionableLongGrid3DZCrossSectionProcessor extends ActionableGrid<GridProcessor<LongGrid2D>, LongGrid2D> implements GridProcessor<LongGrid3D> {
-
-	private ActionableGrid<GridProcessor<LongGrid3D>, LongGrid3D> source;
-	private int z;
+	private ActionableGrid<G1> source;
 	
-	public int getZ() {
-		return z;
-	}
-
-	public void setZ(int z) {
-		this.z = z;
+	@Override
+	public void addedToGrid(ActionableGrid<G1> grid) {
+		if (this.source == null) {
+			this.source = grid;
+		} else {
+			throw new UnsupportedOperationException("This processor does not support being added to more than one grid at the same time.");
+		}		
 	}
 	
-	public ActionableLongGrid3DZCrossSectionProcessor(ActionableGrid<GridProcessor<LongGrid3D>, LongGrid3D> source, int z) {
-		this.source = source;
-		this.z = z;
+	@Override
+	public void removedFromGrid(ActionableGrid<G1> grid) {
+		if (this.source == grid) {
+			this.source = null;
+		}
 	}
 
 	@Override
@@ -47,17 +45,24 @@ public class ActionableLongGrid3DZCrossSectionProcessor extends ActionableGrid<G
 	public void afterProcessing() throws Exception {
 		triggerAfterProcessing();		
 	}
+	
+	protected abstract G2 transformGridBlock(G1 gridBlock);
 
 	@Override
-	public void processGridBlock(LongGrid3D gridBlock) throws Exception {
-		if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
-			triggerProcessGridBlock(gridBlock.crossSectionAtZ(z));
+	public void processGridBlock(G1 gridBlock) throws Exception {
+		G2 transformedBlock = transformGridBlock(gridBlock);
+		if (transformedBlock != null) {
+			triggerProcessGridBlock(transformedBlock);
 		}
 	}
 	
 	@Override
 	public void processGrid() throws Exception {
-		source.processGrid();
+		if (this.source == null) {
+			throw new UnsupportedOperationException("This instance is not added to any grid.");
+		} else {
+			source.processGrid();
+		}
 	}
-
+	
 }

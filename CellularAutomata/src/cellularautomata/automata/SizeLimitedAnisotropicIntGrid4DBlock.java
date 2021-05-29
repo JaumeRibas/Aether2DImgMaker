@@ -19,52 +19,52 @@ package cellularautomata.automata;
 import java.io.Serializable;
 
 import cellularautomata.grid.CAConstants;
-import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
-import cellularautomata.grid4d.LongGrid4D;
+import cellularautomata.grid4d.AnisotropicIntGrid4DSlice;
+import cellularautomata.grid4d.IntGrid4D;
 
-public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serializable {
+public class SizeLimitedAnisotropicIntGrid4DBlock implements IntGrid4D, Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4770835861364964176L;
+	private static final long serialVersionUID = -848573187277376184L;
 
 	public static final int MIN_LENGTH = 2;
 
 	protected int maxW;
 	protected int minW;
-	private AnisotropicLongGrid4DSlice[] slices;
+	private AnisotropicIntGrid4DSlice[] slices;
 
-	public SizeLimitedAnisotropicLongGrid4DBlock(int minW, long maxBytes) {
+	public SizeLimitedAnisotropicIntGrid4DBlock(int minW, long maxBytes) {
 		this.minW = minW;
 		int wLength = getMaxWLength(minW, maxBytes);
 		if (wLength < 2) {
 			throw new OutOfMemoryError("Grid block with min w of " + minW + " and mininmum length of " + MIN_LENGTH + " is bigger than size limit (" + maxBytes + " bytes).");
 		}
-		slices = new AnisotropicLongGrid4DSlice[wLength];
+		slices = new AnisotropicIntGrid4DSlice[wLength];
 		maxW = minW + wLength - 1;
 		for (int x = minW, i = 0; x <= maxW; x++, i++) {
-			slices[i] = new AnisotropicLongGrid4DSlice(x);
+			slices[i] = new AnisotropicIntGrid4DSlice(x);
 		}
 	}
 
-	protected void setValueAtPosition(int w, int x, int y, int z, long initialValue) {
+	protected void setValueAtPosition(int w, int x, int y, int z, int initialValue) {
 		slices[w - minW].setAtPosition(x, y, z, initialValue);			
 	}
 
 	@Override
-	public long getFromPosition(int w, int x, int y, int z) {
+	public int getFromPosition(int w, int x, int y, int z) {
 		if (slices == null) {
 			throw new UnsupportedOperationException("The grid block is no longer available.");
 		}
 		return slices[w - minW].getFromPosition(x, y, z);
 	}
 
-	protected void setSlice(int x, AnisotropicLongGrid4DSlice slice) {
+	protected void setSlice(int x, AnisotropicIntGrid4DSlice slice) {
 		slices[x - minW] = slice;
 	}
 	
-	protected AnisotropicLongGrid4DSlice getSlice(int w) {
+	protected AnisotropicIntGrid4DSlice getSlice(int w) {
 		return slices[w - minW];
 	}
 	
@@ -74,7 +74,7 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Serial
 		int w = minW;
 		long roundedSize = Utils.roundUpToEightMultiple(size);
 		while (roundedSize <= maxBytes) {
-			size += AnisotropicLongGrid4DSlice.getSliceSize(w) + Integer.BYTES;
+			size += AnisotropicIntGrid4DSlice.getSliceSize(w) + Integer.BYTES;
 			roundedSize = Utils.roundUpToEightMultiple(size);
 			w++;
 			wLength++;

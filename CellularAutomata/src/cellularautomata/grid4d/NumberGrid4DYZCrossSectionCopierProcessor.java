@@ -14,33 +14,36 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid3d;
+package cellularautomata.grid4d;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid2d.ArrayGrid2D;
-import cellularautomata.grid2d.ObjectGrid2D;
+import org.apache.commons.math3.FieldElement;
 
-public class Grid3DZCrossSectionCopierProcessor<T> implements GridProcessor<ObjectGrid3D<T>> {
+import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid2d.ArrayNumberGrid2D;
+import cellularautomata.grid2d.NumberGrid2D;
+
+public class NumberGrid4DYZCrossSectionCopierProcessor<T extends FieldElement<T> & Comparable<T>> implements GridProcessor<NumberGrid4D<T>> {
 
 	private boolean isProcessing = false; 
-	private Map<Integer, CopyData> copyRequests = new HashMap<Integer, CopyData>();
-	private Map<Integer, CopyData> copies = new HashMap<Integer, CopyData>();
+	private Map<String, CopyData> copyRequests = new HashMap<String, CopyData>();
+	private Map<String, CopyData> copies = new HashMap<String, CopyData>();
 	
-	public void requestCopy(int crossSectionZ) {
+	public void requestCopy(int crossSectionY, int crossSectionZ) {
 		if (isProcessing) {
 			throw new UnsupportedOperationException("Copies cannot be requested while the copier is processing.");
 		}
-		copyRequests.put(crossSectionZ, new CopyData(crossSectionZ));
+		copyRequests.put(crossSectionY + "," + crossSectionZ, new CopyData(crossSectionY, crossSectionZ));
 	}
 	
-	public ObjectGrid2D<T> getCopy(int crossSectionZ) {
-		if (copies.containsKey(crossSectionZ)) {
-			CopyData copyData = copies.get(crossSectionZ);
+	public NumberGrid2D<T> getCopy(int crossSectionY, int crossSectionZ) {
+		String key = crossSectionY + "," + crossSectionZ;
+		if (copies.containsKey(key)) {
+			CopyData copyData = copies.get(key);
 			int valuesSize = copyData.values.size();
 			if (valuesSize > 0) {
 				@SuppressWarnings("unchecked")
@@ -56,7 +59,7 @@ public class Grid3DZCrossSectionCopierProcessor<T> implements GridProcessor<Obje
 					localYMinima[i] = localMinY;
 					i++;
 				}
-				return new ArrayGrid2D<T>(copyData.minX, localYMinima, values);
+				return new ArrayNumberGrid2D<T>(copyData.minX, localYMinima, values);
 			}
 		}
 		return null;
@@ -69,22 +72,24 @@ public class Grid3DZCrossSectionCopierProcessor<T> implements GridProcessor<Obje
 	}
 
 	@Override
-	public void processGridBlock(ObjectGrid3D<T> gridBlock) throws Exception {
+	public void processGridBlock(NumberGrid4D<T> gridBlock) throws Exception {
 		for (CopyData copyData : copyRequests.values()) {
+			int copyY = copyData.y;
 			int copyZ = copyData.z;
-			if (copyZ >= gridBlock.getMinZ() && copyZ <= gridBlock.getMaxZ()) {
+			if (copyZ >= gridBlock.getMinZ() && copyZ <= gridBlock.getMaxZ()
+					&& copyY >= gridBlock.getMinYAtZ(copyZ) && copyY <= gridBlock.getMaxYAtZ(copyZ)) {
 				if (copyData.values.size() == 0) {
-					copyData.minX = gridBlock.getMinXAtZ(copyZ);
+					copyData.minX = gridBlock.getMinWAtYZ(copyY, copyZ);
 				}
-				int maxX = gridBlock.getMaxXAtZ(copyZ);
-				for (int x = gridBlock.getMinXAtZ(copyZ); x <= maxX; x++) {
-					int localMinY = gridBlock.getMinY(x, copyZ);
-					int localMaxY = gridBlock.getMaxY(x, copyZ);
-					copyData.localYMinima.add(localMinY);
+				int maxW = gridBlock.getMaxWAtYZ(copyY, copyZ);
+				for (int w = gridBlock.getMinWAtYZ(copyY, copyZ); w <= maxW; w++) {
+					int localMinX = gridBlock.getMinX(w, copyY, copyZ);
+					int localMaxX = gridBlock.getMaxX(w, copyY, copyZ);
+					copyData.localYMinima.add(localMinX);
 					@SuppressWarnings("unchecked")
-					T[] slice = (T[]) new Object[localMaxY - localMinY + 1];
-					for (int y = localMinY, i = 0; y <= localMaxY; y++, i++) {
-						slice[i] = gridBlock.getFromPosition(x, y, copyZ);
+					T[] slice = (T[]) new Object[localMaxX - localMinX + 1];
+					for (int x = localMinX, i = 0; x <= localMaxX; x++, i++) {
+						slice[i] = gridBlock.getFromPosition(w, x, copyY, copyZ);
 					}
 					copyData.values.add(slice);
 				}
@@ -94,7 +99,7 @@ public class Grid3DZCrossSectionCopierProcessor<T> implements GridProcessor<Obje
 
 	@Override
 	public void afterProcessing() throws Exception {
-		for (Integer copyData : copyRequests.keySet()) {
+		for (String copyData : copyRequests.keySet()) {
 			copies.put(copyData, copyRequests.get(copyData));
 		}
 		copyRequests.clear();
@@ -102,11 +107,13 @@ public class Grid3DZCrossSectionCopierProcessor<T> implements GridProcessor<Obje
 	}
 	
 	private class CopyData {
-		CopyData(int z) {
+		CopyData(int y, int z) {
+			this.y = z;
 			this.z = z;
 			values = new ArrayList<T[]>();
 			localYMinima = new ArrayList<Integer>();
 		}
+		int y;
 		int z;
 		int minX;
 		List<T[]> values;

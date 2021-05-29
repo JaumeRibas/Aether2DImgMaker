@@ -74,7 +74,7 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Serial
 		int x = minX;
 		long roundedSize = Utils.roundUpToEightMultiple(size);
 		while (roundedSize <= maxBytes) {
-			size += AnisotropicLongGrid3DSlice.getSliceSize(x) + Long.BYTES;
+			size += AnisotropicLongGrid3DSlice.getSliceSize(x) + Integer.BYTES;
 			roundedSize = Utils.roundUpToEightMultiple(size);
 			x++;
 			xLength++;

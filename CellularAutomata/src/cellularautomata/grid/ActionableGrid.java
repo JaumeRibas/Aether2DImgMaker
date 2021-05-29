@@ -30,20 +30,24 @@ import cellularautomata.grid.Grid;
  * @param <P>
  * @param <G>
  */
-public abstract class ActionableGrid<P extends GridProcessor<G>, G extends Grid> {
+public abstract class ActionableGrid<G extends Grid> {
 	
-	protected Set<P> processors;
+	protected Set<GridProcessor<G>> processors;
 	
-	public void addProcessor(P processor) {
+	public void addProcessor(GridProcessor<G> processor) {
 		if (processors == null) {
-			processors = new HashSet<P>();
+			processors = new HashSet<GridProcessor<G>>();
 		}
 		processors.add(processor);
+		processor.addedToGrid(this);
 	}
 	
-	public boolean removeProcessor(P processor) {
+	public boolean removeProcessor(GridProcessor<G> processor) {
 		if (processors != null) {
-			return processors.remove(processor);
+			if (processors.remove(processor)) {
+				processor.removedFromGrid(this);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -70,7 +74,7 @@ public abstract class ActionableGrid<P extends GridProcessor<G>, G extends Grid>
 	
 	protected void triggerBeforeProcessing() throws Exception {
 		if (processors != null) {
-			for (P processor : processors) {
+			for (GridProcessor<G> processor : processors) {
 				processor.beforeProcessing();
 			}
 		}
@@ -78,7 +82,7 @@ public abstract class ActionableGrid<P extends GridProcessor<G>, G extends Grid>
 	
 	protected void triggerProcessGridBlock(G gridBlock) throws Exception {
 		if (processors != null) {
-			for (P processor : processors) {
+			for (GridProcessor<G> processor : processors) {
 				processor.processGridBlock(gridBlock);
 			}
 		}
@@ -86,7 +90,7 @@ public abstract class ActionableGrid<P extends GridProcessor<G>, G extends Grid>
 	
 	protected void triggerAfterProcessing() throws Exception {
 		if (processors != null) {
-			for (P processor : processors) {
+			for (GridProcessor<G> processor : processors) {
 				processor.afterProcessing();
 			}
 		}

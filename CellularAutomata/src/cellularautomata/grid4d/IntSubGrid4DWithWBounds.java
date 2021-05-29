@@ -14,13 +14,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.evolvinggrid;
+package cellularautomata.grid4d;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid3d.Grid3D;
-import cellularautomata.grid3d.LongGrid3D;
-
-public abstract class ActionableEvolvingLongGrid3D extends ActionableGrid<GridProcessor<LongGrid3D>, LongGrid3D> implements EvolvingModel, Grid3D {
+public class IntSubGrid4DWithWBounds extends SubGrid4DWithWBounds<IntGrid4D> implements IntGrid4D {
 	
+	public IntSubGrid4DWithWBounds(IntGrid4D source, int minW, int maxW) {
+		super(source, minW, maxW);
+	}
+
+	@Override
+	public int getFromPosition(int w, int x, int y, int z) throws Exception {
+		return source.getFromPosition(w, x, y, z);
+	}
+
 }

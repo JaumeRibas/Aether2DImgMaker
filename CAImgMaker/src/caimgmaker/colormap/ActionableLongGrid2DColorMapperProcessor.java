@@ -18,18 +18,15 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid.GridProcessor;
+import cellularautomata.grid.ActionableGridTransformerProcessor;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 
-public class ActionableLongGrid2DColorMapperProcessor extends ActionableGrid<GridProcessor<ObjectGrid2D<Color>>, ObjectGrid2D<Color>> 
-	implements GridProcessor<LongGrid2D> {
+public class ActionableLongGrid2DColorMapperProcessor extends ActionableGridTransformerProcessor<LongGrid2D, ObjectGrid2D<Color>> {
 	
-	private ColorMapper colorMapper;
-	private ActionableGrid<GridProcessor<LongGrid2D>, LongGrid2D> source;
-	private long minValue;
-	private long maxValue;
+	protected ColorMapper colorMapper;
+	protected long minValue;
+	protected long maxValue;
 	
 	public void setMinValue(long value) {
 		minValue = value;
@@ -47,32 +44,15 @@ public class ActionableLongGrid2DColorMapperProcessor extends ActionableGrid<Gri
 		return minValue;
 	}
 	
-	public ActionableLongGrid2DColorMapperProcessor(ActionableGrid<GridProcessor<LongGrid2D>, LongGrid2D> source, 
-			ColorMapper colorMapper, long minValue, long maxValue) {
-		this.source = source;
+	public ActionableLongGrid2DColorMapperProcessor(ColorMapper colorMapper, long minValue, long maxValue) {
 		this.colorMapper = colorMapper;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 	}
 
 	@Override
-	public void beforeProcessing() throws Exception {
-		triggerBeforeProcessing();
-	}
-
-	@Override
-	public void processGridBlock(LongGrid2D gridBlock) throws Exception {
-		triggerProcessGridBlock(colorMapper.getMappedGrid(gridBlock, minValue, maxValue));
-	}
-
-	@Override
-	public void afterProcessing() throws Exception {
-		triggerAfterProcessing();
-	}
-
-	@Override
-	public void processGrid() throws Exception {
-		source.processGrid();
+	protected ObjectGrid2D<Color> transformGridBlock(LongGrid2D gridBlock) {
+		return colorMapper.getMappedGrid(gridBlock, minValue, maxValue);
 	}
 
 }
