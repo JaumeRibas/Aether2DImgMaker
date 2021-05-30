@@ -19,62 +19,25 @@ package cellularautomata.evolvinggrid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid.ActionableGrid;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid3d.Grid3D;
 import cellularautomata.grid4d.Grid4D;
 
-public class ActionableEvolvingGrid4DZCrossSectionProcessor<G1 extends Grid4D, G2 extends Grid3D> 
-	extends ActionableEvolvingGrid3D<G2> implements GridProcessor<G1> {
+public class ActionableEvolvingGrid4DZCrossSection<G1 extends Grid4D, G2 extends Grid3D> 
+	extends ActionableEvolvingGrid3D<G2> {
 
 	protected int z;	
 	protected ActionableEvolvingGrid4D<G1> source;
 
-	public ActionableEvolvingGrid4DZCrossSectionProcessor(int z) {
+	public ActionableEvolvingGrid4DZCrossSection(ActionableEvolvingGrid4D<G1> grid, int z) {
+		this.source = grid;
 		this.z = z;
-	}
-	
-	@Override
-	public void addedToGrid(ActionableGrid<G1> grid) {
-		if (this.source == null) {
-			this.source = (ActionableEvolvingGrid4D<G1>) grid;
-		} else {
-			throw new UnsupportedOperationException("This processor does not support being added to more than one grid at the same time.");
-		}
-	}
-	
-	@Override
-	public void removedFromGrid(ActionableGrid<G1> grid) {
-		if (this.source == grid) {
-			this.source = null;
-		}
-	}
-
-	@Override
-	public void beforeProcessing() throws Exception {
-		triggerBeforeProcessing();		
-	}
-
-	@Override
-	public void afterProcessing() throws Exception {
-		triggerAfterProcessing();		
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void processGridBlock(G1 gridBlock) throws Exception {
-		if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
-			triggerProcessGridBlock((G2) gridBlock.crossSectionAtZ(z));
-		}
+		this.source.addProcessor(new InternalProcessor());
 	}
 	
 	@Override
 	public void processGrid() throws Exception {
-		if (this.source == null) {
-			throw new UnsupportedOperationException("This instance is not added to any grid.");
-		} else {
-			source.processGrid();
-		}
+		source.processGrid();
 	}
 	
 	public int getZ() {
@@ -230,4 +193,25 @@ public class ActionableEvolvingGrid4DZCrossSectionProcessor<G1 extends Grid4D, G
 		source.backUp(backupPath, backupName);
 	}
 	
+	private class InternalProcessor implements GridProcessor<G1> {
+
+		@Override
+		public void beforeProcessing() throws Exception {
+			triggerBeforeProcessing();		
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void processGridBlock(G1 gridBlock) throws Exception {
+			if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
+				triggerProcessGridBlock((G2) gridBlock.crossSectionAtZ(z));
+			}
+		}
+
+		@Override
+		public void afterProcessing() throws Exception {
+			triggerAfterProcessing();		
+		}
+		
+	}
 }

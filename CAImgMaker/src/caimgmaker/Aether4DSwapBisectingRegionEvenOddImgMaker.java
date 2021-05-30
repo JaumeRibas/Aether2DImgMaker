@@ -22,7 +22,7 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether4DAsymmetricSectionSwap;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
-import cellularautomata.evolvinggrid.ActionableEvolvingGrid4DZCrossSectionProcessor;
+import cellularautomata.evolvinggrid.ActionableEvolvingGrid4DZCrossSection;
 import cellularautomata.grid.CAConstants;
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid4d.LongGrid4D;
@@ -86,7 +86,6 @@ public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
@@ -94,9 +93,9 @@ public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			ActionableEvolvingGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D> xSection = 
-					new ActionableEvolvingGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D>(0);
-			ca.addProcessor(xSection);
+			ActionableEvolvingGrid4DZCrossSection<LongGrid4D, LongGrid3D> xSection = 
+					new ActionableEvolvingGrid4DZCrossSection<LongGrid4D, LongGrid3D>(ca, 0);
+			path += xSection.getSubFolderPath();
 			if (isScanInitialYIndexDefined) {
 				imgMaker.createScanningAndCrossSectionEvenOddImages(
 						xSection, 0, scanInitialYIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
