@@ -19,9 +19,10 @@ package cellularautomata.grid4d;
 import cellularautomata.grid.ActionableGridTransformerProcessor;
 import cellularautomata.grid3d.Grid3D;
 
-public class ActionableGrid4DZCrossSectionProcessor<G1 extends Grid4D, G2 extends Grid3D> extends ActionableGridTransformerProcessor<G1, G2> {
+public class ActionableGrid4DZCrossSectionProcessor<G1 extends Grid4D, G2 extends Grid3D> 
+	extends ActionableGridTransformerProcessor<G1, G2> {
 
-	private int z;
+	protected int z;
 
 	public ActionableGrid4DZCrossSectionProcessor(int z) {
 		this.z = z;

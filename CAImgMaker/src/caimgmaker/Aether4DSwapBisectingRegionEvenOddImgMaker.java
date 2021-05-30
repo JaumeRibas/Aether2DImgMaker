@@ -22,7 +22,9 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether4DAsymmetricSectionSwap;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
+import cellularautomata.evolvinggrid.ActionableEvolvingGrid4DZCrossSectionProcessor;
 import cellularautomata.grid.CAConstants;
+import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid4d.LongGrid4D;
 
 public class Aether4DSwapBisectingRegionEvenOddImgMaker {
@@ -92,13 +94,16 @@ public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
+			ActionableEvolvingGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D> xSection = 
+					new ActionableEvolvingGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D>(0);
+			ca.addProcessor(xSection);
 			if (isScanInitialYIndexDefined) {
-				imgMaker.createYScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(
-						ca, 0, scanInitialYIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
+				imgMaker.createScanningAndCrossSectionEvenOddImages(
+						xSection, 0, scanInitialYIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/asymmetric_section/img", path + "/backups");
 			} else {
-				imgMaker.createYScanningAndCrossSectionEvenOddImagesFrom3DZCrossSection(
-						ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
+				imgMaker.createScanningAndCrossSectionEvenOddImages(
+						xSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/asymmetric_section/img", path + "/backups");
 			}
 			

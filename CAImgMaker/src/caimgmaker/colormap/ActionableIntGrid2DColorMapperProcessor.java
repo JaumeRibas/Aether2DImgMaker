@@ -22,7 +22,8 @@ import cellularautomata.grid.ActionableGridTransformerProcessor;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 
-public class ActionableIntGrid2DColorMapperProcessor extends ActionableGridTransformerProcessor<IntGrid2D, ObjectGrid2D<Color>> {
+public class ActionableIntGrid2DColorMapperProcessor 
+	extends ActionableGridTransformerProcessor<IntGrid2D, ObjectGrid2D<Color>> {
 	
 	protected ColorMapper colorMapper;
 	protected int minValue;

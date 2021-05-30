@@ -27,7 +27,6 @@ import cellularautomata.grid.Grid;
  * 
  * @author Jaume
  *
- * @param <P>
  * @param <G>
  */
 public abstract class ActionableGrid<G extends Grid> {

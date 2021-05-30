@@ -16,9 +16,10 @@
  */
 package cellularautomata.grid;
 
-public abstract class ActionableGridTransformerProcessor<G1 extends Grid, G2 extends Grid> extends ActionableGrid<G2> implements GridProcessor<G1> {
+public abstract class ActionableGridTransformerProcessor<G1 extends Grid, G2 extends Grid> 
+	extends ActionableGrid<G2> implements GridProcessor<G1> {
 
-	private ActionableGrid<G1> source;
+	protected ActionableGrid<G1> source;
 	
 	@Override
 	public void addedToGrid(ActionableGrid<G1> grid) {
@@ -26,7 +27,7 @@ public abstract class ActionableGridTransformerProcessor<G1 extends Grid, G2 ext
 			this.source = grid;
 		} else {
 			throw new UnsupportedOperationException("This processor does not support being added to more than one grid at the same time.");
-		}		
+		}
 	}
 	
 	@Override

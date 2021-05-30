@@ -47,7 +47,6 @@ import cellularautomata.evolvinggrid.EvolvingNumberGrid1D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid2D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid4D;
-import cellularautomata.grid.CAConstants;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid1d.ObjectGrid1D;
@@ -65,7 +64,6 @@ import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid3d.LongGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid3d.ObjectGrid3D;
-import cellularautomata.grid4d.ActionableGrid4DZCrossSectionProcessor;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
@@ -74,20 +72,10 @@ import cellularautomata.numbers.BigInt;
 public class CATests {
 	
 	public static void main(String[] args) throws Exception {
-//		long initialValue = -3000;
-//		Aether2D ae1 = new Aether2D(initialValue);
-//		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
-//		compare(ae1, ae2);
-		Aether4DAsymmetricSectionSwap ca = new Aether4DAsymmetricSectionSwap(-1000, CAConstants.ONE_MB, "D:/data/test");
-		for(int i = 0; i < 10; i++) { ca.nextStep(); }
-		ActionableGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D> test = 
-				new ActionableGrid4DZCrossSectionProcessor<LongGrid4D, LongGrid3D>(0);
-		LongGrid3DZCrossSectionCopierProcessor copier = new LongGrid3DZCrossSectionCopierProcessor();
-		ca.addProcessor(test);
-		test.addProcessor(copier);
-		copier.requestCopy(0);
-		test.processGrid();
-		printAsGrid(copier.getCopy(0), 0);
+		long initialValue = -3000;
+		Aether2D ae1 = new Aether2D(initialValue);
+		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
+		compare(ae1, ae2);
 	}
 	
 	public static void testSort() {
