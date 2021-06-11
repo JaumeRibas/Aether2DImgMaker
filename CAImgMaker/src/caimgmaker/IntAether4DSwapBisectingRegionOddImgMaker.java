@@ -99,15 +99,16 @@ public class IntAether4DSwapBisectingRegionOddImgMaker {
 			}
 			ActionableEvolvingGrid4DZCrossSection<IntGrid4D, IntGrid3D> xSection = 
 					new ActionableEvolvingGrid4DZCrossSection<IntGrid4D, IntGrid3D>(ca, 0);
-			path += xSection.getSubFolderPath();
+			String imgsPath = path + xSection.getSubFolderPath() + "/asymmetric_section/img";
+			String backupPath = path + ca.getSubFolderPath() + "/backups";
 			if (isScanInitialIndexesDefined) {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntGrid3D(
 						xSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
-					path + "/asymmetric_section/img", path + "/backups");
+						imgsPath, backupPath);
 			} else {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntGrid3D(
 						xSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
-					path + "/asymmetric_section/img", path + "/backups");
+						imgsPath, backupPath);
 			}
 			
 		}		

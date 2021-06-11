@@ -30,6 +30,9 @@ public class ActionableEvolvingGrid4DZCrossSection<G1 extends Grid4D, G2 extends
 	protected ActionableEvolvingGrid4D<G1> source;
 
 	public ActionableEvolvingGrid4DZCrossSection(ActionableEvolvingGrid4D<G1> grid, int z) {
+		if (z > grid.getMaxZ() || z < grid.getMinZ()) {
+			throw new IllegalArgumentException("Z coordinate outside of grid bounds.");
+		}
 		this.source = grid;
 		this.z = z;
 		this.source.addProcessor(new InternalProcessor());
