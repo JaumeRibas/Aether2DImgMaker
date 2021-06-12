@@ -95,7 +95,7 @@ public class CATests {
 			error = false;
 //			System.out.println(Arrays.toString(array));
 			for (int j = 0; j < lengthMinusOne; j++) {
-				if (array[j] <array[j + 1]) {
+				if (array[j] < array[j + 1]) {
 					System.out.println("Error!");
 					error = true;
 					break;
@@ -128,143 +128,114 @@ public class CATests {
 		}
 	}
 	
-	public static void asymmetricPositionsNeighbors() {
+	private static char getCoordLetterFromIndex(int dimension, int coordIndex) {
+		if (dimension < 3) {
+			return (char) (coordIndex + 120);//120 letter 'x'
+		} else {
+			return (char) (122 - dimension + coordIndex  + 1);//122 letter 'z'
+		}
+	}
+	
+	public static void printAsymmetricPositionsNeighbors(int dimension) {
 		int size = 15;
-		System.out.println(" x | y | z | Neighborhood");
-		System.out.println("-------------------------");
-		for (int x = 0; x < size; x++) {
-			for (int y = 0; y <= x; y++) {
-				for (int z = 0; z <= y; z++) {
-					int[] coords = new int[] {x, y, z};
-					int[] greaterXNeighborCoords = new int[] {x+1, y, z};
-					int[] smallerXNeighborCoords = new int[] {x-1, y, z};
-					int[] greaterYNeighborCoords = new int[] {x, y+1, z};
-					int[] smallerYNeighborCoords = new int[] {x, y-1, z};
-					int[] greaterZNeighborCoords = new int[] {x, y, z+1};
-					int[] smallerZNeighborCoords = new int[] {x, y, z-1};
-					int greaterXNeighborSymmetries = 1;
-					int smallerXNeighborSymmetries = 1;
-					int greaterYNeighborSymmetries = 1;
-					int smallerYNeighborSymmetries = 1;
-					int greaterZNeighborSymmetries = 1;
-					int smallerZNeighborSymmetries = 1;
-					int greaterXNeighborWeight = 1;
-					int smallerXNeighborWeight = 1;
-					int greaterYNeighborWeight = 1;
-					int smallerYNeighborWeight = 1;
-					int greaterZNeighborWeight = 1;
-					int smallerZNeighborWeight = 1;
-					List<String> neighbors = new ArrayList<String>();
-					int[] nc = greaterXNeighborCoords;
-					if (isOutsideAsymmetricSection(nc)) {
-						greaterXNeighborSymmetries = 0;
-					} else {
-						greaterXNeighborWeight += getSymmetricNeighborsCount(nc, coords);
-						greaterXNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
-					}
-					nc = smallerXNeighborCoords;
-					if (isOutsideAsymmetricSection(nc)) {
-						smallerXNeighborSymmetries = 0;
-					} else {
-						smallerXNeighborWeight += getSymmetricNeighborsCount(nc, coords);
-						smallerXNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
-					}
-					nc = greaterYNeighborCoords;
-					if (isOutsideAsymmetricSection(nc)) {
-						greaterYNeighborSymmetries = 0;
-					} else {
-						greaterYNeighborWeight += getSymmetricNeighborsCount(nc, coords);
-						greaterYNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
-					}
-					nc = smallerYNeighborCoords;
-					if (isOutsideAsymmetricSection(nc)) {
-						smallerYNeighborSymmetries = 0;
-					} else {
-						smallerYNeighborWeight += getSymmetricNeighborsCount(nc, coords);
-						smallerYNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
-					}
-					nc = greaterZNeighborCoords;
-					if (isOutsideAsymmetricSection(nc)) {
-						greaterZNeighborSymmetries = 0;
-					} else {
-						greaterZNeighborWeight += getSymmetricNeighborsCount(nc, coords);
-						greaterZNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
-					}
-					nc = smallerZNeighborCoords;
-					if (isOutsideAsymmetricSection(nc)) {
-						smallerZNeighborSymmetries = 0;
-					} else {
-						smallerZNeighborWeight += getSymmetricNeighborsCount(nc, coords);
-						smallerZNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
-					}
-					
-					if (greaterXNeighborSymmetries > 0) {
-						String neighbor = "GX";
-						if (greaterXNeighborWeight > 1) {
-							neighbor = neighbor + "(" + greaterXNeighborWeight + ")";
-						}
-						if (greaterXNeighborSymmetries > 1) {
-							neighbor = greaterXNeighborSymmetries + "*" + neighbor;
-						}
-						neighbors.add(neighbor);
-					}
-					if (smallerXNeighborSymmetries > 0) {
-						String neighbor = "SX";
-						if (smallerXNeighborWeight > 1) {
-							neighbor = neighbor + "(" + smallerXNeighborWeight + ")";
-						}
-						if (smallerXNeighborSymmetries > 1) {
-							neighbor = smallerXNeighborSymmetries + "*" + neighbor;
-						}
-						neighbors.add(neighbor);
-					}
-					if (greaterYNeighborSymmetries > 0) {
-						String neighbor = "GY";
-						if (greaterYNeighborWeight > 1) {
-							neighbor = neighbor + "(" + greaterYNeighborWeight + ")";
-						}
-						if (greaterYNeighborSymmetries > 1) {
-							neighbor = greaterYNeighborSymmetries + "*" + neighbor;
-						}
-						neighbors.add(neighbor);
-					}
-					if (smallerYNeighborSymmetries > 0) {
-						String neighbor = "SY";
-						if (smallerYNeighborWeight > 1) {
-							neighbor = neighbor + "(" + smallerYNeighborWeight + ")";
-						}
-						if (smallerYNeighborSymmetries > 1) {
-							neighbor = smallerYNeighborSymmetries + "*" + neighbor;
-						}
-						neighbors.add(neighbor);
-					}
-					if (greaterZNeighborSymmetries > 0) {
-						String neighbor = "GZ";
-						if (greaterZNeighborWeight > 1) {
-							neighbor = neighbor + "(" + greaterZNeighborWeight + ")";
-						}
-						if (greaterZNeighborSymmetries > 1) {
-							neighbor = greaterZNeighborSymmetries + "*" + neighbor;
-						}
-						neighbors.add(neighbor);
-					}
-					if (smallerZNeighborSymmetries > 0) {
-						String neighbor = "SZ";
-						if (smallerZNeighborWeight > 1) {
-							neighbor = neighbor + "(" + smallerZNeighborWeight + ")";
-						}
-						if (smallerZNeighborSymmetries > 1) {
-							neighbor = smallerZNeighborSymmetries + "*" + neighbor;
-						}
-						neighbors.add(neighbor);
-					}					
-					
-					System.out.println(" " + x + " | " + y + " | " + z + " | " + String.join(", ", neighbors));
+		StringBuilder header = new StringBuilder();
+		StringBuilder underline = new StringBuilder();
+		header.append(' ').append(getCoordLetterFromIndex(dimension, 0)).append(' ');
+		underline.append("-----------------");
+		for (int coord = 1; coord < dimension; coord++) {
+			header.append("| ").append(getCoordLetterFromIndex(dimension, coord)).append(' ');
+			underline.append("----");
+		}
+		header.append("| Neighborhood");
+		header.append(System.lineSeparator()).append(underline);
+		System.out.println(header);
+		int[] coordinates = new int[dimension];
+		int sizeMinusOne = size - 1;
+		int dimensionMinusOne = dimension - 1;
+		int currentAxis = dimensionMinusOne;
+		while (currentAxis > -1) {
+			if (currentAxis == dimensionMinusOne) {
+				int previousCoordinate = coordinates[currentAxis - 1];
+				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
+					coordinates[currentAxis] = currentCoordinate;
+					printAsymmetricPositionNeighbors(coordinates);
 				}
 				System.out.println();
+				currentAxis--;
+			} else {
+				int currentCoordinate = coordinates[currentAxis];
+				int max;
+				if (currentAxis == 0) {
+					max = sizeMinusOne;
+				} else {
+					max = coordinates[currentAxis - 1];
+				}
+				if (currentCoordinate < max) {
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					currentAxis = dimensionMinusOne;
+				} else {
+					coordinates[currentAxis] = 0;
+					System.out.println();
+					currentAxis--;
+				}
 			}
-			System.out.println(System.lineSeparator() + System.lineSeparator());
 		}
+	}	
+	
+	private static void printAsymmetricPositionNeighbors(int[] coords) {
+		List<String> neighbors = new ArrayList<String>();
+		String[] strCoords = new String[coords.length];
+		for (int coord = 0; coord < coords.length; coord++) {
+			char coordLetter = getCoordLetterFromIndex(coords.length, coord);
+			strCoords[coord] = coords[coord] + "";
+			
+			int[] greaterNeighborCoords = coords.clone();
+			int[] smallerNeighborCoords = coords.clone();
+			greaterNeighborCoords[coord]++;
+			smallerNeighborCoords[coord]--;
+			int greaterNeighborSymmetries = 1;
+			int smallerNeighborSymmetries = 1;
+			int greaterNeighborWeight = 1;
+			int smallerNeighborWeight = 1;
+			
+			int[] nc = greaterNeighborCoords;
+			if (isOutsideAsymmetricSection(nc)) {
+				greaterNeighborSymmetries = 0;
+			} else {
+				greaterNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+				greaterNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+			}
+			nc = smallerNeighborCoords;
+			if (isOutsideAsymmetricSection(nc)) {
+				smallerNeighborSymmetries = 0;
+			} else {
+				smallerNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+				smallerNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+			}
+			
+			if (greaterNeighborSymmetries > 0) {
+				String neighbor = ("G" + coordLetter).toUpperCase();
+				if (greaterNeighborWeight > 1) {
+					neighbor = neighbor + "(" + greaterNeighborWeight + ")";
+				}
+				if (greaterNeighborSymmetries > 1) {
+					neighbor = greaterNeighborSymmetries + "*" + neighbor;
+				}
+				neighbors.add(neighbor);
+			}
+			if (smallerNeighborSymmetries > 0) {
+				String neighbor = ("S" + coordLetter).toUpperCase();
+				if (smallerNeighborWeight > 1) {
+					neighbor = neighbor + "(" + smallerNeighborWeight + ")";
+				}
+				if (smallerNeighborSymmetries > 1) {
+					neighbor = smallerNeighborSymmetries + "*" + neighbor;
+				}
+				neighbors.add(neighbor);
+			}
+		}
+		System.out.println(" " + String.join(" | ", strCoords) + " | " + String.join(", ", neighbors));
 	}
 	
 	private static boolean isOutsideAsymmetricSection(int[] coords) {
@@ -283,75 +254,41 @@ public class CATests {
 	}
 	
 	private static int getSymmetricNeighborsCount(int[] coords, int[] compareCoords) {
-		int x = coords[0], y = coords[1], z = coords[2];
-		int[] greaterXNeighborCoords = new int[] {x+1, y, z};
-		int[] smallerXNeighborCoords = new int[] {x-1, y, z};
-		int[] greaterYNeighborCoords = new int[] {x, y+1, z};
-		int[] smallerYNeighborCoords = new int[] {x, y-1, z};
-		int[] greaterZNeighborCoords = new int[] {x, y, z+1};
-		int[] smallerZNeighborCoords = new int[] {x, y, z-1};
 		int count = 0;
-		if (!Arrays.equals(greaterXNeighborCoords, compareCoords)) {
-			if (Arrays.equals(getAsymmetricCoords(greaterXNeighborCoords), compareCoords)) {
-				count++;
+		for (int coord = 0; coord < coords.length; coord++) {
+			int[] greaterNeighborCoords = coords.clone();
+			int[] smallerNeighborCoords = coords.clone();
+			greaterNeighborCoords[coord]++;
+			smallerNeighborCoords[coord]--;
+			if (!Arrays.equals(greaterNeighborCoords, compareCoords)) {
+				if (Arrays.equals(getAsymmetricCoords(greaterNeighborCoords), compareCoords)) {
+					count++;
+				}
 			}
-		}
-		if (!Arrays.equals(smallerXNeighborCoords, compareCoords)) {
-			if (Arrays.equals(getAsymmetricCoords(smallerXNeighborCoords), compareCoords)) {
-				count++;
-			}
-		}
-		if (!Arrays.equals(greaterYNeighborCoords, compareCoords)) {
-			if (Arrays.equals(getAsymmetricCoords(greaterYNeighborCoords), compareCoords)) {
-				count++;
-			}
-		}
-		if (!Arrays.equals(smallerYNeighborCoords, compareCoords)) {
-			if (Arrays.equals(getAsymmetricCoords(smallerYNeighborCoords), compareCoords)) {
-				count++;
-			}
-		}
-		if (!Arrays.equals(greaterZNeighborCoords, compareCoords)) {
-			if (Arrays.equals(getAsymmetricCoords(greaterZNeighborCoords), compareCoords)) {
-				count++;
-			}
-		}
-		if (!Arrays.equals(smallerZNeighborCoords, compareCoords)) {
-			if (Arrays.equals(getAsymmetricCoords(smallerZNeighborCoords), compareCoords)) {
-				count++;
+			if (!Arrays.equals(smallerNeighborCoords, compareCoords)) {
+				if (Arrays.equals(getAsymmetricCoords(smallerNeighborCoords), compareCoords)) {
+					count++;
+				}
 			}
 		}
 		return count;
 	}
 	
 	private static int[] getAsymmetricCoords(int[] coords){	
-		int x = coords[0], y = coords[1], z = coords[2];
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (x >= y) {
-			if (y >= z) {
-				//x >= y >= z
-				return new int[]{x, y, z};
-			} else if (x >= z) { 
-				//x >= z > y
-				return new int[]{x, z, y};
-			} else {
-				//z > x >= y
-				return new int[]{z, x, y};
-			}
-		} else if (y >= z) {
-			if (x >= z) {
-				//y > x >= z
-				return new int[]{y, x, z};
-			} else {
-				//y >= z > x
-				return new int[]{y, z, x};
-			}
-		} else {
-			// z > y > x
-			return new int[]{z, y, x};
+		int[] asymmetricCoords = coords.clone();
+		for (int i = 0; i < asymmetricCoords.length; i++) {
+			int coord = asymmetricCoords[i];
+			if (coord < 0) asymmetricCoords[i] = -coord;
 		}
+		Arrays.sort(asymmetricCoords);
+		//reverse order
+		int halfLength = asymmetricCoords.length/2;
+		for (int i = 0, j = asymmetricCoords.length - 1; i < halfLength; i++, j--) {
+			int swp = asymmetricCoords[i];
+			asymmetricCoords[i] = asymmetricCoords[j];
+			asymmetricCoords[j] = swp;
+		}
+		return asymmetricCoords;
 	}
 	
 	public static void findAEMinAllowedValues() {
