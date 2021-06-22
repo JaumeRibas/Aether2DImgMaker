@@ -136,29 +136,30 @@ public class CATests {
 		}
 	}
 	
-	public static void printAsymmetricPositionsNeighbors(int dimension) {
-		int size = 15;
+	public static void printAsymmetricPositionsNeighbors(int dimension, int size) {
 		StringBuilder header = new StringBuilder();
 		StringBuilder underline = new StringBuilder();
 		header.append(' ').append(getCoordLetterFromIndex(dimension, 0)).append(' ');
-		underline.append("-----------------");
+		underline.append("-----------------------------------");
 		for (int coord = 1; coord < dimension; coord++) {
 			header.append("| ").append(getCoordLetterFromIndex(dimension, coord)).append(' ');
 			underline.append("----");
 		}
-		header.append("| Neighborhood");
+		header.append("| Neighborhood | Type A | Type B");
 		header.append(System.lineSeparator()).append(underline);
 		System.out.println(header);
+		List<String> neighborhoodTypesA = new ArrayList<String>();
+		List<String> neighborhoodTypesB = new ArrayList<String>();
 		int[] coordinates = new int[dimension];
 		int sizeMinusOne = size - 1;
 		int dimensionMinusOne = dimension - 1;
 		int currentAxis = dimensionMinusOne;
 		while (currentAxis > -1) {
 			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinate = coordinates[currentAxis - 1];
+				int previousCoordinate = coordinates[currentAxis - 1];//TODO breaks here for 1D
 				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
 					coordinates[currentAxis] = currentCoordinate;
-					printAsymmetricPositionNeighbors(coordinates);
+					printAsymmetricPositionNeighbors(coordinates, neighborhoodTypesA, neighborhoodTypesB);
 				}
 				System.out.println();
 				currentAxis--;
@@ -181,11 +182,16 @@ public class CATests {
 				}
 			}
 		}
+		System.out.println("Type A count: " + neighborhoodTypesA.size());
+		System.out.println("Type B count: " + neighborhoodTypesB.size());
 	}	
 	
-	private static void printAsymmetricPositionNeighbors(int[] coords) {
+	private static void printAsymmetricPositionNeighbors(int[] coords, List<String> neighborhoodTypesA, List<String> neighborhoodTypesB) {
 		List<String> neighbors = new ArrayList<String>();
+		List<String> plainNeighbors = new ArrayList<String>();
 		String[] strCoords = new String[coords.length];
+		boolean hasSymmetries = false;
+		boolean hasMultipliers = false;
 		for (int coord = 0; coord < coords.length; coord++) {
 			char coordLetter = getCoordLetterFromIndex(coords.length, coord);
 			strCoords[coord] = coords[coord] + "";
@@ -216,26 +222,51 @@ public class CATests {
 			
 			if (greaterNeighborSymmetries > 0) {
 				String neighbor = ("G" + coordLetter).toUpperCase();
+				String plainNeighbor = neighbor;
 				if (greaterNeighborWeight > 1) {
+					hasMultipliers = true;
 					neighbor = neighbor + "(" + greaterNeighborWeight + ")";
 				}
 				if (greaterNeighborSymmetries > 1) {
+					hasSymmetries = true;
 					neighbor = greaterNeighborSymmetries + "*" + neighbor;
 				}
 				neighbors.add(neighbor);
+				plainNeighbors.add(plainNeighbor);
 			}
 			if (smallerNeighborSymmetries > 0) {
 				String neighbor = ("S" + coordLetter).toUpperCase();
+				String plainNeighbor = neighbor;
 				if (smallerNeighborWeight > 1) {
+					hasMultipliers = true;
 					neighbor = neighbor + "(" + smallerNeighborWeight + ")";
 				}
 				if (smallerNeighborSymmetries > 1) {
+					hasSymmetries = true;
 					neighbor = smallerNeighborSymmetries + "*" + neighbor;
 				}
 				neighbors.add(neighbor);
+				plainNeighbors.add(plainNeighbor);
 			}
 		}
-		System.out.println(" " + String.join(" | ", strCoords) + " | " + String.join(", ", neighbors));
+		String neighborhood = String.join(", ", neighbors);		
+		int typeA = neighborhoodTypesA.indexOf(neighborhood);
+		if (typeA < 0) {
+			typeA = neighborhoodTypesA.size();
+			neighborhoodTypesA.add(neighborhood);
+		}
+		typeA++;
+		
+		String plainNeighborhood = String.join(", ", plainNeighbors);
+		plainNeighborhood += " " + hasSymmetries + hasMultipliers;
+		int typeB = neighborhoodTypesB.indexOf(plainNeighborhood);
+		if (typeB < 0) {
+			typeB = neighborhoodTypesB.size();
+			neighborhoodTypesB.add(plainNeighborhood);
+		}
+		typeB++;
+		
+		System.out.println(" " + String.join(" | ", strCoords) + " | " + neighborhood + " | " + typeA + " | " + typeB);
 	}
 	
 	private static boolean isOutsideAsymmetricSection(int[] coords) {
