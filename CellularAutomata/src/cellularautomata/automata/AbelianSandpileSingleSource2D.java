@@ -73,7 +73,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 			for (int y = 0; y <= x; y++) {
 				int value = grid[x][y];
 				if (value >= 4) {
-					//I assume that if any position topples the state changes
+					//If any position topples the state changes
 					changed = true;
 					//Add one to the neighboring positions
 					//x+

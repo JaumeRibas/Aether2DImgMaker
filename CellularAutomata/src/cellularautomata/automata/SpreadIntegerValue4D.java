@@ -109,7 +109,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Serial
 							//Divide its value by 9 (using integer division)
 							long share = value/9;
 							if (share != 0) {
-								//I assume that if any share is not zero the state changes
+								//If any share is not zero the state changes
 								changed = true;
 								//Add the share to the neighboring positions
 								addToWPositive(newGrid, w, x, y, z, share);

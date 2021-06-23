@@ -155,7 +155,7 @@ public class SpreadIntegerValueSimple4D implements SymmetricEvolvingLongGrid4D {
 								//Divide its value by 9 (using integer division)
 								long share = value/9;
 								if (share != 0) {
-									//I assume that if any share is not zero the state changes
+									//If any share is not zero the state changes
 									changed = true;
 									//Add the share and the remainder to the corresponding position in the new array
 									newGrid[w + indexOffset][x + indexOffset][y + indexOffset][z + indexOffset] += value%9 + share;

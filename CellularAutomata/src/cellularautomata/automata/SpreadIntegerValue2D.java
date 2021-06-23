@@ -91,7 +91,7 @@ public class SpreadIntegerValue2D implements SymmetricEvolvingLongGrid2D {
 						//Divide its value by 5 (using integer division)
 						long share = value/5;
 						if (share != 0) {
-							//I assume that if any share is not zero the state changes
+							//If any share is not zero the state changes
 							changed = true;
 							//Add the share to the neighboring positions
 							//if the neighbor's value is equal to the current value, add the share to the current position instead

@@ -80,7 +80,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D  {
 						//Divide its value by 7 (using integer division)
 						long share = value/7;
 						if (share != 0) {
-							//I assume that if any share is not zero the state changes
+							//If any share is not zero the state changes
 							changed = true;
 							//Add the share to the neighboring positions
 							boolean yEqualsXMinusOne = y == x - 1;

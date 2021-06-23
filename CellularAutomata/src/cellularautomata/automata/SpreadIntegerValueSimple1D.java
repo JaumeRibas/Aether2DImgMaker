@@ -110,7 +110,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricEvolvingLongGrid1D {
 					//Divide its value by 3 (using integer division)
 					long share = value/3;
 					if (share != 0) {
-						//I assume that if any share is not zero the state changes
+						//If any share is not zero the state changes
 						changed = true;
 						//Add the share and the remainder to the corresponding position in the new array
 						newGrid[x + indexOffset] += value%3 + share;
