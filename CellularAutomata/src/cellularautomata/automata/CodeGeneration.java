@@ -22,7 +22,7 @@ import java.util.List;
 
 
 public class CodeGeneration {
-
+	
 	public static void main(String[] args) {
 		printAetherTopplingMethods(3);
 	}
@@ -30,7 +30,7 @@ public class CodeGeneration {
 	public static void printAetherTopplingMethods(int dimension) {
 		List<AnysotropicNeighborhoodType> neighborhoodTypes = new ArrayList<AnysotropicNeighborhoodType>();
 		int[] coordinates = new int[dimension];
-		int sizeMinusOne = dimension * 10;//totally made up
+		int sizeMinusOne = dimension * 5;//totally made up
 		int dimensionMinusOne = dimension - 1;
 		int currentAxis = dimensionMinusOne;
 		while (currentAxis > -1) {
@@ -59,25 +59,213 @@ public class CodeGeneration {
 				}
 			}
 		}
-		for (int i = 0; i < neighborhoodTypes.size(); i++) {
+		for (int i = 0, num = 1; i < neighborhoodTypes.size(); i = num, num++) {
 			AnysotropicNeighborhoodType type = neighborhoodTypes.get(i);
-			printAetherTopplingMethod(type, i);
+			printAetherTopplingMethod(type, num);
 			System.out.println();
 		}
 	}
 	
+	private static String getNL(int indentation) {
+		String result = System.lineSeparator();
+		for (int i = 0; i < indentation; i++) {
+			result += "    ";
+		}
+		return result;
+	}
+	
 	private static void printAetherTopplingMethod(AnysotropicNeighborhoodType type, int number) {
 		//TODO finish
-		//String method = "private static boolean topplePositionType14(int y, int z, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, long greaterZNeighborValue, long smallerZNeighborValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {";
+		int ind0 = 0;
+		int ind1 = ind0 + 1;
+		int ind2 = ind1 + 1;
+		int dimension = type.coordinates.length;
+		StringBuilder method = new StringBuilder(); 
+		method.append("private static boolean topplePositionType").append(number).append("(");
+		//add coordinates parameters if needed
+		for (int i = 1; i < dimension; i++) {
+			if (type.coordinates[i] == null) {
+				method.append("int ").append(getAxisLetterFromIndex(dimension, i)).append(", ");
+			}
+		}
+		//add current value parameter
+		method.append("long currentValue, ");
+		//add neighbors parameters 
+		int neighborCount = type.neighbors.size();
+		for (int i = 0; i < neighborCount; i++) {
+			NeighborType neighbor = type.neighbors.get(i);
+			char axisLetter = getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+			String dir = neighbor.isPositiveDirection? "g" : "s";
+			String varPrefix = dir + axisLetter;
+			method.append("long ").append(varPrefix).append("Value, ");
+			if (neighbor.symmetryCount == null) {
+				method.append("int ").append(varPrefix).append("SymmetryCount, ");
+			}
+			if (neighbor.multiplier == null) {
+				method.append("int ").append(varPrefix).append("ShareMultiplier, ");
+			}
+		}
+		StringBuilder arrayBrackets = new StringBuilder();
+		for (int i = 1; i < dimension; i++) {
+			arrayBrackets.append("[]");
+		}
+		char firstAxisLetter = getUpperCaseAxisLetterFromIndex(dimension, 0);
+		if (neighborCount > 2) {
+			//add arrays to reuse
+			method.append("long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, ");
+			if (type.hasMultipliers) {
+				method.append("int[] relevantAsymmetricNeighborShareMultipliers, ");
+			}
+			if (type.hasSymmetries) {
+				method.append("int[] relevantAsymmetricNeighborSymmetryCounts, ");
+			}
+			//add new grid slices parameter
+			method.append("long").append(arrayBrackets).append("[] new").append(firstAxisLetter).append("Slices) {").append(getNL(ind1));
+			String regularCountVariable;
+			if (type.hasSymmetries) {
+				regularCountVariable = "relevantAsymmetricNeighborCount";
+				method.append("int ").append(regularCountVariable).append(" = 0;").append(getNL(ind1));
+			} else {
+				regularCountVariable = "relevantNeighborCount";
+			}
+			method.append("int relevantNeighborCount = 0;").append(getNL(ind1));
+			for (int i = 0; i < neighborCount; i++) {
+				NeighborType neighbor = type.neighbors.get(i);
+				char axisLetter = getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+				String dir = neighbor.isPositiveDirection? "g" : "s";
+				String varPrefix = dir + axisLetter;
+				String valueVarName = varPrefix + "Value";
+				method.append("if (").append(valueVarName).append(" < currentValue) {").append(getNL(ind2))
+				.append("relevantAsymmetricNeighborValues[").append(regularCountVariable).append("] = ").append(valueVarName).append(";").append(getNL(ind2))
+				.append("int[] nc = relevantAsymmetricNeighborCoords[").append(regularCountVariable).append("];").append(getNL(ind2))
+				.append("nc[0] = ");
+				if (neighbor.axisIndex == 0) {
+					if (neighbor.isPositiveDirection) {
+						method.append("2");
+					} else {
+						method.append("0");
+					}
+					method.append(";").append(getNL(ind2));
+					for (int axis = 1; axis < dimension; axis++) {
+						method.append("nc[").append(axis).append("] = ");
+						Integer coordinate = type.coordinates[axis];
+						if (coordinate == null) {
+							method.append(getAxisLetterFromIndex(dimension, axis));
+						} else {
+							method.append(coordinate);
+						}
+						method.append(";").append(getNL(ind2));
+					}
+				} else {
+					method.append("1").append(";").append(getNL(ind2));
+					int axis = 1;
+					Integer coordinate;
+					for (;axis < neighbor.axisIndex; axis++) {
+						method.append("nc[").append(axis).append("] = ");
+						coordinate = type.coordinates[axis];
+						if (coordinate == null) {
+							method.append(getAxisLetterFromIndex(dimension, axis));
+						} else {
+							method.append(coordinate);
+						}
+						method.append(";").append(getNL(ind2));
+					}
+					method.append("nc[").append(axis).append("] = ");
+					coordinate = type.coordinates[axis];
+					if (coordinate == null) {
+						method.append(getAxisLetterFromIndex(dimension, axis));
+						if (neighbor.isPositiveDirection) {
+							method.append(" + 1");
+						} else {
+							method.append(" - 1");
+						}
+					} else {
+						int neighborCoordinate = coordinate;
+						if (neighbor.isPositiveDirection) {
+							neighborCoordinate++;
+						} else {
+							neighborCoordinate--;
+						}
+						method.append(neighborCoordinate);
+					}
+					method.append(";").append(getNL(ind2));
+					axis++;
+					for (; axis < dimension; axis++) {
+						method.append("nc[").append(axis).append("] = ");
+						coordinate = type.coordinates[axis];
+						if (coordinate == null) {
+							method.append(getAxisLetterFromIndex(dimension, axis));
+						} else {
+							method.append(coordinate);
+						}
+						method.append(";").append(getNL(ind2));
+					}
+				}
+				if (type.hasMultipliers) {
+					method.append("relevantAsymmetricNeighborShareMultipliers[").append(regularCountVariable).append("] = ");
+					if (neighbor.multiplier == null) {
+						method.append(varPrefix).append("ShareMultiplier");
+					} else {
+						method.append(neighbor.multiplier);
+					}
+					method.append(";").append(getNL(ind2));
+				}
+				if (type.hasSymmetries) {
+					method.append("relevantAsymmetricNeighborSymmetryCounts[").append(regularCountVariable).append("] = ");
+					String symmetryCount;
+					if (neighbor.symmetryCount == null) {
+						symmetryCount = varPrefix + "SymmetryCount";
+					} else {
+						symmetryCount = neighbor.symmetryCount.toString();
+					}
+					method.append(symmetryCount).append(";").append(getNL(ind2))
+					.append("relevantNeighborCount += ").append(symmetryCount).append(";").append(getNL(ind2));
+				}
+				method.append(regularCountVariable).append("++;").append(getNL(ind1)).append("}").append(getNL(ind1));
+			}
+			method.append("if (topplePosition(new").append(firstAxisLetter).append("Slices, currentValue, ");
+			for (int i = 1; i < dimension; i++) {
+				if (type.coordinates[i] == null) {
+					method.append(getAxisLetterFromIndex(dimension, i));
+				} else {
+					method.append(type.coordinates[i]);
+				}
+				method.append(", ");
+			}
+			method.append("relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, ");
+			if (type.hasMultipliers) {
+				method.append("relevantAsymmetricNeighborShareMultipliers, ");
+			}
+			if (type.hasSymmetries) {
+				method.append("relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, ");
+			}
+			method.append(regularCountVariable).append(")) {").append(getNL(ind2))
+			.append("return true;").append(getNL(ind1))
+			.append("} else {").append(getNL(ind2))
+			.append("return false;").append(getNL(ind1)).append("}").append(getNL(ind0));
+		} else {
+			//add new grid slices parameter
+			method.append("long").append(arrayBrackets).append(" newCurrent").append(firstAxisLetter).append("Slice, long")
+			.append(arrayBrackets).append(" newGreater").append(firstAxisLetter).append("Slice) {").append(getNL(ind0));
+			
+			//TODO finish
+			
+		}		
+		method.append("}");
+		System.out.println(method);
 	}
 	
 	private static class NeighborType {
-		int coordinateIndex;
-		boolean isGreater;
+		int axisIndex;
+		boolean isPositiveDirection;
 		
-		public NeighborType(int coordinateIndex, boolean isGreater) {
-			this.coordinateIndex = coordinateIndex;
-			this.isGreater = isGreater;
+		//not used in equals on purpose
+		Integer symmetryCount = 1;
+		Integer multiplier = 1;
+		
+		public NeighborType(int axisIndex, boolean isPositiveDirection) {
+			this.axisIndex = axisIndex;
+			this.isPositiveDirection = isPositiveDirection;
 		}
 		
 		@Override
@@ -88,7 +276,7 @@ public class CodeGeneration {
 				return false;
 			}
 			NeighborType otherNeighbor = (NeighborType)other;
-			return otherNeighbor.coordinateIndex == coordinateIndex && otherNeighbor.isGreater == isGreater;
+			return otherNeighbor.axisIndex == axisIndex && otherNeighbor.isPositiveDirection == isPositiveDirection;
 		}
 	}
 	
@@ -96,6 +284,16 @@ public class CodeGeneration {
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
 		List<NeighborType> neighbors = new ArrayList<NeighborType>();
+		
+		//not used in equals on purpose
+		Integer[] coordinates;
+		
+		public AnysotropicNeighborhoodType(int[] coordinates) {
+			this.coordinates = new Integer[coordinates.length];
+			for (int i = 0; i < coordinates.length; i++) {
+				this.coordinates[i] = coordinates[i];
+			}
+		}
 		
 		@Override
 		public boolean equals(Object other) {
@@ -110,13 +308,13 @@ public class CodeGeneration {
 	}
 	
 	private static void getAnisotropicNeighborhoodTypes(int[] coords, List<AnysotropicNeighborhoodType> neighborhoodTypes) {
-		AnysotropicNeighborhoodType type = new AnysotropicNeighborhoodType();
-		for (int coord = 0; coord < coords.length; coord++) {
+		AnysotropicNeighborhoodType type = new AnysotropicNeighborhoodType(coords);
+		for (int axis = 0; axis < coords.length; axis++) {
 			
 			int[] greaterNeighborCoords = coords.clone();
 			int[] smallerNeighborCoords = coords.clone();
-			greaterNeighborCoords[coord]++;
-			smallerNeighborCoords[coord]--;
+			greaterNeighborCoords[axis]++;
+			smallerNeighborCoords[axis]--;
 			int greaterNeighborSymmetries = 1;
 			int smallerNeighborSymmetries = 1;
 			int greaterNeighborWeight = 1;
@@ -138,38 +336,65 @@ public class CodeGeneration {
 			}
 			
 			if (greaterNeighborSymmetries > 0) {
-				NeighborType neighbor = new NeighborType(coord, true);
+				NeighborType neighbor = new NeighborType(axis, true);
 				if (greaterNeighborWeight > 1) {
 					type.hasMultipliers = true;
+					neighbor.multiplier = greaterNeighborWeight;
 				}
 				if (greaterNeighborSymmetries > 1) {
 					type.hasSymmetries = true;
+					neighbor.symmetryCount = greaterNeighborSymmetries;
 				}
 				type.neighbors.add(neighbor);
 			}
 			if (smallerNeighborSymmetries > 0) {
-				NeighborType neighbor = new NeighborType(coord, false);
+				NeighborType neighbor = new NeighborType(axis, false);
 				if (smallerNeighborWeight > 1) {
 					type.hasMultipliers = true;
+					neighbor.multiplier = smallerNeighborWeight;
 				}
 				if (smallerNeighborSymmetries > 1) {
 					type.hasSymmetries = true;
+					neighbor.symmetryCount = smallerNeighborSymmetries;
 				}
 				type.neighbors.add(neighbor);
 			}
 		}
-		if (!neighborhoodTypes.contains(type)) {
+		int indexOfType = neighborhoodTypes.indexOf(type);
+		if (indexOfType < 0) {
 			neighborhoodTypes.add(type);
+		} else {
+			AnysotropicNeighborhoodType generalType = neighborhoodTypes.get(indexOfType);
+			for (int coord = 0; coord < coords.length; coord++) {
+				if (generalType.coordinates[coord] != type.coordinates[coord]) {
+					generalType.coordinates[coord] = null;//it doesn't repeat itself so set it to null
+				}
+			}
+			if (type.hasMultipliers || type.hasSymmetries) {
+				int neighborsSize = type.neighbors.size();
+				for (int i = 0; i < neighborsSize; i++) {
+					NeighborType neighbor = type.neighbors.get(i);
+					NeighborType generalNeighbor = generalType.neighbors.get(i);					
+					if (generalNeighbor.multiplier != neighbor.multiplier) {
+//						System.out.println("It does enter here though");
+						generalNeighbor.multiplier = null;//it doesn't repeat itself so set it to null
+					}
+					if (generalNeighbor.symmetryCount != neighbor.symmetryCount) {
+						System.out.println("Does it never enter here?");
+						generalNeighbor.symmetryCount = null;//it doesn't repeat itself so set it to null
+					}
+				}			
+			}
 		}
 	}
 	
 	public static void printAnisotropicPositionsNeighbors(int dimension, int size) {
 		StringBuilder header = new StringBuilder();
 		StringBuilder underline = new StringBuilder();
-		header.append(' ').append(getCoordLetterFromIndex(dimension, 0)).append(' ');
+		header.append(' ').append(getAxisLetterFromIndex(dimension, 0)).append(' ');
 		underline.append("-----------------------------------");
 		for (int coord = 1; coord < dimension; coord++) {
-			header.append("| ").append(getCoordLetterFromIndex(dimension, coord)).append(' ');
+			header.append("| ").append(getAxisLetterFromIndex(dimension, coord)).append(' ');
 			underline.append("----");
 		}
 		header.append("| Neighborhood | Type A | Type B");
@@ -213,12 +438,16 @@ public class CodeGeneration {
 		System.out.println("Type B count: " + neighborhoodTypesB.size());
 	}	
 	
-	private static char getCoordLetterFromIndex(int dimension, int coordIndex) {
+	private static char getAxisLetterFromIndex(int dimension, int axisIndex) {
 		if (dimension < 3) {
-			return (char) (coordIndex + 120);//120 letter 'x'
+			return (char) (axisIndex + 120);//120 letter 'x'
 		} else {
-			return (char) (122 - dimension + coordIndex  + 1);//122 letter 'z'
+			return (char) (122 - dimension + axisIndex  + 1);//122 letter 'z'
 		}
+	}
+	
+	private static char getUpperCaseAxisLetterFromIndex(int dimension, int axisIndex) {
+		return Character.toUpperCase(getAxisLetterFromIndex(dimension, axisIndex));
 	}
 	
 	private static void printAnisotropicPositionNeighbors(int[] coords, List<String> neighborhoodTypesA, List<String> neighborhoodTypesB) {
@@ -227,14 +456,14 @@ public class CodeGeneration {
 		String[] strCoords = new String[coords.length];
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
-		for (int coord = 0; coord < coords.length; coord++) {
-			char coordLetter = getCoordLetterFromIndex(coords.length, coord);
-			strCoords[coord] = coords[coord] + "";
+		for (int axis = 0; axis < coords.length; axis++) {
+			char coordLetter = getAxisLetterFromIndex(coords.length, axis);
+			strCoords[axis] = coords[axis] + "";
 			
 			int[] greaterNeighborCoords = coords.clone();
 			int[] smallerNeighborCoords = coords.clone();
-			greaterNeighborCoords[coord]++;
-			smallerNeighborCoords[coord]--;
+			greaterNeighborCoords[axis]++;
+			smallerNeighborCoords[axis]--;
 			int greaterNeighborSymmetries = 1;
 			int smallerNeighborSymmetries = 1;
 			int greaterNeighborWeight = 1;
@@ -256,7 +485,7 @@ public class CodeGeneration {
 			}
 			
 			if (greaterNeighborSymmetries > 0) {
-				String neighbor = ("G" + coordLetter).toUpperCase();
+				String neighbor = "G" + Character.toUpperCase(coordLetter);
 				String plainNeighbor = neighbor;
 				if (greaterNeighborWeight > 1) {
 					hasMultipliers = true;
@@ -270,7 +499,7 @@ public class CodeGeneration {
 				plainNeighbors.add(plainNeighbor);
 			}
 			if (smallerNeighborSymmetries > 0) {
-				String neighbor = ("S" + coordLetter).toUpperCase();
+				String neighbor = "S" + Character.toUpperCase(coordLetter);
 				String plainNeighbor = neighbor;
 				if (smallerNeighborWeight > 1) {
 					hasMultipliers = true;
