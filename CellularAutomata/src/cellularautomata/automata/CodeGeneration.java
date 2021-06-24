@@ -20,13 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Miscellaneous methods to aid in writing code. 
- * AETHER HOLY
- * 
- * @author Jaume
- *
- */
+
 public class CodeGeneration {
 
 	public static void main(String[] args) {
