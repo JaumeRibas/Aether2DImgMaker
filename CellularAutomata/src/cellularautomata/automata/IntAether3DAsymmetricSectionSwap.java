@@ -932,12 +932,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType3(int currentValue, int greaterXNeighborValue, int smallerYNeighborValue, 
@@ -979,12 +975,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType4(int currentValue, int greaterXNeighborValue, int smallerZNeighborValue, 
@@ -1100,12 +1092,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	};
 
 	private static boolean topplePositionType6(int y, int currentValue, int gXValue, int sXValue, 
@@ -1170,12 +1158,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType7(int coord, int currentValue, int gXValue, int sXValue, 
@@ -1229,12 +1213,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType8(int y, int currentValue, int greaterXNeighborValue, int smallerYNeighborValue, 
@@ -1272,12 +1252,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType9(int y, int z, int currentValue, int gXValue, int sYValue, 
@@ -1331,12 +1307,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType10(int coord, int currentValue, int greaterXNeighborValue, 
@@ -1477,12 +1449,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
 			relevantNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
-				relevantNeighborShareMultipliers, relevantNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 
 	private static boolean topplePositionType12(int y, int currentValue, int greaterXNeighborValue, 
@@ -1542,13 +1510,9 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
+		return topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
-				relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+				relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType13(int coord, int currentValue, int greaterXNeighborValue, 
@@ -1597,12 +1561,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType14(int y, int z, int currentValue, int greaterXNeighborValue, 
@@ -1651,12 +1611,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType15(int y, int z, int currentValue, int greaterXNeighborValue, 
@@ -1712,12 +1668,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			nc[2] = z - 1;
 			relevantNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
-				relevantNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborCount);
 	}
 	
 	private static boolean topplePosition(AnisotropicIntGrid3DSlice[] newXSlices, int value, int y, int z, int[] neighborValues,

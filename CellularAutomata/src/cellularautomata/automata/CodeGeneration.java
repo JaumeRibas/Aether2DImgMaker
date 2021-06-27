@@ -24,7 +24,8 @@ import java.util.List;
 public class CodeGeneration {
 	
 	public static void main(String[] args) {
-		printAnisotropicPositionsTypes(4, 20);
+//		printAnisotropicPositionsTypes(4, 20);
+		printAetherTopplingMethods(4);
 	}
 	
 	public static void printAetherTopplingMethods(int dimension) {
@@ -223,7 +224,7 @@ public class CodeGeneration {
 				}
 				method.append(regularCountVariable).append("++;").append(getNL(ind1)).append("}").append(getNL(ind1));
 			}
-			method.append("if (topplePosition(new").append(firstAxisLetter).append("Slices, currentValue, ");
+			method.append("return topplePosition(new").append(firstAxisLetter).append("Slices, currentValue, ");
 			for (int i = 1; i < dimension; i++) {
 				if (type.coordinates[i] == null) {
 					method.append(getAxisLetterFromIndex(dimension, i));
@@ -239,10 +240,7 @@ public class CodeGeneration {
 			if (type.hasSymmetries) {
 				method.append("relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, ");
 			}
-			method.append(regularCountVariable).append(")) {").append(getNL(ind2))
-			.append("return true;").append(getNL(ind1))
-			.append("} else {").append(getNL(ind2))
-			.append("return false;").append(getNL(ind1)).append("}").append(getNL(ind0));
+			method.append(regularCountVariable).append(");").append(getNL(ind0));
 		} else {
 			//add new grid slices parameter
 			method.append("long").append(arrayBrackets).append(" newCurrent").append(firstAxisLetter).append("Slice, long")

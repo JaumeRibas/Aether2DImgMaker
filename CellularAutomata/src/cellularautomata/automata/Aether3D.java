@@ -766,12 +766,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType3(long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
@@ -812,12 +808,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType4(long currentValue, long greaterXNeighborValue, long smallerZNeighborValue, 
@@ -933,12 +925,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	};
 
 	private static boolean topplePositionType6(int y, long currentValue, long gXValue, long sXValue, 
@@ -1003,12 +991,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType7(int coord, long currentValue, long gXValue, long sXValue, 
@@ -1062,12 +1046,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType8(int y, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
@@ -1105,12 +1085,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType9(int y, int z, long currentValue, long gXValue, long sYValue, 
@@ -1164,12 +1140,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType10(int coord, long currentValue, long greaterXNeighborValue, 
@@ -1310,12 +1282,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
 			relevantNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
-				relevantNeighborShareMultipliers, relevantNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 
 	private static boolean topplePositionType12(int y, long currentValue, long greaterXNeighborValue, 
@@ -1375,13 +1343,9 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
+		return topplePosition(newXSlices, currentValue, y, 0, relevantAsymmetricNeighborValues, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
-				relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+				relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType13(int coord, long currentValue, long greaterXNeighborValue, 
@@ -1430,12 +1394,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType14(int y, int z, long currentValue, long greaterXNeighborValue, 
@@ -1484,12 +1444,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			relevantNeighborCount++;
 			relevantAsymmetricNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType15(int y, int z, long currentValue, long greaterXNeighborValue, 
@@ -1545,12 +1501,8 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 			nc[2] = z - 1;
 			relevantNeighborCount++;
 		}
-		if (topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
-				relevantNeighborCount)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topplePosition(newXSlices, currentValue, y, z, relevantNeighborValues, relevantNeighborCoords, 
+				relevantNeighborCount);
 	}
 	
 	private static boolean topplePosition(long[][][] newXSlices, long value, int y, int z, long[] neighborValues,
