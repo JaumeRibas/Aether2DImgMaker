@@ -24,7 +24,7 @@ import java.util.List;
 public class CodeGeneration {
 	
 	public static void main(String[] args) {
-		printAetherTopplingMethods(3);
+		printAnisotropicPositionsTypes(4, 20);
 	}
 	
 	public static void printAetherTopplingMethods(int dimension) {
@@ -531,6 +531,138 @@ public class CodeGeneration {
 		typeB++;
 		
 		System.out.println(" " + String.join(" | ", strCoords) + " | " + neighborhood + " | " + typeA + " | " + typeB);
+	}
+	
+	private static void printAnisotropicPositionType(int[] coords, List<String> neighborhoodTypesA, List<String> neighborhoodTypesB) {
+		List<String> neighbors = new ArrayList<String>();
+		List<String> plainNeighbors = new ArrayList<String>();
+		String[] strCoords = new String[coords.length];
+		boolean hasSymmetries = false;
+		boolean hasMultipliers = false;
+		for (int axis = 0; axis < coords.length; axis++) {
+			char coordLetter = getAxisLetterFromIndex(coords.length, axis);
+			strCoords[axis] = coords[axis] > 9 ? coords[axis] + "" : "0" + coords[axis];
+			
+			int[] greaterNeighborCoords = coords.clone();
+			int[] smallerNeighborCoords = coords.clone();
+			greaterNeighborCoords[axis]++;
+			smallerNeighborCoords[axis]--;
+			int greaterNeighborSymmetries = 1;
+			int smallerNeighborSymmetries = 1;
+			int greaterNeighborWeight = 1;
+			int smallerNeighborWeight = 1;
+			
+			int[] nc = greaterNeighborCoords;
+			if (isOutsideAsymmetricSection(nc)) {
+				greaterNeighborSymmetries = 0;
+			} else {
+				greaterNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+				greaterNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+			}
+			nc = smallerNeighborCoords;
+			if (isOutsideAsymmetricSection(nc)) {
+				smallerNeighborSymmetries = 0;
+			} else {
+				smallerNeighborWeight += getSymmetricNeighborsCount(nc, coords);
+				smallerNeighborSymmetries += getSymmetricNeighborsCount(coords, nc);
+			}
+			
+			if (greaterNeighborSymmetries > 0) {
+				String neighbor = "G" + Character.toUpperCase(coordLetter);
+				String plainNeighbor = neighbor;
+				if (greaterNeighborWeight > 1) {
+					hasMultipliers = true;
+					neighbor = neighbor + "(" + greaterNeighborWeight + ")";
+				}
+				if (greaterNeighborSymmetries > 1) {
+					hasSymmetries = true;
+					neighbor = greaterNeighborSymmetries + "*" + neighbor;
+				}
+				neighbors.add(neighbor);
+				plainNeighbors.add(plainNeighbor);
+			}
+			if (smallerNeighborSymmetries > 0) {
+				String neighbor = "S" + Character.toUpperCase(coordLetter);
+				String plainNeighbor = neighbor;
+				if (smallerNeighborWeight > 1) {
+					hasMultipliers = true;
+					neighbor = neighbor + "(" + smallerNeighborWeight + ")";
+				}
+				if (smallerNeighborSymmetries > 1) {
+					hasSymmetries = true;
+					neighbor = smallerNeighborSymmetries + "*" + neighbor;
+				}
+				neighbors.add(neighbor);
+				plainNeighbors.add(plainNeighbor);
+			}
+		}
+		String neighborhood = String.join(", ", neighbors);		
+		int typeA = neighborhoodTypesA.indexOf(neighborhood);
+		if (typeA < 0) {
+			typeA = neighborhoodTypesA.size();
+			neighborhoodTypesA.add(neighborhood);
+		}
+		typeA++;
+		
+		String plainNeighborhood = String.join(", ", plainNeighbors);
+		plainNeighborhood += " " + hasSymmetries + hasMultipliers;
+		int typeB = neighborhoodTypesB.indexOf(plainNeighborhood);
+		if (typeB < 0) {
+			typeB = neighborhoodTypesB.size();
+			neighborhoodTypesB.add(plainNeighborhood);
+		}
+		typeB++;
+		
+		System.out.println(" " + String.join(" | ", strCoords) + " | " + (typeB > 9 ? typeB : "0" + typeB));
+	}
+	
+	public static void printAnisotropicPositionsTypes(int dimension, int size) {
+		StringBuilder header = new StringBuilder();
+		StringBuilder underline = new StringBuilder();
+		header.append(' ').append(getAxisLetterFromIndex(dimension, 0)).append("  ");
+		underline.append("------------");
+		for (int coord = 1; coord < dimension; coord++) {
+			header.append("| ").append(getAxisLetterFromIndex(dimension, coord)).append("  ");
+			underline.append("-----");
+		}
+		header.append("| Type B");
+		header.append(System.lineSeparator()).append(underline);
+		System.out.println(header);
+		List<String> neighborhoodTypesA = new ArrayList<String>();
+		List<String> neighborhoodTypesB = new ArrayList<String>();
+		int[] coordinates = new int[dimension];
+		int sizeMinusOne = size - 1;
+		int dimensionMinusOne = dimension - 1;
+		int currentAxis = dimensionMinusOne;
+		while (currentAxis > -1) {
+			if (currentAxis == dimensionMinusOne) {
+				int previousCoordinate = coordinates[currentAxis - 1];//TODO breaks here for 1D
+				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
+					coordinates[currentAxis] = currentCoordinate;
+					printAnisotropicPositionType(coordinates, neighborhoodTypesA, neighborhoodTypesB);
+				}
+				System.out.println();
+				currentAxis--;
+			} else {
+				int currentCoordinate = coordinates[currentAxis];
+				int max;
+				if (currentAxis == 0) {
+					max = sizeMinusOne;
+				} else {
+					max = coordinates[currentAxis - 1];
+				}
+				if (currentCoordinate < max) {
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					currentAxis = dimensionMinusOne;
+				} else {
+					coordinates[currentAxis] = 0;
+					System.out.println();
+					currentAxis--;
+				}
+			}
+		}
+		System.out.println("Type B count: " + neighborhoodTypesB.size());
 	}
 	
 	private static boolean isOutsideAsymmetricSection(int[] coords) {
