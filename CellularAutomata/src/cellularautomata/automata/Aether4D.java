@@ -291,6 +291,8 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				}
 			}
 			grid[w][x-1][y][z] += valueToAdd;
+			if (x > maxX)
+				maxX = x;
 		}
 	}
 
@@ -320,6 +322,8 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				}
 			}
 			grid[w][x][y-1][z] += valueToAdd;
+			if (y > maxY)
+				maxY = y;
 		}
 	}
 
@@ -349,6 +353,8 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				valueToAdd += value;
 			}
 			grid[w][x][y][z-1] += valueToAdd;
+			if (z > maxZ)
+				maxZ = z;
 		}
 	}
 	
