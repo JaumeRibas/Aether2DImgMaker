@@ -25,6 +25,11 @@ public class Grid4DYZCrossSection<G extends Grid4D> implements Grid2D {
 	protected int z;
 	
 	public Grid4DYZCrossSection(G source, int y, int z) {
+		if (z > source.getMaxZ() || z < source.getMinZ()) {
+			throw new IllegalArgumentException("Z coordinate outside of grid bounds.");
+		} else if (y > source.getMaxYAtZ(z) || y < source.getMinYAtZ(z)) {
+			throw new IllegalArgumentException("Y coordinate outside of grid bounds.");
+		}
 		this.source = source;
 		this.y = y;
 		this.z = z;
@@ -34,20 +39,40 @@ public class Grid4DYZCrossSection<G extends Grid4D> implements Grid2D {
 	public int getMinX() {
 		return source.getMinWAtYZ(y, z);
 	}
+	
+	@Override
+	public int getMinX(int y) {
+		return source.getMinW(y, this.y, z);
+	}
 
 	@Override
 	public int getMaxX() {
 		return source.getMaxWAtYZ(y, z);
+	}
+	
+	@Override
+	public int getMaxX(int y) {
+		return source.getMaxW(y, this.y, z);
 	}
 
 	@Override
 	public int getMinY() {
 		return source.getMinXAtYZ(y, z);
 	}
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinX(x, y, z);
+	}
 
 	@Override
 	public int getMaxY() {
 		return source.getMaxXAtYZ(y, z);
+	}
+	
+	@Override
+	public int getMaxY(int x) {
+		return source.getMaxX(x, y, z);
 	}
 
 }
