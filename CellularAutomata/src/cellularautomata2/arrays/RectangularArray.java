@@ -48,7 +48,7 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	
 	/**
 	 * Returns the size of the array on the given axis.
-	 * The size must be greater or equal to zero and smaller than the array's dimension returned by {@link #getDimension()}.
+	 * The size must be greater than or equal to zero and smaller than the array's dimension returned by {@link #getDimension()}.
 	 * 
 	 * @param axis the index of the axis on which the size is requested.
 	 * @return the size
@@ -110,7 +110,7 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	 */
 	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
 		if (edgeWidth < 1) {
-			throw new IllegalArgumentException("The edge width must be greater or equal to one.");
+			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
 		}
 		if (command == null) {
 			throw new IllegalArgumentException("The command cannot be null.");

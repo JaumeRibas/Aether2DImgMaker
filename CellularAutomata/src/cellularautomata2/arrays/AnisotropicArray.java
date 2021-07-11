@@ -98,7 +98,7 @@ public abstract class AnisotropicArray extends SquareArray {
 	@Override
 	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
 		if (edgeWidth < 1) {
-			throw new IllegalArgumentException("The edge width must be greater or equal to one.");
+			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
 		}
 		if (command == null) {
 			throw new IllegalArgumentException("The command cannot be null.");
