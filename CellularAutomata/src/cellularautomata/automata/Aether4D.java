@@ -4164,42 +4164,42 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	
 	@Override
 	public int getMinW() {
-		return -getAsymmetricMaxW();
+		return -maxW;
 	}
 
 	@Override
 	public int getMaxW() {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 
 	@Override
 	public int getMinX() {
-		return -getAsymmetricMaxW();
+		return -maxW;
 	}
 
 	@Override
 	public int getMaxX() {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 
 	@Override
 	public int getMinY() {
-		return -getAsymmetricMaxW();
+		return -maxW;
 	}
 
 	@Override
 	public int getMaxY() {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 
 	@Override
 	public int getMinZ() {
-		return -getAsymmetricMaxW();
+		return -maxW;
 	}
 
 	@Override
 	public int getMaxZ() {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 	
 	@Override
@@ -4214,7 +4214,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 
 	@Override
 	public int getAsymmetricMaxW(int x, int y, int z) {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 	
 	@Override
@@ -4269,17 +4269,17 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 
 	@Override
 	public int getAsymmetricMaxWAtZ(int z) {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 
 	@Override
 	public int getAsymmetricMaxWAtXZ(int x, int z) {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 
 	@Override
 	public int getAsymmetricMaxWAtYZ(int y, int z) {
-		return getAsymmetricMaxW();
+		return maxW;
 	}
 
 	@Override
