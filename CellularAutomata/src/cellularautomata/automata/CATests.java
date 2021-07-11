@@ -77,6 +77,23 @@ public class CATests {
 		compare(ae1, ae2);
 	}
 	
+	public static void queryAether4DNeighborhood(String[] args) {
+		long initialValue = Long.parseLong(args[0]);
+		int step = Integer.parseInt(args[1]);
+		int w = Integer.parseInt(args[2]);
+		int x = Integer.parseInt(args[3]);
+		int y = Integer.parseInt(args[4]);
+		int z = Integer.parseInt(args[5]);
+		Aether4D ae = new Aether4D(initialValue);
+		System.out.println("Initial value: " + initialValue);
+		for (int i = 0; i < step; i++) {
+			System.out.print("Step: " + i + "\r");
+			ae.nextStep();
+		}
+		System.out.println("Step: " + step);
+		printVonNeumannNeighborhood(ae, w, x, y, z);
+	}
+	
 	public static void testSort() {
 		int testCount = 1000000;
 		int arrayLength = 6;
@@ -118,14 +135,49 @@ public class CATests {
 	
 	public static void printVonNeumannNeighborhood(LongGrid3D grid, int x, int y, int z) {
 		try {
-			System.out.println("center: " + grid.getFromPosition(x, y, z) 
-				+ ", gx: " + grid.getFromPosition(x + 1, y, z) + ", sx: " + grid.getFromPosition(x - 1, y, z) 
-				+ ", gy: " + grid.getFromPosition(x, y + 1, z) + ", sy: " + grid.getFromPosition(x, y - 1, z)
-				+ ", gz: " + grid.getFromPosition(x, y, z + 1) + ", sz: " + grid.getFromPosition(x, y, z - 1));
+			//center
+			System.out.println("(" + x + ", " + y + ", " + z + "): " + grid.getFromPosition(x, y, z));
+			//gx
+			System.out.println("("+ (x + 1) + ", " + y + ", " + z + "): " + grid.getFromPosition(x + 1, y, z));
+			//sx
+			System.out.println("("+ (x - 1) + ", " + y + ", " + z + "): " + grid.getFromPosition(x - 1, y, z));
+			//gy
+			System.out.println("("+ x + ", " + (y + 1) + ", " + z + "): " + grid.getFromPosition(x, y + 1, z));
+			//sy
+			System.out.println("("+ x + ", " + (y - 1) + ", " + z + "): " + grid.getFromPosition(x, y - 1, z));
+			//gz
+			System.out.println("("+ x + ", " + y + ", " + (z + 1) + "): " + grid.getFromPosition(x, y, z + 1));
+			//sz
+			System.out.println("("+ x + ", " + y + ", " + (z - 1) + "): " + grid.getFromPosition(x, y, z - 1));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}	
+	
+	public static void printVonNeumannNeighborhood(LongGrid4D grid, int w, int x, int y, int z) {
+		try {
+			//center
+			System.out.println("(" + w + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(w, x, y, z));
+			//gw
+			System.out.println("(" + (w + 1) + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(w + 1, x, y, z));
+			//sw
+			System.out.println("(" + (w - 1) + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(w - 1, x, y, z));
+			//gx
+			System.out.println("(" + w + ", " + (x + 1) + ", " + y + ", " + z + "): " + grid.getFromPosition(w, x + 1, y, z));
+			//sx
+			System.out.println("(" + w + ", " + (x - 1) + ", " + y + ", " + z + "): " + grid.getFromPosition(w, x - 1, y, z));
+			//gy
+			System.out.println("(" + w + ", " + x + ", " + (y + 1) + ", " + z + "): " + grid.getFromPosition(w, x, y + 1, z));
+			//sy
+			System.out.println("(" + w + ", " + x + ", " + (y - 1) + ", " + z + "): " + grid.getFromPosition(w, x, y - 1, z));
+			//gz
+			System.out.println("(" + w + ", " + x + ", " + y + ", " + (z + 1) + "): " + grid.getFromPosition(w, x, y, z + 1));
+			//sz
+			System.out.println("(" + w + ", " + x + ", " + y + ", " + (z - 1) + "): " + grid.getFromPosition(w, x, y, z - 1));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public static void findAEMinAllowedValues() {
 		//System.out.println(Integer.BYTES);
@@ -751,6 +803,7 @@ public class CATests {
 			boolean finished2 = false;
 			boolean equal = true;
 			while (!finished1 && !finished2) {
+				System.out.println("step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
 						for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
@@ -760,7 +813,6 @@ public class CATests {
 									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(w, x, y, z) 
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
-									return;
 								}
 							}
 						}	
@@ -773,6 +825,8 @@ public class CATests {
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
+				if (!equal)
+					break;
 			}
 			if (equal)
 				System.out.println("Equal");
