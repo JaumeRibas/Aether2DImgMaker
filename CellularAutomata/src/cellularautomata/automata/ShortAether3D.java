@@ -29,6 +29,9 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid3D;
  *
  */
 public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable {
+	
+	public static final short MAX_INITIAL_VALUE = Short.MAX_VALUE;
+	public static final short MIN_INITIAL_VALUE = -13107;
 
 	/**
 	 * 
@@ -49,8 +52,8 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public ShortAether3D(short initialValue) {
-		if (initialValue < -9363) {//to prevent overflow of short type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -9,363. Use a greater initial value or a different implementation.");
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of short type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -13,107. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DShortArray(7);
