@@ -179,20 +179,30 @@ public class CATests {
 		}
 	}
 	
-	public static void findAEMinAllowedValues() {
-		//System.out.println(Integer.BYTES);
-		/*System.out.println(Long.MIN_VALUE);
-		return;*/
-		BigInt num = BigInt.valueOf(1);
-		BigInt singleSourceValue = BigInt.valueOf(-9365);
-		BigInt maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, singleSourceValue);
-		while (maxNeighboringValuesDifference.compareTo(BigInt.valueOf(Short.MAX_VALUE)) > 0) {
-			singleSourceValue = singleSourceValue.add(num);
-			maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(4, singleSourceValue);
+	public static BigInt getAetherMinAllowedSingleSourceValue(int dimension, BigInt maxAllowedValue) {
+		return getAetherMinAllowedSingleSourceValue(dimension, maxAllowedValue, BigInt.ZERO);
+	}
+	
+	public static BigInt getAetherMinAllowedSingleSourceValue(int dimension, BigInt maxAllowedValue, BigInt errorMargin/*, BigInt firstValueToTest TODO*/) {
+		if (maxAllowedValue.compareTo(BigInt.ZERO) <= 0) {
+			throw new IllegalArgumentException("Max allowed value must be greater than zero.");
 		}
-		System.out.println(singleSourceValue);
-//		System.out.println(Integer.MIN_VALUE);
-//		System.out.println(Integer.MAX_VALUE);
+		if (errorMargin.compareTo(BigInt.ZERO) < 0) {
+			throw new IllegalArgumentException("Error margin must be greater than or equal to zero.");
+		}
+//		if (firstValueToTest.compareTo(BigInt.ZERO) > 0) {
+//			throw new IllegalArgumentException("First value to test must be less than or equal to zero.");
+//		}
+		BigInt increment = errorMargin.add(BigInt.ONE);
+		BigInt minSingleSourceValue = BigInt.ZERO;//firstValueToTest;		
+		BigInt maxNeighboringValuesDifference;
+		BigInt tmpValue = minSingleSourceValue;
+		do {
+			minSingleSourceValue = tmpValue;
+			tmpValue = tmpValue.subtract(increment);
+			maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(dimension, tmpValue);
+		} while (maxNeighboringValuesDifference.compareTo(maxAllowedValue) <= 0);	
+		return minSingleSourceValue;
 	}
 	
 	public static void testAether3DEnclosed2() {
