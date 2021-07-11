@@ -38,6 +38,9 @@ import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
  *
  */
 public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<LongGrid4D> {
+	
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = Long.valueOf("-2635249153387078803");
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -67,7 +70,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 	 * @throws Exception
 	 */
 	public Aether4DAsymmetricSectionSwap(long initialValue, long maxGridHeapSize, String folderPath) throws Exception {
-		if (initialValue < Long.valueOf("-2635249153387078803")) {//to prevent overflow of long type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -2,635,249,153,387,078,803. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;

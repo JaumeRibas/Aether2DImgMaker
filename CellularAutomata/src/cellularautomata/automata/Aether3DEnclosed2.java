@@ -28,6 +28,9 @@ import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
  */
 public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 	
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = Long.valueOf("-3689348814741910323");
+	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
 	
@@ -49,7 +52,7 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 			throw new IllegalArgumentException("Sides cannot be smaller than 2.");
 		}
 		//safety check to prevent exceeding the data type's max value
-		if (singleSourceValue < Long.valueOf("-3689348814741910323")) {
+		if (singleSourceValue < MIN_INITIAL_VALUE) {
 			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
 		}
 		grid = new long[xSide][ySide][zSide];

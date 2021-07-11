@@ -31,6 +31,9 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
  */
 public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {	
 	
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = Long.valueOf("-9223372036854775807");
+	
 	private static final byte RIGHT = 2;
 	private static final byte LEFT = 3;
 	
@@ -52,7 +55,7 @@ public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public AetherSimple1D(long initialValue) {
-		if (initialValue < Long.valueOf("-9223372036854775807")) {//to prevent overflow of long type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -9,223,372,036,854,775,807. Use a greater initial value or a different implementation.");
 	    }
 		this.initialValue = initialValue;

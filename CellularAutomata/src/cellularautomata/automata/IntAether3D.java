@@ -29,6 +29,9 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid3D;
  *
  */
 public class IntAether3D implements SymmetricEvolvingIntGrid3D, Serializable {
+	
+	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
+	public static final int MIN_INITIAL_VALUE = -858993459;
 
 	/**
 	 * 
@@ -49,7 +52,7 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D, Serializable {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public IntAether3D(int initialValue) {
-		if (initialValue < -858993459) {//to prevent overflow of int type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of int type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -858,993,459. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;

@@ -38,6 +38,9 @@ import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
  *
  */
 public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<IntGrid3D> {
+	
+	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
+	public static final int MIN_INITIAL_VALUE = -858993459;
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -62,7 +65,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 	 * @throws Exception
 	 */
 	public IntAether3DAsymmetricSectionSwap(int initialValue, long maxGridHeapSize, String folderPath) throws Exception {
-		if (initialValue < -858993459) {//to prevent overflow of int type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of int type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -858,993,459. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;

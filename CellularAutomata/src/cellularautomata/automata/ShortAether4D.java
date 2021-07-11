@@ -30,6 +30,9 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingShortGrid4D;
  */
 public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable {
 	
+	public static final short MAX_INITIAL_VALUE = Short.MAX_VALUE;
+	public static final short MIN_INITIAL_VALUE = -9363;
+	
 	/**
 	 * 
 	 */
@@ -64,7 +67,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public ShortAether4D(short initialValue) {
-		if (initialValue < -9363) {//to prevent overflow of short type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of short type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -9,363. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;

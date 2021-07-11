@@ -37,6 +37,9 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2382159486781927184L;
+	
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = Long.valueOf("-3689348814741910323");
 
 	/** A 3D array representing the grid */
 	private long[][][] grid;
@@ -52,7 +55,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public Aether3D(long initialValue) {
-		if (initialValue < Long.valueOf("-3689348814741910323")) {//to prevent overflow of long type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;

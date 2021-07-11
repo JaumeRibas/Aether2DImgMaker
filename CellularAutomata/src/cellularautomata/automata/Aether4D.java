@@ -35,6 +35,9 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	 */
 	private static final long serialVersionUID = -8314893471774482651L;
 	
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = Long.valueOf("-2635249153387078803");
+	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;
 	private static final byte X_POSITIVE = 2;
@@ -64,7 +67,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public Aether4D(long initialValue) {
-		if (initialValue < Long.valueOf("-2635249153387078803")) {//to prevent overflow of long type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -2,635,249,153,387,078,803. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;

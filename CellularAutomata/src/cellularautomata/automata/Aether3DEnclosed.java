@@ -28,6 +28,9 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
  */
 public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 	
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = Long.valueOf("-3689348814741910323");
+	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
 	private static final byte RIGHT = 2;
@@ -56,7 +59,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D {
 	public Aether3DEnclosed(long initialValue, int side) {
 		if (side%2 == 0)
 			throw new UnsupportedOperationException("Only uneven sides are supported.");
-		if (initialValue < Long.valueOf("-3689348814741910323")) {//to prevent overflow of long type
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
 		}
 		this.side = side;
