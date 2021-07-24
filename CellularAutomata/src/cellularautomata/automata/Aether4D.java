@@ -418,7 +418,6 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-
 		//w slice transition
 		grid[2] = null;// free old grid progressively to save memory
 		smallerWSlice = currentWSlice;
@@ -434,7 +433,6 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
-		
 		if (toppleRangeType4(currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
@@ -443,7 +441,6 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		
 	// 04 | 03 | 02 | 00 | 40
 		currentValue = currentWSlice[3][2][0];
 		greaterWNeighborValue = greaterWSlice[3][2][0];
