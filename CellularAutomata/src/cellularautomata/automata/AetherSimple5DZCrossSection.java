@@ -31,6 +31,9 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
  */
 public class AetherSimple5DZCrossSection implements SymmetricEvolvingLongGrid4D {	
 
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
+	
 	private static final byte V_POSITIVE = 8;
 	private static final byte V_NEGATIVE = 9;
 	private static final byte W_POSITIVE = 0;
@@ -61,9 +64,9 @@ public class AetherSimple5DZCrossSection implements SymmetricEvolvingLongGrid4D 
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public AetherSimple5DZCrossSection(long initialValue, int z) {
-//		if (initialValue < Long.valueOf("-2635249153387078803")) {//to prevent overflow of long type
-//			throw new IllegalArgumentException("Initial value cannot be smaller than -2,635,249,153,387,078,803. Use a greater initial value or a different implementation.");
-//		}
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
+			throw new IllegalArgumentException("Initial value cannot be smaller than -2,049,638,230,412,172,401. Use a greater initial value or a different implementation.");
+		}
 		this.initialValue = initialValue;
 		int side = 5;
 		grid = new long[side][side][side][side][side];
