@@ -29,7 +29,7 @@ import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-3689348814741910323");
+	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;

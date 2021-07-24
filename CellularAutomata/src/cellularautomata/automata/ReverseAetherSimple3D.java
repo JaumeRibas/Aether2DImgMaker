@@ -31,7 +31,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
  */
 public class ReverseAetherSimple3D implements SymmetricEvolvingLongGrid3D {	
 	
-	public static final long MAX_INITIAL_VALUE = Long.valueOf("3689348814741910323");
+	public static final long MAX_INITIAL_VALUE = 3689348814741910323L;
 	public static final long MIN_INITIAL_VALUE = Long.MIN_VALUE;
 	
 	private static final byte UP = 0;

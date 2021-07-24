@@ -32,7 +32,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 public class AetherSimple4D implements SymmetricEvolvingLongGrid4D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-2635249153387078803");
+	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;

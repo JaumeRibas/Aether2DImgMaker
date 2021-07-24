@@ -40,7 +40,7 @@ import cellularautomata.grid3d.LongSubGrid3DWithXBounds;
 public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<LongGrid3D> {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-3689348814741910323");
+	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";

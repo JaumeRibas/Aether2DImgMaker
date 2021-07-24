@@ -36,7 +36,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	private static final long serialVersionUID = -8314893471774482651L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-2635249153387078803");
+	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
 
 	/** A 4D array representing the grid */
 	private long[][][][] grid;

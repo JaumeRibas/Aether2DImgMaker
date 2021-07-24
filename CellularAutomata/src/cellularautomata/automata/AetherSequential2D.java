@@ -32,7 +32,7 @@ import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
 public class AetherSequential2D implements EvolvingLongGrid2D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-6148914691236517205");
+	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;

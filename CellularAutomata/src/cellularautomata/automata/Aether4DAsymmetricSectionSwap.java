@@ -40,7 +40,7 @@ import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
 public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<LongGrid4D> {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-2635249153387078803");
+	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";

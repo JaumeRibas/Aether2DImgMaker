@@ -39,7 +39,7 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, Serializable {
 	private static final long serialVersionUID = 2382159486781927184L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-3689348814741910323");
+	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
 
 	/** A 3D array representing the grid */
 	private long[][][] grid;

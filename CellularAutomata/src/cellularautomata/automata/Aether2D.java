@@ -29,7 +29,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
 public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = Long.valueOf("-6148914691236517205");
+	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
 
 	/** A 2D array representing the grid */
 	private long[][] grid;
