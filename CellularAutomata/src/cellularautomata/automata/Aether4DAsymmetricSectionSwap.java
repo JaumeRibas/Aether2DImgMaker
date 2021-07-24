@@ -120,7 +120,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		}
 	}
 
-	private SizeLimitedAnisotropicLongGrid4DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicLongGrid4DBlock loadGridBlockSafe(int minW) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
 		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = null;
@@ -132,7 +132,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 			try {
 				//"minW=".length() == 5
 				fileMinW = Integer.parseInt(fileName.substring(5, fileName.indexOf("_")));
-				if (fileMinW == minX) {
+				if (fileMinW == minW) {
 					found = true;
 					gridBlockFile = currentFile;
 				}
