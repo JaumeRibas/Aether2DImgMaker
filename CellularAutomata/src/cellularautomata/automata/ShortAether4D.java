@@ -152,7 +152,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		smallerWSlice = currentWSlice;
 		currentWSlice = greaterWSlice;
 		greaterWSlice = grid[3];
-		short[][][][] currentWSlices = new short[][][][] { smallerWSlice, currentWSlice, greaterWSlice};
+		short[][][][] wSlices = new short[][][][] { smallerWSlice, currentWSlice, greaterWSlice};
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
 		newGreaterWSlice = Utils.buildAnisotropic3DShortArray(4);
@@ -277,9 +277,9 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		smallerWSlice = currentWSlice;
 		currentWSlice = greaterWSlice;
 		greaterWSlice = grid[4];
-		currentWSlices[0] = smallerWSlice;
-		currentWSlices[1] = currentWSlice;
-		currentWSlices[2] = greaterWSlice;
+		wSlices[0] = smallerWSlice;
+		wSlices[1] = currentWSlice;
+		wSlices[2] = greaterWSlice;
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
 		newGreaterWSlice = Utils.buildAnisotropic3DShortArray(5);
@@ -287,7 +287,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
-		if (toppleRangeType1(currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -372,7 +372,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType2(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType2(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -414,7 +414,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType3(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType3(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -424,9 +424,9 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		smallerWSlice = currentWSlice;
 		currentWSlice = greaterWSlice;
 		greaterWSlice = grid[5];
-		currentWSlices[0] = smallerWSlice;
-		currentWSlices[1] = currentWSlice;
-		currentWSlices[2] = greaterWSlice;
+		wSlices[0] = smallerWSlice;
+		wSlices[1] = currentWSlice;
+		wSlices[2] = greaterWSlice;
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
 		newGreaterWSlice = Utils.buildAnisotropic3DShortArray(6);
@@ -435,11 +435,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
 		
-		if (toppleRangeType4(currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType5(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType5(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -488,11 +488,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType6(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType6(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType7(4, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType7(4, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -500,12 +500,12 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		// 5 >= w < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
-		if (toppleRangeBeyondW4(currentWSlices, newWSlices, newGrid, 5, edgeMinusTwo, 
+		if (toppleRangeBeyondW4(wSlices, newWSlices, newGrid, 5, edgeMinusTwo, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse this arrays?
 			changed = true;
 		}
 		//edge - 2 >= w < edge
-		if (toppleRangeBeyondW4(currentWSlices, newWSlices, newGrid, edgeMinusTwo, edge, 
+		if (toppleRangeBeyondW4(wSlices, newWSlices, newGrid, edgeMinusTwo, edge, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;
 			maxW++;
@@ -518,21 +518,21 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private boolean toppleRangeBeyondW4(short[][][][] currentWSlices, short[][][][] newWSlices, short[][][][] newGrid, int minW,
+	private boolean toppleRangeBeyondW4(short[][][][] wSlices, short[][][][] newWSlices, short[][][][] newGrid, int minW,
 			int maxW, short[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords,
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
 		int w = minW, wMinusOne = w - 1, wMinusTwo = w - 2, wMinusThree = w - 3, wPlusOne = w + 1, wPlusTwo = w + 2;
-		short[][][] smallerWSlice = null, currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		short[][][] smallerWSlice = null, currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 		short[][][] newSmallerWSlice = null, newCurrentWSlice = newWSlices[1], newGreaterWSlice = newWSlices[2];
 		for (; w != maxW; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne = wPlusTwo, wPlusTwo++) {
 			//w slice transition
 			smallerWSlice = currentWSlice;
 			currentWSlice = greaterWSlice;
 			greaterWSlice = grid[wPlusOne];
-			currentWSlices[0] = smallerWSlice;
-			currentWSlices[1] = currentWSlice;
-			currentWSlices[2] = greaterWSlice;
+			wSlices[0] = smallerWSlice;
+			wSlices[1] = currentWSlice;
+			wSlices[2] = greaterWSlice;
 			newSmallerWSlice = newCurrentWSlice;
 			newCurrentWSlice = newGreaterWSlice;
 			newGreaterWSlice = Utils.buildAnisotropic3DShortArray(wPlusTwo);
@@ -540,11 +540,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 			newWSlices[0] = newSmallerWSlice;
 			newWSlices[1] = newCurrentWSlice;
 			newWSlices[2] = newGreaterWSlice;
-			if (toppleRangeType4(currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType8(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType8(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -592,13 +592,13 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType9(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType9(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 			int x = 4, xPlusOne = x + 1, xMinusOne = x - 1;
 			for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-				if (toppleRangeType8(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+				if (toppleRangeType8(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -808,12 +808,12 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-				if (toppleRangeType9(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+				if (toppleRangeType9(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType5(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType5(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1024,7 +1024,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}			
-			if (toppleRangeType6(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType6(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1101,22 +1101,22 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 					changed = true;
 				}
 			}
-			if (toppleRangeType7(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType7(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 		}		
-		currentWSlices[1] = currentWSlice;
-		currentWSlices[2] = greaterWSlice;
+		wSlices[1] = currentWSlice;
+		wSlices[2] = greaterWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
 		return changed;
 	}
 
-	private static boolean toppleRangeType1(short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType1(short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		short[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		short[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w | 00 | 00 | 00 | 06
 		short currentValue = currentWSlice[0][0][0];
 		short greaterWNeighborValue = greaterWSlice[0][0][0];
@@ -1167,11 +1167,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int x, short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType2(int x, short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1;
 		boolean changed = false;
-		short[][][] currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		short[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 10
 		short currentValue = currentWSlice[x][0][0];
 		short greaterWNeighborValue = greaterWSlice[x][0][0];
@@ -1209,11 +1209,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int coord, short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType3(int coord, short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1;
 		boolean changed = false;
-		short[][][] currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		short[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x |  y | 00 | 13
 		short currentValue = currentWSlice[coord][coord][0];
 		short greaterWNeighborValue = greaterWSlice[coord][coord][0];
@@ -1274,14 +1274,14 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType4(short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		if (toppleRangeType1(currentWSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		short[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		short[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w | 02 | 00 | 00 | 32
 		short currentValue = currentWSlice[2][0][0];
 		short greaterWNeighborValue = greaterWSlice[2][0][0];
@@ -1363,11 +1363,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(int x, short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType5(int x, short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		short[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		short[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 19
 		short currentValue = currentWSlice[x][0][0];
 		short greaterWNeighborValue = greaterWSlice[x][0][0];
@@ -1412,10 +1412,10 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int coord, short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType6(int coord, short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
-		short[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];	
+		short[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];	
 		boolean changed = false;		
 	//  w |  x |  y | 00 | 22
 		short currentValue = currentWSlice[coord][coord][0];
@@ -1490,7 +1490,7 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		}
 		coordMinusOne = coord;
 		coord++;
-		if (toppleRangeType2(coord, currentWSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeType2(coord, wSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}		
@@ -1535,11 +1535,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int x, short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType7(int x, short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {		
 		int y = x - 1, xMinusOne = x - 1, xMinusTwo = x - 2, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
-		short[][][] currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		short[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x |  y | 00 | 27
 		short currentValue = currentWSlice[x][y][0];
 		short greaterWNeighborValue = greaterWSlice[x][y][0];
@@ -1611,18 +1611,18 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}		
-		if (toppleRangeType3(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeType3(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int x, short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType8(int x, short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		short[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		short[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 32
 		short currentValue = currentWSlice[x][0][0];
 		short greaterWNeighborValue = greaterWSlice[x][0][0];
@@ -1667,11 +1667,11 @@ public class ShortAether4D implements SymmetricEvolvingShortGrid4D, Serializable
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int coord, short[][][][] currentWSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType9(int coord, short[][][][] wSlices, short[][][][] newWSlices, short[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
-		short[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		short[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w |  x |  y | 00 | 35
 		short currentValue = currentWSlice[coord][coord][0];
 		short greaterWNeighborValue = greaterWSlice[coord][coord][0];

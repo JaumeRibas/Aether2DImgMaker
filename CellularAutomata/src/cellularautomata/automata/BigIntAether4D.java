@@ -153,7 +153,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		smallerWSlice = currentWSlice;
 		currentWSlice = greaterWSlice;
 		greaterWSlice = grid[3];
-		BigInt[][][][] currentWSlices = new BigInt[][][][] { smallerWSlice, currentWSlice, greaterWSlice};
+		BigInt[][][][] wSlices = new BigInt[][][][] { smallerWSlice, currentWSlice, greaterWSlice};
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
 		newGreaterWSlice = Utils.buildAnisotropic3DBigIntArray(4);
@@ -278,9 +278,9 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		smallerWSlice = currentWSlice;
 		currentWSlice = greaterWSlice;
 		greaterWSlice = grid[4];
-		currentWSlices[0] = smallerWSlice;
-		currentWSlices[1] = currentWSlice;
-		currentWSlices[2] = greaterWSlice;
+		wSlices[0] = smallerWSlice;
+		wSlices[1] = currentWSlice;
+		wSlices[2] = greaterWSlice;
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
 		newGreaterWSlice = Utils.buildAnisotropic3DBigIntArray(5);
@@ -288,7 +288,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
-		if (toppleRangeType1(currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -373,7 +373,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType2(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType2(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -415,7 +415,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType3(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType3(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -425,9 +425,9 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		smallerWSlice = currentWSlice;
 		currentWSlice = greaterWSlice;
 		greaterWSlice = grid[5];
-		currentWSlices[0] = smallerWSlice;
-		currentWSlices[1] = currentWSlice;
-		currentWSlices[2] = greaterWSlice;
+		wSlices[0] = smallerWSlice;
+		wSlices[1] = currentWSlice;
+		wSlices[2] = greaterWSlice;
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
 		newGreaterWSlice = Utils.buildAnisotropic3DBigIntArray(6);
@@ -436,11 +436,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
 		
-		if (toppleRangeType4(currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType5(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType5(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -489,11 +489,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType6(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType6(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType7(4, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType7(4, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -501,12 +501,12 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		// 5 >= w < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
-		if (toppleRangeBeyondW4(currentWSlices, newWSlices, newGrid, 5, edgeMinusTwo, 
+		if (toppleRangeBeyondW4(wSlices, newWSlices, newGrid, 5, edgeMinusTwo, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse this arrays?
 			changed = true;
 		}
 		//edge - 2 >= w < edge
-		if (toppleRangeBeyondW4(currentWSlices, newWSlices, newGrid, edgeMinusTwo, edge, 
+		if (toppleRangeBeyondW4(wSlices, newWSlices, newGrid, edgeMinusTwo, edge, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;
 			maxW++;
@@ -519,21 +519,21 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private boolean toppleRangeBeyondW4(BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[][][][] newGrid, int minW,
+	private boolean toppleRangeBeyondW4(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[][][][] newGrid, int minW,
 			int maxW, BigInt[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords,
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
 		int w = minW, wMinusOne = w - 1, wMinusTwo = w - 2, wMinusThree = w - 3, wPlusOne = w + 1, wPlusTwo = w + 2;
-		BigInt[][][] smallerWSlice = null, currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		BigInt[][][] smallerWSlice = null, currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 		BigInt[][][] newSmallerWSlice = null, newCurrentWSlice = newWSlices[1], newGreaterWSlice = newWSlices[2];
 		for (; w != maxW; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne = wPlusTwo, wPlusTwo++) {
 			//w slice transition
 			smallerWSlice = currentWSlice;
 			currentWSlice = greaterWSlice;
 			greaterWSlice = grid[wPlusOne];
-			currentWSlices[0] = smallerWSlice;
-			currentWSlices[1] = currentWSlice;
-			currentWSlices[2] = greaterWSlice;
+			wSlices[0] = smallerWSlice;
+			wSlices[1] = currentWSlice;
+			wSlices[2] = greaterWSlice;
 			newSmallerWSlice = newCurrentWSlice;
 			newCurrentWSlice = newGreaterWSlice;
 			newGreaterWSlice = Utils.buildAnisotropic3DBigIntArray(wPlusTwo);
@@ -541,11 +541,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 			newWSlices[0] = newSmallerWSlice;
 			newWSlices[1] = newCurrentWSlice;
 			newWSlices[2] = newGreaterWSlice;
-			if (toppleRangeType4(currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType8(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType8(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -593,13 +593,13 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType9(3, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType9(3, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 			int x = 4, xPlusOne = x + 1, xMinusOne = x - 1;
 			for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-				if (toppleRangeType8(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+				if (toppleRangeType8(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -809,12 +809,12 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-				if (toppleRangeType9(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+				if (toppleRangeType9(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType5(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType5(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1025,7 +1025,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}			
-			if (toppleRangeType6(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType6(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1102,22 +1102,22 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 					changed = true;
 				}
 			}
-			if (toppleRangeType7(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType7(x, wSlices, newWSlices, relevantAsymmetricNeighborValues,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 		}		
-		currentWSlices[1] = currentWSlice;
-		currentWSlices[2] = greaterWSlice;
+		wSlices[1] = currentWSlice;
+		wSlices[2] = greaterWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
 		return changed;
 	}
 
-	private static boolean toppleRangeType1(BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType1(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		BigInt[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w | 00 | 00 | 00 | 06
 		BigInt currentValue = currentWSlice[0][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[0][0][0];
@@ -1168,11 +1168,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int x, BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType2(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1;
 		boolean changed = false;
-		BigInt[][][] currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		BigInt[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 10
 		BigInt currentValue = currentWSlice[x][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][0][0];
@@ -1210,11 +1210,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int coord, BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType3(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1;
 		boolean changed = false;
-		BigInt[][][] currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		BigInt[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x |  y | 00 | 13
 		BigInt currentValue = currentWSlice[coord][coord][0];
 		BigInt greaterWNeighborValue = greaterWSlice[coord][coord][0];
@@ -1275,14 +1275,14 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType4(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		if (toppleRangeType1(currentWSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		BigInt[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w | 02 | 00 | 00 | 32
 		BigInt currentValue = currentWSlice[2][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[2][0][0];
@@ -1364,11 +1364,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(int x, BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType5(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		BigInt[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 19
 		BigInt currentValue = currentWSlice[x][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][0][0];
@@ -1413,10 +1413,10 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int coord, BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType6(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
-		BigInt[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];	
+		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];	
 		boolean changed = false;		
 	//  w |  x |  y | 00 | 22
 		BigInt currentValue = currentWSlice[coord][coord][0];
@@ -1491,7 +1491,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		}
 		coordMinusOne = coord;
 		coord++;
-		if (toppleRangeType2(coord, currentWSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeType2(coord, wSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}		
@@ -1536,11 +1536,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int x, BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType7(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {		
 		int y = x - 1, xMinusOne = x - 1, xMinusTwo = x - 2, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
-		BigInt[][][] currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		BigInt[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x |  y | 00 | 27
 		BigInt currentValue = currentWSlice[x][y][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][y][0];
@@ -1612,18 +1612,18 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}		
-		if (toppleRangeType3(x, currentWSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeType3(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int x, BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType8(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		BigInt[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];		
+		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 32
 		BigInt currentValue = currentWSlice[x][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][0][0];
@@ -1668,11 +1668,11 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Se
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int coord, BigInt[][][][] currentWSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType9(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
-		BigInt[][][] smallerWSlice = currentWSlices[0], currentWSlice = currentWSlices[1], greaterWSlice = currentWSlices[2];
+		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w |  x |  y | 00 | 35
 		BigInt currentValue = currentWSlice[coord][coord][0];
 		BigInt greaterWNeighborValue = greaterWSlice[coord][coord][0];
