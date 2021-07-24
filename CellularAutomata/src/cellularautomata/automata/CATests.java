@@ -77,6 +77,31 @@ public class CATests {
 		compare(ae1, ae2);
 	}
 	
+	public static void testBigIntValueOfPerformance() {
+		int count = 100000000;
+		BigInt total, bigIntIncrement;
+		int increment;
+		long millis;
+		millis = System.currentTimeMillis();
+		total = BigInt.ZERO;
+		increment = 0;
+		for (int i = 0; i < count; i++) {
+			increment++;
+			total = total.add(BigInt.valueOf(increment));
+		}
+		System.out.println(System.currentTimeMillis() - millis);
+		System.out.println(total);
+		millis = System.currentTimeMillis();
+		total = BigInt.ZERO;
+		bigIntIncrement = BigInt.ZERO;
+		for (int i = 0; i < count; i++) {
+			bigIntIncrement = bigIntIncrement.add(BigInt.ONE);
+			total = total.add(bigIntIncrement);
+		}
+		System.out.println(System.currentTimeMillis() - millis);
+		System.out.println(total);
+	}
+	
 	public static void queryAether4DNeighborhood(String[] args) {
 		long initialValue = Long.parseLong(args[0]);
 		int step = Integer.parseInt(args[1]);
@@ -179,30 +204,36 @@ public class CATests {
 		}
 	}
 	
+	/**
+	 *  0 -> 0
+	 * -1 -> 1
+	 * -2 -> 2*dimension - 1
+	 * -3 -> previous - 1
+	 * -4 -> previous + 2*dimension
+	 * -5 -> previous - 1
+	 * -6 -> previous + 2*dimension
+	 * ... 
+	 * 
+	 * @param dimension
+	 * @param maxAllowedValue
+	 * @return
+	 */
 	public static BigInt getAetherMinAllowedSingleSourceValue(int dimension, BigInt maxAllowedValue) {
-		return getAetherMinAllowedSingleSourceValue(dimension, maxAllowedValue, BigInt.ZERO);
-	}
-	
-	public static BigInt getAetherMinAllowedSingleSourceValue(int dimension, BigInt maxAllowedValue, BigInt errorMargin/*, BigInt firstValueToTest TODO*/) {
 		if (maxAllowedValue.compareTo(BigInt.ZERO) <= 0) {
 			throw new IllegalArgumentException("Max allowed value must be greater than zero.");
 		}
-		if (errorMargin.compareTo(BigInt.ZERO) < 0) {
-			throw new IllegalArgumentException("Error margin must be greater than or equal to zero.");
+		BigInt two = BigInt.valueOf(2);
+		BigInt doubleDimensionMinusOne = BigInt.valueOf(dimension).multiply(two).subtract(BigInt.ONE);
+		if (maxAllowedValue.compareTo(doubleDimensionMinusOne) < 0) {
+			return BigInt.ONE.negate();
 		}
-//		if (firstValueToTest.compareTo(BigInt.ZERO) > 0) {
-//			throw new IllegalArgumentException("First value to test must be less than or equal to zero.");
-//		}
-		BigInt increment = errorMargin.add(BigInt.ONE);
-		BigInt minSingleSourceValue = BigInt.ZERO;//firstValueToTest;		
-		BigInt maxNeighboringValuesDifference;
-		BigInt tmpValue = minSingleSourceValue;
-		do {
-			minSingleSourceValue = tmpValue;
-			tmpValue = tmpValue.subtract(increment);
-			maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(dimension, tmpValue);
-		} while (maxNeighboringValuesDifference.compareTo(maxAllowedValue) <= 0);	
-		return minSingleSourceValue;
+		BigInt minSingleSourceValue1 = two.multiply(maxAllowedValue).divide(doubleDimensionMinusOne.negate());
+		BigInt minSingleSourceValue2 = minSingleSourceValue1.subtract(BigInt.ONE);//it can be off by 1
+		if (Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(dimension, minSingleSourceValue2).compareTo(maxAllowedValue) > 0) {
+			return minSingleSourceValue1;
+		} else {
+			return minSingleSourceValue2;
+		}
 	}
 	
 	public static void testAether3DEnclosed2() {
