@@ -210,8 +210,6 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 				null,
 				gridBlockA.getSlice(3),
 				gridBlockA.getSlice(4)};
-//		newXSlices[1] = newCurrentXSlice;
-//		newXSlices[2] = newGreaterXSlice;
 		while (x <= currentMaxX) {
 			while (x <= currentMaxX && x < gridBlockA.maxX) {
 				slideGridSlices(newXSlices, new AnisotropicLongGrid3DSlice(x + 1));
