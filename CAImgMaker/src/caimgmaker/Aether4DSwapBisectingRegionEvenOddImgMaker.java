@@ -99,11 +99,11 @@ public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 			if (isScanInitialYIndexDefined) {
 				imgMaker.createZScanningAndCrossSectionEvenOddImages(
 						xSection, 0, scanInitialYIndex, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
-					path + "/asymmetric_section/img", path + "/backups");
+					path + "/img", path + "/backups");
 			} else {
 				imgMaker.createZScanningAndCrossSectionEvenOddImages(
 						xSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
-					path + "/asymmetric_section/img", path + "/backups");
+					path + "/img", path + "/backups");
 			}
 			
 		}		

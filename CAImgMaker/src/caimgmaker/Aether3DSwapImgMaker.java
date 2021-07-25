@@ -94,10 +94,10 @@ public class Aether3DSwapImgMaker {
 			}
 			if (isScanInitialZIndexDefined) {
 				imgMaker.createScanningAndCrossSectionImagesFromLongGrid3D(ca, scanInitialZIndex, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
 				imgMaker.createScanningAndCrossSectionImagesFromLongGrid3D(ca, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/asymmetric_section/img", path + "/backups");
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
 			
 		}		

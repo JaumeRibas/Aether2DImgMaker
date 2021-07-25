@@ -99,7 +99,7 @@ public class IntAether4DSwapBisectingRegionOddImgMaker {
 			}
 			ActionableEvolvingGrid4DZCrossSection<IntGrid4D, IntGrid3D> xSection = 
 					new ActionableEvolvingGrid4DZCrossSection<IntGrid4D, IntGrid3D>(ca, 0);
-			String imgsPath = path + xSection.getSubFolderPath() + "/asymmetric_section/img";
+			String imgsPath = path + xSection.getSubFolderPath() + "/img";
 			String backupPath = path + ca.getSubFolderPath() + "/backups";
 			if (isScanInitialIndexesDefined) {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntGrid3D(
