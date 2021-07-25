@@ -52,7 +52,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 	private SizeLimitedAnisotropicIntGrid3DBlock gridBlockA;
 	private SizeLimitedAnisotropicIntGrid3DBlock gridBlockB;
 	private int initialValue;
-	private int currentStep;
+	private long currentStep;
 	private int maxX;
 	private File gridFolder;
 	private long maxGridBlockSize;
@@ -1769,7 +1769,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
@@ -1894,7 +1894,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * asymmetricNeighborShareMultipliers[j]);
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[0];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
@@ -2013,7 +2013,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share * neighborShareMultipliers[j]);
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
@@ -2137,7 +2137,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 				newXSlices[nc[0]].addToPosition(nc[1], nc[2], share);
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[0];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
@@ -2242,7 +2242,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getInitialValue() {
+	public int getInitialValue() {
 		return initialValue;
 	}
 	
@@ -2278,7 +2278,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (int) properties.get("initialValue");
-		currentStep = (int) properties.get("currentStep");
+		currentStep = (long) properties.get("currentStep");
 		maxX = (int) properties.get("maxX");
 		maxGridBlockSize = (long) properties.get("maxGridBlockSize");
 	}

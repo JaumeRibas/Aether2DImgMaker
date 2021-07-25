@@ -2187,7 +2187,7 @@ public class ShortAether3D implements SymmetricEvolvingShortGrid3D, Serializable
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getInitialValue() {
+	public short getInitialValue() {
 		return initialValue;
 	}	
 	

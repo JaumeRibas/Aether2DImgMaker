@@ -2187,7 +2187,7 @@ public class IntAether3D implements SymmetricEvolvingIntGrid3D, Serializable {
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getInitialValue() {
+	public int getInitialValue() {
 		return initialValue;
 	}	
 	
