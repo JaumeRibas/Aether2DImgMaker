@@ -63,6 +63,7 @@ import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid3d.LongGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid3d.ObjectGrid3D;
+import cellularautomata.grid4d.IntGrid4D;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
@@ -219,8 +220,11 @@ public class CATests {
 	 * @return
 	 */
 	public static BigInt getAetherMinAllowedSingleSourceValue(int dimension, BigInt maxAllowedValue) {
-		if (maxAllowedValue.compareTo(BigInt.ZERO) <= 0) {
-			throw new IllegalArgumentException("Max allowed value must be greater than zero.");
+		int maxAllowedValueComparedToZero = maxAllowedValue.compareTo(BigInt.ZERO);
+		if (maxAllowedValueComparedToZero < 0) {
+			throw new IllegalArgumentException("Max allowed cannot be less than zero.");
+		} else if (maxAllowedValueComparedToZero == 0) {
+			return BigInt.ZERO;
 		}
 		BigInt two = BigInt.valueOf(2);
 		BigInt doubleDimensionMinusOne = BigInt.valueOf(dimension).multiply(two).subtract(BigInt.ONE);
@@ -676,6 +680,10 @@ public class CATests {
 		}
 	}
 	
+	public static void compare(EvolvingLongGrid4D ca1, ActionableEvolvingGrid4D<LongGrid4D> ca2) {
+		compare(ca2, ca1);
+	}
+	
 	public static void compare(ActionableEvolvingGrid4D<LongGrid4D> ca1, EvolvingLongGrid4D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -685,6 +693,62 @@ public class CATests {
 				
 				@Override
 				public void processGridBlock(LongGrid4D gridBlock) throws Exception {
+					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
+						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
+							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
+								for (int w = gridBlock.getMinW(x,y,z); w <= gridBlock.getMaxW(x,y,z); w++) {
+									if (gridBlock.getFromPosition(w, x, y, z) != ca2.getFromPosition(w, x, y, z)) {
+										System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(w, x, y, z) 
+												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
+									}
+								}
+							}	
+						}	
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// do nothing					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// do nothing			
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processGrid();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(EvolvingIntGrid4D ca1, ActionableEvolvingGrid4D<IntGrid4D> ca2) {
+		compare(ca2, ca1);
+	}
+	
+	public static void compare(ActionableEvolvingGrid4D<IntGrid4D> ca1, EvolvingIntGrid4D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			GridProcessor<IntGrid4D> comparator = new GridProcessor<IntGrid4D>() {
+				
+				@Override
+				public void processGridBlock(IntGrid4D gridBlock) throws Exception {
 					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
 						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
 							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
