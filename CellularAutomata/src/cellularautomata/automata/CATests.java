@@ -226,6 +226,11 @@ public class CATests {
 		} else if (maxAllowedValueComparedToZero == 0) {
 			return BigInt.ZERO;
 		}
+		if (dimension <= 0) {
+			throw new IllegalArgumentException("Grid dimension must be greater than zero.");
+		} else if (dimension == 1) {
+			return maxAllowedValue.negate();
+		}
 		BigInt two = BigInt.valueOf(2);
 		BigInt doubleDimensionMinusOne = BigInt.valueOf(dimension).multiply(two).subtract(BigInt.ONE);
 		if (maxAllowedValue.compareTo(doubleDimensionMinusOne) < 0) {
