@@ -29,22 +29,22 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
  *
  */
 public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8314893471774482651L;
-	
+
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
 
 	/** A 4D array representing the grid */
 	private long[][][][] grid;
-	
+
 	private long initialValue;
 	private long step;
 	private int maxW;
-	
+
 	/**
 	 * Creates an instance with the given initial value
 	 * 
@@ -60,7 +60,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		maxW = 5;
 		step = 0;
 	}
-	
+
 	/**
 	 * Creates an instance restoring a backup
 	 * 
@@ -291,7 +291,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-	// 03 | 02 | 00 | 00 | 19
+		// 03 | 02 | 00 | 00 | 19
 		// reuse values obtained previously
 		currentValue = currentWSlice[2][0][0];;
 		greaterWNeighborValue = greaterWSlice[2][0][0];
@@ -304,7 +304,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 03 | 02 | 01 | 00 | 20
+		// 03 | 02 | 01 | 00 | 20
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -319,7 +319,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 03 | 02 | 01 | 01 | 21
+		// 03 | 02 | 01 | 01 | 21
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -333,7 +333,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 03 | 02 | 02 | 00 | 22
+		// 03 | 02 | 02 | 00 | 22
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
@@ -346,7 +346,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 03 | 02 | 02 | 01 | 23
+		// 03 | 02 | 02 | 01 | 23
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -360,7 +360,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 03 | 02 | 02 | 02 | 24
+		// 03 | 02 | 02 | 02 | 24
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -376,7 +376,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-	// 03 | 03 | 02 | 00 | 27
+		// 03 | 03 | 02 | 00 | 27
 		currentValue = currentWSlice[3][2][0];
 		greaterWNeighborValue = greaterWSlice[3][2][0];
 		smallerXNeighborValue = currentWSlice[2][2][0];
@@ -388,7 +388,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 03 | 03 | 02 | 01 | 28
+		// 03 | 03 | 02 | 01 | 28
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -402,7 +402,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 03 | 03 | 02 | 02 | 29
+		// 03 | 03 | 02 | 02 | 29
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -441,7 +441,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-	// 04 | 03 | 02 | 00 | 40
+		// 04 | 03 | 02 | 00 | 40
 		currentValue = currentWSlice[3][2][0];
 		greaterWNeighborValue = greaterWSlice[3][2][0];
 		smallerWNeighborValue = smallerWSlice[3][2][0];
@@ -455,7 +455,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	// 04 | 03 | 02 | 01 | 41
+		// 04 | 03 | 02 | 01 | 41
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -471,7 +471,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 			changed = true;
 		}
-	// 04 | 03 | 02 | 02 | 42
+		// 04 | 03 | 02 | 02 | 42
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -545,7 +545,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-	//  w | 03 | 02 | 00 | 53
+			//  w | 03 | 02 | 00 | 53
 			long currentValue = currentWSlice[3][2][0];
 			long greaterWNeighborValue = greaterWSlice[3][2][0];
 			long smallerWNeighborValue = smallerWSlice[3][2][0];
@@ -559,7 +559,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
-	//  w | 03 | 02 | 01 | 54
+			//  w | 03 | 02 | 01 | 54
 			// reuse values obtained previously
 			long smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -575,7 +575,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
 			}
-	//  w | 03 | 02 | 02 | 55
+			//  w | 03 | 02 | 02 | 55
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -599,7 +599,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
-	//  w |  x | 02 | 00 | 67
+				//  w |  x | 02 | 00 | 67
 				currentValue = currentWSlice[x][2][0];
 				greaterWNeighborValue = greaterWSlice[x][2][0];
 				smallerWNeighborValue = smallerWSlice[x][2][0];
@@ -613,7 +613,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x | 02 | 01 | 68
+				//  w |  x | 02 | 01 | 68
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -629,7 +629,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x | 02 | 02 | 69
+				//  w |  x | 02 | 02 | 69
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -645,7 +645,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				}
 				int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
 				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
-	//  w |  x |  y | 00 | 67
+					//  w |  x |  y | 00 | 67
 					currentValue = currentWSlice[x][y][0];
 					greaterWNeighborValue = greaterWSlice[x][y][0];
 					smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -659,7 +659,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 							relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 						changed = true;
 					}
-	//  w |  x |  y | 01 | 77
+					//  w |  x |  y | 01 | 77
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -677,7 +677,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					}
 					int z = 2, zPlusOne = z + 1;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 81
+						//  w |  x |  y |  z | 81
 						// reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -693,7 +693,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 							changed = true;
 						}
 					}
-	//  w |  x |  y |  z | 78
+					//  w |  x |  y |  z | 78
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -709,7 +709,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
 					}
-	//  w |  x |  y |++z | 69
+					//  w |  x |  y |++z | 69
 					z = zPlusOne;
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
@@ -725,7 +725,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						changed = true;
 					}
 				}
-	//  w |  x |  y | 00 | 53
+				//  w |  x |  y | 00 | 53
 				currentValue = currentWSlice[x][y][0];
 				greaterWNeighborValue = greaterWSlice[x][y][0];
 				smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -739,7 +739,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x |  y | 01 | 70
+				//  w |  x |  y | 01 | 70
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -757,7 +757,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				}
 				int z = 2, zPlusOne = z + 1;
 				for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 79
+					//  w |  x |  y |  z | 79
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -774,7 +774,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						changed = true;
 					}
 				}
-	//  w |  x |  y |  z | 71
+				//  w |  x |  y |  z | 71
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -790,7 +790,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x |  y |++z | 55
+				//  w |  x |  y |++z | 55
 				z = zPlusOne;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
@@ -814,7 +814,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-	//  w |  x | 02 | 00 | 58
+			//  w |  x | 02 | 00 | 58
 			currentValue = currentWSlice[x][2][0];
 			greaterWNeighborValue = greaterWSlice[x][2][0];
 			smallerWNeighborValue = smallerWSlice[x][2][0];
@@ -828,7 +828,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
-	//  w |  x | 02 | 01 | 59
+			//  w |  x | 02 | 01 | 59
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -844,7 +844,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
 			}
-	//  w |  x | 02 | 02 | 60
+			//  w |  x | 02 | 02 | 60
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -860,7 +860,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 			}
 			int y = 3, yPlusOne = y + 1, yMinusOne = y - 1;
 			for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++) {
-	//  w |  x |  y | 00 | 58
+				//  w |  x |  y | 00 | 58
 				currentValue = currentWSlice[x][y][0];
 				greaterWNeighborValue = greaterWSlice[x][y][0];
 				smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -874,7 +874,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x |  y | 01 | 73
+				//  w |  x |  y | 01 | 73
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -892,7 +892,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				}
 				int z = 2, zPlusOne = z + 1;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 80
+					//  w |  x |  y |  z | 80
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -909,7 +909,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						changed = true;
 					}
 				}
-	//  w |  x |  y |  z | 74
+				//  w |  x |  y |  z | 74
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -925,7 +925,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x |  y |++z | 60
+				//  w |  x |  y |++z | 60
 				z = zPlusOne;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
@@ -941,7 +941,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					changed = true;
 				}
 			}
-	//  w |  x |  y | 00 | 40
+			//  w |  x |  y | 00 | 40
 			currentValue = currentWSlice[x][y][0];
 			greaterWNeighborValue = greaterWSlice[x][y][0];
 			smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -955,7 +955,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
-	//  w |  x |  y | 01 | 61
+			//  w |  x |  y | 01 | 61
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -973,7 +973,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 			}
 			int z = 2, zPlusOne = z + 1;
 			for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 75
+				//  w |  x |  y |  z | 75
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -990,7 +990,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					changed = true;
 				}
 			}
-	//  w |  x |  y |  z | 62
+			//  w |  x |  y |  z | 62
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1006,7 +1006,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
 			}
-	//  w |  x |  y |++z | 42
+			//  w |  x |  y |++z | 42
 			z = zPlusOne;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
@@ -1028,7 +1028,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 			xMinusOne = x;
 			x = xPlusOne;
 			for (y = 3, yMinusOne = y - 1, yPlusOne = y + 1; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
-	//  w |  x |  y | 00 | 45
+				//  w |  x |  y | 00 | 45
 				currentValue = currentWSlice[x][y][0];
 				greaterWNeighborValue = greaterWSlice[x][y][0];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][0];
@@ -1040,7 +1040,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x |  y | 01 | 64
+				//  w |  x |  y | 01 | 64
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1055,7 +1055,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 					changed = true;
 				}
 				for (z = 2, zPlusOne = z + 1; z != yMinusOne; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 76
+					//  w |  x |  y |  z | 76
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1070,7 +1070,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						changed = true;
 					}
 				}
-	//  w |  x |  y |  z | 65
+				//  w |  x |  y |  z | 65
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1084,7 +1084,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-	//  w |  x |  y |++z | 47
+				//  w |  x |  y |++z | 47
 				z = zPlusOne;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
@@ -1114,7 +1114,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		long[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
-	//  w | 00 | 00 | 00 | 06
+		//  w | 00 | 00 | 00 | 06
 		long currentValue = currentWSlice[0][0][0];
 		long greaterWNeighborValue = greaterWSlice[0][0][0];
 		long smallerWNeighborValue = smallerWSlice[0][0][0];
@@ -1123,7 +1123,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}		
-	//  w | 01 | 00 | 00 | 16
+		//  w | 01 | 00 | 00 | 16
 		// reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -1136,7 +1136,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w | 01 | 01 | 00 | 17
+		//  w | 01 | 01 | 00 | 17
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1149,7 +1149,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w | 01 | 01 | 01 | 18
+		//  w | 01 | 01 | 01 | 18
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1169,7 +1169,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int xMinusOne = x - 1;
 		boolean changed = false;
 		long[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
-	//  w |  x | 00 | 00 | 10
+		//  w |  x | 00 | 00 | 10
 		long currentValue = currentWSlice[x][0][0];
 		long greaterWNeighborValue = greaterWSlice[x][0][0];
 		long smallerXNeighborValue = currentWSlice[xMinusOne][0][0];
@@ -1178,7 +1178,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 01 | 00 | 25
+		//  w |  x | 01 | 00 | 25
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1191,7 +1191,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 01 | 01 | 26
+		//  w |  x | 01 | 01 | 26
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1211,7 +1211,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int coordMinusOne = coord - 1;
 		boolean changed = false;
 		long[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
-	//  w |  x |  y | 00 | 13
+		//  w |  x |  y | 00 | 13
 		long currentValue = currentWSlice[coord][coord][0];
 		long greaterWNeighborValue = greaterWSlice[coord][coord][0];
 		long smallerYNeighborValue = currentWSlice[coord][coordMinusOne][0];
@@ -1220,7 +1220,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y | 01 | 30
+		//  w |  x |  y | 01 | 30
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1235,7 +1235,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int z = 2;
 		int zPlusOne = z + 1;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 50
+			//  w |  x |  y |  z | 50
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1247,7 +1247,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				changed = true;
 			}
 		}
-	//  w |  x |  y |  z | 31
+		//  w |  x |  y |  z | 31
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1259,7 +1259,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y |++z | 15
+		//  w |  x |  y |++z | 15
 		z = zPlusOne;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
@@ -1279,7 +1279,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 			changed = true;
 		}
 		long[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
-	//  w | 02 | 00 | 00 | 32
+		//  w | 02 | 00 | 00 | 32
 		long currentValue = currentWSlice[2][0][0];
 		long greaterWNeighborValue = greaterWSlice[2][0][0];
 		long smallerWNeighborValue = smallerWSlice[2][0][0];
@@ -1290,7 +1290,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w | 02 | 01 | 00 | 33
+		//  w | 02 | 01 | 00 | 33
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1305,7 +1305,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w | 02 | 01 | 01 | 34
+		//  w | 02 | 01 | 01 | 34
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1319,7 +1319,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w | 02 | 02 | 00 | 35
+		//  w | 02 | 02 | 00 | 35
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;		
@@ -1331,7 +1331,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w | 02 | 02 | 01 | 36
+		//  w | 02 | 02 | 01 | 36
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1345,7 +1345,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w | 02 | 02 | 02 | 37
+		//  w | 02 | 02 | 02 | 37
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1365,7 +1365,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		long[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
-	//  w |  x | 00 | 00 | 19
+		//  w |  x | 00 | 00 | 19
 		long currentValue = currentWSlice[x][0][0];
 		long greaterWNeighborValue = greaterWSlice[x][0][0];
 		long smallerWNeighborValue = smallerWSlice[x][0][0];
@@ -1377,7 +1377,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 01 | 00 | 38
+		//  w |  x | 01 | 00 | 38
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1392,7 +1392,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 01 | 01 | 39
+		//  w |  x | 01 | 01 | 39
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1414,7 +1414,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		long[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];	
 		boolean changed = false;		
-	//  w |  x |  y | 00 | 22
+		//  w |  x |  y | 00 | 22
 		long currentValue = currentWSlice[coord][coord][0];
 		long greaterWNeighborValue = greaterWSlice[coord][coord][0];
 		long smallerWNeighborValue = smallerWSlice[coord][coord][0];
@@ -1426,7 +1426,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y | 01 | 43
+		//  w |  x |  y | 01 | 43
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1443,7 +1443,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int z = 2;
 		int zPlusOne = z + 1;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 63
+			//  w |  x |  y |  z | 63
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1458,7 +1458,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				changed = true;
 			}
 		}
-	//  w |  x |  y |  z | 44
+		//  w |  x |  y |  z | 44
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1472,7 +1472,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y |++z | 24
+		//  w |  x |  y |++z | 24
 		z = zPlusOne;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
@@ -1491,7 +1491,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}		
-	//  w |  x | 02 | 00 | 45
+		//  w |  x | 02 | 00 | 45
 		currentValue = currentWSlice[coord][2][0];
 		greaterWNeighborValue = greaterWSlice[coord][2][0];
 		long smallerXNeighborValue = currentWSlice[coordMinusOne][2][0];
@@ -1503,7 +1503,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 02 | 01 | 46
+		//  w |  x | 02 | 01 | 46
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1517,7 +1517,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 02 | 02 | 47
+		//  w |  x | 02 | 02 | 47
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1538,7 +1538,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int y = x - 1, xMinusOne = x - 1, xMinusTwo = x - 2, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
 		long[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
-	//  w |  x |  y | 00 | 27
+		//  w |  x |  y | 00 | 27
 		long currentValue = currentWSlice[x][y][0];
 		long greaterWNeighborValue = greaterWSlice[x][y][0];
 		long smallerXNeighborValue = currentWSlice[xMinusOne][y][0];
@@ -1550,7 +1550,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y | 01 | 48
+		//  w |  x |  y | 01 | 48
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1567,7 +1567,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int z = 2;
 		int zPlusOne = z + 1;
 		for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 66
+			//  w |  x |  y |  z | 66
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1582,7 +1582,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				changed = true;
 			}
 		}
-	//  w |  x |  y |  z | 49
+		//  w |  x |  y |  z | 49
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1596,7 +1596,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y |++z | 29
+		//  w |  x |  y |++z | 29
 		z = zPlusOne;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
@@ -1621,7 +1621,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		long[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
-	//  w |  x | 00 | 00 | 32
+		//  w |  x | 00 | 00 | 32
 		long currentValue = currentWSlice[x][0][0];
 		long greaterWNeighborValue = greaterWSlice[x][0][0];
 		long smallerWNeighborValue = smallerWSlice[x][0][0];
@@ -1633,7 +1633,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 01 | 00 | 51
+		//  w |  x | 01 | 00 | 51
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1648,7 +1648,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x | 01 | 01 | 52
+		//  w |  x | 01 | 01 | 52
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1670,7 +1670,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
 		long[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
-	//  w |  x |  y | 00 | 35
+		//  w |  x |  y | 00 | 35
 		long currentValue = currentWSlice[coord][coord][0];
 		long greaterWNeighborValue = greaterWSlice[coord][coord][0];
 		long smallerWNeighborValue = smallerWSlice[coord][coord][0];
@@ -1682,7 +1682,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y | 01 | 56
+		//  w |  x |  y | 01 | 56
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1699,7 +1699,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		int z = 2;
 		int zPlusOne = z + 1;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
-	//  w |  x |  y |  z | 72
+			//  w |  x |  y |  z | 72
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1714,7 +1714,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				changed = true;
 			}
 		}
-	//  w |  x |  y |  z | 57
+		//  w |  x |  y |  z | 57
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1728,7 +1728,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-	//  w |  x |  y |++z | 37
+		//  w |  x |  y |++z | 37
 		z = zPlusOne;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
@@ -1743,7 +1743,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		}
 		return changed;
 	}
-	
+
 	private static boolean topplePositionType1(long currentValue, long gWValue, long[][][] newCurrentWSlice, long[][][] newGreaterWSlice) {
 		boolean toppled = false;
 		if (gWValue < currentValue) {
@@ -1763,129 +1763,129 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	}
 
 	private static boolean topplePositionType2(long currentValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = 0;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = 0;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 8;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 6;
-	        relevantNeighborCount += 6;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 0;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = 0;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 8;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 6;
+			relevantNeighborCount += 6;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType3(long currentValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = 0;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 6;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = 1;
-	        nc[2] = 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 3;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
-	        relevantNeighborCount += 4;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, 1, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 0;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 6;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 3;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
+			relevantNeighborCount += 4;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, 1, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType4(long currentValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = 1;
-	        nc[2] = 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = 1;
-	        nc[2] = 1;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, 1, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 1;
+			nc[2] = 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 1;
+			nc[3] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, 1, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType5(long currentValue, long gWValue, long sZValue, long[][][] newCurrentWSlice, long[][][] newGreaterWSlice) {
@@ -1965,484 +1965,484 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	}
 
 	private static boolean topplePositionType6(long currentValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = 0;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = 0;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 6;
-	        relevantNeighborCount += 6;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = 0;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = 0;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 6;
+			relevantNeighborCount += 6;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType7(int x, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
-	        relevantNeighborCount += 4;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
+			relevantNeighborCount += 4;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType8(int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord + 1;
-	        nc[2] = coord;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord - 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType9(int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord + 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = coord - 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = coord - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType10(int x, long currentValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
-	        relevantNeighborCount += 4;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
+			relevantNeighborCount += 4;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType11(int x, int y, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType12(int x, int coord, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord + 1;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord - 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord + 1;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType13(int coord, long currentValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord - 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType14(int coord, int z, long currentValue, long gWValue, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord - 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z + 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z - 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z + 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType15(int coord, long currentValue, long gWValue, long sZValue, long[][][] newCurrentWSlice, long[][][] newGreaterWSlice) {
-		 // 4*GW, 4*SZ | 15 | 15
+		// 4*GW, 4*SZ | 15 | 15
 		boolean toppled = false;
 		if (sZValue < currentValue) {
 			if (gWValue < currentValue) {
@@ -2520,1202 +2520,1202 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	}
 
 	private static boolean topplePositionType16(int x, int y, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType17(int x, int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord + 1;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord - 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord + 1;
+			nc[3] = coord;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType18(int coord, int z, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord + 1;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord - 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z + 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z - 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sWShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z + 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType19(int x, int y, int z, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z + 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z - 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sXShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sYShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z + 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = gZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = sZShareMultiplier;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType20(int x, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = 0;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
-	        relevantNeighborCount += 4;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = 0;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 4;
+			relevantNeighborCount += 4;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType21(int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord + 1;
-	        nc[2] = coord;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord - 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType22(int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord + 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = coord - 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = coord - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType23(int x, int y, int z, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, long[][][][] newWSlices) {
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = 1;
-	        relevantNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sWShareMultiplier;
-	        relevantNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = gXShareMultiplier;
-	        relevantNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sXShareMultiplier;
-	        relevantNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = gYShareMultiplier;
-	        relevantNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sYShareMultiplier;
-	        relevantNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z + 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = gZShareMultiplier;
-	        relevantNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z - 1;
-	        relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
-	        relevantNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = 1;
+			relevantNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sWShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = gXShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sXShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = gYShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sYShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z + 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = gZShareMultiplier;
+			relevantNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z - 1;
+			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
+			relevantNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
 	private static boolean topplePositionType24(int x, int y, long currentValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType25(int x, int coord, long currentValue, long gWValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord + 1;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord - 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord + 1;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType26(int coord, int z, long currentValue, long gWValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord - 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
-	        relevantNeighborCount += 3;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z + 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z - 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 3;
+			relevantNeighborCount += 3;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z + 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType27(int x, int y, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = 0;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = 0;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType28(int x, int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = coord;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord + 1;
-	        nc[3] = coord;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = coord;
-	        nc[3] = coord - 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = coord;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord + 1;
+			nc[3] = coord;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = coord;
+			nc[3] = coord - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType29(int coord, int z, long currentValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord + 1;
-	        nc[2] = coord;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord - 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z + 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = coord;
-	        nc[2] = coord;
-	        nc[3] = z - 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 0;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord + 1;
+			nc[2] = coord;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord - 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z + 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = coord;
+			nc[2] = coord;
+			nc[3] = z - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType30(int x, int y, int z, long currentValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][][] newWSlices) {
-	    int relevantAsymmetricNeighborCount = 0;
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-	        relevantNeighborCount += 2;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = z;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z + 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z - 1;
-	        relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-	        relevantNeighborCount += 1;
-	        relevantAsymmetricNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		int relevantAsymmetricNeighborCount = 0;
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+			relevantNeighborCount += 2;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = z;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z + 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z - 1;
+			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+			relevantNeighborCount += 1;
+			relevantAsymmetricNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType31(int x, int y, int z, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, long[][][][] newWSlices) {
-	    int relevantNeighborCount = 0;
-	    if (gWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 2;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantNeighborCount++;
-	    }
-	    if (sWValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sWValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 0;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantNeighborCount++;
-	    }
-	    if (gXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x + 1;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantNeighborCount++;
-	    }
-	    if (sXValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sXValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x - 1;
-	        nc[2] = y;
-	        nc[3] = z;
-	        relevantNeighborCount++;
-	    }
-	    if (gYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y + 1;
-	        nc[3] = z;
-	        relevantNeighborCount++;
-	    }
-	    if (sYValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sYValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y - 1;
-	        nc[3] = z;
-	        relevantNeighborCount++;
-	    }
-	    if (gZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z + 1;
-	        relevantNeighborCount++;
-	    }
-	    if (sZValue < currentValue) {
-	        relevantAsymmetricNeighborValues[relevantNeighborCount] = sZValue;
-	        int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
-	        nc[0] = 1;
-	        nc[1] = x;
-	        nc[2] = y;
-	        nc[3] = z - 1;
-	        relevantNeighborCount++;
-	    }
-	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantNeighborCount);
+		int relevantNeighborCount = 0;
+		if (gWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 2;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z;
+			relevantNeighborCount++;
+		}
+		if (sWValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sWValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 0;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z;
+			relevantNeighborCount++;
+		}
+		if (gXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x + 1;
+			nc[2] = y;
+			nc[3] = z;
+			relevantNeighborCount++;
+		}
+		if (sXValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sXValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x - 1;
+			nc[2] = y;
+			nc[3] = z;
+			relevantNeighborCount++;
+		}
+		if (gYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y + 1;
+			nc[3] = z;
+			relevantNeighborCount++;
+		}
+		if (sYValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sYValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y - 1;
+			nc[3] = z;
+			relevantNeighborCount++;
+		}
+		if (gZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = gZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z + 1;
+			relevantNeighborCount++;
+		}
+		if (sZValue < currentValue) {
+			relevantAsymmetricNeighborValues[relevantNeighborCount] = sZValue;
+			int[] nc = relevantAsymmetricNeighborCoords[relevantNeighborCount];
+			nc[0] = 1;
+			nc[1] = x;
+			nc[2] = y;
+			nc[3] = z - 1;
+			relevantNeighborCount++;
+		}
+		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantNeighborCount);
 	}
-	
+
 	private static boolean topplePosition(long[][][][] newWSlices, long value, int x, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
-			case 3:
-				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, 
-						neighborCoords, 3);
-				break;
-			case 2:
-				long n0Val = neighborValues[0], n1Val = neighborValues[1];
-				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
-				if (n0Val == n1Val) {
-					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					newWSlices[1][x][y][z] += value - toShare + share + toShare%3;
-				} else if (n0Val < n1Val) {
-					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
-				} else {
-					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
-				}				
-				break;
-			case 1:
-				long toShare = value - neighborValues[0];
-				long share = toShare/2;
+		case 3:
+			Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, 
+					neighborCoords, 3);
+			break;
+		case 2:
+			long n0Val = neighborValues[0], n1Val = neighborValues[1];
+			int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
+			if (n0Val == n1Val) {
+				// n0Val = n1Val < value
+				long toShare = value - n0Val; 
+				long share = toShare/3;
 				if (share != 0) {
 					toppled = true;
-					value = value - toShare + toShare%2 + share;
-					int[] nc = neighborCoords[0];
-					newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share;
 				}
-				// no break
-			case 0:
-				newWSlices[1][x][y][z] += value;
-				break;
-			default: // 8, 7, 6, 5, 4
-				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, neighborCoords, 
-						neighborCount);
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				newWSlices[1][x][y][z] += value - toShare + share + toShare%3;
+			} else if (n0Val < n1Val) {
+				// n0Val < n1Val < value
+				long toShare = value - n1Val; 
+				long share = toShare/3;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n0Val;
+				share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
+			} else {
+				// n1Val < n0Val < value
+				long toShare = value - n0Val; 
+				long share = toShare/3;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n1Val;
+				share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
+			}				
+			break;
+		case 1:
+			long toShare = value - neighborValues[0];
+			long share = toShare/2;
+			if (share != 0) {
+				toppled = true;
+				value = value - toShare + toShare%2 + share;
+				int[] nc = neighborCoords[0];
+				newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share;
+			}
+			// no break
+		case 0:
+			newWSlices[1][x][y][z] += value;
+			break;
+		default: // 8, 7, 6, 5, 4
+			Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, neighborCoords, 
+					neighborCount);
 		}
 		return toppled;
 	}
-	
+
 	private static boolean topplePositionSortedNeighbors(long[][][][] newWSlices, long value, int x, int y, int z, 
 			long[] neighborValues, int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
@@ -3753,93 +3753,93 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		newWSlices[1][x][y][z] += value;
 		return toppled;
 	}
-	
+
 	private static boolean topplePosition(long[][][][] newWSlices, long value, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
-			case 3:
-				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, 
-						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
-				break;
-			case 2:
-				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
-				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
-				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
-				int shareCount = neighborCount + 1;
-				if (n0Val == n1Val) {
-					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					newWSlices[1][x][y][z] += value - toShare + share + toShare%shareCount;
-				} else if (n0Val < n1Val) {
-					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
-				} else {
-					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
-				}				
-				break;
-			case 1:
-				shareCount = neighborCount + 1;
-				long toShare = value - asymmetricNeighborValues[0];
+		case 3:
+			Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, 
+					asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+			break;
+		case 2:
+			long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+			int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
+			int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
+			int shareCount = neighborCount + 1;
+			if (n0Val == n1Val) {
+				// n0Val = n1Val < value
+				long toShare = value - n0Val; 
 				long share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
-					value = value - toShare + toShare%shareCount + share;
-					int[] nc = asymmetricNeighborCoords[0];
-					newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share * asymmetricNeighborShareMultipliers[0];
 				}
-				// no break
-			case 0:
-				newWSlices[1][x][y][z] += value;
-				break;
-			default: // 8, 7, 6, 5, 4
-				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
-						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
-						asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				newWSlices[1][x][y][z] += value - toShare + share + toShare%shareCount;
+			} else if (n0Val < n1Val) {
+				// n0Val < n1Val < value
+				long toShare = value - n1Val; 
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				shareCount -= asymmetricNeighborSymmetryCounts[1];
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n0Val;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+			} else {
+				// n1Val < n0Val < value
+				long toShare = value - n0Val; 
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				shareCount -= asymmetricNeighborSymmetryCounts[0];
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n1Val;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+			}				
+			break;
+		case 1:
+			shareCount = neighborCount + 1;
+			long toShare = value - asymmetricNeighborValues[0];
+			long share = toShare/shareCount;
+			if (share != 0) {
+				toppled = true;
+				value = value - toShare + toShare%shareCount + share;
+				int[] nc = asymmetricNeighborCoords[0];
+				newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share * asymmetricNeighborShareMultipliers[0];
+			}
+			// no break
+		case 0:
+			newWSlices[1][x][y][z] += value;
+			break;
+		default: // 8, 7, 6, 5, 4
+			Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
+					asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+					asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;
 	}
-	
+
 	private static boolean topplePositionSortedNeighbors(long[][][][] newWSlices, long value, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
@@ -3878,88 +3878,88 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		newWSlices[1][x][y][z] += value;
 		return toppled;
 	}
-	
+
 	private static boolean topplePosition(long[][][][] newWSlices, long value, int x, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
-			case 3:
-				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, 
-						neighborCoords, neighborShareMultipliers, 3);
-				break;
-			case 2:
-				long n0Val = neighborValues[0], n1Val = neighborValues[1];
-				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
-				int n0Mult = neighborShareMultipliers[0], n1Mult = neighborShareMultipliers[1];
-				if (n0Val == n1Val) {
-					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					newWSlices[1][x][y][z] += value - toShare + share + toShare%3;
-				} else if (n0Val < n1Val) {
-					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
-				} else {
-					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/3;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/2;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
-				}				
-				break;
-			case 1:
-				long toShare = value - neighborValues[0];
-				long share = toShare/2;
+		case 3:
+			Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, 
+					neighborCoords, neighborShareMultipliers, 3);
+			break;
+		case 2:
+			long n0Val = neighborValues[0], n1Val = neighborValues[1];
+			int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
+			int n0Mult = neighborShareMultipliers[0], n1Mult = neighborShareMultipliers[1];
+			if (n0Val == n1Val) {
+				// n0Val = n1Val < value
+				long toShare = value - n0Val; 
+				long share = toShare/3;
 				if (share != 0) {
 					toppled = true;
-					value = value - toShare + toShare%2 + share;
-					int[] nc = neighborCoords[0];
-					newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share * neighborShareMultipliers[0];
 				}
-				// no break
-			case 0:
-				newWSlices[1][x][y][z] += value;
-				break;
-			default: // 8, 7, 6, 5, 4
-				Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords, 
-						neighborShareMultipliers);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, neighborCoords, 
-						neighborShareMultipliers, neighborCount);
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				newWSlices[1][x][y][z] += value - toShare + share + toShare%3;
+			} else if (n0Val < n1Val) {
+				// n0Val < n1Val < value
+				long toShare = value - n1Val; 
+				long share = toShare/3;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n0Val;
+				share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
+			} else {
+				// n1Val < n0Val < value
+				long toShare = value - n0Val; 
+				long share = toShare/3;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share*n0Mult;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n1Val;
+				share = toShare/2;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share*n1Mult;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%2;
+			}				
+			break;
+		case 1:
+			long toShare = value - neighborValues[0];
+			long share = toShare/2;
+			if (share != 0) {
+				toppled = true;
+				value = value - toShare + toShare%2 + share;
+				int[] nc = neighborCoords[0];
+				newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share * neighborShareMultipliers[0];
+			}
+			// no break
+		case 0:
+			newWSlices[1][x][y][z] += value;
+			break;
+		default: // 8, 7, 6, 5, 4
+			Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords, 
+					neighborShareMultipliers);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, neighborValues, neighborCoords, 
+					neighborShareMultipliers, neighborCount);
 		}
 		return toppled;
 	}
-	
+
 	private static boolean topplePositionSortedNeighbors(long[][][][] newWSlices, long value, int x, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
@@ -3997,92 +3997,92 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		newWSlices[1][x][y][z] += value;
 		return toppled;
 	}
-	
+
 	private static boolean topplePosition(long[][][][] newWSlices, long value, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
-			case 3:
-				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, 
-						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
-				break;
-			case 2:
-				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
-				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
-				int shareCount = neighborCount + 1;
-				if (n0Val == n1Val) {
-					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					newWSlices[1][x][y][z] += value - toShare + share + toShare%shareCount;
-				} else if (n0Val < n1Val) {
-					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n0Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
-				} else {
-					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					long currentRemainingValue = value - neighborCount*share;
-					toShare = currentRemainingValue - n1Val;
-					share = toShare/shareCount;
-					if (share != 0) {
-						toppled = true;
-					}
-					newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
-					newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
-				}				
-				break;
-			case 1:
-				shareCount = neighborCount + 1;
-				long toShare = value - asymmetricNeighborValues[0];
+		case 3:
+			Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, 
+					asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+			break;
+		case 2:
+			long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+			int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
+			int shareCount = neighborCount + 1;
+			if (n0Val == n1Val) {
+				// n0Val = n1Val < value
+				long toShare = value - n0Val; 
 				long share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
-					value = value - toShare + toShare%shareCount + share;
-					int[] nc = asymmetricNeighborCoords[0];
-					newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share;
 				}
-				// no break
-			case 0:
-				newWSlices[1][x][y][z] += value;
-				break;
-			default: // 8, 7, 6, 5, 4
-				Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
-						asymmetricNeighborSymmetryCounts);
-				toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
-						asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				newWSlices[1][x][y][z] += value - toShare + share + toShare%shareCount;
+			} else if (n0Val < n1Val) {
+				// n0Val < n1Val < value
+				long toShare = value - n1Val; 
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				shareCount -= asymmetricNeighborSymmetryCounts[1];
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n0Val;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+			} else {
+				// n1Val < n0Val < value
+				long toShare = value - n0Val; 
+				long share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n0Coords[0]][n0Coords[1]][n0Coords[2]][n0Coords[3]] += share;
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				shareCount -= asymmetricNeighborSymmetryCounts[0];
+				long currentRemainingValue = value - neighborCount*share;
+				toShare = currentRemainingValue - n1Val;
+				share = toShare/shareCount;
+				if (share != 0) {
+					toppled = true;
+				}
+				newWSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]][n1Coords[3]] += share;
+				newWSlices[1][x][y][z] += currentRemainingValue - toShare + share + toShare%shareCount;
+			}				
+			break;
+		case 1:
+			shareCount = neighborCount + 1;
+			long toShare = value - asymmetricNeighborValues[0];
+			long share = toShare/shareCount;
+			if (share != 0) {
+				toppled = true;
+				value = value - toShare + toShare%shareCount + share;
+				int[] nc = asymmetricNeighborCoords[0];
+				newWSlices[nc[0]][nc[1]][nc[2]][nc[3]] += share;
+			}
+			// no break
+		case 0:
+			newWSlices[1][x][y][z] += value;
+			break;
+		default: // 8, 7, 6, 5, 4
+			Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
+					asymmetricNeighborSymmetryCounts);
+			toppled = topplePositionSortedNeighbors(newWSlices, value, x, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+					asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;
 	}
-	
+
 	private static boolean topplePositionSortedNeighbors(long[][][][] newWSlices, long value, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
@@ -4121,7 +4121,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		newWSlices[1][x][y][z] += value;
 		return toppled;
 	}
-	
+
 	@Override
 	public long getFromPosition(int w, int x, int y, int z){	
 		if (x < 0) x = -x;
@@ -4154,12 +4154,12 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		} while (!sorted);
 		return grid[w][x][y][z];
 	}
-	
+
 	@Override
 	public long getFromAsymmetricPosition(int w, int x, int y, int z){	
 		return grid[w][x][y][z];
 	}
-	
+
 	@Override
 	public int getMinW() {
 		return -maxW;
@@ -4199,12 +4199,12 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	public int getMaxZ() {
 		return maxW;
 	}
-	
+
 	@Override
 	public int getAsymmetricMinW() {
 		return 0;
 	}
-	
+
 	@Override
 	public int getAsymmetricMinW(int x, int y, int z) {
 		return Math.max(Math.max(x, y), z);
@@ -4214,12 +4214,12 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	public int getAsymmetricMaxW(int x, int y, int z) {
 		return maxW;
 	}
-	
+
 	@Override
 	public int getAsymmetricMaxW() {
 		return maxW;
 	}
-	
+
 	@Override
 	public int getAsymmetricMinX() {
 		return 0;
@@ -4229,22 +4229,22 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	public int getAsymmetricMaxX() {
 		return maxW;
 	}
-	
+
 	@Override
 	public int getAsymmetricMinY() {
 		return 0;
 	}
-	
+
 	@Override
 	public int getAsymmetricMaxY() {
 		return maxW;
 	}
-	
+
 	@Override
 	public int getAsymmetricMinZ() {
 		return 0;
 	}
-	
+
 	@Override
 	public int getAsymmetricMaxZ() {
 		return maxW;
@@ -4389,7 +4389,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	public int getAsymmetricMaxZ(int w, int x, int y) {
 		return Math.min(getAsymmetricMaxZ(), y);
 	}
-	
+
 	@Override
 	public int getAsymmetricMinYAtW(int w) {
 		return 0;
@@ -4414,7 +4414,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	public long getStep() {
 		return step;
 	}
-	
+
 	/**
 	 * Returns the initial value
 	 * 
@@ -4423,7 +4423,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	public long getIntialValue() {
 		return initialValue;
 	}
-	
+
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		Utils.serializeToFile(this, backupPath, backupName);
@@ -4433,10 +4433,10 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 	public String getName() {
 		return "Aether4D";
 	}
-	
+
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
 	}
-	
+
 }
