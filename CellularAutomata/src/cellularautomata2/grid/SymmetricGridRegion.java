@@ -111,40 +111,44 @@ public interface SymmetricGridRegion extends GridRegion {
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
-		Integer[] partialCoordinates = new Integer[dimension];
-		PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
-		int[] upperBounds = new int[dimension];
-		int[] lowerBounds = new int[dimension];
-		int currentAxis = dimension - 1;
-		boolean isBeginningOfLoop = true;
-		while (currentAxis < dimension) {
-			if (currentAxis == 0) {
-				int lowerBound = getLowerBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
-				int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
-				for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
-					coordinates[0] = currentCoordinate;
-					command.execute(immutableCoordinates);
-				}
-				isBeginningOfLoop = false;
-				currentAxis++;
-			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
-				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
-				coordinates[currentAxis] = localLowerBound;
-				partialCoordinates[currentAxis] = localLowerBound;
-				currentAxis--;
-			} else {
-				int currentCoordinate = coordinates[currentAxis];
-				if (currentCoordinate < upperBounds[currentAxis]) {
-					isBeginningOfLoop = true;
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
-					partialCoordinates[currentAxis] = currentCoordinate;
+		if (dimension == 0) {
+			command.execute(immutableCoordinates);
+		} else {
+			Integer[] partialCoordinates = new Integer[dimension];
+			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
+			int[] upperBounds = new int[dimension];
+			int[] lowerBounds = new int[dimension];
+			int currentAxis = dimension - 1;
+			boolean isBeginningOfLoop = true;
+			while (currentAxis < dimension) {
+				if (currentAxis == 0) {
+					int lowerBound = getLowerBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
+					int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
+					for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
+						coordinates[0] = currentCoordinate;
+						command.execute(immutableCoordinates);
+					}
+					isBeginningOfLoop = false;
+					currentAxis++;
+				} else if (isBeginningOfLoop) {
+					int localLowerBound = getLowerBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
+					lowerBounds[currentAxis] = localLowerBound;
+					upperBounds[currentAxis] = getUpperBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
+					coordinates[currentAxis] = localLowerBound;
+					partialCoordinates[currentAxis] = localLowerBound;
 					currentAxis--;
 				} else {
-					partialCoordinates[currentAxis] = null;
-					currentAxis++;
+					int currentCoordinate = coordinates[currentAxis];
+					if (currentCoordinate < upperBounds[currentAxis]) {
+						isBeginningOfLoop = true;
+						currentCoordinate++;
+						coordinates[currentAxis] = currentCoordinate;
+						partialCoordinates[currentAxis] = currentCoordinate;
+						currentAxis--;
+					} else {
+						partialCoordinates[currentAxis] = null;
+						currentAxis++;
+					}
 				}
 			}
 		}
@@ -161,45 +165,49 @@ public interface SymmetricGridRegion extends GridRegion {
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
-		Integer[] partialCoordinates = new Integer[dimension];
-		PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
-		int[] upperBounds = new int[dimension];
-		int[] lowerBounds = new int[dimension];
-		int currentAxis = dimension - 1;
-		boolean isBeginningOfLoop = true;
-		while (currentAxis < dimension) {
-			if (currentAxis == 0) {
-				int lowerBound = getLowerBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
-				int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
-				int currentCoordinate = lowerBound;
-				coordinates[0] = currentCoordinate;
-				if (!Utils.isEvenPosition(coordinates)) {
-					currentCoordinate++;
-				}
-				for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
+		if (dimension == 0) {
+			command.execute(immutableCoordinates);
+		} else {
+			Integer[] partialCoordinates = new Integer[dimension];
+			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
+			int[] upperBounds = new int[dimension];
+			int[] lowerBounds = new int[dimension];
+			int currentAxis = dimension - 1;
+			boolean isBeginningOfLoop = true;
+			while (currentAxis < dimension) {
+				if (currentAxis == 0) {
+					int lowerBound = getLowerBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
+					int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
+					int currentCoordinate = lowerBound;
 					coordinates[0] = currentCoordinate;
-					command.execute(immutableCoordinates);
-				}
-				isBeginningOfLoop = false;
-				currentAxis++;
-			} else if (isBeginningOfLoop) {
-				int localLowerBound = getLowerBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
-				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getUpperBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
-				coordinates[currentAxis] = localLowerBound;
-				partialCoordinates[currentAxis] = localLowerBound;
-				currentAxis--;
-			} else {
-				int currentCoordinate = coordinates[currentAxis];
-				if (currentCoordinate < upperBounds[currentAxis]) {
-					isBeginningOfLoop = true;
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
-					partialCoordinates[currentAxis] = currentCoordinate;
+					if (!Utils.isEvenPosition(coordinates)) {
+						currentCoordinate++;
+					}
+					for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
+						coordinates[0] = currentCoordinate;
+						command.execute(immutableCoordinates);
+					}
+					isBeginningOfLoop = false;
+					currentAxis++;
+				} else if (isBeginningOfLoop) {
+					int localLowerBound = getLowerBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
+					lowerBounds[currentAxis] = localLowerBound;
+					upperBounds[currentAxis] = getUpperBoundOfAsymmetricRegion(currentAxis, immutablePartialCoordinates);
+					coordinates[currentAxis] = localLowerBound;
+					partialCoordinates[currentAxis] = localLowerBound;
 					currentAxis--;
 				} else {
-					partialCoordinates[currentAxis] = null;
-					currentAxis++;
+					int currentCoordinate = coordinates[currentAxis];
+					if (currentCoordinate < upperBounds[currentAxis]) {
+						isBeginningOfLoop = true;
+						currentCoordinate++;
+						coordinates[currentAxis] = currentCoordinate;
+						partialCoordinates[currentAxis] = currentCoordinate;
+						currentAxis--;
+					} else {
+						partialCoordinates[currentAxis] = null;
+						currentAxis++;
+					}
 				}
 			}
 		}

@@ -37,28 +37,22 @@ public class CodeGeneration {
 		int currentAxis = dimensionMinusOne;
 		while (currentAxis > -1) {
 			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinate = coordinates[currentAxis - 1];//TODO breaks here for 1D
-				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
-					coordinates[currentAxis] = currentCoordinate;
-					getAnisotropicVonNeumannNeighborhoodTypes(coordinates, neighborhoodTypes);
-				}
-				currentAxis--;
+				getAnisotropicVonNeumannNeighborhoodTypes(coordinates, neighborhoodTypes);
+			}
+			int currentCoordinate = coordinates[currentAxis];
+			int max;
+			if (currentAxis == 0) {
+				max = sizeMinusOne;
 			} else {
-				int currentCoordinate = coordinates[currentAxis];
-				int max;
-				if (currentAxis == 0) {
-					max = sizeMinusOne;
-				} else {
-					max = coordinates[currentAxis - 1];
-				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
-					currentAxis = dimensionMinusOne;
-				} else {
-					coordinates[currentAxis] = 0;
-					currentAxis--;
-				}
+				max = coordinates[currentAxis - 1];
+			}
+			if (currentCoordinate < max) {
+				currentCoordinate++;
+				coordinates[currentAxis] = currentCoordinate;
+				currentAxis = dimensionMinusOne;
+			} else {
+				coordinates[currentAxis] = 0;
+				currentAxis--;
 			}
 		}
 		for (int i = 0, num = 1; i < neighborhoodTypes.size(); i = num, num++) {
@@ -428,34 +422,28 @@ public class CodeGeneration {
 		boolean printed = false;
 		while (currentAxis > -1 && !printed) {
 			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinate = coordinates[currentAxis - 1];//TODO breaks here for 1D
-				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate && !printed; currentCoordinate++) {
-					coordinates[currentAxis] = currentCoordinate;
-					if (Arrays.equals(coordinates, coords)) {
-						System.out.println(header);
-						printAnisotropicPositionVonNeumannNeighborhood(coordinates, neighborhoodTypesA, neighborhoodTypesB, hideNeighborhood, hideTypeB);
-						printed = true;
-					} else {
-						getAnisotropicPositionVonNeumannNeighborhoodTypes(coordinates, neighborhoodTypesA, neighborhoodTypesB);
-					}
+				if (Arrays.equals(coordinates, coords)) {
+					System.out.println(header);
+					printAnisotropicPositionVonNeumannNeighborhood(coordinates, neighborhoodTypesA, neighborhoodTypesB, hideNeighborhood, hideTypeB);
+					printed = true;
+				} else {
+					getAnisotropicPositionVonNeumannNeighborhoodTypes(coordinates, neighborhoodTypesA, neighborhoodTypesB);
 				}
-				currentAxis--;
+			}
+			int currentCoordinate = coordinates[currentAxis];
+			int max;
+			if (currentAxis == 0) {
+				max = sizeMinusOne;
 			} else {
-				int currentCoordinate = coordinates[currentAxis];
-				int max;
-				if (currentAxis == 0) {
-					max = sizeMinusOne;
-				} else {
-					max = coordinates[currentAxis - 1];
-				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
-					currentAxis = dimensionMinusOne;
-				} else {
-					coordinates[currentAxis] = 0;
-					currentAxis--;
-				}
+				max = coordinates[currentAxis - 1];
+			}
+			if (currentCoordinate < max) {
+				currentCoordinate++;
+				coordinates[currentAxis] = currentCoordinate;
+				currentAxis = dimensionMinusOne;
+			} else {
+				coordinates[currentAxis] = 0;
+				currentAxis--;
 			}
 		}
 	}
@@ -492,30 +480,23 @@ public class CodeGeneration {
 		int currentAxis = dimensionMinusOne;
 		while (currentAxis > -1) {
 			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinate = coordinates[currentAxis - 1];//TODO breaks here for 1D
-				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
-					coordinates[currentAxis] = currentCoordinate;
-					printAnisotropicPositionVonNeumannNeighborhood(coordinates, neighborhoodTypesA, neighborhoodTypesB, hideNeighborhood, hideTypeB);
-				}
+				printAnisotropicPositionVonNeumannNeighborhood(coordinates, neighborhoodTypesA, neighborhoodTypesB, hideNeighborhood, hideTypeB);
+			}
+			int currentCoordinate = coordinates[currentAxis];
+			int max;
+			if (currentAxis == 0) {
+				max = sizeMinusOne;
+			} else {
+				max = coordinates[currentAxis - 1];
+			}
+			if (currentCoordinate < max) {
+				currentCoordinate++;
+				coordinates[currentAxis] = currentCoordinate;
+				currentAxis = dimensionMinusOne;
+			} else {
+				coordinates[currentAxis] = 0;
 				System.out.println();
 				currentAxis--;
-			} else {
-				int currentCoordinate = coordinates[currentAxis];
-				int max;
-				if (currentAxis == 0) {
-					max = sizeMinusOne;
-				} else {
-					max = coordinates[currentAxis - 1];
-				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
-					currentAxis = dimensionMinusOne;
-				} else {
-					coordinates[currentAxis] = 0;
-					System.out.println();
-					currentAxis--;
-				}
 			}
 		}
 		System.out.println("Type A count: " + neighborhoodTypesA.size());
@@ -539,28 +520,22 @@ public class CodeGeneration {
 		int currentAxis = dimensionMinusOne;
 		while (currentAxis > -1) {
 			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinate = coordinates[currentAxis - 1];//TODO breaks here for 1D
-				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
-					coordinates[currentAxis] = currentCoordinate;
-					getAnisotropicVonNeumannNeighborhoodTypeMap(coordinates, neighborhoodTypesA, neighborhoodTypesB, typesMap);
-				}
-				currentAxis--;
+				getAnisotropicVonNeumannNeighborhoodTypeMap(coordinates, neighborhoodTypesA, neighborhoodTypesB, typesMap);
+			}
+			int currentCoordinate = coordinates[currentAxis];
+			int max;
+			if (currentAxis == 0) {
+				max = sizeMinusOne;
 			} else {
-				int currentCoordinate = coordinates[currentAxis];
-				int max;
-				if (currentAxis == 0) {
-					max = sizeMinusOne;
-				} else {
-					max = coordinates[currentAxis - 1];
-				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
-					currentAxis = dimensionMinusOne;
-				} else {
-					coordinates[currentAxis] = 0;
-					currentAxis--;
-				}
+				max = coordinates[currentAxis - 1];
+			}
+			if (currentCoordinate < max) {
+				currentCoordinate++;
+				coordinates[currentAxis] = currentCoordinate;
+				currentAxis = dimensionMinusOne;
+			} else {
+				coordinates[currentAxis] = 0;
+				currentAxis--;
 			}
 		}
 		for (Integer typeA : typesMap.keySet()) {
@@ -588,30 +563,23 @@ public class CodeGeneration {
 		int currentAxis = dimensionMinusOne;
 		while (currentAxis > -1) {
 			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinate = coordinates[currentAxis - 1];//TODO breaks here for 1D
-				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
-					coordinates[currentAxis] = currentCoordinate;
-					printAnisotropicPosition(coordinates);
-				}
+				printAnisotropicPosition(coordinates);
+			}
+			int currentCoordinate = coordinates[currentAxis];
+			int max;
+			if (currentAxis == 0) {
+				max = sizeMinusOne;
+			} else {
+				max = coordinates[currentAxis - 1];
+			}
+			if (currentCoordinate < max) {
+				currentCoordinate++;
+				coordinates[currentAxis] = currentCoordinate;
+				currentAxis = dimensionMinusOne;
+			} else {
+				coordinates[currentAxis] = 0;
 //				System.out.println();
 				currentAxis--;
-			} else {
-				int currentCoordinate = coordinates[currentAxis];
-				int max;
-				if (currentAxis == 0) {
-					max = sizeMinusOne;
-				} else {
-					max = coordinates[currentAxis - 1];
-				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
-					currentAxis = dimensionMinusOne;
-				} else {
-					coordinates[currentAxis] = 0;
-//					System.out.println();
-					currentAxis--;
-				}
 			}
 		}
 	}

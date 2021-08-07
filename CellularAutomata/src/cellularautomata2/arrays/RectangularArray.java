@@ -159,18 +159,16 @@ public abstract class RectangularArray implements MultidimensionalArray {
 	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, PositionCommand command) {
 		int dimension = upperBounds.length;
 		int[] coordinates = new int[dimension];
-		System.arraycopy(lowerBounds, 0, coordinates, 0, coordinates.length);
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
-		int currentAxis = 0;
-		while (currentAxis < dimension) {
-			if (currentAxis == 0) {
-				int upperBound = upperBounds[0];
-				for (int currentCoordinate = lowerBounds[0]; currentCoordinate <= upperBound; currentCoordinate++) {
-					coordinates[0] = currentCoordinate;
+		if (dimension == 0) {
+			command.execute(immutableCoordinates);
+		} else {
+			System.arraycopy(lowerBounds, 0, coordinates, 0, coordinates.length);
+			int currentAxis = 0;
+			while (currentAxis < dimension) {
+				if (currentAxis == 0) {
 					command.execute(immutableCoordinates);
 				}
-				currentAxis++;
-			} else {
 				int currentCoordinate = coordinates[currentAxis];
 				if (currentCoordinate < upperBounds[currentAxis]) {
 					currentCoordinate++;

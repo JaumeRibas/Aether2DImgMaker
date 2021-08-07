@@ -40,15 +40,18 @@ public abstract class AnisotropicArray extends SquareArray {
 	}
 	
 	public static long getVolume(int dimension, int side) {
-		if (dimension == 1) {
-			return side;
-		} else {
-			long volume = 0;
-			dimension--;
-			for (int i = 1; i <= side; i++) {
-				volume += getVolume(dimension, i);
-			}
-			return volume;
+		switch (dimension) {
+			case 0:
+				return 1;
+			case 1://this case could be omitted
+				return side;
+			default:
+				int volume = 0;
+				dimension--;
+				for (int i = 1; i <= side; i++) {
+					volume += getVolume(dimension, i);
+				}
+				return volume;
 		}
 	}
 	
@@ -64,18 +67,16 @@ public abstract class AnisotropicArray extends SquareArray {
 		}
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
-		int sideMinusOne = side - 1;
-		int dimensionMinusOne = dimension - 1;
-		int currentAxis = dimensionMinusOne;
-		while (currentAxis > -1) {
-			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinate = coordinates[currentAxis - 1];
-				for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
-					coordinates[currentAxis] = currentCoordinate;
+		if (dimension == 0) {
+			command.execute(immutableCoordinates);
+		} else {
+			int sideMinusOne = side - 1;
+			int dimensionMinusOne = dimension - 1;
+			int currentAxis = dimensionMinusOne;
+			while (currentAxis > -1) {
+				if (currentAxis == dimensionMinusOne) {
 					command.execute(immutableCoordinates);
 				}
-				currentAxis--;
-			} else {
 				int currentCoordinate = coordinates[currentAxis];
 				int max;
 				if (currentAxis == 0) {
@@ -103,7 +104,7 @@ public abstract class AnisotropicArray extends SquareArray {
 		if (command == null) {
 			throw new IllegalArgumentException("The command cannot be null.");
 		}
-		if (side <= edgeWidth) {
+		if (dimension > 0 && side <= edgeWidth) {
 			forEachIndex(command);
 		} else {
 			int[] coordinates = new int[dimension];
@@ -116,28 +117,22 @@ public abstract class AnisotropicArray extends SquareArray {
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					int previousCoordinate = coordinates[currentAxis - 1];
-					for (int currentCoordinate = 0; currentCoordinate <= previousCoordinate; currentCoordinate++) {
-						coordinates[currentAxis] = currentCoordinate;
-						command.execute(immutableCoordinates);
-					}
-					currentAxis--;
+					command.execute(immutableCoordinates);
+				}
+				int currentCoordinate = coordinates[currentAxis];
+				int max;
+				if (currentAxis == 0) {
+					max = sideMinusOne;
 				} else {
-					int currentCoordinate = coordinates[currentAxis];
-					int max;
-					if (currentAxis == 0) {
-						max = sideMinusOne;
-					} else {
-						max = coordinates[currentAxis - 1];
-					}
-					if (currentCoordinate < max) {
-						currentCoordinate++;
-						coordinates[currentAxis] = currentCoordinate;
-						currentAxis = dimensionMinusOne;
-					} else {
-						coordinates[currentAxis] = 0;
-						currentAxis--;
-					}
+					max = coordinates[currentAxis - 1];
+				}
+				if (currentCoordinate < max) {
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					currentAxis = dimensionMinusOne;
+				} else {
+					coordinates[currentAxis] = 0;
+					currentAxis--;
 				}
 			}
 		}

@@ -66,7 +66,7 @@ public class SpreadIntegerValue extends SymmetricIntGridRegion implements Cellul
 		int[] coordsArray = coordinates.getCopyAsArray();
 		Utils.abs(coordsArray);
 		Utils.sortDescending(coordsArray);
-		if (coordsArray[0] < grid.getSide()) {
+		if (coordsArray.length == 0 || coordsArray[0] < grid.getSide()) {
 			return grid.get(new Coordinates(coordsArray));
 		} else {
 			return backgroundValue;
@@ -98,29 +98,23 @@ public class SpreadIntegerValue extends SymmetricIntGridRegion implements Cellul
 		boolean changed = false;
 		while (currentAxis > -1) {
 			if (currentAxis == dimensionMinusOne) {
-				int previousCoordinatePlusOne = indexes[currentAxis - 1] + 1;
-				for (int currentCoordinate = -1; currentCoordinate <= previousCoordinatePlusOne; currentCoordinate++) {
-					indexes[currentAxis] = currentCoordinate;
-					boolean positionToppled = topplePosition(indexes, immutableIndexes, newGrid);
-					changed = changed || positionToppled;
-				}
-				currentAxis--;
+				boolean positionToppled = topplePosition(indexes, immutableIndexes, newGrid);
+				changed = changed || positionToppled;
+			}
+			int currentCoordinate = indexes[currentAxis];
+			int max;
+			if (currentAxis == 0) {
+				max = sideMinusOne;
 			} else {
-				int currentCoordinate = indexes[currentAxis];
-				int max;
-				if (currentAxis == 0) {
-					max = sideMinusOne;
-				} else {
-					max = indexes[currentAxis - 1] + 1;
-				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					indexes[currentAxis] = currentCoordinate;
-					currentAxis = dimensionMinusOne;
-				} else {
-					indexes[currentAxis] = -1;
-					currentAxis--;
-				}
+				max = indexes[currentAxis - 1] + 1;
+			}
+			if (currentCoordinate < max) {
+				currentCoordinate++;
+				indexes[currentAxis] = currentCoordinate;
+				currentAxis = dimensionMinusOne;
+			} else {
+				indexes[currentAxis] = -1;
+				currentAxis--;
 			}
 		}
 		//Replace the old array with the new one
