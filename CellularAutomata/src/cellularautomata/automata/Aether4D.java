@@ -1532,6 +1532,7 @@ public class Aether4D implements SymmetricEvolvingLongGrid4D, Serializable {
 		return changed;
 	}
 
+	//this range could be merged into type 6
 	private static boolean toppleRangeType7(int x, long[][][][] wSlices, long[][][][] newWSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {		
 		int y = x - 1, xMinusOne = x - 1, xMinusTwo = x - 2, yPlusOne = y + 1, yMinusOne = y - 1;
