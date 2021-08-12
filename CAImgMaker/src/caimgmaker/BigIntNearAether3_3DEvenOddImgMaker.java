@@ -18,7 +18,7 @@ package caimgmaker;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.BigIntNearAether3Simple3D;
+import cellularautomata.automata.nearaether.BigIntNearAether3Simple3D;
 import cellularautomata.numbers.BigInt;
 
 public class BigIntNearAether3_3DEvenOddImgMaker {

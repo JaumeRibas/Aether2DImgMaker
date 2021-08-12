@@ -20,7 +20,7 @@ import java.awt.Color;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether2D;
+import cellularautomata.automata.aether.Aether2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.SubareaGrid;

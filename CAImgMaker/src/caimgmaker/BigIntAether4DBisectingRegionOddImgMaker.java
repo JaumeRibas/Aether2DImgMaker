@@ -24,7 +24,7 @@ import org.apache.commons.io.FileUtils;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.BigIntAether4D;
+import cellularautomata.automata.aether.BigIntAether4D;
 import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid4D;
 import cellularautomata.numbers.BigInt;

@@ -18,7 +18,7 @@ package cellularautomata.grid4d;
 
 import java.io.Serializable;
 
-import cellularautomata.automata.Utils;
+import cellularautomata.Utils;
 import cellularautomata.numbers.BigInt;
 
 public class AnisotropicBigIntGrid4DSlice implements Serializable {

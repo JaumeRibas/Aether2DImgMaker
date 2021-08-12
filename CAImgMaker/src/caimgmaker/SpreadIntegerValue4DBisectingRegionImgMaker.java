@@ -20,7 +20,7 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.SpreadIntegerValue4D;
+import cellularautomata.automata.siv.SpreadIntegerValue4D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 
 public class SpreadIntegerValue4DBisectingRegionImgMaker {

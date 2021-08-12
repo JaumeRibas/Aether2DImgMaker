@@ -20,7 +20,7 @@ import java.awt.Color;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.HueWithBackgroundMapper;
-import cellularautomata.automata.Aether2D;
+import cellularautomata.automata.aether.Aether2D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
 
 public class Aether2DEvenOddImgMaker {

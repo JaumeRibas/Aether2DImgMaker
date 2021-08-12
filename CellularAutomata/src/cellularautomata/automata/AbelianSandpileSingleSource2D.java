@@ -19,6 +19,7 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cellularautomata.Utils;
 import cellularautomata.evolvinggrid.SymmetricEvolvingIntGrid2D;
 import cellularautomata.grid2d.IsotropicGrid2DA;
 

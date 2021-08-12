@@ -20,7 +20,7 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.IntNearAether1_3D;
+import cellularautomata.automata.nearaether.IntNearAether1_3D;
 import cellularautomata.evolvinggrid.EvolvingIntGrid3D;
 
 public class IntNearAether1_3DImgMaker {

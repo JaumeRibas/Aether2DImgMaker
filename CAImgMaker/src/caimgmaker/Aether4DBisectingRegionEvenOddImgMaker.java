@@ -20,7 +20,7 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether4D;
+import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
 

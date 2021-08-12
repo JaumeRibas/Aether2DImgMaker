@@ -19,6 +19,8 @@ package cellularautomata.automata;
 import java.io.IOException;
 import java.util.HashMap;
 
+import cellularautomata.Utils;
+
 public class SerializedHashMapEditor {
 
 	public static void main(String[] args) {

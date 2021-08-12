@@ -24,7 +24,7 @@ import org.apache.commons.io.FileUtils;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.BigIntAether3DEnclosed;
+import cellularautomata.automata.aether.BigIntAether3DEnclosed;
 import cellularautomata.numbers.BigInt;
 
 public class BigIntAether3DEnclosedEvenOddImgMaker {

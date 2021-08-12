@@ -20,8 +20,8 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Constants;
-import cellularautomata.automata.IntAether4DAsymmetricSectionSwap;
+import cellularautomata.Constants;
+import cellularautomata.automata.aether.IntAether4DAsymmetricSectionSwap;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4DZCrossSection;
 import cellularautomata.grid3d.IntGrid3D;

@@ -18,8 +18,8 @@ package cellularautomata.grid3d;
 
 import java.io.Serializable;
 
-import cellularautomata.automata.Constants;
-import cellularautomata.automata.Utils;
+import cellularautomata.Constants;
+import cellularautomata.Utils;
 
 public class AnisotropicLongGrid3DSlice implements Serializable {
 	

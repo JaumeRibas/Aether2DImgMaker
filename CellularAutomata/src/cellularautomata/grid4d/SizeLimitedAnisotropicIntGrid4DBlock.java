@@ -18,8 +18,8 @@ package cellularautomata.grid4d;
 
 import java.io.Serializable;
 
-import cellularautomata.automata.Constants;
-import cellularautomata.automata.Utils;
+import cellularautomata.Constants;
+import cellularautomata.Utils;
 
 public class SizeLimitedAnisotropicIntGrid4DBlock implements IntGrid4D, AnisotropicGrid4DA, Serializable {
 

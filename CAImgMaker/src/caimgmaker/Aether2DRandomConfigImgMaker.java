@@ -20,7 +20,7 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.Aether2DRandomConfiguration;
+import cellularautomata.automata.aether.Aether2DRandomConfiguration;
 
 public class Aether2DRandomConfigImgMaker {
 	

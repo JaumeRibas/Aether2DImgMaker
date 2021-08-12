@@ -25,7 +25,7 @@ import org.apache.commons.io.FileUtils;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.BigIntAether3DAsymmetricSectionSwap;
+import cellularautomata.automata.aether.BigIntAether3DAsymmetricSectionSwap;
 import cellularautomata.numbers.BigInt;
 
 public class BigIntAether3DSwapOddImgMaker {
