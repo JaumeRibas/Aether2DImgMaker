@@ -77,11 +77,11 @@ public class BigIntNearAether3_3DEvenOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialXIndexDefined) {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca.asymmetricSection(), xScanInitialIndex, 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, xScanInitialIndex, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");				
 			} else {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca.asymmetricSection(), 0, colorMapper, colorMapper, 
-						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, 0, colorMapper, colorMapper, 
+						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
 		}		
 	}

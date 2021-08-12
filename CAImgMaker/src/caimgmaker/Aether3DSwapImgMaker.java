@@ -21,8 +21,8 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether3DAsymmetricSectionSwap;
+import cellularautomata.automata.Constants;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
-import cellularautomata.grid.CAConstants;
 import cellularautomata.grid3d.LongGrid3D;
 
 public class Aether3DSwapImgMaker {
@@ -77,7 +77,7 @@ public class Aether3DSwapImgMaker {
 			if (isRestore) {
 				ca = new Aether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new Aether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
+				ca = new Aether3DAsymmetricSectionSwap(initialValue, Constants.ONE_GB*8, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {

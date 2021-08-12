@@ -25,213 +25,195 @@ public class AsymmetricGridSection4D<G extends SymmetricGrid4D> implements Grid4
 	}
 	
 	@Override
-	public int getMinW() {
-		return source.getAsymmetricMinW();
-	}
+	public int getMinW() { return source.getAsymmetricMinW(); }
 
 	@Override
-	public int getMaxW() {
-		return source.getAsymmetricMaxW();
-	}
-	
-	@Override
-	public int getMinW(int x, int y, int z) {
-		return source.getAsymmetricMinW(x, y, z);
-	}
-	
-	@Override
-	public int getMaxW(int x, int y, int z) {
-		return source.getAsymmetricMaxW(x, y, z);
-	}
+	public int getMaxW() { return source.getAsymmetricMaxW(); }
 
 	@Override
-	public int getMinX() {
-		return source.getAsymmetricMinX();
-	}
+	public int getMinWAtX(int x) { return source.getAsymmetricMinWAtX(x); }
 
 	@Override
-	public int getMaxX() {
-		return source.getAsymmetricMaxX();
-	}
+	public int getMaxWAtX(int x) { return source.getAsymmetricMaxWAtX(x); }
 
 	@Override
-	public int getMinY() {
-		return source.getAsymmetricMinY();
-	}
+	public int getMinWAtY(int y) { return source.getAsymmetricMinWAtY(y); }
 
 	@Override
-	public int getMaxY() {
-		return source.getAsymmetricMaxY();
-	}
-	
-	@Override
-	public int getMinZ() {
-		return source.getAsymmetricMinZ();
-	}
+	public int getMaxWAtY(int y) { return source.getAsymmetricMaxWAtY(y); }
 
 	@Override
-	public int getMaxZ() {
-		return source.getAsymmetricMaxZ();
-	}
-	
-	@Override
-	public int getMinWAtZ(int z) {
-		return source.getAsymmetricMinWAtZ(z);
-	}
+	public int getMinWAtZ(int z) { return source.getAsymmetricMinWAtZ(z); }
 
 	@Override
-	public int getMinWAtXZ(int x, int z) {
-		return source.getAsymmetricMinWAtXZ(x, z);
-	}
+	public int getMaxWAtZ(int z) { return source.getAsymmetricMaxWAtZ(z); }
 
 	@Override
-	public int getMinWAtYZ(int y, int z) {
-		return source.getAsymmetricMinWAtYZ(y, z);
-	}
+	public int getMinWAtXY(int x, int y) { return source.getAsymmetricMinWAtXY(x, y); }
 
 	@Override
-	public int getMaxWAtZ(int z) {
-		return source.getAsymmetricMaxWAtZ(z);
-	}
+	public int getMaxWAtXY(int x, int y) { return source.getAsymmetricMaxWAtXY(x, y); }
 
 	@Override
-	public int getMaxWAtXZ(int x, int z) {
-		return source.getAsymmetricMaxWAtXZ(x, z);
-	}
+	public int getMinWAtXZ(int x, int z) { return source.getAsymmetricMinWAtXZ(x, z); }
 
 	@Override
-	public int getMaxWAtYZ(int y, int z) {
-		return source.getAsymmetricMaxWAtYZ(y, z);
-	}
+	public int getMaxWAtXZ(int x, int z) { return source.getAsymmetricMaxWAtXZ(x, z); }
 
 	@Override
-	public int getMinXAtZ(int z) {
-		return source.getAsymmetricMinXAtZ(z);
-	}
+	public int getMinWAtYZ(int y, int z) { return source.getAsymmetricMinWAtYZ(y, z); }
 
 	@Override
-	public int getMinXAtWZ(int w, int z) {
-		return source.getAsymmetricMinXAtWZ(w, z);
-	}
+	public int getMaxWAtYZ(int y, int z) { return source.getAsymmetricMaxWAtYZ(y, z); }
 
 	@Override
-	public int getMinXAtYZ(int y, int z) {
-		return source.getAsymmetricMinXAtYZ(y, z);
-	}
+	public int getMinW(int x, int y, int z) { return source.getAsymmetricMinW(x, y, z); }
 
 	@Override
-	public int getMinX(int w, int y, int z) {
-		return source.getAsymmetricMinX(w, y, z);
-	}
+	public int getMaxW(int x, int y, int z) { return source.getAsymmetricMaxW(x, y, z); }
 
 	@Override
-	public int getMaxXAtZ(int z) {
-		return source.getAsymmetricMaxXAtZ(z);
-	}
+	public int getMinX() { return source.getAsymmetricMinX(); }
 
 	@Override
-	public int getMaxXAtWZ(int w, int z) {
-		return source.getAsymmetricMaxXAtWZ(w, z);
-	}
+	public int getMaxX() { return source.getAsymmetricMaxX(); }
 
 	@Override
-	public int getMaxXAtYZ(int y, int z) {
-		return source.getAsymmetricMaxXAtYZ(y, z);
-	}
+	public int getMinXAtW(int w) { return source.getAsymmetricMinXAtW(w); }
 
 	@Override
-	public int getMaxX(int w, int y, int z) {
-		return source.getAsymmetricMaxX(w, y, z);
-	}
+	public int getMaxXAtW(int w) { return source.getAsymmetricMaxXAtW(w); }
 
 	@Override
-	public int getMinYAtZ(int z) {
-		return source.getAsymmetricMinYAtZ(z);
-	}
+	public int getMinXAtY(int y) { return source.getAsymmetricMinXAtY(y); }
 
 	@Override
-	public int getMaxYAtWZ(int w, int z) {
-		return source.getAsymmetricMaxYAtWZ(w, z);
-	}
+	public int getMaxXAtY(int y) { return source.getAsymmetricMaxXAtY(y); }
 
 	@Override
-	public int getMinYAtXZ(int x, int z) {
-		return source.getAsymmetricMinYAtXZ(x, z);
-	}
+	public int getMinXAtZ(int z) { return source.getAsymmetricMinXAtZ(z); }
 
 	@Override
-	public int getMinY(int w, int x, int z) {
-		return source.getAsymmetricMinY(w, x, z);
-	}
+	public int getMaxXAtZ(int z) { return source.getAsymmetricMaxXAtZ(z); }
 
 	@Override
-	public int getMaxYAtZ(int z) {
-		return source.getAsymmetricMaxYAtZ(z);
-	}
+	public int getMinXAtWY(int w, int y) { return source.getAsymmetricMinXAtWY(w, y); }
 
 	@Override
-	public int getMinYAtWZ(int w, int z) {
-		return source.getAsymmetricMinYAtWZ(w, z);
-	}
+	public int getMaxXAtWY(int w, int y) { return source.getAsymmetricMaxXAtWY(w, y); }
 
 	@Override
-	public int getMaxYAtXZ(int x, int z) {
-		return source.getAsymmetricMaxYAtXZ(x, z);
-	}
+	public int getMinXAtWZ(int w, int z) { return source.getAsymmetricMinXAtWZ(w, z); }
 
 	@Override
-	public int getMaxY(int w, int x, int z) {
-		return source.getAsymmetricMaxY(w, x, z);
-	}	
+	public int getMaxXAtWZ(int w, int z) { return source.getAsymmetricMaxXAtWZ(w, z); }
 
 	@Override
-	public int getMinXAtW(int w) {
-		return source.getAsymmetricMinXAtW(w);
-	}
+	public int getMinXAtYZ(int y, int z) { return source.getAsymmetricMinXAtYZ(y, z); }
 
 	@Override
-	public int getMaxXAtW(int w) {
-		return source.getAsymmetricMaxXAtW(w);
-	}
+	public int getMaxXAtYZ(int y, int z) { return source.getAsymmetricMaxXAtYZ(y, z); }
 
 	@Override
-	public int getMinYAtWX(int w, int x) {
-		return source.getAsymmetricMinYAtWX(w, x);
-	}
+	public int getMinX(int w, int y, int z) { return source.getAsymmetricMinX(w, y, z); }
 
 	@Override
-	public int getMaxYAtWX(int w, int x) {
-		return source.getAsymmetricMaxYAtWX(w, x);
-	}
+	public int getMaxX(int w, int y, int z) { return source.getAsymmetricMaxX(w, y, z); }
 
 	@Override
-	public int getMinZ(int w, int x, int y) {
-		return source.getAsymmetricMinZ(w, x, y);
-	}
+	public int getMinY() { return source.getAsymmetricMinY(); }
 
 	@Override
-	public int getMaxZ(int w, int x, int y) {
-		return source.getAsymmetricMaxZ(w, x, y);
-	}
+	public int getMaxY() { return source.getAsymmetricMaxY(); }
 
 	@Override
-	public int getMinYAtW(int w) {
-		return source.getAsymmetricMinYAtW(w);
-	}
+	public int getMinYAtW(int w) { return source.getAsymmetricMinYAtW(w); }
 
 	@Override
-	public int getMaxYAtW(int w) {
-		return source.getAsymmetricMaxYAtW(w);
-	}
+	public int getMaxYAtW(int w) { return source.getAsymmetricMaxYAtW(w); }
 
 	@Override
-	public int getMinZAtW(int w) {
-		return source.getAsymmetricMinZAtW(w);
-	}
+	public int getMinYAtX(int x) { return source.getAsymmetricMinYAtX(x); }
 
 	@Override
-	public int getMaxZAtW(int w) {
-		return source.getAsymmetricMaxZAtW(w);
-	}
+	public int getMaxYAtX(int x) { return source.getAsymmetricMaxYAtX(x); }
+
+	@Override
+	public int getMinYAtZ(int z) { return source.getAsymmetricMinYAtZ(z); }
+
+	@Override
+	public int getMaxYAtZ(int z) { return source.getAsymmetricMaxYAtZ(z); }
+
+	@Override
+	public int getMinYAtWX(int w, int x) { return source.getAsymmetricMinYAtWX(w, x); }
+
+	@Override
+	public int getMaxYAtWX(int w, int x) { return source.getAsymmetricMaxYAtWX(w, x); }
+
+	@Override
+	public int getMinYAtWZ(int w, int z) { return source.getAsymmetricMinYAtWZ(w, z); }
+
+	@Override
+	public int getMaxYAtWZ(int w, int z) { return source.getAsymmetricMaxYAtWZ(w, z); }
+
+	@Override
+	public int getMinYAtXZ(int x, int z) { return source.getAsymmetricMinYAtXZ(x, z); }
+
+	@Override
+	public int getMaxYAtXZ(int x, int z) { return source.getAsymmetricMaxYAtXZ(x, z); }
+
+	@Override
+	public int getMinY(int w, int x, int z) { return source.getAsymmetricMinY(w, x, z); }
+
+	@Override
+	public int getMaxY(int w, int x, int z) { return source.getAsymmetricMaxY(w, x, z); }
+
+	@Override
+	public int getMinZ() { return source.getAsymmetricMinZ(); }
+
+	@Override
+	public int getMaxZ() { return source.getAsymmetricMaxZ(); }
+
+	@Override
+	public int getMinZAtW(int w) { return source.getAsymmetricMinZAtW(w); }
+
+	@Override
+	public int getMaxZAtW(int w) { return source.getAsymmetricMaxZAtW(w); }
+
+	@Override
+	public int getMinZAtX(int x) { return source.getAsymmetricMinZAtX(x); }
+
+	@Override
+	public int getMaxZAtX(int x) { return source.getAsymmetricMaxZAtX(x); }
+
+	@Override
+	public int getMinZAtY(int y) { return source.getAsymmetricMinZAtY(y); }
+
+	@Override
+	public int getMaxZAtY(int y) { return source.getAsymmetricMaxZAtY(y); }
+
+	@Override
+	public int getMinZAtWX(int w, int x) { return source.getAsymmetricMinZAtWX(w, x); }
+
+	@Override
+	public int getMaxZAtWX(int w, int x) { return source.getAsymmetricMaxZAtWX(w, x); }
+
+	@Override
+	public int getMinZAtWY(int w, int y) { return source.getAsymmetricMinZAtWY(w, y); }
+
+	@Override
+	public int getMaxZAtWY(int w, int y) { return source.getAsymmetricMaxZAtWY(w, y); }
+
+	@Override
+	public int getMinZAtXY(int x, int y) { return source.getAsymmetricMinZAtXY(x, y); }
+
+	@Override
+	public int getMaxZAtXY(int x, int y) { return source.getAsymmetricMaxZAtXY(x, y); }
+
+	@Override
+	public int getMinZ(int w, int x, int y) { return source.getAsymmetricMinZ(w, x, y); }
+
+	@Override
+	public int getMaxZ(int w, int x, int y) { return source.getAsymmetricMaxZ(w, x, y); }
 
 }

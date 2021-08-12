@@ -19,11 +19,16 @@ package cellularautomata.grid3d;
 public interface SymmetricLongGrid3D extends LongGrid3D, SymmetricGrid3D {
 	
 	/**
-	 * Returns the value at a given position
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this section is undefined.
+	 * <p>
 	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @param z the position on the z-coordinate
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */

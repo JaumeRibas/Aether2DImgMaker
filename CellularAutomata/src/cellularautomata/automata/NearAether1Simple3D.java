@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
-import cellularautomata.numbers.BigInt;
+import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
@@ -30,8 +29,11 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {	
+public class NearAether1Simple3D implements EvolvingLongGrid3D {	
 	
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
+
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
 	private static final byte RIGHT = 2;
@@ -58,13 +60,8 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 	 */
 	public NearAether1Simple3D(long initialValue) {
 		//safety check to prevent exceeding the data type's max value
-		if (initialValue < 0) {
-			//for this algorithm the safety check of Aether can be reused
-			BigInt maxNeighboringValuesDifference = Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(3, BigInt.valueOf(initialValue));
-			if (maxNeighboringValuesDifference.compareTo(BigInt.valueOf(Long.MAX_VALUE)) > 0) {
-				throw new IllegalArgumentException("Resulting max value difference between neighboring positions (" + maxNeighboringValuesDifference 
-						+ ") exceeds implementation's limit (" + Long.MAX_VALUE + "). Use a greater initial value or a different implementation.");
-			}
+		if (initialValue < MIN_INITIAL_VALUE) {
+			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
 		//initial side of the array, will be increased as needed
@@ -314,41 +311,6 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinY() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxY() {
-		return getMaxY();
-	}
-
-	@Override
-	public int getAsymmetricMinZ() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxZ() {
-		return getMaxZ();
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
 	public long getStep() {
 		return currentStep;
 	}
@@ -375,95 +337,5 @@ public class NearAether1Simple3D implements SymmetricEvolvingLongGrid3D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
-	}
-	
-	@Override
-	public int getAsymmetricMinXAtY(int y) {
-		return y;
-	}
-
-	@Override
-	public int getAsymmetricMinXAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMinX(int y, int z) {
-		return Math.max(y, z);
-	}
-
-	@Override
-	public int getAsymmetricMaxXAtY(int y) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMaxXAtZ(int z) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMaxX(int y, int z) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinYAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinYAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMinY(int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMaxYAtX(int x) {
-		return Math.min(getAsymmetricMaxY(), x);
-	}
-
-	@Override
-	public int getAsymmetricMaxYAtZ(int z) {
-		return getAsymmetricMaxY();
-	}
-
-	@Override
-	public int getAsymmetricMaxY(int x, int z) {
-		return Math.min(getAsymmetricMaxY(), x);
-	}
-
-	@Override
-	public int getAsymmetricMinZAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinZAtY(int y) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinZ(int x, int y) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxZAtX(int x) {
-		return Math.min(getAsymmetricMaxZ(), x);
-	}
-
-	@Override
-	public int getAsymmetricMaxZAtY(int y) {
-		return Math.min(getAsymmetricMaxZ(), y);
-	}
-
-	@Override
-	public int getAsymmetricMaxZ(int x, int y) {
-		return Math.min(getAsymmetricMaxZ(), y);
 	}
 }

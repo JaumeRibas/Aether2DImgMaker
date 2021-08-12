@@ -23,9 +23,9 @@ public interface ObjectGrid3D<T> extends Grid3D {
 	/**
 	 * Returns the object at a given position
 	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @param z the position on the z-coordinate
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
 	 * @return the object at (x,y,z)
 	 * @throws Exception 
 	 */

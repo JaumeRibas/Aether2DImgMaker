@@ -69,7 +69,7 @@ import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
 import cellularautomata.numbers.BigInt;
 
-public class CATests {
+public class Test {
 	
 	public static void main(String[] args) throws Exception {
 		long initialValue = -3000;
@@ -202,46 +202,6 @@ public class CATests {
 			System.out.println("(" + w + ", " + x + ", " + y + ", " + (z - 1) + "): " + grid.getFromPosition(w, x, y, z - 1));
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 *  0 -> 0
-	 * -1 -> 1
-	 * -2 -> 2*dimension - 1
-	 * -3 -> previous - 1
-	 * -4 -> previous + 2*dimension
-	 * -5 -> previous - 1
-	 * -6 -> previous + 2*dimension
-	 * ... 
-	 * 
-	 * @param dimension
-	 * @param maxAllowedValue
-	 * @return
-	 */
-	public static BigInt getAetherMinAllowedSingleSourceValue(int dimension, BigInt maxAllowedValue) {
-		int maxAllowedValueComparedToZero = maxAllowedValue.compareTo(BigInt.ZERO);
-		if (maxAllowedValueComparedToZero < 0) {
-			throw new IllegalArgumentException("Max allowed cannot be less than zero.");
-		} else if (maxAllowedValueComparedToZero == 0) {
-			return BigInt.ZERO;
-		}
-		if (dimension <= 0) {
-			throw new IllegalArgumentException("Grid dimension must be greater than zero.");
-		} else if (dimension == 1) {
-			return maxAllowedValue.negate();
-		}
-		BigInt two = BigInt.valueOf(2);
-		BigInt doubleDimensionMinusOne = BigInt.valueOf(dimension).multiply(two).subtract(BigInt.ONE);
-		if (maxAllowedValue.compareTo(doubleDimensionMinusOne) < 0) {
-			return BigInt.ONE.negate();
-		}
-		BigInt minSingleSourceValue1 = two.multiply(maxAllowedValue).divide(doubleDimensionMinusOne.negate());
-		BigInt minSingleSourceValue2 = minSingleSourceValue1.subtract(BigInt.ONE);//it can be off by 1
-		if (Utils.getAetherMaxNeighboringValuesDifferenceFromSingleSource(dimension, minSingleSourceValue2).compareTo(maxAllowedValue) > 0) {
-			return minSingleSourceValue1;
-		} else {
-			return minSingleSourceValue2;
 		}
 	}
 	
@@ -581,6 +541,10 @@ public class CATests {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void compare(EvolvingLongGrid3D ca1, ActionableEvolvingGrid3D<IntGrid3D> ca2) {
+		compare(ca2 , ca1);
 	}
 	
 	public static void compare(ActionableEvolvingGrid3D<IntGrid3D> ca1, EvolvingLongGrid3D ca2) {

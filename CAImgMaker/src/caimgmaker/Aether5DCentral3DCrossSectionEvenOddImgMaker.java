@@ -22,9 +22,9 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.AetherSimple5DZCrossSection;
 import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid4D;
 
-public class Aether5DCentral3DRegionEvenOddImgMaker {
+public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"2000", "D:/data/test"};//debug
@@ -38,7 +38,7 @@ public class Aether5DCentral3DRegionEvenOddImgMaker {
 			if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
 					&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
 				initialValue = tmp.longValue();
-				SymmetricEvolvingLongGrid4D ca = new AetherSimple5DZCrossSection(initialValue, 0);
+				EvolvingLongGrid4D ca = new AetherSimple5DZCrossSection(initialValue, 0);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {
@@ -64,15 +64,15 @@ public class Aether5DCentral3DRegionEvenOddImgMaker {
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				String backupPath = path + ca.getSubFolderPath() + "/backups";
-				EvolvingLongGrid3D bisectingRegion = ca.asymmetricSection().crossSectionAtZ(0);
+				EvolvingLongGrid3D bisectingRegion = ca.crossSectionAtZ(0);
 				String imagesPath = path + ca.getSubFolderPath() + "/bisecting_region/img";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionEvenOddImages(bisectingRegion, scanInitialZIndex, 
-							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
 					imgMaker.createScanningAndCrossSectionEvenOddImages(bisectingRegion, 
-							0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
+							0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
 				System.err.println("Initial value out of range.");

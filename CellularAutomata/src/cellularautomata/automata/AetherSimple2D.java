@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
@@ -29,7 +29,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
  * @author Jaume
  *
  */
-public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {	
+public class AetherSimple2D implements EvolvingLongGrid2D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -281,31 +281,6 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 	}
 
 	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinY() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxY() {
-		return getMaxY();
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int x, int y) {
-		return getFromPosition(x, y);
-	}
-
-	@Override
 	public String getName() {
 		return "Aether2D";
 	}
@@ -313,26 +288,6 @@ public class AetherSimple2D implements SymmetricEvolvingLongGrid2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
-	}
-
-	@Override
-	public int getAsymmetricMinX(int y) {
-		return y;
-	}
-
-	@Override
-	public int getAsymmetricMaxX(int y) {
-		return getMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinY(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxY(int x) {
-		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override

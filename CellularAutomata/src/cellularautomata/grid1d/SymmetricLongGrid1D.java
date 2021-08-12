@@ -18,6 +18,19 @@ package cellularautomata.grid1d;
 
 public interface SymmetricLongGrid1D extends LongGrid1D, SymmetricGrid1D {
 	
+	/**
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * That is, where the x-coordinate is inside the [{@link #getAsymmetricMinX()}, {@link #getAsymmetricMaxX()}] bounds.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this bounds is undefined.
+	 * <p>
+	 * 
+	 * @param x the position on the x-axis
+	 * @return the {@link long} value at (x)
+	 * @throws Exception 
+	 */
 	long getFromAsymmetricPosition(int x);
 	
 	@Override

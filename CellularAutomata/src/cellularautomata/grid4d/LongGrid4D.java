@@ -25,10 +25,10 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	/**
 	 * Returns the value at a given position
 	 * 
-	 * @param w the position on the w-coordinate 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @param z the position on the z-coordinate
+	 * @param w the position on the w-axis 
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */

@@ -20,8 +20,8 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
+import cellularautomata.automata.Constants;
 import cellularautomata.automata.IntAether3DAsymmetricSectionSwap;
-import cellularautomata.grid.CAConstants;
 
 public class IntAether3DSwapEvenOddImgMaker {
 	
@@ -75,7 +75,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 			if (isRestore) {
 				ca = new IntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new IntAether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
+				ca = new IntAether3DAsymmetricSectionSwap(initialValue, Constants.ONE_GB*8, path);
 //				ca = new IntAether3DAsymmetricSectionSwap(initialValue, CAConstants.ONE_MB*8, path);
 			}
 			boolean finished = false;

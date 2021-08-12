@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
+import cellularautomata.grid3d.SizeLimitedAnisotropicIntGrid3DBlock;
 
 public class GridBlock3DResizingTool {
 	

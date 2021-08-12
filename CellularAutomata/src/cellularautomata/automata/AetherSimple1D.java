@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a single source initial configuration, for review and testing purposes
@@ -29,7 +29,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
  * @author Jaume
  *
  */
-public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {	
+public class AetherSimple1D implements EvolvingLongGrid1D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -219,21 +219,6 @@ public class AetherSimple1D implements SymmetricEvolvingLongGrid1D {
 	 */
 	public long getInitialValue() {
 		return initialValue;
-	}
-
-	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int x) {
-		return getFromPosition(x);
 	}
 
 	@Override

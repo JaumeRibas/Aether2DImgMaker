@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
+import cellularautomata.grid1d.IsotropicGrid1DA;
 
 /**
  * A synchronous sandpile model with isotropic rules and a single source initial configuration.
@@ -27,7 +28,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
  * @author Jaume
  *
  */
-public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {	
+public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {	
 
 	private static final byte RIGHT = 1;
 	private static final byte LEFT = 0;
@@ -141,11 +142,6 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 			return 0;
 		}
 	}
-	
-	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
 
 	@Override
 	public int getAsymmetricMaxX() {
@@ -159,16 +155,6 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D {
 	 */
 	public long getInitialValue() {
 		return initialValue;
-	}
-
-	@Override
-	public int getMinX() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxX() {
-		return getAsymmetricMaxX();
 	}
 
 	@Override

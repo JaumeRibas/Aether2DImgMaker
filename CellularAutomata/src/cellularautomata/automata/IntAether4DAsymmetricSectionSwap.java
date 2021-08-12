@@ -27,9 +27,12 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
+import cellularautomata.grid4d.AnisotropicGrid4DA;
 import cellularautomata.grid4d.AnisotropicIntGrid4DSlice;
+import cellularautomata.grid4d.ImmutableIntGrid4D;
 import cellularautomata.grid4d.IntGrid4D;
 import cellularautomata.grid4d.IntSubGrid4DWithWBounds;
+import cellularautomata.grid4d.SizeLimitedAnisotropicIntGrid4DBlock;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -37,7 +40,7 @@ import cellularautomata.grid4d.IntSubGrid4DWithWBounds;
  * @author Jaume
  *
  */
-public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<IntGrid4D> {
+public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<IntGrid4D> implements AnisotropicGrid4DA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -613566757;
@@ -4305,7 +4308,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<I
 			if (block.maxW > maxW) {
 				subBlock = new IntSubGrid4DWithWBounds(block, block.minW, maxW);
 			} else {
-				subBlock = block;
+				subBlock = new ImmutableIntGrid4D(block);
 			}
 			triggerProcessGridBlock(subBlock);
 		}
@@ -4426,28 +4429,8 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<I
 	}
 	
 	@Override
-	public int getMinW() {
-		return 0;
-	}
-	
-	@Override
-	public int getMinW(int x, int y, int z) {
-		return Math.max(Math.max(x, y), z);
-	}
-
-	@Override
-	public int getMaxW(int x, int y, int z) {
-		return getMaxW();
-	}
-	
-	@Override
 	public int getMaxW() {
 		return maxW;
-	}
-	
-	@Override
-	public int getMinX() {
-		return 0;
 	}
 
 	@Override
@@ -4456,183 +4439,13 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<I
 	}
 	
 	@Override
-	public int getMinY() {
-		return 0;
-	}
-	
-	@Override
 	public int getMaxY() {
 		return maxW;
 	}
 	
 	@Override
-	public int getMinZ() {
-		return 0;
-	}
-	
-	@Override
 	public int getMaxZ() {
 		return maxW;
-	}
-
-	@Override
-	public int getMinWAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinWAtXZ(int x, int z) {
-		return x;
-	}
-
-	@Override
-	public int getMinWAtYZ(int y, int z) {
-		return y;
-	}
-
-	@Override
-	public int getMaxWAtZ(int z) {
-		return maxW;
-	}
-
-	@Override
-	public int getMaxWAtXZ(int x, int z) {
-		return getMaxW();
-	}
-
-	@Override
-	public int getMaxWAtYZ(int y, int z) {
-		return getMaxW();
-	}
-
-	@Override
-	public int getMinXAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinXAtWZ(int w, int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinXAtYZ(int y, int z) {
-		return y;
-	}
-
-	@Override
-	public int getMinX(int w, int y, int z) {
-		return y;
-	}
-
-	@Override
-	public int getMaxXAtZ(int z) {
-		return getMaxX();
-	}
-
-	@Override
-	public int getMaxXAtWZ(int w, int z) {
-		return Math.min(getMaxX(), w);
-	}
-
-	@Override
-	public int getMaxXAtYZ(int y, int z) {
-		return getMaxX();
-	}
-
-	@Override
-	public int getMaxX(int w, int y, int z) {
-		return Math.min(getMaxX(), w);
-	}
-	
-	@Override
-	public int getMinXAtW(int w) {
-		return 0;
-	}
-	
-	@Override
-	public int getMaxXAtW(int w) {
-		return Math.min(getMaxX(), w);
-	}
-
-	@Override
-	public int getMinYAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMaxYAtWZ(int w, int z) {
-		return Math.min(getMaxY(), w);
-	}
-
-	@Override
-	public int getMinYAtXZ(int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinY(int w, int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getMaxYAtZ(int z) {
-		return getMaxY();
-	}
-
-	@Override
-	public int getMinYAtWZ(int w, int z) {
-		return z;
-	}
-
-	@Override
-	public int getMaxYAtXZ(int x, int z) {
-		return Math.min(getMaxY(), x);
-	}
-
-	@Override
-	public int getMaxY(int w, int x, int z) {
-		return Math.min(getMaxY(), x);
-	}
-
-	@Override
-	public int getMinYAtWX(int w, int x) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxYAtWX(int w, int x) {
-		return Math.min(getMaxY(), x);
-	}
-
-	@Override
-	public int getMinZ(int w, int x, int y) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxZ(int w, int x, int y) {
-		return Math.min(getMaxZ(), y);
-	}
-	
-	@Override
-	public int getMinYAtW(int w) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxYAtW(int w) {
-		return Math.min(getMaxY(), w);
-	}
-
-	@Override
-	public int getMinZAtW(int w) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxZAtW(int w) {
-		return Math.min(getMaxZ(), w);
 	}
 
 }

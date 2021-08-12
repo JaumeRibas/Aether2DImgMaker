@@ -18,7 +18,9 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
+import cellularautomata.grid2d.IsotropicGrid2DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a single source initial configuration
@@ -26,7 +28,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid2D;
  * @author Jaume
  *
  */
-public class Aether2D implements SymmetricEvolvingLongGrid2D {
+public class Aether2D implements SymmetricEvolvingLongGrid2D, IsotropicGrid2DA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -1139,20 +1141,10 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	public long getFromAsymmetricPosition(int x, int y){	
 		return grid[x][y];
 	}
-	
-	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
 
 	@Override
 	public int getAsymmetricMaxX() {
 		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMinY() {
-		return 0;
 	}
 	
 	@Override
@@ -1170,26 +1162,6 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	}
 
 	@Override
-	public int getMinX() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxX() {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMinY() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxY() {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
 	public long getStep() {
 		return currentStep;
 	}
@@ -1202,26 +1174,6 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
-	}
-
-	@Override
-	public int getAsymmetricMinX(int y) {
-		return y;
-	}
-
-	@Override
-	public int getAsymmetricMaxX(int y) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinY(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxY(int x) {
-		return Math.min(getAsymmetricMaxY(), x);
 	}
 
 	@Override

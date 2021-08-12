@@ -17,17 +17,19 @@
 package cellularautomata.grid4d;
 
 public class SubGrid4D<G extends Grid4D> implements Grid4D {
-	
+
 	protected G source;
-	private int minW;
-	private int maxW;
-	private int minX;
-	private int maxX;
-	private int minY;
-	private int maxY;
-	private int minZ;
-	private int maxZ;
+	protected int minW;
+	protected int maxW;
+	protected int minX;
+	protected int maxX;
+	protected int minY;
+	protected int maxY;
+	protected int minZ;
+	protected int maxZ;
 	
+	protected SubGrid4D() {}
+
 	public SubGrid4D(G source, int minW, int maxW, int minX, 
 			int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minW > maxW) {
@@ -66,47 +68,197 @@ public class SubGrid4D<G extends Grid4D> implements Grid4D {
 		this.minZ = Math.max(minZ, sourceMinZ);
 		this.maxZ = Math.min(maxZ, sourceMaxZ);
 	}
-	
-	@Override
-	public int getMinW() {
-		return minW;
-	}
 
 	@Override
-	public int getMaxW() {
-		return maxW;
-	}
+	public int getMinW() { return minW; }
 
 	@Override
-	public int getMinX() {
-		return minX;
-	}
+	public int getMaxW() { return maxW; }
 
 	@Override
-	public int getMaxX() {
-		return maxX;
-	}
+	public int getMinWAtX(int x) { return Math.max(minW, source.getMinWAtX(x)); }
 
 	@Override
-	public int getMinY() {
-		return minY;
-	}
+	public int getMaxWAtX(int x) { return Math.min(maxW, source.getMaxWAtX(x)); }
 
 	@Override
-	public int getMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		return minZ;
-	}
+	public int getMinWAtY(int y) { return Math.max(minW, source.getMinWAtY(y)); }
 
 	@Override
-	public int getMaxZ() {
-		return maxZ;
-	}
-	
-	//TODO add missing methods
+	public int getMaxWAtY(int y) { return Math.min(maxW, source.getMaxWAtY(y)); }
+
+	@Override
+	public int getMinWAtZ(int z) { return Math.max(minW, source.getMinWAtZ(z)); }
+
+	@Override
+	public int getMaxWAtZ(int z) { return Math.min(maxW, source.getMaxWAtZ(z)); }
+
+	@Override
+	public int getMinWAtXY(int x, int y) { return Math.max(minW, source.getMinWAtXY(x, y)); }
+
+	@Override
+	public int getMaxWAtXY(int x, int y) { return Math.min(maxW, source.getMaxWAtXY(x, y)); }
+
+	@Override
+	public int getMinWAtXZ(int x, int z) { return Math.max(minW, source.getMinWAtXZ(x, z)); }
+
+	@Override
+	public int getMaxWAtXZ(int x, int z) { return Math.min(maxW, source.getMaxWAtXZ(x, z)); }
+
+	@Override
+	public int getMinWAtYZ(int y, int z) { return Math.max(minW, source.getMinWAtYZ(y, z)); }
+
+	@Override
+	public int getMaxWAtYZ(int y, int z) { return Math.min(maxW, source.getMaxWAtYZ(y, z)); }
+
+	@Override
+	public int getMinW(int x, int y, int z) { return Math.max(minW, source.getMinW(x, y, z)); }
+
+	@Override
+	public int getMaxW(int x, int y, int z) { return Math.min(maxW, source.getMaxW(x, y, z)); }
+
+	@Override
+	public int getMinX() { return minX; }
+
+	@Override
+	public int getMaxX() { return maxX; }
+
+	@Override
+	public int getMinXAtW(int w) { return Math.max(minX, source.getMinXAtW(w)); }
+
+	@Override
+	public int getMaxXAtW(int w) { return Math.min(maxX, source.getMaxXAtW(w)); }
+
+	@Override
+	public int getMinXAtY(int y) { return Math.max(minX, source.getMinXAtY(y)); }
+
+	@Override
+	public int getMaxXAtY(int y) { return Math.min(maxX, source.getMaxXAtY(y)); }
+
+	@Override
+	public int getMinXAtZ(int z) { return Math.max(minX, source.getMinXAtZ(z)); }
+
+	@Override
+	public int getMaxXAtZ(int z) { return Math.min(maxX, source.getMaxXAtZ(z)); }
+
+	@Override
+	public int getMinXAtWY(int w, int y) { return Math.max(minX, source.getMinXAtWY(w, y)); }
+
+	@Override
+	public int getMaxXAtWY(int w, int y) { return Math.min(maxX, source.getMaxXAtWY(w, y)); }
+
+	@Override
+	public int getMinXAtWZ(int w, int z) { return Math.max(minX, source.getMinXAtWZ(w, z)); }
+
+	@Override
+	public int getMaxXAtWZ(int w, int z) { return Math.min(maxX, source.getMaxXAtWZ(w, z)); }
+
+	@Override
+	public int getMinXAtYZ(int y, int z) { return Math.max(minX, source.getMinXAtYZ(y, z)); }
+
+	@Override
+	public int getMaxXAtYZ(int y, int z) { return Math.min(maxX, source.getMaxXAtYZ(y, z)); }
+
+	@Override
+	public int getMinX(int w, int y, int z) { return Math.max(minX, source.getMinX(w, y, z)); }
+
+	@Override
+	public int getMaxX(int w, int y, int z) { return Math.min(maxX, source.getMaxX(w, y, z)); }
+
+	@Override
+	public int getMinY() { return minY; }
+
+	@Override
+	public int getMaxY() { return maxY; }
+
+	@Override
+	public int getMinYAtW(int w) { return Math.max(minY, source.getMinYAtW(w)); }
+
+	@Override
+	public int getMaxYAtW(int w) { return Math.min(maxY, source.getMaxYAtW(w)); }
+
+	@Override
+	public int getMinYAtX(int x) { return Math.max(minY, source.getMinYAtX(x)); }
+
+	@Override
+	public int getMaxYAtX(int x) { return Math.min(maxY, source.getMaxYAtX(x)); }
+
+	@Override
+	public int getMinYAtZ(int z) { return Math.max(minY, source.getMinYAtZ(z)); }
+
+	@Override
+	public int getMaxYAtZ(int z) { return Math.min(maxY, source.getMaxYAtZ(z)); }
+
+	@Override
+	public int getMinYAtWX(int w, int x) { return Math.max(minY, source.getMinYAtWX(w, x)); }
+
+	@Override
+	public int getMaxYAtWX(int w, int x) { return Math.min(maxY, source.getMaxYAtWX(w, x)); }
+
+	@Override
+	public int getMinYAtWZ(int w, int z) { return Math.max(minY, source.getMinYAtWZ(w, z)); }
+
+	@Override
+	public int getMaxYAtWZ(int w, int z) { return Math.min(maxY, source.getMaxYAtWZ(w, z)); }
+
+	@Override
+	public int getMinYAtXZ(int x, int z) { return Math.max(minY, source.getMinYAtXZ(x, z)); }
+
+	@Override
+	public int getMaxYAtXZ(int x, int z) { return Math.min(maxY, source.getMaxYAtXZ(x, z)); }
+
+	@Override
+	public int getMinY(int w, int x, int z) { return Math.max(minY, source.getMinY(w, x, z)); }
+
+	@Override
+	public int getMaxY(int w, int x, int z) { return Math.min(maxY, source.getMaxY(w, x, z)); }
+
+	@Override
+	public int getMinZ() { return minZ; }
+
+	@Override
+	public int getMaxZ() { return maxZ; }
+
+	@Override
+	public int getMinZAtW(int w) { return Math.max(minZ, source.getMinZAtW(w)); }
+
+	@Override
+	public int getMaxZAtW(int w) { return Math.min(maxZ, source.getMaxZAtW(w)); }
+
+	@Override
+	public int getMinZAtX(int x) { return Math.max(minZ, source.getMinZAtX(x)); }
+
+	@Override
+	public int getMaxZAtX(int x) { return Math.min(maxZ, source.getMaxZAtX(x)); }
+
+	@Override
+	public int getMinZAtY(int y) { return Math.max(minZ, source.getMinZAtY(y)); }
+
+	@Override
+	public int getMaxZAtY(int y) { return Math.min(maxZ, source.getMaxZAtY(y)); }
+
+	@Override
+	public int getMinZAtWX(int w, int x) { return Math.max(minZ, source.getMinZAtWX(w, x)); }
+
+	@Override
+	public int getMaxZAtWX(int w, int x) { return Math.min(maxZ, source.getMaxZAtWX(w, x)); }
+
+	@Override
+	public int getMinZAtWY(int w, int y) { return Math.max(minZ, source.getMinZAtWY(w, y)); }
+
+	@Override
+	public int getMaxZAtWY(int w, int y) { return Math.min(maxZ, source.getMaxZAtWY(w, y)); }
+
+	@Override
+	public int getMinZAtXY(int x, int y) { return Math.max(minZ, source.getMinZAtXY(x, y)); }
+
+	@Override
+	public int getMaxZAtXY(int x, int y) { return Math.min(maxZ, source.getMaxZAtXY(x, y)); }
+
+	@Override
+	public int getMinZ(int w, int x, int y) { return Math.max(minZ, source.getMinZ(w, x, y)); }
+
+	@Override
+	public int getMaxZ(int w, int x, int y) { return Math.min(maxZ, source.getMaxZ(w, x, y)); }
 
 }

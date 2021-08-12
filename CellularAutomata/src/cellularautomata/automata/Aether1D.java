@@ -19,6 +19,7 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
+import cellularautomata.grid1d.IsotropicGrid1DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
@@ -26,7 +27,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
  * @author Jaume
  *
  */
-public class Aether1D implements SymmetricEvolvingLongGrid1D {	
+public class Aether1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -260,11 +261,6 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 			return 0;
 		}
 	}
-	
-	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
 
 	@Override
 	public int getAsymmetricMaxX() {
@@ -278,16 +274,6 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D {
 	 */
 	public long getInitialValue() {
 		return initialValue;
-	}
-
-	@Override
-	public int getMinX() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxX() {
-		return getAsymmetricMaxX();
 	}
 
 	@Override

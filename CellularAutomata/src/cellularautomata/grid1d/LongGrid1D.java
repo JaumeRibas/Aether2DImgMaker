@@ -23,7 +23,7 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	/**
 	 * Returns the value at a given position
 	 * 
-	 * @param x the position on the x-coordinate
+	 * @param x the position on the x-axis
 	 * @return the value at (x)
 	 */
 	long getFromPosition(int x);

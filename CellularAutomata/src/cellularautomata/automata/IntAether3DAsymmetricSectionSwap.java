@@ -27,9 +27,12 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
+import cellularautomata.grid3d.AnisotropicGrid3DA;
 import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
+import cellularautomata.grid3d.ImmutableIntGrid3D;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
+import cellularautomata.grid3d.SizeLimitedAnisotropicIntGrid3DBlock;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
@@ -37,7 +40,7 @@ import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
  * @author Jaume
  *
  */
-public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<IntGrid3D> {
+public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<IntGrid3D> implements AnisotropicGrid3DA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;
@@ -2166,7 +2169,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 			if (block.maxX > maxX) {
 				subBlock = new IntSubGrid3DWithXBounds(block, block.minX, maxX);
 			} else {
-				subBlock = block;
+				subBlock = new ImmutableIntGrid3D(block);
 			}
 			triggerProcessGridBlock(subBlock);
 		}
@@ -2282,20 +2285,10 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 		maxX = (int) properties.get("maxX");
 		maxGridBlockSize = (long) properties.get("maxGridBlockSize");
 	}
-	
-	@Override
-	public int getMinX() {
-		return 0;
-	}
 
 	@Override
 	public int getMaxX() {
 		return maxX;
-	}
-	
-	@Override
-	public int getMinY() {
-		return 0;
 	}
 	
 	@Override
@@ -2304,103 +2297,8 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<I
 	}
 	
 	@Override
-	public int getMinZ() {
-		return 0;
-	}
-	
-	@Override
 	public int getMaxZ() {
 		return maxX;
-	}
-	
-	@Override
-	public int getMinXAtY(int y) {
-		return y;
-	}
-
-	@Override
-	public int getMinXAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinX(int y, int z) {
-		return Math.max(y, z);
-	}
-
-	@Override
-	public int getMaxXAtY(int y) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxXAtZ(int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxX(int y, int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMinYAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getMinYAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinY(int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getMaxYAtX(int x) {
-		return x;
-	}
-
-	@Override
-	public int getMaxYAtZ(int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxY(int x, int z) {
-		return x;
-	}
-
-	@Override
-	public int getMinZAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getMinZAtY(int y) {
-		return 0;
-	}
-
-	@Override
-	public int getMinZ(int x, int y) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxZAtX(int x) {
-		return x;
-	}
-
-	@Override
-	public int getMaxZAtY(int y) {
-		return y;
-	}
-
-	@Override
-	public int getMaxZ(int x, int y) {
-		return y;
 	}
 
 }

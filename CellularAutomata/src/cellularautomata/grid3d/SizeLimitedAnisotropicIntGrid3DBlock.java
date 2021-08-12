@@ -14,15 +14,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata;
+package cellularautomata.grid3d;
 
 import java.io.Serializable;
 
-import cellularautomata.grid.CAConstants;
-import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
-import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.automata.Constants;
+import cellularautomata.automata.Utils;
 
-public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializable {
+public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, AnisotropicGrid3DA, Serializable {
 
 	/**
 	 * 
@@ -31,8 +30,8 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 
 	public static final int MIN_LENGTH = 2;
 
-	protected int maxX;
-	protected int minX;
+	public int maxX;
+	public int minX;
 	private AnisotropicIntGrid3DSlice[] slices;
 
 	public SizeLimitedAnisotropicIntGrid3DBlock(int minX, long maxBytes) {
@@ -48,7 +47,7 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 		}
 	}
 
-	protected void setValueAtPosition(int x, int y, int z, int initialValue) {
+	public void setValueAtPosition(int x, int y, int z, int initialValue) {
 		slices[x - minX].setAtPosition(y, z, initialValue);			
 	}
 
@@ -60,16 +59,16 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 		return slices[x - minX].getFromPosition(y, z);
 	}
 
-	protected void setSlice(int x, AnisotropicIntGrid3DSlice slice) {
+	public void setSlice(int x, AnisotropicIntGrid3DSlice slice) {
 		slices[x - minX] = slice;
 	}
 	
-	protected AnisotropicIntGrid3DSlice getSlice(int x) {
+	public AnisotropicIntGrid3DSlice getSlice(int x) {
 		return slices[x - minX];
 	}
 	
 	private static int getMaxXLength(int minX, long maxBytes) {
-		long size = CAConstants.ARRAY_SIZE_OVERHEAD;
+		long size = Constants.ARRAY_SIZE_OVERHEAD;
 		int xLength = 0;
 		int x = minX;
 		long roundedSize = Utils.roundUpToEightMultiple(size);
@@ -93,18 +92,8 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 	}
 	
 	@Override
-	public int getMinY() {
-		return 0;
-	}
-	
-	@Override
 	public int getMaxY() {
 		return maxX;
-	}
-	
-	@Override
-	public int getMinZ() {
-		return 0;
 	}
 	
 	@Override
@@ -124,85 +113,10 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Serializ
 
 	@Override
 	public int getMinX(int y, int z) {
-		return Math.max(Math.max(y, z), minX);
+		return Math.max(y, minX);
 	}
 
-	@Override
-	public int getMaxXAtY(int y) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxXAtZ(int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxX(int y, int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMinYAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getMinYAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinY(int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getMaxYAtX(int x) {
-		return Math.min(maxX, x);
-	}
-
-	@Override
-	public int getMaxYAtZ(int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxY(int x, int z) {
-		return Math.min(maxX, x);
-	}
-
-	@Override
-	public int getMinZAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getMinZAtY(int y) {
-		return 0;
-	}
-
-	@Override
-	public int getMinZ(int x, int y) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxZAtX(int x) {
-		return Math.min(maxX, x);
-	}
-
-	@Override
-	public int getMaxZAtY(int y) {
-		return Math.min(maxX, y);
-	}
-
-	@Override
-	public int getMaxZ(int x, int y) {
-		return Math.min(maxX, y);
-	}
-
-	protected void free() {
+	public void free() {
 		slices = null;
 	}
 	

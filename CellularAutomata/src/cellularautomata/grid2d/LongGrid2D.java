@@ -23,8 +23,8 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	/**
 	 * Returns the value at a given position
 	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
 	 * @return the value at (x,y)
 	 * @throws Exception 
 	 */

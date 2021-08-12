@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
+import cellularautomata.grid1d.IsotropicGrid1DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 1D with a single source initial configuration
@@ -27,7 +28,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
+public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {
 
 	private long[] grid;
 	
@@ -127,11 +128,6 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 	public long getFromAsymmetricPosition(int x){	
 		return grid[x];
 	}
-	
-	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
 
 	@Override
 	public int getAsymmetricMaxX() {
@@ -150,16 +146,6 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D {
 	 */
 	public long getInitialValue() {
 		return initialValue;
-	}
-
-	@Override
-	public int getMinX() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getMaxX() {
-		return getAsymmetricMaxX();
 	}
 	
 	public long getBackgroundValue() {

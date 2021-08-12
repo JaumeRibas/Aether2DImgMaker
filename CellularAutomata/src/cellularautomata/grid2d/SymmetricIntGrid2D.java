@@ -32,8 +32,8 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	 * The result of getting the value of a position outside this bounds is undefined.
 	 * <p>
 	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
 	 * @return the {@link int} value at (x,y)
 	 * @throws Exception 
 	 */

@@ -27,7 +27,593 @@ public class CodeGeneration {
 	
 	public static void main(String[] args) {
 		printAnisotropicPositionsVonNeumannNeighborhoods(4, 15, true, true);
-	}	
+	}
+	
+	public static void printBoundsMethodsForAnisotropicGrid(int dimension) {
+		int[] axes = new int[dimension];
+		char[] axisLetters = new char[dimension];
+		char[] axisUpperCaseLetters = new char[dimension];
+		for (int axis = 0; axis < dimension; axis++) {
+			axes[axis] = axis;
+			char axisLetter = getAxisLetterFromIndex(dimension, axis);
+			axisLetters[axis] = axisLetter;
+			axisUpperCaseLetters[axis] = Character.toUpperCase(axisLetter);
+		}
+		int dimensionMinusOne = dimension - 1;
+		for (int currentAxis = 0; currentAxis < dimension; currentAxis++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[currentAxis];
+			System.out.println("@Override" + System.lineSeparator() + "default int getMin" + currentAxisUppercaseLetter 
+					+ "() { return 0; }" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int i = 0;
+			for (; i < currentAxis; i++) {
+				otherAxes[i] = i;
+			}
+			for (int k = currentAxis + 1; i < dimensionMinusOne; i = k, k++) {
+				otherAxes[i] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (i = 1; i < indexes.length; i++) {
+					indexes[i] = i;
+				}
+				i = indexCountMinusOne;
+				while (i > -1) {
+					if (i == indexCountMinusOne) {
+						boolean isThereAGreaterAxis = false;
+						boolean isThereASmallerAxis = false;
+						int smallestGreaterAxis = 0, greatestSmallerAxis = 0;
+						int otherAxis = otherAxes[indexes[0]];
+						if (otherAxis > currentAxis) {
+							isThereAGreaterAxis = true;
+							smallestGreaterAxis = otherAxis;
+						} else {
+							isThereASmallerAxis = true;
+							greatestSmallerAxis = otherAxis;
+						}
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxis]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxis = otherAxes[indexes[k]];
+							if (otherAxis > currentAxis) {
+								if (!isThereAGreaterAxis) {
+									isThereAGreaterAxis = true;
+									smallestGreaterAxis = otherAxis;
+								}
+							} else {
+								isThereASmallerAxis = true;
+								greatestSmallerAxis = otherAxis;
+							}
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxis]);
+						}
+						if (isThereAGreaterAxis) {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return " + axisLetters[smallestGreaterAxis] + "; }" + System.lineSeparator());
+						} else {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return 0; }" + System.lineSeparator());
+						}
+						if (isThereASmallerAxis) {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return Math.min(" + axisLetters[greatestSmallerAxis] + ", getMax" + currentAxisUppercaseLetter + "()); }" + System.lineSeparator());
+						} else {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+						}
+					}
+					int index = indexes[i];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + i;
+					if (index < max) {
+						index++;
+						indexes[i] = index;
+						i = indexCountMinusOne;
+					} else {
+						if (i > 0) {
+							int newIndex = indexes[i - 1] + 2;
+							if (newIndex < max) {
+								indexes[i] = newIndex;
+							}
+						}
+						i--;
+					}
+				}
+			}
+			if (otherAxes.length > 0) {
+				StringBuilder otherAxesParams = new StringBuilder();
+				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				for (i = 1; i < otherAxes.length; i++) {
+					otherAxesParams.append(", int ").append(axisLetters[otherAxes[i]]);
+				}
+				if (currentAxis == dimensionMinusOne) {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return 0; }" + System.lineSeparator());
+				} else {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return " + axisLetters[currentAxis + 1] + "; }" + System.lineSeparator());
+				}
+				if (currentAxis == 0) {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+				} else {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return Math.min(" + axisLetters[currentAxis - 1] + ", getMax" + currentAxisUppercaseLetter + "()); }" + System.lineSeparator());
+				}	
+			}
+		}
+	}
+	
+	public static void printBoundsMethodsForIsotropicGrid(int dimension) {
+		int[] axes = new int[dimension];
+		char[] axisLetters = new char[dimension];
+		char[] axisUpperCaseLetters = new char[dimension];
+		for (int axis = 0; axis < dimension; axis++) {
+			axes[axis] = axis;
+			char axisLetter = getAxisLetterFromIndex(dimension, axis);
+			axisLetters[axis] = axisLetter;
+			axisUpperCaseLetters[axis] = Character.toUpperCase(axisLetter);
+		}
+		int dimensionMinusOne = dimension - 1;
+		for (int currentAxis = 0; currentAxis < dimension; currentAxis++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[currentAxis];
+			System.out.println("@Override" + System.lineSeparator() + "default int getAsymmetricMin" + currentAxisUppercaseLetter 
+					+ "() { return 0; }" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int i = 0;
+			for (; i < currentAxis; i++) {
+				otherAxes[i] = i;
+			}
+			for (int k = currentAxis + 1; i < dimensionMinusOne; i = k, k++) {
+				otherAxes[i] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (i = 1; i < indexes.length; i++) {
+					indexes[i] = i;
+				}
+				i = indexCountMinusOne;
+				while (i > -1) {
+					if (i == indexCountMinusOne) {
+						boolean isThereAGreaterAxis = false;
+						boolean isThereASmallerAxis = false;
+						int smallestGreaterAxis = 0, greatestSmallerAxis = 0;
+						int otherAxis = otherAxes[indexes[0]];
+						if (otherAxis > currentAxis) {
+							isThereAGreaterAxis = true;
+							smallestGreaterAxis = otherAxis;
+						} else {
+							isThereASmallerAxis = true;
+							greatestSmallerAxis = otherAxis;
+						}
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxis]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxis = otherAxes[indexes[k]];
+							if (otherAxis > currentAxis) {
+								if (!isThereAGreaterAxis) {
+									isThereAGreaterAxis = true;
+									smallestGreaterAxis = otherAxis;
+								}
+							} else {
+								isThereASmallerAxis = true;
+								greatestSmallerAxis = otherAxis;
+							}
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxis]);
+						}
+						if (isThereAGreaterAxis) {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return " + axisLetters[smallestGreaterAxis] + "; }" + System.lineSeparator());
+						} else {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return 0; }" + System.lineSeparator());
+						}
+						if (isThereASmallerAxis) {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return Math.min(" + axisLetters[greatestSmallerAxis] + ", getAsymmetricMax" + currentAxisUppercaseLetter + "()); }" + System.lineSeparator());
+						} else {
+							System.out.println("@Override" + System.lineSeparator() 
+							+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return getAsymmetricMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+						}
+					}
+					int index = indexes[i];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + i;
+					if (index < max) {
+						index++;
+						indexes[i] = index;
+						i = indexCountMinusOne;
+					} else {
+						if (i > 0) {
+							int newIndex = indexes[i - 1] + 2;
+							if (newIndex < max) {
+								indexes[i] = newIndex;
+							}
+						}
+						i--;
+					}
+				}
+			}
+			if (otherAxes.length > 0) {
+				StringBuilder otherAxesParams = new StringBuilder();
+				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				for (i = 1; i < otherAxes.length; i++) {
+					otherAxesParams.append(", int ").append(axisLetters[otherAxes[i]]);
+				}
+				if (currentAxis == dimensionMinusOne) {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return 0; }" + System.lineSeparator());
+				} else {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return " + axisLetters[currentAxis + 1] + "; }" + System.lineSeparator());
+				}
+				if (currentAxis == 0) {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return getAsymmetricMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+				} else {
+					System.out.println("@Override" + System.lineSeparator() 
+					+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ ") { return Math.min(" + axisLetters[currentAxis - 1] + ", getAsymmetricMax" + currentAxisUppercaseLetter + "()); }" + System.lineSeparator());
+				}	
+			}
+		}
+	}
+	
+	public static void printBoundsMethodsForAsymmetricSection(int dimension) {
+		int[] axes = new int[dimension];
+		char[] axisLetters = new char[dimension];
+		char[] axisUpperCaseLetters = new char[dimension];
+		for (int i = 0; i < axes.length; i++) {
+			axes[i] = i;
+			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			axisLetters[i] = axisLetter;
+			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+		}
+		int dimensionMinusOne = dimension - 1;
+		for (int i = 0; i < dimension; i++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLetter 
+					+ "() { return source.getAsymmetricMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLetter 
+					+ "() { return source.getAsymmetricMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int j = 0;
+			for (; j < i; j++) {
+				otherAxes[j] = j;
+			}
+			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
+				otherAxes[j] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (j = 1; j < indexes.length; j++) {
+					indexes[j] = j;
+				}
+				j = indexCountMinusOne;
+				while (j > -1) {
+					if (j == indexCountMinusOne) {
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						StringBuilder otherAxesCsv = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesCsv.append(axisLetters[otherAxes[indexes[0]]]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesCsv.append(", ").append(axisLetters[otherAxes[indexes[k]]]);
+						}
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+					}
+					int index = indexes[j];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
+					if (index < max) {
+						index++;
+						indexes[j] = index;
+						j = indexCountMinusOne;
+					} else {
+						if (j > 0) {
+							int newIndex = indexes[j - 1] + 2;
+							if (newIndex < max) {
+								indexes[j] = newIndex;
+							}
+						}
+						j--;
+					}
+				}
+			}
+			if (otherAxes.length > 0) {
+				StringBuilder otherAxesParams = new StringBuilder();
+				StringBuilder otherAxesCsv = new StringBuilder();
+				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				otherAxesCsv.append(axisLetters[otherAxes[0]]);
+				for (j = 1; j < otherAxes.length; j++) {
+					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
+					otherAxesCsv.append(", ").append(axisLetters[otherAxes[j]]);
+				}
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+				+ ") { return source.getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+				+ ") { return source.getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());	
+			}
+		}
+	}
+	
+	public static void printBoundsMethodsForDecorator(int dimension) {
+		int[] axes = new int[dimension];
+		char[] axisLetters = new char[dimension];
+		char[] axisUpperCaseLetters = new char[dimension];
+		for (int i = 0; i < axes.length; i++) {
+			axes[i] = i;
+			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			axisLetters[i] = axisLetter;
+			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+		}
+		int dimensionMinusOne = dimension - 1;
+		for (int i = 0; i < dimension; i++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLetter 
+					+ "() { return source.getMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLetter 
+					+ "() { return source.getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int j = 0;
+			for (; j < i; j++) {
+				otherAxes[j] = j;
+			}
+			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
+				otherAxes[j] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (j = 1; j < indexes.length; j++) {
+					indexes[j] = j;
+				}
+				j = indexCountMinusOne;
+				while (j > -1) {
+					if (j == indexCountMinusOne) {
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						StringBuilder otherAxesCsv = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesCsv.append(axisLetters[otherAxes[indexes[0]]]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesCsv.append(", ").append(axisLetters[otherAxes[indexes[k]]]);
+						}
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+					}
+					int index = indexes[j];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
+					if (index < max) {
+						index++;
+						indexes[j] = index;
+						j = indexCountMinusOne;
+					} else {
+						if (j > 0) {
+							int newIndex = indexes[j - 1] + 2;
+							if (newIndex < max) {
+								indexes[j] = newIndex;
+							}
+						}
+						j--;
+					}
+				}
+			}
+			if (otherAxes.length > 0) {
+				StringBuilder otherAxesParams = new StringBuilder();
+				StringBuilder otherAxesCsv = new StringBuilder();
+				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				otherAxesCsv.append(axisLetters[otherAxes[0]]);
+				for (j = 1; j < otherAxes.length; j++) {
+					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
+					otherAxesCsv.append(", ").append(axisLetters[otherAxes[j]]);
+				}
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+				+ ") { return source.getMin" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+				+ ") { return source.getMax" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());	
+			}
+		}
+	}
+	
+	public static void printBoundsMethodsForSubgrid(int dimension) {
+		int[] axes = new int[dimension];
+		char[] axisLetters = new char[dimension];
+		char[] axisUpperCaseLetters = new char[dimension];
+		for (int i = 0; i < axes.length; i++) {
+			axes[i] = i;
+			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			axisLetters[i] = axisLetter;
+			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+		}
+		int dimensionMinusOne = dimension - 1;
+		for (int i = 0; i < dimension; i++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLetter 
+					+ "() { return min" + currentAxisUppercaseLetter + "; }" + System.lineSeparator());
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLetter 
+					+ "() { return max" + currentAxisUppercaseLetter + "; }" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int j = 0;
+			for (; j < i; j++) {
+				otherAxes[j] = j;
+			}
+			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
+				otherAxes[j] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (j = 1; j < indexes.length; j++) {
+					indexes[j] = j;
+				}
+				j = indexCountMinusOne;
+				while (j > -1) {
+					if (j == indexCountMinusOne) {
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						StringBuilder otherAxesCsv = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesCsv.append(axisLetters[otherAxes[indexes[0]]]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesCsv.append(", ").append(axisLetters[otherAxes[indexes[k]]]);
+						}
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return Math.max(min" + currentAxisUppercaseLetter 
+						+ ", source.getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return Math.min(max" + currentAxisUppercaseLetter 
+						+ ", source.getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
+					}
+					int index = indexes[j];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
+					if (index < max) {
+						index++;
+						indexes[j] = index;
+						j = indexCountMinusOne;
+					} else {
+						if (j > 0) {
+							int newIndex = indexes[j - 1] + 2;
+							if (newIndex < max) {
+								indexes[j] = newIndex;
+							}
+						}
+						j--;
+					}
+				}
+			}
+			if (otherAxes.length > 0) {
+				StringBuilder otherAxesParams = new StringBuilder();
+				StringBuilder otherAxesCsv = new StringBuilder();
+				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				otherAxesCsv.append(axisLetters[otherAxes[0]]);
+				for (j = 1; j < otherAxes.length; j++) {
+					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
+					otherAxesCsv.append(", ").append(axisLetters[otherAxes[j]]);
+				}
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams + ") { return Math.max(min" + currentAxisUppercaseLetter 
+				+ ", source.getMin" + currentAxisUppercaseLetter + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ") { return Math.min(max" + currentAxisUppercaseLetter 
+				+ ", source.getMax" + currentAxisUppercaseLetter + "(" + otherAxesCsv + ")); }" + System.lineSeparator());		
+			}
+		}
+	}
+	
+	public static void printAsymmetricBoundsMethodsForInterface(int dimension) {
+		int[] axes = new int[dimension];
+		char[] axisLetters = new char[dimension];
+		char[] axisUpperCaseLetters = new char[dimension];
+		for (int i = 0; i < axes.length; i++) {
+			axes[i] = i;
+			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			axisLetters[i] = axisLetter;
+			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+		}
+		int dimensionMinusOne = dimension - 1;
+		for (int i = 0; i < dimension; i++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
+			System.out.println("int getAsymmetricMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			System.out.println("int getAsymmetricMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int j = 0;
+			for (; j < i; j++) {
+				otherAxes[j] = j;
+			}
+			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
+				otherAxes[j] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (j = 1; j < indexes.length; j++) {
+					indexes[j] = j;
+				}
+				j = indexCountMinusOne;
+				while (j > -1) {
+					if (j == indexCountMinusOne) {
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+						}
+						System.out.println("int getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
+						System.out.println("int getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
+					}
+					int index = indexes[j];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
+					if (index < max) {
+						index++;
+						indexes[j] = index;
+						j = indexCountMinusOne;
+					} else {
+						if (j > 0) {
+							int newIndex = indexes[j - 1] + 2;
+							if (newIndex < max) {
+								indexes[j] = newIndex;
+							}
+						}
+						j--;
+					}
+				}
+			}
+			if (otherAxes.length > 0) {
+				StringBuilder otherAxesParams = new StringBuilder();
+				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				for (j = 1; j < otherAxes.length; j++) {
+					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
+				}
+				System.out.println("int getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());
+				System.out.println("int getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());
+			}
+		}
+	}
 	
 	public static void printBoundsMethodsForInterface(int dimension) {
 		int[] axes = new int[dimension];
@@ -39,70 +625,64 @@ public class CodeGeneration {
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
-		if (dimension == 1) {
-			for (int i = 0; i < dimension; i++) {
-				char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-				System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-				System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+		int dimensionMinusOne = dimension - 1;
+		for (int i = 0; i < dimension; i++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
+			System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int j = 0;
+			for (; j < i; j++) {
+				otherAxes[j] = j;
 			}
-		} else {
-			int dimensionMinusOne = dimension - 1;
-			for (int i = 0; i < dimension; i++) {
-				char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-				System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-				System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-				int[] otherAxes = new int[dimensionMinusOne];
-				int j = 0;
-				for (; j < i; j++) {
-					otherAxes[j] = j;
+			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
+				otherAxes[j] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (j = 1; j < indexes.length; j++) {
+					indexes[j] = j;
 				}
-				for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
-					otherAxes[j] = k;
-				}
-				int otherAxesCountMinusOne = otherAxes.length - 1;
-				for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
-					int[] indexes = new int[indexCount];
-					for (j = 1; j < indexes.length; j++) {
-						indexes[j] = j;
+				j = indexCountMinusOne;
+				while (j > -1) {
+					if (j == indexCountMinusOne) {
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+						}
+						System.out.println("int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
+						System.out.println("int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
 					}
-					j = indexCountMinusOne;
-					while (j > -1) {
-						if (j == indexCountMinusOne) {
-							StringBuilder otherAxesInMethodName = new StringBuilder();
-							StringBuilder otherAxesParams = new StringBuilder();
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-							otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
-							for (int k = 1; k < indexCount; k++) {
-								otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-								otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+					int index = indexes[j];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
+					if (index < max) {
+						index++;
+						indexes[j] = index;
+						j = indexCountMinusOne;
+					} else {
+						if (j > 0) {
+							int newIndex = indexes[j - 1] + 2;
+							if (newIndex < max) {
+								indexes[j] = newIndex;
 							}
-							System.out.println("int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
-							System.out.println("int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
 						}
-						int index = indexes[j];
-						int max = otherAxesCountMinusOne - indexCountMinusOne + j;
-						if (index < max) {
-							index++;
-							indexes[j] = index;
-							j = indexCountMinusOne;
-						} else {
-							if (j > 0) {
-								int newIndex = indexes[j - 1] + 2;
-								if (newIndex < max) {
-									indexes[j] = newIndex;
-								}
-							}
-							j--;
-						}
+						j--;
 					}
 				}
+			}
+			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
 				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
 					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
 				}
 				System.out.println("int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());
-				System.out.println("int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());
+				System.out.println("int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());				
 			}
 		}
 	}
@@ -117,63 +697,57 @@ public class CodeGeneration {
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
-		if (dimension == 1) {
-			for (int i = 0; i < dimension; i++) {
-				char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-				System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-				System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+		int dimensionMinusOne = dimension - 1;
+		for (int i = 0; i < dimension; i++) {
+			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
+			System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int j = 0;
+			for (; j < i; j++) {
+				otherAxes[j] = j;
 			}
-		} else {
-			int dimensionMinusOne = dimension - 1;
-			for (int i = 0; i < dimension; i++) {
-				char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-				System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-				System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-				int[] otherAxes = new int[dimensionMinusOne];
-				int j = 0;
-				for (; j < i; j++) {
-					otherAxes[j] = j;
+			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
+				otherAxes[j] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (j = 1; j < indexes.length; j++) {
+					indexes[j] = j;
 				}
-				for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
-					otherAxes[j] = k;
-				}
-				int otherAxesCountMinusOne = otherAxes.length - 1;
-				for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
-					int[] indexes = new int[indexCount];
-					for (j = 1; j < indexes.length; j++) {
-						indexes[j] = j;
+				j = indexCountMinusOne;
+				while (j > -1) {
+					if (j == indexCountMinusOne) {
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						for (int k = 1; k < indexCount; k++) {
+							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+						}
+						System.out.println("default int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+						System.out.println("default int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
 					}
-					j = indexCountMinusOne;
-					while (j > -1) {
-						if (j == indexCountMinusOne) {
-							StringBuilder otherAxesInMethodName = new StringBuilder();
-							StringBuilder otherAxesParams = new StringBuilder();
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-							otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
-							for (int k = 1; k < indexCount; k++) {
-								otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-								otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+					int index = indexes[j];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
+					if (index < max) {
+						index++;
+						indexes[j] = index;
+						j = indexCountMinusOne;
+					} else {
+						if (j > 0) {
+							int newIndex = indexes[j - 1] + 2;
+							if (newIndex < max) {
+								indexes[j] = newIndex;
 							}
-							System.out.println("default int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
-							System.out.println("default int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
 						}
-						int index = indexes[j];
-						int max = otherAxesCountMinusOne - indexCountMinusOne + j;
-						if (index < max) {
-							index++;
-							indexes[j] = index;
-							j = indexCountMinusOne;
-						} else {
-							if (j > 0) {
-								int newIndex = indexes[j - 1] + 2;
-								if (newIndex < max) {
-									indexes[j] = newIndex;
-								}
-							}
-							j--;
-						}
+						j--;
 					}
 				}
+			}
+			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
 				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {

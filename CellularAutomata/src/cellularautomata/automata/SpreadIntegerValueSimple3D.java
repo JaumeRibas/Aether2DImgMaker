@@ -19,7 +19,7 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
+import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 3D, with a single source initial configuration, for review and testing purposes
@@ -27,7 +27,7 @@ import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid3D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
+public class SpreadIntegerValueSimple3D implements EvolvingLongGrid3D {
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
@@ -285,41 +285,6 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 	}
 	
 	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinY() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxY() {
-		return getMaxY();
-	}
-
-	@Override
-	public int getAsymmetricMinZ() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxZ() {
-		return getMaxZ();
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
 	public long getStep() {
 		return currentStep;
 	}
@@ -398,95 +363,5 @@ public class SpreadIntegerValueSimple3D implements SymmetricEvolvingLongGrid3D {
 	@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue + "/" + backgroundValue;
-	}
-	
-	@Override
-	public int getAsymmetricMinXAtY(int y) {
-		return y;
-	}
-
-	@Override
-	public int getAsymmetricMinXAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMinX(int y, int z) {
-		return Math.max(y, z);
-	}
-
-	@Override
-	public int getAsymmetricMaxXAtY(int y) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMaxXAtZ(int z) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMaxX(int y, int z) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinYAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinYAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMinY(int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMaxYAtX(int x) {
-		return Math.min(getAsymmetricMaxY(), x);
-	}
-
-	@Override
-	public int getAsymmetricMaxYAtZ(int z) {
-		return getAsymmetricMaxY();
-	}
-
-	@Override
-	public int getAsymmetricMaxY(int x, int z) {
-		return Math.min(getAsymmetricMaxY(), x);
-	}
-
-	@Override
-	public int getAsymmetricMinZAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinZAtY(int y) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinZ(int x, int y) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxZAtX(int x) {
-		return Math.min(getAsymmetricMaxZ(), x);
-	}
-
-	@Override
-	public int getAsymmetricMaxZAtY(int y) {
-		return Math.min(getAsymmetricMaxZ(), y);
-	}
-
-	@Override
-	public int getAsymmetricMaxZ(int x, int y) {
-		return Math.min(getAsymmetricMaxZ(), y);
 	}
 }

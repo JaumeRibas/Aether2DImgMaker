@@ -21,8 +21,8 @@ public interface ObjectGrid2D<T> extends Grid2D {
 	/**
 	 * Returns the object at a given position
 	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
 	 * @return the object at (x,y)
 	 * @throws Exception 
 	 */

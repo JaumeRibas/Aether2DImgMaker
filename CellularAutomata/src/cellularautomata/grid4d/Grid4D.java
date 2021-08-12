@@ -234,6 +234,50 @@ public interface Grid4D extends Grid {
 		return getMaxZ();
 	}
 
+	default int getMinWAtX(int x) { return getMinW(); }
+
+	default int getMaxWAtX(int x) { return getMaxW(); }
+
+	default int getMinWAtY(int y) { return getMinW(); }
+
+	default int getMaxWAtY(int y) { return getMaxW(); }
+
+	default int getMinWAtXY(int x, int y) { return getMinW(); }
+
+	default int getMaxWAtXY(int x, int y) { return getMaxW(); }
+
+	default int getMinXAtY(int y) { return getMinX(); }
+
+	default int getMaxXAtY(int y) { return getMaxX(); }
+
+	default int getMinXAtWY(int w, int y) { return getMinX(); }
+
+	default int getMaxXAtWY(int w, int y) { return getMaxX(); }
+
+	default int getMinYAtX(int x) { return getMinY(); }
+
+	default int getMaxYAtX(int x) { return getMaxY(); }
+
+	default int getMinZAtX(int x) { return getMinZ(); }
+
+	default int getMaxZAtX(int x) { return getMaxZ(); }
+
+	default int getMinZAtY(int y) { return getMinZ(); }
+
+	default int getMaxZAtY(int y) { return getMaxZ(); }
+
+	default int getMinZAtWX(int w, int x) { return getMinZ(); }
+
+	default int getMaxZAtWX(int w, int x) { return getMaxZ(); }
+
+	default int getMinZAtWY(int w, int y) { return getMinZ(); }
+
+	default int getMaxZAtWY(int w, int y) { return getMaxZ(); }
+
+	default int getMinZAtXY(int x, int y) { return getMinZ(); }
+
+	default int getMaxZAtXY(int x, int y) { return getMaxZ(); }
+
 	default Grid2D crossSectionAtYZ(int y, int z) {
 		return new Grid4DYZCrossSection<Grid4D>(this, y, z);
 	}

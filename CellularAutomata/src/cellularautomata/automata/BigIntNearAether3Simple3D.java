@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid3D;
+import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntNearAether3Simple3D implements SymmetricEvolvingNumberGrid3D<BigInt> {	
+public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -306,41 +306,6 @@ public class BigIntNearAether3Simple3D implements SymmetricEvolvingNumberGrid3D<
 	}
 	
 	@Override
-	public int getAsymmetricMinX() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinY() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxY() {
-		return getMaxY();
-	}
-
-	@Override
-	public int getAsymmetricMinZ() {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxZ() {
-		return getMaxZ();
-	}
-
-	@Override
-	public BigInt getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
 	public long getStep() {
 		return currentStep;
 	}
@@ -365,95 +330,5 @@ public class BigIntNearAether3Simple3D implements SymmetricEvolvingNumberGrid3D<
 	}@Override
 	public String getSubFolderPath() {
 		return getName() + "/" + initialValue;
-	}
-	
-	@Override
-	public int getAsymmetricMinXAtY(int y) {
-		return y;
-	}
-
-	@Override
-	public int getAsymmetricMinXAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMinX(int y, int z) {
-		return Math.max(y, z);
-	}
-
-	@Override
-	public int getAsymmetricMaxXAtY(int y) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMaxXAtZ(int z) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMaxX(int y, int z) {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	public int getAsymmetricMinYAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinYAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMinY(int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getAsymmetricMaxYAtX(int x) {
-		return Math.min(getAsymmetricMaxY(), x);
-	}
-
-	@Override
-	public int getAsymmetricMaxYAtZ(int z) {
-		return getAsymmetricMaxY();
-	}
-
-	@Override
-	public int getAsymmetricMaxY(int x, int z) {
-		return Math.min(getAsymmetricMaxY(), x);
-	}
-
-	@Override
-	public int getAsymmetricMinZAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinZAtY(int y) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMinZ(int x, int y) {
-		return 0;
-	}
-
-	@Override
-	public int getAsymmetricMaxZAtX(int x) {
-		return Math.min(getAsymmetricMaxZ(), x);
-	}
-
-	@Override
-	public int getAsymmetricMaxZAtY(int y) {
-		return Math.min(getAsymmetricMaxZ(), y);
-	}
-
-	@Override
-	public int getAsymmetricMaxZ(int x, int y) {
-		return Math.min(getAsymmetricMaxZ(), y);
 	}
 }

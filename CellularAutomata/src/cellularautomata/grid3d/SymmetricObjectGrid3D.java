@@ -19,11 +19,16 @@ package cellularautomata.grid3d;
 public interface SymmetricObjectGrid3D<T> extends ObjectGrid3D<T>, SymmetricGrid3D {
 	
 	/**
-	 * Returns the object at a given position
+	 * <p>
+	 * Returns the object at a given position within the asymmetric section of the grid.
+	 * </p>
+	 * <p>
+	 * The result of getting an object at a position outside this section is undefined.
+	 * <p>
 	 * 
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @param z the position on the z-coordinate
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
 	 * @return the value at (x,y,z)
 	 * @throws Exception 
 	 */

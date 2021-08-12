@@ -18,8 +18,8 @@ package cellularautomata.grid4d;
 
 import java.io.Serializable;
 
+import cellularautomata.automata.Constants;
 import cellularautomata.automata.Utils;
-import cellularautomata.grid.CAConstants;
 
 public class AnisotropicLongGrid4DSlice implements Serializable {
 	
@@ -50,11 +50,11 @@ public class AnisotropicLongGrid4DSlice implements Serializable {
 	
 	public static long getSliceSize(int w) {
 		int wPlusOne = w + 1;
-		long size = Utils.roundUpToEightMultiple(wPlusOne * Integer.BYTES + CAConstants.ARRAY_SIZE_OVERHEAD);
+		long size = Utils.roundUpToEightMultiple(wPlusOne * Integer.BYTES + Constants.ARRAY_SIZE_OVERHEAD);
 		for (int i = 1; i <= wPlusOne; i++) {
-			size += Utils.roundUpToEightMultiple(i * Integer.BYTES + CAConstants.ARRAY_SIZE_OVERHEAD);
+			size += Utils.roundUpToEightMultiple(i * Integer.BYTES + Constants.ARRAY_SIZE_OVERHEAD);
 			for (int j = 1; j <= i; j++) {
-				size += Utils.roundUpToEightMultiple(j * PRIMITIVE_SIZE + CAConstants.ARRAY_SIZE_OVERHEAD);
+				size += Utils.roundUpToEightMultiple(j * PRIMITIVE_SIZE + Constants.ARRAY_SIZE_OVERHEAD);
 			}
 		}
 		return size;

@@ -54,30 +54,6 @@ public class Utils {
 		return b;
 	}
 	
-	/**
-	 * <p>Gives the maximum value difference between neighbors throughout the evolution of an Aether model with single source initial configuration.</p>
-	 * <p>If the source value is larger or equal to zero, the maximum value difference between neighbors is equal to the source value</p>
-	 * 
-	 * @param gridDimension the dimension of the grid
-	 * @param sourceValue the value of the single source initial configuration
-	 * @return
-	 */
-	public static BigInt getAetherMaxNeighboringValuesDifferenceFromSingleSource(int gridDimension, BigInt sourceValue) {
-		if (gridDimension <= 0) {
-			throw new IllegalArgumentException("Grid dimension must be greater than zero.");
-		}
-		if (sourceValue.compareTo(BigInt.ZERO) < 0) {
-			if (gridDimension > 1) {
-				BigInt two = BigInt.valueOf(2);
-				return sourceValue.add(sourceValue.negate().divide(two).multiply(BigInt.valueOf(gridDimension).multiply(two).add(BigInt.ONE))).abs();
-			} else {
-				return sourceValue.negate();
-			}
-		} else {
-			return sourceValue; 
-		}
-	}
-	
 	public static BigInt[][][][] buildAnisotropic4DBigIntArray(int side) {
 		BigInt[][][][] anisotropic4DArray = new BigInt[side][][][];
 		for (int w = 0; w < anisotropic4DArray.length; w++) {

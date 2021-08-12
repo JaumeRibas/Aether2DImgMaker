@@ -19,12 +19,17 @@ package cellularautomata.grid4d;
 public interface SymmetricIntGrid4D extends IntGrid4D, SymmetricGrid4D {
 
 	/**
-	 * Returns the value at a given position within one of the asymmetric sections
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this section is undefined.
+	 * <p>
 	 * 
-	 * @param w the position on the w-coordinate
-	 * @param x the position on the x-coordinate
-	 * @param y the position on the y-coordinate
-	 * @param z the position on the z-coordinate
+	 * @param w the position on the w-axis
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */

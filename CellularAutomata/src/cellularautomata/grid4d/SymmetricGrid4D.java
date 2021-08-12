@@ -18,8 +18,6 @@ package cellularautomata.grid4d;
 
 public interface SymmetricGrid4D extends Grid4D {
 	
-	//TODO: add missing methods
-	
 	/**
 	 * Returns the smallest w-coordinate of the asymmetric section of the grid
 	 * 
@@ -163,6 +161,50 @@ public interface SymmetricGrid4D extends Grid4D {
 	int getAsymmetricMinZAtW(int w);
 	
 	int getAsymmetricMaxZAtW(int w);
+
+	int getAsymmetricMinWAtX(int x);
+
+	int getAsymmetricMaxWAtX(int x);
+
+	int getAsymmetricMinWAtY(int y);
+
+	int getAsymmetricMaxWAtY(int y);
+
+	int getAsymmetricMinWAtXY(int x, int y);
+
+	int getAsymmetricMaxWAtXY(int x, int y);
+
+	int getAsymmetricMinXAtY(int y);
+
+	int getAsymmetricMaxXAtY(int y);
+
+	int getAsymmetricMinXAtWY(int w, int y);
+
+	int getAsymmetricMaxXAtWY(int w, int y);
+
+	int getAsymmetricMinYAtX(int x);
+
+	int getAsymmetricMaxYAtX(int x);
+
+	int getAsymmetricMinZAtX(int x);
+
+	int getAsymmetricMaxZAtX(int x);
+
+	int getAsymmetricMinZAtY(int y);
+
+	int getAsymmetricMaxZAtY(int y);
+
+	int getAsymmetricMinZAtWX(int w, int x);
+
+	int getAsymmetricMaxZAtWX(int w, int x);
+
+	int getAsymmetricMinZAtWY(int w, int y);
+
+	int getAsymmetricMaxZAtWY(int w, int y);
+
+	int getAsymmetricMinZAtXY(int x, int y);
+
+	int getAsymmetricMaxZAtXY(int x, int y);
 	
 	/**
 	 * Returns an asymmetric section of the grid

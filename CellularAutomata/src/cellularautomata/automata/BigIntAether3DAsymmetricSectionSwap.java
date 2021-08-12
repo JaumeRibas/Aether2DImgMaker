@@ -28,8 +28,11 @@ import org.apache.commons.io.FileUtils;
 
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
 import cellularautomata.grid3d.AnisotropicBigIntGrid3DSlice;
+import cellularautomata.grid3d.AnisotropicGrid3DA;
+import cellularautomata.grid3d.ImmutableNumberGrid3D;
 import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid3d.NumberSubGrid3DWithXBounds;
+import cellularautomata.grid3d.SizeLimitedAnisotropicBigIntGrid3DBlock;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -38,7 +41,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<NumberGrid3D<BigInt>> {
+public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<NumberGrid3D<BigInt>> implements AnisotropicGrid3DA {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -2214,7 +2217,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 			if (block.maxX > maxX) {
 				subBlock = new NumberSubGrid3DWithXBounds<BigInt>(block, block.minX, maxX);
 			} else {
-				subBlock = block;
+				subBlock = new ImmutableNumberGrid3D<BigInt>(block);
 			}
 			triggerProcessGridBlock(subBlock);
 		}
@@ -2330,20 +2333,10 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 		maxX = (int) properties.get("maxX");
 		gridBlockSide = (int) properties.get("gridBlockSide");
 	}
-	
-	@Override
-	public int getMinX() {
-		return 0;
-	}
 
 	@Override
 	public int getMaxX() {
 		return maxX;
-	}
-	
-	@Override
-	public int getMinY() {
-		return 0;
 	}
 	
 	@Override
@@ -2352,103 +2345,8 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 	}
 	
 	@Override
-	public int getMinZ() {
-		return 0;
-	}
-	
-	@Override
 	public int getMaxZ() {
 		return maxX;
-	}
-	
-	@Override
-	public int getMinXAtY(int y) {
-		return y;
-	}
-
-	@Override
-	public int getMinXAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinX(int y, int z) {
-		return Math.max(y, z);
-	}
-
-	@Override
-	public int getMaxXAtY(int y) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxXAtZ(int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxX(int y, int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMinYAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getMinYAtZ(int z) {
-		return z;
-	}
-
-	@Override
-	public int getMinY(int x, int z) {
-		return z;
-	}
-
-	@Override
-	public int getMaxYAtX(int x) {
-		return x;
-	}
-
-	@Override
-	public int getMaxYAtZ(int z) {
-		return maxX;
-	}
-
-	@Override
-	public int getMaxY(int x, int z) {
-		return x;
-	}
-
-	@Override
-	public int getMinZAtX(int x) {
-		return 0;
-	}
-
-	@Override
-	public int getMinZAtY(int y) {
-		return 0;
-	}
-
-	@Override
-	public int getMinZ(int x, int y) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxZAtX(int x) {
-		return x;
-	}
-
-	@Override
-	public int getMaxZAtY(int y) {
-		return y;
-	}
-
-	@Override
-	public int getMaxZ(int x, int y) {
-		return y;
 	}
 
 }

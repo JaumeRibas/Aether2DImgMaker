@@ -18,6 +18,7 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
 
 /**

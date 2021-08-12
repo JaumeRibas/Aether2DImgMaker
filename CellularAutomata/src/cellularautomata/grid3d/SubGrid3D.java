@@ -19,12 +19,14 @@ package cellularautomata.grid3d;
 public class SubGrid3D<G extends Grid3D> implements Grid3D {
 	
 	protected G source;
-	private int minX;
-	private int maxX;
-	private int minY;
-	private int maxY;
-	private int minZ;
-	private int maxZ;
+	protected int minX;
+	protected int maxX;
+	protected int minY;
+	protected int maxY;
+	protected int minZ;
+	protected int maxZ;
+	
+	protected SubGrid3D() {	}
 	
 	public SubGrid3D(G source, int minX, int maxX, int minY, 
 			int maxY, int minZ, int maxZ) {
@@ -67,35 +69,75 @@ public class SubGrid3D<G extends Grid3D> implements Grid3D {
 	}
 
 	@Override
-	public int getMinX() {
-		return minX;
-	}
+	public int getMinX() { return minX; }
 
 	@Override
-	public int getMaxX() {
-		return maxX;
-	}
+	public int getMaxX() { return maxX; }
 
 	@Override
-	public int getMinY() {
-		return minY;
-	}
+	public int getMinXAtY(int y) { return Math.max(minX, source.getMinXAtY(y)); }
 
 	@Override
-	public int getMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		return minZ;
-	}
+	public int getMaxXAtY(int y) { return Math.min(maxX, source.getMaxXAtY(y)); }
 
 	@Override
-	public int getMaxZ() {
-		return maxZ;
-	}
-	
-	//TODO add missing methods
+	public int getMinXAtZ(int z) { return Math.max(minX, source.getMinXAtZ(z)); }
+
+	@Override
+	public int getMaxXAtZ(int z) { return Math.min(maxX, source.getMaxXAtZ(z)); }
+
+	@Override
+	public int getMinX(int y, int z) { return Math.max(minX, source.getMinX(y, z)); }
+
+	@Override
+	public int getMaxX(int y, int z) { return Math.min(maxX, source.getMaxX(y, z)); }
+
+	@Override
+	public int getMinY() { return minY; }
+
+	@Override
+	public int getMaxY() { return maxY; }
+
+	@Override
+	public int getMinYAtX(int x) { return Math.max(minY, source.getMinYAtX(x)); }
+
+	@Override
+	public int getMaxYAtX(int x) { return Math.min(maxY, source.getMaxYAtX(x)); }
+
+	@Override
+	public int getMinYAtZ(int z) { return Math.max(minY, source.getMinYAtZ(z)); }
+
+	@Override
+	public int getMaxYAtZ(int z) { return Math.min(maxY, source.getMaxYAtZ(z)); }
+
+	@Override
+	public int getMinY(int x, int z) { return Math.max(minY, source.getMinY(x, z)); }
+
+	@Override
+	public int getMaxY(int x, int z) { return Math.min(maxY, source.getMaxY(x, z)); }
+
+	@Override
+	public int getMinZ() { return minZ; }
+
+	@Override
+	public int getMaxZ() { return maxZ; }
+
+	@Override
+	public int getMinZAtX(int x) { return Math.max(minZ, source.getMinZAtX(x)); }
+
+	@Override
+	public int getMaxZAtX(int x) { return Math.min(maxZ, source.getMaxZAtX(x)); }
+
+	@Override
+	public int getMinZAtY(int y) { return Math.max(minZ, source.getMinZAtY(y)); }
+
+	@Override
+	public int getMaxZAtY(int y) { return Math.min(maxZ, source.getMaxZAtY(y)); }
+
+	@Override
+	public int getMinZ(int x, int y) { return Math.max(minZ, source.getMinZ(x, y)); }
+
+	@Override
+	public int getMaxZ(int x, int y) { return Math.min(maxZ, source.getMaxZ(x, y)); }
 
 }

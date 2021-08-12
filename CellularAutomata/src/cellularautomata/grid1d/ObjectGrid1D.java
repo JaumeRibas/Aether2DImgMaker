@@ -21,7 +21,7 @@ public interface ObjectGrid1D<T> extends Grid1D {
 	/**
 	 * Returns the value at a given position
 	 * 
-	 * @param x the position on the x-coordinate
+	 * @param x the position on the x-axis
 	 * @return the value at (x)
 	 */
 	T getFromPosition(int x);

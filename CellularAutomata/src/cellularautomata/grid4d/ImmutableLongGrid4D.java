@@ -14,23 +14,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid;
+package cellularautomata.grid4d;
 
-public class CAConstants {
-	public static final int ARRAY_SIZE_OVERHEAD = 16;
-	
-	/**
-	 * Number of bytes in 1 GiB
-	 */
-	public static final long ONE_GB = 1073741824;
-	
-	/**
-	 * Number of bytes in 1 MiB
-	 */
-	public static final long ONE_MB = 1048576;
-	
-	/**
-	 * Number of bytes in 1 KiB
-	 */
-	public static final long ONE_KB = 1024;
+public class ImmutableLongGrid4D extends Grid4DDecorator<LongGrid4D> implements LongGrid4D {
+
+	public ImmutableLongGrid4D(LongGrid4D source) {
+		super(source);
+	}
+
+	@Override
+	public long getFromPosition(int w, int x, int y, int z) throws Exception {
+		return source.getFromPosition(w, x, y, z);
+	}
+
 }

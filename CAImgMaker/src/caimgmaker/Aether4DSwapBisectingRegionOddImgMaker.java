@@ -21,9 +21,9 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.Aether4DAsymmetricSectionSwap;
+import cellularautomata.automata.Constants;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
 import cellularautomata.evolvinggrid.ActionableEvolvingGrid4DZCrossSection;
-import cellularautomata.grid.CAConstants;
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid4d.LongGrid4D;
 
@@ -83,7 +83,7 @@ public class Aether4DSwapBisectingRegionOddImgMaker {
 			if (isRestore) {
 				ca = new Aether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new Aether4DAsymmetricSectionSwap(initialValue, CAConstants.ONE_GB*8, path);
+				ca = new Aether4DAsymmetricSectionSwap(initialValue, Constants.ONE_GB*8, path);
 			}
 			boolean finished = false;
 			while (ca.getStep() < initialStep && !finished) {
