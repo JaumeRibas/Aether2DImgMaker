@@ -22,15 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
+import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
 
 /**
- * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D, with a single source initial configuration, for review and testing purposes
  * 
  * @author Jaume
  *
  */
-public class AetherSimple5DZCrossSection implements EvolvingLongGrid4D {	
+public class AetherSimple5D implements EvolvingLongGrid5D {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -51,7 +51,6 @@ public class AetherSimple5DZCrossSection implements EvolvingLongGrid4D {
 	
 	private long initialValue;
 	private long currentStep;
-	private int z;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -64,7 +63,7 @@ public class AetherSimple5DZCrossSection implements EvolvingLongGrid4D {
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public AetherSimple5DZCrossSection(long initialValue, int z) {
+	public AetherSimple5D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -2,049,638,230,412,172,401. Use a greater initial value or a different implementation.");
 		}
@@ -76,7 +75,6 @@ public class AetherSimple5DZCrossSection implements EvolvingLongGrid4D {
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
-		this.z = z;
 	}
 	
 	@Override
@@ -266,12 +264,12 @@ public class AetherSimple5DZCrossSection implements EvolvingLongGrid4D {
 	}
 	
 	@Override
-	public long getFromPosition(int w, int x, int y, int z){
-		int arrayV = originIndex + w;
-		int arrayW = originIndex + x;
-		int arrayX = originIndex + y;
-		int arrayY = originIndex + z;
-		int arrayZ = originIndex + this.z;
+	public long getFromPosition(int v, int w, int x, int y, int z){
+		int arrayV = originIndex + v;
+		int arrayW = originIndex + w;
+		int arrayX = originIndex + x;
+		int arrayY = originIndex + y;
+		int arrayZ = originIndex + z;
 		if (arrayV < 0 || arrayV > grid.length - 1 
 				|| arrayW < 0 || arrayW > grid.length - 1 
 				|| arrayX < 0 || arrayX > grid[0].length - 1
@@ -282,6 +280,30 @@ public class AetherSimple5DZCrossSection implements EvolvingLongGrid4D {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayV][arrayW][arrayX][arrayY][arrayZ];
 		}
+	}
+	
+	@Override
+	public int getMinV() {
+		int arrayMinV = - originIndex;
+		int valuesMinV;
+		if (boundsReached) {
+			valuesMinV = arrayMinV;
+		} else {
+			valuesMinV = arrayMinV + 1;
+		}
+		return valuesMinV;
+	}
+
+	@Override
+	public int getMaxV() {
+		int arrayMaxV = grid.length - 1 - originIndex;
+		int valuesMaxV;
+		if (boundsReached) {
+			valuesMaxV = arrayMaxV;
+		} else {
+			valuesMaxV = arrayMaxV - 1;
+		}
+		return valuesMaxV;
 	}
 	
 	@Override
@@ -401,7 +423,7 @@ public class AetherSimple5DZCrossSection implements EvolvingLongGrid4D {
 
 	@Override
 	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/z=" + z;
+		return getName() + "/" + initialValue;
 	}
 	
 	@Override

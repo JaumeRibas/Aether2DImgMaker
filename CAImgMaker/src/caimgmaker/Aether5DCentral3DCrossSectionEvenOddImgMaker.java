@@ -20,9 +20,9 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.aether.AetherSimple5DZCrossSection;
+import cellularautomata.automata.aether.AetherSimple5D;
 import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
-import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
+import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
 
 public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 	
@@ -38,7 +38,7 @@ public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 			if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
 					&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
 				initialValue = tmp.longValue();
-				EvolvingLongGrid4D ca = new AetherSimple5DZCrossSection(initialValue, 0);
+				EvolvingLongGrid5D ca = new AetherSimple5D(initialValue);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {
@@ -64,8 +64,8 @@ public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				String backupPath = path + ca.getSubFolderPath() + "/backups";
-				EvolvingLongGrid3D bisectingRegion = ca.crossSectionAtZ(0);
-				String imagesPath = path + ca.getSubFolderPath() + "/bisecting_region/img";
+				EvolvingLongGrid3D bisectingRegion = ca.crossSectionAtYZ(0, 0);
+				String imagesPath = path + ca.getSubFolderPath() + "/y=0_z=0/img";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
 					imgMaker.createScanningAndCrossSectionEvenOddImages(bisectingRegion, scanInitialZIndex, 
