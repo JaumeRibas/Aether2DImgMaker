@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid.EvolvingLongGrid4D;
+import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes

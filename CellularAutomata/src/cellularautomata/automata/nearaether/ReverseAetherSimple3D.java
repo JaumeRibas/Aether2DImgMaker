@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
+import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
 
 /**
  * Implementation of a CA that behaves the same way as the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton, but with opposite values.

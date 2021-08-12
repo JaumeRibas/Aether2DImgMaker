@@ -22,8 +22,8 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.Aether4DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
-import cellularautomata.evolvinggrid.ActionableEvolvingGrid4DZCrossSection;
+import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4D;
+import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4DZCrossSection;
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid4d.LongGrid4D;
 

@@ -25,8 +25,8 @@ import org.apache.commons.io.FileUtils;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.aether.BigIntAether4D;
-import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
-import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid4D;
+import cellularautomata.evolvinggrid3d.EvolvingNumberGrid3D;
+import cellularautomata.evolvinggrid4d.SymmetricEvolvingNumberGrid4D;
 import cellularautomata.numbers.BigInt;
 
 public class BigIntAether4DBisectingRegionEvenOddImgMaker {

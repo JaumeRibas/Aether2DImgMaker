@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
+import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.

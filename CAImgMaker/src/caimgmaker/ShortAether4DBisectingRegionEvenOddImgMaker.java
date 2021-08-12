@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.aether.ShortAether4D;
-import cellularautomata.evolvinggrid.EvolvingShortGrid3D;
+import cellularautomata.evolvinggrid3d.EvolvingShortGrid3D;
 
 public class ShortAether4DBisectingRegionEvenOddImgMaker {
 	

@@ -19,7 +19,7 @@ package caimgmaker;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.HueMapper;
 import cellularautomata.automata.aether.Aether2D;
-import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
+import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
 
 public class Aether2DImgMaker {
 	

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid4D;
+import cellularautomata.evolvinggrid4d.SymmetricEvolvingLongGrid4D;
 import cellularautomata.grid4d.IsotropicGrid4DA;
 
 /**

@@ -22,7 +22,7 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.Aether3DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid.ActionableEvolvingGrid3D;
+import cellularautomata.evolvinggrid3d.ActionableEvolvingGrid3D;
 import cellularautomata.grid3d.LongGrid3D;
 
 public class Aether3DSwapEvenOddImgMaker {

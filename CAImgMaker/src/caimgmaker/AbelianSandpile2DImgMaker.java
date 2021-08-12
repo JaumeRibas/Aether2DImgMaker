@@ -19,7 +19,7 @@ package caimgmaker;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.AbelianSandpileSingleSource2D;
-import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
+import cellularautomata.evolvinggrid2d.EvolvingIntGrid2D;
 
 public class AbelianSandpile2DImgMaker {
 	

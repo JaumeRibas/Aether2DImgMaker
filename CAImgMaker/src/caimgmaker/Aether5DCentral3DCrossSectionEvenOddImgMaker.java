@@ -21,8 +21,8 @@ import java.math.BigInteger;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.aether.AetherSimple5DZCrossSection;
-import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
-import cellularautomata.evolvinggrid.EvolvingLongGrid4D;
+import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
+import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
 
 public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 	

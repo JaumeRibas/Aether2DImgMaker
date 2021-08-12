@@ -19,7 +19,7 @@ package cellularautomata.automata.siv;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.evolvinggrid.EvolvingLongGrid1D;
+import cellularautomata.evolvinggrid1d.EvolvingLongGrid1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 1D, with a single source initial configuration, for review and testing purposes

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid.EvolvingNumberGrid3D;
+import cellularautomata.evolvinggrid3d.EvolvingNumberGrid3D;
 import cellularautomata.numbers.BigInt;
 
 /**

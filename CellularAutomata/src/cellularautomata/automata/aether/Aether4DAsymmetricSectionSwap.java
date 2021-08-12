@@ -27,7 +27,7 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid.ActionableEvolvingGrid4D;
+import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4D;
 import cellularautomata.grid4d.AnisotropicGrid4DA;
 import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
 import cellularautomata.grid4d.ImmutableLongGrid4D;

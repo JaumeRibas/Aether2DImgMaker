@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid.SymmetricEvolvingNumberGrid3D;
+import cellularautomata.evolvinggrid3d.SymmetricEvolvingNumberGrid3D;
 import cellularautomata.grid3d.IsotropicGrid3DA;
 import cellularautomata.numbers.BigInt;
 

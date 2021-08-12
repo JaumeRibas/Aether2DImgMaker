@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid.EvolvingIntGrid2D;
+import cellularautomata.evolvinggrid2d.EvolvingIntGrid2D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a random initial configuration

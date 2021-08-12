@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid.EvolvingLongGrid3D;
+import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration

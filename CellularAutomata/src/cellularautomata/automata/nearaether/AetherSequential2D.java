@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid.EvolvingLongGrid2D;
+import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
 
 /**
  * Asynchronous variation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton to test its abelianness

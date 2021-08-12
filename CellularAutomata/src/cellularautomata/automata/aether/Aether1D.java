@@ -18,7 +18,8 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import cellularautomata.evolvinggrid.SymmetricEvolvingLongGrid1D;
+
+import cellularautomata.evolvinggrid1d.SymmetricEvolvingLongGrid1D;
 import cellularautomata.grid1d.IsotropicGrid1DA;
 
 /**
