@@ -1898,7 +1898,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 		if (sZValue.compareTo(currentValue) < 0) {
 			if (gWValue.compareTo(currentValue) < 0) {
 				if (sZValue.equals(gWValue)) {
-					// gx = sz < current
+					// gw = sz < current
 					BigInt toShare = currentValue.subtract(gWValue); 
 					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
@@ -1908,7 +1908,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 					newCurrentWSlice[1][1][1] = newCurrentWSlice[1][1][1].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 					newGreaterWSlice[1][1][1] = newGreaterWSlice[1][1][1].add(share);
 				} else if (sZValue.compareTo(gWValue) < 0) {
-					// sz < gx < current
+					// sz < gw < current
 					BigInt toShare = currentValue.subtract(gWValue); 
 					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
@@ -1925,7 +1925,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 					newCurrentWSlice[1][1][0] = newCurrentWSlice[1][1][0].add(share.add(share));
 					newCurrentWSlice[1][1][1] = newCurrentWSlice[1][1][1].add(currentRemainingValue .subtract(toShare).add(share).add(shareAndRemainder[1]));
 				} else {
-					// gx < sz < current
+					// gw < sz < current
 					BigInt toShare = currentValue.subtract(sZValue); 
 					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
@@ -1943,7 +1943,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 					newGreaterWSlice[1][1][1] = newGreaterWSlice[1][1][1].add(share);
 				}
 			} else {
-				// sz < current <= gx
+				// sz < current <= gw
 				BigInt toShare = currentValue.subtract(sZValue); 
 				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
@@ -1954,7 +1954,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 			}
 		} else {
 			if (gWValue.compareTo(currentValue) < 0) {
-				// gx < current <= sz
+				// gw < current <= sz
 				BigInt toShare = currentValue.subtract(gWValue); 
 				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
@@ -2452,7 +2452,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 		if (sZValue.compareTo(currentValue) < 0) {
 			if (gWValue.compareTo(currentValue) < 0) {
 				if (sZValue.equals(gWValue)) {
-					// gx = sz < current
+					// gw = sz < current
 					int coordMinusOne = coord - 1;
 					BigInt toShare = currentValue.subtract(gWValue); 
 					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
@@ -2463,7 +2463,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 					newCurrentWSlice[coord][coord][coord] = newCurrentWSlice[coord][coord][coord].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 					newGreaterWSlice[coord][coord][coord] = newGreaterWSlice[coord][coord][coord].add(share);
 				} else if (sZValue.compareTo(gWValue) < 0) {
-					// sz < gx < current
+					// sz < gw < current
 					int coordMinusOne = coord - 1;
 					BigInt toShare = currentValue.subtract(gWValue); 
 					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
@@ -2481,7 +2481,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 					newCurrentWSlice[coord][coord][coordMinusOne] = newCurrentWSlice[coord][coord][coordMinusOne].add(share);
 					newCurrentWSlice[coord][coord][coord] = newCurrentWSlice[coord][coord][coord].add(currentRemainingValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 				} else {
-					// gx < sz < current
+					// gw < sz < current
 					int coordMinusOne = coord - 1;
 					BigInt toShare = currentValue.subtract(sZValue); 
 					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
@@ -2500,7 +2500,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 					newGreaterWSlice[coord][coord][coord] = newGreaterWSlice[coord][coord][coord].add(share);
 				}
 			} else {
-				// sz < current <= gx
+				// sz < current <= gw
 				int coordMinusOne = coord - 1;
 				BigInt toShare = currentValue.subtract(sZValue); 
 				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
@@ -2512,7 +2512,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 			}
 		} else {
 			if (gWValue.compareTo(currentValue) < 0) {
-				// gx < current <= sz
+				// gw < current <= sz
 				BigInt toShare = currentValue.subtract(gWValue); 
 				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {

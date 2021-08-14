@@ -1897,7 +1897,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 		if (sZValue < currentValue) {
 			if (gWValue < currentValue) {
 				if (sZValue == gWValue) {
-					// gx = sz < current
+					// gw = sz < current
 					int toShare = currentValue - gWValue; 
 					int share = toShare/9;
 					if (share != 0) {
@@ -1907,7 +1907,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 					newCurrentWSlice[1][1][1] += currentValue - toShare + share + toShare%9;
 					newGreaterWSlice[1][1][1] += share;
 				} else if (sZValue < gWValue) {
-					// sz < gx < current
+					// sz < gw < current
 					int toShare = currentValue - gWValue; 
 					int share = toShare/9;
 					if (share != 0) {
@@ -1924,7 +1924,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 					newCurrentWSlice[1][1][0] += share + share;
 					newCurrentWSlice[1][1][1] += currentRemainingValue - toShare + share + toShare%5;
 				} else {
-					// gx < sz < current
+					// gw < sz < current
 					int toShare = currentValue - sZValue; 
 					int share = toShare/9;
 					if (share != 0) {
@@ -1942,7 +1942,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 					newGreaterWSlice[1][1][1] += share;
 				}
 			} else {
-				// sz < current <= gx
+				// sz < current <= gw
 				int toShare = currentValue - sZValue; 
 				int share = toShare/5;
 				if (share != 0) {
@@ -1953,7 +1953,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 			}
 		} else {
 			if (gWValue < currentValue) {
-				// gx < current <= sz
+				// gw < current <= sz
 				int toShare = currentValue - gWValue; 
 				int share = toShare/5;
 				if (share != 0) {
@@ -2451,7 +2451,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 		if (sZValue < currentValue) {
 			if (gWValue < currentValue) {
 				if (sZValue == gWValue) {
-					// gx = sz < current
+					// gw = sz < current
 					int toShare = currentValue - gWValue; 
 					int share = toShare/9;
 					if (share != 0) {
@@ -2461,7 +2461,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 					newCurrentWSlice[coord][coord][coord] += currentValue - toShare + share + toShare%9;
 					newGreaterWSlice[coord][coord][coord] += share;
 				} else if (sZValue < gWValue) {
-					// sz < gx < current
+					// sz < gw < current
 					int coordMinusOne = coord - 1;
 					int toShare = currentValue - gWValue; 
 					int share = toShare/9;
@@ -2479,7 +2479,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 					newCurrentWSlice[coord][coord][coordMinusOne] += share;
 					newCurrentWSlice[coord][coord][coord] += currentRemainingValue - toShare + share + toShare%5;
 				} else {
-					// gx < sz < current
+					// gw < sz < current
 					int toShare = currentValue - sZValue; 
 					int share = toShare/9;
 					if (share != 0) {
@@ -2497,7 +2497,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 					newGreaterWSlice[coord][coord][coord] += share;
 				}
 			} else {
-				// sz < current <= gx
+				// sz < current <= gw
 				int toShare = currentValue - sZValue; 
 				int share = toShare/5;
 				if (share != 0) {
@@ -2508,7 +2508,7 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 			}
 		} else {
 			if (gWValue < currentValue) {
-				// gx < current <= sz
+				// gw < current <= sz
 				int toShare = currentValue - gWValue; 
 				int share = toShare/5;
 				if (share != 0) {

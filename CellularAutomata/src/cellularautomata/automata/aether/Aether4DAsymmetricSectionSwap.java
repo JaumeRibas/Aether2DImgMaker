@@ -2074,7 +2074,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		if (sZValue < currentValue) {
 			if (gWValue < currentValue) {
 				if (sZValue == gWValue) {
-					// gx = sz < current
+					// gw = sz < current
 					long toShare = currentValue - gWValue; 
 					long share = toShare/9;
 					if (share != 0) {
@@ -2084,7 +2084,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 					newCurrentWSlice.addToPosition(1, 1, 1, currentValue - toShare + share + toShare%9);
 					newGreaterWSlice.addToPosition(1, 1, 1, share);
 				} else if (sZValue < gWValue) {
-					// sz < gx < current
+					// sz < gw < current
 					long toShare = currentValue - gWValue; 
 					long share = toShare/9;
 					if (share != 0) {
@@ -2101,7 +2101,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 					newCurrentWSlice.addToPosition(1, 1, 0, share + share);
 					newCurrentWSlice.addToPosition(1, 1, 1, currentRemainingValue - toShare + share + toShare%5);
 				} else {
-					// gx < sz < current
+					// gw < sz < current
 					long toShare = currentValue - sZValue; 
 					long share = toShare/9;
 					if (share != 0) {
@@ -2119,7 +2119,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 					newGreaterWSlice.addToPosition(1, 1, 1, share);
 				}
 			} else {
-				// sz < current <= gx
+				// sz < current <= gw
 				long toShare = currentValue - sZValue; 
 				long share = toShare/5;
 				if (share != 0) {
@@ -2130,7 +2130,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 			}
 		} else {
 			if (gWValue < currentValue) {
-				// gx < current <= sz
+				// gw < current <= sz
 				long toShare = currentValue - gWValue; 
 				long share = toShare/5;
 				if (share != 0) {
@@ -2628,7 +2628,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		if (sZValue < currentValue) {
 			if (gWValue < currentValue) {
 				if (sZValue == gWValue) {
-					// gx = sz < current
+					// gw = sz < current
 					long toShare = currentValue - gWValue; 
 					long share = toShare/9;
 					if (share != 0) {
@@ -2638,7 +2638,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 					newCurrentWSlice.addToPosition(coord, coord, coord, currentValue - toShare + share + toShare%9);
 					newGreaterWSlice.addToPosition(coord, coord, coord, share);
 				} else if (sZValue < gWValue) {
-					// sz < gx < current
+					// sz < gw < current
 					int coordMinusOne = coord - 1;
 					long toShare = currentValue - gWValue; 
 					long share = toShare/9;
@@ -2656,7 +2656,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 					newCurrentWSlice.addToPosition(coord, coord, coordMinusOne, share);
 					newCurrentWSlice.addToPosition(coord, coord, coord, currentRemainingValue - toShare + share + toShare%5);
 				} else {
-					// gx < sz < current
+					// gw < sz < current
 					long toShare = currentValue - sZValue; 
 					long share = toShare/9;
 					if (share != 0) {
@@ -2674,7 +2674,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 					newGreaterWSlice.addToPosition(coord, coord, coord, share);
 				}
 			} else {
-				// sz < current <= gx
+				// sz < current <= gw
 				long toShare = currentValue - sZValue; 
 				long share = toShare/5;
 				if (share != 0) {
@@ -2685,7 +2685,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 			}
 		} else {
 			if (gWValue < currentValue) {
-				// gx < current <= sz
+				// gw < current <= sz
 				long toShare = currentValue - gWValue; 
 				long share = toShare/5;
 				if (share != 0) {
