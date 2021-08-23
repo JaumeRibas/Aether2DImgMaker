@@ -20,9 +20,9 @@ import java.math.BigInteger;
 
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
-import cellularautomata.automata.aether.AetherSimple5D;
+import cellularautomata.automata.aether.Aether5D;
 import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
-import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
+import cellularautomata.evolvinggrid5d.SymmetricEvolvingLongGrid5D;
 
 public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 	
@@ -38,7 +38,7 @@ public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 			if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
 					&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
 				initialValue = tmp.longValue();
-				EvolvingLongGrid5D ca = new AetherSimple5D(initialValue);
+				SymmetricEvolvingLongGrid5D ca = new Aether5D(initialValue);
 				String path;
 				int initialStep = 0;
 				if (args.length > 1) {
@@ -64,14 +64,14 @@ public class Aether5DCentral3DCrossSectionEvenOddImgMaker {
 				}
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				String backupPath = path + ca.getSubFolderPath() + "/backups";
-				EvolvingLongGrid3D bisectingRegion = ca.crossSectionAtYZ(0, 0);
+				EvolvingLongGrid3D crossSection = ca.asymmetricSection().crossSectionAtYZ(0, 0);
 				String imagesPath = path + ca.getSubFolderPath() + "/y=0_z=0/img";
 				ImgMaker imgMaker = new ImgMaker();
 				if (isScanInitialZIndexDefined) {
-					imgMaker.createScanningAndCrossSectionEvenOddImages(bisectingRegion, scanInitialZIndex, 
+					imgMaker.createScanningAndCrossSectionEvenOddImages(crossSection, scanInitialZIndex, 
 							0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				} else {
-					imgMaker.createScanningAndCrossSectionEvenOddImages(bisectingRegion, 
+					imgMaker.createScanningAndCrossSectionEvenOddImages(crossSection, 
 							0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, imagesPath, backupPath);
 				}
 			} else {
