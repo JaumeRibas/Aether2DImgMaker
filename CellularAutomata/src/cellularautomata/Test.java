@@ -45,6 +45,7 @@ import cellularautomata.evolvinggrid4d.EvolvingIntGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingNumberGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingShortGrid4D;
+import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
 import cellularautomata.automata.SingleSourceLongSandpile1D;
 import cellularautomata.automata.aether.Aether2D;
 import cellularautomata.automata.aether.Aether3DEnclosed;
@@ -52,6 +53,7 @@ import cellularautomata.automata.aether.Aether3DEnclosed2;
 import cellularautomata.automata.aether.Aether3DRandomConfiguration;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.AetherSimple2D;
+import cellularautomata.automata.aether.AetherSimple5D;
 import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether4D;
 import cellularautomata.automata.aether.ShortAether4D;
@@ -81,6 +83,7 @@ import cellularautomata.grid4d.IntGrid4D;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
+import cellularautomata.grid5d.LongGrid5D;
 import cellularautomata.numbers.BigInt;
 
 public class Test {
@@ -115,6 +118,24 @@ public class Test {
 		}
 		System.out.println(System.currentTimeMillis() - millis);
 		System.out.println(total);
+	}
+	
+	public static void queryAether5DNeighborhood(String[] args) {
+		long initialValue = Long.parseLong(args[0]);
+		int step = Integer.parseInt(args[1]);
+		int v = Integer.parseInt(args[2]);
+		int w = Integer.parseInt(args[3]);
+		int x = Integer.parseInt(args[4]);
+		int y = Integer.parseInt(args[5]);
+		int z = Integer.parseInt(args[6]);
+		AetherSimple5D ae = new AetherSimple5D(initialValue);
+		System.out.println("Initial value: " + initialValue);
+		for (int i = 0; i < step; i++) {
+			System.out.print("Step: " + i + "\r");
+			ae.nextStep();
+		}
+		System.out.println("Step: " + step);
+		printVonNeumannNeighborhood(ae, v, w, x, y, z);
 	}
 	
 	public static void queryAether4DNeighborhood(String[] args) {
@@ -214,6 +235,35 @@ public class Test {
 			System.out.println("(" + w + ", " + x + ", " + y + ", " + (z + 1) + "): " + grid.getFromPosition(w, x, y, z + 1));
 			//sz
 			System.out.println("(" + w + ", " + x + ", " + y + ", " + (z - 1) + "): " + grid.getFromPosition(w, x, y, z - 1));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void printVonNeumannNeighborhood(LongGrid5D grid, int v, int w, int x, int y, int z) {
+		try {
+			//center
+			System.out.println("(" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(v, w, x, y, z));
+			//gv
+			System.out.println("(" + (v + 1) + ", " + w + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(v + 1, w, x, y, z));
+			//sv
+			System.out.println("(" + (v - 1) + ", " + w + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(v - 1, w, x, y, z));
+			//gw
+			System.out.println("(" + v + ", " + (w + 1) + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(v, w + 1, x, y, z));
+			//sw
+			System.out.println("(" + v + ", " + (w - 1) + ", " + x + ", " + y + ", " + z + "): " + grid.getFromPosition(v, w - 1, x, y, z));
+			//gx
+			System.out.println("(" + v + ", " + w + ", " + (x + 1) + ", " + y + ", " + z + "): " + grid.getFromPosition(v, w, x + 1, y, z));
+			//sx
+			System.out.println("(" + v + ", " + w + ", " + (x - 1) + ", " + y + ", " + z + "): " + grid.getFromPosition(v, w, x - 1, y, z));
+			//gy
+			System.out.println("(" + v + ", " + w + ", " + x + ", " + (y + 1) + ", " + z + "): " + grid.getFromPosition(v, w, x, y + 1, z));
+			//sy
+			System.out.println("(" + v + ", " + w + ", " + x + ", " + (y - 1) + ", " + z + "): " + grid.getFromPosition(v, w, x, y - 1, z));
+			//gz
+			System.out.println("(" + v + ", " + w + ", " + x + ", " + y + ", " + (z + 1) + "): " + grid.getFromPosition(v, w, x, y, z + 1));
+			//sz
+			System.out.println("(" + v + ", " + w + ", " + x + ", " + y + ", " + (z - 1) + "): " + grid.getFromPosition(v, w, x, y, z - 1));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1565,6 +1615,47 @@ public class Test {
 				}
 				if (!equal)
 					return;
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(EvolvingLongGrid5D ca1, EvolvingLongGrid5D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("step " + ca1.getStep());
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca1.getMinXAtYZ(y,z); x <= ca1.getMaxXAtYZ(y,z); x++) {
+							for (int w = ca1.getMinWAtXYZ(x,y,z); w <= ca1.getMaxWAtXYZ(x,y,z); w++) {
+								for (int v = ca1.getMinV(w,x,y,z); v <= ca1.getMaxV(w,x,y,z); v++) {
+									if (ca1.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
+										equal = false;
+										System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
+												+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(v, w, x, y, z) 
+												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
+									}
+								}
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal)
+					break;
 			}
 			if (equal)
 				System.out.println("Equal");

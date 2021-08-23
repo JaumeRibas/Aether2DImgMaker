@@ -112,6 +112,14 @@ public class Utils {
 		return anisotropic2DArray;
 	}
 	
+	public static long[][][][][] buildAnisotropic5DLongArray(int side) {
+		long[][][][][] anisotropic5DArray = new long[side][][][][];
+		for (int v = 0; v < anisotropic5DArray.length; v++) {
+			anisotropic5DArray[v] = buildAnisotropic4DLongArray(v + 1);
+		}
+		return anisotropic5DArray;
+	}
+	
 	public static long[][][][] buildAnisotropic4DLongArray(int side) {
 		long[][][][] anisotropic4DArray = new long[side][][][];
 		for (int w = 0; w < anisotropic4DArray.length; w++) {

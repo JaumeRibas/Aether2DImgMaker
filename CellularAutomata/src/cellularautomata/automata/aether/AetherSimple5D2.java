@@ -21,8 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
+import cellularautomata.evolvinggrid5d.SymmetricEvolvingLongGrid5D;
+import cellularautomata.grid5d.IsotropicGrid5DA;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +32,7 @@ import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
  * @author Jaume
  *
  */
-public class AetherSimple5D implements EvolvingLongGrid5D {	
+public class AetherSimple5D2 implements SymmetricEvolvingLongGrid5D, IsotropicGrid5DA {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -52,9 +54,6 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 	private long initialValue;
 	private long currentStep;
 	
-	/** The indexes of the origin within the array */
-	private int originIndex;
-	
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
@@ -63,15 +62,13 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public AetherSimple5D(long initialValue) {
+	public AetherSimple5D2(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException("Initial value cannot be smaller than -2,049,638,230,412,172,401. Use a greater initial value or a different implementation.");
 		}
 		this.initialValue = initialValue;
-		int side = 5;
-		grid = new long[side][side][side][side][side];
-		originIndex = (side - 1)/2;
-		grid[originIndex][originIndex][originIndex][originIndex][originIndex] = this.initialValue;
+		grid = Utils.buildAnisotropic5DLongArray(4);
+		grid[0][0][0][0][0] = this.initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		currentStep = 0;
@@ -81,84 +78,52 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 	public boolean nextStep(){
 		//Use new array to store the values of the next step
 		long[][][][][] newGrid = null;
-		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2][grid[0][0][0].length + 2][grid[0][0][0][0].length + 2];
-			//The offset between the indexes of the new and old array
-			indexOffset = 1;
+			newGrid = Utils.buildAnisotropic5DLongArray(grid.length + 1);
 		} else {
-			newGrid = new long[grid.length][grid[0].length][grid[0][0].length][grid[0][0][0].length][grid[0][0][0][0].length];
+			newGrid = Utils.buildAnisotropic5DLongArray(grid.length);
 		}
 		boolean changed = false;
-		//For every position
-		for (int v = 0; v < grid.length; v++) {
-			for (int w = 0; w < grid[0].length; w++) {
-				for (int x = 0; x < grid[0][0].length; x++) {
-					for (int y = 0; y < grid[0][0][0].length; y++) {
-						for (int z = 0; z < grid[0][0][0][0].length; z++) {
-							long value = grid[v][w][x][y][z];
+		int lenghtMinusOne = grid.length - 1;
+		//For every position inside the asymmetric section and those just outside its edge
+		for (int v = -1, vPlusOne = v + 1; v <= lenghtMinusOne; v = vPlusOne, vPlusOne++) {
+			for (int w = -1, wPlusOne = w + 1; w <= vPlusOne; w = wPlusOne, wPlusOne++) {
+				for (int x = -1, xPlusOne = x + 1; x <= wPlusOne; x = xPlusOne, xPlusOne++) {
+					for (int y = -1, yPlusOne = y + 1; y <= xPlusOne; y = yPlusOne, yPlusOne++) {
+						for (int z = -1; z <= yPlusOne; z++) {
+							long value = getFromPosition(v, w, x, y, z);
 							List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(10);						
 							long neighborValue;
-							if (v < grid.length - 1)
-								neighborValue = grid[v + 1][w][x][y][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v + 1, w, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(V_POSITIVE, neighborValue));
-							if (v > 0)
-								neighborValue = grid[v - 1][w][x][y][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v - 1, w, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(V_NEGATIVE, neighborValue));
-							if (w < grid[v].length - 1)
-								neighborValue = grid[v][w + 1][x][y][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w + 1, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(W_POSITIVE, neighborValue));
-							if (w > 0)
-								neighborValue = grid[v][w - 1][x][y][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w - 1, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(W_NEGATIVE, neighborValue));
-							if (x < grid[v][w].length - 1)
-								neighborValue = grid[v][w][x + 1][y][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w, x + 1, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(X_POSITIVE, neighborValue));
-							if (x > 0)
-								neighborValue = grid[v][w][x - 1][y][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w, x - 1, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(X_NEGATIVE, neighborValue));
-							if (y < grid[v][w][x].length - 1)
-								neighborValue = grid[v][w][x][y + 1][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w, x, y + 1, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Y_POSITIVE, neighborValue));
-							if (y > 0)
-								neighborValue = grid[v][w][x][y - 1][z];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w, x, y - 1, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Y_NEGATIVE, neighborValue));
-							if (z < grid[v][w][x][y].length - 1)
-								neighborValue = grid[v][w][x][y][z + 1];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w, x, y, z + 1);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Z_POSITIVE, neighborValue));
-							if (z > 0)
-								neighborValue = grid[v][w][x][y][z - 1];
-							else
-								neighborValue = 0;
+							neighborValue = getFromPosition(v, w, x, y, z - 1);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Z_NEGATIVE, neighborValue));
 							
@@ -186,20 +151,20 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 										long toShare = value - neighborValue;
 										long share = toShare/shareCount;
 										if (share != 0) {
-											checkBoundsReached(v + indexOffset, w + indexOffset, x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
+											checkBoundsReached(v, newGrid.length);
 											changed = true;
 											value = value - toShare + toShare%shareCount + share;
 											for (Neighbor<Long> neighbor : neighbors) {
 												int[] nc = getNeighborCoordinates(v, w, x, y, z, neighbor.getDirection());
-												newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset][nc[3] + indexOffset][nc[4] + indexOffset] += share;
+												addToPosition(newGrid, nc[0], nc[1], nc[2], nc[3], nc[4], share);
 											}
 										}
 										previousNeighborValue = neighborValue;
 									}
 									neighbors.remove(i);
 								}	
-							}					
-							newGrid[v + indexOffset][w + indexOffset][x + indexOffset][y + indexOffset][z + indexOffset] += value;
+							}
+							addToPosition(newGrid, v, w, x, y, z, value);
 						}
 					}
 				}
@@ -207,20 +172,14 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 		}
 		//Replace the old array with the new one
 		grid = newGrid;
-		//Update the index of the origin
-		originIndex += indexOffset;
 		//Increase the current step by one
 		currentStep++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
 	
-	private void checkBoundsReached(int v, int w, int x, int y, int z, int length) {
-		if (v == 1 || v == length - 2 ||
-			w == 1 || w == length - 2 || 
-			x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2 || 
-			z == 1 || z == length - 2) {
+	private void checkBoundsReached(int v, int length) {
+		if (v == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -262,41 +221,65 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 			v, w, x, y, z
 		};
 	}
-	
-	@Override
-	public long getFromPosition(int v, int w, int x, int y, int z){
-		int arrayV = originIndex + v;
-		int arrayW = originIndex + w;
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		int arrayZ = originIndex + z;
-		if (arrayV < 0 || arrayV > grid.length - 1 
-				|| arrayW < 0 || arrayW > grid.length - 1 
-				|| arrayX < 0 || arrayX > grid[0].length - 1
-				|| arrayY < 0 || arrayY > grid[0][0].length - 1) {
-			//If the entered position is outside the array the value will be the background value
-			return 0;
-		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayV][arrayW][arrayX][arrayY][arrayZ];
+
+	private void addToPosition(long[][][][][] newGrid, int v, int w, int x, int y, int z, long value){	
+		if (!(x < 0 || y < 0 || z < 0 || w < 0 || v < 0 
+				|| z > y || y > x || x > w || w > v)) {
+			newGrid[v][w][x][y][z] += value;
 		}
-	}
-	
-	@Override
-	public int getMinV() {
-		int arrayMinV = - originIndex;
-		int valuesMinV;
-		if (boundsReached) {
-			valuesMinV = arrayMinV;
-		} else {
-			valuesMinV = arrayMinV + 1;
-		}
-		return valuesMinV;
 	}
 
 	@Override
-	public int getMaxV() {
-		int arrayMaxV = grid.length - 1 - originIndex;
+	public long getFromPosition(int v, int w, int x, int y, int z){	
+		if (x < 0) x = -x;
+		if (y < 0) y = -y;
+		if (z < 0) z = -z;
+		if (w < 0) w = -w;
+		if (v < 0) v = -v;
+		//sort coordinates
+		//TODO faster sorting?
+		boolean sorted;
+		do {
+			sorted = true;
+			if (z > y) {
+				sorted = false;
+				int swp = z;
+				z = y;
+				y = swp;
+			}
+			if (y > x) {
+				sorted = false;
+				int swp = y;
+				y = x;
+				x = swp;
+			}
+			if (x > w) {
+				sorted = false;
+				int swp = x;
+				x = w;
+				w = swp;
+			}
+			if (w > v) {
+				sorted = false;
+				int swp = w;
+				w = v;
+				v = swp;
+			}
+		} while (!sorted);
+		if (v < grid.length)
+			return grid[v][w][x][y][z];
+		else
+			return 0;
+	}
+
+	@Override
+	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z){	
+		return grid[v][w][x][y][z];
+	}
+
+	@Override
+	public int getAsymmetricMaxV() {
+		int arrayMaxV = grid.length - 1;
 		int valuesMaxV;
 		if (boundsReached) {
 			valuesMaxV = arrayMaxV;
@@ -307,99 +290,23 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 	}
 	
 	@Override
-	public int getMinW() {
-		int arrayMinW = - originIndex;
-		int valuesMinW;
-		if (boundsReached) {
-			valuesMinW = arrayMinW;
-		} else {
-			valuesMinW = arrayMinW + 1;
-		}
-		return valuesMinW;
-	}
-
-	@Override
-	public int getMaxW() {
-		int arrayMaxW = grid.length - 1 - originIndex;
-		int valuesMaxW;
-		if (boundsReached) {
-			valuesMaxW = arrayMaxW;
-		} else {
-			valuesMaxW = arrayMaxW - 1;
-		}
-		return valuesMaxW;
-	}
-
-	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-
-	@Override
-	public int getMaxX() {
-		int arrayMaxX = grid.length - 1 - originIndex;
-		int valuesMaxX;
-		if (boundsReached) {
-			valuesMaxX = arrayMaxX;
-		} else {
-			valuesMaxX = arrayMaxX - 1;
-		}
-		return valuesMaxX;
+	public int getAsymmetricMaxW() {
+		return getAsymmetricMaxV();
 	}
 	
 	@Override
-	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
+	public int getAsymmetricMaxX() {
+		return getAsymmetricMaxV();
 	}
 	
 	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
+	public int getAsymmetricMaxY() {
+		return getAsymmetricMaxV();
 	}
 	
 	@Override
-	public int getMinZ() {
-		int arrayMinZ = - originIndex;
-		int valuesMinZ;
-		if (boundsReached) {
-			valuesMinZ = arrayMinZ;
-		} else {
-			valuesMinZ = arrayMinZ + 1;
-		}
-		return valuesMinZ;
-	}
-	
-	@Override
-	public int getMaxZ() {
-		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
-		int valuesMaxZ;
-		if (boundsReached) {
-			valuesMaxZ = arrayMaxZ;
-		} else {
-			valuesMaxZ = arrayMaxZ - 1;
-		}
-		return valuesMaxZ;
+	public int getAsymmetricMaxZ() {
+		return getAsymmetricMaxV();
 	}
 
 	@Override
