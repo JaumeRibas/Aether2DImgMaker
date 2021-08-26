@@ -45,6 +45,7 @@ import cellularautomata.evolvinggrid4d.EvolvingIntGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingNumberGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingShortGrid4D;
+import cellularautomata.evolvinggrid5d.EvolvingIntGrid5D;
 import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
 import cellularautomata.automata.SingleSourceLongSandpile1D;
 import cellularautomata.automata.aether.Aether2D;
@@ -1624,6 +1625,47 @@ public class Test {
 	}
 	
 	public static void compare(EvolvingLongGrid5D ca1, EvolvingLongGrid5D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("step " + ca1.getStep());
+				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
+					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
+						for (int x = ca1.getMinXAtYZ(y,z); x <= ca1.getMaxXAtYZ(y,z); x++) {
+							for (int w = ca1.getMinWAtXYZ(x,y,z); w <= ca1.getMaxWAtXYZ(x,y,z); w++) {
+								for (int v = ca1.getMinV(w,x,y,z); v <= ca1.getMaxV(w,x,y,z); v++) {
+									if (ca1.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
+										equal = false;
+										System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
+												+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(v, w, x, y, z) 
+												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
+									}
+								}
+							}
+						}	
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal)
+					break;
+			}
+			if (equal)
+				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(EvolvingLongGrid5D ca1, EvolvingIntGrid5D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;

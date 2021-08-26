@@ -144,6 +144,14 @@ public class Utils {
 		return anisotropic2DArray;
 	}
 	
+	public static int[][][][][] buildAnisotropic5DIntArray(int side) {
+		int[][][][][] anisotropic5DArray = new int[side][][][][];
+		for (int v = 0; v < anisotropic5DArray.length; v++) {
+			anisotropic5DArray[v] = buildAnisotropic4DIntArray(v + 1);
+		}
+		return anisotropic5DArray;
+	}
+	
 	public static int[][][][] buildAnisotropic4DIntArray(int side) {
 		int[][][][] anisotropic4DArray = new int[side][][][];
 		for (int w = 0; w < anisotropic4DArray.length; w++) {
