@@ -42,8 +42,8 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Anisot
 		}
 		slices = new AnisotropicLongGrid4DSlice[wLength];
 		maxW = minW + wLength - 1;
-		for (int x = minW, i = 0; x <= maxW; x++, i++) {
-			slices[i] = new AnisotropicLongGrid4DSlice(x);
+		for (int w = minW, i = 0; w <= maxW; w++, i++) {
+			slices[i] = new AnisotropicLongGrid4DSlice(w);
 		}
 	}
 
@@ -59,8 +59,8 @@ public class SizeLimitedAnisotropicLongGrid4DBlock implements LongGrid4D, Anisot
 		return slices[w - minW].getFromPosition(x, y, z);
 	}
 
-	public void setSlice(int x, AnisotropicLongGrid4DSlice slice) {
-		slices[x - minW] = slice;
+	public void setSlice(int w, AnisotropicLongGrid4DSlice slice) {
+		slices[w - minW] = slice;
 	}
 	
 	public AnisotropicLongGrid4DSlice getSlice(int w) {

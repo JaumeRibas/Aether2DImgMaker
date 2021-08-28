@@ -685,26 +685,26 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<I
 		return changed;
 	}
 
-	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicIntGrid4DBlock gridBlock, int x, AnisotropicIntGrid4DSlice[] xSlices, 
-			AnisotropicIntGrid4DSlice[] newXSlices, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicIntGrid4DBlock gridBlock, int w, AnisotropicIntGrid4DSlice[] wSlices, 
+			AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
-		return toppleSliceBeyondFour(gridBlock, gridBlock, gridBlock, x, xSlices, newXSlices, 
+		return toppleSliceBeyondFour(gridBlock, gridBlock, gridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
 	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock,
-			int x, AnisotropicIntGrid4DSlice[] xSlices, AnisotropicIntGrid4DSlice[] newXSlices, int[] relevantAsymmetricNeighborValues, 
+			int w, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
-		return toppleSliceBeyondFour(leftGridBlock, leftGridBlock, rightGridBlock, x, xSlices, newXSlices, 
+		return toppleSliceBeyondFour(leftGridBlock, leftGridBlock, rightGridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
 	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock,
-			int x, AnisotropicIntGrid4DSlice[] xSlices, AnisotropicIntGrid4DSlice[] newXSlices, int[] relevantAsymmetricNeighborValues, 
+			int w, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
-		return toppleSliceBeyondFour(leftGridBlock, rightGridBlock, rightGridBlock, x, xSlices, newXSlices, 
+		return toppleSliceBeyondFour(leftGridBlock, rightGridBlock, rightGridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}

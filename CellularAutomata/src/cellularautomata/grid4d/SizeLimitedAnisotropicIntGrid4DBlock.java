@@ -42,8 +42,8 @@ public class SizeLimitedAnisotropicIntGrid4DBlock implements IntGrid4D, Anisotro
 		}
 		slices = new AnisotropicIntGrid4DSlice[wLength];
 		maxW = minW + wLength - 1;
-		for (int x = minW, i = 0; x <= maxW; x++, i++) {
-			slices[i] = new AnisotropicIntGrid4DSlice(x);
+		for (int w = minW, i = 0; w <= maxW; w++, i++) {
+			slices[i] = new AnisotropicIntGrid4DSlice(w);
 		}
 	}
 
@@ -59,8 +59,8 @@ public class SizeLimitedAnisotropicIntGrid4DBlock implements IntGrid4D, Anisotro
 		return slices[w - minW].getFromPosition(x, y, z);
 	}
 
-	public void setSlice(int x, AnisotropicIntGrid4DSlice slice) {
-		slices[x - minW] = slice;
+	public void setSlice(int w, AnisotropicIntGrid4DSlice slice) {
+		slices[w - minW] = slice;
 	}
 	
 	public AnisotropicIntGrid4DSlice getSlice(int w) {

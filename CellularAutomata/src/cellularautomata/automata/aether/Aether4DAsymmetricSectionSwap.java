@@ -117,7 +117,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		readWriteGridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
-	private SizeLimitedAnisotropicLongGrid4DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicLongGrid4DBlock loadGridBlockSafe(int minW) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
 		SizeLimitedAnisotropicLongGrid4DBlock gridBlock = null;
@@ -125,11 +125,11 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
 			String fileName = currentFile.getName();
-			int fileMinX;
+			int fileMinW;
 			try {
 				//"minW=".length() == 5
-				fileMinX = Integer.parseInt(fileName.substring(5, fileName.indexOf("_")));
-				if (fileMinX == minX) {
+				fileMinW = Integer.parseInt(fileName.substring(5, fileName.indexOf("_")));
+				if (fileMinW == minW) {
 					found = true;
 					gridBlockFile = currentFile;
 				}
@@ -685,26 +685,26 @@ public class Aether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<Long
 		return changed;
 	}
 
-	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicLongGrid4DBlock gridBlock, int x, AnisotropicLongGrid4DSlice[] xSlices, 
-			AnisotropicLongGrid4DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicLongGrid4DBlock gridBlock, int w, AnisotropicLongGrid4DSlice[] wSlices, 
+			AnisotropicLongGrid4DSlice[] newWSlices, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
-		return toppleSliceBeyondFour(gridBlock, gridBlock, gridBlock, x, xSlices, newXSlices, 
+		return toppleSliceBeyondFour(gridBlock, gridBlock, gridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
 	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicLongGrid4DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid4DBlock rightGridBlock,
-			int x, AnisotropicLongGrid4DSlice[] xSlices, AnisotropicLongGrid4DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
+			int w, AnisotropicLongGrid4DSlice[] wSlices, AnisotropicLongGrid4DSlice[] newWSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
-		return toppleSliceBeyondFour(leftGridBlock, leftGridBlock, rightGridBlock, x, xSlices, newXSlices, 
+		return toppleSliceBeyondFour(leftGridBlock, leftGridBlock, rightGridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
 	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicLongGrid4DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid4DBlock rightGridBlock,
-			int x, AnisotropicLongGrid4DSlice[] xSlices, AnisotropicLongGrid4DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
+			int w, AnisotropicLongGrid4DSlice[] wSlices, AnisotropicLongGrid4DSlice[] newWSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
-		return toppleSliceBeyondFour(leftGridBlock, rightGridBlock, rightGridBlock, x, xSlices, newXSlices, 
+		return toppleSliceBeyondFour(leftGridBlock, rightGridBlock, rightGridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}

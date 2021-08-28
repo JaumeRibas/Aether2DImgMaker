@@ -40,8 +40,8 @@ public class SizeLimitedAnisotropicBigIntGrid4DBlock implements NumberGrid4D<Big
 		}
 		slices = new AnisotropicBigIntGrid4DSlice[side];
 		maxW = minW + side - 1;
-		for (int x = minW, i = 0; x <= maxW; x++, i++) {
-			slices[i] = new AnisotropicBigIntGrid4DSlice(x);
+		for (int w = minW, i = 0; w <= maxW; w++, i++) {
+			slices[i] = new AnisotropicBigIntGrid4DSlice(w);
 		}
 	}
 
@@ -57,8 +57,8 @@ public class SizeLimitedAnisotropicBigIntGrid4DBlock implements NumberGrid4D<Big
 		return slices[w - minW].getFromPosition(x, y, z);
 	}
 
-	public void setSlice(int x, AnisotropicBigIntGrid4DSlice slice) {
-		slices[x - minW] = slice;
+	public void setSlice(int w, AnisotropicBigIntGrid4DSlice slice) {
+		slices[w - minW] = slice;
 	}
 	
 	protected AnisotropicBigIntGrid4DSlice getSlice(int w) {
