@@ -111,12 +111,12 @@ public class Grid5DYZCrossSection<G extends Grid5D> implements Grid3D {
 
 	@Override
 	public int getMinY(int x, int z) {
-		return source.getMinW(x, z, this.y, this.z);
+		return source.getMinW(x, z, y, this.z);
 	}
 
 	@Override
 	public int getMaxY(int x, int z) {
-		return source.getMaxW(x, z, this.y, this.z);
+		return source.getMaxW(x, z, y, this.z);
 	}
 
 	@Override
@@ -151,12 +151,12 @@ public class Grid5DYZCrossSection<G extends Grid5D> implements Grid3D {
 
 	@Override
 	public int getMinZ(int x, int y) {
-		return source.getMinX(x, y, this.y, this.z);
+		return source.getMinX(x, y, this.y, z);
 	}
 
 	@Override
 	public int getMaxZ(int x, int y) {
-		return source.getMaxX(x, y, this.y, this.z);
+		return source.getMaxX(x, y, this.y, z);
 	}
 
 }
