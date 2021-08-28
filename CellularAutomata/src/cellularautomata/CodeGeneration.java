@@ -26,7 +26,7 @@ import java.util.Map;
 public class CodeGeneration {
 	
 	public static void main(String[] args) {
-		printAnisotropicPositionsVonNeumannNeighborhoods(4, 15, true, true);
+		printBoundsMethodsForDecorator(5);
 	}
 	
 	public static void printBoundsMethodsForAnisotropicGrid(int dimension) {

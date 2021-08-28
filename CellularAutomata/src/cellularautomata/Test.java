@@ -45,6 +45,7 @@ import cellularautomata.evolvinggrid4d.EvolvingIntGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingNumberGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingShortGrid4D;
+import cellularautomata.evolvinggrid5d.ActionableEvolvingGrid5D;
 import cellularautomata.evolvinggrid5d.EvolvingIntGrid5D;
 import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
 import cellularautomata.automata.SingleSourceLongSandpile1D;
@@ -84,6 +85,7 @@ import cellularautomata.grid4d.IntGrid4D;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.ShortGrid4D;
+import cellularautomata.grid5d.IntGrid5D;
 import cellularautomata.grid5d.LongGrid5D;
 import cellularautomata.numbers.BigInt;
 
@@ -791,6 +793,122 @@ public class Test {
 										System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(w, x, y, z) 
 												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
+									}
+								}
+							}	
+						}	
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// do nothing					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// do nothing			
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processGrid();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(EvolvingLongGrid5D ca1, ActionableEvolvingGrid5D<LongGrid5D> ca2) {
+		compare(ca2, ca1);
+	}
+	
+	public static void compare(ActionableEvolvingGrid5D<LongGrid5D> ca1, EvolvingLongGrid5D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			GridProcessor<LongGrid5D> comparator = new GridProcessor<LongGrid5D>() {
+				
+				@Override
+				public void processGridBlock(LongGrid5D gridBlock) throws Exception {
+					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
+						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
+							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
+								for (int w = gridBlock.getMinWAtXYZ(x,y,z); w <= gridBlock.getMaxWAtXYZ(x,y,z); w++) {
+									for (int v = gridBlock.getMinV(w,x,y,z); v <= gridBlock.getMaxV(w,x,y,z); v++) {
+										if (gridBlock.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
+											System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
+													+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(v, w, x, y, z) 
+													+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
+										}
+									}
+								}
+							}	
+						}	
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// do nothing					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// do nothing			
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processGrid();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(EvolvingIntGrid5D ca1, ActionableEvolvingGrid5D<IntGrid5D> ca2) {
+		compare(ca2, ca1);
+	}
+	
+	public static void compare(ActionableEvolvingGrid5D<IntGrid5D> ca1, EvolvingIntGrid5D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			GridProcessor<IntGrid5D> comparator = new GridProcessor<IntGrid5D>() {
+				
+				@Override
+				public void processGridBlock(IntGrid5D gridBlock) throws Exception {
+					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
+						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
+							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
+								for (int w = gridBlock.getMinWAtXYZ(x,y,z); w <= gridBlock.getMaxWAtXYZ(x,y,z); w++) {
+									for (int v = gridBlock.getMinV(w,x,y,z); v <= gridBlock.getMaxV(w,x,y,z); v++) {
+										if (gridBlock.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
+											System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
+													+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(v, w, x, y, z) 
+													+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
+										}
 									}
 								}
 							}	
