@@ -26,7 +26,7 @@ import java.util.Map;
 public class CodeGeneration {
 	
 	public static void main(String[] args) {
-		printBoundsMethodsForDecorator(5);
+		printAetherTopplingMethods(5);
 	}
 	
 	public static void printBoundsMethodsForAnisotropicGrid(int dimension) {
@@ -850,7 +850,8 @@ public class CodeGeneration {
 	public static void printAetherTopplingMethods(int dimension) {
 		List<AnysotropicVonNeumannNeighborhoodType> neighborhoodTypes = new ArrayList<AnysotropicVonNeumannNeighborhoodType>();
 		int[] coordinates = new int[dimension];
-		int sizeMinusOne = dimension * 5;//totally made up
+		int size = (dimension - 1)*2 + 3;//it seems to work
+		int sizeMinusOne = size - 1;
 		int dimensionMinusOne = dimension - 1;
 		int currentAxis = dimensionMinusOne;
 		while (currentAxis > -1) {
