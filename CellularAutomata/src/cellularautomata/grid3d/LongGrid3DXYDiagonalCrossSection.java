@@ -14,20 +14,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.evolvinggrid2d;
+package cellularautomata.grid3d;
 
-import cellularautomata.evolvinggrid.EvolvingLongGrid;
 import cellularautomata.grid2d.LongGrid2D;
 
-public interface EvolvingLongGrid2D extends LongGrid2D, EvolvingLongGrid {
-	
-	@Override
-	default EvolvingLongGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
-		return new EvolvingLongSubGrid2D(this, minX, maxX, minY, maxY);
+public class LongGrid3DXYDiagonalCrossSection<G extends LongGrid3D> extends Grid3DXYDiagonalCrossSection<G> implements LongGrid2D {
+
+	public LongGrid3DXYDiagonalCrossSection(G source, int yOffsetFromX) {
+		super(source, yOffsetFromX);
 	}
-	
+
 	@Override
-	default EvolvingLongGrid2D evenOddYSubGrid(boolean isEven) {
-		return new EvolvingLongEvenOddYSubGrid2D(this, isEven);
+	public long getFromPosition(int x, int y) throws Exception {
+		return source.getFromPosition(x, x + yOffsetFromX, y);
 	}
+
 }

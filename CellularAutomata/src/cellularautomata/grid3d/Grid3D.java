@@ -307,5 +307,9 @@ public interface Grid3D extends Grid {
 	default Grid2D crossSectionAtX(int x) {
 		return new Grid3DXCrossSection<Grid3D>(this, x);
 	}
+	
+	default Grid2D diagonalCrossSectionOnXY(int yOffsetFromX) {
+		return new Grid3DXYDiagonalCrossSection<Grid3D>(this, yOffsetFromX);
+	}
 
 }

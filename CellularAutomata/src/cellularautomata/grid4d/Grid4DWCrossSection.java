@@ -19,143 +19,136 @@ package cellularautomata.grid4d;
 import cellularautomata.grid3d.Grid3D;
 
 
-public class Grid4DZCrossSection<G extends Grid4D> implements Grid3D {
+public class Grid4DWCrossSection<G extends Grid4D> implements Grid3D {
 
 	protected G source;
-	protected int z;
+	protected int w;
 	
-	public Grid4DZCrossSection(G source, int z) {
-		if (z > source.getMaxZ() || z < source.getMinZ()) {
-			throw new IllegalArgumentException("Z coordinate outside of grid bounds.");
+	public Grid4DWCrossSection(G source, int w) {
+		if (w > source.getMaxW() || w < source.getMinW()) {
+			throw new IllegalArgumentException("W coordinate outside of grid bounds.");
 		}
 		this.source = source;
-		this.z = z;
+		this.w = w;
 	}
 
-	
-	 /*
-	 * 	x -> w
-	 * 	y -> x
-	 * 	z -> y
-	 */
-	 
 	@Override
 	public int getMinX() {
-		return source.getMinWAtZ(z);
+		return source.getMinXAtW(w);
 	}
 	
 	@Override
 	public int getMinXAtY(int y) {
-		return source.getMinWAtXZ(y, z);
+		return source.getMinXAtWY(w, y);
 	}
 	
 	@Override
 	public int getMinXAtZ(int z) {
-		return source.getMinWAtYZ(z, this.z);
+		return source.getMinXAtWZ(w, z);
 	}
 	
 	@Override
 	public int getMinX(int y, int z) {
-		return source.getMinW(y, z, this.z);
+		return source.getMinX(w, y, z);
 	}
 
 	@Override
 	public int getMaxX() {
-		return source.getMaxWAtZ(z);
+		return source.getMaxXAtW(w);
 	}
 	
 	@Override
 	public int getMaxXAtY(int y) {
-		return source.getMaxWAtXZ(y, z);
+		return source.getMaxXAtWY(w, y);
 	}
 	
 	@Override
 	public int getMaxXAtZ(int z) {
-		return source.getMaxWAtYZ(z, this.z);
+		return source.getMaxXAtWZ(w, z);
 	}
 	
 	@Override
 	public int getMaxX(int y, int z) {
-		return source.getMaxW(y, z, this.z);
+		return source.getMaxX(w, y, z);
 	}
 
 	@Override
 	public int getMinY() {
-		return source.getMinXAtZ(z);
+		return source.getMinYAtW(w);
 	}
 	
 	@Override
 	public int getMinYAtX(int x) {
-		return source.getMinXAtWZ(x, z);
+		return source.getMinYAtWX(w, x);
 	}
 	
 	@Override
 	public int getMinYAtZ(int z) {
-		return source.getMinXAtYZ(z, this.z);
+		return source.getMinYAtWZ(w, z);
 	}
 	
 	@Override
 	public int getMinY(int x, int z) {
-		return source.getMinX(x, z, this.z);
+		return source.getMinY(w, x, z);
 	}
 	
 	@Override
 	public int getMaxY() {
-		return source.getMaxXAtZ(z);
+		return source.getMaxYAtW(w);
 	}
 	
 	@Override
 	public int getMaxYAtX(int x) {
-		return source.getMaxXAtWZ(x, z);
+		return source.getMaxYAtWX(w, x);
 	}
 	
 	@Override
 	public int getMaxYAtZ(int z) {
-		return source.getMaxXAtYZ(z, this.z);
+		return source.getMaxYAtWZ(w, z);
 	}
 	
 	@Override
 	public int getMaxY(int x, int z) {
-		return source.getMaxX(x, z, this.z);
+		return source.getMaxY(w, x, z);
 	}
 	
 	@Override
 	public int getMinZ() {
-		return source.getMinYAtZ(z);
+		return source.getMinZAtW(w);
 	}
 	
 	@Override
 	public int getMinZAtX(int x) {
-		return source.getMinYAtWZ(x, z);
+		return source.getMinZAtWX(w, x);
 	}
 	
 	@Override
 	public int getMinZAtY(int y) {
-		return source.getMinYAtXZ(y, z);
+		return source.getMinZAtWY(w, y);
 	}
 	
 	@Override
 	public int getMinZ(int x, int y) {
-		return source.getMinY(x, y, z);
+		return source.getMinZ(w, x, y);
 	}
 	
 	@Override
 	public int getMaxZ() {
-		return source.getMaxYAtZ(z);
+		return source.getMaxZAtW(w);
 	}
 	
 	@Override
 	public int getMaxZAtX(int x) {
-		return source.getMaxYAtWZ(x, z);
+		return source.getMaxZAtWX(w, x);
 	}
 	
 	@Override
 	public int getMaxZAtY(int y) {
-		return source.getMaxYAtXZ(y, z);
+		return source.getMaxZAtWY(w, y);
 	}
 	
 	@Override
 	public int getMaxZ(int x, int y) {
-		return source.getMaxY(x, y, z);
+		return source.getMaxZ(w, x, y);
 	}
 }

@@ -90,5 +90,10 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	default LongGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
 		return new LongSubGrid2D<LongGrid2D>(this, minX, maxX, minY, maxY);
 	}
+	
+	@Override
+	default LongGrid2D evenOddYSubGrid(boolean isEven) {
+		return new LongEvenOddYSubGrid2D<LongGrid2D>(this, isEven);
+	}
 
 }
