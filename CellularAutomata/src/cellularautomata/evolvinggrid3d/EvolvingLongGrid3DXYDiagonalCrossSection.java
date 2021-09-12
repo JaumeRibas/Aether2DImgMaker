@@ -45,7 +45,9 @@ public class EvolvingLongGrid3DXYDiagonalCrossSection extends LongGrid3DXYDiagon
 	@Override
 	public String getName() {
 		String name = source.getName() + "_y=x";
-		if (yOffsetFromX != 0) {
+		if (yOffsetFromX < 0) {
+			name += yOffsetFromX;
+		} else if (yOffsetFromX > 0) {
 			name += "+" + yOffsetFromX;
 		}
 		return name;
@@ -54,7 +56,9 @@ public class EvolvingLongGrid3DXYDiagonalCrossSection extends LongGrid3DXYDiagon
 	@Override
 	public String getSubFolderPath() {
 		String path = source.getSubFolderPath() + "/y=x";
-		if (yOffsetFromX != 0) {
+		if (yOffsetFromX < 0) {
+			path += yOffsetFromX;
+		} else if (yOffsetFromX > 0) {
 			path += "+" + yOffsetFromX;
 		}
 		return path;
