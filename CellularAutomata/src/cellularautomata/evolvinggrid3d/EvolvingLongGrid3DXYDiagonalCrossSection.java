@@ -24,8 +24,8 @@ import cellularautomata.grid3d.LongGrid3DXYDiagonalCrossSection;
 
 public class EvolvingLongGrid3DXYDiagonalCrossSection extends LongGrid3DXYDiagonalCrossSection<EvolvingLongGrid3D> implements EvolvingLongGrid2D {
 
-	public EvolvingLongGrid3DXYDiagonalCrossSection(EvolvingLongGrid3D source, int x) {
-		super(source, x);
+	public EvolvingLongGrid3DXYDiagonalCrossSection(EvolvingLongGrid3D source, int yOffsetFromX) {
+		super(source, yOffsetFromX);
 	}
 
 	@Override
