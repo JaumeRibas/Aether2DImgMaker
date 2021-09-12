@@ -85,7 +85,7 @@ public class Grid3DXYDiagonalCrossSection<G extends Grid3D> implements Grid2D {
 				return crossSectionX;
 			}
 		}
-		throw new IllegalArgumentException("Y outside of bounds.");
+		throw new IllegalArgumentException("Y coordinate outside of bounds.");
 	}
 	
 	@Override
@@ -101,7 +101,7 @@ public class Grid3DXYDiagonalCrossSection<G extends Grid3D> implements Grid2D {
 				return crossSectionX;
 			}
 		}
-		throw new IllegalArgumentException("Y outside of bounds.");
+		throw new IllegalArgumentException("Y coordinate outside of bounds.");
 	}
 	
 	@Override
