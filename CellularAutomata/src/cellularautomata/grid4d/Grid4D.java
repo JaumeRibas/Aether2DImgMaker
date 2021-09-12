@@ -304,4 +304,8 @@ public interface Grid4D extends Grid {
 	default Grid3D crossSectionAtW(int w) {
 		return new Grid4DWCrossSection<Grid4D>(this, w);
 	}
+	
+	default Grid3D diagonalCrossSectionOnWX(int xOffsetFromW) {
+		return new Grid4DWXDiagonalCrossSection<Grid4D>(this, xOffsetFromW);
+	}
 }

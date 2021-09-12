@@ -133,4 +133,9 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	default LongGrid3D crossSectionAtW(int w) {
 		return new LongGrid4DWCrossSection<LongGrid4D>(this, w);
 	}
+	
+	@Override
+	default LongGrid3D diagonalCrossSectionOnWX(int xOffsetFromW) {
+		return new LongGrid4DWXDiagonalCrossSection<LongGrid4D>(this, xOffsetFromW);
+	}
 }

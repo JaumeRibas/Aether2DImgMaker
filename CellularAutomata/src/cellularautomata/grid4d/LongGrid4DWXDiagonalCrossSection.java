@@ -14,28 +14,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.evolvinggrid4d;
+package cellularautomata.grid4d;
 
-import cellularautomata.evolvinggrid.EvolvingLongGrid;
-import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
-import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
-import cellularautomata.grid4d.LongGrid4D;
+import cellularautomata.grid3d.LongGrid3D;
 
-public interface EvolvingLongGrid4D extends LongGrid4D, EvolvingLongGrid {
-	
-	@Override
-	default EvolvingLongGrid2D crossSectionAtYZ(int y, int z) {
-		return new EvolvingLongGrid4DYZCrossSection(this, y, z);
+public class LongGrid4DWXDiagonalCrossSection<G extends LongGrid4D> extends Grid4DWXDiagonalCrossSection<G> implements LongGrid3D {
+
+	public LongGrid4DWXDiagonalCrossSection(G source, int xOffsetFromW) {
+		super(source, xOffsetFromW);
 	}
-	
+
 	@Override
-	default EvolvingLongGrid3D crossSectionAtZ(int z) {
-		return new EvolvingLongGrid4DZCrossSection(this, z);
+	public long getFromPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(x, x + xOffsetFromW, y, z);
 	}
-	
-	@Override
-	default EvolvingLongGrid3D diagonalCrossSectionOnWX(int xOffsetFromW) {
-		return new EvolvingLongGrid4DWXDiagonalCrossSection(this, xOffsetFromW);
-	}
-	
+
 }
