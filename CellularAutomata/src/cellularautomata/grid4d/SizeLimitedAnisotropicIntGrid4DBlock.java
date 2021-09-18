@@ -78,7 +78,7 @@ public class SizeLimitedAnisotropicIntGrid4DBlock implements IntGrid4D, Anisotro
 			w++;
 			wLength++;
 		}
-		return wLength - 1;
+		return wLength - 2; //subtract one more to leave room for the extra slice being computed
 	}
 
 	@Override

@@ -78,7 +78,7 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Anisot
 			x++;
 			xLength++;
 		}
-		return xLength - 1;
+		return xLength - 2; //subtract one more to leave room for the extra slice being computed
 	}
 	
 	@Override

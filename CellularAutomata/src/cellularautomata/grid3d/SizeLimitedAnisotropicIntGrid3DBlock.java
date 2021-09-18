@@ -78,7 +78,7 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Anisotro
 			x++;
 			xLength++;
 		}
-		return xLength - 1;
+		return xLength - 2; //subtract one more to leave room for the extra slice being computed
 	}
 	
 	@Override

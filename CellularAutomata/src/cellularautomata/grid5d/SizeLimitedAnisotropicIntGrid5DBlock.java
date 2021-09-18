@@ -78,7 +78,7 @@ public class SizeLimitedAnisotropicIntGrid5DBlock implements IntGrid5D, Anisotro
 			v++;
 			vLength++;
 		}
-		return vLength - 1;
+		return vLength - 2; //subtract one more to leave room for the extra slice being computed
 	}
 
 	@Override
