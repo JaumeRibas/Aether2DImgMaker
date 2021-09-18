@@ -40,7 +40,7 @@ public class EvenOddYSubGrid2D<G extends Grid2D> implements Grid2D {
 		if (sourceMinY%2 == 0 != isEven) {
 			sourceMinY++;
 		}
-		int sourceMaxY = source.getMaxX();
+		int sourceMaxY = source.getMaxY();
 		if (sourceMaxY%2 == 0 != isEven) {
 			sourceMaxY--;
 		}
