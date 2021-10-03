@@ -72,6 +72,29 @@ public interface ShortGrid2D extends Grid2D, ShortGrid {
 		return anyPositionMatches ? new short[]{ minValue, maxValue } : null;
 	}
 	
+	default short[] getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
+		int maxX = getMaxX(), minX = getMinX();
+		short maxValue = Short.MIN_VALUE, minValue = Short.MAX_VALUE;
+		for (int x = minX; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isYEven = minY%2 == 0;
+			if (isYEven != isEven) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				anyPositionMatches = true;
+				short value = getFromPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return anyPositionMatches ? new short[]{ minValue, maxValue } : null;
+	}
+	
 	@Override
 	default short getTotal() throws Exception {
 		short total = 0;

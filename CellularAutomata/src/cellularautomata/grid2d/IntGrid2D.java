@@ -72,6 +72,29 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 		return anyPositionMatches ? new int[]{ minValue, maxValue } : null;
 	}
 	
+	default int[] getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
+		int maxX = getMaxX(), minX = getMinX();
+		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
+		for (int x = minX; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isYEven = minY%2 == 0;
+			if (isYEven != isEven) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				anyPositionMatches = true;
+				int value = getFromPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return anyPositionMatches ? new int[]{ minValue, maxValue } : null;
+	}
+	
 	@Override
 	default int getTotal() throws Exception {
 		int total = 0;

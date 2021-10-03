@@ -86,6 +86,49 @@ public interface NumberGrid2D<T extends FieldElement<T> & Comparable<T>> extends
 		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
 	}
 	
+	default MinAndMax<T> getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		T maxValue = null;
+		T minValue = null;
+		int x = minX;
+		for (; x <= maxX && maxValue == null; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isYEven = minY%2 == 0;
+			if (isYEven != isEven) {
+				minY++;
+			}
+			if (minY <= maxY) {
+				T value = getFromPosition(x, minY);
+				maxValue = value;
+				minValue = value;
+				for (int y = minY + 2; y <= maxY; y+=2) {
+					value = getFromPosition(x, y);
+					if (value.compareTo(maxValue) > 0)
+						maxValue = value;
+					if (value.compareTo(minValue) < 0)
+						minValue = value;
+				}
+			}
+		}
+		for (; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isYEven = minY%2 == 0;
+			if (isYEven != isEven) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				T value = getFromPosition(x, y);
+				if (value.compareTo(maxValue) > 0)
+					maxValue = value;
+				if (value.compareTo(minValue) < 0)
+					minValue = value;
+			}
+		}
+		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+	}
+	
 	@Override
 	default T getTotal() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
