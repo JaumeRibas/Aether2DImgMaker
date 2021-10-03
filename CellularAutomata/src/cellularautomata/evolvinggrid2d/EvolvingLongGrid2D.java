@@ -26,8 +26,4 @@ public interface EvolvingLongGrid2D extends LongGrid2D, EvolvingLongGrid {
 		return new EvolvingLongSubGrid2D(this, minX, maxX, minY, maxY);
 	}
 	
-	@Override
-	default EvolvingLongGrid2D evenOddYSubGrid(boolean isEven) {
-		return new EvolvingLongEvenOddYSubGrid2D(this, isEven);
-	}
 }

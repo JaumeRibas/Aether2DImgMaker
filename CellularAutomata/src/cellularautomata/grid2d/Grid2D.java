@@ -109,13 +109,4 @@ public interface Grid2D extends Grid {
 		return new SubGrid2D<Grid2D>(this, minX, maxX, minY, maxY);
 	}
 	
-	/**
-	 * Returns a decorated {@link Grid2D} with only the y coordinates that are even or odd as per the passed isEven parameter.
-	 * 
-	 * @param isEven
-	 * @return
-	 */
-	default Grid2D evenOddYSubGrid(boolean isEven) {
-		return new EvenOddYSubGrid2D<Grid2D>(this, isEven);
-	}
 }
