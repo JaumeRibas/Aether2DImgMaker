@@ -30,6 +30,7 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	 */
 	int getFromPosition(int x, int y) throws Exception;
 	
+	@Override
 	default int[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
