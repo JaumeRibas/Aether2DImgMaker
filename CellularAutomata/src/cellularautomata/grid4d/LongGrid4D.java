@@ -125,13 +125,18 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	}
 	
 	@Override
-	default LongGrid3D crossSectionAtZ(int z) {
-		return new LongGrid4DZCrossSection<LongGrid4D>(this, z);
+	default LongGrid3D crossSectionAtW(int w) {
+		return new LongGrid4DWCrossSection<LongGrid4D>(this, w);
 	}
 	
 	@Override
-	default LongGrid3D crossSectionAtW(int w) {
-		return new LongGrid4DWCrossSection<LongGrid4D>(this, w);
+	default LongGrid3D crossSectionAtX(int x) {
+		return new LongGrid4DXCrossSection<LongGrid4D>(this, x);
+	}
+	
+	@Override
+	default LongGrid3D crossSectionAtZ(int z) {
+		return new LongGrid4DZCrossSection<LongGrid4D>(this, z);
 	}
 	
 	@Override
