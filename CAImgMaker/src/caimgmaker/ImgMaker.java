@@ -160,7 +160,7 @@ public class ImgMaker {
 			if (evenMinAndMaxValue != null) {
 				System.out.println("Even positions: min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + evenMinAndMaxValue[1]);
 				ObjectGrid2D<Color> evenColorGrid = colorMapper.getMappedGrid(ca, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(evenColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
 					imgPath + evenFolder + "/" + numberedFolder, ca.getName() + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -169,7 +169,7 @@ public class ImgMaker {
 			if (oddMinAndMaxValue != null) {
 				System.out.println("odd positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddColorGrid = colorMapper.getMappedGrid(ca, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
 						imgPath + oddFolder + "/" + numberedFolder, ca.getName() + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -199,12 +199,12 @@ public class ImgMaker {
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 					minY = ca.getMinY(), maxY = ca.getMaxY();
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
-			LongGrid2D xSection = ca.crossSectionAtZ(z);
-			long[] minAndMaxValue = xSection.getMinAndMax();
+			LongGrid2D crossSection = ca.crossSectionAtZ(z);
+			long[] minAndMaxValue = crossSection.getMinAndMax();
 			System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
-					imgPath + numberedFolder, ca.getName() + "_x_section_" + currentStep + ".png");
+					imgPath + numberedFolder, ca.getName() + "_cross_section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -233,8 +233,8 @@ public class ImgMaker {
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 					minY = ca.getMinY(), maxY = ca.getMaxY();
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
-			LongGrid2D xSection = ca.crossSectionAtZ(z);
-			long[] minAndMaxValue = xSection.getMinAndMax();
+			LongGrid2D crossSection = ca.crossSectionAtZ(z);
+			long[] minAndMaxValue = crossSection.getMinAndMax();
 			System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 			if (scanSpeed > 0 && (rangeMax > minAndMaxValue[1] || rangeMax < minAndMaxValue[0] || firstIteration)) {
 				rangeMin = minAndMaxValue[0];
@@ -244,8 +244,8 @@ public class ImgMaker {
 				rangeMin = rangeMax - valueRange + 1;
 			}
 			System.out.println("Range min value: " + rangeMin + System.lineSeparator() + "Range max value: " + rangeMax);
-			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, rangeMin, rangeMax);
-			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_x_section_" + currentStep + ".png");
+			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, rangeMin, rangeMax);
+			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, ca.getName() + "_cross_section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -277,8 +277,8 @@ public class ImgMaker {
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 					minY = ca.getMinY(), maxY = ca.getMaxY();
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
-			LongGrid2D xSection = ca.crossSectionAtZ(z);
-			long[] minAndMaxValue = xSection.getMinAndMax();
+			LongGrid2D crossSection = ca.crossSectionAtZ(z);
+			long[] minAndMaxValue = crossSection.getMinAndMax();
 			System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 			if (firstIteration) {
 				firstRangeMin = minAndMaxValue[0];
@@ -292,10 +292,10 @@ public class ImgMaker {
 			while (rangeMin <= minAndMaxValue[1]) {
 				long rangeMax = rangeMin + valueRange - 1;
 				System.out.println("Range " + rangeId + System.lineSeparator() + "Min value: " + rangeMin + System.lineSeparator() + "Max value: " + rangeMax);
-				ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, rangeMin, rangeMax);
+				ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, rangeMin, rangeMax);
 				createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
 						imgPath + "/" + rangeId + "(minVal=" + rangeMin + "_maxVal=" + rangeMax + ")/" 
-						+ numberedFolder, ca.getName() + "_x_section_" + currentStep + ".png");
+						+ numberedFolder, ca.getName() + "_cross_section_" + currentStep + ".png");
 				rangeMin += rangeLeap;
 				rangeId++;
 			}
@@ -329,12 +329,12 @@ public class ImgMaker {
 			if (scanZ >= ca.getMaxZ())
 				scanZ = ca.getMinZ();
 			System.out.println("Scan z: " + scanZ);
-			LongGrid2D xSection = ca.crossSectionAtZ(scanZ);
-			long[] minAndMaxValue = xSection.getMinAndMax();
+			LongGrid2D crossSection = ca.crossSectionAtZ(scanZ);
+			long[] minAndMaxValue = crossSection.getMinAndMax();
 			System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
-					imgPath + numberedFolder, ca.getName() + "_x_section_" + currentStep + ".png");
+					imgPath + numberedFolder, ca.getName() + "_cross_section_" + currentStep + ".png");
 			scanZ++;
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -375,14 +375,14 @@ public class ImgMaker {
 			long lastStep = ae.getStep() - 1;
 			System.out.println("Last step: " + lastStep);
 			LongGrid3D asymmetricSection = ae.asymmetricSection();
-			LongGrid2D xSection = asymmetricSection.crossSectionAtZ(asymmetricSection.getMinZ());
-			long[] minAndMaxValue = xSection.getMinAndMax();
+			LongGrid2D crossSection = asymmetricSection.crossSectionAtZ(asymmetricSection.getMinZ());
+			long[] minAndMaxValue = crossSection.getMinAndMax();
 			System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 			int minX = asymmetricSection.getMinX(), maxX = asymmetricSection.getMaxX(), 
 					minY = asymmetricSection.getMinY(), maxY = asymmetricSection.getMaxY();
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, imgPath, 
-					ae.getName() + "_x_section_" + initialValue + ".png");
+					ae.getName() + "_cross_section_" + initialValue + ".png");
 			i++;
 		}
 	}
@@ -434,15 +434,15 @@ public class ImgMaker {
 			System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 			ObjectGrid2D<Color> colorGrid = scanningColorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
-					scanImgPath + numberedFolder, caName + "_x_section_" + currentStep + ".png");
+					scanImgPath + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
 			scanZ++;
 			if (!caFinished) {
-				IntGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
-				minAndMaxValue = xSection.getMinAndMax();
+				IntGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
+				minAndMaxValue = crossSection.getMinAndMax();
 				System.out.println("Cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-				colorGrid = crossSectionColorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+				colorGrid = crossSectionColorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 				createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-						caName + "_x_section_" + currentStep + ".png");
+						caName + "_cross_section_" + currentStep + ".png");
 			}
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -508,16 +508,16 @@ public class ImgMaker {
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
 			System.out.println("Scan z: " + scanZ);
 			EvolvingIntGrid2D scan = ca.crossSectionAtZ(scanZ);
-			EvolvingIntGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
+			EvolvingIntGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
 			
-			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
+			String evenCrossSectionFolder, oddCrossSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
 				if (crossSectionZ%2 == 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanZ%2 == 0) {
 					evenScanFolder = "even";
@@ -528,11 +528,11 @@ public class ImgMaker {
 				}
 			} else {
 				if (crossSectionZ%2 != 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanZ%2 != 0) {
 					evenScanFolder = "even";
@@ -544,14 +544,14 @@ public class ImgMaker {
 			}
 			
 			int[] evenScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(true);
-			int[] evenXSectionMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(true);
+			int[] evenCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
 			int[] oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(false);
-			int[] oddXSectionMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(false);
+			int[] oddCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
 			
 			if (evenScanMinAndMaxValue != null) {
 				System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> evenScanColorGrid = scanningColorMapper.getMappedGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenScanColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(evenScanColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
 						scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -560,29 +560,29 @@ public class ImgMaker {
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddScanColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (evenXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue[0] + ", max value: " + evenXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(xSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (evenCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (oddXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue[0] + ", max value: " + oddXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(xSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
-								crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (oddCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+								crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
 			
 			folderImageCount++;
@@ -656,14 +656,14 @@ public class ImgMaker {
 			IntGrid2D scan = ca.crossSectionAtX(scanX);
 			IntGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
 			
-			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
+			String evenCrossSectionFolder, oddCrossSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
 				if (crossSectionZ%2 == 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanX%2 == 0) {
 					evenScanFolder = "even";
@@ -674,11 +674,11 @@ public class ImgMaker {
 				}
 			} else {
 				if (crossSectionZ%2 != 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanX%2 != 0) {
 					evenScanFolder = "even";
@@ -690,14 +690,14 @@ public class ImgMaker {
 			}
 			
 			int[] evenScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(true);
-			int[] evenXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
+			int[] evenCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
 			int[] oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(false);
-			int[] oddXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
+			int[] oddCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
 			
 			if (evenScanMinAndMaxValue != null) {
 				System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> evenScanColorGrid = scanningColorMapper.getMappedGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenScanColorGrid, true, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(evenScanColorGrid, true, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
@@ -706,29 +706,29 @@ public class ImgMaker {
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddScanColorGrid, false, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, false, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (evenXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue[0] + ", max value: " + evenXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (evenCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (oddXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue[0] + ", max value: " + oddXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
-								crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (oddCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+								crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
 			
 			folderImageCount++;
@@ -825,7 +825,7 @@ public class ImgMaker {
 			if (oddXScanMinAndMaxValue != null) {
 				System.out.println("X scan odd positions: min value: " + oddXScanMinAndMaxValue[0] + ", max value: " + oddXScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(xScan, oddXScanMinAndMaxValue[0], oddXScanMinAndMaxValue[1]);
-				createImageFromEvenOrOddPositions(isEvenScanX, oddScanColorGrid, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, isEvenScanX, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						xScanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
@@ -834,7 +834,7 @@ public class ImgMaker {
 			if (oddZScanMinAndMaxValue != null) {
 				System.out.println("Z scan odd positions: min value: " + oddZScanMinAndMaxValue[0] + ", max value: " + oddZScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(zScan, oddZScanMinAndMaxValue[0], oddZScanMinAndMaxValue[1]);
-				createImageFromEvenOrOddPositions(isEvenScanZ, oddScanColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, isEvenScanZ, minX, maxX, minY, maxY, minWidth, minHeight, 
 						zScanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -843,7 +843,7 @@ public class ImgMaker {
 			if (oddCrossSectionMinAndMaxValue != null) {
 				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
-				createImageFromEvenOrOddPositions(isEvenCrossSectionZ, oddCrossSectionColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
 								crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -951,7 +951,7 @@ public class ImgMaker {
 			if (oddXScanMinAndMaxValue != null) {
 				System.out.println("X scan odd positions: min value: " + oddXScanMinAndMaxValue[0] + ", max value: " + oddXScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(xScan, oddXScanMinAndMaxValue[0], oddXScanMinAndMaxValue[1]);
-				createImageFromEvenOrOddPositions(isEvenScanX, oddScanColorGrid, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, isEvenScanX, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						xScanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
@@ -960,7 +960,7 @@ public class ImgMaker {
 			if (oddZScanMinAndMaxValue != null) {
 				System.out.println("Z scan odd positions: min value: " + oddZScanMinAndMaxValue[0] + ", max value: " + oddZScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(zScan, oddZScanMinAndMaxValue[0], oddZScanMinAndMaxValue[1]);
-				createImageFromEvenOrOddPositions(isEvenScanZ, oddScanColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, isEvenScanZ, minX, maxX, minY, maxY, minWidth, minHeight, 
 						zScanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -969,7 +969,7 @@ public class ImgMaker {
 			if (oddCrossSectionMinAndMaxValue != null) {
 				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
-				createImageFromEvenOrOddPositions(isEvenCrossSectionZ, oddCrossSectionColorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
 								crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -1057,14 +1057,14 @@ public class ImgMaker {
 			NumberGrid2D<T> scan = ca.crossSectionAtX(scanX);
 			NumberGrid2D<T> crossSection = ca.crossSectionAtZ(crossSectionZ);
 			
-			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
+			String evenCrossSectionFolder, oddCrossSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
 				if (crossSectionZ%2 == 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanX%2 == 0) {
 					evenScanFolder = "even";
@@ -1075,11 +1075,11 @@ public class ImgMaker {
 				}
 			} else {
 				if (crossSectionZ%2 != 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanX%2 != 0) {
 					evenScanFolder = "even";
@@ -1091,14 +1091,14 @@ public class ImgMaker {
 			}
 			
 			MinAndMax<T> evenScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(true);
-			MinAndMax<T> evenXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
+			MinAndMax<T> evenCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
 			MinAndMax<T> oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(false);
-			MinAndMax<T> oddXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
+			MinAndMax<T> oddCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
 			
 			if (evenScanMinAndMaxValue != null) {
 				System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue.getMin() + ", max value: " + evenScanMinAndMaxValue.getMax());
 				ObjectGrid2D<Color> evenScanColorGrid = scanningColorMapper.getMappedGrid(scan, evenScanMinAndMaxValue.getMin(), evenScanMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(evenScanColorGrid, true, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(evenScanColorGrid, true, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
@@ -1107,29 +1107,29 @@ public class ImgMaker {
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue.getMin() + ", max value: " + oddScanMinAndMaxValue.getMax());
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue.getMin(), oddScanMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(oddScanColorGrid, false, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, false, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (evenXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue.getMin() + ", max value: " + evenXSectionMinAndMaxValue.getMax());
-				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenXSectionMinAndMaxValue.getMin(), evenXSectionMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (evenCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue.getMin() + ", max value: " + evenCrossSectionMinAndMaxValue.getMax());
+				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenCrossSectionMinAndMaxValue.getMin(), evenCrossSectionMinAndMaxValue.getMax());
+				createImageFromEvenOrOddPositions(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (oddXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue.getMin() + ", max value: " + oddXSectionMinAndMaxValue.getMax());
-				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddXSectionMinAndMaxValue.getMin(), oddXSectionMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
-								crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (oddCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue.getMin() + ", max value: " + oddCrossSectionMinAndMaxValue.getMax());
+				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue.getMin(), oddCrossSectionMinAndMaxValue.getMax());
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+								crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
 			
 			folderImageCount++;
@@ -1208,21 +1208,21 @@ public class ImgMaker {
 			NumberGrid2D<T> crossSection = ca.crossSectionAtZ(crossSectionZ);
 			
 			MinAndMax<T> oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(isEvenScanX);
-			MinAndMax<T> oddXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(isEvenCrossSectionZ);
+			MinAndMax<T> oddCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(isEvenCrossSectionZ);
 			
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue.getMin() + ", max value: " + oddScanMinAndMaxValue.getMax());
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue.getMin(), oddScanMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(oddScanColorGrid, isEvenScanX, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, isEvenScanX, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (oddXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue.getMin() + ", max value: " + oddXSectionMinAndMaxValue.getMax());
-				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddXSectionMinAndMaxValue.getMin(), oddXSectionMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
+			if (oddCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue.getMin() + ", max value: " + oddCrossSectionMinAndMaxValue.getMax());
+				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue.getMin(), oddCrossSectionMinAndMaxValue.getMax());
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
 								crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -1297,16 +1297,16 @@ public class ImgMaker {
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
 			System.out.println("Scan z: " + scanZ);
 			EvolvingLongGrid2D scan = ca.crossSectionAtZ(scanZ);
-			EvolvingLongGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
+			EvolvingLongGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
 			
-			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
+			String evenCrossSectionFolder, oddCrossSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
 				if (crossSectionZ%2 == 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanZ%2 == 0) {
 					evenScanFolder = "even";
@@ -1317,11 +1317,11 @@ public class ImgMaker {
 				}
 			} else {
 				if (crossSectionZ%2 != 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanZ%2 != 0) {
 					evenScanFolder = "even";
@@ -1333,14 +1333,14 @@ public class ImgMaker {
 			}
 			
 			long[] evenScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(true);
-			long[] evenXSectionMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(true);
+			long[] evenCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
 			long[] oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(false);
-			long[] oddXSectionMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(false);
+			long[] oddCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
 			
 			if (evenScanMinAndMaxValue != null) {
 				System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> evenScanColorGrid = scanningColorMapper.getMappedGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenScanColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(evenScanColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
 						scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -1349,29 +1349,29 @@ public class ImgMaker {
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddScanColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage( minX, maxX, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (evenXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue[0] + ", max value: " + evenXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(xSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (evenCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (oddXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue[0] + ", max value: " + oddXSectionMinAndMaxValue[1]);		
-				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(xSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);	
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
-								crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (oddCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);		
+				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);	
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+								crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
 			
 			folderImageCount++;
@@ -1442,21 +1442,21 @@ public class ImgMaker {
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
 			System.out.println("Scan z: " + scanZ);
 			EvolvingShortGrid2D scan = ca.crossSectionAtZ(scanZ);
-			EvolvingShortGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
+			EvolvingShortGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
 			
-			String evenXSectionPath, oddXSectionPath, evenScanPath, oddScanPath;
-			ColorMapper evenXSectionMapper, oddXSectionMapper, evenScanMapper, oddScanMapper;
+			String evenCrossSectionPath, oddCrossSectionPath, evenScanPath, oddScanPath;
+			ColorMapper evenCrossSectionMapper, oddCrossSectionMapper, evenScanMapper, oddScanMapper;
 			if (isEvenStep) {
 				if (crossSectionZ%2 == 0) {
-					evenXSectionMapper = evenColorMapper;
-					oddXSectionMapper = oddColorMapper;	
-					evenXSectionPath = evenImgPath + crossSectionFolder + "even";
-					oddXSectionPath = oddImgPath + crossSectionFolder + "odd";
+					evenCrossSectionMapper = evenColorMapper;
+					oddCrossSectionMapper = oddColorMapper;	
+					evenCrossSectionPath = evenImgPath + crossSectionFolder + "even";
+					oddCrossSectionPath = oddImgPath + crossSectionFolder + "odd";
 				} else {
-					evenXSectionMapper = oddColorMapper;
-					oddXSectionMapper = evenColorMapper;
-					evenXSectionPath = oddImgPath + crossSectionFolder + "odd";
-					oddXSectionPath = evenImgPath + crossSectionFolder + "even";
+					evenCrossSectionMapper = oddColorMapper;
+					oddCrossSectionMapper = evenColorMapper;
+					evenCrossSectionPath = oddImgPath + crossSectionFolder + "odd";
+					oddCrossSectionPath = evenImgPath + crossSectionFolder + "even";
 				}
 				if (scanZ%2 == 0) {
 					evenScanMapper = evenColorMapper;
@@ -1471,15 +1471,15 @@ public class ImgMaker {
 				}
 			} else {
 				if (crossSectionZ%2 != 0) {
-					evenXSectionMapper = evenColorMapper;
-					oddXSectionMapper = oddColorMapper;	
-					evenXSectionPath = evenImgPath + crossSectionFolder + "even";
-					oddXSectionPath = oddImgPath + crossSectionFolder + "odd";
+					evenCrossSectionMapper = evenColorMapper;
+					oddCrossSectionMapper = oddColorMapper;	
+					evenCrossSectionPath = evenImgPath + crossSectionFolder + "even";
+					oddCrossSectionPath = oddImgPath + crossSectionFolder + "odd";
 				} else {
-					evenXSectionMapper = oddColorMapper;
-					oddXSectionMapper = evenColorMapper;
-					evenXSectionPath = oddImgPath + crossSectionFolder + "odd";
-					oddXSectionPath = evenImgPath + crossSectionFolder + "even";
+					evenCrossSectionMapper = oddColorMapper;
+					oddCrossSectionMapper = evenColorMapper;
+					evenCrossSectionPath = oddImgPath + crossSectionFolder + "odd";
+					oddCrossSectionPath = evenImgPath + crossSectionFolder + "even";
 				}
 				if (scanZ%2 != 0) {
 					evenScanMapper = evenColorMapper;
@@ -1495,14 +1495,14 @@ public class ImgMaker {
 			}
 			
 			short[] evenScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(true);
-			short[] evenXSectionMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(true);
+			short[] evenCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
 			short[] oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(false);
-			short[] oddXSectionMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(false);
+			short[] oddCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
 			
 			if (evenScanMinAndMaxValue != null) {
 				System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> evenScanColorGrid = evenScanMapper.getMappedGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenScanColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(evenScanColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
 						evenScanPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -1511,29 +1511,29 @@ public class ImgMaker {
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = oddScanMapper.getMappedGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddScanColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
 						oddScanPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
 						oddScanPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (evenXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue[0] + ", max value: " + evenXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> evenCrossSectionColorGrid = evenXSectionMapper.getMappedGrid(xSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
-						evenXSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (evenCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> evenCrossSectionColorGrid = evenCrossSectionMapper.getMappedGrid(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+						evenCrossSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						evenXSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						evenCrossSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (oddXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue[0] + ", max value: " + oddXSectionMinAndMaxValue[1]);		
-				ObjectGrid2D<Color> oddCrossSectionColorGrid = oddXSectionMapper.getMappedGrid(xSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);	
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
-						oddXSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (oddCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);		
+				ObjectGrid2D<Color> oddCrossSectionColorGrid = oddCrossSectionMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);	
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+						oddCrossSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						oddXSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						oddCrossSectionPath + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
 			
 			folderImageCount++;
@@ -1617,15 +1617,15 @@ public class ImgMaker {
 			System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 			ObjectGrid2D<Color> colorGrid = scanningColorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
-					scanImgPath + numberedFolder, caName + "_x_section_" + currentStep + ".png");
+					scanImgPath + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
 			scanZ++;
 			if (!caFinished) {
-				LongGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
-				minAndMaxValue = xSection.getMinAndMax();
+				LongGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
+				minAndMaxValue = crossSection.getMinAndMax();
 				System.out.println("Cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-				colorGrid = crossSectionColorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+				colorGrid = crossSectionColorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 				createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-						caName + "_x_section_" + currentStep + ".png");
+						caName + "_cross_section_" + currentStep + ".png");
 			}
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -1704,15 +1704,15 @@ public class ImgMaker {
 			System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 			ObjectGrid2D<Color> colorGrid = scanningColorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, 
-					scanImgPath + numberedFolder, caName + "_x_section_" + currentStep + ".png");
+					scanImgPath + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
 			scanZ--;
 			if (!caFinished) {
-				ShortGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
-				minAndMaxValue = xSection.getMinAndMax();
+				ShortGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
+				minAndMaxValue = crossSection.getMinAndMax();
 				System.out.println("Cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-				colorGrid = crossSectionColorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+				colorGrid = crossSectionColorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 				createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-						caName + "_x_section_" + currentStep + ".png");
+						caName + "_cross_section_" + currentStep + ".png");
 			}
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -1774,56 +1774,56 @@ public class ImgMaker {
 		
 		ActionableGrid3DZCrossSectionProcessor<IntGrid3D, IntGrid2D> scan = 
 				new ActionableGrid3DZCrossSectionProcessor<IntGrid3D, IntGrid2D>(scanZ);
-		ActionableGrid3DZCrossSectionProcessor<IntGrid3D, IntGrid2D> xSection = 
+		ActionableGrid3DZCrossSectionProcessor<IntGrid3D, IntGrid2D> crossSection = 
 				new ActionableGrid3DZCrossSectionProcessor<IntGrid3D, IntGrid2D>(crossSectionZ);
 		
 		IntGridMinAndMaxProcessor<IntGrid2D> scanMinAndMaxProcessor = new IntGridMinAndMaxProcessor<IntGrid2D>();
-		IntGridMinAndMaxProcessor<IntGrid2D> xSectionMinAndMaxProcessor = new IntGridMinAndMaxProcessor<IntGrid2D>();
+		IntGridMinAndMaxProcessor<IntGrid2D> crossSectionMinAndMaxProcessor = new IntGridMinAndMaxProcessor<IntGrid2D>();
 		
 		scan.addProcessor(scanMinAndMaxProcessor);
-		xSection.addProcessor(xSectionMinAndMaxProcessor);
+		crossSection.addProcessor(crossSectionMinAndMaxProcessor);
 		
 		ca.addProcessor(scan);
-		ca.addProcessor(xSection);
+		ca.addProcessor(crossSection);
 		//get min and max for current step
 		ca.processGrid();
 		
 		do {
 			scan.removeProcessor(scanMinAndMaxProcessor);
-			xSection.removeProcessor(xSectionMinAndMaxProcessor);
+			crossSection.removeProcessor(crossSectionMinAndMaxProcessor);
 			System.out.println("Step: " + currentStep);
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 					minY = ca.getMinY(), maxY = ca.getMaxY();
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
 			System.out.println("Scan z: " + scanZ);
 			int[] scanMinAndMaxValue = scanMinAndMaxProcessor.getMinAndMaxValue();
-			int[] xSectionMinAndMaxValue = xSectionMinAndMaxProcessor.getMinAndMaxValue();
+			int[] crossSectionMinAndMaxValue = crossSectionMinAndMaxProcessor.getMinAndMaxValue();
 			System.out.println("Scan: min value: " + scanMinAndMaxValue[0] + ", max value: " + scanMinAndMaxValue[1]);
-			System.out.println("Cross section: min value: " + xSectionMinAndMaxValue[0] + ", max value: " + xSectionMinAndMaxValue[1]);
+			System.out.println("Cross section: min value: " + crossSectionMinAndMaxValue[0] + ", max value: " + crossSectionMinAndMaxValue[1]);
 			
 			ActionableIntGrid2DColorMapperProcessor scanColorMapperProcessor = 
 					new ActionableIntGrid2DColorMapperProcessor(scanningColorMapper, scanMinAndMaxValue[0], scanMinAndMaxValue[1]);
 			ActionableIntGrid2DColorMapperProcessor crossSectionColorMapperProcessor = 
-					new ActionableIntGrid2DColorMapperProcessor(crossSectionColorMapper, xSectionMinAndMaxValue[0], xSectionMinAndMaxValue[1]);
+					new ActionableIntGrid2DColorMapperProcessor(crossSectionColorMapper, crossSectionMinAndMaxValue[0], crossSectionMinAndMaxValue[1]);
 			
 			ImageRenderingProcessor scanImageRenderer = 
 					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPath + numberedFolder, caName + "_x_section_" + currentStep + ".png");
-			ImageRenderingProcessor xSectionImageRenderer = 
+							scanImgPath + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
+			ImageRenderingProcessor crossSectionImageRenderer = 
 					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-							caName + "_x_section_" + currentStep + ".png");
+							caName + "_cross_section_" + currentStep + ".png");
 			
 			scanColorMapperProcessor.addProcessor(scanImageRenderer);
-			crossSectionColorMapperProcessor.addProcessor(xSectionImageRenderer);
+			crossSectionColorMapperProcessor.addProcessor(crossSectionImageRenderer);
 			
 			scan.addProcessor(scanColorMapperProcessor);
-			xSection.addProcessor(crossSectionColorMapperProcessor);
+			crossSection.addProcessor(crossSectionColorMapperProcessor);
 			
 			//generate images
 			ca.processGrid();
 			
 			scan.removeProcessor(scanColorMapperProcessor);
-			xSection.removeProcessor(crossSectionColorMapperProcessor);
+			crossSection.removeProcessor(crossSectionColorMapperProcessor);
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -1852,7 +1852,7 @@ public class ImgMaker {
 				scanZ = ca.getMinZ();
 			scan.setZ(scanZ);
 			scan.addProcessor(scanMinAndMaxProcessor);
-			xSection.addProcessor(xSectionMinAndMaxProcessor);
+			crossSection.addProcessor(crossSectionMinAndMaxProcessor);
 			currentStep++;
 			System.out.println();
 		} while (ca.nextStep());
@@ -1891,56 +1891,56 @@ public class ImgMaker {
 		
 		ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D> scan = 
 				new ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D>(scanZ);
-		ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D> xSection = 
+		ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D> crossSection = 
 				new ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D>(crossSectionZ);
 		
 		LongGridMinAndMaxProcessor<LongGrid2D> scanMinAndMaxProcessor = new LongGridMinAndMaxProcessor<LongGrid2D>();
-		LongGridMinAndMaxProcessor<LongGrid2D> xSectionMinAndMaxProcessor = new LongGridMinAndMaxProcessor<LongGrid2D>();
+		LongGridMinAndMaxProcessor<LongGrid2D> crossSectionMinAndMaxProcessor = new LongGridMinAndMaxProcessor<LongGrid2D>();
 		
 		scan.addProcessor(scanMinAndMaxProcessor);
-		xSection.addProcessor(xSectionMinAndMaxProcessor);
+		crossSection.addProcessor(crossSectionMinAndMaxProcessor);
 		
 		ca.addProcessor(scan);
-		ca.addProcessor(xSection);
+		ca.addProcessor(crossSection);
 		//get min and max for current step
 		ca.processGrid();
 		
 		do {
 			scan.removeProcessor(scanMinAndMaxProcessor);
-			xSection.removeProcessor(xSectionMinAndMaxProcessor);
+			crossSection.removeProcessor(crossSectionMinAndMaxProcessor);
 			System.out.println("Step: " + currentStep);
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 					minY = ca.getMinY(), maxY = ca.getMaxY();
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
 			System.out.println("Scan z: " + scanZ);
 			long[] scanMinAndMaxValue = scanMinAndMaxProcessor.getMinAndMaxValue();
-			long[] xSectionMinAndMaxValue = xSectionMinAndMaxProcessor.getMinAndMaxValue();
+			long[] crossSectionMinAndMaxValue = crossSectionMinAndMaxProcessor.getMinAndMaxValue();
 			System.out.println("Scan: min value: " + scanMinAndMaxValue[0] + ", max value: " + scanMinAndMaxValue[1]);
-			System.out.println("Cross section: min value: " + xSectionMinAndMaxValue[0] + ", max value: " + xSectionMinAndMaxValue[1]);
+			System.out.println("Cross section: min value: " + crossSectionMinAndMaxValue[0] + ", max value: " + crossSectionMinAndMaxValue[1]);
 			
 			ActionableLongGrid2DColorMapperProcessor scanColorMapperProcessor = 
 					new ActionableLongGrid2DColorMapperProcessor(scanningColorMapper, scanMinAndMaxValue[0], scanMinAndMaxValue[1]);
 			ActionableLongGrid2DColorMapperProcessor crossSectionColorMapperProcessor = 
-					new ActionableLongGrid2DColorMapperProcessor(crossSectionColorMapper, xSectionMinAndMaxValue[0], xSectionMinAndMaxValue[1]);
+					new ActionableLongGrid2DColorMapperProcessor(crossSectionColorMapper, crossSectionMinAndMaxValue[0], crossSectionMinAndMaxValue[1]);
 			
 			ImageRenderingProcessor scanImageRenderer = 
 					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPath + numberedFolder, caName + "_x_section_" + currentStep + ".png");
-			ImageRenderingProcessor xSectionImageRenderer = 
+							scanImgPath + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
+			ImageRenderingProcessor crossSectionImageRenderer = 
 					new ImageRenderingProcessor(minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-							caName + "_x_section_" + currentStep + ".png");
+							caName + "_cross_section_" + currentStep + ".png");
 			
 			scanColorMapperProcessor.addProcessor(scanImageRenderer);
-			crossSectionColorMapperProcessor.addProcessor(xSectionImageRenderer);
+			crossSectionColorMapperProcessor.addProcessor(crossSectionImageRenderer);
 			
 			scan.addProcessor(scanColorMapperProcessor);
-			xSection.addProcessor(crossSectionColorMapperProcessor);
+			crossSection.addProcessor(crossSectionColorMapperProcessor);
 			
 			//generate images
 			ca.processGrid();
 			
 			scan.removeProcessor(scanColorMapperProcessor);
-			xSection.removeProcessor(crossSectionColorMapperProcessor);
+			crossSection.removeProcessor(crossSectionColorMapperProcessor);
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -1969,7 +1969,7 @@ public class ImgMaker {
 				scanZ = ca.getMinZ();
 			scan.setZ(scanZ);
 			scan.addProcessor(scanMinAndMaxProcessor);
-			xSection.addProcessor(xSectionMinAndMaxProcessor);
+			crossSection.addProcessor(crossSectionMinAndMaxProcessor);
 			currentStep++;
 			System.out.println();
 		} while (ca.nextStep());
@@ -2021,14 +2021,14 @@ public class ImgMaker {
 			IntGrid2D scan = xCopier.getCopy(scanX);
 			IntGrid2D crossSection = zCopier.getCopy(crossSectionZ);
 			
-			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
+			String evenCrossSectionFolder, oddCrossSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
 				if (crossSectionZ%2 == 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanX%2 == 0) {
 					evenScanFolder = "even";
@@ -2039,11 +2039,11 @@ public class ImgMaker {
 				}
 			} else {
 				if (crossSectionZ%2 != 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanX%2 != 0) {
 					evenScanFolder = "even";
@@ -2055,14 +2055,14 @@ public class ImgMaker {
 			}
 			
 			int[] evenScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(true);
-			int[] evenXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
+			int[] evenCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(true);
 			int[] oddScanMinAndMaxValue = scan.getEvenOddPositionsMinAndMax(false);
-			int[] oddXSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
+			int[] oddCrossSectionMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(false);
 			
 			if (evenScanMinAndMaxValue != null) {
 				System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> evenScanColorGrid = scanningColorMapper.getMappedGrid(scan, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenScanColorGrid, true, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(evenScanColorGrid, true, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
@@ -2071,29 +2071,29 @@ public class ImgMaker {
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddScanColorGrid, false, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, false, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (evenXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue[0] + ", max value: " + evenXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (evenCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> evenCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(evenCrossSectionColorGrid, true, minX, maxX, minY, maxY, minWidth, minHeight, 
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}
-			if (oddXSectionMinAndMaxValue != null) {
-				System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue[0] + ", max value: " + oddXSectionMinAndMaxValue[1]);
-				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
-								crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+			if (oddCrossSectionMinAndMaxValue != null) {
+				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
+				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, false, minX, maxX, minY, maxY, minWidth, minHeight, 
+								crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-						crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
+						crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_" + currentStep + ".png");
 			}			
 			
 			folderImageCount++;
@@ -2182,7 +2182,7 @@ public class ImgMaker {
 			if (oddScanMinAndMaxValue != null) {
 				System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue.getMin() + ", max value: " + oddScanMinAndMaxValue.getMax());
 				ObjectGrid2D<Color> oddScanColorGrid = scanningColorMapper.getMappedGrid(scan, oddScanMinAndMaxValue.getMin(), oddScanMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(oddScanColorGrid, isEvenScanX, minZ, maxZ, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddScanColorGrid, isEvenScanX, minZ, maxZ, minY, maxY, minWidth, minHeight, 
 						scanImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minZ, maxZ, minY, maxY, minWidth, minHeight, 
@@ -2191,7 +2191,7 @@ public class ImgMaker {
 			if (oddCrossSectionMinAndMaxValue != null) {
 				System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue.getMin() + ", max value: " + oddCrossSectionMinAndMaxValue.getMax());
 				ObjectGrid2D<Color> oddCrossSectionColorGrid = crossSectionColorMapper.getMappedGrid(crossSection, oddCrossSectionMinAndMaxValue.getMin(), oddCrossSectionMinAndMaxValue.getMax());
-				createEvenOddImageLeftToRight(oddCrossSectionColorGrid, isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
+				createImageFromEvenOrOddPositions(oddCrossSectionColorGrid, isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
 								crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + currentStep + ".png");
 			} else {
 				createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -2265,54 +2265,54 @@ public class ImgMaker {
 		
 		ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D> scan = 
 				new ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D>(scanZ);
-		ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D> xSection = 
+		ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D> crossSection = 
 				new ActionableGrid3DZCrossSectionProcessor<LongGrid3D, LongGrid2D>(crossSectionZ);
 		
 		LongGridEvenOddMinAndMaxProcessor<LongGrid2D> scanMinAndMaxProcessor = new LongGridEvenOddMinAndMaxProcessor<LongGrid2D>();
-		LongGridEvenOddMinAndMaxProcessor<LongGrid2D> xSectionMinAndMaxProcessor = new LongGridEvenOddMinAndMaxProcessor<LongGrid2D>();
+		LongGridEvenOddMinAndMaxProcessor<LongGrid2D> crossSectionMinAndMaxProcessor = new LongGridEvenOddMinAndMaxProcessor<LongGrid2D>();
 		
 		scan.addProcessor(scanMinAndMaxProcessor);
-		xSection.addProcessor(xSectionMinAndMaxProcessor);
+		crossSection.addProcessor(crossSectionMinAndMaxProcessor);
 		
 		ca.addProcessor(scan);
-		ca.addProcessor(xSection);
+		ca.addProcessor(crossSection);
 		//get min and max for current step
 		ca.processGrid();
 		
 		do {
 			scan.removeProcessor(scanMinAndMaxProcessor);
-			xSection.removeProcessor(xSectionMinAndMaxProcessor);
+			crossSection.removeProcessor(crossSectionMinAndMaxProcessor);
 			System.out.println("Step: " + currentStep);
 			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 					minY = ca.getMinY(), maxY = ca.getMaxY();
 			System.out.println("Max y: " + maxY + System.lineSeparator() + "Max x: " + maxX);
 			System.out.println("Scan z: " + scanZ);
 			long[] evenScanMinAndMaxValue = scanMinAndMaxProcessor.getEvenMinAndMaxValue();
-			long[] evenXSectionMinAndMaxValue = xSectionMinAndMaxProcessor.getEvenMinAndMaxValue();
+			long[] evenCrossSectionMinAndMaxValue = crossSectionMinAndMaxProcessor.getEvenMinAndMaxValue();
 			long[] oddScanMinAndMaxValue = scanMinAndMaxProcessor.getOddMinAndMaxValue();
-			long[] oddXSectionMinAndMaxValue = xSectionMinAndMaxProcessor.getOddMinAndMaxValue();
+			long[] oddCrossSectionMinAndMaxValue = crossSectionMinAndMaxProcessor.getOddMinAndMaxValue();
 			System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 			System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
-			System.out.println("Cross section even positions: min value: " + evenXSectionMinAndMaxValue[0] + ", max value: " + evenXSectionMinAndMaxValue[1]);
-			System.out.println("Cross section odd positions: min value: " + oddXSectionMinAndMaxValue[0] + ", max value: " + oddXSectionMinAndMaxValue[1]);
+			System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
+			System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
 			
 			ActionableLongGrid2DColorMapperProcessor evenScanColorMapperProcessor = 
 					new ActionableLongGrid2DColorMapperProcessor(scanningColorMapper, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 			ActionableLongGrid2DColorMapperProcessor oddScanColorMapperProcessor = 
 					new ActionableLongGrid2DColorMapperProcessor(scanningColorMapper, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 			ActionableLongGrid2DColorMapperProcessor evenCrossSectionColorMapperProcessor = 
-					new ActionableLongGrid2DColorMapperProcessor(crossSectionColorMapper, evenXSectionMinAndMaxValue[0], evenXSectionMinAndMaxValue[1]);
+					new ActionableLongGrid2DColorMapperProcessor(crossSectionColorMapper, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
 			ActionableLongGrid2DColorMapperProcessor oddCrossSectionColorMapperProcessor = 
-					new ActionableLongGrid2DColorMapperProcessor(crossSectionColorMapper, oddXSectionMinAndMaxValue[0], oddXSectionMinAndMaxValue[1]);
+					new ActionableLongGrid2DColorMapperProcessor(crossSectionColorMapper, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
 			
-			String evenXSectionFolder, oddXSectionFolder, evenScanFolder, oddScanFolder;
+			String evenCrossSectionFolder, oddCrossSectionFolder, evenScanFolder, oddScanFolder;
 			if (isEvenStep) {
 				if (crossSectionZ%2 == 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanZ%2 == 0) {
 					evenScanFolder = "even";
@@ -2323,11 +2323,11 @@ public class ImgMaker {
 				}
 			} else {
 				if (crossSectionZ%2 != 0) {
-					evenXSectionFolder = "even";
-					oddXSectionFolder = "odd";
+					evenCrossSectionFolder = "even";
+					oddCrossSectionFolder = "odd";
 				} else {
-					evenXSectionFolder = "odd";
-					oddXSectionFolder = "even";
+					evenCrossSectionFolder = "odd";
+					oddCrossSectionFolder = "even";
 				}
 				if (scanZ%2 != 0) {
 					evenScanFolder = "even";
@@ -2339,34 +2339,34 @@ public class ImgMaker {
 			}
 			EvenOddImageRenderingProcessor evenScanImageRenderer = 
 					new EvenOddImageRenderingProcessor(true, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_x_section_" + currentStep + ".png");
+							scanImgPath + evenScanFolder + "/" + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
 			EvenOddImageRenderingProcessor oddScanImageRenderer = 
 					new EvenOddImageRenderingProcessor(false, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_x_section_" + currentStep + ".png");
-			EvenOddImageRenderingProcessor evenXSectionImageRenderer = 
+							scanImgPath + oddScanFolder + "/" + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
+			EvenOddImageRenderingProcessor evenCrossSectionImageRenderer = 
 					new EvenOddImageRenderingProcessor(true, minX, maxX, minY, maxY, minWidth, minHeight, 
-							crossSectionImgPath + evenXSectionFolder + "/" + numberedFolder, caName + "_x_section_" + currentStep + ".png");
-			EvenOddImageRenderingProcessor oddXSectionImageRenderer = 
+							crossSectionImgPath + evenCrossSectionFolder + "/" + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
+			EvenOddImageRenderingProcessor oddCrossSectionImageRenderer = 
 					new EvenOddImageRenderingProcessor(false, minX, maxX, minY, maxY, minWidth, minHeight, 
-							crossSectionImgPath + oddXSectionFolder + "/" + numberedFolder, caName + "_x_section_" + currentStep + ".png");
+							crossSectionImgPath + oddCrossSectionFolder + "/" + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
 			
 			evenScanColorMapperProcessor.addProcessor(evenScanImageRenderer);
 			oddScanColorMapperProcessor.addProcessor(oddScanImageRenderer);
-			evenCrossSectionColorMapperProcessor.addProcessor(evenXSectionImageRenderer);
-			oddCrossSectionColorMapperProcessor.addProcessor(oddXSectionImageRenderer);
+			evenCrossSectionColorMapperProcessor.addProcessor(evenCrossSectionImageRenderer);
+			oddCrossSectionColorMapperProcessor.addProcessor(oddCrossSectionImageRenderer);
 			
 			scan.addProcessor(evenScanColorMapperProcessor);
 			scan.addProcessor(oddScanColorMapperProcessor);
-			xSection.addProcessor(evenCrossSectionColorMapperProcessor);
-			xSection.addProcessor(oddCrossSectionColorMapperProcessor);
+			crossSection.addProcessor(evenCrossSectionColorMapperProcessor);
+			crossSection.addProcessor(oddCrossSectionColorMapperProcessor);
 			
 			//generate images
 			ca.processGrid();
 			
 			scan.removeProcessor(evenScanColorMapperProcessor);
 			scan.removeProcessor(oddScanColorMapperProcessor);
-			xSection.removeProcessor(evenCrossSectionColorMapperProcessor);
-			xSection.removeProcessor(oddCrossSectionColorMapperProcessor);
+			crossSection.removeProcessor(evenCrossSectionColorMapperProcessor);
+			crossSection.removeProcessor(oddCrossSectionColorMapperProcessor);
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
@@ -2395,7 +2395,7 @@ public class ImgMaker {
 				scanZ = ca.getMinZ();
 			scan.setZ(scanZ);
 			scan.addProcessor(scanMinAndMaxProcessor);
-			xSection.addProcessor(xSectionMinAndMaxProcessor);
+			crossSection.addProcessor(crossSectionMinAndMaxProcessor);
 			currentStep++;
 			isEvenStep = !isEvenStep;
 			System.out.println();
@@ -2427,14 +2427,14 @@ public class ImgMaker {
 			long[] minAndMaxValue = scan.getMinAndMax();
 			System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 			ObjectGrid2D<Color> colorGrid = scanningColorMapper.getMappedGrid(scan, minAndMaxValue[0], minAndMaxValue[1]);
-			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, scanImgPath + numberedFolder, caName + "_x_section_" + currentStep + ".png");
+			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, scanImgPath + numberedFolder, caName + "_cross_section_" + currentStep + ".png");
 			scanZ++;
-			LongGrid2D xSection = ca.crossSectionAtZ(crossSectionZ);
-			minAndMaxValue = xSection.getMinAndMax();
+			LongGrid2D crossSection = ca.crossSectionAtZ(crossSectionZ);
+			minAndMaxValue = crossSection.getMinAndMax();
 			System.out.println("Cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-			colorGrid = crossSectionColorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
+			colorGrid = crossSectionColorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 			createImage(colorGrid, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-					caName + "_x_section_" + currentStep + ".png");
+					caName + "_cross_section_" + currentStep + ".png");
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
 				numberedFolder++;
@@ -2461,11 +2461,11 @@ public class ImgMaker {
 				System.out.println("New block: [" + minX + "," + maxX + "]");
 				for (int scanX = minX; scanX <= maxX; scanX++) {
 					System.out.println("X: " + scanX);
-					IntGrid2D xSection = gridBlock.crossSectionAtX(scanX);
-					int[] minAndMaxValue = xSection.getMinAndMax();
+					IntGrid2D crossSection = gridBlock.crossSectionAtX(scanX);
+					int[] minAndMaxValue = crossSection.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, minAndMaxValue[0], minAndMaxValue[1]);
-					createImage(colorGrid, minWidth, minHeight, imgsPath, caName + "_x_section_" + scanX + ".png");
+					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
+					createImage(colorGrid, minWidth, minHeight, imgsPath, caName + "_cross_section_" + scanX + ".png");
 				}
 			}
 			
@@ -2504,46 +2504,110 @@ public class ImgMaker {
 				boolean isEven = (minX + currentStep)%2 == 0;
 				for (int scanX = minX; scanX <= maxX; scanX++, isEven = !isEven) {
 					System.out.println("X: " + scanX);
-					IntGrid2D xSection = gridBlock.crossSectionAtX(scanX);
-					SubareaGrid<IntGrid2D> xSectionSubareaGrid = new SubareaGrid<IntGrid2D>(xSection, imageWidth, imageHeight);
-					int subareasGridMinX = xSectionSubareaGrid.getMinX();
-					int subareasGridMaxX = xSectionSubareaGrid.getMaxX();
+					IntGrid2D crossSection = gridBlock.crossSectionAtX(scanX);
+					SubareaGrid<IntGrid2D> crossSectionSubareaGrid = new SubareaGrid<IntGrid2D>(crossSection, imageWidth, imageHeight);
+					int subareasGridMinX = crossSectionSubareaGrid.getMinX();
+					int subareasGridMaxX = crossSectionSubareaGrid.getMaxX();
 					for (int subareasX = subareasGridMinX; subareasX <= subareasGridMaxX; subareasX++) {
-						int subareasGridLocalMinY = xSectionSubareaGrid.getMinY(subareasX);
-						int subareasGridLocalMaxY = xSectionSubareaGrid.getMaxY(subareasX);
+						int subareasGridLocalMinY = crossSectionSubareaGrid.getMinY(subareasX);
+						int subareasGridLocalMaxY = crossSectionSubareaGrid.getMaxY(subareasX);
 						for (int subareasY = subareasGridLocalMinY; subareasY <= subareasGridLocalMaxY; subareasY++) {
 							System.out.println("Subarea: (" + subareasX + "," + subareasY + ")");
 							int framedGridMinX = subareasX * imageWidth;
 							int framedGridMaxX = framedGridMinX + imageWidth - 1;
 							int framedGridMinY = subareasY * imageHeight;
 							int framedGridMaxY = framedGridMinY + imageHeight - 1;
-							IntGrid2D xSectionSubarea = xSectionSubareaGrid.getSubareaAtPosition(subareasX, subareasY);
-							int[] evenMinAndMaxValue = xSectionSubarea.getEvenOddPositionsMinAndMax(isEven);
+							IntGrid2D crossSectionSubarea = crossSectionSubareaGrid.getSubareaAtPosition(subareasX, subareasY);
+							int[] evenMinAndMaxValue = crossSectionSubarea.getEvenOddPositionsMinAndMax(isEven);
 							if (evenMinAndMaxValue != null) {
 								System.out.println("Even positions min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Even positions max value: " + evenMinAndMaxValue[1]);
-								ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSectionSubarea, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
-								createImageFromEvenOrOddPositions(isEven, colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
+								ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSectionSubarea, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+								createImageFromEvenOrOddPositions(colorGrid, isEven, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
 										imageWidth, imageHeight, imgsPath + "even/" 
-										+ subareasX + "," + subareasY, caName + "_x_section_" + scanX + ".png");
+										+ subareasX + "," + subareasY, caName + "_cross_section_" + scanX + ".png");
 							} else {
 								createEmptyImage(framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
 										imageWidth, imageHeight, imgsPath + "even/" 
-										+ subareasX + "," + subareasY, caName + "_x_section_" + scanX + ".png");
+										+ subareasX + "," + subareasY, caName + "_cross_section_" + scanX + ".png");
 							}							
-							int[] oddMinAndMaxValue = xSectionSubarea.getEvenOddPositionsMinAndMax(!isEven);
+							int[] oddMinAndMaxValue = crossSectionSubarea.getEvenOddPositionsMinAndMax(!isEven);
 							if (oddMinAndMaxValue != null) {
 								System.out.println("Odd positions min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Odd positions max value: " + oddMinAndMaxValue[1]);
-								ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSectionSubarea, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
-								createImageFromEvenOrOddPositions(!isEven, colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
+								ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSectionSubarea, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
+								createImageFromEvenOrOddPositions(colorGrid, !isEven, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
 										imageWidth, imageHeight, imgsPath + "odd/" 
-										+ subareasX + "," + subareasY, caName + "_x_section_" + scanX + ".png");
+										+ subareasX + "," + subareasY, caName + "_cross_section_" + scanX + ".png");
 							} else {
 								createEmptyImage(framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
 										imageWidth, imageHeight, imgsPath + "odd/" 
-										+ subareasX + "," + subareasY, caName + "_x_section_" + scanX + ".png");
+										+ subareasX + "," + subareasY, caName + "_cross_section_" + scanX + ".png");
 							}							
 						}						
 					}					
+				}
+			}
+			
+			@Override
+			public void beforeProcessing() throws Exception {
+				//do nothing		
+			}
+			
+			@Override
+			public void afterProcessing() throws Exception {
+				//do nothing
+			}
+		});
+
+		//generate images
+		ca.processGrid();
+	
+		System.out.println("Finished!");
+	}
+	
+	public void createZScanningEvenOddImages(ActionableEvolvingGrid3D<IntGrid3D> ca,
+			ColorMapper colorMapper, String imagesPath) throws Exception {
+		long currentStep = ca.getStep();
+		String caName = ca.getName();
+		String imgsPath = imagesPath + "/" + colorMapper.getClass().getSimpleName() + "/scans/step=" 
+				+ currentStep + "/z_scan/";
+		System.out.println("Scanning grid at step " + currentStep + " along the z axis.");
+		
+		ca.addProcessor(new GridProcessor<IntGrid3D>() {
+			
+			@Override
+			public void processGridBlock(IntGrid3D gridBlock) throws Exception {
+				int minX = gridBlock.getMinX();
+				int maxX = gridBlock.getMaxX();
+				int minY = gridBlock.getMinY();
+				int maxY = gridBlock.getMaxY();
+				int minZ = gridBlock.getMinZ();
+				int maxZ = gridBlock.getMaxZ();
+				System.out.println("New block: [" + minX + "," + maxX + "]");
+				boolean isEven = (minZ + currentStep)%2 == 0;
+				for (int scanZ = minZ; scanZ <= maxZ; scanZ++, isEven = !isEven) {
+					System.out.println("Z: " + scanZ);
+					IntGrid2D crossSection = gridBlock.crossSectionAtZ(scanZ);
+					int[] evenMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(isEven);
+					if (evenMinAndMaxValue != null) {
+						System.out.println("Even positions min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Even positions max value: " + evenMinAndMaxValue[1]);
+						ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+						createImageFromEvenOrOddPositions(colorGrid, isEven, minX, maxX, minY, maxY,
+								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/even/", caName + "_cross_section_" + scanZ + ".png");
+					} else {
+						createEmptyImage(minX, maxX, minY, maxY,
+								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/even/", caName + "_cross_section_" + scanZ + ".png");
+					}					
+					int[] oddMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(!isEven);
+					ObjectGrid2D<Color> colorGrid;
+					if (oddMinAndMaxValue != null) {
+						System.out.println("Odd positions min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Odd positions max value: " + oddMinAndMaxValue[1]);
+						colorGrid = colorMapper.getMappedGrid(crossSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
+						createImageFromEvenOrOddPositions(colorGrid, !isEven, minX, maxX, minY, maxY,
+								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/odd/", caName + "_cross_section_" + scanZ + ".png");
+					} else {
+						createEmptyImage(minX, maxX, minY, maxY,
+								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/odd/", caName + "_cross_section_" + scanZ + ".png");
+					}
 				}
 			}
 			
@@ -2664,171 +2728,6 @@ public class ImgMaker {
 		saveAsPngImage(pixelData, width, height, path, name);
 	}
 	
-	public static void createImageLeftToRight(ObjectGrid2D<Color> grid, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
-			throws Exception {
-		int gridPositionSize = getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
-		createImageLeftToRight(grid, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
-	}
-	
-	public static void createImageLeftToRight(ObjectGrid2D<Color> gridRegion, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
-			int minWidth, int minHeight, String path, String name) throws Exception {
-		
-		int framedGridWidth = maxX - minX + 1;
-		int framedGridHeight = maxY - minY + 1;
-		
-		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
-		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
-		
-		int imageWidth = Math.max(framedGridWidthInPixels, minWidth);
-		int imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
-		
-		
-		long longByteCount = (long)imageWidth * imageHeight * 3;
-		if (longByteCount > Integer.MAX_VALUE)
-			throw new Exception("Integer max value exceeded");
-		int byteCount = (int)longByteCount;
-		byte[] pixelData = new byte[byteCount];
-		
-		int canvasTopMargin = imageHeight - framedGridHeightInPixels;
-		
-		int regionMinX = gridRegion.getMinX();
-		int regionMaxX = gridRegion.getMaxX();
-		int framedRegionMinX, framedRegionMaxX;
-		if (minX < regionMinX) {
-			framedRegionMinX = regionMinX;
-		} else {
-			framedRegionMinX = minX;
-		}
-		if (maxX > regionMaxX) {
-			framedRegionMaxX = regionMaxX;
-		} else {
-			framedRegionMaxX = maxX;
-		}
-		
-		for (int x = framedRegionMinX, xx = x - minX; x <= framedRegionMaxX; x++, xx++) {
-			
-			int regionMaxY = gridRegion.getMaxY(x);
-			int regionMinY = gridRegion.getMinY(x);
-			int framedRegionMinYAtX, framedRegionMaxYAtX;
-			if (maxY > regionMaxY) {
-				framedRegionMaxYAtX = regionMaxY;
-			} else {
-				framedRegionMaxYAtX = maxY;
-			}
-			if (minY < regionMinY) {
-				framedRegionMinYAtX = regionMinY;
-			} else {
-				framedRegionMinYAtX = minY;
-			}
-					
-			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
-				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y++, yy++) {
-					java.awt.Color c = gridRegion.getFromPosition(x, y);
-					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
-					
-					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;
-					int dataIndex = (((framedGridSquentialIndex / framedGridWidth) * gridPositionSize * imageWidth)
-							+ ((framedGridSquentialIndex % framedGridWidth) * gridPositionSize) 
-							+ (hBandIndex * imageWidth)
-							+ (canvasTopMargin * imageWidth)) * 3;
-					
-					for (int vBandIndex = 0; vBandIndex < gridPositionSize; vBandIndex++) {
-						pixelData[dataIndex++] = r;
-						pixelData[dataIndex++] = g;
-						pixelData[dataIndex++] = b;
-					}				
-				}
-			}
-			
-		}
-		saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
-	}
-	
-	public static void createEvenOddImageLeftToRight(ObjectGrid2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
-			throws Exception {
-		int gridPositionSize = getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
-		createEvenOddImageLeftToRight(grid, isEven, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
-	}
-	
-	public static void createEvenOddImageLeftToRight(ObjectGrid2D<Color> gridRegion, boolean isEven, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
-			int minWidth, int minHeight, String path, String name) throws Exception {
-		
-		int framedGridWidth = maxX - minX + 1;
-		int framedGridHeight = maxY - minY + 1;
-		
-		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
-		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
-		
-		int imageWidth = Math.max(framedGridWidthInPixels, minWidth);
-		int imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
-		
-		
-		long longByteCount = (long)imageWidth * imageHeight * 3;
-		if (longByteCount > Integer.MAX_VALUE)
-			throw new Exception("Integer max value exceeded");
-		int byteCount = (int)longByteCount;
-		byte[] pixelData = new byte[byteCount];	
-		
-		
-		int canvasTopMargin = imageHeight - framedGridHeightInPixels;
-		
-		
-		int regionMinX = gridRegion.getMinX();
-		int regionMaxX = gridRegion.getMaxX();
-		int framedRegionMinX, framedRegionMaxX;
-		if (minX < regionMinX) {
-			framedRegionMinX = regionMinX;
-		} else {
-			framedRegionMinX = minX;
-		}
-		if (maxX > regionMaxX) {
-			framedRegionMaxX = regionMaxX;
-		} else {
-			framedRegionMaxX = maxX;
-		}
-		
-		for (int x = framedRegionMinX, xx = x - minX; x <= framedRegionMaxX; x++, xx++) {
-			
-			int regionMaxY = gridRegion.getMaxY(x);
-			int regionMinY = gridRegion.getMinY(x);
-			int framedRegionMinYAtX, framedRegionMaxYAtX;
-			if (maxY > regionMaxY) {
-				framedRegionMaxYAtX = regionMaxY;
-			} else {
-				framedRegionMaxYAtX = maxY;
-			}
-			if (minY < regionMinY) {
-				framedRegionMinYAtX = regionMinY;
-			} else {
-				framedRegionMinYAtX = minY;
-			}
-			boolean isPositionEven = (framedRegionMinYAtX+x)%2 == 0;
-			if (isEven != isPositionEven) { 
-				framedRegionMinYAtX++;
-			}
-			for (int hBandIndex = 0; hBandIndex < gridPositionSize; hBandIndex++) {			
-				for (int y = framedRegionMinYAtX, yy = y - minY; y <= framedRegionMaxYAtX; y+=2, yy+=2) {
-					java.awt.Color c = gridRegion.getFromPosition(x, y);
-					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
-					
-					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;
-					int dataIndex = (((framedGridSquentialIndex / framedGridWidth) * gridPositionSize * imageWidth)
-							+ ((framedGridSquentialIndex % framedGridWidth) * gridPositionSize) 
-							+ (hBandIndex * imageWidth)
-							+ (canvasTopMargin * imageWidth)) * 3;
-					
-					for (int vBandIndex = 0; vBandIndex < gridPositionSize; vBandIndex++) {
-						pixelData[dataIndex++] = r;
-						pixelData[dataIndex++] = g;
-						pixelData[dataIndex++] = b;
-					}				
-				}
-			}
-			
-		}
-		saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
-	}
-	
 	public static void createEmptyImage(int minX, int maxX, int minY, int maxY, String path, String name) 
 			throws Exception {
 		int width = maxX - minX + 1;
@@ -2858,70 +2757,6 @@ public class ImgMaker {
 		byte[] pixelData = new byte[byteCount];	
 		saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
 	}
-	
-	public void createZScanningEvenOddImages(ActionableEvolvingGrid3D<IntGrid3D> ca,
-			ColorMapper colorMapper, String imagesPath) throws Exception {
-		long currentStep = ca.getStep();
-		String caName = ca.getName();
-		String imgsPath = imagesPath + "/" + colorMapper.getClass().getSimpleName() + "/scans/step=" 
-				+ currentStep + "/z_scan/";
-		System.out.println("Scanning grid at step " + currentStep + " along the z axis.");
-		
-		ca.addProcessor(new GridProcessor<IntGrid3D>() {
-			
-			@Override
-			public void processGridBlock(IntGrid3D gridBlock) throws Exception {
-				int minX = gridBlock.getMinX();
-				int maxX = gridBlock.getMaxX();
-				int minY = gridBlock.getMinY();
-				int maxY = gridBlock.getMaxY();
-				int minZ = gridBlock.getMinZ();
-				int maxZ = gridBlock.getMaxZ();
-				System.out.println("New block: [" + minX + "," + maxX + "]");
-				boolean isEven = (minZ + currentStep)%2 == 0;
-				for (int scanZ = minZ; scanZ <= maxZ; scanZ++, isEven = !isEven) {
-					System.out.println("Z: " + scanZ);
-					IntGrid2D xSection = gridBlock.crossSectionAtZ(scanZ);
-					int[] evenMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(isEven);
-					if (evenMinAndMaxValue != null) {
-						System.out.println("Even positions min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Even positions max value: " + evenMinAndMaxValue[1]);
-						ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
-						createImageFromEvenOrOddPositions(isEven, colorGrid, minX, maxX, minY, maxY,
-								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/even/", caName + "_x_section_" + scanZ + ".png");
-					} else {
-						createEmptyImage(minX, maxX, minY, maxY,
-								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/even/", caName + "_x_section_" + scanZ + ".png");
-					}					
-					int[] oddMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(!isEven);
-					ObjectGrid2D<Color> colorGrid;
-					if (oddMinAndMaxValue != null) {
-						System.out.println("Odd positions min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Odd positions max value: " + oddMinAndMaxValue[1]);
-						colorGrid = colorMapper.getMappedGrid(xSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
-						createImageFromEvenOrOddPositions(!isEven, colorGrid, minX, maxX, minY, maxY,
-								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/odd/", caName + "_x_section_" + scanZ + ".png");
-					} else {
-						createEmptyImage(minX, maxX, minY, maxY,
-								imgsPath + "minX=" + minX + "_maxX=" + maxX + "/odd/", caName + "_x_section_" + scanZ + ".png");
-					}
-				}
-			}
-			
-			@Override
-			public void beforeProcessing() throws Exception {
-				//do nothing		
-			}
-			
-			@Override
-			public void afterProcessing() throws Exception {
-				//do nothing
-			}
-		});
-
-		//generate images
-		ca.processGrid();
-	
-		System.out.println("Finished!");
-	}	
 	
 	public static void createImage(ObjectGrid2D<Color> grid, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
@@ -3019,20 +2854,20 @@ public class ImgMaker {
 		saveAsPngImage(pixelData, width, height, path, name);
 	}
 	
-	public static void createImageFromEvenOrOddPositions(boolean isEven, ObjectGrid2D<Color> grid, int minX, int maxX, int minY, int maxY, String path, String name) 
+	public static void createImageFromEvenOrOddPositions(ObjectGrid2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, String path, String name) 
 			throws Exception {
 		int width = maxX - minX + 1;
 		int height = maxY - minY + 1;
-		createImageFromEvenOrOddPositions(isEven, grid, minX, maxX, minY, maxY, 1, width, height, path, name);
+		createImageFromEvenOrOddPositions(grid, isEven, minX, maxX, minY, maxY, 1, width, height, path, name);
 	}
 	
-	public static void createImageFromEvenOrOddPositions(boolean isEven, ObjectGrid2D<Color> grid, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
+	public static void createImageFromEvenOrOddPositions(ObjectGrid2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
 		int gridPositionSize = getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
-		createImageFromEvenOrOddPositions(isEven, grid, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
+		createImageFromEvenOrOddPositions(grid, isEven, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
 	}
 	
-	public static void createImageFromEvenOrOddPositions(boolean isEven, ObjectGrid2D<Color> grid, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
+	public static void createImageFromEvenOrOddPositions(ObjectGrid2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
 			int minWidth, int minHeight, String path, String name) throws Exception {
 		int dataWidth = (maxX - minX + 1) * gridPositionSize;
 		int dataHeight = (maxY - minY + 1) * gridPositionSize;

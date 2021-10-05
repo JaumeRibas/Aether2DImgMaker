@@ -27,12 +27,12 @@ import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4DWCrossSection;
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid4d.LongGrid4D;
 
-public class Aether4DSwap3DCrossSectionOddImgMaker {
+public class Aether4DSwapWCrossSectionOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
 //		args = new String[]{"-2000", "1", "D:/data/test", "0", "0", "0"};//debug
 		if (args.length < 2) {
-			System.err.println("You must specify an initial value and a coordinate for the cross section.");
+			System.err.println("You must specify an initial value and a w-coordinate for the cross section.");
 		} else {
 			long initialValue = 0;
 			boolean isRestore = false;
@@ -64,7 +64,7 @@ public class Aether4DSwap3DCrossSectionOddImgMaker {
 				if (crossSectionW < 0)
 					crossSectionW = -crossSectionW;
 			} else {
-				System.err.println("Cross section coordinate out of int range.");
+				System.err.println("Cross section w-coordinate out of int range.");
 				return;
 			}
 			if (args.length > 2) {
@@ -102,7 +102,7 @@ public class Aether4DSwap3DCrossSectionOddImgMaker {
 				System.out.println("step: " + ca.getStep());
 			}
 			if (crossSectionW > ca.getMaxW()) {
-				System.err.println("Cross section coordinate " + crossSectionW + " is outside all steps of Aether 4D with initial value " + initialValue + ".");
+				System.err.println("Cross section w-coordinate " + crossSectionW + " is outside all steps of Aether 4D with initial value " + initialValue + ".");
 			} else {
 				ColorMapper colorMapper = new GrayscaleMapper(0);
 				ImgMaker imgMaker = null;
@@ -112,16 +112,16 @@ public class Aether4DSwap3DCrossSectionOddImgMaker {
 					imgMaker = new ImgMaker();
 				}
 				String backupPath = path + ca.getSubFolderPath() + "/backups";
-				ActionableEvolvingGrid4DWCrossSection<LongGrid4D, LongGrid3D> xSection = 
+				ActionableEvolvingGrid4DWCrossSection<LongGrid4D, LongGrid3D> crossSection = 
 						new ActionableEvolvingGrid4DWCrossSection<LongGrid4D, LongGrid3D>(ca, crossSectionW);
-				String imagesPath = path + xSection.getSubFolderPath();
+				String imagesPath = path + crossSection.getSubFolderPath();
 				if (isScanInitialIndexesDefined) {
 					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
-							xSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+							crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				} else {
 					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
-							xSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+							crossSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				}				
 			}		

@@ -64,7 +64,7 @@ public class Aether3DPatternComparingImgMaker {
 			MinAndMax<BigInt> minMax = crossSection.getEvenOddPositionsMinAndMax(false);
 			if (minMax != null) {
 				ObjectGrid2D<Color> mappedGrid = colorMapper.getMappedGrid(crossSection, minMax.getMin(), minMax.getMax());
-				ImgMaker.createEvenOddImageLeftToRight(mappedGrid, false, mappedGrid.getMinX(), mappedGrid.getMaxX(), mappedGrid.getMinY(), 
+				ImgMaker.createImageFromEvenOrOddPositions(mappedGrid, false, mappedGrid.getMinX(), mappedGrid.getMaxX(), mappedGrid.getMinY(), 
 						mappedGrid.getMaxY(), 0, 0, path, "Ae3D" + initialValue + "_" + step + ".png");
 			} else {
 				ImgMaker.createEmptyImage(crossSection.getMinX(), crossSection.getMaxX(), crossSection.getMinY(), 

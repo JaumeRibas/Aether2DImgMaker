@@ -86,9 +86,9 @@ public class Aether5DSwapCentral3DCrossSectionEvenOddImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			ActionableEvolvingGrid5DYZCrossSection<LongGrid5D, LongGrid3D> xSection = 
+			ActionableEvolvingGrid5DYZCrossSection<LongGrid5D, LongGrid3D> crossSection = 
 					new ActionableEvolvingGrid5DYZCrossSection<LongGrid5D, LongGrid3D>(ca, 0, 0);
-			String imgPath = path + xSection.getSubFolderPath();
+			String imgPath = path + crossSection.getSubFolderPath();
 			path += ca.getSubFolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
@@ -98,10 +98,10 @@ public class Aether5DSwapCentral3DCrossSectionEvenOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createZScanningAndCrossSectionEvenOddImages(xSection, scanInitialZIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+				imgMaker.createZScanningAndCrossSectionEvenOddImages(crossSection, scanInitialZIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					imgPath + "/img", path + "/backups");
 			} else {
-				imgMaker.createZScanningAndCrossSectionEvenOddImages(xSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+				imgMaker.createZScanningAndCrossSectionEvenOddImages(crossSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					imgPath + "/img", path + "/backups");
 			}
 			

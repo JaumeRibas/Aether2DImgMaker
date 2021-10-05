@@ -60,21 +60,21 @@ public class IntGrid3DXCrossSectionEvenOddImgMakerProcessor implements GridProce
 	public void processGridBlock(IntGrid3D gridBlock) throws Exception {
 		if (!imagesMade) {
 			if(x >= gridBlock.getMinX() && x <= gridBlock.getMaxX()) {
-				IntGrid2D xSection = gridBlock.crossSectionAtX(x);			
-				int[] evenMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(isEven);
+				IntGrid2D crossSection = gridBlock.crossSectionAtX(x);			
+				int[] evenMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(isEven);
 				if (evenMinAndMaxValue != null) {
-					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
 					ImgMaker.createImageFromEvenOrOddPositions(isEven, colorGrid, imageWidth, imageHeight, imgsPath + "even/", imgsName);
 				} else {
-					ImgMaker.createEmptyImage(xSection.getMinX(), xSection.getMaxX(), xSection.getMinY(), xSection.getMaxY(), 
+					ImgMaker.createEmptyImage(crossSection.getMinX(), crossSection.getMaxX(), crossSection.getMinY(), crossSection.getMaxY(), 
 							imageWidth, imageHeight, imgsPath + "even/", imgsName);
 				}
-				int[] oddMinAndMaxValue = xSection.getEvenOddPositionsMinAndMax(!isEven);
+				int[] oddMinAndMaxValue = crossSection.getEvenOddPositionsMinAndMax(!isEven);
 				if (oddMinAndMaxValue != null) {
-					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(xSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
+					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(crossSection, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 					ImgMaker.createImageFromEvenOrOddPositions(!isEven, colorGrid, imageWidth, imageHeight, imgsPath + "odd/", imgsName);
 				} else {
-					ImgMaker.createEmptyImage(xSection.getMinX(), xSection.getMaxX(), xSection.getMinY(), xSection.getMaxY(), 
+					ImgMaker.createEmptyImage(crossSection.getMinX(), crossSection.getMaxX(), crossSection.getMinY(), crossSection.getMaxY(), 
 							imageWidth, imageHeight, imgsPath + "odd/", imgsName);
 				}				
 				imagesMade = true;

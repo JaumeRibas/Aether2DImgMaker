@@ -97,16 +97,16 @@ public class IntAether5DSwapCentral3DCrossSectionOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			ActionableEvolvingGrid5DYZCrossSection<IntGrid5D, IntGrid3D> xSection = 
+			ActionableEvolvingGrid5DYZCrossSection<IntGrid5D, IntGrid3D> crossSection = 
 					new ActionableEvolvingGrid5DYZCrossSection<IntGrid5D, IntGrid3D>(ca, 0, 0);
-			path += xSection.getSubFolderPath();
+			path += crossSection.getSubFolderPath();
 			if (isScanInitialIndexesDefined) {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntGrid3D(
-						xSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+						crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			} else {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntGrid3D(
-						xSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+						crossSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			}
 			

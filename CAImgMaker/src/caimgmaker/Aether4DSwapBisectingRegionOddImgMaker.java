@@ -97,16 +97,16 @@ public class Aether4DSwapBisectingRegionOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			ActionableEvolvingGrid4DZCrossSection<LongGrid4D, LongGrid3D> xSection = 
+			ActionableEvolvingGrid4DZCrossSection<LongGrid4D, LongGrid3D> crossSection = 
 					new ActionableEvolvingGrid4DZCrossSection<LongGrid4D, LongGrid3D>(ca, 0);
-			path += xSection.getSubFolderPath();
+			path += crossSection.getSubFolderPath();
 			if (isScanInitialIndexesDefined) {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
-						xSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
+						crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			} else {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
-						xSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
+						crossSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			}
 			
