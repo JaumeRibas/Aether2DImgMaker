@@ -45,22 +45,22 @@ public interface IsotropicGrid2DA extends SymmetricGrid2D {
 
 	@Override
 	default int getMinX() {
-		return -getAsymmetricMinX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	default int getMaxX() {
-		return getAsymmetricMinX();
+		return getAsymmetricMaxX();
 	}
 
 	@Override
 	default int getMinY() {
-		return -getAsymmetricMinX();
+		return -getAsymmetricMaxX();
 	}
 
 	@Override
 	default int getMaxY() {
-		return getAsymmetricMinX();
+		return getAsymmetricMaxX();
 	}
 	
 	//TODO add missing symmetric bounds methods
