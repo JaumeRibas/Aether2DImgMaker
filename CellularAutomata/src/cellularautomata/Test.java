@@ -29,7 +29,6 @@ import org.apache.commons.math3.fraction.BigFraction;
 import cellularautomata.evolvinggrid.EvolvingIntGrid;
 import cellularautomata.evolvinggrid.EvolvingLongGrid;
 import cellularautomata.evolvinggrid.EvolvingModel;
-import cellularautomata.evolvinggrid.EvolvingShortGrid;
 import cellularautomata.evolvinggrid1d.EvolvingLongGrid1D;
 import cellularautomata.evolvinggrid1d.EvolvingNumberGrid1D;
 import cellularautomata.evolvinggrid2d.EvolvingIntGrid2D;
@@ -39,12 +38,10 @@ import cellularautomata.evolvinggrid3d.ActionableEvolvingGrid3D;
 import cellularautomata.evolvinggrid3d.EvolvingIntGrid3D;
 import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
 import cellularautomata.evolvinggrid3d.EvolvingNumberGrid3D;
-import cellularautomata.evolvinggrid3d.EvolvingShortGrid3D;
 import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingIntGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
 import cellularautomata.evolvinggrid4d.EvolvingNumberGrid4D;
-import cellularautomata.evolvinggrid4d.EvolvingShortGrid4D;
 import cellularautomata.evolvinggrid5d.ActionableEvolvingGrid5D;
 import cellularautomata.evolvinggrid5d.EvolvingIntGrid5D;
 import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
@@ -58,7 +55,6 @@ import cellularautomata.automata.aether.AetherSimple2D;
 import cellularautomata.automata.aether.AetherSimple5D;
 import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether4D;
-import cellularautomata.automata.aether.ShortAether4D;
 import cellularautomata.automata.siv.SpreadIntegerValue1D;
 import cellularautomata.automata.siv.SpreadIntegerValue2D;
 import cellularautomata.automata.siv.SpreadIntegerValueRules;
@@ -70,7 +66,6 @@ import cellularautomata.grid1d.ObjectGrid1D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
-import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.grid3d.BigFractionGrid3DPattern;
 import cellularautomata.grid3d.BigIntGrid3DPattern;
 import cellularautomata.grid3d.Grid3DZCrossSectionCopierProcessor;
@@ -84,7 +79,6 @@ import cellularautomata.grid3d.ObjectGrid3D;
 import cellularautomata.grid4d.IntGrid4D;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
-import cellularautomata.grid4d.ShortGrid4D;
 import cellularautomata.grid5d.IntGrid5D;
 import cellularautomata.grid5d.LongGrid5D;
 import cellularautomata.numbers.BigInt;
@@ -319,8 +313,8 @@ public class Test {
 	}
 	
 	public static void testAsymmetricSection() {
-		ShortAether4D ae = new ShortAether4D((short) -10000);
-		ShortGrid4D ns = ae.asymmetricSection();
+		IntAether4D ae = new IntAether4D((short) -10000);
+		IntGrid4D ns = ae.asymmetricSection();
 		try {
 			do {
 				System.out.println("Comparing step " + ae.getStep());
@@ -1092,44 +1086,6 @@ public class Test {
 		}
 	}
 	
-	public static void compare(EvolvingShortGrid4D ca1, EvolvingShortGrid4D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			boolean equal = true;
-			while (!finished1 && !finished2) {
-				System.out.println("Comparing step " + ca1.getStep());
-				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
-						for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
-							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
-								if (ca1.getFromPosition(w, x, y, z) != ca2.getFromPosition(w, x, y, z)) {
-									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
-											+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(w, x, y, z) 
-											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
-									return;
-								}
-							}
-						}	
-					}	
-				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					equal = false;
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-			if (equal)
-				System.out.println("Equal");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static void compare(EvolvingLongGrid4D ca1, EvolvingIntGrid4D ca2) {
 		compare(ca2, ca1);
 	}
@@ -1210,42 +1166,6 @@ public class Test {
 		}
 	}
 	
-	public static void compare(EvolvingShortGrid3D ca1,  EvolvingIntGrid3D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			boolean equal = true;
-			while (!finished1 && !finished2) {
-				System.out.println("Comparing step " + ca1.getStep());
-				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
-						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
-							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
-								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
-										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
-								return;
-							}
-						}	
-					}	
-				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					equal = false;
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-			if (equal)
-				System.out.println("Equal");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static void compare(EvolvingLongGrid3D ca1, EvolvingIntGrid3D ca2) {
 		compare(ca2, ca1);
 	}
@@ -1262,42 +1182,6 @@ public class Test {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 //							System.out.println("Comparing position (" + x + ", " + y + ", " + z + ")");
-							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
-								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
-										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
-								return;
-							}
-						}	
-					}	
-				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					equal = false;
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-			if (equal)
-				System.out.println("Equal");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compare(EvolvingShortGrid3D ca1, EvolvingLongGrid3D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			boolean equal = true;
-			while (!finished1 && !finished2) {
-				System.out.println("Comparing step " + ca1.getStep());
-				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
-						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
 								equal = false;
 								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
@@ -1823,17 +1707,6 @@ public class Test {
 			e.printStackTrace();
 		}
 	}
-
-	public static void printMinAndMaxValues(EvolvingShortGrid ca) {
-		try {
-			do {
-				short[] minAndMax = ca.getMinAndMax();
-				System.out.println("min: " + minAndMax[0] + "\t\tmax: " + minAndMax[1]);
-			} while(ca.nextStep());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public static void printMinAndMaxValues(EvolvingLongGrid ca) {
 		try {
@@ -2247,52 +2120,6 @@ public class Test {
 	}
 	
 	public static void printAsGrid(IntGrid2D grid, int backgroundValue) throws Exception {
-		int maxDigits = 3;
-		int maxY = grid.getMaxY();
-		int minY = grid.getMinY();
-		int maxX = grid.getMaxX();
-		int minX = grid.getMinX();
-		for (int y = maxY; y >= minY; y--) {
-			int localMaxX = grid.getMaxX(y);
-			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
-				int digits = Long.toString(grid.getFromPosition(x, y)).length();
-				if (digits > maxDigits)
-					maxDigits = digits;
-			}
-		}
-		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
-			headFootGap += "-";
-		}
-		String headFoot = "+";
-		for (int i = minX; i <= maxX; i++) {
-			headFoot += headFootGap + "+";
-		}
-		for (int y = maxY; y >= minY; y--) {
-			System.out.println(headFoot);
-			int localMaxX = grid.getMaxX(y);
-			int localMinX = grid.getMinX(y);
-			int x = minX;
-			for (; x < localMinX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			for (; x <= localMaxX; x++) {
-				String strVal = " ";
-				long val = grid.getFromPosition(x, y);
-				if (val != backgroundValue) {
-					strVal = val + "";
-				}
-				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
-			}
-			for (; x <= maxX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			System.out.println("|");
-		}
-		System.out.println(headFoot);
-	}
-	
-	public static void printAsGrid(ShortGrid2D grid, short backgroundValue) throws Exception {
 		int maxDigits = 3;
 		int maxY = grid.getMaxY();
 		int minY = grid.getMinY();

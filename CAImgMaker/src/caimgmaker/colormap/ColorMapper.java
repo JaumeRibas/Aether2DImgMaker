@@ -23,7 +23,6 @@ import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
-import cellularautomata.grid2d.ShortGrid2D;
 
 public interface ColorMapper {
 	
@@ -32,8 +31,6 @@ public interface ColorMapper {
 	public abstract ObjectGrid2D<Color> getMappedGrid(LongGrid2D grid, long minValue, long maxValue);
 	
 	public abstract ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue);
-	
-	public abstract ObjectGrid2D<Color> getMappedGrid(ShortGrid2D grid, short minValue, short maxValue);
 	
 //	/**
 //	 * Return the color mapper's name in a format that can be used in file names

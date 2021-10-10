@@ -24,7 +24,6 @@ import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
-import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.numbers.BigInt;
 
 public class GrayscaleWithBackgroundMapper implements ColorMapper {
@@ -80,17 +79,6 @@ public class GrayscaleWithBackgroundMapper implements ColorMapper {
 			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
 		}
 		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
-	}
-	
-	@Override
-	public ObjectGrid2D<Color> getMappedGrid(ShortGrid2D grid, short minValue, short maxValue) {
-		IntColorMap colorMap = null;
-		if (minValue == maxValue) {
-			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
-		} else {
-			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
-		}
-		return new ColorMappedShortGrid2DWithBackground(grid, colorMap, (Short)backgroundValue, backgroundColor);
 	}
 
 }

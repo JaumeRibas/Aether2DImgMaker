@@ -25,7 +25,6 @@ import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
-import cellularautomata.grid2d.ShortGrid2D;
 import cellularautomata.numbers.BigInt;
 
 public class HueMapper implements ColorMapper {
@@ -71,17 +70,6 @@ public class HueMapper implements ColorMapper {
 			colorMap = new IntHueMap(minValue, maxValue);
 		}
 		return new ColorMappedIntGrid2D(grid, colorMap);
-	}
-
-	@Override
-	public ObjectGrid2D<Color> getMappedGrid(ShortGrid2D grid, short minValue, short maxValue) {
-		IntColorMap colorMap = null;
-		if (minValue == maxValue) {
-			colorMap = new SolidColorMap<Object>(getEmptyColor());
-		} else {
-			colorMap = new IntHueMap(minValue, maxValue);
-		}
-		return new ColorMappedShortGrid2D(grid, colorMap);
 	}
 	
 	private Color getEmptyColor() {
