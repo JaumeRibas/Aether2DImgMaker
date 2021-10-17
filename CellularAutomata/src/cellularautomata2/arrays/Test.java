@@ -59,7 +59,7 @@ public class Test {
 	public static void testSquareIntArray() {
 		int side = 3;
 		int dimension = 5;
-		SquareIntArray arr = new SquareIntArray(dimension, side);
+		HypercubicIntArray arr = new HypercubicIntArray(dimension, side);
 		System.out.println("dimension: " + arr.getDimension());
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		System.out.println("Setting values");
@@ -98,7 +98,7 @@ public class Test {
 			volume *= sizes[i];
 		}
 		System.out.println(Arrays.toString(sizes));
-		RectangularIntArray arr = new RectangularIntArray(sizes);
+		HyperrectangularIntArray arr = new HyperrectangularIntArray(sizes);
 		System.out.println("dimension: " + arr.getDimension());
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		System.out.println("Setting values");
@@ -129,7 +129,7 @@ public class Test {
 	}
 	
 	public static void testRectangularIntArray() {
-		RectangularIntArray arr = new RectangularIntArray(new int[] { 50, 13, 12, 32 });
+		HyperrectangularIntArray arr = new HyperrectangularIntArray(new int[] { 50, 13, 12, 32 });
 		System.out.println("dimension: " + arr.getDimension());
 		int size0 = arr.getSize(0);
 		int size1 = arr.getSize(1);
@@ -167,7 +167,7 @@ public class Test {
 	}
 	
 	public static void testRectangularIntArray3() {
-		RectangularIntArray arr = new RectangularIntArray(new int[] { 3, 3, 3 });
+		HyperrectangularIntArray arr = new HyperrectangularIntArray(new int[] { 3, 3, 3 });
 		System.out.println("dimension: " + arr.getDimension());
 		arr.forEachIndex(new PositionCommand() {
 			

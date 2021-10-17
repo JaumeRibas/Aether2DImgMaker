@@ -22,7 +22,7 @@ import java.io.IOException;
 import cellularautomata2.arrays.Coordinates;
 import cellularautomata2.arrays.IntValueCommand;
 import cellularautomata2.arrays.PositionCommand;
-import cellularautomata2.arrays.SquareIntArray;
+import cellularautomata2.arrays.HypercubicIntArray;
 import cellularautomata2.arrays.Utils;
 import cellularautomata2.grid.IntGridRegion;
 import cellularautomata2.grid.PartialCoordinates;
@@ -35,7 +35,7 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 	private int backgroundValue;
 	
 	/** A square-like array representing the grid */
-	private SquareIntArray grid;
+	private HypercubicIntArray grid;
 	
 	/** The index of the origin within the array */
 	private int originIndex;
@@ -62,7 +62,7 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 		//Create a square-like array to represent the grid. With the initial value at the origin.
 		//Make the array of side 5 so as to leave a margin of two positions around the center.
 		int side = 5;
-		grid = new SquareIntArray(gridDimension, side);
+		grid = new HypercubicIntArray(gridDimension, side);
 		grid.setAll(backgroundValue);
 		//The origin will be at the center of the array
 		originIndex = (side - 1)/2;
@@ -89,19 +89,19 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 	@Override
 	public boolean nextStep() throws Exception {
 		//Use new array to store the values of the next step
-		SquareIntArray newGrid = null;
+		HypercubicIntArray newGrid = null;
 		//The offset between the indexes of the new and old array
 		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new SquareIntArray(gridDimension, grid.getSide() + 2);
+			newGrid = new HypercubicIntArray(gridDimension, grid.getSide() + 2);
 			if (backgroundValue != 0) {
 				newGrid.padEdges(1, backgroundValue);
 			}
 			indexOffset = 1;
 		} else {
-			newGrid = new SquareIntArray(gridDimension, grid.getSide());
+			newGrid = new HypercubicIntArray(gridDimension, grid.getSide());
 		}
 		SpreadIntegerValueCommand sivCommand = new SpreadIntegerValueCommand(newGrid, indexOffset);
 		//For every position apply rules
@@ -120,10 +120,10 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 		public boolean changed = false;
 		private int gridSideMinusOne;
 		private int gridSide;
-		private SquareIntArray newGrid;
+		private HypercubicIntArray newGrid;
 		private int indexOffset;
 		
-		public SpreadIntegerValueCommand(SquareIntArray newGrid, int indexOffset) {
+		public SpreadIntegerValueCommand(HypercubicIntArray newGrid, int indexOffset) {
 			this.newGrid = newGrid;
 			this.indexOffset = indexOffset;
 			gridSide = grid.getSide();

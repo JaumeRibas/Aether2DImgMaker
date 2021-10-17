@@ -23,7 +23,7 @@ package cellularautomata2.arrays;
  * @author Jaume
  *
  */
-public abstract class AnisotropicArray extends SquareArray {
+public abstract class AnisotropicArray extends HypercubicArray {
 
 	public AnisotropicArray(int dimension, int side) {
 		super(dimension, side);

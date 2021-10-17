@@ -33,7 +33,7 @@ public class Test {
 			vertex1[i] = 0;
 			vertex2[i] = 2;
 		}
-		AlignedRectangle testRectangle = new AlignedRectangle(vertex1, vertex2);
+		AlignedHyperrectangle testRectangle = new AlignedHyperrectangle(vertex1, vertex2);
 		testRectangle.forEachPosition(new PositionCommand() {
 			
 			@Override
@@ -51,7 +51,7 @@ public class Test {
 			vertex1[i] = 0;
 			vertex2[i] = 2;
 		}
-		AlignedRectangle testRectangle = new AlignedRectangle(vertex1, vertex2);
+		AlignedHyperrectangle testRectangle = new AlignedHyperrectangle(vertex1, vertex2);
 		testRectangle.forEachEvenPosition(new PositionCommand() {
 			
 			@Override
@@ -72,7 +72,7 @@ public class Test {
 			vertex1[i] = 0;
 			vertex2[i] = 2;
 		}
-		AlignedRectangle testRectangle = new AlignedRectangle(vertex1, vertex2);
+		AlignedHyperrectangle testRectangle = new AlignedHyperrectangle(vertex1, vertex2);
 		testRectangle.forEachOddPosition(new PositionCommand() {
 			
 			@Override

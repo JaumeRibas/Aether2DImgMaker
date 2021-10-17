@@ -16,17 +16,11 @@
  */
 package cellularautomata2.arrays;
 
-public class RectangularIntArray extends RectangularArray implements MultidimensionalIntArray {
+public class HyperrectangularIntArray extends HyperrectangularArray implements MultidimensionalIntArray {
 
 	private int[] values;
 	
-	/**
-	 * Creates a rectangle-like multidimensional array with the given sizes.
-	 * The dimension of the array will be equal to the length of the sizes array.
-	 * 
-	 * @param sizes
-	 */
-	public RectangularIntArray(int[] sizes) {
+	public HyperrectangularIntArray(int[] sizes) {
 		super(sizes);
 		values = new int[(int) getVolume()];
 	}

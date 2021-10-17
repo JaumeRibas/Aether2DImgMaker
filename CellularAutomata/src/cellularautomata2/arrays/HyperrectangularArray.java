@@ -17,24 +17,24 @@
 package cellularautomata2.arrays;
 
 /**
- * A rectangle-like multidimensional array.
+ * A multidimensional array with hyperrectangular shape.
  * 
  * @author Jaume
  *
  */
-public abstract class RectangularArray implements MultidimensionalArray {
+public abstract class HyperrectangularArray implements MultidimensionalArray {
 	
 	protected int[] sizes;
 	
-	public RectangularArray() {}
+	public HyperrectangularArray() {}
 	
 	/**
-	 * Creates a rectangle-like multidimensional array with the given sizes.
+	 * Creates a multidimensional array with hyperrectangular shape with the given sizes.
 	 * The dimension of the array will be equal to the length of the sizes array.
 	 * 
 	 * @param sizes
 	 */
-	public RectangularArray(int[] sizes) {
+	public HyperrectangularArray(int[] sizes) {
 		if (sizes == null) {
 			throw new IllegalArgumentException("Sizes array cannot be null.");
 		}

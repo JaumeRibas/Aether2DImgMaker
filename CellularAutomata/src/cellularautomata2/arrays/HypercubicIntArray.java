@@ -16,11 +16,11 @@
  */
 package cellularautomata2.arrays;
 
-public class SquareIntArray extends SquareArray implements MultidimensionalIntArray {
+public class HypercubicIntArray extends HypercubicArray implements MultidimensionalIntArray {
 
 	private int[] values;
 	
-	public SquareIntArray(int dimension, int side) {
+	public HypercubicIntArray(int dimension, int side) {
 		super(dimension, side);
 		values = new int[(int) getVolume()];
 	}

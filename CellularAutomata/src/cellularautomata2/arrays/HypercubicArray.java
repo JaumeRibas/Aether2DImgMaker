@@ -17,23 +17,23 @@
 package cellularautomata2.arrays;
 
 /**
- * A square-like multidimensional array.
+ * An hypercube shaped multidimensional array.
  * 
  * @author Jaume
  *
  */
-public abstract class SquareArray extends RectangularArray {
+public abstract class HypercubicArray extends HyperrectangularArray {
 
 	protected int dimension;
 	protected int side;
 	
 	/**
-	 * Creates a square-like multidimensional array with the given dimension and side.
+	 * Creates an hypercube shaped multidimensional array with the given dimension and side.
 	 * 
 	 * @param dimension
 	 * @param side
 	 */
-	public SquareArray(int dimension, int side) {
+	public HypercubicArray(int dimension, int side) {
 		if (dimension < 0) {
 			throw new IllegalArgumentException("Dimension cannot be smaller than zero.");
 		}

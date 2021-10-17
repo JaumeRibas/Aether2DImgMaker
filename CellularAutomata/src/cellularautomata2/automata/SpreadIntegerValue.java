@@ -23,7 +23,7 @@ import cellularautomata2.arrays.Coordinates;
 import cellularautomata2.arrays.IntValueCommand;
 import cellularautomata2.arrays.AnisotropicIntArray;
 import cellularautomata2.arrays.PositionCommand;
-import cellularautomata2.arrays.RectangularArray;
+import cellularautomata2.arrays.HyperrectangularArray;
 import cellularautomata2.arrays.Utils;
 import cellularautomata2.grid.PartialCoordinates;
 import cellularautomata2.grid.SymmetricIntGridRegion;
@@ -276,7 +276,7 @@ public class SpreadIntegerValue extends SymmetricIntGridRegion implements Cellul
 		Utils.addToArray(upperBounds, sideMinusOne);
 		int[] lowerBounds = new int[gridDimension];
 		Utils.addToArray(lowerBounds, -sideMinusOne);
-		RectangularArray.forEachIndexWithinBounds(upperBounds, lowerBounds, new PositionCommand() {
+		HyperrectangularArray.forEachIndexWithinBounds(upperBounds, lowerBounds, new PositionCommand() {
 			
 			@Override
 			public void execute(Coordinates coordinates) {
