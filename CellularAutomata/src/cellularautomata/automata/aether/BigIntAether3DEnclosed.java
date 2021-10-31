@@ -16,14 +16,15 @@
  */
 package cellularautomata.automata.aether;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
+import cellularautomata.Constants;
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.SymmetricEvolvingNumberGrid3D;
 import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.model3d.SymmetricNumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -32,7 +33,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether3DEnclosed implements SymmetricEvolvingNumberGrid3D<BigInt>, IsotropicGrid3DA, Serializable {
+public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, IsotropicGrid3DA, Serializable {
 	
 	/**
 	 * 
@@ -52,6 +53,10 @@ public class BigIntAether3DEnclosed implements SymmetricEvolvingNumberGrid3D<Big
 	
 	private int side;
 	private int halfSide;
+	/**
+	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 */
+	private String creationTimestamp;
 	
 	public BigIntAether3DEnclosed(BigInt initialValue, int side) {
 		if (side%2 == 0)
@@ -65,6 +70,7 @@ public class BigIntAether3DEnclosed implements SymmetricEvolvingNumberGrid3D<Big
 		grid = Utils.buildAnisotropic3DBigIntArray(halfSide + 1);
 		grid[0][0][0] = this.initialValue;
 		step = 0;
+		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
 	}
 	
 	/**
@@ -82,6 +88,7 @@ public class BigIntAether3DEnclosed implements SymmetricEvolvingNumberGrid3D<Big
 		side = data.side;
 		halfSide = data.halfSide;
 		step = data.step;
+		creationTimestamp = data.creationTimestamp;
 	}
 
 	@Override
@@ -2859,12 +2866,15 @@ public class BigIntAether3DEnclosed implements SymmetricEvolvingNumberGrid3D<Big
 
 	@Override
 	public String getName() {
-		return "Aether3DEnclosed";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + File.separator + side + File.separator + initialValue;
+	public String getSubfolderPath() {
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = creationTimestamp;
+		return getName() + "/3D/enclosed/" + side + "/" + strInitialValue;
 	}
 	
 	public int getSide() {

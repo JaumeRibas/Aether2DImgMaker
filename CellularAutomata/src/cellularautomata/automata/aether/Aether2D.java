@@ -18,10 +18,11 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid2d.SymmetricEvolvingLongGrid2D;
 import cellularautomata.grid2d.IsotropicGrid2DA;
+import cellularautomata.model2d.SymmetricLongModel2D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a single source initial configuration
@@ -29,7 +30,12 @@ import cellularautomata.grid2d.IsotropicGrid2DA;
  * @author Jaume
  *
  */
-public class Aether2D implements SymmetricEvolvingLongGrid2D, IsotropicGrid2DA {
+public class Aether2D implements SymmetricLongModel2D, IsotropicGrid2DA, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4185491341110061653L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -38,7 +44,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D, IsotropicGrid2DA {
 	private long[][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	private int maxX;
 
 	/**
@@ -54,7 +60,23 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D, IsotropicGrid2DA {
 		grid = Utils.buildAnisotropic2DLongArray(6);
 		grid[0][0] = initialValue;
 		maxX = 3;
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public Aether2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Aether2D data = (Aether2D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		grid = data.grid;
+		maxX = data.maxX;
+		step = data.step;
 	}
 	
 	@Override
@@ -403,7 +425,7 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D, IsotropicGrid2DA {
 			newGrid[grid.length] = new long[newGrid.length];
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -1164,21 +1186,21 @@ public class Aether2D implements SymmetricEvolvingLongGrid2D, IsotropicGrid2DA {
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 
 	@Override
 	public String getName() {
-		return "Aether2D";
+		return "Aether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/2D/" + initialValue;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }

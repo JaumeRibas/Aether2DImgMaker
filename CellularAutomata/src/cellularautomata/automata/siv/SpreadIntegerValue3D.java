@@ -18,10 +18,11 @@ package cellularautomata.automata.siv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.SymmetricEvolvingLongGrid3D;
 import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 3D with a single source initial configuration
@@ -29,13 +30,18 @@ import cellularautomata.grid3d.IsotropicGrid3DA;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D, IsotropicGrid3DA {	
+public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid3DA, Serializable {	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5458947492323262703L;
 
 	/** A 3D array representing the grid */
 	private long[][][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	private int maxY;
 	private int maxZ;
@@ -55,7 +61,25 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D, Isotro
 		maxY = 0;
 		maxZ = 0;
 		xBoundReached = false;
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public SpreadIntegerValue3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		SpreadIntegerValue3D data = (SpreadIntegerValue3D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		grid = data.grid;
+		maxY = data.maxY;
+		maxZ = data.maxZ;
+		xBoundReached = data.xBoundReached;
+		step = data.step;
 	}
 	
 	@Override
@@ -159,7 +183,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D, Isotro
 			grid[x] = null;
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -216,7 +240,7 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D, Isotro
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -227,11 +251,6 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D, Isotro
 	public long getInitialValue() {
 		return initialValue;
 	}
-	
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
-	}
 
 	public long getBackgroundValue() {
 		return 0;
@@ -239,11 +258,16 @@ public class SpreadIntegerValue3D implements SymmetricEvolvingLongGrid3D, Isotro
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue3D";
+		return "SpreadIntegerValue";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/0";
+	public String getSubfolderPath() {
+		return getName() + "/3D/" + initialValue + "/0";
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }

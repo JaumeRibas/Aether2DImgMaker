@@ -41,7 +41,7 @@ public class SubGrid3D<G extends Grid3D> implements Grid3D {
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX, minY, maxY, minZ, maxZ))
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			throw new IllegalArgumentException("Subsection is out of bounds.");
 	}
 	
 	protected boolean getActualBounds(int minX, int maxX, int minY, 

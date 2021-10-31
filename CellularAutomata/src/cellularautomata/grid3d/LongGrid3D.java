@@ -101,13 +101,8 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	}
 	
 	@Override
-	default LongGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default LongGrid3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new LongSubGrid3D<LongGrid3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
-	}
-	
-	@Override
-	default LongGrid2D crossSectionAtZ(int z) {
-		return new LongGrid3DZCrossSection<LongGrid3D>(this, z);
 	}
 	
 	@Override
@@ -116,8 +111,28 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	}
 	
 	@Override
+	default LongGrid2D crossSectionAtY(int y) {
+		return new LongGrid3DYCrossSection<LongGrid3D>(this, y);
+	}
+	
+	@Override
+	default LongGrid2D crossSectionAtZ(int z) {
+		return new LongGrid3DZCrossSection<LongGrid3D>(this, z);
+	}
+	
+	@Override
 	default LongGrid2D diagonalCrossSectionOnXY(int yOffsetFromX) {
 		return new LongGrid3DXYDiagonalCrossSection<LongGrid3D>(this, yOffsetFromX);
+	}
+	
+	@Override
+	default LongGrid2D diagonalCrossSectionOnXZ(int zOffsetFromX) {
+		return new LongGrid3DXZDiagonalCrossSection<LongGrid3D>(this, zOffsetFromX);
+	}
+	
+	@Override
+	default LongGrid2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new LongGrid3DYZDiagonalCrossSection<LongGrid3D>(this, zOffsetFromY);
 	}
 
 }

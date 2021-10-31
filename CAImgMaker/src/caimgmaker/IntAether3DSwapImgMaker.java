@@ -22,8 +22,8 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.IntAether3DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid3d.ActionableEvolvingGrid3D;
 import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.model3d.ActionableModel3D;
 
 public class IntAether3DSwapImgMaker {
 	
@@ -74,7 +74,7 @@ public class IntAether3DSwapImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableEvolvingGrid3D<IntGrid3D> ca;
+			ActionableModel3D<IntGrid3D> ca;
 			if (isRestore) {
 				ca = new IntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -85,7 +85,7 @@ public class IntAether3DSwapImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getSubFolderPath();
+			path += ca.getSubfolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
@@ -94,10 +94,10 @@ public class IntAether3DSwapImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImagesFromIntGrid3D(ca, scanInitialZIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+				imgMaker.createScanningAndCrossSectionImagesFromIntGrid3D(ca, scanInitialZIndex, 0, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionImagesFromIntGrid3D(ca, 0, colorMapper, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+				imgMaker.createScanningAndCrossSectionImagesFromIntGrid3D(ca, 0, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			}
 

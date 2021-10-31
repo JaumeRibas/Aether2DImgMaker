@@ -20,8 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid2d.SymmetricEvolvingIntGrid2D;
 import cellularautomata.grid2d.IsotropicGrid2DA;
+import cellularautomata.model2d.SymmetricIntModel2D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 2D with a single source initial configuration
@@ -29,13 +29,13 @@ import cellularautomata.grid2d.IsotropicGrid2DA;
  * @author Jaume
  *
  */
-public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D, IsotropicGrid2DA {
+public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicGrid2DA {
 
 	private int[][] grid;
 	
 	private int initialValue;
 	private int backgroundValue;
-	private long currentStep;
+	private long step;
 	
 	private int maxY;
 
@@ -56,7 +56,25 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D, Isot
 		grid[0][0] = this.initialValue;
 		maxY = 0;
 		xBoundReached = false;
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public IntSpreadIntegerValue2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		IntSpreadIntegerValue2D data = (IntSpreadIntegerValue2D) Utils.deserializeFromFile(backupPath);
+		grid = data.grid;
+		initialValue = data.initialValue;
+		backgroundValue = data.backgroundValue;
+		step = data.step;
+		maxY = data.maxY;
+		xBoundReached = data.xBoundReached;
 	}
 	
 	@Override
@@ -154,7 +172,7 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D, Isot
 			}
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -192,7 +210,7 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D, Isot
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -210,12 +228,12 @@ public class IntSpreadIntegerValue2D implements SymmetricEvolvingIntGrid2D, Isot
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue2D";
+		return "SpreadIntegerValue";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+	public String getSubfolderPath() {
+		return getName() + "/2D/" + initialValue + "/" + backgroundValue;
 	}
 
 	@Override

@@ -22,10 +22,10 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.Aether4DAsymmetricSectionSwap;
-import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4D;
-import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4DZCrossSection;
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid4d.LongGrid4D;
+import cellularautomata.model4d.ActionableModel4D;
+import cellularautomata.model4d.ActionableModel4DZCrossSection;
 
 public class Aether4DSwapBisectingRegionOddImgMaker {
 	
@@ -79,7 +79,7 @@ public class Aether4DSwapBisectingRegionOddImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableEvolvingGrid4D<LongGrid4D> ca;
+			ActionableModel4D<LongGrid4D> ca;
 			if (isRestore) {
 				ca = new Aether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -97,16 +97,16 @@ public class Aether4DSwapBisectingRegionOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			ActionableEvolvingGrid4DZCrossSection<LongGrid4D, LongGrid3D> crossSection = 
-					new ActionableEvolvingGrid4DZCrossSection<LongGrid4D, LongGrid3D>(ca, 0);
-			path += crossSection.getSubFolderPath();
+			ActionableModel4DZCrossSection<LongGrid4D, LongGrid3D> crossSection = 
+					new ActionableModel4DZCrossSection<LongGrid4D, LongGrid3D>(ca, 0);
+			path += crossSection.getSubfolderPath();
 			if (isScanInitialIndexesDefined) {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
-						crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
+						crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			} else {
 				imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
-						crossSection, 0, colorMapper, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
+						crossSection, 0, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img", path + "/backups");
 			}
 			

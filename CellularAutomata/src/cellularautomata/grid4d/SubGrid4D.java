@@ -44,6 +44,13 @@ public class SubGrid4D<G extends Grid4D> implements Grid4D {
 		if (minZ > maxZ) {
 			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
 		}
+		this.source = source;
+		if (!getActualBounds(minW, maxW, minX, maxX, minY, maxY, minZ, maxZ))
+			throw new IllegalArgumentException("Subsection is out of bounds.");
+	}
+	
+	protected boolean getActualBounds(int minW, int maxW, int minX, int maxX, int minY, 
+			int maxY, int minZ, int maxZ) {
 		int sourceMinW = source.getMinW();
 		int sourceMaxW = source.getMaxW();
 		int sourceMinX = source.getMinX();
@@ -55,18 +62,20 @@ public class SubGrid4D<G extends Grid4D> implements Grid4D {
 		if (minW > sourceMaxW || maxW < sourceMinW 
 				|| minX > sourceMaxX || maxX < sourceMinX
 				|| minY > sourceMaxY || maxY < sourceMinY
-				|| minZ > sourceMaxZ || maxZ < sourceMinZ)
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
-		//TODO validate that passed bounds are within local bounds
-		this.source = source;
-		this.minW = Math.max(minW, sourceMinW);
-		this.maxW = Math.min(maxW, sourceMaxW);
-		this.minX = Math.max(minX, sourceMinX);
-		this.maxX = Math.min(maxX, sourceMaxX);
-		this.minY = Math.max(minY, sourceMinY);
-		this.maxY = Math.min(maxY, sourceMaxY);
-		this.minZ = Math.max(minZ, sourceMinZ);
-		this.maxZ = Math.min(maxZ, sourceMaxZ);
+				|| minZ > sourceMaxZ || maxZ < sourceMinZ) {
+			return false;
+		} else {
+			//TODO validate that passed bounds are within local bounds
+			this.minW = Math.max(minW, sourceMinW);
+			this.maxW = Math.min(maxW, sourceMaxW);
+			this.minX = Math.max(minX, sourceMinX);
+			this.maxX = Math.min(maxX, sourceMaxX);
+			this.minY = Math.max(minY, sourceMinY);
+			this.maxY = Math.min(maxY, sourceMaxY);
+			this.minZ = Math.max(minZ, sourceMinZ);
+			this.maxZ = Math.min(maxZ, sourceMaxZ);
+			return true;
+		}
 	}
 
 	@Override

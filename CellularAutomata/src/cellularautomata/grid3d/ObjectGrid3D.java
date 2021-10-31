@@ -32,8 +32,18 @@ public interface ObjectGrid3D<T> extends Grid3D {
 	T getFromPosition(int x, int y, int z) throws Exception;
 	
 	@Override
-	default ObjectGrid3D<T> subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default ObjectGrid3D<T> subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new ObjectSubGrid3D<T, ObjectGrid3D<T>>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default ObjectGrid2D<T> crossSectionAtX(int x) {
+		return new ObjectGrid3DXCrossSection<T, ObjectGrid3D<T>>(this, x);
+	}
+	
+	@Override
+	default ObjectGrid2D<T> crossSectionAtY(int y) {
+		return new ObjectGrid3DYCrossSection<T, ObjectGrid3D<T>>(this, y);
 	}
 	
 	@Override
@@ -42,8 +52,18 @@ public interface ObjectGrid3D<T> extends Grid3D {
 	}
 	
 	@Override
-	default ObjectGrid2D<T> crossSectionAtX(int x) {
-		return new ObjectGrid3DXCrossSection<T, ObjectGrid3D<T>>(this, x);
+	default ObjectGrid2D<T> diagonalCrossSectionOnXY(int yOffsetFromX) {
+		return new ObjectGrid3DXYDiagonalCrossSection<T, ObjectGrid3D<T>>(this, yOffsetFromX);
+	}
+	
+	@Override
+	default ObjectGrid2D<T> diagonalCrossSectionOnXZ(int zOffsetFromX) {
+		return new ObjectGrid3DXZDiagonalCrossSection<T, ObjectGrid3D<T>>(this, zOffsetFromX);
+	}
+	
+	@Override
+	default ObjectGrid2D<T> diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new ObjectGrid3DYZDiagonalCrossSection<T, ObjectGrid3D<T>>(this, zOffsetFromY);
 	}
 
 }

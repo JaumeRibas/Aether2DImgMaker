@@ -18,11 +18,15 @@ package cellularautomata.automata.nearaether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Constants;
+import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid3d.EvolvingNumberGrid3D;
+import cellularautomata.model3d.NumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -31,7 +35,12 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {	
+public class BigIntNearAether3Simple3D implements NumericModel3D<BigInt>, Serializable {	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4799014576150501853L;
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -43,7 +52,7 @@ public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {
 	/** 3D array representing the grid **/
 	private BigInt[][][] grid;
 	
-	private long currentStep;
+	private long step;
 	private BigInt initialValue;
 	
 	/** The indexes of the origin within the array */
@@ -51,6 +60,10 @@ public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {
 	
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
+	/**
+	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 */
+	private String creationTimestamp;
 	
 	public BigIntNearAether3Simple3D(BigInt initialValue) {
 		this.initialValue = initialValue;
@@ -68,7 +81,26 @@ public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
+		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public BigIntNearAether3Simple3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		BigIntNearAether3Simple3D data = (BigIntNearAether3Simple3D) Utils.deserializeFromFile(backupPath);
+		grid = data.grid;
+		step = data.step;
+		initialValue = data.initialValue;
+		originIndex = data.originIndex;
+		boundsReached = data.boundsReached;
+		creationTimestamp = data.creationTimestamp;
 	}
 	
 	@Override
@@ -179,7 +211,7 @@ public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -308,7 +340,7 @@ public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -318,18 +350,24 @@ public class BigIntNearAether3Simple3D implements EvolvingNumberGrid3D<BigInt> {
 	 */
 	public BigInt getInitialValue() {
 		return initialValue;
-	}	
-	
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getName() {
-		return "NearAether3_3D";
-	}@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+		return "NearAether3";
 	}
+	
+	@Override
+	public String getSubfolderPath() {
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = creationTimestamp;
+		return getName() + "/3D/" + strInitialValue;
+	}
+	
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		Utils.serializeToFile(this, backupPath, backupName);
+	}
+
 }

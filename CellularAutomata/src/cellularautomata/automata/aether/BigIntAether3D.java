@@ -19,10 +19,12 @@ package cellularautomata.automata.aether;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
+import cellularautomata.Constants;
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.SymmetricEvolvingNumberGrid3D;
 import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.model3d.SymmetricNumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -31,7 +33,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, IsotropicGrid3DA, Serializable {
+public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, IsotropicGrid3DA, Serializable {
 	
 	/**
 	 * 
@@ -51,6 +53,10 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Is
 	private long step;
 	
 	private int maxX;
+	/**
+	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 */
+	private String creationTimestamp;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -63,6 +69,7 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Is
 		grid[0][0][0] = this.initialValue;
 		maxX = 4;
 		step = 0;
+		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
 	}
 	
 	/**
@@ -79,6 +86,7 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Is
 		grid = data.grid;
 		maxX = data.maxX;
 		step = data.step;
+		creationTimestamp = data.creationTimestamp;
 	}
 	
 	@Override
@@ -2106,20 +2114,23 @@ public class BigIntAether3D implements SymmetricEvolvingNumberGrid3D<BigInt>, Is
 	public BigInt getInitialValue() {
 		return initialValue;
 	}	
+
+	@Override
+	public String getName() {
+		return "Aether";
+	}
+	
+	@Override
+	public String getSubfolderPath() {
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = creationTimestamp;
+		return getName() + "/3D/" + strInitialValue;
+	}
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		Utils.serializeToFile(this, backupPath, backupName);
-	}
-
-	@Override
-	public String getName() {
-		return "Aether3D";
-	}
-	
-	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
 	}
 	
 }

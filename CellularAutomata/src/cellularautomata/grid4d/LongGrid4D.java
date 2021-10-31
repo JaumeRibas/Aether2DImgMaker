@@ -17,7 +17,6 @@
 package cellularautomata.grid4d;
 
 import cellularautomata.grid.LongGrid;
-import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid3d.LongGrid3D;
 
 public interface LongGrid4D extends Grid4D, LongGrid {
@@ -115,12 +114,7 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	}
 	
 	@Override
-	default LongGrid2D crossSectionAtYZ(int y, int z) {
-		return new LongGrid4DYZCrossSection<LongGrid4D>(this, y, z);
-	}
-	
-	@Override
-	default LongGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default LongGrid4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new LongSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -132,6 +126,11 @@ public interface LongGrid4D extends Grid4D, LongGrid {
 	@Override
 	default LongGrid3D crossSectionAtX(int x) {
 		return new LongGrid4DXCrossSection<LongGrid4D>(this, x);
+	}
+	
+	@Override
+	default LongGrid3D crossSectionAtY(int y) {
+		return new LongGrid4DYCrossSection<LongGrid4D>(this, y);
 	}
 	
 	@Override

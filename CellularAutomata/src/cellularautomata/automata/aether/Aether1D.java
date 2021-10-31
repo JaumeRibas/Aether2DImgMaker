@@ -18,9 +18,11 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
-import cellularautomata.evolvinggrid1d.SymmetricEvolvingLongGrid1D;
+import cellularautomata.Utils;
 import cellularautomata.grid1d.IsotropicGrid1DA;
+import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
@@ -28,7 +30,12 @@ import cellularautomata.grid1d.IsotropicGrid1DA;
  * @author Jaume
  *
  */
-public class Aether1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {	
+public class Aether1D implements SymmetricLongModel1D, IsotropicGrid1DA, Serializable {	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5112179402220722606L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -37,7 +44,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {
 	private long[] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	private int maxX;
 	
 	/**
@@ -53,7 +60,23 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {
 		grid = new long[5];
 		grid[0] = initialValue;
 		maxX = 2;
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public Aether1D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Aether1D data = (Aether1D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		grid = data.grid;
+		maxX = data.maxX;
+		step = data.step;
 	}
 	
 	@Override
@@ -165,7 +188,7 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {
 			maxX++;
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -264,6 +287,11 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {
 	}
 
 	@Override
+	public long getFromAsymmetricPosition(int x) {
+		return grid[x];
+	}
+
+	@Override
 	public int getAsymmetricMaxX() {
 		return maxX;
 	}
@@ -279,26 +307,21 @@ public class Aether1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 
 	@Override
 	public String getName() {
-		return "Aether1D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/1D/" + initialValue;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int x) {
-		return grid[x];
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }

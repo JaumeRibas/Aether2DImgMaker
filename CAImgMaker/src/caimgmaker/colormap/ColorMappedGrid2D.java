@@ -18,56 +18,16 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
+import cellularautomata.grid2d.Grid2DDecorator;
 import cellularautomata.grid2d.ObjectGrid2D;
 
-public class ColorMappedGrid2D<T> implements ObjectGrid2D<Color> {
+public class ColorMappedGrid2D<T> extends Grid2DDecorator<ObjectGrid2D<T>> implements ObjectGrid2D<Color> {
 
-	protected ObjectGrid2D<T> source;
 	protected ColorMap<T> colorMap;
 	
 	public ColorMappedGrid2D(ObjectGrid2D<T> source, ColorMap<T> colorMap) {
-		this.source = source;
+		super(source);
 		this.colorMap = colorMap;
-	}
-		
-	@Override
-	public int getMinX() {
-		return source.getMinX();
-	}
-	
-	@Override
-	public int getMinX(int y) {
-		return source.getMinX(y);
-	}
-	
-	@Override
-	public int getMaxX() {
-		return source.getMaxX();
-	}
-	
-	@Override
-	public int getMaxX(int y) {
-		return source.getMaxX(y);
-	}
-	
-	@Override
-	public int getMinY() {
-		return source.getMinY();
-	}
-	
-	@Override
-	public int getMinY(int x) {
-		return source.getMinY(x);
-	}
-	
-	@Override
-	public int getMaxY() {
-		return source.getMaxY();
-	}
-	
-	@Override
-	public int getMaxY(int x) {
-		return source.getMaxY(x);
 	}
 
 	@Override

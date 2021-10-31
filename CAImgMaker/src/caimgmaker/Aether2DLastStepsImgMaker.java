@@ -45,8 +45,8 @@ public class Aether2DLastStepsImgMaker {
 	
 	public static void createAether2DLastStepsImages(ColorMapper colorMapper, int imageWidth, int imageHeight, String path) throws Exception {
 		int i = -156250000;
-		String imgPath = path + new Aether2D(0).getName() 
-				+ "/img/lats_steps/" + colorMapper.getClass().getSimpleName() + "/";
+		String imgPath = path + new Aether2D(0).getName() + "/2D"
+				+ "/img/lats_steps/" + colorMapper.getColormapName() + "/";
 		while (true) {
 			long initialValue = i;
 			System.out.println("Initial value: " + initialValue);

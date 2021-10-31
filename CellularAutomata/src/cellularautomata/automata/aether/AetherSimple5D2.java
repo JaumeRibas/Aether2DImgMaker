@@ -23,8 +23,8 @@ import java.util.List;
 
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid5d.SymmetricEvolvingLongGrid5D;
 import cellularautomata.grid5d.IsotropicGrid5DA;
+import cellularautomata.model5d.SymmetricLongModel5D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D, with a single source initial configuration, for review and testing purposes
@@ -32,7 +32,7 @@ import cellularautomata.grid5d.IsotropicGrid5DA;
  * @author Jaume
  *
  */
-public class AetherSimple5D2 implements SymmetricEvolvingLongGrid5D, IsotropicGrid5DA {	
+public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicGrid5DA {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -52,7 +52,7 @@ public class AetherSimple5D2 implements SymmetricEvolvingLongGrid5D, IsotropicGr
 	private long[][][][][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -71,7 +71,7 @@ public class AetherSimple5D2 implements SymmetricEvolvingLongGrid5D, IsotropicGr
 		grid[0][0][0][0][0] = this.initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -173,7 +173,7 @@ public class AetherSimple5D2 implements SymmetricEvolvingLongGrid5D, IsotropicGr
 		//Replace the old array with the new one
 		grid = newGrid;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -311,7 +311,7 @@ public class AetherSimple5D2 implements SymmetricEvolvingLongGrid5D, IsotropicGr
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -325,12 +325,12 @@ public class AetherSimple5D2 implements SymmetricEvolvingLongGrid5D, IsotropicGr
 
 	@Override
 	public String getName() {
-		return "Aether5D";
+		return "Aether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/5D/" + initialValue;
 	}
 	
 	@Override

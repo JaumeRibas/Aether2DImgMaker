@@ -19,7 +19,7 @@ package cellularautomata.automata.siv;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.evolvinggrid1d.EvolvingLongGrid1D;
+import cellularautomata.model1d.LongModel1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 1D, with a single source initial configuration, for review and testing purposes
@@ -27,14 +27,14 @@ import cellularautomata.evolvinggrid1d.EvolvingLongGrid1D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple1D implements EvolvingLongGrid1D {	
+public class SpreadIntegerValueSimple1D implements LongModel1D {	
 
 	/** A 1D array representing the grid */
 	private long[] grid;
 	
 	private long initialValue;
 	private long backgroundValue;
-	private long currentStep;
+	private long step;
 	
 	/** The index of the origin within the array */
 	private int xOriginIndex;
@@ -65,7 +65,7 @@ public class SpreadIntegerValueSimple1D implements EvolvingLongGrid1D {
 		grid[xOriginIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -142,7 +142,7 @@ public class SpreadIntegerValueSimple1D implements EvolvingLongGrid1D {
 		//Update the index of the origin
 		xOriginIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -184,7 +184,7 @@ public class SpreadIntegerValueSimple1D implements EvolvingLongGrid1D {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -202,12 +202,12 @@ public class SpreadIntegerValueSimple1D implements EvolvingLongGrid1D {
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue1D";
+		return "SpreadIntegerValue";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+	public String getSubfolderPath() {
+		return getName() + "/1D/" + initialValue + "/" + backgroundValue;
 	}
 
 	@Override

@@ -17,7 +17,6 @@
 package cellularautomata.grid4d;
 
 import cellularautomata.grid.Grid;
-import cellularautomata.grid2d.Grid2D;
 import cellularautomata.grid3d.Grid3D;
 
 public interface Grid4D extends Grid {
@@ -278,11 +277,7 @@ public interface Grid4D extends Grid {
 
 	default int getMaxZAtXY(int x, int y) { return getMaxZ(); }
 
-	default Grid2D crossSectionAtYZ(int y, int z) {
-		return new Grid4DYZCrossSection<Grid4D>(this, y, z);
-	}
-
-	default Grid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default Grid4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new SubGrid4D<Grid4D>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -292,6 +287,10 @@ public interface Grid4D extends Grid {
 	
 	default Grid3D crossSectionAtX(int x) {
 		return new Grid4DXCrossSection<Grid4D>(this, x);
+	}
+	
+	default Grid3D crossSectionAtY(int y) {
+		return new Grid4DYCrossSection<Grid4D>(this, y);
 	}
 	
 	/**

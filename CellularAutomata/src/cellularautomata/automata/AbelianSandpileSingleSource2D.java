@@ -18,10 +18,11 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid2d.SymmetricEvolvingIntGrid2D;
 import cellularautomata.grid2d.IsotropicGrid2DA;
+import cellularautomata.model2d.SymmetricIntModel2D;
 
 /**
  * Implementation of the <a href="https://en.wikipedia.org/wiki/Abelian_sandpile_model">Abelian sandpile</a> cellular automaton in 2D with synchronous toppling and a single source initial configuration
@@ -29,12 +30,17 @@ import cellularautomata.grid2d.IsotropicGrid2DA;
  * @author Jaume
  *
  */
-public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D, IsotropicGrid2DA {
+public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicGrid2DA, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2801220671142073702L;
 
 	private int[][] grid;
 	
 	private int initialValue;
-	private long currentStep;
+	private long step;
 	
 	private int maxY;
 
@@ -47,12 +53,31 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public AbelianSandpileSingleSource2D(int initialValue) {
+		if (initialValue < 0) {
+			throw new IllegalArgumentException("Initial value cannot be less than zero.");
+		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic2DIntArray(3);
 		grid[0][0] = this.initialValue;
 		maxY = 0;
 		xBoundReached = false;
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public AbelianSandpileSingleSource2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		AbelianSandpileSingleSource2D data = (AbelianSandpileSingleSource2D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		grid = data.grid;
+		maxY = data.maxY;
+		step = data.step;
 	}
 	
 	@Override
@@ -124,7 +149,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 			}
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -162,7 +187,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -176,16 +201,16 @@ public class AbelianSandpileSingleSource2D implements SymmetricEvolvingIntGrid2D
 
 	@Override
 	public String getName() {
-		return "AbelianSandpile2D";
+		return "AbelianSandpile";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/2D/" + initialValue;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }

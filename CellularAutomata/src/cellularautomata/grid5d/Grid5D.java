@@ -17,8 +17,6 @@
 package cellularautomata.grid5d;
 
 import cellularautomata.grid.Grid;
-import cellularautomata.grid2d.Grid2D;
-import cellularautomata.grid3d.Grid3D;
 
 public interface Grid5D extends Grid {
 	
@@ -342,15 +340,28 @@ public interface Grid5D extends Grid {
 
 	default int getMaxZ(int v, int w, int x, int y) { return getMaxZ(); }
 
-	default Grid2D crossSectionAtXYZ(int x, int y, int z) {
-		return new Grid5DXYZCrossSection<Grid5D>(this, x, y, z);
-	}
+//	default Grid2D crossSectionAtV(int v) {
+//		return new Grid5DVCrossSection<Grid5D>(this, v);
+//	}
+//	
+//	default Grid2D crossSectionAtW(int v) {
+//		return new Grid5DWCrossSection<Grid5D>(this, w);
+//	}
+//	
+//	default Grid2D crossSectionAtX(int v) {
+//		return new Grid5DXCrossSection<Grid5D>(this, x);
+//	}
+//	
+//	default Grid2D crossSectionAtY(int v) {
+//		return new Grid5DYCrossSection<Grid5D>(this, y);
+//	}
+//	
+//	default Grid2D crossSectionAtZ(int v) {
+//		return new Grid5DZCrossSection<Grid5D>(this, z);
+//	}
 
-//	default Grid5D subGrid(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+//	default Grid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 //		return new SubGrid5D<Grid5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 //	}
 	
-	default Grid3D crossSectionAtYZ(int y, int z) {
-		return new Grid5DYZCrossSection<Grid5D>(this, y, z);
-	}
 }

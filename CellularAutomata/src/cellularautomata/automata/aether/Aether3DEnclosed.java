@@ -18,10 +18,11 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.SymmetricEvolvingLongGrid3D;
 import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
@@ -29,7 +30,12 @@ import cellularautomata.grid3d.IsotropicGrid3DA;
  * @author Jaume
  *
  */
-public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D, IsotropicGrid3DA {
+public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -757589361637311954L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -45,7 +51,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D, IsotropicG
 	private long[][][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	private int side;
 	private int halfSide;
@@ -72,7 +78,26 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D, IsotropicG
 		grid[0][0][0] = this.initialValue;
 		maxY = 0;
 		maxZ = 0;
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public Aether3DEnclosed(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Aether3DEnclosed data = (Aether3DEnclosed) Utils.deserializeFromFile(backupPath);
+		grid = data.grid;
+		initialValue = data.initialValue;
+		step = data.step;		
+		side = data.side;
+		halfSide = data.halfSide;		
+		maxY = data.maxY;
+		maxZ = data.maxZ;
 	}
 	
 	@Override
@@ -161,7 +186,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D, IsotropicG
 			}
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -328,7 +353,7 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D, IsotropicG
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -342,16 +367,17 @@ public class Aether3DEnclosed implements SymmetricEvolvingLongGrid3D, IsotropicG
 
 	@Override
 	public String getName() {
-		return "Aether3DEnclosed";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() +  "/" + side + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() +  "/3D/enclosed/" + side + "/" + initialValue;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
+	
 }

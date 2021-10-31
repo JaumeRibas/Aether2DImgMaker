@@ -17,7 +17,6 @@
 package cellularautomata.grid4d;
 
 import cellularautomata.grid.IntGrid;
-import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid3d.IntGrid3D;
 
 public interface IntGrid4D extends Grid4D, IntGrid {
@@ -115,13 +114,23 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid2D crossSectionAtYZ(int y, int z) {
-		return new IntGrid4DYZCrossSection<IntGrid4D>(this, y, z);
+	default IntGrid4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new IntSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
-	default IntGrid4D subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new IntSubGrid4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	default IntGrid3D crossSectionAtW(int w) {
+		return new IntGrid4DWCrossSection<IntGrid4D>(this, w);
+	}
+	
+	@Override
+	default IntGrid3D crossSectionAtX(int x) {
+		return new IntGrid4DXCrossSection<IntGrid4D>(this, x);
+	}
+	
+	@Override
+	default IntGrid3D crossSectionAtY(int y) {
+		return new IntGrid4DYCrossSection<IntGrid4D>(this, y);
 	}
 	
 	@Override
@@ -130,7 +139,7 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid3D crossSectionAtW(int w) {
-		return new IntGrid4DWCrossSection<IntGrid4D>(this, w);
+	default IntGrid3D diagonalCrossSectionOnWX(int xOffsetFromW) {
+		return new IntGrid4DWXDiagonalCrossSection<IntGrid4D>(this, xOffsetFromW);
 	}
 }

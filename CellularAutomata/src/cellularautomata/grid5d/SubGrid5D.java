@@ -64,7 +64,7 @@ public class SubGrid5D<G extends Grid5D> implements Grid5D {
 				|| minX > sourceMaxX || maxX < sourceMinX
 				|| minY > sourceMaxY || maxY < sourceMinY
 				|| minZ > sourceMaxZ || maxZ < sourceMinZ)
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			throw new IllegalArgumentException("Subsection is out of bounds.");
 		//TODO validate that passed bounds are within local bounds
 		this.source = source;
 		this.minV = Math.max(minV, sourceMinV);

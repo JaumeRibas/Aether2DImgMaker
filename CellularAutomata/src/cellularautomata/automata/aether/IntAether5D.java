@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid5d.SymmetricEvolvingIntGrid5D;
 import cellularautomata.grid5d.IsotropicGrid5DA;
+import cellularautomata.model5d.SymmetricIntModel5D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D with a single source initial configuration
@@ -30,7 +30,7 @@ import cellularautomata.grid5d.IsotropicGrid5DA;
  * @author Jaume
  *
  */
-public class IntAether5D implements SymmetricEvolvingIntGrid5D, IsotropicGrid5DA, Serializable {
+public class IntAether5D implements SymmetricIntModel5D, IsotropicGrid5DA, Serializable {
 	
 	/**
 	 * 
@@ -10651,12 +10651,12 @@ public class IntAether5D implements SymmetricEvolvingIntGrid5D, IsotropicGrid5DA
 
 	@Override
 	public String getName() {
-		return "Aether5D";
+		return "Aether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/5D/" + initialValue;
 	}
 
 }

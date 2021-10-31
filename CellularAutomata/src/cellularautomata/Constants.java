@@ -33,4 +33,9 @@ public class Constants {
 	 * Number of bytes in 1 KiB
 	 */
 	public static final long ONE_KB = 1024;
+	
+	/**
+	 * Maximum length of the string representation of the initial value of a model in its subfolder path.
+	 */
+	public static final int MAX_INITIAL_VALUE_LENGTH_IN_PATH = 50;
 }

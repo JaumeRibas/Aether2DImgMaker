@@ -149,7 +149,7 @@ public interface NumberGrid2D<T extends FieldElement<T> & Comparable<T>> extends
 	}
 	
 	@Override
-	default NumberGrid2D<T> subGrid(int minX, int maxX, int minY, int maxY) {
+	default NumberGrid2D<T> subsection(int minX, int maxX, int minY, int maxY) {
 		return new NumberSubGrid2D<T, NumberGrid2D<T>>(this, minX, maxX, minY, maxY);
 	}
 

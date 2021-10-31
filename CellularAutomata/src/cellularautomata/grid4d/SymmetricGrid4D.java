@@ -16,7 +16,9 @@
  */
 package cellularautomata.grid4d;
 
-public interface SymmetricGrid4D extends Grid4D {
+import cellularautomata.grid.SymmetricGrid;
+
+public interface SymmetricGrid4D extends Grid4D, SymmetricGrid {
 	
 	/**
 	 * Returns the smallest w-coordinate of the asymmetric section of the grid
@@ -206,11 +208,7 @@ public interface SymmetricGrid4D extends Grid4D {
 
 	int getAsymmetricMaxZAtXY(int x, int y);
 	
-	/**
-	 * Returns an asymmetric section of the grid
-	 * 
-	 * @return a 4D grid
-	 */
+	@Override
 	default Grid4D asymmetricSection() {
 		return new AsymmetricGridSection4D<SymmetricGrid4D>(this);
 	}

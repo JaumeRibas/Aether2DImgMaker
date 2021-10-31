@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid4d.SymmetricEvolvingLongGrid4D;
 import cellularautomata.grid4d.IsotropicGrid4DA;
+import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 4D with a single source initial configuration
@@ -30,7 +30,7 @@ import cellularautomata.grid4d.IsotropicGrid4DA;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, IsotropicGrid4DA, Serializable {
+public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid4DA, Serializable {
 	
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Isotro
 	private long[][][][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	private int maxX;
 	private int maxY;
 	private int maxZ;
@@ -64,7 +64,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Isotro
 		maxY = 0;
 		maxZ = 0;
 		boundsReached = false;
-		currentStep = 0;
+		step = 0;
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Isotro
 		maxZ = data.maxZ;
 		maxWMinusOne = data.maxWMinusOne;
 		boundsReached = data.boundsReached;
-		currentStep = data.currentStep;
+		step = data.step;
 	}
 	
 	@Override
@@ -133,7 +133,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Isotro
 			grid[w] = null;
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -326,7 +326,7 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Isotro
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -337,20 +337,20 @@ public class SpreadIntegerValue4D implements SymmetricEvolvingLongGrid4D, Isotro
 	public long getIntialValue() {
 		return initialValue;
 	}
+
+	@Override
+	public String getName() {
+		return "SpreadIntegerValue";
+	}
+	
+	@Override
+	public String getSubfolderPath() {
+		return getName() + "/4D/" + initialValue + "/0";
+	}
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		Utils.serializeToFile(this, backupPath, backupName);
-	}
-
-	@Override
-	public String getName() {
-		return "SpreadIntegerValue4D";
-	}
-	
-	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/0";
 	}
 	
 }

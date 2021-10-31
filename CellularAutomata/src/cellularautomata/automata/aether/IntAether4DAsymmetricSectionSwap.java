@@ -27,13 +27,13 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4D;
 import cellularautomata.grid4d.AnisotropicGrid4DA;
 import cellularautomata.grid4d.AnisotropicIntGrid4DSlice;
 import cellularautomata.grid4d.ImmutableIntGrid4D;
 import cellularautomata.grid4d.IntGrid4D;
 import cellularautomata.grid4d.IntSubGrid4DWithWBounds;
 import cellularautomata.grid4d.SizeLimitedAnisotropicIntGrid4DBlock;
+import cellularautomata.model4d.ActionableModel4D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -41,7 +41,7 @@ import cellularautomata.grid4d.SizeLimitedAnisotropicIntGrid4DBlock;
  * @author Jaume
  *
  */
-public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<IntGrid4D> implements AnisotropicGrid4DA {
+public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4D> implements AnisotropicGrid4DA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -613566757;
@@ -83,7 +83,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<I
 		gridBlockA.setValueAtPosition(0, 0, 0, 0, initialValue);
 		maxW = 5;
 		step = 0;
-		gridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		gridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			gridFolder.mkdirs();
 		} else {
@@ -114,7 +114,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<I
 		if (maxW > gridBlockA.maxW) {
 			gridBlockB = loadGridBlock(gridBlockA.maxW + 1);
 		}
-		readWriteGridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		readWriteGridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
 	private SizeLimitedAnisotropicIntGrid4DBlock loadGridBlockSafe(int minW) throws IOException, ClassNotFoundException {
@@ -4368,12 +4368,12 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<I
 
 	@Override
 	public String getName() {
-		return "Aether4D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/asymmetric_section";
+	public String getSubfolderPath() {
+		return getName() + "/4D/" + initialValue + "/asymmetric_section";
 	}
 
 	@Override

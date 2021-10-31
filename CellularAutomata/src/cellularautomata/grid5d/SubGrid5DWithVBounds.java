@@ -25,7 +25,7 @@ public class SubGrid5DWithVBounds<G extends Grid5D> extends SubGrid5D<G> {
 		int sourceMinV = source.getMinV();
 		int sourceMaxV = source.getMaxV();
 		if (minV > sourceMaxV || maxV < sourceMinV) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			throw new IllegalArgumentException("Subsection is out of bounds.");
 		}
 		this.source = source;
 		this.minV = Math.max(minV, sourceMinV);

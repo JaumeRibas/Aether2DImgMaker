@@ -19,8 +19,8 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.evolvinggrid1d.SymmetricEvolvingLongGrid1D;
 import cellularautomata.grid1d.IsotropicGrid1DA;
+import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
  * A synchronous sandpile model with isotropic rules and a single source initial configuration.
@@ -28,7 +28,7 @@ import cellularautomata.grid1d.IsotropicGrid1DA;
  * @author Jaume
  *
  */
-public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {	
+public class SingleSourceLongSandpile1D implements SymmetricLongModel1D, IsotropicGrid1DA {	
 
 	private static final byte RIGHT = 1;
 	private static final byte LEFT = 0;
@@ -39,7 +39,7 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D, 
 	private IsotropicLongSandpileRules rules;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -58,7 +58,7 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D, 
 		grid = new long[3];
 		grid[0] = initialValue;
 		boundsReached = false;
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -98,7 +98,7 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D, 
 			}
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 
@@ -159,11 +159,11 @@ public class SingleSourceLongSandpile1D implements SymmetricEvolvingLongGrid1D, 
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	@Override
-	public String getSubFolderPath() {
+	public String getSubfolderPath() {
 		return getName() + "/1D/single source/" + initialValue;
 	}
 

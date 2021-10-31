@@ -16,7 +16,6 @@
  */
 package cellularautomata.grid4d;
 
-import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid3d.ObjectGrid3D;
 
 public interface ObjectGrid4D<T> extends Grid4D {
@@ -34,13 +33,23 @@ public interface ObjectGrid4D<T> extends Grid4D {
 	T getFromPosition(int w, int x, int y, int z) throws Exception;
 	
 	@Override
-	default ObjectGrid2D<T> crossSectionAtYZ(int y, int z) {
-		return new ObjectGrid4DYZCrossSection<T, ObjectGrid4D<T>>(this, y, z);
+	default ObjectGrid4D<T> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new ObjectSubGrid4D<T, ObjectGrid4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
-	default ObjectGrid4D<T> subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new ObjectSubGrid4D<T, ObjectGrid4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	default ObjectGrid3D<T> crossSectionAtW(int w) {
+		return new ObjectGrid4DWCrossSection<T, ObjectGrid4D<T>>(this, w);
+	}
+	
+	@Override
+	default ObjectGrid3D<T> crossSectionAtX(int x) {
+		return new ObjectGrid4DXCrossSection<T, ObjectGrid4D<T>>(this, x);
+	}
+	
+	@Override
+	default ObjectGrid3D<T> crossSectionAtY(int y) {
+		return new ObjectGrid4DYCrossSection<T, ObjectGrid4D<T>>(this, y);
 	}
 	
 	@Override

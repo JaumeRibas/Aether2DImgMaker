@@ -45,12 +45,12 @@ public interface CellularAutomaton {
 	String getName();
 	
 	/**
-	 * Return the cellular automaton's name and configuration as a folder and sub-folder(s) path.
+	 * Return the cellular automaton's name and configuration as a folder and subfolder(s) path.
 	 * For example: "{Name}/{Initial value}"
 	 * 
 	 * @return the path
 	 */
-	String getSubFolderPath();
+	String getSubfolderPath();
 
 	/**
 	 * Backs up the state of the automaton to a file or folder for future restoration.<br/>

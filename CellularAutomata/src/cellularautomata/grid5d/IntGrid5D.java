@@ -17,8 +17,6 @@
 package cellularautomata.grid5d;
 
 import cellularautomata.grid.IntGrid;
-import cellularautomata.grid2d.IntGrid2D;
-import cellularautomata.grid3d.IntGrid3D;
 
 public interface IntGrid5D extends Grid5D, IntGrid {
 	
@@ -126,18 +124,9 @@ public interface IntGrid5D extends Grid5D, IntGrid {
 		return total;
 	}
 	
-	@Override
-	default IntGrid2D crossSectionAtXYZ(int x, int y, int z) {
-		return new IntGrid5DXYZCrossSection<IntGrid5D>(this, x, y, z);
-	}
-	
 //	@Override
-//	default IntGrid5D subGrid(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+//	default IntGrid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 //		return new IntSubGrid5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 //	}
 	
-	@Override
-	default IntGrid3D crossSectionAtYZ(int y, int z) {
-		return new IntGrid5DYZCrossSection<IntGrid5D>(this, y, z);
-	}
 }

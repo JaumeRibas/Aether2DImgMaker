@@ -27,7 +27,7 @@ public interface ObjectGrid1D<T> extends Grid1D {
 	T getFromPosition(int x);
 	
 	@Override
-	default ObjectGrid1D<T> subGrid(int minX, int maxX) {
+	default ObjectGrid1D<T> subsection(int minX, int maxX) {
 		return new ObjectSubGrid1D<T, ObjectGrid1D<T>>(this, minX, maxX);
 	}
 }

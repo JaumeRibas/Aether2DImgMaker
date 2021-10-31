@@ -26,30 +26,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
-import cellularautomata.evolvinggrid.EvolvingIntGrid;
-import cellularautomata.evolvinggrid.EvolvingLongGrid;
-import cellularautomata.evolvinggrid.EvolvingModel;
-import cellularautomata.evolvinggrid1d.EvolvingLongGrid1D;
-import cellularautomata.evolvinggrid1d.EvolvingNumberGrid1D;
-import cellularautomata.evolvinggrid2d.EvolvingIntGrid2D;
-import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
-import cellularautomata.evolvinggrid2d.EvolvingNumberGrid2D;
-import cellularautomata.evolvinggrid3d.ActionableEvolvingGrid3D;
-import cellularautomata.evolvinggrid3d.EvolvingIntGrid3D;
-import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
-import cellularautomata.evolvinggrid3d.EvolvingNumberGrid3D;
-import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4D;
-import cellularautomata.evolvinggrid4d.EvolvingIntGrid4D;
-import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
-import cellularautomata.evolvinggrid4d.EvolvingNumberGrid4D;
-import cellularautomata.evolvinggrid5d.ActionableEvolvingGrid5D;
-import cellularautomata.evolvinggrid5d.EvolvingIntGrid5D;
-import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
+
 import cellularautomata.automata.SingleSourceLongSandpile1D;
 import cellularautomata.automata.aether.Aether2D;
 import cellularautomata.automata.aether.Aether3DEnclosed;
 import cellularautomata.automata.aether.Aether3DEnclosed2;
-import cellularautomata.automata.aether.Aether3DRandomConfiguration;
+import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.AetherSimple2D;
 import cellularautomata.automata.aether.AetherSimple5D;
@@ -59,7 +41,6 @@ import cellularautomata.automata.siv.SpreadIntegerValue1D;
 import cellularautomata.automata.siv.SpreadIntegerValue2D;
 import cellularautomata.automata.siv.SpreadIntegerValueRules;
 import cellularautomata.automata.siv.SpreadIntegerValueSimple2D;
-import cellularautomata.evolvinggrid.EvolvingNumberGrid;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid1d.ObjectGrid1D;
@@ -68,6 +49,7 @@ import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid3d.BigFractionGrid3DPattern;
 import cellularautomata.grid3d.BigIntGrid3DPattern;
+import cellularautomata.grid3d.DummyIntGrid3D;
 import cellularautomata.grid3d.Grid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntGrid3DXCrossSectionCopierProcessor;
@@ -81,6 +63,26 @@ import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid5d.IntGrid5D;
 import cellularautomata.grid5d.LongGrid5D;
+import cellularautomata.model.IntModel;
+import cellularautomata.model.LongModel;
+import cellularautomata.model.NumericModel;
+import cellularautomata.model.Model;
+import cellularautomata.model1d.LongModel1D;
+import cellularautomata.model1d.NumericModel1D;
+import cellularautomata.model2d.IntModel2D;
+import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.NumericModel2D;
+import cellularautomata.model3d.ActionableModel3D;
+import cellularautomata.model3d.IntModel3D;
+import cellularautomata.model3d.LongModel3D;
+import cellularautomata.model3d.NumericModel3D;
+import cellularautomata.model4d.ActionableModel4D;
+import cellularautomata.model4d.IntModel4D;
+import cellularautomata.model4d.LongModel4D;
+import cellularautomata.model4d.NumericModel4D;
+import cellularautomata.model5d.ActionableModel5D;
+import cellularautomata.model5d.IntModel5D;
+import cellularautomata.model5d.LongModel5D;
 import cellularautomata.numbers.BigInt;
 
 public class Test {
@@ -90,6 +92,84 @@ public class Test {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compare(ae1, ae2);
+	}
+	
+	public static void test2DDiagonals() throws Exception {
+		int[][][] sourceValues;
+		int[][] resultValues;
+		DummyIntGrid3D grid;
+		IntGrid2D diagonal;
+		int side = 20;
+		int offset = 5;
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		//xy 
+		for (int off = 0; off <= offset; off += offset) {
+			sourceValues = new int[side][side][side];
+			resultValues = new int[side][side];
+			for (int x = 0; x < side; x++) {
+				for (int z = 0; z < side; z++) {
+					int value = random.nextInt();
+					int y = x+off;
+					if (y < side) {
+						sourceValues[x][x+off][z] = value;
+						resultValues[z][x] = value;	
+					}
+				}
+			}			
+			grid = new DummyIntGrid3D(sourceValues, 0, 0, 0);
+			diagonal = grid.diagonalCrossSectionOnXY(off);
+			compare(diagonal, resultValues, 0, 0);
+		}
+		//xz
+		for (int off = 0; off <= offset; off += offset) {
+			sourceValues = new int[side][side][side];
+			resultValues = new int[side][side];
+			for (int x = 0; x < side; x++) {
+				for (int y = 0; y < side; y++) {
+					int value = random.nextInt();
+					int z = x+off;
+					if (z < side) {
+						sourceValues[x][y][z] = value;
+						resultValues[x][y] = value;
+					}
+				}
+			}			
+			grid = new DummyIntGrid3D(sourceValues, 0, 0, 0);
+			diagonal = grid.diagonalCrossSectionOnXZ(off);
+			compare(diagonal, resultValues, 0, 0);
+		}
+		//yz
+		for (int off = 0; off <= offset; off += offset) {
+			sourceValues = new int[side][side][side];
+			resultValues = new int[side][side];
+			for (int x = 0; x < side; x++) {
+				for (int y = 0; y < side; y++) {
+					int value = random.nextInt();
+					int z = y+off;
+					if (z < side) {
+						sourceValues[x][y][z] = value;
+						resultValues[x][y] = value;
+					}
+				}
+			}			
+			grid = new DummyIntGrid3D(sourceValues, 0, 0, 0);
+			diagonal = grid.diagonalCrossSectionOnYZ(off);
+			compare(diagonal, resultValues, 0, 0);
+		}
+	}
+	
+	public static void compare(IntGrid2D grid, int[][] array, int xOffset, int yOffset) throws Exception {
+		int maxX = grid.getMaxX();
+		for (int x = grid.getMinX(); x <= maxX; x++) {
+			int localMaxY = grid.getMaxY(x);
+			for (int y = grid.getMinY(x); y <= localMaxY; y++) {
+				if (grid.getFromPosition(x, y) != array[x + xOffset][y + yOffset]) {
+					System.out.println("Different value at (" + x + ", " + y + "): " + grid.getFromPosition(x, y) + " != " + array[x + xOffset][y + yOffset]);
+					return;
+				}
+			}
+		}
+		System.out.println("Equal!");
 	}
 	
 	public static void testBigIntValueOfPerformance() {
@@ -276,7 +356,7 @@ public class Test {
 		compareWithOffset(ae1, ae2, side/2 + 1, side/2 + 1, side/2 + 1);
 	}
 	
-	public static void compareWithOffset(EvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2, int xOffset, int yOffset, int zOffset) {
+	public static void compareWithOffset(LongModel3D ca1, LongModel3D ca2, int xOffset, int yOffset, int zOffset) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -306,7 +386,7 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -402,7 +482,7 @@ public class Test {
 	}
 	
 	public static void testAetherRandomConfig() {
-		Aether3DRandomConfiguration ae1 = new Aether3DRandomConfiguration(3, -10, 10);
+		IntAether3DRandomConfiguration ae1 = new IntAether3DRandomConfiguration(3, -10, 10);
 		stepByStep(ae1.crossSectionAtZ(0));
 	}
 	
@@ -430,10 +510,10 @@ public class Test {
 		long initialValue = 2000;
 		SpreadIntegerValue1D siv1 = new SpreadIntegerValue1D(initialValue, 0);
 		SingleSourceLongSandpile1D siv2 = new SingleSourceLongSandpile1D(new SpreadIntegerValueRules(), initialValue);
-		race(new EvolvingModel[] { siv1, siv2 });
+		race(new Model[] { siv1, siv2 });
 	}
 	
-	public static void compare(EvolvingLongGrid1D ca1, EvolvingLongGrid1D ca2) {
+	public static void compare(LongModel1D ca1, LongModel1D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -462,13 +542,13 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingIntGrid2D ca1, EvolvingLongGrid2D ca2) {
+	public static void compare(IntModel2D ca1, LongModel2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -494,13 +574,13 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingIntGrid2D ca1, EvolvingIntGrid2D ca2) {
+	public static void compare(IntModel2D ca1, IntModel2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -526,13 +606,13 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid2D ca1, EvolvingLongGrid2D ca2) {
+	public static void compare(LongModel2D ca1, LongModel2D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -564,13 +644,13 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingIntGrid3D ca1, EvolvingIntGrid3D ca2) {
+	public static void compare(IntModel3D ca1, IntModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -598,17 +678,17 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid3D ca1, ActionableEvolvingGrid3D<IntGrid3D> ca2) {
+	public static void compare(LongModel3D ca1, ActionableModel3D<IntGrid3D> ca2) {
 		compare(ca2 , ca1);
 	}
 	
-	public static void compare(ActionableEvolvingGrid3D<IntGrid3D> ca1, EvolvingLongGrid3D ca2) {
+	public static void compare(ActionableModel3D<IntGrid3D> ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -658,7 +738,7 @@ public class Test {
 		}
 	}
 	
-	public static void compare2(ActionableEvolvingGrid3D<LongGrid3D> ca1, EvolvingLongGrid3D ca2) {
+	public static void compare2(ActionableModel3D<LongGrid3D> ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -710,11 +790,11 @@ public class Test {
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid4D ca1, ActionableEvolvingGrid4D<LongGrid4D> ca2) {
+	public static void compare(LongModel4D ca1, ActionableModel4D<LongGrid4D> ca2) {
 		compare(ca2, ca1);
 	}
 	
-	public static void compare(ActionableEvolvingGrid4D<LongGrid4D> ca1, EvolvingLongGrid4D ca2) {
+	public static void compare(ActionableModel4D<LongGrid4D> ca1, LongModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -766,11 +846,11 @@ public class Test {
 		}
 	}
 	
-	public static void compare(EvolvingIntGrid4D ca1, ActionableEvolvingGrid4D<IntGrid4D> ca2) {
+	public static void compare(IntModel4D ca1, ActionableModel4D<IntGrid4D> ca2) {
 		compare(ca2, ca1);
 	}
 	
-	public static void compare(ActionableEvolvingGrid4D<IntGrid4D> ca1, EvolvingIntGrid4D ca2) {
+	public static void compare(ActionableModel4D<IntGrid4D> ca1, IntModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -822,11 +902,11 @@ public class Test {
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid5D ca1, ActionableEvolvingGrid5D<LongGrid5D> ca2) {
+	public static void compare(LongModel5D ca1, ActionableModel5D<LongGrid5D> ca2) {
 		compare(ca2, ca1);
 	}
 	
-	public static void compare(ActionableEvolvingGrid5D<LongGrid5D> ca1, EvolvingLongGrid5D ca2) {
+	public static void compare(ActionableModel5D<LongGrid5D> ca1, LongModel5D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -880,11 +960,11 @@ public class Test {
 		}
 	}
 	
-	public static void compare(EvolvingIntGrid5D ca1, ActionableEvolvingGrid5D<IntGrid5D> ca2) {
+	public static void compare(IntModel5D ca1, ActionableModel5D<IntGrid5D> ca2) {
 		compare(ca2, ca1);
 	}
 	
-	public static void compare(ActionableEvolvingGrid5D<IntGrid5D> ca1, EvolvingIntGrid5D ca2) {
+	public static void compare(ActionableModel5D<IntGrid5D> ca1, IntModel5D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -939,7 +1019,7 @@ public class Test {
 	}
 	
 	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compare(ActionableEvolvingGrid3D<NumberGrid3D<T>> ca1, EvolvingNumberGrid3D<T> ca2) {
+		compare(ActionableModel3D<NumberGrid3D<T>> ca1, NumericModel3D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -990,7 +1070,7 @@ public class Test {
 	}
 	
 	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compare(ActionableEvolvingGrid4D<NumberGrid4D<T>> ca1, EvolvingNumberGrid4D<T> ca2) {
+		compare(ActionableModel4D<NumberGrid4D<T>> ca1, NumericModel4D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1047,7 +1127,7 @@ public class Test {
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid4D ca1, EvolvingLongGrid4D ca2) {
+	public static void compare(LongModel4D ca1, LongModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1080,17 +1160,17 @@ public class Test {
 					break;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid4D ca1, EvolvingIntGrid4D ca2) {
+	public static void compare(LongModel4D ca1, IntModel4D ca2) {
 		compare(ca2, ca1);
 	}
 	
-	public static void compare(EvolvingIntGrid4D ca1, EvolvingLongGrid4D ca2) {
+	public static void compare(IntModel4D ca1, LongModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1122,13 +1202,13 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingIntGrid4D ca1, EvolvingIntGrid4D ca2) {
+	public static void compare(IntModel4D ca1, IntModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1160,17 +1240,17 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid3D ca1, EvolvingIntGrid3D ca2) {
+	public static void compare(LongModel3D ca1, IntModel3D ca2) {
 		compare(ca2, ca1);
 	}
 	
-	public static void compare(EvolvingIntGrid3D ca1, EvolvingLongGrid3D ca2) {
+	public static void compare(IntModel3D ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1201,13 +1281,13 @@ public class Test {
 				}
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2) {
+	public static void compare(LongModel3D ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1238,13 +1318,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compareInverted(EvolvingLongGrid3D ca1, EvolvingLongGrid3D ca2) {
+	public static void compareInverted(LongModel3D ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1275,13 +1355,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(EvolvingNumberGrid3D<T> ca1, EvolvingLongGrid3D ca2) {
+	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(NumericModel3D<T> ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1312,13 +1392,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(EvolvingNumberGrid4D<T> ca1, EvolvingLongGrid4D ca2) {
+	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(NumericModel4D<T> ca1, LongModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1351,21 +1431,21 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void comparePatterns(EvolvingNumberGrid3D<BigInt> ca1, EvolvingNumberGrid3D<BigInt> ca2, double maxDifference) {
+	public static void comparePatterns(NumericModel3D<BigInt> ca1, NumericModel3D<BigInt> ca2, double maxDifference) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
 			boolean finished2 = false;
 			boolean equal = true;
 			while (!finished1 && !finished2) {
-				BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>> p1 = new BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>>(ca1);
-				BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>> p2 = new BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>>(ca2);
+				BigIntGrid3DPattern<NumericModel3D<BigInt>> p1 = new BigIntGrid3DPattern<NumericModel3D<BigInt>>(ca1);
+				BigIntGrid3DPattern<NumericModel3D<BigInt>> p2 = new BigIntGrid3DPattern<NumericModel3D<BigInt>>(ca2);
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
@@ -1392,13 +1472,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void comparePatterns2(EvolvingNumberGrid3D<BigFraction> ca1, EvolvingNumberGrid3D<BigInt> ca2, double maxDifference) {
+	public static void comparePatterns2(NumericModel3D<BigFraction> ca1, NumericModel3D<BigInt> ca2, double maxDifference) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1406,7 +1486,7 @@ public class Test {
 			boolean equal = true;
 			while (!finished1 && !finished2) {
 				BigFractionGrid3DPattern p1 = new BigFractionGrid3DPattern(ca1);
-				BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>> p2 = new BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>>(ca2);
+				BigIntGrid3DPattern<NumericModel3D<BigInt>> p2 = new BigIntGrid3DPattern<NumericModel3D<BigInt>>(ca2);
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
@@ -1433,13 +1513,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void printAveragePatternDifferenceAtEachStep(EvolvingNumberGrid3D<BigFraction> ca1, EvolvingNumberGrid3D<BigInt> ca2) {
+	public static void printAveragePatternDifferenceAtEachStep(NumericModel3D<BigFraction> ca1, NumericModel3D<BigInt> ca2) {
 		try {
 			boolean finished1 = false;
 			boolean finished2 = false;
@@ -1453,10 +1533,10 @@ public class Test {
 		}
 	}
 	
-	public static double getAveragePatternDifference(EvolvingNumberGrid3D<BigFraction> ca1, 
-			EvolvingNumberGrid3D<BigInt> ca2) throws Exception {
+	public static double getAveragePatternDifference(NumericModel3D<BigFraction> ca1, 
+			NumericModel3D<BigInt> ca2) throws Exception {
 		BigFractionGrid3DPattern p1 = new BigFractionGrid3DPattern(ca1);
-		BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>> p2 = new BigIntGrid3DPattern<EvolvingNumberGrid3D<BigInt>>(ca2);
+		BigIntGrid3DPattern<NumericModel3D<BigInt>> p2 = new BigIntGrid3DPattern<NumericModel3D<BigInt>>(ca2);
 		double totalDifference = 0;
 		long positionCount = 0;
 		int maxZ = ca1.getMaxZ();
@@ -1480,7 +1560,7 @@ public class Test {
 		return totalDifference/positionCount;
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(EvolvingNumberGrid1D<T> ca1, EvolvingLongGrid1D ca2) {
+	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(NumericModel1D<T> ca1, LongModel1D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1507,13 +1587,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(EvolvingNumberGrid3D<T> ca1, EvolvingIntGrid3D ca2) {
+	public static <T extends Number & FieldElement<T> & Comparable<T>> void compare(NumericModel3D<T> ca1, IntModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1544,13 +1624,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void compare(EvolvingNumberGrid3D<T> ca1, EvolvingNumberGrid3D<T> ca2) {
+	public static <T extends FieldElement<T> & Comparable<T>> void compare(NumericModel3D<T> ca1, NumericModel3D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1581,13 +1661,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void compare(EvolvingNumberGrid4D<T> ca1, EvolvingNumberGrid4D<T> ca2) {
+	public static <T extends FieldElement<T> & Comparable<T>> void compare(NumericModel4D<T> ca1, NumericModel4D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1620,13 +1700,13 @@ public class Test {
 					return;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid5D ca1, EvolvingLongGrid5D ca2) {
+	public static void compare(LongModel5D ca1, LongModel5D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1661,13 +1741,13 @@ public class Test {
 					break;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void compare(EvolvingLongGrid5D ca1, EvolvingIntGrid5D ca2) {
+	public static void compare(LongModel5D ca1, IntModel5D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1702,13 +1782,13 @@ public class Test {
 					break;
 			}
 			if (equal)
-				System.out.println("Equal");
+				System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void printMinAndMaxValues(EvolvingLongGrid ca) {
+	public static void printMinAndMaxValues(LongModel ca) {
 		try {
 			do {
 				long[] minAndMax = ca.getMinAndMax();
@@ -1719,7 +1799,7 @@ public class Test {
 		}
 	}
 	
-	public static void checkTotalValueConservation(EvolvingLongGrid ca) {
+	public static void checkTotalValueConservation(LongModel ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			long value = ca.getTotal(), newValue = value;
@@ -1738,7 +1818,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void checkTotalValueConservation(EvolvingNumberGrid<T> ca) {
+	public static <T extends FieldElement<T> & Comparable<T>> void checkTotalValueConservation(NumericModel<T> ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			T value = ca.getTotal(), newValue = value;
@@ -1757,7 +1837,7 @@ public class Test {
 		}
 	}
 	
-	public static void printTotalValueEvolution(EvolvingLongGrid ca) {
+	public static void printTotalValueEvolution(LongModel ca) {
 		try {
 			do {
 				System.out.println("step " + ca.getStep() + ": " + ca.getTotal());
@@ -1768,7 +1848,7 @@ public class Test {
 		}
 	}
 	
-	public static void checkTotalValueConservation(EvolvingIntGrid ca) {
+	public static void checkTotalValueConservation(IntModel ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			int value = ca.getTotal(), newValue = value;
@@ -1787,7 +1867,7 @@ public class Test {
 		}
 	}
 	
-	public static void stepByStep(EvolvingIntGrid2D ca) {
+	public static void stepByStep(IntModel2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -1802,7 +1882,7 @@ public class Test {
 		}
 	}
 	
-	public static void stepByStep(EvolvingLongGrid1D ca) {
+	public static void stepByStep(LongModel1D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -1817,7 +1897,7 @@ public class Test {
 		}
 	}
 	
-	public static void stepByStep(EvolvingLongGrid2D ca) {
+	public static void stepByStep(LongModel2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -1832,7 +1912,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void stepByStep(EvolvingNumberGrid1D<T> ca) {
+	public static <T extends FieldElement<T> & Comparable<T>> void stepByStep(NumericModel1D<T> ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -1847,7 +1927,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void stepByStep(EvolvingNumberGrid2D<T> ca) {
+	public static <T extends Number & FieldElement<T> & Comparable<T>> void stepByStep(NumericModel2D<T> ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -1862,7 +1942,7 @@ public class Test {
 		}
 	}
 	
-	public static <T> void stepByStepZCrossSection(ActionableEvolvingGrid3D<ObjectGrid3D<T>> ca, T backgroundValue, int z) {
+	public static <T> void stepByStepZCrossSection(ActionableModel3D<ObjectGrid3D<T>> ca, T backgroundValue, int z) {
 		try {
 			Scanner s = new Scanner(System.in);
 			Grid3DZCrossSectionCopierProcessor<T> copier = new Grid3DZCrossSectionCopierProcessor<T>();
@@ -1884,7 +1964,7 @@ public class Test {
 		}
 	}	
 	
-	public static void stepByStepZCrossSectionOfLongGrid(ActionableEvolvingGrid3D<LongGrid3D> ca, int z) {
+	public static void stepByStepZCrossSectionOfLongGrid(ActionableModel3D<LongGrid3D> ca, int z) {
 		try {
 			Scanner s = new Scanner(System.in);
 			LongGrid3DZCrossSectionCopierProcessor copier = new LongGrid3DZCrossSectionCopierProcessor();
@@ -1907,7 +1987,7 @@ public class Test {
 		}
 	}	
 	
-	public static void stepByStepZCrossSectionOfIntGrid(ActionableEvolvingGrid3D<IntGrid3D> ca, int z) {
+	public static void stepByStepZCrossSectionOfIntGrid(ActionableModel3D<IntGrid3D> ca, int z) {
 		try {
 			Scanner s = new Scanner(System.in);
 			IntGrid3DZCrossSectionCopierProcessor copier = new IntGrid3DZCrossSectionCopierProcessor();
@@ -1930,7 +2010,7 @@ public class Test {
 		}
 	}	
 	
-	public static void stepByStepXCrossSection(ActionableEvolvingGrid3D<IntGrid3D> ca, int x) {
+	public static void stepByStepXCrossSection(ActionableModel3D<IntGrid3D> ca, int x) {
 		try {
 			Scanner s = new Scanner(System.in);
 			IntGrid3DXCrossSectionCopierProcessor copier = new IntGrid3DXCrossSectionCopierProcessor();
@@ -1953,10 +2033,10 @@ public class Test {
 		}
 	}
 	
-	public static void race(EvolvingModel... cas) {
+	public static void race(Model... cas) {
 		try {
 			long millis;
-			for (EvolvingModel ca : cas) {
+			for (Model ca : cas) {
 				millis = System.currentTimeMillis();
 				while (ca.nextStep());
 				System.out.println(ca.getClass().getSimpleName() + ": " + (System.currentTimeMillis() - millis));

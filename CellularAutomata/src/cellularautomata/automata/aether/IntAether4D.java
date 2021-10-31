@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid4d.SymmetricEvolvingIntGrid4D;
 import cellularautomata.grid4d.IsotropicGrid4DA;
+import cellularautomata.model4d.SymmetricIntModel4D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -30,7 +30,7 @@ import cellularautomata.grid4d.IsotropicGrid4DA;
  * @author Jaume
  *
  */
-public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA, Serializable {
+public class IntAether4D implements SymmetricIntModel4D, IsotropicGrid4DA, Serializable {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -613566757;
@@ -4205,12 +4205,12 @@ public class IntAether4D implements SymmetricEvolvingIntGrid4D, IsotropicGrid4DA
 
 	@Override
 	public String getName() {
-		return "Aether4D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/4D/" + initialValue;
 	}
 	
 }

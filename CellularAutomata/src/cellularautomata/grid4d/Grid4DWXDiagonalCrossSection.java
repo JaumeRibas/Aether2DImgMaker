@@ -39,7 +39,7 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 		this.source = source;
 		this.xOffsetFromW = xOffsetFromW;
 		if (!getBounds()) {
-			throw new IllegalArgumentException("Cross section outside of grid bounds.");
+			throw new IllegalArgumentException("Cross section is out of bounds.");
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 				return crossSectionW;
 			}
 		}
-		throw new IllegalArgumentException("Y coordinate outside of bounds.");
+		throw new IllegalArgumentException("Y coordinate out of bounds.");
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 				return crossSectionW;
 			}
 		}
-		throw new IllegalArgumentException("Y coordinate outside of bounds.");
+		throw new IllegalArgumentException("Y coordinate out of bounds.");
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 				return crossSectionW;
 			}
 		}
-		throw new IllegalArgumentException("Z coordinate outside of bounds.");
+		throw new IllegalArgumentException("Z coordinate out of bounds.");
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 				return crossSectionW;
 			}
 		}
-		throw new IllegalArgumentException("Z coordinate outside of bounds.");
+		throw new IllegalArgumentException("Z coordinate out of bounds.");
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 				}
 			}
 		}
-		throw new IllegalArgumentException("Coordinates outside of bounds.");
+		throw new IllegalArgumentException("Coordinates out of bounds.");
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 				}
 			}
 		}
-		throw new IllegalArgumentException("Coordinates outside of bounds.");
+		throw new IllegalArgumentException("Coordinates out of bounds.");
 	}
 
 	@Override

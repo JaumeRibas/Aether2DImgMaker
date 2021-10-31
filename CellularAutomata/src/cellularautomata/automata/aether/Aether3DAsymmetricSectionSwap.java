@@ -28,12 +28,12 @@ import org.apache.commons.io.FileUtils;
 
 import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.ActionableEvolvingGrid3D;
 import cellularautomata.grid3d.AnisotropicGrid3DA;
 import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
 import cellularautomata.grid3d.ImmutableLongGrid3D;
 import cellularautomata.grid3d.LongSubGrid3DWithXBounds;
 import cellularautomata.grid3d.SizeLimitedAnisotropicLongGrid3DBlock;
+import cellularautomata.model3d.ActionableModel3D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
@@ -41,7 +41,7 @@ import cellularautomata.grid3d.SizeLimitedAnisotropicLongGrid3DBlock;
  * @author Jaume
  *
  */
-public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<LongGrid3D> implements AnisotropicGrid3DA {
+public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D> implements AnisotropicGrid3DA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -56,7 +56,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 	private SizeLimitedAnisotropicLongGrid3DBlock gridBlockA;
 	private SizeLimitedAnisotropicLongGrid3DBlock gridBlockB;
 	private long initialValue;
-	private int currentStep;
+	private int step;
 	private int maxX;
 	private File gridFolder;
 	private File readWriteGridFolder;
@@ -82,8 +82,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 		}
 		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
 		maxX = 4;
-		currentStep = 0;
-		gridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		step = 0;
+		gridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			gridFolder.mkdirs();
 		} else {
@@ -114,7 +114,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 		if (maxX > gridBlockA.maxX) {
 			gridBlockB = loadGridBlock(gridBlockA.maxX + 1);
 		}
-		readWriteGridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		readWriteGridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
 	private SizeLimitedAnisotropicLongGrid3DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
@@ -265,7 +265,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 			gridBlockA.setSlice(currentMaxX + 1, newXSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
-		currentStep++;
+		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -2233,17 +2233,17 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 
 	@Override
 	public String getName() {
-		return "Aether3D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/asymmetric_section";
+	public String getSubfolderPath() {
+		return getName() + "/3D/" + initialValue + "/asymmetric_section";
 	}
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -2281,7 +2281,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 	private HashMap<String, Object> getPropertiesMap() {
 		HashMap<String, Object> properties = new HashMap<String, Object>();
 		properties.put("initialValue", initialValue);
-		properties.put("currentStep", currentStep);
+		properties.put("step", step);
 		properties.put("maxX", maxX);
 		properties.put("maxGridBlockSize", maxGridBlockSize);
 		return properties;
@@ -2289,7 +2289,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<Long
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (long) properties.get("initialValue");
-		currentStep = (int) properties.get("currentStep");
+		step = (int) properties.get("step");
 		maxX = (int) properties.get("maxX");
 		maxGridBlockSize = (long) properties.get("maxGridBlockSize");
 	}

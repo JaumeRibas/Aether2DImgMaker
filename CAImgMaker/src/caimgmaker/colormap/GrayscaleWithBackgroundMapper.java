@@ -81,4 +81,9 @@ public class GrayscaleWithBackgroundMapper implements ColorMapper {
 		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
 	}
 
+	@Override
+	public String getColormapName() {
+		return "Grayscale with exception (" + backgroundValue + "->" + backgroundColor + ")";
+	}
+
 }

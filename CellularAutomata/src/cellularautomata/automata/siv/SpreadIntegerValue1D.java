@@ -18,9 +18,11 @@ package cellularautomata.automata.siv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
-import cellularautomata.evolvinggrid1d.SymmetricEvolvingLongGrid1D;
+import cellularautomata.Utils;
 import cellularautomata.grid1d.IsotropicGrid1DA;
+import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 1D with a single source initial configuration
@@ -28,13 +30,18 @@ import cellularautomata.grid1d.IsotropicGrid1DA;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D, IsotropicGrid1DA {
+public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicGrid1DA, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3608064387299026181L;
 
 	private long[] grid;
 	
 	private long initialValue;
 	private long backgroundValue;
-	private long currentStep;
+	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundReached;
@@ -53,7 +60,23 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D, Isotro
 		grid[1] = backgroundValue;
 		grid[2] = backgroundValue;
 		boundReached = false;
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public SpreadIntegerValue1D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		SpreadIntegerValue1D data = (SpreadIntegerValue1D) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		backgroundValue = data.backgroundValue;
+		grid = data.grid;
+		step = data.step;
 	}
 	
 	@Override
@@ -110,7 +133,7 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D, Isotro
 			}
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -136,7 +159,7 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D, Isotro
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -154,16 +177,16 @@ public class SpreadIntegerValue1D implements SymmetricEvolvingLongGrid1D, Isotro
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue1D";
+		return "SpreadIntegerValue";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+	public String getSubfolderPath() {
+		return getName() + "/1D/" + initialValue + "/" + backgroundValue;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }

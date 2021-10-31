@@ -20,7 +20,6 @@ import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.grid.MinAndMax;
 import cellularautomata.grid.NumberGrid;
-import cellularautomata.grid2d.NumberGrid2D;
 import cellularautomata.grid3d.NumberGrid3D;
 
 public interface NumberGrid4D<T extends FieldElement<T> & Comparable<T>> extends ObjectGrid4D<T>, NumberGrid<T> {
@@ -163,13 +162,23 @@ public interface NumberGrid4D<T extends FieldElement<T> & Comparable<T>> extends
 	}
 	
 	@Override
-	default NumberGrid2D<T> crossSectionAtYZ(int y, int z) {
-		return new NumberGrid4DYZCrossSection<T, NumberGrid4D<T>>(this, y, z);
+	default NumberGrid4D<T> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new NumberSubGrid4D<T, NumberGrid4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
-	default NumberGrid4D<T> subGrid(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new NumberSubGrid4D<T, NumberGrid4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	default NumberGrid3D<T> crossSectionAtW(int w) {
+		return new NumberGrid4DWCrossSection<T, NumberGrid4D<T>>(this, w);
+	}
+	
+	@Override
+	default NumberGrid3D<T> crossSectionAtX(int x) {
+		return new NumberGrid4DXCrossSection<T, NumberGrid4D<T>>(this, x);
+	}
+	
+	@Override
+	default NumberGrid3D<T> crossSectionAtY(int y) {
+		return new NumberGrid4DYCrossSection<T, NumberGrid4D<T>>(this, y);
 	}
 	
 	@Override

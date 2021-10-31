@@ -25,7 +25,7 @@ public class SubGrid4DWithWBounds<G extends Grid4D> extends SubGrid4D<G> {
 		int sourceMinW = source.getMinW();
 		int sourceMaxW = source.getMaxW();
 		if (minW > sourceMaxW || maxW < sourceMinW) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			throw new IllegalArgumentException("Subsection is out of bounds.");
 		}
 		this.source = source;
 		this.minW = Math.max(minW, sourceMinW);

@@ -18,11 +18,13 @@ package cellularautomata.automata.nearaether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
+import cellularautomata.model2d.LongModel2D;
 
 /**
  * Asynchronous variation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton to test its abelianness
@@ -30,7 +32,12 @@ import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
  * @author Jaume
  *
  */
-public class AetherSequential2D implements EvolvingLongGrid2D {	
+public class AetherSequential2D implements LongModel2D, Serializable {	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -531595590796258827L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -44,7 +51,7 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 	private long[][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int xOriginIndex;
@@ -83,7 +90,29 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 		topplingPositionXIndex = 1;
 		topplingPositionYIndex = 1;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public AetherSequential2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		AetherSequential2D data = (AetherSequential2D) Utils.deserializeFromFile(backupPath);
+		grid = data.grid;
+		initialValue = data.initialValue;
+		step = data.step;
+		xOriginIndex = data.xOriginIndex;
+		yOriginIndex = data.yOriginIndex;
+		topplingPositionXIndex = data.topplingPositionXIndex;
+		topplingPositionYIndex = data.topplingPositionYIndex;
+		changed = data.changed;
+		boundsReached = data.boundsReached;
+		resizeGrid = data.resizeGrid;
 	}
 	
 	@Override
@@ -206,7 +235,7 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 		xOriginIndex += indexOffset;
 		yOriginIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return previousChanged;
 	}
@@ -282,7 +311,7 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -296,16 +325,17 @@ public class AetherSequential2D implements EvolvingLongGrid2D {
 
 	@Override
 	public String getName() {
-		return "Aether2D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/2D/" + initialValue;
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
+	
 }

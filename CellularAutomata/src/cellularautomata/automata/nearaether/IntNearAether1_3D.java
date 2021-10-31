@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.SymmetricEvolvingIntGrid3D;
 import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.model3d.SymmetricIntModel3D;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
@@ -30,7 +30,7 @@ import cellularautomata.grid3d.IsotropicGrid3DA;
  * @author Jaume
  *
  */
-public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, IsotropicGrid3DA, Serializable {
+public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA, Serializable {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;
@@ -51,7 +51,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, IsotropicG
 	private int[][][] grid;
 	
 	private int initialValue;
-	private long currentStep;
+	private long step;
 	
 	private int maxY;
 	private int maxZ;
@@ -76,7 +76,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, IsotropicG
 		maxY = 0;
 		maxZ = 0;
 		boundsReached = false;
-		currentStep = 0;
+		step = 0;
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, IsotropicG
 		maxZ = data.maxZ;
 		maxXMinusOne = data.maxXMinusOne;
 		boundsReached = data.boundsReached;
-		currentStep = data.currentStep;
+		step = data.step;
 	}
 	
 	@Override
@@ -206,7 +206,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, IsotropicG
 			}
 		}
 		grid = newGrid;
-		currentStep++;
+		step++;
 		return changed;
 	}
 	
@@ -368,7 +368,7 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, IsotropicG
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -382,12 +382,12 @@ public class IntNearAether1_3D implements SymmetricEvolvingIntGrid3D, IsotropicG
 
 	@Override
 	public String getName() {
-		return "NearAether3D";
+		return "NearAether1";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/3D/" + initialValue;
 	}
 	
 	@Override

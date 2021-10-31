@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.SymmetricEvolvingLongGrid3D;
 import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
@@ -30,7 +30,7 @@ import cellularautomata.grid3d.IsotropicGrid3DA;
  * @author Jaume
  *
  */
-public class Aether3D implements SymmetricEvolvingLongGrid3D, IsotropicGrid3DA, Serializable {
+public class Aether3D implements SymmetricLongModel3D, IsotropicGrid3DA, Serializable {
 	
 	//debug
 //	private static HashSet<Integer> coverage = new HashSet<Integer>();
@@ -2077,12 +2077,12 @@ public class Aether3D implements SymmetricEvolvingLongGrid3D, IsotropicGrid3DA, 
 
 	@Override
 	public String getName() {
-		return "Aether3D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/3D/" + initialValue;
 	}
 	
 }

@@ -33,7 +33,7 @@ public class SubGrid2D<G extends Grid2D> implements Grid2D {
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX, minY, maxY)) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			throw new IllegalArgumentException("Subsection is out of bounds.");
 		}
 	}
 	

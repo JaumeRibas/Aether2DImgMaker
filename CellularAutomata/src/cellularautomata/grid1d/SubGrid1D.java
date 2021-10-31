@@ -28,7 +28,7 @@ public class SubGrid1D<G extends Grid1D> implements Grid1D {
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX)) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			throw new IllegalArgumentException("Subsection is out of bounds.");
 		}
 	}
 	

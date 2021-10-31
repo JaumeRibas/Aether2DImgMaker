@@ -27,13 +27,13 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid5d.ActionableEvolvingGrid5D;
 import cellularautomata.grid5d.AnisotropicGrid5DA;
 import cellularautomata.grid5d.AnisotropicIntGrid5DSlice;
 import cellularautomata.grid5d.ImmutableIntGrid5D;
 import cellularautomata.grid5d.IntGrid5D;
 import cellularautomata.grid5d.IntSubGrid5DWithVBounds;
 import cellularautomata.grid5d.SizeLimitedAnisotropicIntGrid5DBlock;
+import cellularautomata.model5d.ActionableModel5D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D with a single source initial configuration
@@ -41,7 +41,7 @@ import cellularautomata.grid5d.SizeLimitedAnisotropicIntGrid5DBlock;
  * @author Jaume
  *
  */
-public class IntAether5DAsymmetricSectionSwap extends ActionableEvolvingGrid5D<IntGrid5D> implements AnisotropicGrid5DA {
+public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntGrid5D> implements AnisotropicGrid5DA {
 
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -477218589;
@@ -83,7 +83,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableEvolvingGrid5D<I
 		gridBlockA.setValueAtPosition(0, 0, 0, 0, 0, initialValue);
 		maxV = 6;
 		step = 0;
-		gridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		gridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			gridFolder.mkdirs();
 		} else {
@@ -114,7 +114,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableEvolvingGrid5D<I
 		if (maxV > gridBlockA.maxV) {
 			gridBlockB = loadGridBlock(gridBlockA.maxV + 1);
 		}
-		readWriteGridFolder = new File(folderPath + File.separator + getSubFolderPath() + File.separator + GRID_FOLDER_NAME);
+		readWriteGridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
 	private SizeLimitedAnisotropicIntGrid5DBlock loadGridBlockSafe(int minV) throws IOException, ClassNotFoundException {
@@ -10808,12 +10808,12 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableEvolvingGrid5D<I
 
 	@Override
 	public String getName() {
-		return "Aether5D";
+		return "Aether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/asymmetric_section";
+	public String getSubfolderPath() {
+		return getName() + "/5D/" + initialValue + "/asymmetric_section";
 	}
 
 	@Override

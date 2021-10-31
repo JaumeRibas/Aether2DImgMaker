@@ -73,7 +73,7 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	}
 	
 	@Override
-	default LongGrid1D subGrid(int minX, int maxX) {
+	default LongGrid1D subsection(int minX, int maxX) {
 		return new LongSubGrid1D<LongGrid1D>(this, minX, maxX);
 	}
 }

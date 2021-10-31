@@ -104,4 +104,9 @@ public class GrayscaleMapper implements ColorMapper {
 		return new ColorMappedIntGrid2D(grid, colorMap);
 	}
 
+	@Override
+	public String getColormapName() {
+		return "Grayscale";
+	}
+
 }

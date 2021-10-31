@@ -16,7 +16,9 @@
  */
 package cellularautomata.grid5d;
 
-public interface SymmetricGrid5D extends Grid5D {
+import cellularautomata.grid.SymmetricGrid;
+
+public interface SymmetricGrid5D extends Grid5D, SymmetricGrid {
 	
 	int getAsymmetricMinV();
 
@@ -338,11 +340,7 @@ public interface SymmetricGrid5D extends Grid5D {
 
 	int getAsymmetricMaxZ(int v, int w, int x, int y);
 	
-	/**
-	 * Returns an asymmetric section of the grid
-	 * 
-	 * @return a 5D grid
-	 */
+	@Override
 	default Grid5D asymmetricSection() {
 		return new AsymmetricGridSection5D<SymmetricGrid5D>(this);
 	}

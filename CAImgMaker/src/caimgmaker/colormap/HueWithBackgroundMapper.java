@@ -86,4 +86,9 @@ public class HueWithBackgroundMapper implements ColorMapper {
 		return new Color(Color.HSBtoRGB(hue, 1, 1));
 	}
 
+	@Override
+	public String getColormapName() {
+		return "Hue colormap with exception (" + backgroundValue + "->" + backgroundColor + ")";
+	}
+
 }

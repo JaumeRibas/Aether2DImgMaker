@@ -101,8 +101,18 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid3D subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default IntGrid3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new IntSubGrid3D<IntGrid3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default IntGrid2D crossSectionAtX(int x) {
+		return new IntGrid3DXCrossSection<IntGrid3D>(this, x);
+	}
+	
+	@Override
+	default IntGrid2D crossSectionAtY(int y) {
+		return new IntGrid3DYCrossSection<IntGrid3D>(this, y);
 	}
 	
 	@Override
@@ -111,8 +121,18 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid2D crossSectionAtX(int x) {
-		return new IntGrid3DXCrossSection<IntGrid3D>(this, x);
+	default IntGrid2D diagonalCrossSectionOnXY(int yOffsetFromX) {
+		return new IntGrid3DXYDiagonalCrossSection<IntGrid3D>(this, yOffsetFromX);
+	}
+	
+	@Override
+	default IntGrid2D diagonalCrossSectionOnXZ(int zOffsetFromX) {
+		return new IntGrid3DXZDiagonalCrossSection<IntGrid3D>(this, zOffsetFromX);
+	}
+	
+	@Override
+	default IntGrid2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new IntGrid3DYZDiagonalCrossSection<IntGrid3D>(this, zOffsetFromY);
 	}
 	
 }

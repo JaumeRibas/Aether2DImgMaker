@@ -17,8 +17,6 @@
 package cellularautomata.grid5d;
 
 import cellularautomata.grid.LongGrid;
-import cellularautomata.grid2d.LongGrid2D;
-import cellularautomata.grid3d.LongGrid3D;
 
 public interface LongGrid5D extends Grid5D, LongGrid {
 	
@@ -126,18 +124,9 @@ public interface LongGrid5D extends Grid5D, LongGrid {
 		return total;
 	}
 	
-	@Override
-	default LongGrid2D crossSectionAtXYZ(int x, int y, int z) {
-		return new LongGrid5DXYZCrossSection<LongGrid5D>(this, x, y, z);
-	}
-	
 //	@Override
-//	default LongGrid5D subGrid(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+//	default LongGrid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 //		return new LongSubGrid5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 //	}
-	
-	@Override
-	default LongGrid3D crossSectionAtYZ(int y, int z) {
-		return new LongGrid5DYZCrossSection<LongGrid5D>(this, y, z);
-	}
+
 }

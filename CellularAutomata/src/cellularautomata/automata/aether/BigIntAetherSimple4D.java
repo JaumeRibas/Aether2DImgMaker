@@ -18,11 +18,13 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Constants;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid4d.EvolvingNumberGrid4D;
+import cellularautomata.model4d.NumericModel4D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -31,7 +33,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAetherSimple4D implements EvolvingNumberGrid4D<BigInt> {	
+public class BigIntAetherSimple4D implements NumericModel4D<BigInt> {	
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;
@@ -46,13 +48,17 @@ public class BigIntAetherSimple4D implements EvolvingNumberGrid4D<BigInt> {
 	private BigInt[][][][] grid;
 	
 	private BigInt initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
 	
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
+	/**
+	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 */
+	private String creationTimestamp;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -76,7 +82,8 @@ public class BigIntAetherSimple4D implements EvolvingNumberGrid4D<BigInt> {
 		grid[originIndex][originIndex][originIndex][originIndex] = this.initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
+		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
 	}
 	
 	@Override
@@ -213,7 +220,7 @@ public class BigIntAetherSimple4D implements EvolvingNumberGrid4D<BigInt> {
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -375,7 +382,7 @@ public class BigIntAetherSimple4D implements EvolvingNumberGrid4D<BigInt> {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -389,12 +396,15 @@ public class BigIntAetherSimple4D implements EvolvingNumberGrid4D<BigInt> {
 
 	@Override
 	public String getName() {
-		return "Aether4D";
+		return "Aether";
 	}
-
+	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = creationTimestamp;
+		return getName() + "/4D/" + strInitialValue;
 	}
 	
 	@Override

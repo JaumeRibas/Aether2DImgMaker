@@ -26,14 +26,15 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
+import cellularautomata.Constants;
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid4d.ActionableEvolvingGrid4D;
 import cellularautomata.grid4d.AnisotropicBigIntGrid4DSlice;
 import cellularautomata.grid4d.AnisotropicGrid4DA;
 import cellularautomata.grid4d.ImmutableNumberGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
 import cellularautomata.grid4d.NumberSubGrid4DWithWBounds;
 import cellularautomata.grid4d.SizeLimitedAnisotropicBigIntGrid4DBlock;
+import cellularautomata.model4d.ActionableModel4D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -42,7 +43,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4D<NumberGrid4D<BigInt>> implements AnisotropicGrid4DA {
+public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<NumberGrid4D<BigInt>> implements AnisotropicGrid4DA {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -63,10 +64,14 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4
 	private SizeLimitedAnisotropicBigIntGrid4DBlock gridBlockA;
 	private SizeLimitedAnisotropicBigIntGrid4DBlock gridBlockB;
 	private BigInt initialValue;
-	private int currentStep;
+	private int step;
 	private int maxW, maxX, maxY, maxZ;
 	private File gridFolder;
 	private int gridBlockSide;
+	/**
+	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 */
+	private String creationTimestamp;
 	
 	/**
 	 * 
@@ -84,7 +89,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4
 		maxX = 0;
 		maxY = 0;
 		maxZ = 0;
-		currentStep = 0;
+		step = 0;
 		gridFolder = new File(folderPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			gridFolder.mkdirs();
@@ -248,7 +253,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4
 			gridBlockA.setSlice(currentMaxW + 1, newGridSlices[2]);
 			processGridBlock(gridBlockA);
 		}
-		currentStep++;
+		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -605,17 +610,20 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4
 
 	@Override
 	public String getName() {
-		return "Aether4D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = creationTimestamp;
+		return getName() + "/4D/" + strInitialValue + "/asymmetric_section";
 	}
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -651,23 +659,25 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableEvolvingGrid4
 	private HashMap<String, Object> getPropertiesMap() {
 		HashMap<String, Object> properties = new HashMap<String, Object>();
 		properties.put("initialValue", initialValue);
-		properties.put("currentStep", currentStep);
+		properties.put("step", step);
 		properties.put("maxW", maxW);
 		properties.put("maxX", maxX);
 		properties.put("maxY", maxY);
 		properties.put("maxZ", maxZ);
 		properties.put("gridBlockSide", gridBlockSide);
+		properties.put("creationTimestamp", creationTimestamp);
 		return properties;
 	}
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (BigInt) properties.get("initialValue");
-		currentStep = (int) properties.get("currentStep");
+		step = (int) properties.get("step");
 		maxW = (int) properties.get("maxW"); 
 		maxX = (int) properties.get("maxX"); 
 		maxY = (int) properties.get("maxY"); 
 		maxZ = (int) properties.get("maxZ");
 		gridBlockSide = (int) properties.get("gridBlockSide");
+		creationTimestamp = (String) properties.get("creationTimestamp");
 	}
 	
 	private int[] getAsymmetricCoords(int w, int x, int y, int z) {

@@ -26,7 +26,7 @@ public class LongGrid3DXYDiagonalCrossSection<G extends LongGrid3D> extends Grid
 
 	@Override
 	public long getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(x, x + yOffsetFromX, y);
+		return source.getFromPosition(y, y + yOffsetFromX, x);
 	}
 
 }

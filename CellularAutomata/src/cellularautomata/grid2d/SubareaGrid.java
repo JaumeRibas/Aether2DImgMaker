@@ -40,7 +40,7 @@ public class SubareaGrid<G extends Grid2D> implements Grid2D {
 		int maxX = minX + subareaWidth - 1;
 		int minY = y * subareaHeight;
 		int maxY = minY + subareaHeight - 1;
-		return (G) baseGrid.subGrid(minX, maxX, minY, maxY);
+		return (G) baseGrid.subsection(minX, maxX, minY, maxY);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class SubareaGrid<G extends Grid2D> implements Grid2D {
 	}
 
 	@Override
-	public G subGrid(int minX, int maxX, int minY, int maxY) {
+	public G subsection(int minX, int maxX, int minY, int maxY) {
 		throw new UnsupportedOperationException();
 	}
 

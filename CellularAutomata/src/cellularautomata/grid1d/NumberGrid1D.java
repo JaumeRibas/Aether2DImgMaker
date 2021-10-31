@@ -73,7 +73,7 @@ public interface NumberGrid1D<T extends FieldElement<T> & Comparable<T>> extends
 	}
 	
 	@Override
-	default NumberGrid1D<T> subGrid(int minX, int maxX) {
+	default NumberGrid1D<T> subsection(int minX, int maxX) {
 		return new NumberSubGrid1D<T, NumberGrid1D<T>>(this, minX, maxX);
 	}
 }

@@ -23,17 +23,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
+import cellularautomata.Constants;
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.ActionableEvolvingGrid3D;
 import cellularautomata.grid3d.AnisotropicBigIntGrid3DSlice;
 import cellularautomata.grid3d.AnisotropicGrid3DA;
 import cellularautomata.grid3d.ImmutableNumberGrid3D;
 import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid3d.NumberSubGrid3DWithXBounds;
 import cellularautomata.grid3d.SizeLimitedAnisotropicBigIntGrid3DBlock;
+import cellularautomata.model3d.ActionableModel3D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -42,7 +44,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3D<NumberGrid3D<BigInt>> implements AnisotropicGrid3DA {
+public class BigIntAether3DAsymmetricSectionSwap extends ActionableModel3D<NumberGrid3D<BigInt>> implements AnisotropicGrid3DA {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -60,10 +62,14 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 	private SizeLimitedAnisotropicBigIntGrid3DBlock gridBlockA;
 	private SizeLimitedAnisotropicBigIntGrid3DBlock gridBlockB;
 	private BigInt initialValue;
-	private int currentStep;
+	private int step;
 	private int maxX;
 	private File gridFolder;
 	private int gridBlockSide;
+	/**
+	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 */
+	private String creationTimestamp;
 	
 	/**
 	 * 
@@ -81,7 +87,8 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 		gridBlockA = new SizeLimitedAnisotropicBigIntGrid3DBlock(0, gridBlockSide);
 		gridBlockA.setValueAtPosition(0, 0, 0, initialValue);
 		maxX = 4;
-		currentStep = 0;
+		step = 0;
+		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
 		gridFolder = new File(folderPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			gridFolder.mkdirs();
@@ -262,7 +269,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 			gridBlockA.setSlice(currentMaxX + 1, newXSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
-		currentStep++;
+		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -2276,17 +2283,20 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 
 	@Override
 	public String getName() {
-		return "Aether3D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/asymmetric_section";
+	public String getSubfolderPath() {
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = creationTimestamp;
+		return getName() + "/3D/" + strInitialValue + "/asymmetric_section";
 	}
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -2322,17 +2332,19 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableEvolvingGrid3
 	private HashMap<String, Object> getPropertiesMap() {
 		HashMap<String, Object> properties = new HashMap<String, Object>();
 		properties.put("initialValue", initialValue);
-		properties.put("currentStep", currentStep);
+		properties.put("step", step);
 		properties.put("maxX", maxX);
 		properties.put("gridBlockSide", gridBlockSide);
+		properties.put("creationTimestamp", creationTimestamp);
 		return properties;
 	}
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (BigInt) properties.get("initialValue");
-		currentStep = (int) properties.get("currentStep");
+		step = (int) properties.get("step");
 		maxX = (int) properties.get("maxX");
 		gridBlockSide = (int) properties.get("gridBlockSide");
+		creationTimestamp = (String) properties.get("creationTimestamp");
 	}
 
 	@Override

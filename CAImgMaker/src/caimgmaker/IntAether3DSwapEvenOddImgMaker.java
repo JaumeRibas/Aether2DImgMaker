@@ -83,7 +83,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 				finished = !ca.nextStep();
 				System.out.println("step: " + ca.getStep());
 			}
-			path += ca.getSubFolderPath();
+			path += ca.getSubfolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = null;
 			if (isBackupLeapDefined) {
@@ -93,10 +93,10 @@ public class IntAether3DSwapEvenOddImgMaker {
 			}
 			final int crossSectionZ = 0;
 			if (isScanInitialXIndexDefined) {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, scanXInitialIndex, crossSectionZ, colorMapper, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, scanXInitialIndex, crossSectionZ, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, crossSectionZ, colorMapper, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, crossSectionZ, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}	
 		}		

@@ -18,9 +18,10 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
+import cellularautomata.model3d.LongModel3D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
@@ -28,7 +29,12 @@ import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
  * @author Jaume
  *
  */
-public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
+public class Aether3DEnclosed2 implements LongModel3D, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7567346581581646585L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -37,7 +43,7 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 	private long[][][] grid;
 	
 	private long singleSourceValue;
-	private long currentStep;
+	private long step;
 	private int xSide;
 	private int ySide;
 	private int zSide;
@@ -70,7 +76,31 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 		this.singleSourceY = singleSourceY;
 		this.singleSourceZ = singleSourceZ;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public Aether3DEnclosed2(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Aether3DEnclosed2 data = (Aether3DEnclosed2) Utils.deserializeFromFile(backupPath);
+		grid = data.grid;
+		singleSourceValue = data.singleSourceValue;
+		step = data.step;
+		xSide = data.xSide;
+		ySide = data.ySide;
+		zSide = data.zSide;
+		xSideMinusOne = data.xSideMinusOne;
+		ySideMinusOne = data.ySideMinusOne;
+		zSideMinusOne = data.zSideMinusOne;
+		singleSourceX = data.singleSourceX;
+		singleSourceY = data.singleSourceY;
+		singleSourceZ = data.singleSourceZ;
 	}
 	
 	@Override
@@ -209,7 +239,7 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 		//Replace the old array with the new one
 		grid = newGrid;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -251,7 +281,7 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -262,21 +292,21 @@ public class Aether3DEnclosed2 implements EvolvingLongGrid3D {
 	public long getInitialValue() {
 		return singleSourceValue;
 	}
-	
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
-	}
 
 	@Override
 	public String getName() {
-		return "Aether3DEnclosed";
+		return "Aether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + xSide + "x" + ySide + "x" + zSide 
+	public String getSubfolderPath() {
+		return getName() + "/3D/enclosed/" + xSide + "x" + ySide + "x" + zSide 
 				+ "/(" + singleSourceX + "," + singleSourceY + "," + singleSourceZ + ")=" + singleSourceValue;
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 
 }

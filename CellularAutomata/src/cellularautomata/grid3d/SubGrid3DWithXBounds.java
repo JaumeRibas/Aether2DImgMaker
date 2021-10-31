@@ -25,7 +25,7 @@ public class SubGrid3DWithXBounds<G extends Grid3D> extends SubGrid3D<G> {
 		int sourceMinX = source.getMinX();
 		int sourceMaxX = source.getMaxX();
 		if (minX > sourceMaxX || maxX < sourceMinX) {
-			throw new IllegalArgumentException("Sub-grid bounds outside of grid bounds.");
+			throw new IllegalArgumentException("Subsection is out of bounds.");
 		}
 		this.source = source;
 		this.minX = Math.max(minX, sourceMinX);

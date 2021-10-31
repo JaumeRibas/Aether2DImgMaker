@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
+import cellularautomata.model2d.LongModel2D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +30,7 @@ import cellularautomata.evolvinggrid2d.EvolvingLongGrid2D;
  * @author Jaume
  *
  */
-public class AetherSimple2D implements EvolvingLongGrid2D {	
+public class AetherSimple2D implements LongModel2D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -44,7 +44,7 @@ public class AetherSimple2D implements EvolvingLongGrid2D {
 	private long[][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int xOriginIndex;
@@ -71,7 +71,7 @@ public class AetherSimple2D implements EvolvingLongGrid2D {
 		grid[xOriginIndex][yOriginIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -173,7 +173,7 @@ public class AetherSimple2D implements EvolvingLongGrid2D {
 		xOriginIndex += indexOffset;
 		yOriginIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -269,7 +269,7 @@ public class AetherSimple2D implements EvolvingLongGrid2D {
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -283,12 +283,12 @@ public class AetherSimple2D implements EvolvingLongGrid2D {
 
 	@Override
 	public String getName() {
-		return "Aether2D";
+		return "Aether";
 	}
 	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/2D/" + initialValue;
 	}
 
 	@Override

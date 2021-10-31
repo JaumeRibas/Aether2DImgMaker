@@ -110,7 +110,7 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	}
 	
 	@Override
-	default IntGrid2D subGrid(int minX, int maxX, int minY, int maxY) {
+	default IntGrid2D subsection(int minX, int maxX, int minY, int maxY) {
 		return new IntSubGrid2D<IntGrid2D>(this, minX, maxX, minY, maxY);
 	}
 

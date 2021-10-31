@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
+import cellularautomata.model5d.LongModel5D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +30,7 @@ import cellularautomata.evolvinggrid5d.EvolvingLongGrid5D;
  * @author Jaume
  *
  */
-public class AetherSimple5D implements EvolvingLongGrid5D {	
+public class AetherSimple5D implements LongModel5D {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -50,7 +50,7 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 	private long[][][][][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -74,7 +74,7 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 		grid[originIndex][originIndex][originIndex][originIndex][originIndex] = this.initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -210,7 +210,7 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -404,7 +404,7 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -418,12 +418,12 @@ public class AetherSimple5D implements EvolvingLongGrid5D {
 
 	@Override
 	public String getName() {
-		return "Aether5D";
+		return "Aether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/5D/" + initialValue;
 	}
 	
 	@Override

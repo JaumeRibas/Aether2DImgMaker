@@ -19,10 +19,12 @@ package cellularautomata.automata.aether;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
+import cellularautomata.Constants;
 import cellularautomata.Utils;
-import cellularautomata.evolvinggrid4d.SymmetricEvolvingNumberGrid4D;
 import cellularautomata.grid4d.IsotropicGrid4DA;
+import cellularautomata.model4d.SymmetricNumericModel4D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -31,7 +33,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, IsotropicGrid4DA, Serializable {
+public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicGrid4DA, Serializable {
 
 	/**
 	 * 
@@ -50,6 +52,10 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 	private BigInt initialValue;
 	private long step;
 	private int maxW;
+	/**
+	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 */
+	private String creationTimestamp;
 
 	/**
 	 * Creates an instance with the given initial value
@@ -62,6 +68,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 		grid[0][0][0][0] = this.initialValue;
 		maxW = 5;
 		step = 0;
+		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
 	}
 
 	/**
@@ -78,6 +85,7 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 		grid = data.grid;
 		maxW = data.maxW;
 		step = data.step;
+		creationTimestamp = data.creationTimestamp;
 	}
 
 	@Override
@@ -4217,12 +4225,15 @@ public class BigIntAether4D implements SymmetricEvolvingNumberGrid4D<BigInt>, Is
 
 	@Override
 	public String getName() {
-		return "Aether4D";
+		return "Aether";
 	}
-
+	
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = creationTimestamp;
+		return getName() + "/4D/" + strInitialValue;
 	}
 
 }

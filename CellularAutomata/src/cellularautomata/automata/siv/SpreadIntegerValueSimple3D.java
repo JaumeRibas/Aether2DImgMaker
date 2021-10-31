@@ -19,7 +19,7 @@ package cellularautomata.automata.siv;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
+import cellularautomata.model3d.LongModel3D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 3D, with a single source initial configuration, for review and testing purposes
@@ -27,14 +27,14 @@ import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple3D implements EvolvingLongGrid3D {
+public class SpreadIntegerValueSimple3D implements LongModel3D {
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
 	
 	private long initialValue;
 	private long backgroundValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -67,7 +67,7 @@ public class SpreadIntegerValueSimple3D implements EvolvingLongGrid3D {
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -192,7 +192,7 @@ public class SpreadIntegerValueSimple3D implements EvolvingLongGrid3D {
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -286,7 +286,7 @@ public class SpreadIntegerValueSimple3D implements EvolvingLongGrid3D {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -357,11 +357,11 @@ public class SpreadIntegerValueSimple3D implements EvolvingLongGrid3D {
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue3D";
+		return "SpreadIntegerValue";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+	public String getSubfolderPath() {
+		return getName() + "/3D/" + initialValue + "/" + backgroundValue;
 	}
 }

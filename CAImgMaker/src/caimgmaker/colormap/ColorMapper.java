@@ -32,18 +32,11 @@ public interface ColorMapper {
 	
 	public abstract ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue);
 	
-//	/**
-//	 * Return the color mapper's name in a format that can be used in file names
-//	 * 
-//	 * @return the name
-//	 */
-//	public abstract String getName();
-//	
-//	/**
-//	 * Return the color mapper's name and configuration as a folder and sub-folder(s) path.
-//	 * For example: "<Name>/<backgroundValue>/<backgroundColor>"
-//	 * 
-//	 * @return the path
-//	 */
-//	public abstract String getSubFolderPath();
+	/**
+	 * Return the colormap's name in a format that can be used in file names
+	 * 
+	 * @return the name
+	 */
+	public abstract String getColormapName();
+	
 }

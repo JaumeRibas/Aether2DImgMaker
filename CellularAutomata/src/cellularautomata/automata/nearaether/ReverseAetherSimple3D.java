@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
+import cellularautomata.model3d.LongModel3D;
 
 /**
  * Implementation of a CA that behaves the same way as the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton, but with opposite values.
@@ -30,7 +30,7 @@ import cellularautomata.evolvinggrid3d.EvolvingLongGrid3D;
  * @author Jaume
  *
  */
-public class ReverseAetherSimple3D implements EvolvingLongGrid3D {	
+public class ReverseAetherSimple3D implements LongModel3D {	
 	
 	public static final long MAX_INITIAL_VALUE = 3689348814741910323L;
 	public static final long MIN_INITIAL_VALUE = Long.MIN_VALUE;
@@ -46,7 +46,7 @@ public class ReverseAetherSimple3D implements EvolvingLongGrid3D {
 	private long[][][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -72,7 +72,7 @@ public class ReverseAetherSimple3D implements EvolvingLongGrid3D {
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -181,7 +181,7 @@ public class ReverseAetherSimple3D implements EvolvingLongGrid3D {
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -310,7 +310,7 @@ public class ReverseAetherSimple3D implements EvolvingLongGrid3D {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -329,11 +329,11 @@ public class ReverseAetherSimple3D implements EvolvingLongGrid3D {
 
 	@Override
 	public String getName() {
-		return "ReverseAether3D";
+		return "ReverseAether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/3D/" + initialValue;
 	}
 }

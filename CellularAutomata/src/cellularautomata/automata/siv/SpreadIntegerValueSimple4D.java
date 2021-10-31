@@ -19,7 +19,7 @@ package cellularautomata.automata.siv;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
+import cellularautomata.model4d.LongModel4D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
@@ -27,13 +27,13 @@ import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple4D implements EvolvingLongGrid4D {	
+public class SpreadIntegerValueSimple4D implements LongModel4D {	
 	
 	private long[][][][] grid;
 	
 	private long initialValue;
 	private long backgroundValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -67,7 +67,7 @@ public class SpreadIntegerValueSimple4D implements EvolvingLongGrid4D {
 		grid[originIndex][originIndex][originIndex][originIndex] = this.initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -217,7 +217,7 @@ public class SpreadIntegerValueSimple4D implements EvolvingLongGrid4D {
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -338,7 +338,7 @@ public class SpreadIntegerValueSimple4D implements EvolvingLongGrid4D {
 
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -436,12 +436,12 @@ public class SpreadIntegerValueSimple4D implements EvolvingLongGrid4D {
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue4D";
+		return "SpreadIntegerValue";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue + "/" + backgroundValue;
+	public String getSubfolderPath() {
+		return getName() + "/4D/" + initialValue + "/" + backgroundValue;
 	}
 	
 	@Override

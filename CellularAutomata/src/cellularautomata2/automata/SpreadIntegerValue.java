@@ -239,7 +239,7 @@ public class SpreadIntegerValue extends SymmetricIntGridRegion implements Cellul
 	}
 
 	@Override
-	public String getSubFolderPath() {
+	public String getSubfolderPath() {
 		return getName() + "/" + grid.getDimension() + "/" + initialValue + "/" + backgroundValue;
 	}
 

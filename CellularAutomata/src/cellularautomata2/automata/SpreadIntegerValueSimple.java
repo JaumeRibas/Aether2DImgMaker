@@ -233,7 +233,7 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 	}
 
 	@Override
-	public String getSubFolderPath() {
+	public String getSubfolderPath() {
 		return getName() + "/" + gridDimension + "/" + initialValue + "/" + backgroundValue;
 	}
 

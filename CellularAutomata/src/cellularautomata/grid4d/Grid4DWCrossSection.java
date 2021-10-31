@@ -26,7 +26,7 @@ public class Grid4DWCrossSection<G extends Grid4D> implements Grid3D {
 	
 	public Grid4DWCrossSection(G source, int w) {
 		if (w > source.getMaxW() || w < source.getMinW()) {
-			throw new IllegalArgumentException("W coordinate outside of grid bounds.");
+			throw new IllegalArgumentException("W coordinate is out of bounds.");
 		}
 		this.source = source;
 		this.w = w;

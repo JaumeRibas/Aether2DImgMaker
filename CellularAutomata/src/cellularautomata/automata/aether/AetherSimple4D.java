@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
+import cellularautomata.model4d.LongModel4D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +30,7 @@ import cellularautomata.evolvinggrid4d.EvolvingLongGrid4D;
  * @author Jaume
  *
  */
-public class AetherSimple4D implements EvolvingLongGrid4D {	
+public class AetherSimple4D implements LongModel4D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
@@ -48,7 +48,7 @@ public class AetherSimple4D implements EvolvingLongGrid4D {
 	private long[][][][] grid;
 	
 	private long initialValue;
-	private long currentStep;
+	private long step;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -72,7 +72,7 @@ public class AetherSimple4D implements EvolvingLongGrid4D {
 		grid[originIndex][originIndex][originIndex][originIndex] = this.initialValue;
 		boundsReached = false;
 		//Set the current step to zero
-		currentStep = 0;
+		step = 0;
 	}
 	
 	@Override
@@ -194,7 +194,7 @@ public class AetherSimple4D implements EvolvingLongGrid4D {
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
-		currentStep++;
+		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -356,7 +356,7 @@ public class AetherSimple4D implements EvolvingLongGrid4D {
 	
 	@Override
 	public long getStep() {
-		return currentStep;
+		return step;
 	}
 	
 	/**
@@ -370,12 +370,12 @@ public class AetherSimple4D implements EvolvingLongGrid4D {
 
 	@Override
 	public String getName() {
-		return "Aether4D";
+		return "Aether";
 	}
 
 	@Override
-	public String getSubFolderPath() {
-		return getName() + "/" + initialValue;
+	public String getSubfolderPath() {
+		return getName() + "/4D/" + initialValue;
 	}
 	
 	@Override

@@ -133,8 +133,18 @@ public interface NumberGrid3D<T extends FieldElement<T> & Comparable<T>> extends
 	}
 	
 	@Override
-	default NumberGrid3D<T> subGrid(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default NumberGrid3D<T> subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new NumberSubGrid3D<T, NumberGrid3D<T>>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default NumberGrid2D<T> crossSectionAtX(int x) {
+		return new NumberGrid3DXCrossSection<T, NumberGrid3D<T>>(this, x);
+	}
+	
+	@Override
+	default NumberGrid2D<T> crossSectionAtY(int y) {
+		return new NumberGrid3DYCrossSection<T, NumberGrid3D<T>>(this, y);
 	}
 	
 	@Override
@@ -143,8 +153,18 @@ public interface NumberGrid3D<T extends FieldElement<T> & Comparable<T>> extends
 	}
 	
 	@Override
-	default NumberGrid2D<T> crossSectionAtX(int x) {
-		return new NumberGrid3DXCrossSection<T, NumberGrid3D<T>>(this, x);
+	default NumberGrid2D<T> diagonalCrossSectionOnXY(int yOffsetFromX) {
+		return new NumberGrid3DXYDiagonalCrossSection<T, NumberGrid3D<T>>(this, yOffsetFromX);
+	}
+	
+	@Override
+	default NumberGrid2D<T> diagonalCrossSectionOnXZ(int zOffsetFromX) {
+		return new NumberGrid3DXZDiagonalCrossSection<T, NumberGrid3D<T>>(this, zOffsetFromX);
+	}
+	
+	@Override
+	default NumberGrid2D<T> diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new NumberGrid3DYZDiagonalCrossSection<T, NumberGrid3D<T>>(this, zOffsetFromY);
 	}
 
 }
