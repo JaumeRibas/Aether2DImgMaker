@@ -30,7 +30,7 @@ public class Args {
 	@Parameter(names = { "-model" }, description = "The model to generate images from. The currently available models are: 'Aether', 'Spread_Integer_Value' and 'Abelian_sandpile'.")
     public String model = "Aether";
 	
-	@Parameter(names = { "-grid" }, validateWith = GridValidator.class, converter = GridConverter.class, description = "The type of grid to use. Currently, the only available type is: '{dimension}d_{side}', where {dimension} is a positive integer and {side} is either 'infinite' (for an infinite grid) or a positive integer (for a finite grid shaped as an hypercube of this side) (e.g. '2d_infinite').")
+	@Parameter(names = { "-grid" }, validateWith = GridValidator.class, converter = GridConverter.class, description = "The type of grid to use. Currently, the only available type is: '{dimension}d_{side}', where {dimension} is a positive integer and {side} is either 'infinite' (for an infinite grid) or a positive integer (for a finite grid shaped as a hypercube of this side) (e.g. '2d_infinite').")
     public GridOptionValue grid = null;
 
 	@Parameter(names = { "-initial-config" }, validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class, description = "The initial configuration. The currently available configurations are: 'single-source_{value}', for a single source initial configuration (e.g. 'single-source_-1000'), and 'random-region_{side}_{min}_{max}', for an initial configuration consisting of an hypercubic region of side {side} filled with random values ranging form {min} to {max} (e.g. 'random-region_250_-45_60'). Note that outside this region the value will be zero.")
