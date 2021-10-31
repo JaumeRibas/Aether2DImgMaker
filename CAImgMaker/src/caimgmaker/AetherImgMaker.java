@@ -75,7 +75,7 @@ public class AetherImgMaker {
 	private static final String singleSourceOutOfRangeMessageFormat = "The single source value is out of the currently supported range for this model: [%d, %d].%n";
 	private static final String minAndMaxOutOfRangeMessageFormat = "The min/max values are out of the currently supported range for this model: [%d, %d].%n";
 	private static final String initialConfigNeededMessageFormat = "The %s model needs and initial configuration.%n";
-	private static final String unsupportedDimensionCount = "Currently it is only supported to generate images from a model section with dimension two or three. Use any of the coordinate options (-v -w -x -y -z) or a -grid with two or three dimenisons.";
+	private static final String unsupportedDimensionCount = "Currently it is only supported to generate images from a model section with dimension two or three. Use any of the coordinate options (-v -w -x -y -z) or a -grid with two or three dimensions.";
 	private static final String unknownImgGenMode = "Unrecognized image generation mode.";
 	private static final String unsupportedModelSectionMessageFormat = "It is currently not supported to generate images form a model section of type %s.%n";
 
