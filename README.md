@@ -11,7 +11,7 @@ To run this app you need to have Java (version 8 or higher) installed.
 
 ## How to run
 
-To run the app open a terminal and use `java -jar`. For instance, if the .jar file is in the current directory, use `java -jar AetherImgMaker.jar [options]`, where `[options]` is a space separated list the options and values to use. Option names are prefixed with a hyphen, e.g. `-help`. Most options require a value that must come right after the option name, e.g. `-colormap grayscale`. Use the `-help` option to view a list of available options and their accepted values. The `Ctrl`+`C` keyboard shortcut can be used to halt the execution.
+To run the app open a terminal and use `java -jar`. For instance, if the .jar file is in the current directory, use `java -jar AetherImgMaker.jar [options]`, where `[options]` is a space separated list of the options and values to use. Option names are prefixed with a hyphen, e.g. `-help`. Most options require a value that must come right after the option name, e.g. `-colormap grayscale`. Use the `-help` option to view a list of available options and their accepted values. The `Ctrl`+`C` keyboard shortcut can be used to halt the execution.
 
 **Beware that in some cases the app can generate a high number of images in a relatively short time.**
 
