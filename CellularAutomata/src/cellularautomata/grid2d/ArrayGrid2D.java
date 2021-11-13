@@ -17,81 +17,75 @@
 package cellularautomata.grid2d;
 
 /**
- * Represents a fixed size 2D region of a grid backed by a 2D array.
- * The shape and orientation of the region is such that no line parallel to an axis crosses its bounds in more than two places.
+ * Represents a fixed size convex 2D region of a grid backed by a 2D array.
  * 
  * @author Jaume
  *
  */
-public class ArrayGrid2D<T> implements ObjectGrid2D<T> {
+public abstract class ArrayGrid2D implements Grid2D {
 
-	private T[][] values;
-	private int minX;
-	private int maxX;
-	private int[] localYMinima;
-	private int minY;
-	private int maxY;
+	protected int minX;
+	protected int maxX;
+	protected int[] localYMinima;
+	protected int minY;
+	protected int maxY;
 	
-	private static final String UNSUPPORTED_SHAPE_ERROR = 
-			"The shape and orientation of the region must be such that no line parallel to an axis crosses its bounds in more than two places.";
+	private static final String UNSUPPORTED_SHAPE_ERROR = "The region must be convex.";
 	
 	/**
 	 * Constructs an {@code ArrayGrid2D} with the specified bounds
 	 * 
 	 * @param minX the smallest x-coordinate within the region
 	 * @param localYMinima an array of the smallest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
-	 * @param values a 2D array containing the values of the region
 	 */
-	public ArrayGrid2D(int minX, int[] localYMinima, T[][] values) {
-		if (localYMinima.length != values.length) {
-			throw new IllegalArgumentException("Local y minima's length must be equal to values' length.");
-		}
+	public ArrayGrid2D(int minX, int[] localYMinima) {
 		if (localYMinima.length == 0) {
 			throw new IllegalArgumentException("Local y minima's length cannot be 0.");
 		}
 		long longMaxX = (long)localYMinima.length + minX - 1;
 		if (longMaxX > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException(
-					"Resulting max x (" + longMaxX + ") is too big. It cannot be bigger than " + Integer.MAX_VALUE + ".");
+					"Resulting max x (" + longMaxX + ") is greater than the supported max (" + Integer.MAX_VALUE + ").");
 		}
 		this.minX = minX;
 		maxX = (int)longMaxX;
-		this.localYMinima = localYMinima;
-		this.values = values;
-		boolean minimaAscending = false;
-		boolean maximaDescending = false;
-		int previousLocalMinY = localYMinima[0];
-		int previousLocalMaxY = values[0].length + previousLocalMinY - 1;
-		minY = previousLocalMinY;
-		maxY = previousLocalMaxY;
-		for (int i = 0; i < values.length; i++) {
-			int localMinY = localYMinima[i];
-			long longLocalMaxY = (long)values[i].length + localMinY - 1;
-			if (longLocalMaxY > Integer.MAX_VALUE) {
-				throw new IllegalArgumentException(
-						"Resulting max y at index " + i + " (" + longLocalMaxY + ") is too big. It cannot be bigger than " + Integer.MAX_VALUE + ".");
-			}
-			int localMaxY = (int)longLocalMaxY;
-			if (minimaAscending) {
-				if (localMinY < previousLocalMinY) {
+		this.localYMinima = localYMinima;				
+	}
+	
+	protected void getYBounds(int[] localYMaxima) {
+		//get absolute y bounds and validate convexity
+		if (localYMinima.length > 2) {
+			minY = Math.min(localYMinima[0], localYMinima[1]);
+			maxY = Math.max(localYMaxima[0], localYMaxima[1]);
+			long previousLocalMinimaSlope = localYMinima[1] - localYMinima[0];
+			long previousLocalMaximaSlope = localYMaxima[1] - localYMaxima[0];		
+			int previousLocalMinY = localYMinima[1];
+			int previousLocalMaxY = localYMaxima[1];
+			for (int i = 2; i < localYMinima.length; i++) {
+				int localMinY = localYMinima[i];
+				int localMaxY = localYMaxima[i];
+				minY = Math.min(minY, localMinY);
+				maxY = Math.max(maxY, localMaxY);
+				long localMinimaSlope = localMinY - previousLocalMinY;
+				long localMaximaSlope = localMaxY - previousLocalMaxY;
+				if (localMinimaSlope < previousLocalMinimaSlope) {
 					throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
 				}
-			} else if (localMinY > previousLocalMinY) {
-				minimaAscending = true;
-			} else if (localMinY < minY) {
-				minY = localMinY;
-			}
-			if (maximaDescending) {
-				if (localMaxY > previousLocalMaxY) {
+				if (localMaximaSlope > previousLocalMaximaSlope) {
 					throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
 				}
-			} else if (localMaxY < previousLocalMaxY) {
-				maximaDescending = true;
-			} else if (localMaxY > maxY) {
-				maxY = localMaxY;
+				previousLocalMinimaSlope = localMinimaSlope;
+				previousLocalMaximaSlope = localMaximaSlope;		
+				previousLocalMinY = localMinY;
+				previousLocalMaxY = localMaxY;
 			}
-			previousLocalMinY = localMinY;
-			previousLocalMaxY = localMaxY;
+		} else {
+			minY = localYMinima[0];
+			maxY = localYMaxima[0];
+			if (localYMinima.length > 1) {
+				minY = Math.min(minY, localYMinima[1]);
+				maxY = Math.max(maxY, localYMaxima[1]);				
+			}
 		}
 	}
 	
@@ -116,67 +110,8 @@ public class ArrayGrid2D<T> implements ObjectGrid2D<T> {
 	}
 	
 	@Override
-	public int getMinX(int y) {
-		int localMinX = minX;
-		int edgeMinY = localYMinima[0];
-		int edgeMaxY = values[0].length + edgeMinY - 1;
-		if (y > edgeMaxY) {
-			int i = 1;
-			localMinX++;
-			while (y > values[i].length + localYMinima[i] - 1) {
-				localMinX++;
-				i++;
-			}
-		} else if (y < edgeMinY) {
-			int i = 1;
-			localMinX++;
-			while (y < localYMinima[i]) {
-				localMinX++;
-				i++;
-			}
-		}
-		return localMinX;
-	}
-	
-	@Override
-	public int getMaxX(int y) {
-		int localMaxX = maxX;
-		int i = values.length - 1;
-		int edgeMinY = localYMinima[i];
-		int edgeMaxY = values[i].length + edgeMinY - 1;
-		if (y > edgeMaxY) {
-			i--;
-			localMaxX--;
-			while (y > values[i].length + localYMinima[i] - 1) {
-				localMaxX--;
-				i--;
-			}
-		} else if (y < edgeMinY) {
-			i--;
-			localMaxX--;
-			while (y < localYMinima[i]) {
-				localMaxX--;
-				i--;
-			}
-		}
-		return localMaxX;
-	}
-	
-	@Override
 	public int getMinY(int x) {
 		return localYMinima[x - minX];
 	}
 	
-	@Override
-	public int getMaxY(int x) {
-		int index = x - minX;
-		return values[index].length + localYMinima[index] - 1;
-	}
-
-	@Override
-	public T getFromPosition(int x, int y) {
-		int i = x - minX;
-		int j = y - localYMinima[i];
-		return values[i][j];
-	}
 }

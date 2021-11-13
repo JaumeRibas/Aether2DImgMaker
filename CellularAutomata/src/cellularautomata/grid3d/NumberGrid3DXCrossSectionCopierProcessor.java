@@ -16,6 +16,7 @@
  */
 package cellularautomata.grid3d;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,6 +33,8 @@ public class NumberGrid3DXCrossSectionCopierProcessor<T extends FieldElement<T> 
 	private boolean isProcessing = false; 
 	private Set<Integer> copyRequests = new HashSet<Integer>();
 	private Map<Integer, NumberGrid2D<T>> copies = new HashMap<Integer, NumberGrid2D<T>>();
+	private Class<T> numberClass;
+	private Class<T[]> numberArrayClass;
 	
 	public void requestCopy(int crossSectionX) {
 		if (isProcessing) {
@@ -50,20 +53,28 @@ public class NumberGrid3DXCrossSectionCopierProcessor<T extends FieldElement<T> 
 		copies.clear();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void processGridBlock(NumberGrid3D<T> gridBlock) throws Exception {
+		if (!copyRequests.isEmpty() && this.numberClass == null) {
+			int x = gridBlock.getMinX();
+			int y = gridBlock.getMinYAtX(x);
+			T sampleNumber = gridBlock.getFromPosition(x, y, gridBlock.getMinZ(x, y));
+			this.numberClass = (Class<T>) sampleNumber.getClass();
+			this.numberArrayClass = (Class<T[]>) Array.newInstance(numberClass, 0).getClass();
+		}
 		for (Integer copyX : copyRequests) {
 			if (copyX >= gridBlock.getMinX() && copyX <= gridBlock.getMaxX()) {
 				int minZ = gridBlock.getMinZAtX(copyX);
 				int maxZ = gridBlock.getMaxZAtX(copyX);
 				int length = maxZ - minZ + 1;
 				int[] localYMinima = new int[length];
-				Object[][] values = new Object[length][];
+				T[][] values = (T[][]) Array.newInstance(numberArrayClass, length);
 				for (int z = minZ, i = 0; z <= maxZ; z++, i++) {
 					int localMinY = gridBlock.getMinY(copyX, z);
 					int localMaxY = gridBlock.getMaxY(copyX, z);
 					localYMinima[i] = localMinY;
-					Object[] slice = new Object[localMaxY - localMinY + 1];
+					T[] slice = (T[]) Array.newInstance(numberClass, localMaxY - localMinY + 1);
 					for (int y = localMinY, j = 0; y <= localMaxY; y++, j++) {
 						slice[j] = gridBlock.getFromPosition(copyX, y, z);
 					}

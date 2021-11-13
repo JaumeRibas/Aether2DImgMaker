@@ -23,7 +23,7 @@ import java.util.List;
 
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.grid5d.IsotropicGrid5DA;
+import cellularautomata.grid5d.IsotropicHypercubicGrid5DA;
 import cellularautomata.model5d.SymmetricLongModel5D;
 
 /**
@@ -32,7 +32,7 @@ import cellularautomata.model5d.SymmetricLongModel5D;
  * @author Jaume
  *
  */
-public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicGrid5DA {	
+public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubicGrid5DA {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -287,26 +287,6 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicGrid5DA {
 			valuesMaxV = arrayMaxV - 1;
 		}
 		return valuesMaxV;
-	}
-	
-	@Override
-	public int getAsymmetricMaxW() {
-		return getAsymmetricMaxV();
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getAsymmetricMaxV();
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return getAsymmetricMaxV();
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
-		return getAsymmetricMaxV();
 	}
 
 	@Override

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid2d.IsotropicGrid2DA;
+import cellularautomata.grid2d.IsotropicSquareGrid2DA;
 import cellularautomata.model2d.SymmetricIntModel2D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicGrid2DA, Serializable {
+public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicSquareGrid2DA, Serializable {
 
 	/**
 	 * 
@@ -41,8 +41,6 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 	
 	private int initialValue;
 	private long step;
-	
-	private int maxY;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean xBoundReached;
@@ -59,7 +57,6 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic2DIntArray(3);
 		grid[0][0] = this.initialValue;
-		maxY = 0;
 		xBoundReached = false;
 		step = 0;
 	}
@@ -76,7 +73,6 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 		AbelianSandpileSingleSource2D data = (AbelianSandpileSingleSource2D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
-		maxY = data.maxY;
 		step = data.step;
 	}
 	
@@ -124,8 +120,6 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 						}
 						int yy = y+1;
 						newGrid[x][yy] += valueToAdd;
-						if (yy > maxY)
-							maxY = yy;
 					}
 					//y-
 					if (y > 0) {
@@ -178,11 +172,6 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxY;
 	}
 	
 	@Override

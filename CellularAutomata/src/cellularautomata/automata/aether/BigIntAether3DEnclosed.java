@@ -23,7 +23,7 @@ import java.sql.Timestamp;
 
 import cellularautomata.Constants;
 import cellularautomata.Utils;
-import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.grid3d.IsotropicCubicGrid3DA;
 import cellularautomata.model3d.SymmetricNumericModel3D;
 import cellularautomata.numbers.BigInt;
 
@@ -33,7 +33,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, IsotropicGrid3DA, Serializable {
+public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, IsotropicCubicGrid3DA, Serializable {
 	
 	/**
 	 * 
@@ -2833,16 +2833,6 @@ public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, 
 	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return getAsymmetricMaxX();
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
-		return getAsymmetricMaxY();
 	}
 	
 	@Override

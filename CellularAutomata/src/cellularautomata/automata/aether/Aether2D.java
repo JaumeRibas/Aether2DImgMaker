@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid2d.IsotropicGrid2DA;
+import cellularautomata.grid2d.IsotropicSquareGrid2DA;
 import cellularautomata.model2d.SymmetricLongModel2D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume
  *
  */
-public class Aether2D implements SymmetricLongModel2D, IsotropicGrid2DA, Serializable {
+public class Aether2D implements SymmetricLongModel2D, IsotropicSquareGrid2DA, Serializable {
 	
 	/**
 	 * 
@@ -1167,11 +1167,6 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicGrid2DA, Seriali
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
 		return maxX;
 	}
 	

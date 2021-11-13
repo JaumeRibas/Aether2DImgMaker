@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid4d.IsotropicGrid4DA;
+import cellularautomata.grid4d.IsotropicHypercubicGrid4DA;
 import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class Aether4D implements SymmetricLongModel4D, IsotropicGrid4DA, Serializable {
+public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicGrid4DA, Serializable {
 
 	/**
 	 * 
@@ -4164,21 +4164,6 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicGrid4DA, Seriali
 
 	@Override
 	public int getAsymmetricMaxW() {
-		return maxW;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return maxW;
-	}
-
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxW;
-	}
-
-	@Override
-	public int getAsymmetricMaxZ() {
 		return maxW;
 	}
 

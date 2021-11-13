@@ -17,13 +17,19 @@
 package cellularautomata.grid2d;
 
 /**
- * An isotropic region of a 2D grid with center at the origin of coordinates.
+ * An isotropic square region of a 2D grid with center at the origin of coordinates.
  * Its underlying asymmetric section being the one within the region where x >= y >= 0.
  *  
  * @author Jaume
  *
  */
-public interface IsotropicGrid2DA extends SymmetricGrid2D {
+public interface IsotropicSquareGrid2DA extends SymmetricGrid2D {
+
+	@Override
+	default int getMinX() { return -getAsymmetricMaxX(); }
+
+	@Override
+	default int getMaxX() { return getAsymmetricMaxX(); }
 
 	@Override
 	default int getAsymmetricMinX() { return 0; }
@@ -35,34 +41,21 @@ public interface IsotropicGrid2DA extends SymmetricGrid2D {
 	default int getAsymmetricMaxX(int y) { return getAsymmetricMaxX(); }
 
 	@Override
+	default int getMinY() { return -getAsymmetricMaxX(); }
+
+	@Override
+	default int getMaxY() { return getAsymmetricMaxX(); }
+
+	@Override
 	default int getAsymmetricMinY() { return 0; }
+
+	@Override
+	default int getAsymmetricMaxY() { return getAsymmetricMaxX(); }
 
 	@Override
 	default int getAsymmetricMinY(int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxY(int x) { return Math.min(x, getAsymmetricMaxY()); }
-
-	@Override
-	default int getMinX() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	default int getMaxX() {
-		return getAsymmetricMaxX();
-	}
-
-	@Override
-	default int getMinY() {
-		return -getAsymmetricMaxX();
-	}
-
-	@Override
-	default int getMaxY() {
-		return getAsymmetricMaxX();
-	}
-	
-	//TODO add missing symmetric bounds methods
+	default int getAsymmetricMaxY(int x) { return x; }
 	
 }

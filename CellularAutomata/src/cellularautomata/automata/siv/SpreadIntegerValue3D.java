@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.grid3d.IsotropicCubicGrid3DA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid3DA, Serializable {	
+public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubicGrid3DA, Serializable {	
 
 	/**
 	 * 
@@ -42,9 +42,6 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid
 	
 	private long initialValue;
 	private long step;
-	
-	private int maxY;
-	private int maxZ;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean xBoundReached;
@@ -58,8 +55,6 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DLongArray(2);
 		grid[0][0][0] = this.initialValue;
-		maxY = 0;
-		maxZ = 0;
 		xBoundReached = false;
 		step = 0;
 	}
@@ -76,8 +71,6 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid
 		SpreadIntegerValue3D data = (SpreadIntegerValue3D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
-		maxY = data.maxY;
-		maxZ = data.maxZ;
 		xBoundReached = data.xBoundReached;
 		step = data.step;
 	}
@@ -138,8 +131,6 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid
 								}
 								int yy = y+1;
 								newGrid[x][yy][z] += valueToAdd;
-								if (yy > maxY)
-									maxY = yy;
 							}
 							//y-
 							if (y > z) {	
@@ -163,8 +154,6 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid
 								}
 								int zz = z+1;
 								newGrid[x][y][zz] += valueToAdd;
-								if (zz > maxZ)
-									maxZ = zz;
 							}
 							//z-
 							if (z > 0) {
@@ -226,16 +215,6 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicGrid
 	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
-		return maxZ;
 	}
 	
 	@Override

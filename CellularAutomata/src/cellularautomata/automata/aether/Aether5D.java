@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid5d.IsotropicGrid5DA;
+import cellularautomata.grid5d.IsotropicHypercubicGrid5DA;
 import cellularautomata.model5d.SymmetricLongModel5D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model5d.SymmetricLongModel5D;
  * @author Jaume
  *
  */
-public class Aether5D implements SymmetricLongModel5D, IsotropicGrid5DA, Serializable {
+public class Aether5D implements SymmetricLongModel5D, IsotropicHypercubicGrid5DA, Serializable {
 
 	/**
 	 * 
@@ -10608,26 +10608,6 @@ public class Aether5D implements SymmetricLongModel5D, IsotropicGrid5DA, Seriali
 
 	@Override
 	public int getAsymmetricMaxV() {
-		return maxV;
-	}
-
-	@Override
-	public int getAsymmetricMaxW() {
-		return maxV;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return maxV;
-	}
-
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxV;
-	}
-
-	@Override
-	public int getAsymmetricMaxZ() {
 		return maxV;
 	}
 

@@ -16,7 +16,9 @@
  */
 package cellularautomata.grid1d;
 
-public interface SymmetricGrid1D extends Grid1D {
+import cellularautomata.grid.SymmetricGrid;
+
+public interface SymmetricGrid1D extends Grid1D, SymmetricGrid {
 
 	/**
 	 * Returns the smallest x-coordinate of the asymmetric section of the grid
@@ -32,12 +34,7 @@ public interface SymmetricGrid1D extends Grid1D {
 	 */
 	int getAsymmetricMaxX();
 	
-	
-	/**
-	 * Returns an asymmetric section of the grid
-	 * 
-	 * @return a 1D grid
-	 */
+	@Override
 	default Grid1D asymmetricSection() {
 		return new AsymmetricGridSection1D<SymmetricGrid1D>(this);
 	}

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.grid3d.IsotropicCubicGrid3DA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA, Serializable {
+public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicCubicGrid3DA, Serializable {
 	
 	/**
 	 * 
@@ -56,9 +56,6 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 	private int side;
 	private int halfSide;
 	
-	private int maxY;
-	private int maxZ;
-	
 	/**
 	 * Creates an instance with the given initial value and grid side
 	 * 
@@ -76,8 +73,6 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DLongArray(halfSide + 1);
 		grid[0][0][0] = this.initialValue;
-		maxY = 0;
-		maxZ = 0;
 		step = 0;
 	}
 	
@@ -95,9 +90,7 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 		initialValue = data.initialValue;
 		step = data.step;		
 		side = data.side;
-		halfSide = data.halfSide;		
-		maxY = data.maxY;
-		maxZ = data.maxZ;
+		halfSide = data.halfSide;
 	}
 	
 	@Override
@@ -241,8 +234,6 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 			}
 			int yy = y+1;
 			grid[x][yy][z] += valueToAdd;
-			if (yy > maxY)
-				maxY = yy;
 		}
 	}
 	
@@ -256,8 +247,6 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 				}
 			}
 			grid[x][y-1][z] += valueToAdd;
-			if (y > maxY)
-				maxY = y;
 		}
 	}
 	
@@ -272,8 +261,6 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 			}
 			int zz = z+1;
 			grid[x][y][zz] += valueToAdd;
-			if (zz > maxZ)
-				maxZ = zz;
 		}
 	}
 	
@@ -284,8 +271,6 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 				valueToAdd += value;
 			}
 			grid[x][y][z-1] += valueToAdd;
-			if (z > maxZ)
-				maxZ = z;
 		}	
 	}
 	
@@ -339,16 +324,6 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicGrid3DA,
 	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
-		return maxZ;
 	}
 	
 	@Override

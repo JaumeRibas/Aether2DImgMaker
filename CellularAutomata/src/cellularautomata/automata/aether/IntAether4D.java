@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid4d.IsotropicGrid4DA;
+import cellularautomata.grid4d.IsotropicHypercubicGrid4DA;
 import cellularautomata.model4d.SymmetricIntModel4D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model4d.SymmetricIntModel4D;
  * @author Jaume
  *
  */
-public class IntAether4D implements SymmetricIntModel4D, IsotropicGrid4DA, Serializable {
+public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicGrid4DA, Serializable {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -613566757;
@@ -4166,21 +4166,6 @@ public class IntAether4D implements SymmetricIntModel4D, IsotropicGrid4DA, Seria
 
 	@Override
 	public int getAsymmetricMaxW() {
-		return maxW;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return maxW;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxW;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
 		return maxW;
 	}
 	

@@ -16,6 +16,7 @@
  */
 package cellularautomata.grid3d;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,8 @@ public class NumberGrid3DZCrossSectionCopierProcessor<T extends FieldElement<T> 
 	private boolean isProcessing = false; 
 	private Map<Integer, CopyData> copyRequests = new HashMap<Integer, CopyData>();
 	private Map<Integer, CopyData> copies = new HashMap<Integer, CopyData>();
+	private Class<T> numberClass;
+	private Class<T[]> numberArrayClass;
 	
 	public void requestCopy(int crossSectionZ) {
 		if (isProcessing) {
@@ -40,14 +43,15 @@ public class NumberGrid3DZCrossSectionCopierProcessor<T extends FieldElement<T> 
 		copyRequests.put(crossSectionZ, new CopyData(crossSectionZ));
 	}
 	
+	@SuppressWarnings("unchecked")
 	public NumberGrid2D<T> getCopy(int crossSectionZ) {
 		if (copies.containsKey(crossSectionZ)) {
 			CopyData copyData = copies.get(crossSectionZ);
 			int valuesSize = copyData.values.size();
 			if (valuesSize > 0) {
-				Object[][] values = new Object[valuesSize][];
+				T[][] values = (T[][]) Array.newInstance(numberArrayClass, valuesSize);
 				int i = 0;
-				for (Object[] slice : copyData.values) {
+				for (T[] slice : copyData.values) {
 					values[i] = slice;
 					i++;
 				}
@@ -69,8 +73,16 @@ public class NumberGrid3DZCrossSectionCopierProcessor<T extends FieldElement<T> 
 		copies.clear();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void processGridBlock(NumberGrid3D<T> gridBlock) throws Exception {
+		if (!copyRequests.isEmpty() && this.numberClass == null) {
+			int x = gridBlock.getMinX();
+			int y = gridBlock.getMinYAtX(x);
+			T sampleNumber = gridBlock.getFromPosition(x, y, gridBlock.getMinZ(x, y));
+			this.numberClass = (Class<T>) sampleNumber.getClass();
+			this.numberArrayClass = (Class<T[]>) Array.newInstance(numberClass, 0).getClass();
+		}
 		for (CopyData copyData : copyRequests.values()) {
 			int copyZ = copyData.z;
 			if (copyZ >= gridBlock.getMinZ() && copyZ <= gridBlock.getMaxZ()) {
@@ -82,7 +94,7 @@ public class NumberGrid3DZCrossSectionCopierProcessor<T extends FieldElement<T> 
 					int localMinY = gridBlock.getMinY(x, copyZ);
 					int localMaxY = gridBlock.getMaxY(x, copyZ);
 					copyData.localYMinima.add(localMinY);
-					Object[] slice = new Object[localMaxY - localMinY + 1];
+					T[] slice = (T[]) Array.newInstance(numberClass, localMaxY - localMinY + 1);
 					for (int y = localMinY, i = 0; y <= localMaxY; y++, i++) {
 						slice[i] = gridBlock.getFromPosition(x, y, copyZ);
 					}
@@ -104,12 +116,12 @@ public class NumberGrid3DZCrossSectionCopierProcessor<T extends FieldElement<T> 
 	private class CopyData {
 		CopyData(int z) {
 			this.z = z;
-			values = new ArrayList<Object[]>();
+			values = new ArrayList<T[]>();
 			localYMinima = new ArrayList<Integer>();
 		}
 		int z;
 		int minX;
-		List<Object[]> values;
+		List<T[]> values;
 		List<Integer> localYMinima;
 	}
 	

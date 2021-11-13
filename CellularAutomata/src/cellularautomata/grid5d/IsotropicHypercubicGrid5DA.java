@@ -17,13 +17,19 @@
 package cellularautomata.grid5d;
 
 /**
- * An isotropic region of a 5D grid with center at the origin of coordinates.
+ * An isotropic hypercubic region of a 5D grid with center at the origin of coordinates.
  * Its underlying asymmetric section being the one within the region where v >= w >= x >= y >= z >= 0.
  *  
  * @author Jaume
  *
  */
-public interface IsotropicGrid5DA extends SymmetricGrid5D {
+public interface IsotropicHypercubicGrid5DA extends SymmetricGrid5D {
+
+	@Override
+	default int getMinV() { return -getAsymmetricMaxV(); }
+
+	@Override
+	default int getMaxV() { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinV() { return 0; }
@@ -119,427 +125,411 @@ public interface IsotropicGrid5DA extends SymmetricGrid5D {
 	default int getAsymmetricMaxV(int w, int x, int y, int z) { return getAsymmetricMaxV(); }
 
 	@Override
+	default int getMinW() { return -getAsymmetricMaxV(); }
+
+	@Override
+	default int getMaxW() { return getAsymmetricMaxV(); }
+
+	@Override
 	default int getAsymmetricMinW() { return 0; }
+
+	@Override
+	default int getAsymmetricMaxW() { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinWAtV(int v) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxWAtV(int v) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxWAtV(int v) { return v; }
 
 	@Override
 	default int getAsymmetricMinWAtX(int x) { return x; }
 
 	@Override
-	default int getAsymmetricMaxWAtX(int x) { return getAsymmetricMaxW(); }
+	default int getAsymmetricMaxWAtX(int x) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinWAtY(int y) { return y; }
 
 	@Override
-	default int getAsymmetricMaxWAtY(int y) { return getAsymmetricMaxW(); }
+	default int getAsymmetricMaxWAtY(int y) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinWAtZ(int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxWAtZ(int z) { return getAsymmetricMaxW(); }
+	default int getAsymmetricMaxWAtZ(int z) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinWAtVX(int v, int x) { return x; }
 
 	@Override
-	default int getAsymmetricMaxWAtVX(int v, int x) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxWAtVX(int v, int x) { return v; }
 
 	@Override
 	default int getAsymmetricMinWAtVY(int v, int y) { return y; }
 
 	@Override
-	default int getAsymmetricMaxWAtVY(int v, int y) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxWAtVY(int v, int y) { return v; }
 
 	@Override
 	default int getAsymmetricMinWAtVZ(int v, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxWAtVZ(int v, int z) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxWAtVZ(int v, int z) { return v; }
 
 	@Override
 	default int getAsymmetricMinWAtXY(int x, int y) { return x; }
 
 	@Override
-	default int getAsymmetricMaxWAtXY(int x, int y) { return getAsymmetricMaxW(); }
+	default int getAsymmetricMaxWAtXY(int x, int y) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinWAtXZ(int x, int z) { return x; }
 
 	@Override
-	default int getAsymmetricMaxWAtXZ(int x, int z) { return getAsymmetricMaxW(); }
+	default int getAsymmetricMaxWAtXZ(int x, int z) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinWAtYZ(int y, int z) { return y; }
 
 	@Override
-	default int getAsymmetricMaxWAtYZ(int y, int z) { return getAsymmetricMaxW(); }
+	default int getAsymmetricMaxWAtYZ(int y, int z) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinWAtVXY(int v, int x, int y) { return x; }
 
 	@Override
-	default int getAsymmetricMaxWAtVXY(int v, int x, int y) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxWAtVXY(int v, int x, int y) { return v; }
 
 	@Override
 	default int getAsymmetricMinWAtVXZ(int v, int x, int z) { return x; }
 
 	@Override
-	default int getAsymmetricMaxWAtVXZ(int v, int x, int z) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxWAtVXZ(int v, int x, int z) { return v; }
 
 	@Override
 	default int getAsymmetricMinWAtVYZ(int v, int y, int z) { return y; }
 
 	@Override
-	default int getAsymmetricMaxWAtVYZ(int v, int y, int z) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxWAtVYZ(int v, int y, int z) { return v; }
 
 	@Override
 	default int getAsymmetricMinWAtXYZ(int x, int y, int z) { return x; }
 
 	@Override
-	default int getAsymmetricMaxWAtXYZ(int x, int y, int z) { return getAsymmetricMaxW(); }
+	default int getAsymmetricMaxWAtXYZ(int x, int y, int z) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinW(int v, int x, int y, int z) { return x; }
 
 	@Override
-	default int getAsymmetricMaxW(int v, int x, int y, int z) { return Math.min(v, getAsymmetricMaxW()); }
+	default int getAsymmetricMaxW(int v, int x, int y, int z) { return v; }
+
+	@Override
+	default int getMinX() { return -getAsymmetricMaxV(); }
+
+	@Override
+	default int getMaxX() { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinX() { return 0; }
 
 	@Override
+	default int getAsymmetricMaxX() { return getAsymmetricMaxV(); }
+
+	@Override
 	default int getAsymmetricMinXAtV(int v) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxXAtV(int v) { return Math.min(v, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtV(int v) { return v; }
 
 	@Override
 	default int getAsymmetricMinXAtW(int w) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxXAtW(int w) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtW(int w) { return w; }
 
 	@Override
 	default int getAsymmetricMinXAtY(int y) { return y; }
 
 	@Override
-	default int getAsymmetricMaxXAtY(int y) { return getAsymmetricMaxX(); }
+	default int getAsymmetricMaxXAtY(int y) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinXAtZ(int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxXAtZ(int z) { return getAsymmetricMaxX(); }
+	default int getAsymmetricMaxXAtZ(int z) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinXAtVW(int v, int w) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxXAtVW(int v, int w) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtVW(int v, int w) { return w; }
 
 	@Override
 	default int getAsymmetricMinXAtVY(int v, int y) { return y; }
 
 	@Override
-	default int getAsymmetricMaxXAtVY(int v, int y) { return Math.min(v, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtVY(int v, int y) { return v; }
 
 	@Override
 	default int getAsymmetricMinXAtVZ(int v, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxXAtVZ(int v, int z) { return Math.min(v, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtVZ(int v, int z) { return v; }
 
 	@Override
 	default int getAsymmetricMinXAtWY(int w, int y) { return y; }
 
 	@Override
-	default int getAsymmetricMaxXAtWY(int w, int y) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtWY(int w, int y) { return w; }
 
 	@Override
 	default int getAsymmetricMinXAtWZ(int w, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxXAtWZ(int w, int z) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtWZ(int w, int z) { return w; }
 
 	@Override
 	default int getAsymmetricMinXAtYZ(int y, int z) { return y; }
 
 	@Override
-	default int getAsymmetricMaxXAtYZ(int y, int z) { return getAsymmetricMaxX(); }
+	default int getAsymmetricMaxXAtYZ(int y, int z) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinXAtVWY(int v, int w, int y) { return y; }
 
 	@Override
-	default int getAsymmetricMaxXAtVWY(int v, int w, int y) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtVWY(int v, int w, int y) { return w; }
 
 	@Override
 	default int getAsymmetricMinXAtVWZ(int v, int w, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxXAtVWZ(int v, int w, int z) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtVWZ(int v, int w, int z) { return w; }
 
 	@Override
 	default int getAsymmetricMinXAtVYZ(int v, int y, int z) { return y; }
 
 	@Override
-	default int getAsymmetricMaxXAtVYZ(int v, int y, int z) { return Math.min(v, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtVYZ(int v, int y, int z) { return v; }
 
 	@Override
 	default int getAsymmetricMinXAtWYZ(int w, int y, int z) { return y; }
 
 	@Override
-	default int getAsymmetricMaxXAtWYZ(int w, int y, int z) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxXAtWYZ(int w, int y, int z) { return w; }
 
 	@Override
 	default int getAsymmetricMinX(int v, int w, int y, int z) { return y; }
 
 	@Override
-	default int getAsymmetricMaxX(int v, int w, int y, int z) { return Math.min(w, getAsymmetricMaxX()); }
+	default int getAsymmetricMaxX(int v, int w, int y, int z) { return w; }
+
+	@Override
+	default int getMinY() { return -getAsymmetricMaxV(); }
+
+	@Override
+	default int getMaxY() { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinY() { return 0; }
 
 	@Override
+	default int getAsymmetricMaxY() { return getAsymmetricMaxV(); }
+
+	@Override
 	default int getAsymmetricMinYAtV(int v) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxYAtV(int v) { return Math.min(v, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtV(int v) { return v; }
 
 	@Override
 	default int getAsymmetricMinYAtW(int w) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxYAtW(int w) { return Math.min(w, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtW(int w) { return w; }
 
 	@Override
 	default int getAsymmetricMinYAtX(int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxYAtX(int x) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtX(int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinYAtZ(int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxYAtZ(int z) { return getAsymmetricMaxY(); }
+	default int getAsymmetricMaxYAtZ(int z) { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinYAtVW(int v, int w) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxYAtVW(int v, int w) { return Math.min(w, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtVW(int v, int w) { return w; }
 
 	@Override
 	default int getAsymmetricMinYAtVX(int v, int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxYAtVX(int v, int x) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtVX(int v, int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinYAtVZ(int v, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxYAtVZ(int v, int z) { return Math.min(v, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtVZ(int v, int z) { return v; }
 
 	@Override
 	default int getAsymmetricMinYAtWX(int w, int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxYAtWX(int w, int x) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtWX(int w, int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinYAtWZ(int w, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxYAtWZ(int w, int z) { return Math.min(w, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtWZ(int w, int z) { return w; }
 
 	@Override
 	default int getAsymmetricMinYAtXZ(int x, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxYAtXZ(int x, int z) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtXZ(int x, int z) { return x; }
 
 	@Override
 	default int getAsymmetricMinYAtVWX(int v, int w, int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxYAtVWX(int v, int w, int x) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtVWX(int v, int w, int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinYAtVWZ(int v, int w, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxYAtVWZ(int v, int w, int z) { return Math.min(w, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtVWZ(int v, int w, int z) { return w; }
 
 	@Override
 	default int getAsymmetricMinYAtVXZ(int v, int x, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxYAtVXZ(int v, int x, int z) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtVXZ(int v, int x, int z) { return x; }
 
 	@Override
 	default int getAsymmetricMinYAtWXZ(int w, int x, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxYAtWXZ(int w, int x, int z) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxYAtWXZ(int w, int x, int z) { return x; }
 
 	@Override
 	default int getAsymmetricMinY(int v, int w, int x, int z) { return z; }
 
 	@Override
-	default int getAsymmetricMaxY(int v, int w, int x, int z) { return Math.min(x, getAsymmetricMaxY()); }
+	default int getAsymmetricMaxY(int v, int w, int x, int z) { return x; }
+
+	@Override
+	default int getMinZ() { return -getAsymmetricMaxV(); }
+
+	@Override
+	default int getMaxZ() { return getAsymmetricMaxV(); }
 
 	@Override
 	default int getAsymmetricMinZ() { return 0; }
 
 	@Override
+	default int getAsymmetricMaxZ() { return getAsymmetricMaxV(); }
+
+	@Override
 	default int getAsymmetricMinZAtV(int v) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtV(int v) { return Math.min(v, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtV(int v) { return v; }
 
 	@Override
 	default int getAsymmetricMinZAtW(int w) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtW(int w) { return Math.min(w, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtW(int w) { return w; }
 
 	@Override
 	default int getAsymmetricMinZAtX(int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtX(int x) { return Math.min(x, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtX(int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinZAtY(int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtY(int y) { return Math.min(y, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtY(int y) { return y; }
 
 	@Override
 	default int getAsymmetricMinZAtVW(int v, int w) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtVW(int v, int w) { return Math.min(w, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtVW(int v, int w) { return w; }
 
 	@Override
 	default int getAsymmetricMinZAtVX(int v, int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtVX(int v, int x) { return Math.min(x, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtVX(int v, int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinZAtVY(int v, int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtVY(int v, int y) { return Math.min(y, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtVY(int v, int y) { return y; }
 
 	@Override
 	default int getAsymmetricMinZAtWX(int w, int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtWX(int w, int x) { return Math.min(x, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtWX(int w, int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinZAtWY(int w, int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtWY(int w, int y) { return Math.min(y, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtWY(int w, int y) { return y; }
 
 	@Override
 	default int getAsymmetricMinZAtXY(int x, int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtXY(int x, int y) { return Math.min(y, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtXY(int x, int y) { return y; }
 
 	@Override
 	default int getAsymmetricMinZAtVWX(int v, int w, int x) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtVWX(int v, int w, int x) { return Math.min(x, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtVWX(int v, int w, int x) { return x; }
 
 	@Override
 	default int getAsymmetricMinZAtVWY(int v, int w, int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtVWY(int v, int w, int y) { return Math.min(y, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtVWY(int v, int w, int y) { return y; }
 
 	@Override
 	default int getAsymmetricMinZAtVXY(int v, int x, int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtVXY(int v, int x, int y) { return Math.min(y, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtVXY(int v, int x, int y) { return y; }
 
 	@Override
 	default int getAsymmetricMinZAtWXY(int w, int x, int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZAtWXY(int w, int x, int y) { return Math.min(y, getAsymmetricMaxZ()); }
+	default int getAsymmetricMaxZAtWXY(int w, int x, int y) { return y; }
 
 	@Override
 	default int getAsymmetricMinZ(int v, int w, int x, int y) { return 0; }
 
 	@Override
-	default int getAsymmetricMaxZ(int v, int w, int x, int y) { return Math.min(y, getAsymmetricMaxZ()); }
-	
-	@Override
-	default int getMinV() {
-		return -getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMaxV() {
-		return getAsymmetricMaxV();
-	}
-	
-	@Override
-	default int getMinW() {
-		return -getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMaxW() {
-		return getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMinX() {
-		return -getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMaxX() {
-		return getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMinY() {
-		return -getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMaxY() {
-		return getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMinZ() {
-		return -getAsymmetricMaxV();
-	}
-
-	@Override
-	default int getMaxZ() {
-		return getAsymmetricMaxV();
-	}
-	
-	//TODO add missing symmetric bounds methods
+	default int getAsymmetricMaxZ(int v, int w, int x, int y) { return y; }
 	
 }

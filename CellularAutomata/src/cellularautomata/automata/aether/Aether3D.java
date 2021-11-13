@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.grid3d.IsotropicCubicGrid3DA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class Aether3D implements SymmetricLongModel3D, IsotropicGrid3DA, Serializable {
+public class Aether3D implements SymmetricLongModel3D, IsotropicCubicGrid3DA, Serializable {
 	
 	//debug
 //	private static HashSet<Integer> coverage = new HashSet<Integer>();
@@ -2043,16 +2043,6 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicGrid3DA, Seriali
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
 		return maxX;
 	}
 	

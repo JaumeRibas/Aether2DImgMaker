@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid4d.IsotropicGrid4DA;
+import cellularautomata.grid4d.IsotropicHypercubicGrid4DA;
 import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid4DA, Serializable {
+public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHypercubicGrid4DA, Serializable {
 	
 	/**
 	 * 
@@ -43,8 +43,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid
 	private long initialValue;
 	private long step;
 	private int maxX;
-	private int maxY;
-	private int maxZ;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -61,8 +59,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid
 		grid = Utils.buildAnisotropic4DLongArray(3);
 		grid[0][0][0][0] = this.initialValue;
 		maxX = 0;
-		maxY = 0;
-		maxZ = 0;
 		boundsReached = false;
 		step = 0;
 	}
@@ -80,8 +76,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid
 		initialValue = data.initialValue;
 		grid = data.grid;
 		maxX = data.maxX;
-		maxY = data.maxY;
-		maxZ = data.maxZ;
 		maxWMinusOne = data.maxWMinusOne;
 		boundsReached = data.boundsReached;
 		step = data.step;
@@ -206,8 +200,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid
 			}
 			int yy = y+1;
 			grid[w][x][yy][z] += valueToAdd;
-			if (yy > maxY)
-				maxY = yy;
 		}
 	}
 
@@ -238,8 +230,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid
 			}
 			int zz = z+1;
 			grid[w][x][y][zz] += valueToAdd;
-			if (zz > maxZ)
-				maxZ = zz;
 		}
 	}
 
@@ -312,16 +302,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicGrid
 	@Override
 	public int getAsymmetricMaxX() {
 		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
-		return maxZ;
 	}
 
 	@Override

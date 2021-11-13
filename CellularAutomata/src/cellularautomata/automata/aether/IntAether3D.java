@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.grid3d.IsotropicCubicGrid3DA;
 import cellularautomata.model3d.SymmetricIntModel3D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model3d.SymmetricIntModel3D;
  * @author Jaume
  *
  */
-public class IntAether3D implements SymmetricIntModel3D, IsotropicGrid3DA, Serializable {
+public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicGrid3DA, Serializable {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;
@@ -2032,16 +2032,6 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicGrid3DA, Seria
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
 		return maxX;
 	}
 	

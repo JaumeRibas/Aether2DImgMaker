@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import cellularautomata.Utils;
-import cellularautomata.grid2d.IsotropicGrid2DA;
+import cellularautomata.grid2d.IsotropicSquareGrid2DA;
 import cellularautomata.model2d.SymmetricIntModel2D;
 
 /**
@@ -29,15 +29,13 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicGrid2DA {
+public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSquareGrid2DA {
 
 	private int[][] grid;
 	
 	private int initialValue;
 	private int backgroundValue;
 	private long step;
-	
-	private int maxY;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean xBoundReached;
@@ -54,7 +52,6 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicGr
 		grid = Utils.buildAnisotropic2DIntArray(3);
 		Utils.setAllArrayIndexes(grid, backgroundValue);
 		grid[0][0] = this.initialValue;
-		maxY = 0;
 		xBoundReached = false;
 		step = 0;
 	}
@@ -73,7 +70,6 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicGr
 		initialValue = data.initialValue;
 		backgroundValue = data.backgroundValue;
 		step = data.step;
-		maxY = data.maxY;
 		xBoundReached = data.xBoundReached;
 	}
 	
@@ -143,8 +139,6 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicGr
 								}
 								int yy = y+1;
 								newGrid[x][yy] += valueToAdd;
-								if (yy > maxY)
-									maxY = yy;
 							}
 							//y-
 							if (isDownEqual)
@@ -201,11 +195,6 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicGr
 	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxY;
 	}
 	
 	@Override

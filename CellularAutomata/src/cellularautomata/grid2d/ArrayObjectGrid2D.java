@@ -18,22 +18,22 @@ package cellularautomata.grid2d;
 
 import java.io.Serializable;
 
-public class ArrayIntGrid2D extends ArrayGrid2D implements IntGrid2D, Serializable {
-	
+public class ArrayObjectGrid2D<T> extends ArrayGrid2D implements ObjectGrid2D<T>, Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 278226012753314721L;
-	private int[][] values;
+	private static final long serialVersionUID = -6271083205749084067L;
+	protected T[][] values;
 	
 	/**
-	 * Constructs an {@code ArrayIntGrid2D} with the specified bounds
+	 * Constructs an {@code ArrayObjectGrid2D} with the specified bounds
 	 * 
 	 * @param minX the smallest x-coordinate within the region
 	 * @param localYMinima an array of the smallest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
-	 * @param values a 2D int array containing the values of the region
+	 * @param values a 2D array containing the values of the region
 	 */
-	public ArrayIntGrid2D(int minX, int[] localYMinima, int[][] values) {
+	public ArrayObjectGrid2D(int minX, int[] localYMinima, T[][] values) {
 		super(minX, localYMinima);
 		if (localYMinima.length != values.length) {
 			throw new IllegalArgumentException("Local y minima's length must be equal to values' length.");
@@ -107,7 +107,7 @@ public class ArrayIntGrid2D extends ArrayGrid2D implements IntGrid2D, Serializab
 	}
 
 	@Override
-	public int getFromPosition(int x, int y) {
+	public T getFromPosition(int x, int y) {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		return values[i][j];

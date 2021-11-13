@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid3d.IsotropicGrid3DA;
+import cellularautomata.grid3d.IsotropicCubicGrid3DA;
 import cellularautomata.model3d.SymmetricIntModel3D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model3d.SymmetricIntModel3D;
  * @author Jaume
  *
  */
-public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA, Serializable {
+public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicCubicGrid3DA, Serializable {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;
@@ -52,9 +52,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 	
 	private int initialValue;
 	private long step;
-	
-	private int maxY;
-	private int maxZ;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -73,8 +70,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DIntArray(3);
 		grid[0][0][0] = this.initialValue;
-		maxY = 0;
-		maxZ = 0;
 		boundsReached = false;
 		step = 0;
 	}
@@ -91,8 +86,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 		IntNearAether1_3D data = (IntNearAether1_3D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
-		maxY = data.maxY;
-		maxZ = data.maxZ;
 		maxXMinusOne = data.maxXMinusOne;
 		boundsReached = data.boundsReached;
 		step = data.step;
@@ -267,8 +260,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 			}
 			int yy = y+1;
 			grid[x][yy][z] += valueToAdd;
-			if (yy > maxY)
-				maxY = yy;
 		}
 	}
 	
@@ -282,8 +273,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 				}
 			}
 			grid[x][y-1][z] += valueToAdd;
-			if (y > maxY)
-				maxY = y;
 		}
 	}
 	
@@ -298,8 +287,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 			}
 			int zz = z+1;
 			grid[x][y][zz] += valueToAdd;
-			if (zz > maxZ)
-				maxZ = zz;
 		}
 	}
 	
@@ -310,8 +297,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 				valueToAdd += value;
 			}
 			grid[x][y][z-1] += valueToAdd;
-			if (z > maxZ)
-				maxZ = z;
 		}	
 	}
 	
@@ -354,16 +339,6 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicGrid3DA,
 	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
-	}
-	
-	@Override
-	public int getAsymmetricMaxY() {
-		return maxY;
-	}
-	
-	@Override
-	public int getAsymmetricMaxZ() {
-		return maxZ;
 	}
 	
 	@Override

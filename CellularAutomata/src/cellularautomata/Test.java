@@ -19,6 +19,7 @@ package cellularautomata;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -45,6 +46,8 @@ import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid1d.ObjectGrid1D;
 import cellularautomata.grid2d.ObjectGrid2D;
+import cellularautomata.grid2d.ArrayIntGrid2D;
+import cellularautomata.grid2d.ArrayNumberGrid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid3d.BigFractionGrid3DPattern;
@@ -92,6 +95,93 @@ public class Test {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compare(ae1, ae2);
+	}
+	
+	public static void testArrayGrid() {
+		System.out.println("Test ArrayGrid2D");
+		ArrayIntGrid2D grid;
+		System.out.println("nulls");
+		try {
+			grid = new ArrayIntGrid2D(0, null, null);
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		try {
+			grid = new ArrayIntGrid2D(0, new int[] {0, 0}, null);
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		try {
+			grid = new ArrayIntGrid2D(0, null, new int[][] {{0, 0}, {0, 0}});
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		System.out.println("empty array");
+		try {
+			grid = new ArrayIntGrid2D(0, new int[0], new int[0][0]);
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}		
+		System.out.println("different length");
+		try {
+			grid = new ArrayIntGrid2D(0, new int[] {0, 0, 0}, new int[][] {{0, 0}, {0, 0}});
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		System.out.println("minX = Ineger.MAX_VALUE, values.length = large");
+		try {
+			grid = new ArrayIntGrid2D(Integer.MAX_VALUE, new int[99999], new int[99999][1]);
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		System.out.println("not convex");
+		try {
+			grid = new ArrayIntGrid2D(0, new int[] {0, 0, -2, 0, 0}, new int[][] { {1}, {1}, {1, 1, 1, 1, 1}, {1}, {1} });
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		try {
+			grid = new ArrayIntGrid2D(0, new int[] {0, 0, 0, 0, 0}, new int[][] { {1}, {1}, {1, 1, 1, 1, 1}, {1}, {1} });
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		try {
+			grid = new ArrayIntGrid2D(0, new int[] {-3, -3, -2, -3, -3 }, 
+					new int[][] { {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1} });
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		try {
+			System.out.println("single dot");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[1], new int[][] {{1}});
+			printAsGrid(grid, 0);
+			System.out.println("single line, horiz, vert, diagonal");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[5], new int[][] { {1}, {1}, {1}, {1}, {1} });
+			printAsGrid(grid, 0);
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[1], new int[][] { {1, 1, 1, 1, 1 } });
+			printAsGrid(grid, 0);
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {-2, -1, 0, 1, 2 }, new int[][] { {1}, {1}, {1}, {1}, {1} });
+			printAsGrid(grid, 0);
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {2, 1, 0, -1, -2 }, new int[][] { {1}, {1}, {1}, {1}, {1} });
+			printAsGrid(grid, 0);
+			System.out.println("tilted square");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {0, -1, -2, -3, -2, -1, 0 }, 
+					new int[][] { {1}, {1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1}, {1} });
+			printAsGrid(grid, 0);
+			System.out.println("aligned square");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {-3, -3, -3, -3, -3 }, 
+					new int[][] { {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1} });
+			printAsGrid(grid, 0);
+			System.out.println("object grid");
+			BigInt[][] array = testGenericArrayBySample(BigInt.ZERO, 1, 1);
+			array[0][0] = BigInt.ONE;
+			ArrayNumberGrid2D<BigInt> nubergrid = new ArrayNumberGrid2D<BigInt>(0, new int[1], array);
+			printAsGrid(nubergrid, BigInt.ZERO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T[][] testGenericArrayBySample(T sample, int width, int height) {
+		Class<T> clazz = (Class<T>) sample.getClass();
+		Class<T[]> arrayClass = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+		T[][] arr = (T[][]) Array.newInstance(arrayClass, width);
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = (T[]) Array.newInstance(clazz, height);
+		}
+		return (T[][]) arr;
 	}
 	
 	public static void test2DDiagonals() throws Exception {
