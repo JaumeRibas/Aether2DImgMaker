@@ -2091,16 +2091,6 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 		return maxX;
 	}
 	
-//	@Override
-//	public int getAsymmetricMaxY() {
-//		return (int) Math.min((step + 2)/2 - 1, maxX);
-//	}
-//	
-//	@Override
-//	public int getAsymmetricMaxZ() {
-//		return getAsymmetricMaxY();
-//	}
-	
 	@Override
 	public long getStep() {
 		return step;
