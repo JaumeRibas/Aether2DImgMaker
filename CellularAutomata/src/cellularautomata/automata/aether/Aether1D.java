@@ -176,13 +176,13 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicGrid1DA, Seriali
 				newGrid[1] += currentValue;
 			}
 		}
-		//2 >= x < edge - 2
+		//2 <= x < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
 		if (toppleRangeBeyondX1(newGrid, 2, edgeMinusTwo)) {
 			changed = true;
 		}
-		//edge - 2 >= x < edge
+		//edge - 2 <= x < edge
 		if (toppleRangeBeyondX1(newGrid, edgeMinusTwo, edge)) {
 			changed = true;
 			maxX++;

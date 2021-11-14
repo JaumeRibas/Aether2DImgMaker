@@ -358,7 +358,7 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicGrid3DA, Se
 			changed = true;
 		}
 		grid[2] = null;
-		// 4 >= x < edge - 2
+		// 4 <= x < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
 		long[][][] xSlices = new long[][][] {null, currentXSlice, greaterXSlice};
@@ -368,7 +368,7 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicGrid3DA, Se
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse this arrays?
 			changed = true;
 		}
-		//edge - 2 >= x < edge
+		//edge - 2 <= x < edge
 		if (toppleRangeBeyondX3(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;

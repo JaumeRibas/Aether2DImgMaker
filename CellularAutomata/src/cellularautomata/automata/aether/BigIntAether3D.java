@@ -364,7 +364,7 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 			changed = true;
 		}
 		grid[2] = null;
-		// 4 >= x < edge - 2
+		// 4 <= x < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
 		BigInt[][][] xSlices = new BigInt[][][] {null, currentXSlice, greaterXSlice};
@@ -374,7 +374,7 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse this arrays?
 			changed = true;
 		}
-		//edge - 2 >= x < edge
+		//edge - 2 <= x < edge
 		if (toppleRangeBeyondX3(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;

@@ -405,7 +405,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareGrid2DA, S
 			}
 		}
 		grid[1] = null;
-		// 3 >= x < edge - 2
+		// 3 <= x < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
 		long[][] xSlices = new long[][] {null, currentXSlice, greaterXSlice};
@@ -415,7 +415,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareGrid2DA, S
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse this arrays?
 			changed = true;
 		}
-		//edge - 2 >= x < edge
+		//edge - 2 <= x < edge
 		if (toppleRangeBeyondX2(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;

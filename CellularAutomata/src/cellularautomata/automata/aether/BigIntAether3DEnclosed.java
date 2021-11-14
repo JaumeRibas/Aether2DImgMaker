@@ -366,7 +366,7 @@ public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, 
 			changed = true;
 		}
 		grid[2] = null;
-		// 4 >= x < edge - 1
+		// 4 <= x < edge - 1
 		int edge = grid.length - 1;
 		BigInt[][][] xSlices = new BigInt[][][] {null, currentXSlice, greaterXSlice};
 		newXSlices[1] = newCurrentXSlice;
