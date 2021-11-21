@@ -4433,20 +4433,20 @@ public class Aether4DAsymmetricSectionSwap extends ActionableModel4D<LongGrid4D>
 	public int getMaxW() {
 		return maxW;
 	}
-
+	
 	@Override
 	public int getMaxX() {
-		return maxW;
+		return (int) Math.min((step + 2)/2 - 1, maxW);
 	}
-
+	
 	@Override
 	public int getMaxY() {
-		return maxW;
+		return getMaxX();
 	}
-
+	
 	@Override
 	public int getMaxZ() {
-		return maxW;
+		return getMaxX();
 	}
 
 }

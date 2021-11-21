@@ -2301,12 +2301,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	
 	@Override
 	public int getMaxY() {
-		return maxX;
+		return (int) Math.min((step + 2)/2 - 1, maxX);
 	}
 	
 	@Override
 	public int getMaxZ() {
-		return maxX;
+		return getMaxY();
 	}
 
 }

@@ -718,17 +718,17 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 	
 	@Override
 	public int getMaxX() {
-		return maxX;
+		return (int) Math.min((step + 2)/2 - 1, maxW);
 	}
 	
 	@Override
 	public int getMaxY() {
-		return maxY;
+		return getMaxX();
 	}
 	
 	@Override
 	public int getMaxZ() {
-		return maxZ;
+		return getMaxX();
 	}
 
 }

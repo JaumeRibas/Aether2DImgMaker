@@ -10876,22 +10876,22 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 	
 	@Override
 	public int getMaxW() {
-		return maxV;
+		return (int) Math.min((step + 2)/2 - 1, maxV);
 	}
-
+	
 	@Override
 	public int getMaxX() {
-		return maxV;
+		return getMaxW();
 	}
-
+	
 	@Override
 	public int getMaxY() {
-		return maxV;
+		return getMaxW();
 	}
-
+	
 	@Override
 	public int getMaxZ() {
-		return maxV;
+		return getMaxW();
 	}
 
 }
