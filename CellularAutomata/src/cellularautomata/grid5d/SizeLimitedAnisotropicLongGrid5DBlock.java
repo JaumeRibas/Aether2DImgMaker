@@ -54,7 +54,7 @@ public class SizeLimitedAnisotropicLongGrid5DBlock implements LongGrid5D, Anisot
 	@Override
 	public long getFromPosition(int v, int w, int x, int y, int z) {
 		if (slices == null) {
-			throw new UnsupportedOperationException("The grid block is no longer available.");
+			throw new IllegalStateException("The grid block is no longer available.");
 		}
 		return slices[v - minV].getFromPosition(w, x, y, z);
 	}

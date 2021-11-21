@@ -38,7 +38,7 @@ public class NumberGrid3DXCrossSectionCopierProcessor<T extends FieldElement<T> 
 	
 	public void requestCopy(int crossSectionX) {
 		if (isProcessing) {
-			throw new UnsupportedOperationException("Copies cannot be requested while the copier is processing.");
+			throw new IllegalStateException("Copies cannot be requested while the copier is processing.");
 		}
 		copyRequests.add(crossSectionX);
 	}

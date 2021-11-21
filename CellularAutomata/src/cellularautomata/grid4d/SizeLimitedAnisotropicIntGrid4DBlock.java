@@ -54,7 +54,7 @@ public class SizeLimitedAnisotropicIntGrid4DBlock implements IntGrid4D, Anisotro
 	@Override
 	public int getFromPosition(int w, int x, int y, int z) {
 		if (slices == null) {
-			throw new UnsupportedOperationException("The grid block is no longer available.");
+			throw new IllegalStateException("The grid block is no longer available.");
 		}
 		return slices[w - minW].getFromPosition(x, y, z);
 	}

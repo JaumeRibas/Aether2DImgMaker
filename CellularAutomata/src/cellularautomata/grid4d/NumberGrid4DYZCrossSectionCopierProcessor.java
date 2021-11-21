@@ -35,7 +35,7 @@ public class NumberGrid4DYZCrossSectionCopierProcessor<T extends FieldElement<T>
 	
 	public void requestCopy(int crossSectionY, int crossSectionZ) {
 		if (isProcessing) {
-			throw new UnsupportedOperationException("Copies cannot be requested while the copier is processing.");
+			throw new IllegalStateException("Copies cannot be requested while the copier is processing.");
 		}
 		copyRequests.put(crossSectionY + "," + crossSectionZ, new CopyData(crossSectionY, crossSectionZ));
 	}

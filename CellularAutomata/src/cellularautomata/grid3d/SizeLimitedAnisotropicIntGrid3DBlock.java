@@ -54,7 +54,7 @@ public class SizeLimitedAnisotropicIntGrid3DBlock implements IntGrid3D, Anisotro
 	@Override
 	public int getFromPosition(int x, int y, int z) {
 		if (slices == null) {
-			throw new UnsupportedOperationException("The grid block is no longer available.");
+			throw new IllegalStateException("The grid block is no longer available.");
 		}
 		return slices[x - minX].getFromPosition(y, z);
 	}

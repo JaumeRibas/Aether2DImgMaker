@@ -36,7 +36,7 @@ public class Grid3DZCrossSectionCopierProcessor<T> implements GridProcessor<Obje
 	
 	public void requestCopy(int crossSectionZ) {
 		if (isProcessing) {
-			throw new UnsupportedOperationException("Copies cannot be requested while the copier is processing.");
+			throw new IllegalStateException("Copies cannot be requested while the copier is processing.");
 		}
 		copyRequests.put(crossSectionZ, new CopyData(crossSectionZ));
 	}

@@ -33,7 +33,7 @@ public class LongGrid3DYCrossSectionCopierProcessor implements GridProcessor<Lon
 	
 	public void requestCopy(int crossSectionY) {
 		if (isProcessing) {
-			throw new UnsupportedOperationException("Copies cannot be requested while the copier is processing.");
+			throw new IllegalStateException("Copies cannot be requested while the copier is processing.");
 		}
 		copyRequests.put(crossSectionY, new CopyData(crossSectionY));
 	}

@@ -54,7 +54,7 @@ public class SizeLimitedAnisotropicLongGrid3DBlock implements LongGrid3D, Anisot
 	@Override
 	public long getFromPosition(int x, int y, int z) throws UnsupportedOperationException {
 		if (slices == null) {
-			throw new UnsupportedOperationException("The grid block is no longer available.");
+			throw new IllegalStateException("The grid block is no longer available.");
 		}
 		return slices[x - minX].getFromPosition(y, z);
 	}
