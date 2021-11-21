@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid2d;
 
+import java.util.Iterator;
+
 import cellularautomata.grid.IntGrid;
 
 public interface IntGrid2D extends Grid2D, IntGrid {
@@ -112,6 +114,11 @@ public interface IntGrid2D extends Grid2D, IntGrid {
 	@Override
 	default IntGrid2D subsection(int minX, int maxX, int minY, int maxY) {
 		return new IntSubGrid2D<IntGrid2D>(this, minX, maxX, minY, maxY);
+	}
+
+	@Override
+	default Iterator<Integer> iterator() {
+		return new IntGrid2DIterator(this);
 	}
 
 }

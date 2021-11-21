@@ -14,14 +14,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.grid;
+package cellularautomata.grid1d;
 
-public interface IntGrid extends Grid, Iterable<Integer> {
+import cellularautomata.grid.LongGrid;
 
-	int[] getMinAndMax() throws Exception;
+public interface SequentialLongGrid1D extends Grid1D, LongGrid {
 	
-	int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception;
-	
-	int getTotal() throws Exception;
 	
 }

@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid5d;
 
+import java.util.Iterator;
+
 import cellularautomata.grid.IntGrid;
 
 public interface IntGrid5D extends Grid5D, IntGrid {
@@ -128,5 +130,10 @@ public interface IntGrid5D extends Grid5D, IntGrid {
 //	default IntGrid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 //		return new IntSubGrid5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 //	}
+
+	@Override
+	default Iterator<Integer> iterator() {
+		return new IntGrid5DIterator(this);
+	}
 	
 }

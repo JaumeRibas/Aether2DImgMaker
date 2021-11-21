@@ -16,9 +16,12 @@
  */
 package cellularautomata.grid4d;
 
+import java.util.Iterator;
+
+import cellularautomata.grid.ObjectGrid;
 import cellularautomata.grid3d.ObjectGrid3D;
 
-public interface ObjectGrid4D<T> extends Grid4D {
+public interface ObjectGrid4D<T> extends Grid4D, ObjectGrid<T> {
 	
 	/**
 	 * Returns the value at a given position
@@ -55,6 +58,11 @@ public interface ObjectGrid4D<T> extends Grid4D {
 	@Override
 	default ObjectGrid3D<T> crossSectionAtZ(int z) {
 		return new ObjectGrid4DZCrossSection<T, ObjectGrid4D<T>>(this, z);
+	}
+
+	@Override
+	default Iterator<T> iterator() {
+		return new ObjectGrid4DIterator<T>(this);
 	}
 
 }

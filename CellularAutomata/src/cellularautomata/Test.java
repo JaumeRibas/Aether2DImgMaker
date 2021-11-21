@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -72,6 +73,7 @@ import cellularautomata.model.NumericModel;
 import cellularautomata.model.Model;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.NumericModel1D;
+import cellularautomata.model1d.SequentialLongModel1D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
@@ -1870,6 +1872,45 @@ public class Test {
 				}
 				if (!equal)
 					break;
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(SequentialLongModel1D ca1, LongModel1D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				Iterator<Long> iterator1 = ca1.iterator();
+				Iterator<Long> iterator2 = ca2.iterator();
+//				System.out.println("Comparing step " + ca1.getStep());
+				while (iterator1.hasNext() && iterator2.hasNext()) {
+					long value1 = iterator1.next();
+					long value2 = iterator2.next();
+					if (value1 != value2) {
+						equal = false;
+						System.out.println("Different value at step " + ca1.getStep() + ": " 
+								+ ca1.getClass().getSimpleName() + ":" + value1 
+								+ " != " + ca2.getClass().getSimpleName() + ":" + value2);
+						//return;
+					}
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal) {
+					return;
+				}
 			}
 			if (equal)
 				System.out.println("Equal!");

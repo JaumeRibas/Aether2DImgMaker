@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid3d;
 
+import java.util.Iterator;
+
 import cellularautomata.grid.LongGrid;
 import cellularautomata.grid2d.LongGrid2D;
 
@@ -133,6 +135,11 @@ public interface LongGrid3D extends Grid3D, LongGrid {
 	@Override
 	default LongGrid2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
 		return new LongGrid3DYZDiagonalCrossSection<LongGrid3D>(this, zOffsetFromY);
+	}
+
+	@Override
+	default Iterator<Long> iterator() {
+		return new LongGrid3DIterator(this);
 	}
 
 }

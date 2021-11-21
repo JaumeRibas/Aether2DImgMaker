@@ -16,12 +16,60 @@
  */
 package cellularautomata.grid;
 
-public interface LongGrid extends Grid {
+import java.io.IOException;
+import java.util.function.LongConsumer;
 
-	long[] getMinAndMax() throws Exception;
+public interface LongGrid extends Grid, Iterable<Long> {
+
+	default long[] getMinAndMax() throws Exception {
+		MinMaxConsumer action = new MinMaxConsumer() ;
+		forEach(action);
+		return new long[] { action.min, action.max };
+	}
 	
 	long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception;
 	
-	long getTotal() throws Exception;
+	default long getTotal() throws Exception {
+		TotalConsumer action = new TotalConsumer() ;
+		forEach(action);
+		return action.total;
+	}
 	
+	/**
+	 * Executes an action for each element of the grid in a consistent order.
+	 * 
+	 * @param action an action to execute for each element
+	 * @throws IOException
+	 */
+	default void forEach(LongConsumer action) throws IOException {
+		for (long value : this) {
+			action.accept(value);
+		}
+	}
+	
+	static class MinMaxConsumer implements LongConsumer {
+		
+		public long min = Long.MAX_VALUE;
+		public long max = Long.MIN_VALUE;
+		
+		@Override
+		public void accept(long value) {
+			if (value < min) {
+				min = value;
+			}
+			if (value > max) {
+				max = value;
+			}
+		}
+	}
+	
+	static class TotalConsumer implements LongConsumer {
+		
+		public long total = 0;
+		
+		@Override
+		public void accept(long value) {
+			total += value;
+		}
+	}
 }

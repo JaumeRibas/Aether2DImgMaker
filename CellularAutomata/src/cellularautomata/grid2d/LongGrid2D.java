@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid2d;
 
+import java.util.Iterator;
+
 import cellularautomata.grid.LongGrid;
 
 public interface LongGrid2D extends Grid2D, LongGrid {
@@ -112,6 +114,11 @@ public interface LongGrid2D extends Grid2D, LongGrid {
 	@Override
 	default LongGrid2D subsection(int minX, int maxX, int minY, int maxY) {
 		return new LongSubGrid2D<LongGrid2D>(this, minX, maxX, minY, maxY);
+	}
+
+	@Override
+	default Iterator<Long> iterator() {
+		return new LongGrid2DIterator(this);
 	}
 
 }

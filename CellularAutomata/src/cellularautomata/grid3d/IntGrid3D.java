@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid3d;
 
+import java.util.Iterator;
+
 import cellularautomata.grid.IntGrid;
 import cellularautomata.grid2d.IntGrid2D;
 
@@ -133,6 +135,11 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	@Override
 	default IntGrid2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
 		return new IntGrid3DYZDiagonalCrossSection<IntGrid3D>(this, zOffsetFromY);
+	}
+
+	@Override
+	default Iterator<Integer> iterator() {
+		return new IntGrid3DIterator(this);
 	}
 	
 }

@@ -16,12 +16,6 @@
  */
 package cellularautomata.grid;
 
-public interface IntGrid extends Grid, Iterable<Integer> {
-
-	int[] getMinAndMax() throws Exception;
-	
-	int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception;
-	
-	int getTotal() throws Exception;
+public interface ObjectGrid<T> extends Grid, Iterable<T> {
 	
 }

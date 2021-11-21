@@ -16,9 +16,12 @@
  */
 package cellularautomata.grid3d;
 
+import java.util.Iterator;
+
+import cellularautomata.grid.ObjectGrid;
 import cellularautomata.grid2d.ObjectGrid2D;
 
-public interface ObjectGrid3D<T> extends Grid3D {
+public interface ObjectGrid3D<T> extends Grid3D, ObjectGrid<T> {
 	
 	/**
 	 * Returns the object at a given position
@@ -64,6 +67,11 @@ public interface ObjectGrid3D<T> extends Grid3D {
 	@Override
 	default ObjectGrid2D<T> diagonalCrossSectionOnYZ(int zOffsetFromY) {
 		return new ObjectGrid3DYZDiagonalCrossSection<T, ObjectGrid3D<T>>(this, zOffsetFromY);
+	}
+
+	@Override
+	default Iterator<T> iterator() {
+		return new ObjectGrid3DIterator<T>(this);
 	}
 
 }

@@ -18,7 +18,7 @@ package cellularautomata.grid;
 
 import org.apache.commons.math3.FieldElement;
 
-public interface NumberGrid<T extends FieldElement<T> & Comparable<T>> extends Grid {
+public interface NumberGrid<T extends FieldElement<T> & Comparable<T>> extends ObjectGrid<T> {
 
 	MinAndMax<T> getMinAndMax() throws Exception;
 	

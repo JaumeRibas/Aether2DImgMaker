@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid1d;
 
+import java.util.Iterator;
+
 import cellularautomata.grid.LongGrid;
 
 public interface LongGrid1D extends Grid1D, LongGrid {
@@ -75,5 +77,10 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	@Override
 	default LongGrid1D subsection(int minX, int maxX) {
 		return new LongSubGrid1D<LongGrid1D>(this, minX, maxX);
+	}
+
+	@Override
+	default Iterator<Long> iterator() {
+		return new LongGrid1DIterator(this);
 	}
 }

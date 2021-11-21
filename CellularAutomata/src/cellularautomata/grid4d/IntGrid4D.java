@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid4d;
 
+import java.util.Iterator;
+
 import cellularautomata.grid.IntGrid;
 import cellularautomata.grid3d.IntGrid3D;
 
@@ -142,4 +144,10 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	default IntGrid3D diagonalCrossSectionOnWX(int xOffsetFromW) {
 		return new IntGrid4DWXDiagonalCrossSection<IntGrid4D>(this, xOffsetFromW);
 	}
+
+	@Override
+	default Iterator<Integer> iterator() {
+		return new IntGrid4DIterator(this);
+	}
+	
 }

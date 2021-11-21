@@ -16,7 +16,11 @@
  */
 package cellularautomata.grid1d;
 
-public interface ObjectGrid1D<T> extends Grid1D {
+import java.util.Iterator;
+
+import cellularautomata.grid.ObjectGrid;
+
+public interface ObjectGrid1D<T> extends Grid1D, ObjectGrid<T> {
 	
 	/**
 	 * Returns the value at a given position
@@ -29,5 +33,10 @@ public interface ObjectGrid1D<T> extends Grid1D {
 	@Override
 	default ObjectGrid1D<T> subsection(int minX, int maxX) {
 		return new ObjectSubGrid1D<T, ObjectGrid1D<T>>(this, minX, maxX);
+	}
+
+	@Override
+	default Iterator<T> iterator() {
+		return new ObjectGrid1DIterator<T>(this);
 	}
 }

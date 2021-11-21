@@ -16,7 +16,11 @@
  */
 package cellularautomata.grid2d;
 
-public interface ObjectGrid2D<T> extends Grid2D {
+import java.util.Iterator;
+
+import cellularautomata.grid.ObjectGrid;
+
+public interface ObjectGrid2D<T> extends Grid2D, ObjectGrid<T> {
 
 	/**
 	 * Returns the object at a given position
@@ -31,5 +35,10 @@ public interface ObjectGrid2D<T> extends Grid2D {
 	@Override
 	default ObjectGrid2D<T> subsection(int minX, int maxX, int minY, int maxY) {
 		return new ObjectSubGrid2D<T, ObjectGrid2D<T>>(this, minX, maxX, minY, maxY);
+	}
+
+	@Override
+	default Iterator<T> iterator() {
+		return new ObjectGrid2DIterator<T>(this);
 	}
 }
