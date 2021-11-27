@@ -55,7 +55,7 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicGrid3DA, 
 	 */
 	public IntAether3D(int initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of int type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -858,993,459. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DIntArray(7);

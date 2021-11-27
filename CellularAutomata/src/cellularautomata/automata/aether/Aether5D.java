@@ -54,7 +54,7 @@ public class Aether5D implements SymmetricLongModel5D, IsotropicHypercubicGrid5D
 	 */
 	public Aether5D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -2,049,638,230,412,172,401. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic5DLongArray(9);

@@ -62,7 +62,7 @@ public class ReverseAetherSimple3D implements LongModel3D {
 	public ReverseAetherSimple3D(long initialValue) {
 		//safety check to prevent exceeding the data type's max value
 		if (initialValue > MAX_INITIAL_VALUE) {
-			throw new IllegalArgumentException("Initial value cannot be greater than 3,689,348,814,741,910,323. Use a smaller initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be greater than %,d. Use a smaller initial value or a different implementation.", MAX_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
 		//initial side of the array, will be increased as needed

@@ -61,7 +61,7 @@ public class NearAether2Simple3D implements LongModel3D {
 	public NearAether2Simple3D(long initialValue) {
 		//safety check to prevent exceeding the data type's max value
 		if (initialValue < MIN_INITIAL_VALUE) {
-			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
 		//initial side of the array, will be increased as needed

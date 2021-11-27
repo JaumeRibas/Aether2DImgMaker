@@ -58,7 +58,7 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicGrid3DA, Se
 	 */
 	public Aether3D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DLongArray(7);

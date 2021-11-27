@@ -61,7 +61,7 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 		}
 		//safety check to prevent exceeding the data type's max value
 		if (singleSourceValue < MIN_INITIAL_VALUE) {
-			throw new IllegalArgumentException("Initial value cannot be smaller than -3,689,348,814,741,910,323. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		grid = new long[xSide][ySide][zSide];
 		grid[singleSourceX][singleSourceY][singleSourceZ] = singleSourceValue;

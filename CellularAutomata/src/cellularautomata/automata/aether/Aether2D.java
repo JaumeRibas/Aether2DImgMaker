@@ -54,7 +54,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareGrid2DA, S
 	 */
 	public Aether2D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -6,148,914,691,236,517,205. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic2DLongArray(6);

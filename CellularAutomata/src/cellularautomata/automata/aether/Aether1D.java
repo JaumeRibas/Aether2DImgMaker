@@ -54,7 +54,7 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicGrid1DA, Seriali
 	 */
 	public Aether1D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -9,223,372,036,854,775,807. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
 		grid = new long[5];

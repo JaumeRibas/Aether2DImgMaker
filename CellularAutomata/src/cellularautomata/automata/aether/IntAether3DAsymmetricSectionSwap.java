@@ -71,7 +71,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableModel3D<IntGrid3
 	 */
 	public IntAether3DAsymmetricSectionSwap(int initialValue, long maxGridHeapSize, String folderPath) throws Exception {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of int type
-			throw new IllegalArgumentException("Initial value cannot be smaller than -858,993,459. Use a greater initial value or a different implementation.");
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
