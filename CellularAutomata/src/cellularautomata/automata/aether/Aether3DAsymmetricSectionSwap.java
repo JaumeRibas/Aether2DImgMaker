@@ -27,6 +27,7 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.grid3d.LongGrid3D;
+import cellularautomata.grid3d.LongSubGrid3D;
 import cellularautomata.Utils;
 import cellularautomata.grid3d.AnisotropicGrid3DA;
 import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
@@ -174,6 +175,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 
 	@Override
 	public boolean nextStep() throws Exception {
+		step++;
 		if (readOnlyMode) {
 			readOnlyMode = false;
 			if (readWriteGridFolder.exists()) {
@@ -265,7 +267,6 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 			gridBlockA.setSlice(currentMaxX + 1, newXSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
-		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -2171,10 +2172,20 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	private void processGridBlock(SizeLimitedAnisotropicLongGrid3DBlock block) throws Exception {
 		if (block.minX <= maxX) {
 			LongGrid3D subBlock = null;
+			int maxY = getMaxY();
+			int maxZ = getMaxZ();
 			if (block.maxX > maxX) {
-				subBlock = new LongSubGrid3DWithXBounds(block, block.minX, maxX);
+				if (block.maxX > maxY || block.maxX > maxZ) {
+					subBlock = new LongSubGrid3D<LongGrid3D>(block, block.minX, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new LongSubGrid3DWithXBounds(block, block.minX, maxX);
+				}
 			} else {
-				subBlock = new ImmutableLongGrid3D(block);
+				if (block.maxX > maxY || block.maxX > maxZ) {
+					subBlock = new LongSubGrid3D<LongGrid3D>(block, block.minX, block.maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new ImmutableLongGrid3D(block);
+				}
 			}
 			triggerProcessGridBlock(subBlock);
 		}

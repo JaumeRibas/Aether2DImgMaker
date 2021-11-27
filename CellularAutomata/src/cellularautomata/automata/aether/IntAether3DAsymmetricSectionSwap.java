@@ -31,6 +31,7 @@ import cellularautomata.grid3d.AnisotropicGrid3DA;
 import cellularautomata.grid3d.AnisotropicIntGrid3DSlice;
 import cellularautomata.grid3d.ImmutableIntGrid3D;
 import cellularautomata.grid3d.IntGrid3D;
+import cellularautomata.grid3d.IntSubGrid3D;
 import cellularautomata.grid3d.IntSubGrid3DWithXBounds;
 import cellularautomata.grid3d.SizeLimitedAnisotropicIntGrid3DBlock;
 import cellularautomata.model3d.ActionableModel3D;
@@ -176,6 +177,7 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableModel3D<IntGrid3
 
 	@Override
 	public boolean nextStep() throws Exception {
+		step++;
 		triggerBeforeProcessing();
 		boolean gridChanged = false;
 		int[] relevantAsymmetricNeighborValues = new int[6];
@@ -261,7 +263,6 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableModel3D<IntGrid3
 			gridBlockA.setSlice(currentMaxX + 1, newXSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
-		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -2167,10 +2168,20 @@ public class IntAether3DAsymmetricSectionSwap extends ActionableModel3D<IntGrid3
 	private void processGridBlock(SizeLimitedAnisotropicIntGrid3DBlock block) throws Exception {
 		if (block.minX <= maxX) {
 			IntGrid3D subBlock = null;
+			int maxY = getMaxY();
+			int maxZ = getMaxZ();
 			if (block.maxX > maxX) {
-				subBlock = new IntSubGrid3DWithXBounds(block, block.minX, maxX);
+				if (block.maxX > maxY || block.maxX > maxZ) {
+					subBlock = new IntSubGrid3D<IntGrid3D>(block, block.minX, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new IntSubGrid3DWithXBounds(block, block.minX, maxX);
+				}
 			} else {
-				subBlock = new ImmutableIntGrid3D(block);
+				if (block.maxX > maxY || block.maxX > maxZ) {
+					subBlock = new IntSubGrid3D<IntGrid3D>(block, block.minX, block.maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new ImmutableIntGrid3D(block);
+				}
 			}
 			triggerProcessGridBlock(subBlock);
 		}

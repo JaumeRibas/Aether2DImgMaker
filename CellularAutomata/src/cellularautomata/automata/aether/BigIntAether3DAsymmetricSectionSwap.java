@@ -33,6 +33,7 @@ import cellularautomata.grid3d.AnisotropicBigIntGrid3DSlice;
 import cellularautomata.grid3d.AnisotropicGrid3DA;
 import cellularautomata.grid3d.ImmutableNumberGrid3D;
 import cellularautomata.grid3d.NumberGrid3D;
+import cellularautomata.grid3d.NumberSubGrid3D;
 import cellularautomata.grid3d.NumberSubGrid3DWithXBounds;
 import cellularautomata.grid3d.SizeLimitedAnisotropicBigIntGrid3DBlock;
 import cellularautomata.model3d.ActionableModel3D;
@@ -184,6 +185,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableModel3D<Numbe
 
 	@Override
 	public boolean nextStep() throws Exception {
+		step++;
 		triggerBeforeProcessing();
 		boolean gridChanged = false;
 		BigInt[] relevantAsymmetricNeighborValues = new BigInt[6];
@@ -269,7 +271,6 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableModel3D<Numbe
 			gridBlockA.setSlice(currentMaxX + 1, newXSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
-		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -2222,10 +2223,20 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableModel3D<Numbe
 	private void processGridBlock(SizeLimitedAnisotropicBigIntGrid3DBlock block) throws Exception {
 		if (block.minX <= maxX) {
 			NumberGrid3D<BigInt> subBlock = null;
+			int maxY = getMaxY();
+			int maxZ = getMaxZ();
 			if (block.maxX > maxX) {
-				subBlock = new NumberSubGrid3DWithXBounds<BigInt>(block, block.minX, maxX);
+				if (block.maxX > maxY || block.maxX > maxZ) {
+					subBlock = new NumberSubGrid3D<BigInt, NumberGrid3D<BigInt>>(block, block.minX, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new NumberSubGrid3DWithXBounds<BigInt>(block, block.minX, maxX);
+				}
 			} else {
-				subBlock = new ImmutableNumberGrid3D<BigInt>(block);
+				if (block.maxX > maxY || block.maxX > maxZ) {
+					subBlock = new NumberSubGrid3D<BigInt, NumberGrid3D<BigInt>>(block, block.minX, block.maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new ImmutableNumberGrid3D<BigInt>(block);
+				}
 			}
 			triggerProcessGridBlock(subBlock);
 		}

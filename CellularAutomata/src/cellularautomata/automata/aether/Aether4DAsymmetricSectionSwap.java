@@ -31,6 +31,7 @@ import cellularautomata.grid4d.AnisotropicGrid4DA;
 import cellularautomata.grid4d.AnisotropicLongGrid4DSlice;
 import cellularautomata.grid4d.ImmutableLongGrid4D;
 import cellularautomata.grid4d.LongGrid4D;
+import cellularautomata.grid4d.LongSubGrid4D;
 import cellularautomata.grid4d.LongSubGrid4DWithWBounds;
 import cellularautomata.grid4d.SizeLimitedAnisotropicLongGrid4DBlock;
 import cellularautomata.model4d.ActionableModel4D;
@@ -174,6 +175,7 @@ public class Aether4DAsymmetricSectionSwap extends ActionableModel4D<LongGrid4D>
 
 	@Override
 	public boolean nextStep() throws Exception {
+		step++;
 		if (readOnlyMode) {
 			readOnlyMode = false;
 			if (readWriteGridFolder.exists()) {
@@ -265,7 +267,6 @@ public class Aether4DAsymmetricSectionSwap extends ActionableModel4D<LongGrid4D>
 			gridBlockA.setSlice(currentMaxW + 1, newWSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
-		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -4306,10 +4307,21 @@ public class Aether4DAsymmetricSectionSwap extends ActionableModel4D<LongGrid4D>
 	private void processGridBlock(SizeLimitedAnisotropicLongGrid4DBlock block) throws Exception {
 		if (block.minW <= maxW) {
 			LongGrid4D subBlock = null;
+			int maxX = getMaxX();
+			int maxY = getMaxY();
+			int maxZ = getMaxZ();
 			if (block.maxW > maxW) {
-				subBlock = new LongSubGrid4DWithWBounds(block, block.minW, maxW);
+				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
+					subBlock = new LongSubGrid4D(block, block.minW, maxW, 0, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new LongSubGrid4DWithWBounds(block, block.minW, maxW);
+				}
 			} else {
-				subBlock = new ImmutableLongGrid4D(block);
+				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
+					subBlock = new LongSubGrid4D(block, block.minW, block.maxW, 0, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new ImmutableLongGrid4D(block);
+				}
 			}
 			triggerProcessGridBlock(subBlock);
 		}

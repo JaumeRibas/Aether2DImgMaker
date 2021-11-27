@@ -31,6 +31,7 @@ import cellularautomata.grid5d.AnisotropicGrid5DA;
 import cellularautomata.grid5d.AnisotropicLongGrid5DSlice;
 import cellularautomata.grid5d.ImmutableLongGrid5D;
 import cellularautomata.grid5d.LongGrid5D;
+import cellularautomata.grid5d.LongSubGrid5D;
 import cellularautomata.grid5d.LongSubGrid5DWithVBounds;
 import cellularautomata.grid5d.SizeLimitedAnisotropicLongGrid5DBlock;
 import cellularautomata.model5d.ActionableModel5D;
@@ -174,6 +175,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 
 	@Override
 	public boolean nextStep() throws Exception {
+		step++;
 		if (readOnlyMode) {
 			readOnlyMode = false;
 			if (readWriteGridFolder.exists()) {
@@ -265,7 +267,6 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 			gridBlockA.setSlice(currentMaxV + 1, newVSlices[RIGHT]);
 			processGridBlock(gridBlockA);
 		}
-		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -10746,10 +10747,22 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 	private void processGridBlock(SizeLimitedAnisotropicLongGrid5DBlock block) throws Exception {
 		if (block.minV <= maxV) {
 			LongGrid5D subBlock = null;
+			int maxW = getMaxW();
+			int maxX = getMaxX();
+			int maxY = getMaxY();
+			int maxZ = getMaxZ();
 			if (block.maxV > maxV) {
-				subBlock = new LongSubGrid5DWithVBounds(block, block.minV, maxV);
+				if (block.maxV > maxW || block.maxV > maxX || block.maxV > maxY || block.maxV > maxZ) {
+					subBlock = new LongSubGrid5D(block, block.minV, maxV, 0, maxW, 0, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new LongSubGrid5DWithVBounds(block, block.minV, maxV);
+				}
 			} else {
-				subBlock = new ImmutableLongGrid5D(block);
+				if (block.maxV > maxW || block.maxV > maxX || block.maxV > maxY || block.maxV > maxZ) {
+					subBlock = new LongSubGrid5D(block, block.minV, block.maxV, 0, maxW, 0, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new ImmutableLongGrid5D(block);
+				}
 			}
 			triggerProcessGridBlock(subBlock);
 		}

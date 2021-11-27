@@ -32,6 +32,7 @@ import cellularautomata.grid4d.AnisotropicBigIntGrid4DSlice;
 import cellularautomata.grid4d.AnisotropicGrid4DA;
 import cellularautomata.grid4d.ImmutableNumberGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
+import cellularautomata.grid4d.NumberSubGrid4D;
 import cellularautomata.grid4d.NumberSubGrid4DWithWBounds;
 import cellularautomata.grid4d.SizeLimitedAnisotropicBigIntGrid4DBlock;
 import cellularautomata.model4d.ActionableModel4D;
@@ -185,6 +186,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 
 	@Override
 	public boolean nextStep() throws Exception {
+		step++;
 		triggerBeforeProcessing();
 		boolean gridChanged = false;		
 		AnisotropicBigIntGrid4DSlice[] newGridSlices = 
@@ -253,7 +255,6 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 			gridBlockA.setSlice(currentMaxW + 1, newGridSlices[2]);
 			processGridBlock(gridBlockA);
 		}
-		step++;
 		triggerAfterProcessing();
 		return gridChanged;
 	}
@@ -261,10 +262,21 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 	private void processGridBlock(SizeLimitedAnisotropicBigIntGrid4DBlock block) throws Exception {
 		if (block.minW <= maxW) {
 			NumberGrid4D<BigInt> subBlock = null;
+			int maxX = getMaxX();
+			int maxY = getMaxY();
+			int maxZ = getMaxZ();
 			if (block.maxW > maxW) {
-				subBlock = new NumberSubGrid4DWithWBounds<BigInt>(block, block.minW, maxW);
+				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
+					subBlock = new NumberSubGrid4D<BigInt, NumberGrid4D<BigInt>>(block, block.minW, maxW, 0, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new NumberSubGrid4DWithWBounds<BigInt>(block, block.minW, maxW);
+				}
 			} else {
-				subBlock = new ImmutableNumberGrid4D<BigInt>(block);
+				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
+					subBlock = new NumberSubGrid4D<BigInt, NumberGrid4D<BigInt>>(block, block.minW, block.maxW, 0, maxX, 0, maxY, 0, maxZ);
+				} else {
+					subBlock = new ImmutableNumberGrid4D<BigInt>(block);
+				}
 			}
 			triggerProcessGridBlock(subBlock);
 		}
