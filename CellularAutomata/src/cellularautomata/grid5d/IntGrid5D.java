@@ -126,10 +126,10 @@ public interface IntGrid5D extends Grid5D, IntGrid {
 		return total;
 	}
 	
-//	@Override
-//	default IntGrid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-//		return new IntSubGrid5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
-//	}
+	@Override
+	default IntGrid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new IntSubGrid5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
 
 	@Override
 	default Iterator<Integer> iterator() {

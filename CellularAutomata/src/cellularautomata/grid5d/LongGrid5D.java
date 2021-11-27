@@ -126,10 +126,10 @@ public interface LongGrid5D extends Grid5D, LongGrid {
 		return total;
 	}
 	
-//	@Override
-//	default LongGrid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-//		return new LongSubGrid5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
-//	}
+	@Override
+	default LongGrid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new LongSubGrid5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
 
 	@Override
 	default Iterator<Long> iterator() {

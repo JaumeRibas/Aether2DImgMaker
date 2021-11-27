@@ -360,8 +360,8 @@ public interface Grid5D extends Grid {
 //		return new Grid5DZCrossSection<Grid5D>(this, z);
 //	}
 
-//	default Grid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-//		return new SubGrid5D<Grid5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
-//	}
+	default Grid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new SubGrid5D<Grid5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
 	
 }
