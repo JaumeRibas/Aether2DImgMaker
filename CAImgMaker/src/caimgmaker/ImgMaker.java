@@ -2183,9 +2183,9 @@ public class ImgMaker {
 					new ActionableLongGrid2DColorMapperProcessor(colorMapper, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 			ActionableLongGrid2DColorMapperProcessor oddScanColorMapperProcessor = 
 					new ActionableLongGrid2DColorMapperProcessor(colorMapper, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
-			ActionableLongGrid2DColorMapperProcessor evencolorMapperProcessor = 
+			ActionableLongGrid2DColorMapperProcessor evenColorMapperProcessor = 
 					new ActionableLongGrid2DColorMapperProcessor(colorMapper, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
-			ActionableLongGrid2DColorMapperProcessor oddcolorMapperProcessor = 
+			ActionableLongGrid2DColorMapperProcessor oddColorMapperProcessor = 
 					new ActionableLongGrid2DColorMapperProcessor(colorMapper, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
 			
 			String evenCrossSectionFolder, oddCrossSectionFolder, evenScanFolder, oddScanFolder;
@@ -2235,21 +2235,21 @@ public class ImgMaker {
 			
 			evenScanColorMapperProcessor.addProcessor(evenScanImageRenderer);
 			oddScanColorMapperProcessor.addProcessor(oddScanImageRenderer);
-			evencolorMapperProcessor.addProcessor(evenCrossSectionImageRenderer);
-			oddcolorMapperProcessor.addProcessor(oddCrossSectionImageRenderer);
+			evenColorMapperProcessor.addProcessor(evenCrossSectionImageRenderer);
+			oddColorMapperProcessor.addProcessor(oddCrossSectionImageRenderer);
 			
 			scan.addProcessor(evenScanColorMapperProcessor);
 			scan.addProcessor(oddScanColorMapperProcessor);
-			crossSection.addProcessor(evencolorMapperProcessor);
-			crossSection.addProcessor(oddcolorMapperProcessor);
+			crossSection.addProcessor(evenColorMapperProcessor);
+			crossSection.addProcessor(oddColorMapperProcessor);
 			
 			//generate images
 			ca.processGrid();
 			
 			scan.removeProcessor(evenScanColorMapperProcessor);
 			scan.removeProcessor(oddScanColorMapperProcessor);
-			crossSection.removeProcessor(evencolorMapperProcessor);
-			crossSection.removeProcessor(oddcolorMapperProcessor);
+			crossSection.removeProcessor(evenColorMapperProcessor);
+			crossSection.removeProcessor(oddColorMapperProcessor);
 			
 			folderImageCount++;
 			if (folderImageCount == imgsPerFolder) {
