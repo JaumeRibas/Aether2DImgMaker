@@ -44,26 +44,23 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 	}
 	
 	protected boolean getBounds() {
-		boolean isCrossing = false;
 		int w = source.getMinW();
 		int maxW = source.getMaxW();
-		for (; w <= maxW && !isCrossing; w++) {
-			int crossSectionX = w + xOffsetFromW;
-			int localMaxX = source.getMaxXAtW(w), localMinX = source.getMinXAtW(w);
-			if (crossSectionX >= localMinX && crossSectionX <= localMaxX) {
-				isCrossing = true;
-				crossSectionMinW = w;
-				crossSectionMaxW = w;
-				crossSectionMaxY = source.getMaxYAtWX(w, crossSectionX);
-				crossSectionMinY = source.getMinYAtWX(w, crossSectionX);
-				crossSectionMaxZ = source.getMaxZAtWX(w, crossSectionX);
-				crossSectionMinZ = source.getMinZAtWX(w, crossSectionX);
-			}
+		int crossSectionX = w + xOffsetFromW;
+		while (w <= maxW && (crossSectionX < source.getMinXAtW(w) || crossSectionX > source.getMaxXAtW(w))) {
+			w++;
+			crossSectionX++;
 		}
-		for (; w <= maxW; w++) {
-			int crossSectionX = w + xOffsetFromW;
-			int localMaxX = source.getMaxXAtW(w), localMinX = source.getMinXAtW(w);
-			if (crossSectionX >= localMinX && crossSectionX <= localMaxX) {
+		if (w <= maxW) {
+			crossSectionMinW = w;
+			crossSectionMaxW = w;
+			crossSectionMaxY = source.getMaxYAtWX(w, crossSectionX);
+			crossSectionMinY = source.getMinYAtWX(w, crossSectionX);
+			crossSectionMaxZ = source.getMaxZAtWX(w, crossSectionX);
+			crossSectionMinZ = source.getMinZAtWX(w, crossSectionX);
+			w++;
+			crossSectionX++;
+			while (w <= maxW && crossSectionX >= source.getMinXAtW(w) && crossSectionX <= source.getMaxXAtW(w)) {
 				crossSectionMaxW = w;
 				int localMaxY = source.getMaxYAtWX(w, crossSectionX), localMinY = source.getMinYAtWX(w, crossSectionX);
 				if (localMaxY > crossSectionMaxY) {
@@ -79,9 +76,13 @@ public class Grid4DWXDiagonalCrossSection<G extends Grid4D> implements Grid3D {
 				if (localMinZ < crossSectionMinZ) {
 					crossSectionMinZ = localMinZ;
 				}
+				w++;
+				crossSectionX++;
 			}
+			return true;
+		} else {
+			return false;
 		}
-		return isCrossing;
 	}
 	
 	@Override

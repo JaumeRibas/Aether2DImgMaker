@@ -36,24 +36,21 @@ public class Grid3DXZDiagonalCrossSection<G extends Grid3D> implements Grid2D {
 	}
 	
 	protected boolean getBounds() {
-		boolean isCrossing = false;
 		int x = source.getMinX();
 		int maxX = source.getMaxX();
-		for (; x <= maxX && !isCrossing; x++) {
-			int crossSectionZ = x + zOffsetFromX;
-			int localMaxZ = source.getMaxZAtX(x), localMinZ = source.getMinZAtX(x);
-			if (crossSectionZ >= localMinZ && crossSectionZ <= localMaxZ) {
-				isCrossing = true;
-				crossSectionMinX = x;
-				crossSectionMaxX = x;
-				crossSectionMaxY = source.getMaxY(x, crossSectionZ);
-				crossSectionMinY = source.getMinY(x, crossSectionZ);
-			}
+		int crossSectionZ = x + zOffsetFromX;
+		while (x <= maxX && (crossSectionZ < source.getMinZAtX(x) || crossSectionZ > source.getMaxZAtX(x))) {
+			x++;
+			crossSectionZ++;
 		}
-		for (; x <= maxX; x++) {
-			int crossSectionZ = x + zOffsetFromX;
-			int localMaxZ = source.getMaxZAtX(x), localMinZ = source.getMinZAtX(x);
-			if (crossSectionZ >= localMinZ && crossSectionZ <= localMaxZ) {
+		if (x <= maxX) {
+			crossSectionMinX = x;
+			crossSectionMaxX = x;
+			crossSectionMaxY = source.getMaxY(x, crossSectionZ);
+			crossSectionMinY = source.getMinY(x, crossSectionZ);
+			x++;
+			crossSectionZ++;
+			while (x <= maxX && crossSectionZ >= source.getMinZAtX(x) && crossSectionZ <= source.getMaxZAtX(x)) {
 				crossSectionMaxX = x;
 				int localMaxY = source.getMaxY(x, crossSectionZ), localMinY = source.getMinY(x, crossSectionZ);
 				if (localMaxY > crossSectionMaxY) {
@@ -62,9 +59,13 @@ public class Grid3DXZDiagonalCrossSection<G extends Grid3D> implements Grid2D {
 				if (localMinY < crossSectionMinY) {
 					crossSectionMinY = localMinY;
 				}
+				x++;
+				crossSectionZ++;
 			}
+			return true;
+		} else {
+			return false;
 		}
-		return isCrossing;
 	}
 	
 	@Override
