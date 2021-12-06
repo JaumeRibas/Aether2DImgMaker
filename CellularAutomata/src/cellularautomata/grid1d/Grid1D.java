@@ -16,9 +16,15 @@
  */
 package cellularautomata.grid1d;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
+import cellularautomata.grid.PartialCoordinates;
 
-public interface Grid1D extends Grid {
+public interface Grid1D extends GridRegion {
+	
+	@Override
+	default int getGridDimension() {
+		return 1;
+	}
 	
 	/**
 	 * Returns the smallest x-coordinate
@@ -43,5 +49,25 @@ public interface Grid1D extends Grid {
 	 */
 	default Grid1D subsection(int minX, int maxX) {
 		return new SubGrid1D<Grid1D>(this, minX, maxX);
+	}
+
+	@Override
+	default int getUpperBound(int axis) {
+		return getMaxX();
+	}
+
+	@Override
+	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+		return getMaxX();
+	}
+
+	@Override
+	default int getLowerBound(int axis) {
+		return getMinX();
+	}
+
+	@Override
+	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+		return getMinX();
 	}
 }

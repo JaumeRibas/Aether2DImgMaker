@@ -16,7 +16,7 @@
  */
 package cellularautomata.grid;
 
-public interface IntGrid extends Grid, Iterable<Integer> {
+public interface IntGrid extends GridRegion, Iterable<Integer> {
 
 	int[] getMinAndMax() throws Exception;
 	

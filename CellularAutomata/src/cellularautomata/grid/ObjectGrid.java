@@ -16,6 +16,6 @@
  */
 package cellularautomata.grid;
 
-public interface ObjectGrid<T> extends Grid, Iterable<T> {
+public interface ObjectGrid<T> extends GridRegion, Iterable<T> {
 	
 }

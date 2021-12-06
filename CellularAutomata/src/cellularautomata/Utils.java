@@ -48,6 +48,18 @@ public class Utils {
 		out.close();
 	}
 	
+	public static char getAxisLetterFromIndex(int dimension, int axisIndex) {
+		if (dimension < 3) {
+			return (char) (axisIndex + 120);//120 letter 'x'
+		} else {
+			return (char) (122 - dimension + axisIndex  + 1);//122 letter 'z'
+		}
+	}
+	
+	public static char getUpperCaseAxisLetterFromIndex(int dimension, int axisIndex) {
+		return Character.toUpperCase(getAxisLetterFromIndex(dimension, axisIndex));
+	}
+	
 	public static <T extends Comparable<T>> T max(T a, T b) {
 		if (a.compareTo(b) > 0)
 			return a;

@@ -16,7 +16,7 @@
  */
 package cellularautomata.grid;
 
-public abstract class ActionableGridTransformerProcessor<G1 extends Grid, G2 extends Grid> 
+public abstract class ActionableGridTransformerProcessor<G1 extends GridRegion, G2 extends GridRegion> 
 	extends ActionableGrid<G2> implements GridProcessor<G1> {
 
 	protected ActionableGrid<G1> source;

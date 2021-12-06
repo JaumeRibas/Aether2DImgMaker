@@ -16,9 +16,15 @@
  */
 package cellularautomata.grid5d;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
+import cellularautomata.grid.PartialCoordinates;
 
-public interface Grid5D extends Grid {
+public interface Grid5D extends GridRegion {
+	
+	@Override
+	default int getGridDimension() {
+		return 5;
+	}
 	
 	int getMinV();
 
@@ -362,6 +368,546 @@ public interface Grid5D extends Grid {
 
 	default Grid5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new SubGrid5D<Grid5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default int getUpperBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMaxV();
+		case 1: 
+			return getMaxW();
+		case 2: 
+			return getMaxX();
+		case 3: 
+			return getMaxY();
+		case 4: 
+			return getMaxZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+		Integer v, w, x, y, z;
+		switch (axis) {
+		case 0:
+			w = coordinates.get(1);	x = coordinates.get(2);	y = coordinates.get(3); z = coordinates.get(4);
+			if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						if (z == null) {
+							return getMaxV();
+						} else {
+							return getMaxVAtZ(z);
+						}
+					} else if (z == null) {
+						return getMaxVAtY(y);
+					} else {
+						return getMaxVAtYZ(y, z);
+					}
+				} else if (y == null) {
+					if (z == null) {
+						return getMaxVAtX(x);
+					} else {
+						return getMaxVAtXZ(x, z);
+					}
+				} else if (z == null) {
+					return getMaxVAtXY(x, y);
+				} else {
+					return getMaxVAtXYZ(x, y, z);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMaxVAtW(w);
+					} else {
+						return getMaxVAtWZ(w, z);
+					}
+				} else if (z == null) {
+					return getMaxVAtWY(w, y);
+				} else {
+					return getMaxVAtWYZ(w, y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMaxVAtWX(w, x);
+				} else {
+					return getMaxVAtWXZ(w, x, z);
+				}
+			} else if (z == null) {
+				return getMaxVAtWXY(w, x, y);
+			} else {
+				return getMaxV(w, x, y, z);
+			}
+		case 1:
+			v = coordinates.get(0);	x = coordinates.get(2);	y = coordinates.get(3); z = coordinates.get(4);
+			if (v == null) {
+				if (x == null) {
+					if (y == null) {
+						if (z == null) {
+							return getMaxW();
+						} else {
+							return getMaxWAtZ(z);
+						}
+					} else if (z == null) {
+						return getMaxWAtY(y);
+					} else {
+						return getMaxWAtYZ(y, z);
+					}
+				} else if (y == null) {
+					if (z == null) {
+						return getMaxWAtX(x);
+					} else {
+						return getMaxWAtXZ(x, z);
+					}
+				} else if (z == null) {
+					return getMaxWAtXY(x, y);
+				} else {
+					return getMaxWAtXYZ(x, y, z);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMaxWAtV(v);
+					} else {
+						return getMaxWAtVZ(v, z);
+					}
+				} else if (z == null) {
+					return getMaxWAtVY(v, y);
+				} else {
+					return getMaxWAtVYZ(v, y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMaxWAtVX(v, x);
+				} else {
+					return getMaxWAtVXZ(v, x, z);
+				}
+			} else if (z == null) {
+				return getMaxWAtVXY(v, x, y);
+			} else {
+				return getMaxW(v, x, y, z);
+			}
+		case 2:
+			v = coordinates.get(0);	w = coordinates.get(1);	y = coordinates.get(3); z = coordinates.get(4);
+			if (v == null) {
+				if (w == null) {
+					if (y == null) {
+						if (z == null) {
+							return getMaxX();
+						} else {
+							return getMaxXAtZ(z);
+						}
+					} else if (z == null) {
+						return getMaxXAtY(y);
+					} else {
+						return getMaxXAtYZ(y, z);
+					}
+				} else if (y == null) {
+					if (z == null) {
+						return getMaxXAtW(w);
+					} else {
+						return getMaxXAtWZ(w, z);
+					}
+				} else if (z == null) {
+					return getMaxXAtWY(w, y);
+				} else {
+					return getMaxXAtWYZ(w, y, z);
+				}
+			} else if (w == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMaxXAtV(v);
+					} else {
+						return getMaxXAtVZ(v, z);
+					}
+				} else if (z == null) {
+					return getMaxXAtVY(v, y);
+				} else {
+					return getMaxXAtVYZ(v, y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMaxXAtVW(v, w);
+				} else {
+					return getMaxXAtVWZ(v, w, z);
+				}
+			} else if (z == null) {
+				return getMaxXAtVWY(v, w, y);
+			} else {
+				return getMaxX(v, w, y, z);
+			}
+		case 3:
+			v = coordinates.get(0);	w = coordinates.get(1);	x = coordinates.get(2); z = coordinates.get(4);
+			if (v == null) {
+				if (w == null) {
+					if (x == null) {
+						if (z == null) {
+							return getMaxY();
+						} else {
+							return getMaxYAtZ(z);
+						}
+					} else if (z == null) {
+						return getMaxYAtX(x);
+					} else {
+						return getMaxYAtXZ(x, z);
+					}
+				} else if (x == null) {
+					if (z == null) {
+						return getMaxYAtW(w);
+					} else {
+						return getMaxYAtWZ(w, z);
+					}
+				} else if (z == null) {
+					return getMaxYAtWX(w, x);
+				} else {
+					return getMaxYAtWXZ(w, x, z);
+				}
+			} else if (w == null) {
+				if (x == null) {
+					if (z == null) {
+						return getMaxYAtV(v);
+					} else {
+						return getMaxYAtVZ(v, z);
+					}
+				} else if (z == null) {
+					return getMaxYAtVX(v, x);
+				} else {
+					return getMaxYAtVXZ(v, x, z);
+				}
+			} else if (x == null) {
+				if (z == null) {
+					return getMaxYAtVW(v, w);
+				} else {
+					return getMaxYAtVWZ(v, w, z);
+				}
+			} else if (z == null) {
+				return getMaxYAtVWX(v, w, x);
+			} else {
+				return getMaxY(v, w, x, z);
+			}
+		case 4:
+			v = coordinates.get(0);	w = coordinates.get(1);	x = coordinates.get(2); y = coordinates.get(3);
+			if (v == null) {
+				if (w == null) {
+					if (x == null) {
+						if (y == null) {
+							return getMaxZ();
+						} else {
+							return getMaxZAtY(y);
+						}
+					} else if (y == null) {
+						return getMaxZAtX(x);
+					} else {
+						return getMaxZAtXY(x, y);
+					}
+				} else if (x == null) {
+					if (y == null) {
+						return getMaxZAtW(w);
+					} else {
+						return getMaxZAtWY(w, y);
+					}
+				} else if (y == null) {
+					return getMaxZAtWX(w, x);
+				} else {
+					return getMaxZAtWXY(w, x, y);
+				}
+			} else if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						return getMaxZAtV(v);
+					} else {
+						return getMaxZAtVY(v, y);
+					}
+				} else if (y == null) {
+					return getMaxZAtVX(v, x);
+				} else {
+					return getMaxZAtVXY(v, x, y);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					return getMaxZAtVW(v, w);
+				} else {
+					return getMaxZAtVWY(v, w, y);
+				}
+			} else if (y == null) {
+				return getMaxZAtVWX(v, w, x);
+			} else {
+				return getMaxZ(v, w, x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getLowerBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMinV();
+		case 1: 
+			return getMinW();
+		case 2: 
+			return getMinX();
+		case 3: 
+			return getMinY();
+		case 4: 
+			return getMinZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+		Integer v, w, x, y, z;
+		switch (axis) {
+		case 0:
+			w = coordinates.get(1);	x = coordinates.get(2);	y = coordinates.get(3); z = coordinates.get(4);
+			if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						if (z == null) {
+							return getMinV();
+						} else {
+							return getMinVAtZ(z);
+						}
+					} else if (z == null) {
+						return getMinVAtY(y);
+					} else {
+						return getMinVAtYZ(y, z);
+					}
+				} else if (y == null) {
+					if (z == null) {
+						return getMinVAtX(x);
+					} else {
+						return getMinVAtXZ(x, z);
+					}
+				} else if (z == null) {
+					return getMinVAtXY(x, y);
+				} else {
+					return getMinVAtXYZ(x, y, z);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMinVAtW(w);
+					} else {
+						return getMinVAtWZ(w, z);
+					}
+				} else if (z == null) {
+					return getMinVAtWY(w, y);
+				} else {
+					return getMinVAtWYZ(w, y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMinVAtWX(w, x);
+				} else {
+					return getMinVAtWXZ(w, x, z);
+				}
+			} else if (z == null) {
+				return getMinVAtWXY(w, x, y);
+			} else {
+				return getMinV(w, x, y, z);
+			}
+		case 1:
+			v = coordinates.get(0);	x = coordinates.get(2);	y = coordinates.get(3); z = coordinates.get(4);
+			if (v == null) {
+				if (x == null) {
+					if (y == null) {
+						if (z == null) {
+							return getMinW();
+						} else {
+							return getMinWAtZ(z);
+						}
+					} else if (z == null) {
+						return getMinWAtY(y);
+					} else {
+						return getMinWAtYZ(y, z);
+					}
+				} else if (y == null) {
+					if (z == null) {
+						return getMinWAtX(x);
+					} else {
+						return getMinWAtXZ(x, z);
+					}
+				} else if (z == null) {
+					return getMinWAtXY(x, y);
+				} else {
+					return getMinWAtXYZ(x, y, z);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMinWAtV(v);
+					} else {
+						return getMinWAtVZ(v, z);
+					}
+				} else if (z == null) {
+					return getMinWAtVY(v, y);
+				} else {
+					return getMinWAtVYZ(v, y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMinWAtVX(v, x);
+				} else {
+					return getMinWAtVXZ(v, x, z);
+				}
+			} else if (z == null) {
+				return getMinWAtVXY(v, x, y);
+			} else {
+				return getMinW(v, x, y, z);
+			}
+		case 2:
+			v = coordinates.get(0);	w = coordinates.get(1);	y = coordinates.get(3); z = coordinates.get(4);
+			if (v == null) {
+				if (w == null) {
+					if (y == null) {
+						if (z == null) {
+							return getMinX();
+						} else {
+							return getMinXAtZ(z);
+						}
+					} else if (z == null) {
+						return getMinXAtY(y);
+					} else {
+						return getMinXAtYZ(y, z);
+					}
+				} else if (y == null) {
+					if (z == null) {
+						return getMinXAtW(w);
+					} else {
+						return getMinXAtWZ(w, z);
+					}
+				} else if (z == null) {
+					return getMinXAtWY(w, y);
+				} else {
+					return getMinXAtWYZ(w, y, z);
+				}
+			} else if (w == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMinXAtV(v);
+					} else {
+						return getMinXAtVZ(v, z);
+					}
+				} else if (z == null) {
+					return getMinXAtVY(v, y);
+				} else {
+					return getMinXAtVYZ(v, y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMinXAtVW(v, w);
+				} else {
+					return getMinXAtVWZ(v, w, z);
+				}
+			} else if (z == null) {
+				return getMinXAtVWY(v, w, y);
+			} else {
+				return getMinX(v, w, y, z);
+			}
+		case 3:
+			v = coordinates.get(0);	w = coordinates.get(1);	x = coordinates.get(2); z = coordinates.get(4);
+			if (v == null) {
+				if (w == null) {
+					if (x == null) {
+						if (z == null) {
+							return getMinY();
+						} else {
+							return getMinYAtZ(z);
+						}
+					} else if (z == null) {
+						return getMinYAtX(x);
+					} else {
+						return getMinYAtXZ(x, z);
+					}
+				} else if (x == null) {
+					if (z == null) {
+						return getMinYAtW(w);
+					} else {
+						return getMinYAtWZ(w, z);
+					}
+				} else if (z == null) {
+					return getMinYAtWX(w, x);
+				} else {
+					return getMinYAtWXZ(w, x, z);
+				}
+			} else if (w == null) {
+				if (x == null) {
+					if (z == null) {
+						return getMinYAtV(v);
+					} else {
+						return getMinYAtVZ(v, z);
+					}
+				} else if (z == null) {
+					return getMinYAtVX(v, x);
+				} else {
+					return getMinYAtVXZ(v, x, z);
+				}
+			} else if (x == null) {
+				if (z == null) {
+					return getMinYAtVW(v, w);
+				} else {
+					return getMinYAtVWZ(v, w, z);
+				}
+			} else if (z == null) {
+				return getMinYAtVWX(v, w, x);
+			} else {
+				return getMinY(v, w, x, z);
+			}
+		case 4:
+			v = coordinates.get(0);	w = coordinates.get(1);	x = coordinates.get(2); y = coordinates.get(3);
+			if (v == null) {
+				if (w == null) {
+					if (x == null) {
+						if (y == null) {
+							return getMinZ();
+						} else {
+							return getMinZAtY(y);
+						}
+					} else if (y == null) {
+						return getMinZAtX(x);
+					} else {
+						return getMinZAtXY(x, y);
+					}
+				} else if (x == null) {
+					if (y == null) {
+						return getMinZAtW(w);
+					} else {
+						return getMinZAtWY(w, y);
+					}
+				} else if (y == null) {
+					return getMinZAtWX(w, x);
+				} else {
+					return getMinZAtWXY(w, x, y);
+				}
+			} else if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						return getMinZAtV(v);
+					} else {
+						return getMinZAtVY(v, y);
+					}
+				} else if (y == null) {
+					return getMinZAtVX(v, x);
+				} else {
+					return getMinZAtVXY(v, x, y);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					return getMinZAtVW(v, w);
+				} else {
+					return getMinZAtVWY(v, w, y);
+				}
+			} else if (y == null) {
+				return getMinZAtVWX(v, w, x);
+			} else {
+				return getMinZ(v, w, x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		}
 	}
 	
 }

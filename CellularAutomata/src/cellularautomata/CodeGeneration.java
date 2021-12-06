@@ -35,7 +35,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int axis = 0; axis < dimension; axis++) {
 			axes[axis] = axis;
-			char axisLetter = getAxisLetterFromIndex(dimension, axis);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, axis);
 			axisLetters[axis] = axisLetter;
 			axisUpperCaseLetters[axis] = Character.toUpperCase(axisLetter);
 		}
@@ -161,7 +161,7 @@ public class CodeGeneration {
 			char[] axisUpperCaseLetters = new char[dimension];
 			for (int axis = 0; axis < dimension; axis++) {
 				axes[axis] = axis;
-				char axisLetter = getAxisLetterFromIndex(dimension, axis);
+				char axisLetter = Utils.getAxisLetterFromIndex(dimension, axis);
 				axisLetters[axis] = axisLetter;
 				axisUpperCaseLetters[axis] = Character.toUpperCase(axisLetter);
 			}
@@ -296,7 +296,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
@@ -384,7 +384,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
@@ -472,7 +472,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
@@ -560,7 +560,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
@@ -648,7 +648,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
@@ -720,7 +720,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
@@ -792,7 +792,7 @@ public class CodeGeneration {
 		char[] axisUpperCaseLetters = new char[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = getAxisLetterFromIndex(dimension, i);
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
 			axisLetters[i] = axisLetter;
 			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
 		}
@@ -911,7 +911,7 @@ public class CodeGeneration {
 		//add coordinates parameters if needed
 		for (int i = 1; i < dimension; i++) {
 			if (type.coordinates[i] == null) {
-				method.append("int ").append(getAxisLetterFromIndex(dimension, i)).append(", ");
+				method.append("int ").append(Utils.getAxisLetterFromIndex(dimension, i)).append(", ");
 			}
 		}
 		//add current value parameter
@@ -920,7 +920,7 @@ public class CodeGeneration {
 		int neighborCount = type.neighbors.size();
 		for (int i = 0; i < neighborCount; i++) {
 			NeighborType neighbor = type.neighbors.get(i);
-			char axisLetter = getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+			char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
 			String dir = neighbor.isPositiveDirection? "g" : "s";
 			String varPrefix = dir + axisLetter;
 			method.append("long ").append(varPrefix).append("Value, ");
@@ -935,7 +935,7 @@ public class CodeGeneration {
 		for (int i = 1; i < dimension; i++) {
 			arrayBrackets.append("[]");
 		}
-		char firstAxisLetter = getUpperCaseAxisLetterFromIndex(dimension, 0);
+		char firstAxisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, 0);
 		if (neighborCount > 2) {
 			//add arrays to reuse
 			method.append("long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, ");
@@ -957,7 +957,7 @@ public class CodeGeneration {
 			method.append("int relevantNeighborCount = 0;").append(getNL(ind1));
 			for (int i = 0; i < neighborCount; i++) {
 				NeighborType neighbor = type.neighbors.get(i);
-				char axisLetter = getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+				char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
 				String dir = neighbor.isPositiveDirection? "g" : "s";
 				String varPrefix = dir + axisLetter;
 				String valueVarName = varPrefix + "Value";
@@ -976,7 +976,7 @@ public class CodeGeneration {
 						method.append("nc[").append(axis).append("] = ");
 						Integer coordinate = type.coordinates[axis];
 						if (coordinate == null) {
-							method.append(getAxisLetterFromIndex(dimension, axis));
+							method.append(Utils.getAxisLetterFromIndex(dimension, axis));
 						} else {
 							method.append(coordinate);
 						}
@@ -990,7 +990,7 @@ public class CodeGeneration {
 						method.append("nc[").append(axis).append("] = ");
 						coordinate = type.coordinates[axis];
 						if (coordinate == null) {
-							method.append(getAxisLetterFromIndex(dimension, axis));
+							method.append(Utils.getAxisLetterFromIndex(dimension, axis));
 						} else {
 							method.append(coordinate);
 						}
@@ -999,7 +999,7 @@ public class CodeGeneration {
 					method.append("nc[").append(axis).append("] = ");
 					coordinate = type.coordinates[axis];
 					if (coordinate == null) {
-						method.append(getAxisLetterFromIndex(dimension, axis));
+						method.append(Utils.getAxisLetterFromIndex(dimension, axis));
 						if (neighbor.isPositiveDirection) {
 							method.append(" + 1");
 						} else {
@@ -1020,7 +1020,7 @@ public class CodeGeneration {
 						method.append("nc[").append(axis).append("] = ");
 						coordinate = type.coordinates[axis];
 						if (coordinate == null) {
-							method.append(getAxisLetterFromIndex(dimension, axis));
+							method.append(Utils.getAxisLetterFromIndex(dimension, axis));
 						} else {
 							method.append(coordinate);
 						}
@@ -1052,7 +1052,7 @@ public class CodeGeneration {
 			method.append("return topplePosition(new").append(firstAxisLetter).append("Slices, currentValue, ");
 			for (int i = 1; i < dimension; i++) {
 				if (type.coordinates[i] == null) {
-					method.append(getAxisLetterFromIndex(dimension, i));
+					method.append(Utils.getAxisLetterFromIndex(dimension, i));
 				} else {
 					method.append(type.coordinates[i]);
 				}
@@ -1223,7 +1223,7 @@ public class CodeGeneration {
 		int size = maxCoord + 1;
 		StringBuilder header = new StringBuilder();
 		StringBuilder underline = new StringBuilder();
-		header.append("  ").append(getAxisLetterFromIndex(dimension, 0)).append(" ");
+		header.append("  ").append(Utils.getAxisLetterFromIndex(dimension, 0)).append(" ");
 		underline.append("------------");
 		if (!hideNeighborhood) {
 			underline.append("---------------");
@@ -1232,7 +1232,7 @@ public class CodeGeneration {
 			underline.append("---------");
 		}
 		for (int coord = 1; coord < dimension; coord++) {
-			header.append("|  ").append(getAxisLetterFromIndex(dimension, coord)).append(" ");
+			header.append("|  ").append(Utils.getAxisLetterFromIndex(dimension, coord)).append(" ");
 			underline.append("-----");
 		}
 		if (!hideNeighborhood) {
@@ -1281,7 +1281,7 @@ public class CodeGeneration {
 	public static void printAnisotropicPositionsVonNeumannNeighborhoods(int dimension, int size, boolean hideNeighborhood, boolean hideTypeB) {
 		StringBuilder header = new StringBuilder();
 		StringBuilder underline = new StringBuilder();
-		header.append("  ").append(getAxisLetterFromIndex(dimension, 0)).append(" ");
+		header.append("  ").append(Utils.getAxisLetterFromIndex(dimension, 0)).append(" ");
 		underline.append("------------");
 		if (!hideNeighborhood) {
 			underline.append("---------------");
@@ -1290,7 +1290,7 @@ public class CodeGeneration {
 			underline.append("---------");
 		}
 		for (int coord = 1; coord < dimension; coord++) {
-			header.append("|  ").append(getAxisLetterFromIndex(dimension, coord)).append(" ");
+			header.append("|  ").append(Utils.getAxisLetterFromIndex(dimension, coord)).append(" ");
 			underline.append("-----");
 		}
 		if (!hideNeighborhood) {
@@ -1374,18 +1374,6 @@ public class CodeGeneration {
 		}
 	}
 	
-	private static char getAxisLetterFromIndex(int dimension, int axisIndex) {
-		if (dimension < 3) {
-			return (char) (axisIndex + 120);//120 letter 'x'
-		} else {
-			return (char) (122 - dimension + axisIndex  + 1);//122 letter 'z'
-		}
-	}
-	
-	private static char getUpperCaseAxisLetterFromIndex(int dimension, int axisIndex) {
-		return Character.toUpperCase(getAxisLetterFromIndex(dimension, axisIndex));
-	}
-	
 	public static void printAnisotropicPositions(int dimension, int size) {
 		int[] coordinates = new int[dimension];
 		int sizeMinusOne = size - 1;
@@ -1417,7 +1405,7 @@ public class CodeGeneration {
 	private static void printAnisotropicPosition(int[] coords) {
 		String[] strCoords = new String[coords.length];
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = getAxisLetterFromIndex(coords.length, axis);
+			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);
 			strCoords[axis] = coordLetter + " = " + coords[axis];
 		}		
 		System.out.println(String.join(", ", strCoords));
@@ -1431,7 +1419,7 @@ public class CodeGeneration {
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = getAxisLetterFromIndex(coords.length, axis);
+			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);
 			strCoords[axis] = coords[axis] > 9 ? coords[axis] + "" : "0" + coords[axis];
 			
 			int[] greaterNeighborCoords = coords.clone();
@@ -1521,7 +1509,7 @@ public class CodeGeneration {
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = getAxisLetterFromIndex(coords.length, axis);			
+			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);			
 			int[] greaterNeighborCoords = coords.clone();
 			int[] smallerNeighborCoords = coords.clone();
 			greaterNeighborCoords[axis]++;
@@ -1596,7 +1584,7 @@ public class CodeGeneration {
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = getAxisLetterFromIndex(coords.length, axis);			
+			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);			
 			int[] greaterNeighborCoords = coords.clone();
 			int[] smallerNeighborCoords = coords.clone();
 			greaterNeighborCoords[axis]++;

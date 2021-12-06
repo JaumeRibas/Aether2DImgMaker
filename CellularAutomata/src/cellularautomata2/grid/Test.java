@@ -16,8 +16,9 @@
  */
 package cellularautomata2.grid;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.PositionCommand;
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
 import cellularautomata2.arrays.Utils;
 
 public class Test {
@@ -34,10 +35,10 @@ public class Test {
 			vertex2[i] = 2;
 		}
 		AlignedHyperrectangle testRectangle = new AlignedHyperrectangle(vertex1, vertex2);
-		testRectangle.forEachPosition(new PositionCommand() {
+		testRectangle.forEachPosition(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				System.out.println(coordinates);
 			}
 		});
@@ -52,10 +53,10 @@ public class Test {
 			vertex2[i] = 2;
 		}
 		AlignedHyperrectangle testRectangle = new AlignedHyperrectangle(vertex1, vertex2);
-		testRectangle.forEachEvenPosition(new PositionCommand() {
+		testRectangle.forEachEvenPosition(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				if (!Utils.isEvenPosition(coordinates.getCopyAsArray())) {
 					System.out.println("Wroong!");
 				}
@@ -73,10 +74,10 @@ public class Test {
 			vertex2[i] = 2;
 		}
 		AlignedHyperrectangle testRectangle = new AlignedHyperrectangle(vertex1, vertex2);
-		testRectangle.forEachOddPosition(new PositionCommand() {
+		testRectangle.forEachOddPosition(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				if (Utils.isEvenPosition(coordinates.getCopyAsArray())) {
 					System.out.println("Wroong!");
 				}

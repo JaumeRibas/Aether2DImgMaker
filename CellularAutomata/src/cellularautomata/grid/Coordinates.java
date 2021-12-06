@@ -14,35 +14,42 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.grid;
+package cellularautomata.grid;
+
+import java.util.Arrays;
 
 /**
- * A way to pass immutable partial coordinates to methods.
+ * A way to pass immutable coordinates to methods.
  * @author Jaume
  *
  */
-public class PartialCoordinates {
+public class Coordinates {
 	
-	private Integer[] coordinates;
+	private int[] coordinates;
 	
-	public PartialCoordinates(Integer... coordinates) {
+	public Coordinates(int... coordinates) {
 		this.coordinates = coordinates;
 	}
 	
-	public Integer get(int axis) {
+	public int get(int axis) {
 		return coordinates[axis];
 	}
-
+	
 	public int getCount() {
 		return coordinates.length;
 	}
 	
-	public Integer[] getCopyAsArray() {
+	public int[] getCopyAsArray() {
 		return coordinates.clone();
 	}
 	
-	public void copyIntoArray(Integer[] array) {
+	public void copyIntoArray(int[] array) {
 		System.arraycopy(coordinates, 0, array, 0, array.length);
+	}
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(coordinates);
 	}
 	
 }

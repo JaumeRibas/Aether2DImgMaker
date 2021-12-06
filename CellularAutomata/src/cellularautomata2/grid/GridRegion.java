@@ -16,8 +16,10 @@
  */
 package cellularautomata2.grid;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.PositionCommand;
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata2.arrays.Utils;
 
 /**
@@ -101,18 +103,18 @@ public interface GridRegion extends GridEntity {
 	int getLowerBound(int axis, PartialCoordinates coordinates);
 	
 	/**
-	 * Executes a {@link PositionCommand} for every position of the region.
-	 * @param command
+	 * Feeds the coordinates of every position of the region to the consumer.
+	 * @param consumer
 	 */
-	default void forEachPosition(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	default void forEachPosition(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			command.execute(immutableCoordinates);
+			consumer.accept(immutableCoordinates);
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
 			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
@@ -126,7 +128,7 @@ public interface GridRegion extends GridEntity {
 					int upperBound = getUpperBound(0, immutablePartialCoordinates);
 					for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
 						coordinates[0] = currentCoordinate;
-						command.execute(immutableCoordinates);
+						consumer.accept(immutableCoordinates);
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
@@ -155,18 +157,18 @@ public interface GridRegion extends GridEntity {
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every even position of the region.
-	 * @param commands
+	 * Feeds the coordinates of every even position of the region to the consumer.
+	 * @param consumer
 	 */
-	default void forEachEvenPosition(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	default void forEachEvenPosition(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			command.execute(immutableCoordinates);			
+			consumer.accept(immutableCoordinates);			
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
 			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
@@ -185,7 +187,7 @@ public interface GridRegion extends GridEntity {
 					}
 					for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 						coordinates[0] = currentCoordinate;
-						command.execute(immutableCoordinates);
+						consumer.accept(immutableCoordinates);
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
@@ -214,12 +216,12 @@ public interface GridRegion extends GridEntity {
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every odd position of the region.
-	 * @param commands
+	 * Feeds the coordinates of every odd position of the region to the consumer.
+	 * @param consumer
 	 */
-	default void forEachOddPosition(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	default void forEachOddPosition(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
@@ -241,7 +243,7 @@ public interface GridRegion extends GridEntity {
 				}
 				for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 					coordinates[0] = currentCoordinate;
-					command.execute(immutableCoordinates);
+					consumer.accept(immutableCoordinates);
 				}
 				isBeginningOfLoop = false;
 				currentAxis++;
@@ -269,7 +271,7 @@ public interface GridRegion extends GridEntity {
 	}
 	
 	/* Recursive version
-	protected void loopCoord(PositionCommand command, int[] coordinates, int axis) {
+	protected void loopCoord(Consumer<Coordinates> consumer, int[] coordinates, int axis) {
 		Integer[] boundsCoordinates = new Integer[getGridDimension() - 1];
 		for (int i = 0; i < axis; i++) {
 			boundsCoordinates[i] = new Integer(coordinates[i]);
@@ -280,7 +282,7 @@ public interface GridRegion extends GridEntity {
 				int lowerBound = bounds[i].getLower();
 				int upperBound = bounds[i].getUpper();
 				for (coordinates[0] = lowerBound; coordinates[0] <= upperBound; coordinates[0]++) {
-					command.execute(coordinates);
+					consumer.accept(coordinates);
 				}
 			}
 		} else {
@@ -289,7 +291,7 @@ public interface GridRegion extends GridEntity {
 				int lowerBound = bounds[i].getLower();
 				int upperBound = bounds[i].getUpper();
 				for (coordinates[axis] = lowerBound; coordinates[axis] <= upperBound; coordinates[axis]++) {
-					loopCoord(commands, coordinates, previousAxis);
+					loopCoord(consumer, coordinates, previousAxis);
 				}
 			}
 		}

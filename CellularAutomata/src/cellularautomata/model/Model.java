@@ -19,9 +19,9 @@ package cellularautomata.model;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
 
-public interface Model extends Grid {	
+public interface Model extends GridRegion {	
 		
 	/**
 	 * Computes the next step of the model and returns whether

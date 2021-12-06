@@ -16,10 +16,16 @@
  */
 package cellularautomata.grid3d;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata.grid2d.Grid2D;
 
-public interface Grid3D extends Grid {
+public interface Grid3D extends GridRegion {
+	
+	@Override
+	default int getGridDimension() {
+		return 3;
+	}
 	
 	/**
 	 * Returns the smallest x-coordinate of the grid
@@ -322,6 +328,132 @@ public interface Grid3D extends Grid {
 	
 	default Grid2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
 		return new Grid3DYZDiagonalCrossSection<Grid3D>(this, zOffsetFromY);
+	}
+	
+	@Override
+	default int getUpperBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMaxX();
+		case 1: 
+			return getMaxY();
+		case 2: 
+			return getMaxZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+		Integer x, y, z;
+		switch (axis) {
+		case 0:
+			y = coordinates.get(1);
+			z = coordinates.get(2);
+			if (y == null) {
+				if (z == null) {
+					return getMaxX();
+				} else {
+					return getMaxXAtZ(z);
+				}
+			} else if (z == null) {
+				return getMaxXAtY(y);
+			} else {
+				return getMaxX(y, z);
+			}
+		case 1:
+			x = coordinates.get(0);
+			z = coordinates.get(2);
+			if (x == null) {
+				if (z == null) {
+					return getMaxY();
+				} else {
+					return getMaxYAtZ(z);
+				}
+			} else if (z == null) {
+				return getMaxYAtX(x);
+			} else {
+				return getMaxY(x, z);
+			}
+		case 2:
+			x = coordinates.get(0);
+			y = coordinates.get(1);
+			if (x == null) {
+				if (y == null) {
+					return getMaxZ();
+				} else {
+					return getMaxZAtY(y);
+				}
+			} else if (y == null) {
+				return getMaxZAtX(x);
+			} else {
+				return getMaxZ(x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getLowerBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMinX();
+		case 1: 
+			return getMinY();
+		case 2: 
+			return getMinZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+		Integer x, y, z;
+		switch (axis) {
+		case 0:
+			y = coordinates.get(1);
+			z = coordinates.get(2);
+			if (y == null) {
+				if (z == null) {
+					return getMinX();
+				} else {
+					return getMinXAtZ(z);
+				}
+			} else if (z == null) {
+				return getMinXAtY(y);
+			} else {
+				return getMinX(y, z);
+			}
+		case 1:
+			x = coordinates.get(0);
+			z = coordinates.get(2);
+			if (x == null) {
+				if (z == null) {
+					return getMinY();
+				} else {
+					return getMinYAtZ(z);
+				}
+			} else if (z == null) {
+				return getMinYAtX(x);
+			} else {
+				return getMinY(x, z);
+			}
+		case 2:
+			x = coordinates.get(0);
+			y = coordinates.get(1);
+			if (x == null) {
+				if (y == null) {
+					return getMinZ();
+				} else {
+					return getMinZAtY(y);
+				}
+			} else if (y == null) {
+				return getMinZAtX(x);
+			} else {
+				return getMinZ(x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
 	}
 
 }

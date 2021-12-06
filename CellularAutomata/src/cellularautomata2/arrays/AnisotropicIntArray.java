@@ -16,6 +16,11 @@
  */
 package cellularautomata2.arrays;
 
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+
+import cellularautomata.grid.Coordinates;
+
 public class AnisotropicIntArray extends AnisotropicArray implements MultidimensionalIntArray {
 
 	private int[] values;
@@ -50,18 +55,18 @@ public class AnisotropicIntArray extends AnisotropicArray implements Multidimens
 	}
 	
 	public void padEdges(int edgeWidth, int value) {
-		forEachEdgeIndex(edgeWidth, new PositionCommand() {		
+		forEachEdgeIndex(edgeWidth, new Consumer<Coordinates>() {		
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				set(coordinates, value);
 			}
 		});
 	}
 	
 	@Override
-	public void forEachValue(IntValueCommand command) {
+	public void forEachValue(IntConsumer consumer) {
 		for (int i = 0; i < values.length; i++) {
-			command.execute(values[i]);
+			consumer.accept(values[i]);
 		}
 	}
 	

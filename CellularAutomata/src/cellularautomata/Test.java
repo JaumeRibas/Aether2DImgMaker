@@ -53,7 +53,7 @@ import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid3d.BigFractionGrid3DPattern;
 import cellularautomata.grid3d.BigIntGrid3DPattern;
-import cellularautomata.grid3d.DummyIntGrid3D;
+import cellularautomata.grid3d.RegularIntGrid3D;
 import cellularautomata.grid3d.Grid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntGrid3DXCrossSectionCopierProcessor;
@@ -189,7 +189,7 @@ public class Test {
 	public static void test2DDiagonals() throws Exception {
 		int[][][] sourceValues;
 		int[][] resultValues;
-		DummyIntGrid3D grid;
+		RegularIntGrid3D grid;
 		IntGrid2D diagonal;
 		int side = 20;
 		int offset = 5;
@@ -208,7 +208,7 @@ public class Test {
 					}
 				}
 			}			
-			grid = new DummyIntGrid3D(sourceValues, 0, 0, 0);
+			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
 			diagonal = grid.diagonalCrossSectionOnXY(off);
 			compare(diagonal, resultValues, 0, 0);
 		}
@@ -226,7 +226,7 @@ public class Test {
 					}
 				}
 			}			
-			grid = new DummyIntGrid3D(sourceValues, 0, 0, 0);
+			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
 			diagonal = grid.diagonalCrossSectionOnXZ(off);
 			compare(diagonal, resultValues, 0, 0);
 		}
@@ -244,7 +244,7 @@ public class Test {
 					}
 				}
 			}			
-			grid = new DummyIntGrid3D(sourceValues, 0, 0, 0);
+			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
 			diagonal = grid.diagonalCrossSectionOnYZ(off);
 			compare(diagonal, resultValues, 0, 0);
 		}

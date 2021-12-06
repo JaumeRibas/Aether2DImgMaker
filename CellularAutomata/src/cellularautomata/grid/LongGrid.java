@@ -19,7 +19,7 @@ package cellularautomata.grid;
 import java.io.IOException;
 import java.util.function.LongConsumer;
 
-public interface LongGrid extends Grid, Iterable<Long> {
+public interface LongGrid extends GridRegion, Iterable<Long> {
 
 	default long[] getMinAndMax() throws Exception {
 		MinMaxConsumer action = new MinMaxConsumer() ;

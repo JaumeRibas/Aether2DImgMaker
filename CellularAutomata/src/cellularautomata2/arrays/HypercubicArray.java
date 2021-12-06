@@ -16,6 +16,10 @@
  */
 package cellularautomata2.arrays;
 
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
+
 /**
  * An hypercube shaped multidimensional array.
  * 
@@ -58,20 +62,20 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	}
 	
 	@Override
-	public void forEachIndex(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	public void forEachIndex(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			command.execute(immutableCoordinates);
+			consumer.accept(immutableCoordinates);
 		} else {
 			int sideMinusOne = side - 1;
 			int currentAxis = 0;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) { 
-					command.execute(immutableCoordinates);
+					consumer.accept(immutableCoordinates);
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				if (currentCoordinate < sideMinusOne) {
@@ -87,15 +91,15 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	}
 	
 	@Override
-	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
+	public void forEachEdgeIndex(int edgeWidth, Consumer<Coordinates> consumer) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
 		}
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		if (dimension > 0 && side <= 2*edgeWidth) {
-			forEachIndex(command);
+			forEachIndex(consumer);
 		} else {
 			int[] upperBounds = new int[dimension];
 			int[] lowerBounds = new int[dimension];
@@ -109,11 +113,11 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 				//top edge
 				int realUpperBound = upperBounds[i];
 				upperBounds[i] = edgeWidthMinusOne;
-				forEachIndexWithinBounds(upperBounds, lowerBounds, command);
+				forEachIndexWithinBounds(upperBounds, lowerBounds, consumer);
 				upperBounds[i] = realUpperBound;
 				//bottom edge
 				lowerBounds[i] = upperBounds[i] - edgeWidthMinusOne;
-				forEachIndexWithinBounds(upperBounds, lowerBounds, command);
+				forEachIndexWithinBounds(upperBounds, lowerBounds, consumer);
 				//new bounds to prevent repeating positions
 				upperBounds[i] = lowerBounds[i] - 1;
 				lowerBounds[i] = edgeWidth;

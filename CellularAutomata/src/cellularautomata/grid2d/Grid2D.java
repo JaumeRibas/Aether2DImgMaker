@@ -16,9 +16,15 @@
  */
 package cellularautomata.grid2d;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
+import cellularautomata.grid.PartialCoordinates;
 
-public interface Grid2D extends Grid {
+public interface Grid2D extends GridRegion {
+	
+	@Override
+	default int getGridDimension() {
+		return 2;
+	}
 	
 	/**
 	 * Returns the smallest x-coordinate
@@ -107,6 +113,70 @@ public interface Grid2D extends Grid {
 	 */
 	default Grid2D subsection(int minX, int maxX, int minY, int maxY) {
 		return new SubGrid2D<Grid2D>(this, minX, maxX, minY, maxY);
+	}
+	
+	@Override
+	default int getUpperBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMaxX();
+		case 1: 
+			return getMaxY();
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+		switch (axis) {
+		case 0: 
+			Integer y = coordinates.get(1);
+			if (y == null) {
+				return getMaxX();
+			} else {
+				return getMaxX(y);
+			}
+		case 1: 
+			Integer x = coordinates.get(0);
+			if (x == null) {
+				return getMaxY();
+			} else {
+				return getMaxY(x);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getLowerBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMinX();
+		case 1: 
+			return getMinY();
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+		switch (axis) {
+		case 0: 
+			Integer y = coordinates.get(1);
+			if (y == null) {
+				return getMinX();
+			} else {
+				return getMinX(y);
+			}
+		case 1: 
+			Integer x = coordinates.get(0);
+			if (x == null) {
+				return getMinY();
+			} else {
+				return getMinY(x);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
 	}
 	
 }

@@ -16,8 +16,12 @@
  */
 package cellularautomata2.arrays;
 
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
+
 /**
- * An array with the shape of an asymmetric sub-region of a square-like multidimensional shape with isotropic symmetry around a center position.
+ * An array with the shape of an asymmetric sub-region of an hypercubic shape with isotropic symmetry around a center position.
  * Its positions are those that meet this condition: side >= coord 1 >= coord 2... >= coord n >= 0
  * 
  * @author Jaume
@@ -61,21 +65,21 @@ public abstract class AnisotropicArray extends HypercubicArray {
 	}
 	
 	@Override
-	public void forEachIndex(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	public void forEachIndex(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			command.execute(immutableCoordinates);
+			consumer.accept(immutableCoordinates);
 		} else {
 			int sideMinusOne = side - 1;
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					command.execute(immutableCoordinates);
+					consumer.accept(immutableCoordinates);
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;
@@ -97,15 +101,15 @@ public abstract class AnisotropicArray extends HypercubicArray {
 	}
 
 	@Override
-	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
+	public void forEachEdgeIndex(int edgeWidth, Consumer<Coordinates> consumer) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
 		}
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		if (dimension > 0 && side <= edgeWidth) {
-			forEachIndex(command);
+			forEachIndex(consumer);
 		} else {
 			int[] coordinates = new int[dimension];
 			if (dimension > 0) {
@@ -117,7 +121,7 @@ public abstract class AnisotropicArray extends HypercubicArray {
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					command.execute(immutableCoordinates);
+					consumer.accept(immutableCoordinates);
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;

@@ -19,6 +19,9 @@ package cellularautomata2.arrays;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
 
 public class Test {	
 
@@ -63,10 +66,10 @@ public class Test {
 		System.out.println("dimension: " + arr.getDimension());
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		System.out.println("Setting values");
-		arr.forEachIndex(new PositionCommand() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				int value = Utils.getRandomInt(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
 				list.add(value);
 				arr.set(coordinates, value);		
@@ -74,10 +77,10 @@ public class Test {
 		});
 		System.out.println("Getting values");
 		Iterator<Integer> iterator = list.iterator();
-		arr.forEachIndex(new PositionCommand() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				int value = arr.get(coordinates);
 				if (value != iterator.next()) {
 					System.err.println("Wroong!");
@@ -102,10 +105,10 @@ public class Test {
 		System.out.println("dimension: " + arr.getDimension());
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		System.out.println("Setting values");
-		arr.forEachIndex(new PositionCommand() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				int value = Utils.getRandomInt(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
 				list.add(value);
 				arr.set(coordinates, value);		
@@ -113,10 +116,10 @@ public class Test {
 		});
 		System.out.println("Getting values");
 		Iterator<Integer> iterator = list.iterator();
-		arr.forEachIndex(new PositionCommand() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				int value = arr.get(coordinates);
 				if (value != iterator.next()) {
 					System.err.println("Wroong!");
@@ -169,10 +172,10 @@ public class Test {
 	public static void testRectangularIntArray3() {
 		HyperrectangularIntArray arr = new HyperrectangularIntArray(new int[] { 3, 3, 3 });
 		System.out.println("dimension: " + arr.getDimension());
-		arr.forEachIndex(new PositionCommand() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
+			public void accept(Coordinates coordinates) {
 				System.out.println(coordinates);
 			}
 		});

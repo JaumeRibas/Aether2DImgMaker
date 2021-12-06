@@ -16,11 +16,11 @@
  */
 package cellularautomata.grid;
 
-public interface SymmetricGrid extends Grid {	
+public interface SymmetricGrid extends GridRegion {	
 	/**
 	 * Returns an asymmetric section of the grid
 	 * 
 	 * @return a grid
 	 */
-	Grid asymmetricSection();
+	GridRegion asymmetricSection();
 }

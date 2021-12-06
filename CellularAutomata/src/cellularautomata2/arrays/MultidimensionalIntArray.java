@@ -16,14 +16,18 @@
  */
 package cellularautomata2.arrays;
 
+import java.util.function.IntConsumer;
+
+import cellularautomata.grid.Coordinates;
+
 public interface MultidimensionalIntArray extends MultidimensionalArray {
 	
 	/**
-	 * Executes a {@link IntValueCommand} for every value of the array.
+	 * Feeds every value of the array to an {@link IntConsumer}.
 	 * 
-	 * @param command
+	 * @param consumer
 	 */
-	void forEachValue(IntValueCommand command);
+	void forEachValue(IntConsumer consumer);
 	
 	/**
 	 * <p>Gets the value at the given indexes.</p>

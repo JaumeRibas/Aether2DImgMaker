@@ -17,9 +17,9 @@
 package cellularautomata2.automata;
 
 import java.util.Scanner;
+import java.util.function.Consumer;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.PositionCommand;
+import cellularautomata.grid.Coordinates;
 import cellularautomata2.grid.IntGridRegion;
 
 public class Test {
@@ -48,10 +48,10 @@ public class Test {
 			boolean finished2 = false;
 //			boolean equal = true;
 			while (!finished1 && !finished2) {
-				region1.forEachPosition(new PositionCommand() {
+				region1.forEachPosition(new Consumer<Coordinates>() {
 					
 					@Override
-					public void execute(Coordinates coordinates) {
+					public void accept(Coordinates coordinates) {
 						if (region1.getValue(coordinates) != region2.getValue(coordinates)) {
 //							equsal = false;
 							System.out.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
@@ -81,10 +81,10 @@ public class Test {
 			SpreadIntegerValueSimple siv = new SpreadIntegerValueSimple(1, 0, 9);
 			do {
 				counter++;
-				siv.forEachPosition(new PositionCommand() {
+				siv.forEachPosition(new Consumer<Coordinates>() {
 					
 					@Override
-					public void execute(Coordinates coordinates) {
+					public void accept(Coordinates coordinates) {
 						System.out.print(siv.getValue(coordinates) + " ");
 					}
 				});

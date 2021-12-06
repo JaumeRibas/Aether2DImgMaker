@@ -16,8 +16,9 @@
  */
 package cellularautomata2.grid;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.IntValueCommand;
+import java.util.function.IntConsumer;
+
+import cellularautomata.grid.Coordinates;
 
 public abstract class SymmetricIntGridRegion extends IntGridRegion implements SymmetricGridRegion {
 
@@ -33,30 +34,30 @@ public abstract class SymmetricIntGridRegion extends IntGridRegion implements Sy
 	public abstract int getValueFromAsymmetricRegion(Coordinates coordinates);
 
 	/**
-	 * Executes a {@link IntValueCommand} for every value of an asymmetric region.
-	 * @param command
+	 * Feeds every value of an asymmetric region to an {@link IntConsumer}.
+	 * @param consumer
 	 */
-	public abstract void forEachValueInAsymmetricRegion(IntValueCommand command);
+	public abstract void forEachValueInAsymmetricRegion(IntConsumer consumer);
 
 	@Override
 	public Bounds getValueBounds() throws Exception {
-		GetValueBoundsValueCommand command = new GetValueBoundsValueCommand();
-		forEachValueInAsymmetricRegion(command);
-		return new Bounds(command.lowerBound, command.upperBound);
+		GetValueBoundsValueConsumer consumer = new GetValueBoundsValueConsumer();
+		forEachValueInAsymmetricRegion(consumer);
+		return new Bounds(consumer.lowerBound, consumer.upperBound);
 	}
 	
 	@Override
 	public Bounds getEvenPositionsValueBounds() throws Exception {
-		GetValueBoundsCoordinateCommand command = new GetValueBoundsCoordinateCommand(this);
-		forEachEvenPositionInAsymmetricRegion(command);
-		return new Bounds(command.lowerBound, command.upperBound);
+		GetValueBoundsCoordinateConsumer consumer = new GetValueBoundsCoordinateConsumer(this);
+		forEachEvenPositionInAsymmetricRegion(consumer);
+		return new Bounds(consumer.lowerBound, consumer.upperBound);
 	}
 	
 	@Override
 	public Bounds getOddPositionsValueBounds() throws Exception {
-		GetValueBoundsCoordinateCommand command = new GetValueBoundsCoordinateCommand(this);
-		forEachOddPositionInAsymmetricRegion(command);
-		return new Bounds(command.lowerBound, command.upperBound);
+		GetValueBoundsCoordinateConsumer consumer = new GetValueBoundsCoordinateConsumer(this);
+		forEachOddPositionInAsymmetricRegion(consumer);
+		return new Bounds(consumer.lowerBound, consumer.upperBound);
 	}
 	
 	

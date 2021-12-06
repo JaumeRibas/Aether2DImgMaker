@@ -19,7 +19,7 @@ package cellularautomata.grid;
 import java.util.HashSet;
 import java.util.Set;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
 
 //TODO try to make it more standard. Perhaps using the Iterable interface. 
 /**
@@ -29,7 +29,7 @@ import cellularautomata.grid.Grid;
  *
  * @param <G>
  */
-public abstract class ActionableGrid<G extends Grid> {
+public abstract class ActionableGrid<G extends GridRegion> {
 	
 	protected Set<GridProcessor<G>> processors;
 	

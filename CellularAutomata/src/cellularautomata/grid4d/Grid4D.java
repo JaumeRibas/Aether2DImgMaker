@@ -16,10 +16,16 @@
  */
 package cellularautomata.grid4d;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata.grid3d.Grid3D;
 
-public interface Grid4D extends Grid {
+public interface Grid4D extends GridRegion {
+	
+	@Override
+	default int getGridDimension() {
+		return 4;
+	}
 	
 	/**
 	 * Returns the smallest w-coordinate
@@ -310,5 +316,251 @@ public interface Grid4D extends Grid {
 	
 	default Grid3D diagonalCrossSectionOnWX(int xOffsetFromW) {
 		return new Grid4DWXDiagonalCrossSection<Grid4D>(this, xOffsetFromW);
+	}
+	
+	@Override
+	default int getUpperBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMaxW();
+		case 1: 
+			return getMaxX();
+		case 2: 
+			return getMaxY();
+		case 3: 
+			return getMaxZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+		Integer w, x, y, z;
+		switch (axis) {
+		case 0:
+			x = coordinates.get(1);	y = coordinates.get(2); z = coordinates.get(3);
+			if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMaxW();
+					} else {
+						return getMaxWAtZ(z);
+					}
+				} else if (z == null) {
+					return getMaxWAtY(y);
+				} else {
+					return getMaxWAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMaxWAtX(x);
+				} else {
+					return getMaxWAtXZ(x, z);
+				}
+			} else if (z == null) {
+				return getMaxWAtXY(x, y);
+			} else {
+				return getMaxW(x, y, z);
+			}
+		case 1:
+			w = coordinates.get(0);	y = coordinates.get(2); z = coordinates.get(3);
+			if (w == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMaxX();
+					} else {
+						return getMaxXAtZ(z);
+					}
+				} else if (z == null) {
+					return getMaxXAtY(y);
+				} else {
+					return getMaxXAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMaxXAtW(w);
+				} else {
+					return getMaxXAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getMaxXAtWY(w, y);
+			} else {
+				return getMaxX(w, y, z);
+			}
+		case 2:
+			w = coordinates.get(0);	x = coordinates.get(1); z = coordinates.get(3);
+			if (w == null) {
+				if (x == null) {
+					if (z == null) {
+						return getMaxY();
+					} else {
+						return getMaxYAtZ(z);
+					}
+				} else if (z == null) {
+					return getMaxYAtX(x);
+				} else {
+					return getMaxYAtXZ(x, z);
+				}
+			} else if (x == null) {
+				if (z == null) {
+					return getMaxYAtW(w);
+				} else {
+					return getMaxYAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getMaxYAtWX(w, x);
+			} else {
+				return getMaxY(w, x, z);
+			}
+		case 3:
+			w = coordinates.get(0);	x = coordinates.get(1); y = coordinates.get(2);
+			if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						return getMaxZ();
+					} else {
+						return getMaxZAtY(y);
+					}
+				} else if (y == null) {
+					return getMaxZAtX(x);
+				} else {
+					return getMaxZAtXY(x, y);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					return getMaxZAtW(w);
+				} else {
+					return getMaxZAtWY(w, y);
+				}
+			} else if (y == null) {
+				return getMaxZAtWX(w, x);
+			} else {
+				return getMaxZ(w, x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getLowerBound(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMinW();
+		case 1: 
+			return getMinX();
+		case 2: 
+			return getMinY();
+		case 3: 
+			return getMinZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+		Integer w, x, y, z;
+		switch (axis) {
+		case 0:
+			x = coordinates.get(1);	y = coordinates.get(2); z = coordinates.get(3);
+			if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMinW();
+					} else {
+						return getMinWAtZ(z);
+					}
+				} else if (z == null) {
+					return getMinWAtY(y);
+				} else {
+					return getMinWAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMinWAtX(x);
+				} else {
+					return getMinWAtXZ(x, z);
+				}
+			} else if (z == null) {
+				return getMinWAtXY(x, y);
+			} else {
+				return getMinW(x, y, z);
+			}
+		case 1:
+			w = coordinates.get(0);	y = coordinates.get(2); z = coordinates.get(3);
+			if (w == null) {
+				if (y == null) {
+					if (z == null) {
+						return getMinX();
+					} else {
+						return getMinXAtZ(z);
+					}
+				} else if (z == null) {
+					return getMinXAtY(y);
+				} else {
+					return getMinXAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getMinXAtW(w);
+				} else {
+					return getMinXAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getMinXAtWY(w, y);
+			} else {
+				return getMinX(w, y, z);
+			}
+		case 2:
+			w = coordinates.get(0);	x = coordinates.get(1); z = coordinates.get(3);
+			if (w == null) {
+				if (x == null) {
+					if (z == null) {
+						return getMinY();
+					} else {
+						return getMinYAtZ(z);
+					}
+				} else if (z == null) {
+					return getMinYAtX(x);
+				} else {
+					return getMinYAtXZ(x, z);
+				}
+			} else if (x == null) {
+				if (z == null) {
+					return getMinYAtW(w);
+				} else {
+					return getMinYAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getMinYAtWX(w, x);
+			} else {
+				return getMinY(w, x, z);
+			}
+		case 3:
+			w = coordinates.get(0);	x = coordinates.get(1); y = coordinates.get(2);
+			if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						return getMinZ();
+					} else {
+						return getMinZAtY(y);
+					}
+				} else if (y == null) {
+					return getMinZAtX(x);
+				} else {
+					return getMinZAtXY(x, y);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					return getMinZAtW(w);
+				} else {
+					return getMinZAtWY(w, y);
+				}
+			} else if (y == null) {
+				return getMinZAtWX(w, x);
+			} else {
+				return getMinZ(w, x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
 	}
 }

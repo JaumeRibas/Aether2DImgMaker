@@ -15,6 +15,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 package cellularautomata2.grid;
+
+import cellularautomata.grid.PartialCoordinates;
+
 /**
  * An hyperrectangular region of dimension n, whose edges are parallel to the axes.
  * 

@@ -16,6 +16,10 @@
  */
 package cellularautomata2.arrays;
 
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
+
 public interface MultidimensionalArray {
 	
 	/**
@@ -33,10 +37,10 @@ public interface MultidimensionalArray {
 	long getVolume();
 	
 	/**
-	 * Executes a {@link PositionCommand} for every index of the array.
+	 * Feeds every index of the array to a {@link Consumer<Coordinates>}.
 	 * 
-	 * @param command
+	 * @param consumer
 	 */
-	void forEachIndex(PositionCommand command);
+	void forEachIndex(Consumer<Coordinates> consumer);
 	
 }

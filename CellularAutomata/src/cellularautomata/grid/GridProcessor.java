@@ -16,9 +16,9 @@
  */
 package cellularautomata.grid;
 
-import cellularautomata.grid.Grid;
+import cellularautomata.grid.GridRegion;
 
-public interface GridProcessor<G extends Grid> {
+public interface GridProcessor<G extends GridRegion> {
 
 	default void addedToGrid(ActionableGrid<G> grid) {
 		//do nothing

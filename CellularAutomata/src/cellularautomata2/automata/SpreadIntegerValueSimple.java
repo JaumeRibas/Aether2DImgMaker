@@ -18,14 +18,14 @@ package cellularautomata2.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.IntValueCommand;
-import cellularautomata2.arrays.PositionCommand;
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata2.arrays.HypercubicIntArray;
 import cellularautomata2.arrays.Utils;
 import cellularautomata2.grid.IntGridRegion;
-import cellularautomata2.grid.PartialCoordinates;
 
 public class SpreadIntegerValueSimple extends IntGridRegion implements CellularAutomaton {
 
@@ -34,7 +34,7 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 	private int initialValue;
 	private int backgroundValue;
 	
-	/** A square-like array representing the grid */
+	/** An hypercubic array representing the grid */
 	private HypercubicIntArray grid;
 	
 	/** The index of the origin within the array */
@@ -59,7 +59,7 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 		immutableIndexes = new Coordinates(indexes);
 		newIndexes = new int[gridDimension];
 		immutableNewIndexes = new Coordinates(newIndexes);
-		//Create a square-like array to represent the grid. With the initial value at the origin.
+		//Create an hypercubic array to represent the grid. With the initial value at the origin.
 		//Make the array of side 5 so as to leave a margin of two positions around the center.
 		int side = 5;
 		grid = new HypercubicIntArray(gridDimension, side);
@@ -103,9 +103,9 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 		} else {
 			newGrid = new HypercubicIntArray(gridDimension, grid.getSide());
 		}
-		SpreadIntegerValueCommand sivCommand = new SpreadIntegerValueCommand(newGrid, indexOffset);
+		SpreadIntegerValueConsumer sivConsumer = new SpreadIntegerValueConsumer(newGrid, indexOffset);
 		//For every position apply rules
-		grid.forEachIndex(sivCommand);
+		grid.forEachIndex(sivConsumer);
 		//Replace the old array with the new one
 		grid = newGrid;
 		//Update the index of the origin
@@ -113,17 +113,17 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
-		return sivCommand.changed;
+		return sivConsumer.changed;
 	}
 	
-	class SpreadIntegerValueCommand implements PositionCommand {
+	class SpreadIntegerValueConsumer implements Consumer<Coordinates> {
 		public boolean changed = false;
 		private int gridSideMinusOne;
 		private int gridSide;
 		private HypercubicIntArray newGrid;
 		private int indexOffset;
 		
-		public SpreadIntegerValueCommand(HypercubicIntArray newGrid, int indexOffset) {
+		public SpreadIntegerValueConsumer(HypercubicIntArray newGrid, int indexOffset) {
 			this.newGrid = newGrid;
 			this.indexOffset = indexOffset;
 			gridSide = grid.getSide();
@@ -131,7 +131,7 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 		}
 		
 		@Override
-		public void execute(Coordinates currentIndexes) {
+		public void accept(Coordinates currentIndexes) {
 			int value = grid.get(currentIndexes);
 			if (value != 0) {
 				currentIndexes.copyIntoArray(indexes);
@@ -253,8 +253,8 @@ public class SpreadIntegerValueSimple extends IntGridRegion implements CellularA
 	}
 
 	@Override
-	public void forEachValue(IntValueCommand command) {
-		grid.forEachValue(command);
+	public void forEachValue(IntConsumer consumer) {
+		grid.forEachValue(consumer);
 	}
 	
 }

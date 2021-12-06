@@ -16,9 +16,11 @@
  */
 package cellularautomata2.grid;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.IntValueCommand;
-import cellularautomata2.arrays.PositionCommand;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.PartialCoordinates;
 
 public abstract class IntGridRegion implements GridRegion {
 	
@@ -34,33 +36,33 @@ public abstract class IntGridRegion implements GridRegion {
 	public abstract int getValue(Coordinates coordinates);
 	
 	/**
-	 * Executes a {@link IntValueCommand} for every value of the region.
-	 * @param command
+	 * Feeds every value of the region to an {@link IntConsumer}.
+	 * @param consumer
 	 */
-	public abstract void forEachValue(IntValueCommand command);
+	public abstract void forEachValue(IntConsumer consumer);
 
 	public Bounds getValueBounds() throws Exception {
-		GetValueBoundsValueCommand command = new GetValueBoundsValueCommand();
-		forEachValue(command);
-		return new Bounds(command.lowerBound, command.upperBound);
+		GetValueBoundsValueConsumer consumer = new GetValueBoundsValueConsumer();
+		forEachValue(consumer);
+		return new Bounds(consumer.lowerBound, consumer.upperBound);
 	}
 	
 	public Bounds getEvenPositionsValueBounds() throws Exception {
-		GetValueBoundsCoordinateCommand command = new GetValueBoundsCoordinateCommand(this);
-		forEachEvenPosition(command);
-		return new Bounds(command.lowerBound, command.upperBound);
+		GetValueBoundsCoordinateConsumer consumer = new GetValueBoundsCoordinateConsumer(this);
+		forEachEvenPosition(consumer);
+		return new Bounds(consumer.lowerBound, consumer.upperBound);
 	}
 	
 	public Bounds getOddPositionsValueBounds() throws Exception {
-		GetValueBoundsCoordinateCommand command = new GetValueBoundsCoordinateCommand(this);
-		forEachOddPosition(command);
-		return new Bounds(command.lowerBound, command.upperBound);
+		GetValueBoundsCoordinateConsumer consumer = new GetValueBoundsCoordinateConsumer(this);
+		forEachOddPosition(consumer);
+		return new Bounds(consumer.lowerBound, consumer.upperBound);
 	}
 	
 	public long getTotalValue() throws Exception {
-		GetTotalValueCommand command = new GetTotalValueCommand();
-		forEachValue(command);
-		return command.totalValue;
+		GetTotalValueConsumer consumer = new GetTotalValueConsumer();
+		forEachValue(consumer);
+		return consumer.totalValue;
 	}
 	
 	public String toString2DCrossSection(int horizontalAxis, int verticalAxis, Coordinates coordinates) {
@@ -149,12 +151,12 @@ public abstract class IntGridRegion implements GridRegion {
 		return strBuilder.toString();
 	}
 	
-	class GetValueBoundsValueCommand implements IntValueCommand {
+	class GetValueBoundsValueConsumer implements IntConsumer {
 		public int lowerBound = Integer.MAX_VALUE;
 		public int upperBound = Integer.MIN_VALUE;
 		
 		@Override
-		public void execute(int value) {
+		public void accept(int value) {
 			if (value > upperBound)
 				upperBound = value;
 			if (value < lowerBound)
@@ -162,17 +164,17 @@ public abstract class IntGridRegion implements GridRegion {
 		}
 	}
 	
-	class GetValueBoundsCoordinateCommand implements PositionCommand {
+	class GetValueBoundsCoordinateConsumer implements Consumer<Coordinates> {
 		public int lowerBound = Integer.MAX_VALUE;
 		public int upperBound = Integer.MIN_VALUE;
 		private IntGridRegion region;
 		
-		public GetValueBoundsCoordinateCommand(IntGridRegion region) {
+		public GetValueBoundsCoordinateConsumer(IntGridRegion region) {
 			this.region = region;
 		}
 		
 		@Override
-		public void execute(Coordinates coordinates) {
+		public void accept(Coordinates coordinates) {
 			int value = region.getValue(coordinates);
 			if (value > upperBound)
 				upperBound = value;
@@ -181,11 +183,11 @@ public abstract class IntGridRegion implements GridRegion {
 		}
 	}
 	
-	class GetTotalValueCommand implements IntValueCommand {
+	class GetTotalValueConsumer implements IntConsumer {
 		public int totalValue = 0;
 		
 		@Override
-		public void execute(int value) {
+		public void accept(int value) {
 			totalValue += value;
 		}
 	}

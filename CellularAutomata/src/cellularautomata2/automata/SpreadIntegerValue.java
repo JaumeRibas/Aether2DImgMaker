@@ -18,14 +18,14 @@ package cellularautomata2.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.IntValueCommand;
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata2.arrays.AnisotropicIntArray;
-import cellularautomata2.arrays.PositionCommand;
 import cellularautomata2.arrays.HyperrectangularArray;
 import cellularautomata2.arrays.Utils;
-import cellularautomata2.grid.PartialCoordinates;
 import cellularautomata2.grid.SymmetricIntGridRegion;
 
 public class SpreadIntegerValue extends SymmetricIntGridRegion implements CellularAutomaton {
@@ -34,7 +34,7 @@ public class SpreadIntegerValue extends SymmetricIntGridRegion implements Cellul
 	private int initialValue;
 	private int backgroundValue;
 	
-	/** A square-like array representing the grid */
+	/** An array representing the grid */
 	private AnisotropicIntArray grid;
 	
 	/** Whether or not the values reached the bounds of the array */
@@ -269,18 +269,18 @@ public class SpreadIntegerValue extends SymmetricIntGridRegion implements Cellul
 	}
 
 	@Override
-	public void forEachValue(IntValueCommand command) {
+	public void forEachValue(IntConsumer consumer) {
 		int gridDimension = grid.getDimension();
 		int sideMinusOne = grid.getSide() - 1;
 		int[] upperBounds = new int[gridDimension];
 		Utils.addToArray(upperBounds, sideMinusOne);
 		int[] lowerBounds = new int[gridDimension];
 		Utils.addToArray(lowerBounds, -sideMinusOne);
-		HyperrectangularArray.forEachIndexWithinBounds(upperBounds, lowerBounds, new PositionCommand() {
+		HyperrectangularArray.forEachIndexWithinBounds(upperBounds, lowerBounds, new Consumer<Coordinates>() {
 			
 			@Override
-			public void execute(Coordinates coordinates) {
-				command.execute(getValue(coordinates));
+			public void accept(Coordinates coordinates) {
+				consumer.accept(getValue(coordinates));
 			}
 		});
 	}
@@ -331,8 +331,8 @@ public class SpreadIntegerValue extends SymmetricIntGridRegion implements Cellul
 	}
 
 	@Override
-	public void forEachValueInAsymmetricRegion(IntValueCommand command) {
-		grid.forEachValue(command);
+	public void forEachValueInAsymmetricRegion(IntConsumer consumer) {
+		grid.forEachValue(consumer);
 	}
 	
 }

@@ -14,15 +14,35 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata2.arrays;
+package cellularautomata.grid;
 
-public interface IntValueCommand {
+/**
+ * A way to pass immutable partial coordinates to methods.
+ * @author Jaume
+ *
+ */
+public class PartialCoordinates {
+	
+	private Integer[] coordinates;
+	
+	public PartialCoordinates(Integer... coordinates) {
+		this.coordinates = coordinates;
+	}
+	
+	public Integer get(int axis) {
+		return coordinates[axis];
+	}
 
-	/**
-	 * <p>Executes the command.</p>
-	 * 
-	 * @param value
-	 */
-	void execute(int value);
+	public int getCount() {
+		return coordinates.length;
+	}
+	
+	public Integer[] getCopyAsArray() {
+		return coordinates.clone();
+	}
+	
+	public void copyIntoArray(Integer[] array) {
+		System.arraycopy(coordinates, 0, array, 0, array.length);
+	}
 	
 }

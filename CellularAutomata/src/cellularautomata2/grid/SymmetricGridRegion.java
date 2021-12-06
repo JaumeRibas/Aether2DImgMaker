@@ -16,8 +16,10 @@
  */
 package cellularautomata2.grid;
 
-import cellularautomata2.arrays.Coordinates;
-import cellularautomata2.arrays.PositionCommand;
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata2.arrays.Utils;
 
 /**
@@ -101,18 +103,18 @@ public interface SymmetricGridRegion extends GridRegion {
 	int getLowerBoundOfAsymmetricRegion(int axis, PartialCoordinates coordinates);
 	
 	/**
-	 * Executes a {@link PositionCommand} for every position of the asymmetric sub-region.
-	 * @param command
+	 * Executes a {@link Consumer<Coordinates>} for every position of the asymmetric sub-region.
+	 * @param consumer
 	 */
-	default void forEachPositionInAsymmetricRegion(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	default void forEachPositionInAsymmetricRegion(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			command.execute(immutableCoordinates);
+			consumer.accept(immutableCoordinates);
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
 			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
@@ -126,7 +128,7 @@ public interface SymmetricGridRegion extends GridRegion {
 					int upperBound = getUpperBoundOfAsymmetricRegion(0, immutablePartialCoordinates);
 					for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
 						coordinates[0] = currentCoordinate;
-						command.execute(immutableCoordinates);
+						consumer.accept(immutableCoordinates);
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
@@ -155,18 +157,18 @@ public interface SymmetricGridRegion extends GridRegion {
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every even position of the asymmetric sub-region.
-	 * @param commands
+	 * Executes a {@link Consumer<Coordinates>} for every even position of the asymmetric sub-region.
+	 * @param consumers
 	 */
-	default void forEachEvenPositionInAsymmetricRegion(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	default void forEachEvenPositionInAsymmetricRegion(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			command.execute(immutableCoordinates);
+			consumer.accept(immutableCoordinates);
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
 			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
@@ -185,7 +187,7 @@ public interface SymmetricGridRegion extends GridRegion {
 					}
 					for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 						coordinates[0] = currentCoordinate;
-						command.execute(immutableCoordinates);
+						consumer.accept(immutableCoordinates);
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
@@ -214,12 +216,12 @@ public interface SymmetricGridRegion extends GridRegion {
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every odd position of the asymmetric sub-region.
-	 * @param commands
+	 * Executes a {@link Consumer<Coordinates>} for every odd position of the asymmetric sub-region.
+	 * @param consumers
 	 */
-	default void forEachOddPositionInAsymmetricRegion(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	default void forEachOddPositionInAsymmetricRegion(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
@@ -241,7 +243,7 @@ public interface SymmetricGridRegion extends GridRegion {
 				}
 				for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 					coordinates[0] = currentCoordinate;
-					command.execute(immutableCoordinates);
+					consumer.accept(immutableCoordinates);
 				}
 				isBeginningOfLoop = false;
 				currentAxis++;

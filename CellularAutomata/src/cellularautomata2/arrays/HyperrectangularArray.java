@@ -16,6 +16,10 @@
  */
 package cellularautomata2.arrays;
 
+import java.util.function.Consumer;
+
+import cellularautomata.grid.Coordinates;
+
 /**
  * A multidimensional array with hyperrectangular shape.
  * 
@@ -48,7 +52,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	
 	/**
 	 * Returns the size of the array on the given axis.
-	 * The size must be greater than or equal to zero and smaller than the array's dimension returned by {@link #getDimension()}.
+	 * The axis must be greater than or equal to zero and smaller than the array's dimension returned by {@link #getDimension()}.
 	 * 
 	 * @param axis the index of the axis on which the size is requested.
 	 * @return the size
@@ -90,9 +94,9 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	
 	
 	@Override
-	public void forEachIndex(PositionCommand command) {
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+	public void forEachIndex(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getDimension();
 		int[] upperBounds = new int[dimension];
@@ -101,19 +105,19 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 			upperBounds[i] = getSize(i) - 1;
 			lowerBounds[i] = 0;
 		}
-		forEachIndexWithinBounds(upperBounds, lowerBounds, command);
+		forEachIndexWithinBounds(upperBounds, lowerBounds, consumer);
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every index of the edges of the array.
-	 * @param command
+	 * Executes a {@link Consumer<Coordinates>} for every index of the edges of the array.
+	 * @param consumer
 	 */
-	public void forEachEdgeIndex(int edgeWidth, PositionCommand command) {
+	public void forEachEdgeIndex(int edgeWidth, Consumer<Coordinates> consumer) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
 		}
-		if (command == null) {
-			throw new IllegalArgumentException("The command cannot be null.");
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getDimension();
 		int[] upperBounds = new int[dimension];
@@ -130,18 +134,18 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 		}
 		if (anyUpperBoundLowerOrEqualToDoubleEdgeWidth) {
 			//for all positions
-			forEachIndexWithinBounds(upperBounds, lowerBounds, command);
+			forEachIndexWithinBounds(upperBounds, lowerBounds, consumer);
 		} else {
 			int edgeWidthMinusOne = edgeWidth - 1;
 			for (int i = 0; i < dimension; i++) {
 				//top edge
 				int realUpperBound = upperBounds[i];
 				upperBounds[i] = edgeWidthMinusOne;
-				forEachIndexWithinBounds(upperBounds, lowerBounds, command);
+				forEachIndexWithinBounds(upperBounds, lowerBounds, consumer);
 				upperBounds[i] = realUpperBound;
 				//bottom edge
 				lowerBounds[i] = upperBounds[i] - edgeWidthMinusOne;
-				forEachIndexWithinBounds(upperBounds, lowerBounds, command);
+				forEachIndexWithinBounds(upperBounds, lowerBounds, consumer);
 				//new bounds to prevent repeating positions
 				upperBounds[i] = lowerBounds[i] - 1;
 				lowerBounds[i] = edgeWidth;
@@ -150,24 +154,24 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	}
 	
 	/**
-	 * Executes a {@link PositionCommand} for every index within the passed bounds. 
+	 * Feeds every index within the passed bounds to a {@link Consumer<Coordinates>}. 
 	 * 
 	 * @param upperBounds
 	 * @param lowerBounds
-	 * @param command
+	 * @param consumer
 	 */
-	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, PositionCommand command) {
+	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, Consumer<Coordinates> consumer) {
 		int dimension = upperBounds.length;
 		int[] coordinates = new int[dimension];
 		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			command.execute(immutableCoordinates);
+			consumer.accept(immutableCoordinates);
 		} else {
 			System.arraycopy(lowerBounds, 0, coordinates, 0, coordinates.length);
 			int currentAxis = 0;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					command.execute(immutableCoordinates);
+					consumer.accept(immutableCoordinates);
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				if (currentCoordinate < upperBounds[currentAxis]) {
