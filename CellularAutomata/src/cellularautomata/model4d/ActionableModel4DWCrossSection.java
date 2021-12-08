@@ -40,6 +40,21 @@ public class ActionableModel4DWCrossSection<G1 extends Grid4D, G2 extends Grid3D
 	}
 	
 	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
+	}
+	
+	@Override
 	public void processGrid() throws Exception {
 		source.processGrid();
 	}
@@ -189,7 +204,7 @@ public class ActionableModel4DWCrossSection<G1 extends Grid4D, G2 extends Grid3D
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/w=" + w;
+		return source.getSubfolderPath() + "/" + source.getWLabel() + "=" + w;
 	}
 
 	@Override

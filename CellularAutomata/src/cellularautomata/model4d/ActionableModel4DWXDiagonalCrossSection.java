@@ -94,6 +94,27 @@ public class ActionableModel4DWXDiagonalCrossSection<G1 extends Grid4D, G2 exten
 	}
 	
 	@Override
+	public String getXLabel() {
+		String xLabel =  source.getXLabel() + "=" + source.getWLabel();
+		if (xOffsetFromW < 0) {
+			xLabel += xOffsetFromW;
+		} else if (xOffsetFromW > 0) {
+			xLabel += "+" + xOffsetFromW;
+		}
+		return xLabel;
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
+	}
+	
+	@Override
 	public void processGrid() throws Exception {
 		source.processGrid();
 	}
@@ -281,7 +302,7 @@ public class ActionableModel4DWXDiagonalCrossSection<G1 extends Grid4D, G2 exten
 
 	@Override
 	public String getSubfolderPath() {
-		String path = source.getSubfolderPath() + "/x=w";
+		String path = source.getSubfolderPath() + "/" + source.getXLabel() + "=" + source.getWLabel();
 		if (xOffsetFromW < 0) {
 			path += xOffsetFromW;
 		} else if (xOffsetFromW > 0) {
