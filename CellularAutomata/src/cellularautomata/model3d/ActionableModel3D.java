@@ -18,9 +18,8 @@ package cellularautomata.model3d;
 
 import cellularautomata.grid.ActionableGrid;
 import cellularautomata.grid3d.Grid3D;
-import cellularautomata.model.Model;
 
 public abstract class ActionableModel3D<G extends Grid3D> 
-	extends ActionableGrid<G> implements Model, Grid3D, Model3D {
+	extends ActionableGrid<G> implements Model3D {
 	
 }

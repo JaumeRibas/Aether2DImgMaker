@@ -18,9 +18,8 @@ package cellularautomata.model4d;
 
 import cellularautomata.grid.ActionableGrid;
 import cellularautomata.grid4d.Grid4D;
-import cellularautomata.model.Model;
 
 public abstract class ActionableModel4D<G extends Grid4D> 
-	extends ActionableGrid<G> implements Model, Grid4D {
+	extends ActionableGrid<G> implements Model4D {
 	
 }
