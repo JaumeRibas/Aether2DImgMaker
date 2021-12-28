@@ -26,17 +26,17 @@ import cellularautomata.grid2d.LongGrid2D;
 
 public interface ColorMapper {
 	
-	public abstract <T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue);
+	<T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue);
 	
-	public abstract ObjectGrid2D<Color> getMappedGrid(LongGrid2D grid, long minValue, long maxValue);
+	ObjectGrid2D<Color> getMappedGrid(LongGrid2D grid, long minValue, long maxValue);
 	
-	public abstract ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue);
+	ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue);
 	
 	/**
 	 * Return the colormap's name in a format that can be used in file names
 	 * 
 	 * @return the name
 	 */
-	public abstract String getColormapName();
+	String getColormapName();
 	
 }
