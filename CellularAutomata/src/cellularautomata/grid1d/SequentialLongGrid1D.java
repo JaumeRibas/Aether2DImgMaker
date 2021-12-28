@@ -16,9 +16,8 @@
  */
 package cellularautomata.grid1d;
 
-import cellularautomata.grid.LongGrid;
+import cellularautomata.grid.SequentialLongGrid;
 
-public interface SequentialLongGrid1D extends Grid1D, LongGrid {
-	
+public interface SequentialLongGrid1D extends Grid1D, SequentialLongGrid {
 	
 }

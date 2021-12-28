@@ -16,7 +16,10 @@
  */
 package cellularautomata.grid2d;
 
-public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.SymmetricIntGrid;
+
+public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D, SymmetricIntGrid {
 	
 	/**
 	 * <p>
@@ -38,6 +41,10 @@ public interface SymmetricIntGrid2D extends IntGrid2D, SymmetricGrid2D {
 	 * @throws Exception 
 	 */
 	int getFromAsymmetricPosition(int x, int y) throws Exception;
+	
+	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1));
+	}
 	
 	@Override
 	default IntGrid2D asymmetricSection() {

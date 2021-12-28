@@ -16,6 +16,8 @@
  */
 package cellularautomata.automata.siv;
 
+import java.util.Arrays;
+
 import cellularautomata.automata.IsotropicLongSandpileRules;
 import cellularautomata.automata.LongTopplingResult;
 
@@ -33,9 +35,7 @@ public class SpreadIntegerValueRules extends IsotropicLongSandpileRules {
 		long remainingCenterValue = valueSentToNeighbors + centerValue%divider;
 		long[] valuesSentToNeighbors = new long[neighborValues.length];
 		if (valueSentToNeighbors != 0) {
-			for (int i = 0; i < valuesSentToNeighbors.length; i++) {
-				valuesSentToNeighbors[i] = valueSentToNeighbors;
-			}
+			Arrays.fill(valuesSentToNeighbors, valueSentToNeighbors);
 		}
 		return new LongTopplingResult(remainingCenterValue, valuesSentToNeighbors);
 	}

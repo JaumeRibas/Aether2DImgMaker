@@ -16,8 +16,12 @@
  */
 package cellularautomata.grid;
 
+import java.util.function.Consumer;
+
+import cellularautomata.arrays.Utils;
+
 /**
- * A convex region of a grid.
+ * A finite convex region of a grid.
  *  
  * @author Jaume
  *
@@ -32,24 +36,22 @@ public interface GridRegion {
 	int getGridDimension();
 	
 	/**
-	 * Returns the upper bound of the region on the given axis.
+	 * Returns the max coordinate of the region on the given axis.
 	 * 
-	 * @param axis the index of the axis on which the upper bound is requested.
-	 * @return the upper bound
+	 * @param axis the index of the axis on which the max coordinate is requested.
+	 * @return the max coordinate
 	 */
-	default int getUpperBound(int axis) {
-		return getUpperBound(axis, new PartialCoordinates(new Integer[getGridDimension() - 1]));
-	}
+	int getMaxCoordinate(int axis);
 	
 	/**
-	 * <p>Returns the local upper bound of the region on the given axis at the given coordinates.</p>
+	 * <p>Returns the local max coordinate of the region on the given axis at the given coordinates.</p>
 	 * <p>The coordinate of the axis whose bound is being requested is ignored.</p>
 	 * <p>{@link null} coordinate values can be used to indicate no restriction on one or more axes.</p>
 	 * <p>It is not defined to call this method with a {@link PartialCoordinates} object with {@link PartialCoordinates#getCount()} different from {@link #getGridDimension()}.
 	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the region.</p>
-	 * <p>These bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
-	 * And progressively narrowing down the coordinates by calling {@link #getUpperBound(int axis, PartialCoordinates coordinates)} 
-	 * and {@link #getLowerBound(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
+	 * <p>These bounds are obtained by first calling the {@link #getMaxCoordinate(int axis)} and {@link #getMinCoordinate(int axis)} to get the global bounds on one axis. 
+	 * And progressively narrowing down the coordinates by calling {@link #getMaxCoordinate(int axis, PartialCoordinates coordinates)} 
+	 * and {@link #getMinCoordinate(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
 	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
@@ -61,31 +63,31 @@ public interface GridRegion {
 	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
-	 * @param  axis the index of the axis on which the upper bound is requested.
+	 * @param  axis the index of the axis on which the max coordinate is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
-	 * @return  the upper bound
+	 * @return  the max coordinate
 	 */
-	int getUpperBound(int axis, PartialCoordinates coordinates);
-	
-	/**
-	 * Returns the lower bound of the region on the given axis.
-	 * 
-	 * @param axis the index of the axis on which the lower bound is requested.
-	 * @return the lower bound
-	 */
-	default int getLowerBound(int axis) {
-		return getLowerBound(axis, new PartialCoordinates(new Integer[getGridDimension() - 1]));
+	default int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		return getMaxCoordinate(axis);
 	}
 	
 	/**
-	 * <p>Returns the local lower bound of the region on the given axis at the given coordinates.</p>
+	 * Returns the min coordinate of the region on the given axis.
+	 * 
+	 * @param axis the index of the axis on which the min coordinate is requested.
+	 * @return the min coordinate
+	 */
+	int getMinCoordinate(int axis);
+	
+	/**
+	 * <p>Returns the local min coordinate of the region on the given axis at the given coordinates.</p>
 	 * <p>The coordinate of the axis whose bound is being requested is ignored.</p>
 	 * <p>{@link null} coordinate values can be used to indicate no restriction on one or more axes.</p>
 	 * <p>It is not defined to call this method with a {@link PartialCoordinates} object with {@link PartialCoordinates#getCount()} different from {@link #getGridDimension()}.
 	 * <p>It is also not defined to call this method on a set of coordinates outside the bounds of the region.</p>
-	 * <p>These bounds are obtained by first calling the {@link #getUpperBound(int axis)} and {@link #getLowerBound(int axis)} to get the global bounds on one axis. 
-	 * And progressively narrowing down the coordinates by calling {@link #getUpperBound(int axis, PartialCoordinates coordinates)} 
-	 * and {@link #getLowerBound(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
+	 * <p>These bounds are obtained by first calling the {@link #getMaxCoordinate(int axis)} and {@link #getMinCoordinate(int axis)} to get the global bounds on one axis. 
+	 * And progressively narrowing down the coordinates by calling {@link #getMaxCoordinate(int axis, PartialCoordinates coordinates)} 
+	 * and {@link #getMinCoordinate(int axis, PartialCoordinates coordinates)} adding one extra coordinate value in every call. 
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
 	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
@@ -97,10 +99,174 @@ public interface GridRegion {
 	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
-	 * @param  axis the index of the axis on which the lower bound is requested.
+	 * @param  axis the index of the axis on which the min coordinate is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
-	 * @return  the lower bound
+	 * @return  the min coordinate
 	 */
-	int getLowerBound(int axis, PartialCoordinates coordinates);
+	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
+		return getMinCoordinate(axis);
+	}
+	
+	/**
+	 * Feeds the coordinates of every position of the region to the consumer.
+	 * @param consumer
+	 */
+	default void forEachPosition(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		int dimension = getGridDimension();
+		int[] coordinates = new int[dimension];
+		Coordinates immutableCoordinates = new Coordinates(coordinates);
+		if (dimension == 0) {
+			consumer.accept(immutableCoordinates);
+		} else {
+			Integer[] partialCoordinates = new Integer[dimension];
+			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
+			int[] maxCoords = new int[dimension];
+			int currentAxis = dimension - 1;
+			boolean isBeginningOfLoop = true;
+			while (currentAxis < dimension) {
+				if (currentAxis == 0) {
+					int minCoord = getMinCoordinate(0, immutablePartialCoordinates);
+					int maxCoord = getMaxCoordinate(0, immutablePartialCoordinates);
+					for (int currentCoordinate = minCoord; currentCoordinate <= maxCoord; currentCoordinate++) {
+						coordinates[0] = currentCoordinate;
+						consumer.accept(immutableCoordinates);
+					}
+					isBeginningOfLoop = false;
+					currentAxis++;
+				} else if (isBeginningOfLoop) {
+					int localMinCoord = getMinCoordinate(currentAxis, immutablePartialCoordinates);
+					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, immutablePartialCoordinates);
+					coordinates[currentAxis] = localMinCoord;
+					partialCoordinates[currentAxis] = localMinCoord;
+					currentAxis--;
+				} else {
+					int currentCoordinate = coordinates[currentAxis];
+					if (currentCoordinate < maxCoords[currentAxis]) {
+						isBeginningOfLoop = true;
+						currentCoordinate++;
+						coordinates[currentAxis] = currentCoordinate;
+						partialCoordinates[currentAxis] = currentCoordinate;
+						currentAxis--;
+					} else {
+						partialCoordinates[currentAxis] = null;
+						currentAxis++;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Feeds the coordinates of every even position of the region to the consumer.
+	 * @param consumer
+	 */
+	default void forEachEvenPosition(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		int dimension = getGridDimension();
+		int[] coordinates = new int[dimension];
+		Coordinates immutableCoordinates = new Coordinates(coordinates);
+		if (dimension == 0) {
+			consumer.accept(immutableCoordinates);			
+		} else {
+			Integer[] partialCoordinates = new Integer[dimension];
+			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
+			int[] maxCoords = new int[dimension];
+			int currentAxis = dimension - 1;
+			boolean isBeginningOfLoop = true;
+			while (currentAxis < dimension) {
+				if (currentAxis == 0) {
+					int minCoord = getMinCoordinate(0, immutablePartialCoordinates);
+					int maxCoord = getMaxCoordinate(0, immutablePartialCoordinates);
+					int currentCoordinate = minCoord;
+					coordinates[0] = currentCoordinate;
+					if (!Utils.isEvenPosition(coordinates)) {
+						currentCoordinate++;
+					}
+					for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
+						coordinates[0] = currentCoordinate;
+						consumer.accept(immutableCoordinates);
+					}
+					isBeginningOfLoop = false;
+					currentAxis++;
+				} else if (isBeginningOfLoop) {
+					int localMinCoord = getMinCoordinate(currentAxis, immutablePartialCoordinates);
+					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, immutablePartialCoordinates);
+					coordinates[currentAxis] = localMinCoord;
+					partialCoordinates[currentAxis] = localMinCoord;
+					currentAxis--;
+				} else {
+					int currentCoordinate = coordinates[currentAxis];
+					if (currentCoordinate < maxCoords[currentAxis]) {
+						isBeginningOfLoop = true;
+						currentCoordinate++;
+						coordinates[currentAxis] = currentCoordinate;
+						partialCoordinates[currentAxis] = currentCoordinate;
+						currentAxis--;
+					} else {
+						partialCoordinates[currentAxis] = null;
+						currentAxis++;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Feeds the coordinates of every odd position of the region to the consumer.
+	 * @param consumer
+	 */
+	default void forEachOddPosition(Consumer<Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		int dimension = getGridDimension();
+		int[] coordinates = new int[dimension];
+		Coordinates immutableCoordinates = new Coordinates(coordinates);
+		Integer[] partialCoordinates = new Integer[dimension];
+		PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
+		int[] maxCoords = new int[dimension];
+		int currentAxis = dimension - 1;
+		boolean isBeginningOfLoop = true;
+		while (currentAxis < dimension) {
+			if (currentAxis == 0) {
+				int minCoord = getMinCoordinate(0, immutablePartialCoordinates);
+				int maxCoord = getMaxCoordinate(0, immutablePartialCoordinates);
+				int currentCoordinate = minCoord;
+				coordinates[0] = currentCoordinate;
+				if (Utils.isEvenPosition(coordinates)) {
+					currentCoordinate++;
+				}
+				for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
+					coordinates[0] = currentCoordinate;
+					consumer.accept(immutableCoordinates);
+				}
+				isBeginningOfLoop = false;
+				currentAxis++;
+			} else if (isBeginningOfLoop) {
+				int localMinCoord = getMinCoordinate(currentAxis, immutablePartialCoordinates);
+				maxCoords[currentAxis] = getMaxCoordinate(currentAxis, immutablePartialCoordinates);
+				coordinates[currentAxis] = localMinCoord;
+				partialCoordinates[currentAxis] = localMinCoord;
+				currentAxis--;
+			} else {
+				int currentCoordinate = coordinates[currentAxis];
+				if (currentCoordinate < maxCoords[currentAxis]) {
+					isBeginningOfLoop = true;
+					currentCoordinate++;
+					coordinates[currentAxis] = currentCoordinate;
+					partialCoordinates[currentAxis] = currentCoordinate;
+					currentAxis--;
+				} else {
+					partialCoordinates[currentAxis] = null;
+					currentAxis++;
+				}
+			}
+		}
+	}
 	
 }

@@ -80,7 +80,7 @@ public class SpreadIntegerValueSimple4D implements LongModel4D {
 			boundsReached = false;
 			newGrid = new long[grid.length + 2][grid.length + 2][grid.length + 2][grid.length + 2];
 			if (backgroundValue != 0) {
-				padEdges(newGrid, 1, backgroundValue);
+				fillEdges(newGrid, 1, backgroundValue);
 			}
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
@@ -350,7 +350,7 @@ public class SpreadIntegerValueSimple4D implements LongModel4D {
 		return initialValue;
 	}
 	
-	public static void padEdges(long[][][][] grid, int width, long value) {
+	public static void fillEdges(long[][][][] grid, int width, long value) {
 		int lengthMinusWith = grid.length - width;
 		//min W side
 		for (int w = 0; w < width && w < grid.length; w++) {

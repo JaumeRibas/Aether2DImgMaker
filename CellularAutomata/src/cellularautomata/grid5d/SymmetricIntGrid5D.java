@@ -16,7 +16,10 @@
  */
 package cellularautomata.grid5d;
 
-public interface SymmetricIntGrid5D extends IntGrid5D, SymmetricGrid5D {
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.SymmetricIntGrid;
+
+public interface SymmetricIntGrid5D extends IntGrid5D, SymmetricGrid5D, SymmetricIntGrid {
 
 	/**
 	 * <p>
@@ -35,6 +38,10 @@ public interface SymmetricIntGrid5D extends IntGrid5D, SymmetricGrid5D {
 	 * @throws Exception 
 	 */
 	int getFromAsymmetricPosition(int v, int w, int x, int y, int z) throws Exception;
+	
+	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
+	}
 
 	@Override
 	default IntGrid5D asymmetricSection() {

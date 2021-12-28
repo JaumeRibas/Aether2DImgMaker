@@ -22,37 +22,46 @@ import java.util.NoSuchElementException;
 public abstract class Grid2DIterator<G extends Grid2D, T> implements Iterator<T> {
 	
 	protected G grid;
-	protected int x;
-	protected int y;
+	private int x;
+	private int y;
+	private int maxX;
+	private int localMaxY;
+	private boolean hasNext;
 	
 	public Grid2DIterator(G grid) {
 		this.grid = grid;
-		this.x = grid.getMinX();
-		this.y = grid.getMinY(x);
+		x = grid.getMinX();
+		maxX = grid.getMaxX();
+		y = grid.getMinY(x);
+		localMaxY = grid.getMaxY(x);
+		hasNext = true;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return x <= grid.getMaxX();
+		return hasNext;
 	}
 
 	@Override
 	public T next() {
-		if (x > grid.getMaxX())
+		if (!hasNext)
 			throw new NoSuchElementException();
 		T next = null;
 		try {
 			next = getFromGridPosition(x, y);
 		} catch (Exception e) {
-			throw new NoSuchElementException(e.getMessage());//what should be done here?
+			throw new NoSuchElementException(e.getMessage());
 		}
-		if (y < grid.getMaxY(x)) {
-			y++;
-		} else {
-			x++;
-			if (x <= grid.getMaxX()) {
+		if (y == localMaxY) {
+			if (x == maxX) {
+				hasNext = false;
+			} else {
+				x++;
 				y = grid.getMinY(x);
+				localMaxY = grid.getMaxY(x);
 			}
+		} else {
+			y++;
 		}
 		return next;
 	}

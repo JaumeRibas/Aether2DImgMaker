@@ -397,6 +397,8 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 		DataInputStream inputStream = null;
 		try {
 			inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(currentFile)));
+			if (!isEven)
+				inputStream.skipBytes(Long.BYTES);
 			while (true) {
 				long value = inputStream.readLong();
 				if (value < min) {
@@ -425,6 +427,16 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 		} catch (FileNotFoundException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public long[] getEvenPositionsMinAndMax() throws Exception {
+		return getEvenOddPositionsMinAndMax(true);
+	}
+
+	@Override
+	public long[] getOddPositionsMinAndMax() throws Exception {
+		return getEvenOddPositionsMinAndMax(false);
 	}
 	
 }

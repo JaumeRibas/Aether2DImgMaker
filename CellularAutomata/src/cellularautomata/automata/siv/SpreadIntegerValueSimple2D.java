@@ -83,7 +83,7 @@ public class SpreadIntegerValueSimple2D implements LongModel2D {
 			boundsReached = false;
 			newGrid = new long[grid.length + 2][grid[0].length + 2];
 			if (backgroundValue != 0) {
-				padEdges(newGrid, 1, backgroundValue);
+				fillEdges(newGrid, 1, backgroundValue);
 			}
 			indexOffset = 1;
 		} else {
@@ -253,16 +253,16 @@ public class SpreadIntegerValueSimple2D implements LongModel2D {
 		return backgroundValue;
 	}
 	
-	public static void padEdges(long[][] grid, int width, long value) {
+	public static void fillEdges(long[][] grid, int width, long value) {
 		//left
 		for (int x = 0; x < width && x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y ++) {
+			for (int y = 0; y < grid[x].length; y++) {
 				grid[x][y] = value;
 			}
 		}
 		//right
 		for (int x = grid.length - width; x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y ++) {
+			for (int y = 0; y < grid[x].length; y++) {
 				grid[x][y] = value;
 			}
 		}

@@ -16,12 +16,12 @@
  */
 package cellularautomata.grid3d;
 
-public class AsymmetricGridSection3D<G extends SymmetricGrid3D> implements Grid3D {
+import cellularautomata.grid.AsymmetricGridSection;
 
-	protected G source;
-	
-	public AsymmetricGridSection3D(G grid) {
-		this.source = grid;
+public class AsymmetricGridSection3D<G extends SymmetricGrid3D> extends AsymmetricGridSection<G> implements Grid3D {
+
+	public AsymmetricGridSection3D(G source) {
+		super(source);
 	}
 
 	@Override

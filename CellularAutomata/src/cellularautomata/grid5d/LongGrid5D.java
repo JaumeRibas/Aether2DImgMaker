@@ -18,6 +18,7 @@ package cellularautomata.grid5d;
 
 import java.util.Iterator;
 
+import cellularautomata.grid.Coordinates;
 import cellularautomata.grid.LongGrid;
 
 public interface LongGrid5D extends Grid5D, LongGrid {
@@ -34,6 +35,10 @@ public interface LongGrid5D extends Grid5D, LongGrid {
 	 * @throws Exception 
 	 */
 	long getFromPosition(int v, int w, int x, int y, int z) throws Exception;
+	
+	default long getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
+	}
 
 	@Override
 	default long[] getMinAndMax() throws Exception {

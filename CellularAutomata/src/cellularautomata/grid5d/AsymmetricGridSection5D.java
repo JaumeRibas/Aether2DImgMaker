@@ -16,14 +16,14 @@
  */
 package cellularautomata.grid5d;
 
-public class AsymmetricGridSection5D<G extends SymmetricGrid5D> implements Grid5D {
+import cellularautomata.grid.AsymmetricGridSection;
 
-	protected G source;
+public class AsymmetricGridSection5D<G extends SymmetricGrid5D> extends AsymmetricGridSection<G> implements Grid5D {
 	
-	public AsymmetricGridSection5D(G grid) {
-		this.source = grid;
+	public AsymmetricGridSection5D(G source) {
+		super(source);
 	}
-	
+
 	@Override
 	public int getMinV() { return source.getAsymmetricMinV(); }
 

@@ -116,7 +116,7 @@ public interface Grid2D extends GridRegion {
 	}
 	
 	@Override
-	default int getUpperBound(int axis) {
+	default int getMaxCoordinate(int axis) {
 		switch (axis) {
 		case 0: 
 			return getMaxX();
@@ -127,7 +127,7 @@ public interface Grid2D extends GridRegion {
 	}
 
 	@Override
-	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+	default int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
 		switch (axis) {
 		case 0: 
 			Integer y = coordinates.get(1);
@@ -148,7 +148,7 @@ public interface Grid2D extends GridRegion {
 	}
 	
 	@Override
-	default int getLowerBound(int axis) {
+	default int getMinCoordinate(int axis) {
 		switch (axis) {
 		case 0: 
 			return getMinX();
@@ -159,7 +159,7 @@ public interface Grid2D extends GridRegion {
 	}
 
 	@Override
-	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
 		switch (axis) {
 		case 0: 
 			Integer y = coordinates.get(1);

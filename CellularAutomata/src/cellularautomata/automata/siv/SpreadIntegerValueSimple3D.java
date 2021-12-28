@@ -81,7 +81,7 @@ public class SpreadIntegerValueSimple3D implements LongModel3D {
 			boundsReached = false;
 			newGrid = new long[grid.length + 2][grid.length + 2][grid.length + 2];
 			if (backgroundValue != 0) {
-				padEdges(newGrid, 1, backgroundValue);
+				fillEdges(newGrid, 1, backgroundValue);
 			}
 			indexOffset = 1;
 		} else {
@@ -303,7 +303,7 @@ public class SpreadIntegerValueSimple3D implements LongModel3D {
 		throw new UnsupportedOperationException();
 	}
 	
-	public static void padEdges(long[][][] grid, int width, long value) {
+	public static void fillEdges(long[][][] grid, int width, long value) {
 		int lengthMinusWith = grid.length - width;
 		//min X side
 		for (int x = 0; x < width && x < grid.length; x++) {

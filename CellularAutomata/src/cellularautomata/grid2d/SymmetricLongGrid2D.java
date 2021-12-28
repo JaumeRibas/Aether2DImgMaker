@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid2d;
 
+import cellularautomata.grid.Coordinates;
+
 public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	
 	/**
@@ -38,6 +40,10 @@ public interface SymmetricLongGrid2D extends LongGrid2D, SymmetricGrid2D {
 	 * @throws Exception 
 	 */
 	long getFromAsymmetricPosition(int x, int y) throws Exception;
+	
+	default long getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1));
+	}
 	
 	@Override
 	default LongGrid2D asymmetricSection() {

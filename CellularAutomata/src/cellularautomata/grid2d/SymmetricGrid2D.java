@@ -16,6 +16,7 @@
  */
 package cellularautomata.grid2d;
 
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata.grid.SymmetricGrid;
 
 public interface SymmetricGrid2D extends Grid2D, SymmetricGrid {
@@ -87,6 +88,70 @@ public interface SymmetricGrid2D extends Grid2D, SymmetricGrid {
 	 * @return the largest y
 	 */
 	int getAsymmetricMaxY(int x);
+	
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getAsymmetricMaxX();
+		case 1: 
+			return getAsymmetricMaxY();
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		switch (axis) {
+		case 0: 
+			Integer y = coordinates.get(1);
+			if (y == null) {
+				return getAsymmetricMaxX();
+			} else {
+				return getAsymmetricMaxX(y);
+			}
+		case 1: 
+			Integer x = coordinates.get(0);
+			if (x == null) {
+				return getAsymmetricMaxY();
+			} else {
+				return getAsymmetricMaxY(x);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getAsymmetricMinCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getAsymmetricMinX();
+		case 1: 
+			return getAsymmetricMinY();
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getAsymmetricMinCoordinate(int axis, PartialCoordinates coordinates) {
+		switch (axis) {
+		case 0: 
+			Integer y = coordinates.get(1);
+			if (y == null) {
+				return getAsymmetricMinX();
+			} else {
+				return getAsymmetricMinX(y);
+			}
+		case 1: 
+			Integer x = coordinates.get(0);
+			if (x == null) {
+				return getAsymmetricMinY();
+			} else {
+				return getAsymmetricMinY(x);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
 	
 	@Override
 	default Grid2D asymmetricSection() {

@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid5d;
 
+import cellularautomata.grid.Coordinates;
+
 public interface SymmetricLongGrid5D extends LongGrid5D, SymmetricGrid5D {
 
 	/**
@@ -35,6 +37,10 @@ public interface SymmetricLongGrid5D extends LongGrid5D, SymmetricGrid5D {
 	 * @throws Exception 
 	 */
 	long getFromAsymmetricPosition(int v, int w, int x, int y, int z) throws Exception;
+	
+	default long getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
+	}
 
 	@Override
 	default LongGrid5D asymmetricSection() {

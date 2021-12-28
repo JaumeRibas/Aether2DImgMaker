@@ -16,6 +16,7 @@
  */
 package cellularautomata.grid3d;
 
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata.grid.SymmetricGrid;
 
 public interface SymmetricGrid3D extends Grid3D, SymmetricGrid {
@@ -247,6 +248,132 @@ public interface SymmetricGrid3D extends Grid3D, SymmetricGrid {
 	 * @return the largest z
 	 */
 	int getAsymmetricMaxZ(int x, int y);
+	
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getAsymmetricMaxX();
+		case 1: 
+			return getAsymmetricMaxY();
+		case 2: 
+			return getAsymmetricMaxZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		Integer x, y, z;
+		switch (axis) {
+		case 0:
+			y = coordinates.get(1);
+			z = coordinates.get(2);
+			if (y == null) {
+				if (z == null) {
+					return getAsymmetricMaxX();
+				} else {
+					return getAsymmetricMaxXAtZ(z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMaxXAtY(y);
+			} else {
+				return getAsymmetricMaxX(y, z);
+			}
+		case 1:
+			x = coordinates.get(0);
+			z = coordinates.get(2);
+			if (x == null) {
+				if (z == null) {
+					return getAsymmetricMaxY();
+				} else {
+					return getAsymmetricMaxYAtZ(z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMaxYAtX(x);
+			} else {
+				return getAsymmetricMaxY(x, z);
+			}
+		case 2:
+			x = coordinates.get(0);
+			y = coordinates.get(1);
+			if (x == null) {
+				if (y == null) {
+					return getAsymmetricMaxZ();
+				} else {
+					return getAsymmetricMaxZAtY(y);
+				}
+			} else if (y == null) {
+				return getAsymmetricMaxZAtX(x);
+			} else {
+				return getAsymmetricMaxZ(x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getAsymmetricMinCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getAsymmetricMinX();
+		case 1: 
+			return getAsymmetricMinY();
+		case 2: 
+			return getAsymmetricMinZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getAsymmetricMinCoordinate(int axis, PartialCoordinates coordinates) {
+		Integer x, y, z;
+		switch (axis) {
+		case 0:
+			y = coordinates.get(1);
+			z = coordinates.get(2);
+			if (y == null) {
+				if (z == null) {
+					return getAsymmetricMinX();
+				} else {
+					return getAsymmetricMinXAtZ(z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMinXAtY(y);
+			} else {
+				return getAsymmetricMinX(y, z);
+			}
+		case 1:
+			x = coordinates.get(0);
+			z = coordinates.get(2);
+			if (x == null) {
+				if (z == null) {
+					return getAsymmetricMinY();
+				} else {
+					return getAsymmetricMinYAtZ(z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMinYAtX(x);
+			} else {
+				return getAsymmetricMinY(x, z);
+			}
+		case 2:
+			x = coordinates.get(0);
+			y = coordinates.get(1);
+			if (x == null) {
+				if (y == null) {
+					return getAsymmetricMinZ();
+				} else {
+					return getAsymmetricMinZAtY(y);
+				}
+			} else if (y == null) {
+				return getAsymmetricMinZAtX(x);
+			} else {
+				return getAsymmetricMinZ(x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
+	}
 	
 	@Override
 	default Grid3D asymmetricSection() {

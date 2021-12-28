@@ -318,8 +318,12 @@ public interface Grid4D extends GridRegion {
 		return new Grid4DWXDiagonalCrossSection<Grid4D>(this, xOffsetFromW);
 	}
 	
+	default Grid3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new Grid4DYZDiagonalCrossSection<Grid4D>(this, zOffsetFromY);
+	}
+	
 	@Override
-	default int getUpperBound(int axis) {
+	default int getMaxCoordinate(int axis) {
 		switch (axis) {
 		case 0: 
 			return getMaxW();
@@ -334,7 +338,7 @@ public interface Grid4D extends GridRegion {
 	}
 
 	@Override
-	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+	default int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
 		Integer w, x, y, z;
 		switch (axis) {
 		case 0:
@@ -442,7 +446,7 @@ public interface Grid4D extends GridRegion {
 	}
 	
 	@Override
-	default int getLowerBound(int axis) {
+	default int getMinCoordinate(int axis) {
 		switch (axis) {
 		case 0: 
 			return getMinW();
@@ -457,7 +461,7 @@ public interface Grid4D extends GridRegion {
 	}
 
 	@Override
-	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
 		Integer w, x, y, z;
 		switch (axis) {
 		case 0:

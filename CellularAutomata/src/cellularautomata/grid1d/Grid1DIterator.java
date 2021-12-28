@@ -22,24 +22,32 @@ import java.util.NoSuchElementException;
 public abstract class Grid1DIterator<G extends Grid1D, T> implements Iterator<T> {
 	
 	protected G grid;
-	protected int x;
+	private int x;
+	private int maxX;
+	private boolean hasNext;
 	
 	public Grid1DIterator(G grid) {
 		this.grid = grid;
 		this.x = grid.getMinX();
+		maxX = grid.getMaxX();
+		hasNext = true;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return x <= grid.getMaxX();
+		return hasNext;
 	}
 
 	@Override
 	public T next() {
-		if (x > grid.getMaxX())
+		if (!hasNext)
 			throw new NoSuchElementException();
 		T next = getFromGridPosition(x);
-		x++;
+		if (x == maxX) {
+			hasNext = false;
+		} else {
+			x++;
+		}
 		return next;
 	}
 	

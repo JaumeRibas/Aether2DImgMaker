@@ -16,7 +16,10 @@
  */
 package cellularautomata.grid3d;
 
-public interface SymmetricIntGrid3D extends IntGrid3D, SymmetricGrid3D {
+import cellularautomata.grid.Coordinates;
+import cellularautomata.grid.SymmetricIntGrid;
+
+public interface SymmetricIntGrid3D extends IntGrid3D, SymmetricGrid3D, SymmetricIntGrid {
 	
 	/**
 	 * <p>
@@ -33,6 +36,10 @@ public interface SymmetricIntGrid3D extends IntGrid3D, SymmetricGrid3D {
 	 * @throws Exception 
 	 */
 	int getFromAsymmetricPosition(int x, int y, int z) throws Exception;
+	
+	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
+	}
 
 	@Override
 	default IntGrid3D asymmetricSection() {

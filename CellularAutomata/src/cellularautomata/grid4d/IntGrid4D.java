@@ -18,6 +18,7 @@ package cellularautomata.grid4d;
 
 import java.util.Iterator;
 
+import cellularautomata.grid.Coordinates;
 import cellularautomata.grid.IntGrid;
 import cellularautomata.grid3d.IntGrid3D;
 
@@ -34,6 +35,10 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	 * @throws Exception 
 	 */
 	int getFromPosition(int w, int x, int y, int z) throws Exception;
+	
+	default int getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
+	}
 
 	@Override
 	default int[] getMinAndMax() throws Exception {
@@ -143,6 +148,11 @@ public interface IntGrid4D extends Grid4D, IntGrid {
 	@Override
 	default IntGrid3D diagonalCrossSectionOnWX(int xOffsetFromW) {
 		return new IntGrid4DWXDiagonalCrossSection<IntGrid4D>(this, xOffsetFromW);
+	}
+
+	@Override
+	default IntGrid3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new IntGrid4DYZDiagonalCrossSection<IntGrid4D>(this, zOffsetFromY);
 	}
 
 	@Override

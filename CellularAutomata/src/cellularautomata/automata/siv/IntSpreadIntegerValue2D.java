@@ -18,6 +18,7 @@ package cellularautomata.automata.siv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import cellularautomata.Utils;
 import cellularautomata.grid2d.IsotropicSquareGrid2DA;
@@ -50,7 +51,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		grid = Utils.buildAnisotropic2DIntArray(3);
-		Utils.setAllArrayIndexes(grid, backgroundValue);
+		Utils.fillArray(grid, backgroundValue);
 		grid[0][0] = this.initialValue;
 		xBoundReached = false;
 		step = 0;
@@ -90,7 +91,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 			if (nextX < newGrid.length) {
 				newGrid[nextX] = new int[nextX + 1];
 				if (nextX >= grid.length) {
-					Utils.setAllArrayIndexes(newGrid[nextX], backgroundValue);
+					Arrays.fill(newGrid[nextX], backgroundValue);
 				}
 			}
 			for (int y = 0; y <= x; y++) {

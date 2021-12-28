@@ -18,6 +18,7 @@ package cellularautomata.grid1d;
 
 import java.util.Iterator;
 
+import cellularautomata.grid.Coordinates;
 import cellularautomata.grid.LongGrid;
 
 public interface LongGrid1D extends Grid1D, LongGrid {
@@ -29,6 +30,10 @@ public interface LongGrid1D extends Grid1D, LongGrid {
 	 * @return the value at (x)
 	 */
 	long getFromPosition(int x);
+	
+	default long getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0));
+	}
 	
 	@Override
 	default long[] getMinAndMax() {

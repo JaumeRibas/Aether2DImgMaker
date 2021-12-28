@@ -51,4 +51,9 @@ public interface IntModel4D extends IntGrid4D, IntModel, Model4D {
 	default IntModel3D diagonalCrossSectionOnWX(int xOffsetFromW) {
 		return new IntModel4DWXDiagonalCrossSection(this, xOffsetFromW);
 	}
+	
+	@Override
+	default IntModel3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new IntModel4DYZDiagonalCrossSection(this, zOffsetFromY);
+	}
 }

@@ -18,6 +18,7 @@ package cellularautomata.grid3d;
 
 import java.util.Iterator;
 
+import cellularautomata.grid.Coordinates;
 import cellularautomata.grid.IntGrid;
 import cellularautomata.grid2d.IntGrid2D;
 
@@ -33,6 +34,10 @@ public interface IntGrid3D extends Grid3D, IntGrid {
 	 * @throws Exception 
 	 */
 	int getFromPosition(int x, int y, int z) throws Exception;
+	
+	default int getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
+	}
 
 	@Override
 	default int[] getMinAndMax() throws Exception {

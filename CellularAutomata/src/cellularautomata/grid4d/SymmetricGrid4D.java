@@ -16,6 +16,7 @@
  */
 package cellularautomata.grid4d;
 
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata.grid.SymmetricGrid;
 
 public interface SymmetricGrid4D extends Grid4D, SymmetricGrid {
@@ -36,8 +37,8 @@ public interface SymmetricGrid4D extends Grid4D, SymmetricGrid {
 	
 	/**
 	 * Returns the smallest w-coordinate of the asymmetric section of the grid at (x,y,z).<br/>
-	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
-	 * {@link #getMaxX()}], [{@link #getMinY()}, {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getAsymmetricMinX()}, 
+	 * {@link #getAsymmetricMaxX()}], [{@link #getAsymmetricMinY()}, {@link #getAsymmetricMaxY()}] and [{@link #getAsymmetricMinZ()}, {@link #getAsymmetricMaxZ()}] 
 	 * 
 	 * @param x the x-coordinate
 	 * @param y the y-coordinate
@@ -48,8 +49,8 @@ public interface SymmetricGrid4D extends Grid4D, SymmetricGrid {
 	
 	/**
 	 * Returns the largest w-coordinate of the asymmetric section of the grid at (x,y,z).<br/>
-	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getMinX()}, 
-	 * {@link #getMaxX()}], [{@link #getMinY()}, {@link #getMaxY()}] and [{@link #getMinZ()}, {@link #getMaxZ()}] 
+	 * It's not defined to call this method on a 'x', 'y' and 'z' coordinates outside the bounds of [{@link #getAsymmetricMinX()}, 
+	 * {@link #getAsymmetricMaxX()}], [{@link #getAsymmetricMinY()}, {@link #getAsymmetricMaxY()}] and [{@link #getAsymmetricMinZ()}, {@link #getAsymmetricMaxZ()}] 
 	 * 
 	 * @param x the x-coordinate
 	 * @param y the y-coordinate
@@ -207,6 +208,252 @@ public interface SymmetricGrid4D extends Grid4D, SymmetricGrid {
 	int getAsymmetricMinZAtXY(int x, int y);
 
 	int getAsymmetricMaxZAtXY(int x, int y);
+	
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getAsymmetricMaxW();
+		case 1: 
+			return getAsymmetricMaxX();
+		case 2: 
+			return getAsymmetricMaxY();
+		case 3: 
+			return getAsymmetricMaxZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		Integer w, x, y, z;
+		switch (axis) {
+		case 0:
+			x = coordinates.get(1);	y = coordinates.get(2); z = coordinates.get(3);
+			if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getAsymmetricMaxW();
+					} else {
+						return getAsymmetricMaxWAtZ(z);
+					}
+				} else if (z == null) {
+					return getAsymmetricMaxWAtY(y);
+				} else {
+					return getAsymmetricMaxWAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getAsymmetricMaxWAtX(x);
+				} else {
+					return getAsymmetricMaxWAtXZ(x, z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMaxWAtXY(x, y);
+			} else {
+				return getAsymmetricMaxW(x, y, z);
+			}
+		case 1:
+			w = coordinates.get(0);	y = coordinates.get(2); z = coordinates.get(3);
+			if (w == null) {
+				if (y == null) {
+					if (z == null) {
+						return getAsymmetricMaxX();
+					} else {
+						return getAsymmetricMaxXAtZ(z);
+					}
+				} else if (z == null) {
+					return getAsymmetricMaxXAtY(y);
+				} else {
+					return getAsymmetricMaxXAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getAsymmetricMaxXAtW(w);
+				} else {
+					return getAsymmetricMaxXAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMaxXAtWY(w, y);
+			} else {
+				return getAsymmetricMaxX(w, y, z);
+			}
+		case 2:
+			w = coordinates.get(0);	x = coordinates.get(1); z = coordinates.get(3);
+			if (w == null) {
+				if (x == null) {
+					if (z == null) {
+						return getAsymmetricMaxY();
+					} else {
+						return getAsymmetricMaxYAtZ(z);
+					}
+				} else if (z == null) {
+					return getAsymmetricMaxYAtX(x);
+				} else {
+					return getAsymmetricMaxYAtXZ(x, z);
+				}
+			} else if (x == null) {
+				if (z == null) {
+					return getAsymmetricMaxYAtW(w);
+				} else {
+					return getAsymmetricMaxYAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMaxYAtWX(w, x);
+			} else {
+				return getAsymmetricMaxY(w, x, z);
+			}
+		case 3:
+			w = coordinates.get(0);	x = coordinates.get(1); y = coordinates.get(2);
+			if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						return getAsymmetricMaxZ();
+					} else {
+						return getAsymmetricMaxZAtY(y);
+					}
+				} else if (y == null) {
+					return getAsymmetricMaxZAtX(x);
+				} else {
+					return getAsymmetricMaxZAtXY(x, y);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					return getAsymmetricMaxZAtW(w);
+				} else {
+					return getAsymmetricMaxZAtWY(w, y);
+				}
+			} else if (y == null) {
+				return getAsymmetricMaxZAtWX(w, x);
+			} else {
+				return getAsymmetricMaxZ(w, x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getAsymmetricMinCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getAsymmetricMinW();
+		case 1: 
+			return getAsymmetricMinX();
+		case 2: 
+			return getAsymmetricMinY();
+		case 3: 
+			return getAsymmetricMinZ();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getAsymmetricMinCoordinate(int axis, PartialCoordinates coordinates) {
+		Integer w, x, y, z;
+		switch (axis) {
+		case 0:
+			x = coordinates.get(1);	y = coordinates.get(2); z = coordinates.get(3);
+			if (x == null) {
+				if (y == null) {
+					if (z == null) {
+						return getAsymmetricMinW();
+					} else {
+						return getAsymmetricMinWAtZ(z);
+					}
+				} else if (z == null) {
+					return getAsymmetricMinWAtY(y);
+				} else {
+					return getAsymmetricMinWAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getAsymmetricMinWAtX(x);
+				} else {
+					return getAsymmetricMinWAtXZ(x, z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMinWAtXY(x, y);
+			} else {
+				return getAsymmetricMinW(x, y, z);
+			}
+		case 1:
+			w = coordinates.get(0);	y = coordinates.get(2); z = coordinates.get(3);
+			if (w == null) {
+				if (y == null) {
+					if (z == null) {
+						return getAsymmetricMinX();
+					} else {
+						return getAsymmetricMinXAtZ(z);
+					}
+				} else if (z == null) {
+					return getAsymmetricMinXAtY(y);
+				} else {
+					return getAsymmetricMinXAtYZ(y, z);
+				}
+			} else if (y == null) {
+				if (z == null) {
+					return getAsymmetricMinXAtW(w);
+				} else {
+					return getAsymmetricMinXAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMinXAtWY(w, y);
+			} else {
+				return getAsymmetricMinX(w, y, z);
+			}
+		case 2:
+			w = coordinates.get(0);	x = coordinates.get(1); z = coordinates.get(3);
+			if (w == null) {
+				if (x == null) {
+					if (z == null) {
+						return getAsymmetricMinY();
+					} else {
+						return getAsymmetricMinYAtZ(z);
+					}
+				} else if (z == null) {
+					return getAsymmetricMinYAtX(x);
+				} else {
+					return getAsymmetricMinYAtXZ(x, z);
+				}
+			} else if (x == null) {
+				if (z == null) {
+					return getAsymmetricMinYAtW(w);
+				} else {
+					return getAsymmetricMinYAtWZ(w, z);
+				}
+			} else if (z == null) {
+				return getAsymmetricMinYAtWX(w, x);
+			} else {
+				return getAsymmetricMinY(w, x, z);
+			}
+		case 3:
+			w = coordinates.get(0);	x = coordinates.get(1); y = coordinates.get(2);
+			if (w == null) {
+				if (x == null) {
+					if (y == null) {
+						return getAsymmetricMinZ();
+					} else {
+						return getAsymmetricMinZAtY(y);
+					}
+				} else if (y == null) {
+					return getAsymmetricMinZAtX(x);
+				} else {
+					return getAsymmetricMinZAtXY(x, y);
+				}
+			} else if (x == null) {
+				if (y == null) {
+					return getAsymmetricMinZAtW(w);
+				} else {
+					return getAsymmetricMinZAtWY(w, y);
+				}
+			} else if (y == null) {
+				return getAsymmetricMinZAtWX(w, x);
+			} else {
+				return getAsymmetricMinZ(w, x, y);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
+	}
 	
 	@Override
 	default Grid4D asymmetricSection() {

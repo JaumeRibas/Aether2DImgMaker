@@ -16,6 +16,8 @@
  */
 package cellularautomata.grid4d;
 
+import cellularautomata.grid.Coordinates;
+
 public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 
 	/**
@@ -34,6 +36,10 @@ public interface SymmetricLongGrid4D extends LongGrid4D, SymmetricGrid4D {
 	 * @throws Exception 
 	 */
 	long getFromAsymmetricPosition(int w, int x, int y, int z) throws Exception;
+	
+	default long getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
+	}
 
 	@Override
 	default LongGrid4D asymmetricSection() {

@@ -68,4 +68,9 @@ public interface Model4D extends Grid4D, Model {
 		return new Model4DWXDiagonalCrossSection<Model4D>(this, xOffsetFromW);
 	}
 	
+	@Override
+	default Model3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new Model4DYZDiagonalCrossSection<Model4D>(this, zOffsetFromY);
+	}
+	
 }

@@ -18,6 +18,7 @@ package cellularautomata.automata.siv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import cellularautomata.model1d.LongModel1D;
 
@@ -58,9 +59,7 @@ public class SpreadIntegerValueSimple1D implements LongModel1D {
 		//The origin will be at the center of the array
 		xOriginIndex = (side - 1)/2;
 		if (backgroundValue != 0) {
-			for (int x = 0; x < grid.length; x++) {
-				grid[x] = backgroundValue;
-			}
+			Arrays.fill(grid, backgroundValue);
 		}
 		grid[xOriginIndex] = initialValue;
 		boundsReached = false;
@@ -79,7 +78,7 @@ public class SpreadIntegerValueSimple1D implements LongModel1D {
 			boundsReached = false;
 			newGrid = new long[grid.length + 2];
 			if (backgroundValue != 0) {
-				//padEdges
+				//fill edges
 				newGrid[0] = backgroundValue;
 				newGrid[newGrid.length - 1] = backgroundValue;
 			}

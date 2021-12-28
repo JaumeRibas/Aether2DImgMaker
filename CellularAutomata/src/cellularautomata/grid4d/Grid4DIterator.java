@@ -22,54 +22,72 @@ import java.util.NoSuchElementException;
 public abstract class Grid4DIterator<G extends Grid4D, T> implements Iterator<T> {
 	
 	protected G grid;
-	protected int w;
-	protected int x;
-	protected int y;
-	protected int z;
+	private int w;
+	private int x;
+	private int y;
+	private int z;
+	private int maxW;
+	private int localMaxX;
+	private int localMaxY;
+	private int localMaxZ;
+	private boolean hasNext;
 	
 	public Grid4DIterator(G grid) {
 		this.grid = grid;
-		this.w = grid.getMinW();
-		this.x = grid.getMinXAtW(w);
-		this.y = grid.getMinYAtWX(w, x);
-		this.z = grid.getMinZ(w, x, y);
+		w = grid.getMinW();
+		maxW = grid.getMaxW();
+		x = grid.getMinXAtW(w);
+		localMaxX = grid.getMaxXAtW(w);
+		y = grid.getMinYAtWX(w, x);
+		localMaxY = grid.getMaxYAtWX(w, x);
+		z = grid.getMinZ(w, x, y);
+		localMaxZ = grid.getMaxZ(w, x, y);
+		hasNext = true;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return w <= grid.getMaxW();
+		return hasNext;
 	}
 
 	@Override
 	public T next() {
-		if (w > grid.getMaxW())
+		if (!hasNext)
 			throw new NoSuchElementException();
 		T next = null;
 		try {
 			next = getFromGridPosition(w, x, y, z);
 		} catch (Exception e) {
-			throw new NoSuchElementException(e.getMessage());//what should be done here?
+			throw new NoSuchElementException(e.getMessage());
 		}
-		if (z < grid.getMaxZ(w, x, y)) {
-			z++;
-		} else {
-			if (y < grid.getMaxYAtWX(w, x)) {
-				y++;
-				z = grid.getMinZ(w, x, y);
-			} else {
-				if (x < grid.getMaxXAtW(w)) {
+		if (z == localMaxZ) {
+			if (y == localMaxY) {
+				if (x == localMaxX) {
+					if (w == maxW) {
+						hasNext = false;
+					} else {
+						w++;
+						x = grid.getMinXAtW(w);
+						localMaxX = grid.getMaxXAtW(w);
+						y = grid.getMinYAtWX(w, x);
+						localMaxY = grid.getMaxYAtWX(w, x);
+						z = grid.getMinZ(w, x, y);
+						localMaxZ = grid.getMaxZ(w, x, y);
+					}
+				} else {
 					x++;
 					y = grid.getMinYAtWX(w, x);
+					localMaxY = grid.getMaxYAtWX(w, x);
 					z = grid.getMinZ(w, x, y);
-				} else {
-					w++;
-					if (w <= grid.getMaxW()) {
-						x = grid.getMinXAtW(w);
-						y = grid.getMinYAtWX(w, x);
-						z = grid.getMinZ(w, x, y);
-					}
+					localMaxZ = grid.getMaxZ(w, x, y);
 				}
+			} else {
+				y++;
+				z = grid.getMinZ(w, x, y);
+				localMaxZ = grid.getMaxZ(w, x, y);
 			}
+		} else {
+			z++;
 		}
 		return next;
 	}

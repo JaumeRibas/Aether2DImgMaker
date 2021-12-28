@@ -16,14 +16,14 @@
  */
 package cellularautomata.grid4d;
 
-public class AsymmetricGridSection4D<G extends SymmetricGrid4D> implements Grid4D {
+import cellularautomata.grid.AsymmetricGridSection;
 
-	protected G source;
+public class AsymmetricGridSection4D<G extends SymmetricGrid4D> extends AsymmetricGridSection<G> implements Grid4D {
 	
-	public AsymmetricGridSection4D(G grid) {
-		this.source = grid;
+	public AsymmetricGridSection4D(G source) {
+		super(source);
 	}
-	
+
 	@Override
 	public int getMinW() { return source.getAsymmetricMinW(); }
 

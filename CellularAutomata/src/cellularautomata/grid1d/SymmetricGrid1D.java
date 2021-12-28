@@ -16,6 +16,7 @@
  */
 package cellularautomata.grid1d;
 
+import cellularautomata.grid.PartialCoordinates;
 import cellularautomata.grid.SymmetricGrid;
 
 public interface SymmetricGrid1D extends Grid1D, SymmetricGrid {
@@ -33,6 +34,26 @@ public interface SymmetricGrid1D extends Grid1D, SymmetricGrid {
 	 * @return the largest x
 	 */
 	int getAsymmetricMaxX();
+
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis) {
+		return getAsymmetricMaxX();
+	}
+
+	@Override
+	default int getAsymmetricMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		return getAsymmetricMaxX();
+	}
+
+	@Override
+	default int getAsymmetricMinCoordinate(int axis) {
+		return getAsymmetricMinX();
+	}
+
+	@Override
+	default int getAsymmetricMinCoordinate(int axis, PartialCoordinates coordinates) {
+		return getAsymmetricMinX();
+	}
 	
 	@Override
 	default Grid1D asymmetricSection() {

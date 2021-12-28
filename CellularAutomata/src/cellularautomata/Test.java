@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
 import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
@@ -43,17 +44,21 @@ import cellularautomata.automata.siv.SpreadIntegerValue1D;
 import cellularautomata.automata.siv.SpreadIntegerValue2D;
 import cellularautomata.automata.siv.SpreadIntegerValueRules;
 import cellularautomata.automata.siv.SpreadIntegerValueSimple2D;
+import cellularautomata.grid.GridRegion;
+import cellularautomata.grid.Coordinates;
 import cellularautomata.grid.GridProcessor;
 import cellularautomata.grid1d.LongGrid1D;
 import cellularautomata.grid1d.ObjectGrid1D;
 import cellularautomata.grid2d.ObjectGrid2D;
 import cellularautomata.grid2d.ArrayIntGrid2D;
 import cellularautomata.grid2d.ArrayNumberGrid2D;
+import cellularautomata.grid2d.Grid2D;
 import cellularautomata.grid2d.IntGrid2D;
 import cellularautomata.grid2d.LongGrid2D;
 import cellularautomata.grid3d.BigFractionGrid3DPattern;
 import cellularautomata.grid3d.BigIntGrid3DPattern;
 import cellularautomata.grid3d.RegularIntGrid3D;
+import cellularautomata.grid3d.Grid3D;
 import cellularautomata.grid3d.Grid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.grid3d.IntGrid3DXCrossSectionCopierProcessor;
@@ -62,6 +67,7 @@ import cellularautomata.grid3d.LongGrid3D;
 import cellularautomata.grid3d.LongGrid3DZCrossSectionCopierProcessor;
 import cellularautomata.grid3d.NumberGrid3D;
 import cellularautomata.grid3d.ObjectGrid3D;
+import cellularautomata.grid4d.RegularIntGrid4D;
 import cellularautomata.grid4d.IntGrid4D;
 import cellularautomata.grid4d.LongGrid4D;
 import cellularautomata.grid4d.NumberGrid4D;
@@ -97,6 +103,332 @@ public class Test {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compare(ae1, ae2);
+	}
+	
+	public static void checkBoundsConsistency(Grid2D grid) {
+		List<String> edgePositions = new ArrayList<String>();
+		//xy
+		int x = grid.getMinX();
+		int maxX = grid.getMaxX();
+		int localMaxY = grid.getMaxY(x);
+		for (int y = grid.getMinY(x); y <= localMaxY; y++) {
+			edgePositions.add(x + "," + y);
+		}
+		for (x++; x < maxX; x++) {
+			edgePositions.add(x + "," + grid.getMinY(x));
+			edgePositions.add(x + "," + grid.getMaxY(x));
+		}
+		if (x == maxX) {
+			localMaxY = grid.getMaxY(x);
+			for (int y = grid.getMinY(x); y <= localMaxY; y++) {
+				edgePositions.add(x + "," + y);
+			}
+		}
+		//yx
+		String errorMessage = "Inconsistency found in bounds in yx traversal";
+		int y = grid.getMinY();
+		int maxY = grid.getMaxY();
+		int localMaxX = grid.getMaxX(y);
+		for (x = grid.getMinX(y); x <= localMaxX; x++) {
+			if (!edgePositions.contains(x + "," + y)) {
+				System.out.println(errorMessage);
+			}
+		}
+		for (y++; y < maxY; y++) {
+			if (!edgePositions.contains(grid.getMinX(y) + "," + y) 
+					|| !edgePositions.contains(grid.getMaxX(y) + "," + y)) {
+				System.out.println(errorMessage);
+			}
+		}
+		if (y == maxY) {
+			localMaxX = grid.getMaxX(y);
+			for (x = grid.getMinX(y); x <= localMaxX; x++) {
+				if (!edgePositions.contains(x + "," + y)) {
+					System.out.println(errorMessage);
+				}
+			}
+		}
+	}
+	
+	public static void checkBoundsConsistency(Grid3D grid) {
+		List<String> edgePositions = new ArrayList<String>();
+		//xyz
+		int x = grid.getMinX();
+		int maxX = grid.getMaxX();
+		int localMaxY = grid.getMaxYAtX(x);
+		for (int y = grid.getMinYAtX(x); y <= localMaxY; y++) {
+			int localMaxZ = grid.getMaxZ(x, y);
+			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+				edgePositions.add(x + "," + y + "," + z);
+			}
+		}
+		for (x++; x < maxX; x++) {
+			int y = grid.getMinYAtX(x);
+			int maxY = grid.getMaxYAtX(x);
+			int localMaxZ = grid.getMaxZ(x, y);
+			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+				edgePositions.add(x + "," + y + "," + z);
+			}
+			for (y++; y < maxY; y++) {
+				edgePositions.add(x + "," + y + "," + grid.getMinZ(x, y));
+				edgePositions.add(x + "," + y + "," + grid.getMaxZ(x, y));
+			}
+			if (y == maxY) {
+				localMaxZ = grid.getMaxZ(x, y);
+				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+					edgePositions.add(x + "," + y + "," + z);
+				}
+			}
+		}
+		if (x == maxX) {
+			localMaxY = grid.getMaxYAtX(x);
+			for (int y = grid.getMinYAtX(x); y <= localMaxY; y++) {
+				int localMaxZ = grid.getMaxZ(x, y);
+				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+					edgePositions.add(x + "," + y + "," + z);
+				}
+			}
+		}
+		//xzy
+		String errorMessage = "Inconsistency found in bounds in xzy traversal";
+		x = grid.getMinX();
+		maxX = grid.getMaxX();
+		int localMaxZ = grid.getMaxZAtX(x);
+		for (int z = grid.getMinYAtX(x); z <= localMaxZ; z++) {
+			localMaxY = grid.getMaxY(x, z);
+			for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+		}
+		for (x++; x < maxX; x++) {
+			int z = grid.getMinZAtX(x);
+			int maxZ = grid.getMaxZAtX(x);
+			localMaxY = grid.getMaxY(x, z);
+			for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			for (z++; z < maxZ; z++) {
+				if (!edgePositions.contains(x + "," + grid.getMinY(x, z) + "," + z) 
+						|| !edgePositions.contains(x + "," + grid.getMaxY(x, z) + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			if (z == maxZ) {
+				localMaxY = grid.getMaxY(x, z);
+				for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		if (x == maxX) {
+			localMaxZ = grid.getMaxZAtX(x);
+			for (int z = grid.getMinZAtX(x); z <= localMaxZ; z++) {
+				localMaxY = grid.getMaxY(x, z);
+				for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		//yxz
+		errorMessage = "Inconsistency found in bounds in yxz traversal";
+		int y = grid.getMinY();
+		int maxY = grid.getMaxY();
+		int localMaxX = grid.getMaxXAtY(y);
+		for (x = grid.getMinXAtY(y); x <= localMaxX; x++) {
+			localMaxZ = grid.getMaxZ(x, y);
+			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+		}
+		for (y++; y < maxY; y++) {
+			x = grid.getMinXAtY(y);
+			maxX = grid.getMaxXAtY(y);
+			localMaxZ = grid.getMaxZ(x, y);
+			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			for (x++; x < maxX; x++) {
+				if (!edgePositions.contains(x + "," + y + "," + grid.getMinZ(x, y)) 
+						|| !edgePositions.contains(x + "," + y + "," + grid.getMaxZ(x, y))) {
+					System.out.println(errorMessage);
+				}
+			}
+			if (x == maxX) {
+				localMaxZ = grid.getMaxZ(x, y);
+				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		if (y == maxY) {
+			localMaxX = grid.getMaxXAtY(y);
+			for (x = grid.getMinXAtY(y); x <= localMaxX; x++) {
+				localMaxZ = grid.getMaxZ(x, y);
+				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		//yzx
+		errorMessage = "Inconsistency found in bounds in yzx traversal";
+		y = grid.getMinY();
+		maxY = grid.getMaxY();
+		localMaxZ = grid.getMaxZAtY(y);
+		for (int z = grid.getMinZAtY(y); z <= localMaxZ; z++) {
+			localMaxX = grid.getMaxX(y, z);
+			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+		}
+		for (y++; y < maxY; y++) {
+			int z = grid.getMinZAtY(y);
+			int maxZ = grid.getMaxZAtY(y);
+			localMaxX = grid.getMaxX(y, z);
+			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			for (z++; z < maxZ; z++) {
+				if (!edgePositions.contains(grid.getMinX(y, z) + "," + y + "," + z) 
+						|| !edgePositions.contains(grid.getMaxX(y, z) + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			if (z == maxZ) {
+				localMaxX = grid.getMaxX(y, z);
+				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		if (y == maxY) {
+			localMaxZ = grid.getMaxZAtY(y);
+			for (int z = grid.getMinZAtY(y); z <= localMaxZ; z++) {
+				localMaxX = grid.getMaxX(y, z);
+				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		//zxy
+		errorMessage = "Inconsistency found in bounds in zxy traversal";
+		int z = grid.getMinZ();
+		int maxZ = grid.getMaxZ();
+		localMaxX = grid.getMaxXAtZ(z);
+		for (x = grid.getMinXAtZ(z); x <= localMaxX; x++) {
+			localMaxY = grid.getMaxY(x, z);
+			for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+		}
+		for (z++; z < maxZ; z++) {
+			x = grid.getMinXAtZ(z);
+			maxX = grid.getMaxXAtZ(z);
+			localMaxY = grid.getMaxY(x, z);
+			for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			for (x++; x < maxX; x++) {
+				if (!edgePositions.contains(x + "," + grid.getMinY(x, z) + "," + z) 
+						|| !edgePositions.contains(x + "," + grid.getMaxY(x, z) + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			if (x == maxX) {
+				localMaxY = grid.getMaxY(x, z);
+				for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		if (z == maxZ) {
+			localMaxX = grid.getMaxXAtZ(z);
+			for (x = grid.getMinXAtZ(z); x <= localMaxX; x++) {
+				localMaxY = grid.getMaxY(x, z);
+				for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		//zyx
+		errorMessage = "Inconsistency found in bounds in zyx traversal";
+		z = grid.getMinZ();
+		maxZ = grid.getMaxZ();
+		localMaxY = grid.getMaxYAtZ(z);
+		for (y = grid.getMinYAtZ(z); y <= localMaxY; y++) {
+			localMaxX = grid.getMaxX(y, z);
+			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+		}
+		for (z++; z < maxZ; z++) {
+			y = grid.getMinYAtZ(z);
+			maxY = grid.getMaxYAtZ(z);
+			localMaxX = grid.getMaxX(y, z);
+			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+				if (!edgePositions.contains(x + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			for (y++; y < maxY; y++) {
+				if (!edgePositions.contains(grid.getMinX(y, z) + "," + y + "," + z) 
+						|| !edgePositions.contains(grid.getMaxX(y, z) + "," + y + "," + z)) {
+					System.out.println(errorMessage);
+				}
+			}
+			if (y == maxY) {
+				localMaxX = grid.getMaxX(y, z);
+				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
+		if (z == maxZ) {
+			localMaxY = grid.getMaxYAtZ(z);
+			for (y = grid.getMinYAtZ(z); y <= localMaxY; y++) {
+				localMaxX = grid.getMaxX(y, z);
+				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+					if (!edgePositions.contains(x + "," + y + "," + z)) {
+						System.out.println(errorMessage);
+					}
+				}
+			}
+		}
 	}
 	
 	public static void testArrayGrid() {
@@ -183,7 +515,7 @@ public class Test {
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = (T[]) Array.newInstance(clazz, height);
 		}
-		return (T[][]) arr;
+		return arr;
 	}
 	
 	public static void test2DDiagonals() throws Exception {
@@ -203,7 +535,7 @@ public class Test {
 					int value = random.nextInt();
 					int y = x+off;
 					if (y < side) {
-						sourceValues[x][x+off][z] = value;
+						sourceValues[x][y][z] = value;
 						resultValues[z][x] = value;	
 					}
 				}
@@ -211,6 +543,7 @@ public class Test {
 			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
 			diagonal = grid.diagonalCrossSectionOnXY(off);
 			compare(diagonal, resultValues, 0, 0);
+			checkBoundsConsistency(diagonal);
 		}
 		//xz
 		for (int off = 0; off <= offset; off += offset) {
@@ -229,6 +562,7 @@ public class Test {
 			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
 			diagonal = grid.diagonalCrossSectionOnXZ(off);
 			compare(diagonal, resultValues, 0, 0);
+			checkBoundsConsistency(diagonal);
 		}
 		//yz
 		for (int off = 0; off <= offset; off += offset) {
@@ -247,6 +581,67 @@ public class Test {
 			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
 			diagonal = grid.diagonalCrossSectionOnYZ(off);
 			compare(diagonal, resultValues, 0, 0);
+			checkBoundsConsistency(diagonal);
+		}
+	}
+	
+	public static void printRegionBounds(GridRegion region) {
+		int dimension = region.getGridDimension();
+		for (int axis = 0; axis < dimension; axis++) {
+			char axisLetter = Utils.getAxisLetterFromIndex(dimension, axis);
+			System.out.printf("%d <= %c <= %d %n", region.getMinCoordinate(axis), axisLetter, region.getMaxCoordinate(axis));
+		}
+	}
+	
+	public static void test3DDiagonals() throws Exception {
+		int[][][][] sourceValues;
+		int[][][] resultValues;
+		RegularIntGrid4D grid;
+		IntGrid3D diagonal;
+		int side = 20;
+		int offset = 5;
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		//wx 
+		for (int off = 0; off <= offset; off += offset) {
+			sourceValues = new int[side][side][side][side];
+			resultValues = new int[side][side][side];
+			for (int w = 0; w < side; w++) {
+				for (int y = 0; y < side; y++) {
+					for (int z = 0; z < side; z++) {
+						int value = random.nextInt();
+						int x = w+off;
+						if (x < side) {
+							sourceValues[w][x][y][z] = value;
+							resultValues[w][y][z] = value;	
+						}
+					}
+				}
+			}			
+			grid = new RegularIntGrid4D(sourceValues, 0, 0, 0, 0);
+			diagonal = grid.diagonalCrossSectionOnWX(off);
+			checkBoundsConsistency(diagonal);
+			compare(diagonal, new RegularIntGrid3D(resultValues, 0, 0, 0));
+		}
+		//yz 
+		for (int off = 0; off <= offset; off += offset) {
+			sourceValues = new int[side][side][side][side];
+			resultValues = new int[side][side][side];
+			for (int w = 0; w < side; w++) {
+				for (int y = 0; y < side; y++) {
+					for (int x = 0; x < side; x++) {
+						int value = random.nextInt();
+						int z = y+off;
+						if (z < side) {
+							sourceValues[w][x][y][z] = value;
+							resultValues[w][x][y] = value;	
+						}
+					}
+				}
+			}			
+			grid = new RegularIntGrid4D(sourceValues, 0, 0, 0, 0);
+			diagonal = grid.diagonalCrossSectionOnYZ(off);
+			checkBoundsConsistency(diagonal);
+			compare(diagonal, new RegularIntGrid3D(resultValues, 0, 0, 0));
 		}
 	}
 	
@@ -262,6 +657,28 @@ public class Test {
 			}
 		}
 		System.out.println("Equal!");
+	}
+	
+	public static void compare(IntGrid3D grid1, IntGrid3D grid2) {
+		try {
+			boolean equal = true;
+			for (int z = grid1.getMinZ(); z <= grid1.getMaxZ(); z++) {
+				for (int y = grid1.getMinYAtZ(z); y <= grid1.getMaxYAtZ(z); y++) {
+					for (int x = grid1.getMinX(y,z); x <= grid1.getMaxX(y,z); x++) {
+						if (grid1.getFromPosition(x, y, z) != grid2.getFromPosition(x, y, z)) {
+							equal = false;
+							System.out.println("Different value at (" + x + ", " + y + ", " + z + "): " 
+									+ grid1.getClass().getSimpleName() + ":" + grid1.getFromPosition(x, y, z) 
+									+ " != " + grid2.getClass().getSimpleName() + ":" + grid2.getFromPosition(x, y, z));
+						}
+					}	
+				}	
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void testBigIntValueOfPerformance() {
@@ -485,7 +902,7 @@ public class Test {
 	}
 	
 	public static void testAsymmetricSection() {
-		IntAether4D ae = new IntAether4D((short) -10000);
+		IntAether4D ae = new IntAether4D(-10000);
 		IntGrid4D ns = ae.asymmetricSection();
 		try {
 			do {
@@ -2422,6 +2839,102 @@ public class Test {
 		    }
 		}
 		return array;
+	}
+	
+	public static void compare(IntModel ca1, IntModel ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+//			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("Comparing step " + ca1.getStep());//debug
+				ca1.forEachPosition(new Consumer<Coordinates>() {
+					
+					@Override
+					public void accept(Coordinates coordinates) {
+						try {
+							if (ca1.getFromPosition(coordinates) != ca2.getFromPosition(coordinates)) {
+//							equal = false;
+								System.out.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
+										+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(coordinates) 
+										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(coordinates));
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+//					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+//			if (equal)
+//				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compare(LongModel ca1, IntModel ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+//			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("Comparing step " + ca1.getStep());//debug
+				ca1.forEachPosition(new Consumer<Coordinates>() {
+					
+					@Override
+					public void accept(Coordinates coordinates) {
+						try {
+							if (ca1.getFromPosition(coordinates) != ca2.getFromPosition(coordinates)) {
+//							equal = false;
+								System.out.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
+										+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(coordinates) 
+										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(coordinates));
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+//					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+//			if (equal)
+//				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep(IntModel ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			Coordinates crossSectionCoordinates = new Coordinates(new int[ca.getGridDimension()]);
+			do {
+				System.out.println("step " + ca.getStep());
+				System.out.println(ca.toString2DCrossSection(0, 1, crossSectionCoordinates));
+				System.out.println("total value " + ca.getTotal());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

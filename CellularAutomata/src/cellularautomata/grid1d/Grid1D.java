@@ -52,22 +52,22 @@ public interface Grid1D extends GridRegion {
 	}
 
 	@Override
-	default int getUpperBound(int axis) {
+	default int getMaxCoordinate(int axis) {
 		return getMaxX();
 	}
 
 	@Override
-	default int getUpperBound(int axis, PartialCoordinates coordinates) {
+	default int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
 		return getMaxX();
 	}
 
 	@Override
-	default int getLowerBound(int axis) {
+	default int getMinCoordinate(int axis) {
 		return getMinX();
 	}
 
 	@Override
-	default int getLowerBound(int axis, PartialCoordinates coordinates) {
+	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
 		return getMinX();
 	}
 }

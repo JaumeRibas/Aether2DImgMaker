@@ -22,45 +22,58 @@ import java.util.NoSuchElementException;
 public abstract class Grid3DIterator<G extends Grid3D, T> implements Iterator<T> {
 	
 	protected G grid;
-	protected int x;
-	protected int y;
-	protected int z;
+	private int x;
+	private int y;
+	private int z;
+	private int maxX;
+	private int localMaxY;
+	private int localMaxZ;
+	private boolean hasNext;
 	
 	public Grid3DIterator(G grid) {
 		this.grid = grid;
-		this.x = grid.getMinX();
-		this.y = grid.getMinYAtX(x);
-		this.z = grid.getMinZ(x, y);
+		x = grid.getMinX();
+		maxX = grid.getMaxX();
+		y = grid.getMinYAtX(x);
+		localMaxY = grid.getMaxYAtX(x);
+		z = grid.getMinZ(x, y);
+		localMaxZ = grid.getMaxZ(x, y);
+		hasNext = true;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return x <= grid.getMaxX();
+		return hasNext;
 	}
 
 	@Override
 	public T next() {
-		if (x > grid.getMaxX())
+		if (!hasNext)
 			throw new NoSuchElementException();
 		T next = null;
 		try {
 			next = getFromGridPosition(x, y, z);
 		} catch (Exception e) {
-			throw new NoSuchElementException(e.getMessage());//what should be done here?
+			throw new NoSuchElementException(e.getMessage());
 		}
-		if (z < grid.getMaxZ(x, y)) {
-			z++;
-		} else {
-			if (y < grid.getMaxYAtX(x)) {
+		if (z == localMaxZ) {
+			if (y == localMaxY) {
+				if (x == maxX) {
+					hasNext = false;
+				} else {
+					x++;
+					y = grid.getMinYAtX(x);
+					localMaxY = grid.getMaxYAtX(x);
+					z = grid.getMinZ(x, y);
+					localMaxZ = grid.getMaxZ(x, y);					
+				}
+			} else {
 				y++;
 				z = grid.getMinZ(x, y);
-			} else {
-				x++;
-				if (x <= grid.getMaxX()) {
-					y = grid.getMinYAtX(x);
-					z = grid.getMinZ(x, y);
-				}
+				localMaxZ = grid.getMaxZ(x, y);
 			}
+		} else {
+			z++;
 		}
 		return next;
 	}
