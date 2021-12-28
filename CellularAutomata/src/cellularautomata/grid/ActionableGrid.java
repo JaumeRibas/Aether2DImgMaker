@@ -23,7 +23,10 @@ import cellularautomata.grid.GridRegion;
 
 //TODO try to make it more standard. Perhaps using the Iterable interface. 
 /**
- * A grid region that can be processed progressively in chunks (blocks).
+ * <p>A grid region that can be processed progressively in chunks (blocks).</p>
+ * <p>The cuts between blocks are perpendicular to the first axis.
+ * The first axis is the x-axis for dimension 1 to 3, the w-axis for dimension 4, the v-axis for dimension 5 and so on.</p>
+ * <p>The blocks are processed in order from minimum to maximum coordinate.</p>
  * 
  * @author Jaume
  *
