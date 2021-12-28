@@ -55,11 +55,11 @@ public class BigIntAether3DSwapOddImgMaker {
 				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0) {
 					maxGridSideInHeap = tmp.intValue();
 				} else {
-					System.err.println("Maximum grid volume in heap out of range.");
+					System.err.println("Maximum grid side in heap out of range.");
 					return;
 				}
 			} else {
-				System.err.println("The maximum grid volume in heap must be a positive integer.");
+				System.err.println("The maximum grid side in heap must be a positive integer.");
 				return;
 			}
 			if (args.length > 2) {
