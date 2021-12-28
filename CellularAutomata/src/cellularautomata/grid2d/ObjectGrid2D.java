@@ -30,7 +30,7 @@ public interface ObjectGrid2D<T> extends Grid2D, ObjectGrid<T> {
 	 * @return the object at (x,y)
 	 * @throws Exception 
 	 */
-	public abstract T getFromPosition(int x, int y) throws Exception;
+	T getFromPosition(int x, int y) throws Exception;
 	
 	@Override
 	default ObjectGrid2D<T> subsection(int minX, int maxX, int minY, int maxY) {
