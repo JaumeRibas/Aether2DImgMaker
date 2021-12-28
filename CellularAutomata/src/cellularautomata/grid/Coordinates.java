@@ -52,4 +52,20 @@ public class Coordinates {
 		return Arrays.toString(coordinates);
 	}
 	
+	public boolean equals(Coordinates other) {
+		if (other == null)
+			return false;
+		return Arrays.equals(coordinates, other.coordinates);
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		if (other == null || other.getClass() != this.getClass()) {
+			return false;
+		}
+		return Arrays.equals(coordinates, ((Coordinates)other).coordinates);
+	}
+	
 }
