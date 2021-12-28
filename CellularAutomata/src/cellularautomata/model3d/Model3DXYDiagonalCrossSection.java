@@ -35,13 +35,7 @@ public class Model3DXYDiagonalCrossSection<M extends Model3D> extends Grid3DXYDi
 	
 	@Override
 	public String getYLabel() {
-		String yLabel =  source.getYLabel() + "=" + source.getXLabel();
-		if (yOffsetFromX < 0) {
-			yLabel += yOffsetFromX;
-		} else if (yOffsetFromX > 0) {
-			yLabel += "+" + yOffsetFromX;
-		}
-		return yLabel;
+		return source.getXLabel();
 	}
 
 	@Override

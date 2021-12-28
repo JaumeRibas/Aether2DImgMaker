@@ -30,13 +30,7 @@ public class Model4DWXDiagonalCrossSection<M extends Model4D> extends Grid4DWXDi
 	
 	@Override
 	public String getXLabel() {
-		String xLabel =  source.getXLabel() + "=" + source.getWLabel();
-		if (xOffsetFromW < 0) {
-			xLabel += xOffsetFromW;
-		} else if (xOffsetFromW > 0) {
-			xLabel += "+" + xOffsetFromW;
-		}
-		return xLabel;
+		return source.getWLabel();
 	}
 	
 	@Override

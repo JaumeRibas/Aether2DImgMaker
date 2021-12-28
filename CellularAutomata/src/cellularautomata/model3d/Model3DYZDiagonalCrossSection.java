@@ -35,13 +35,7 @@ public class Model3DYZDiagonalCrossSection<M extends Model3D> extends Grid3DYZDi
 	
 	@Override
 	public String getYLabel() {
-		String yLabel =  source.getZLabel() + "=" + source.getYLabel();
-		if (zOffsetFromY < 0) {
-			yLabel += zOffsetFromY;
-		} else if (zOffsetFromY > 0) {
-			yLabel += "+" + zOffsetFromY;
-		}
-		return yLabel;
+		return source.getYLabel();
 	}
 
 	@Override

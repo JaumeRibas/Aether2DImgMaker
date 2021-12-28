@@ -95,13 +95,7 @@ public class ActionableModel4DWXDiagonalCrossSection<G1 extends Grid4D, G2 exten
 	
 	@Override
 	public String getXLabel() {
-		String xLabel =  source.getXLabel() + "=" + source.getWLabel();
-		if (xOffsetFromW < 0) {
-			xLabel += xOffsetFromW;
-		} else if (xOffsetFromW > 0) {
-			xLabel += "+" + xOffsetFromW;
-		}
-		return xLabel;
+		return source.getWLabel();
 	}
 	
 	@Override

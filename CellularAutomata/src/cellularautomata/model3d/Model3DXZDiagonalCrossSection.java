@@ -30,13 +30,7 @@ public class Model3DXZDiagonalCrossSection<M extends Model3D> extends Grid3DXZDi
 	
 	@Override
 	public String getXLabel() {
-		String xLabel =  source.getZLabel() + "=" + source.getXLabel();
-		if (zOffsetFromX < 0) {
-			xLabel += zOffsetFromX;
-		} else if (zOffsetFromX > 0) {
-			xLabel += "+" + zOffsetFromX;
-		}
-		return xLabel;
+		return source.getXLabel();
 	}
 	
 	@Override
