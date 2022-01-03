@@ -18,12 +18,13 @@ package cellularautomata.model1d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.grid1d.SymmetricNumberGrid1D;
-
-public interface SymmetricNumericModel1D<T extends FieldElement<T> & Comparable<T>> 
-	extends SymmetricNumberGrid1D<T>, NumericModel1D<T> {
+public interface SymmetricNumericModel1D<T extends FieldElement<T> & Comparable<T>> extends NumericModel1D<T>, SymmetricModel1D {
+	
+	T getFromAsymmetricPosition(int x);
+	
 	@Override
 	default NumericModel1D<T> asymmetricSection() {
-		return new AsymmetricNumericModelSection1D<T>(this);
+		return new AsymmetricNumericModelSection1D<T, SymmetricNumericModel1D<T>>(this);
 	}
+
 }

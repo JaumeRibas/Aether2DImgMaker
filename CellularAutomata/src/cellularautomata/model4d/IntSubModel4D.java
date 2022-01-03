@@ -17,8 +17,9 @@
 package cellularautomata.model4d;
 
 public class IntSubModel4D extends SubModel4D<IntModel4D> implements IntModel4D {
-
-	public IntSubModel4D(IntModel4D source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	
+	public IntSubModel4D(IntModel4D source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ,
+			int maxZ) {
 		super(source, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 

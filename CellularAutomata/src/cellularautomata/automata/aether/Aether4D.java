@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid4d.IsotropicHypercubicGrid4DA;
+import cellularautomata.model4d.IsotropicHypercubicModel4DA;
 import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicGrid4DA, Serializable {
+public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA, Serializable {
 
 	/**
 	 * 

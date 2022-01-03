@@ -16,12 +16,76 @@
  */
 package cellularautomata.model1d;
 
-import cellularautomata.grid1d.LongGrid1D;
+import java.util.Iterator;
+
+import cellularautomata.model.Coordinates;
 import cellularautomata.model.LongModel;
 
-public interface LongModel1D extends LongGrid1D, LongModel, Model1D {
+public interface LongModel1D extends Model1D, LongModel {
+	
+	/**
+	 * Returns the value at a given position
+	 * 
+	 * @param x the position on the x-axis
+	 * @return the value at (x)
+	 */
+	long getFromPosition(int x);
+	
+	default long getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0));
+	}
+	
+	@Override
+	default long[] getMinAndMax() {
+		int maxX = getMaxX(), minX = getMinX();
+		long maxValue = getFromPosition(minX), minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			long value = getFromPosition(x);
+			if (value > maxValue)
+				maxValue = value;
+			if (value < minValue)
+				minValue = value;
+		}
+		return new long[]{ minValue, maxValue };
+	}
+	
+	@Override
+	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
+		int maxX = getMaxX(), minX = getMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		boolean isPositionEven = minX%2 == 0;
+		if (isPositionEven != isEven) {
+			minX++;
+		}
+		for (int x = minX; x <= maxX; x+=2) {
+			anyPositionMatches = true;
+			long value = getFromPosition(x);
+			if (value > maxValue)
+				maxValue = value;
+			if (value < minValue)
+				minValue = value;
+		}
+		return anyPositionMatches? new long[]{ minValue, maxValue } : null;
+	}
+	
+	@Override
+	default long getTotal() {
+		long total = 0;
+		int maxX = getMaxX(), minX = getMinX();
+		for (int x = minX; x <= maxX; x++) {
+			total += getFromPosition(x);
+		}
+		return total;
+	}
+	
 	@Override
 	default LongModel1D subsection(int minX, int maxX) {
-		return new LongSubModel1D(this, minX, maxX);
+		return new LongSubModel1D<LongModel1D>(this, minX, maxX);
+	}
+
+	@Override
+	default Iterator<Long> iterator() {
+		return new LongModel1DIterator(this);
 	}
 }

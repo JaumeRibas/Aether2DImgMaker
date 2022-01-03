@@ -18,9 +18,9 @@ package cellularautomata.model4d;
 
 import cellularautomata.model3d.LongModel3D;
 
-public class LongModel4DYCrossSection extends Model4DYCrossSection<LongModel4D> implements LongModel3D {
+public class LongModel4DYCrossSection<G extends LongModel4D> extends Model4DYCrossSection<G> implements LongModel3D {
 
-	public LongModel4DYCrossSection(LongModel4D source, int y) {
+	public LongModel4DYCrossSection(G source, int y) {
 		super(source, y);
 	}
 
@@ -28,5 +28,4 @@ public class LongModel4DYCrossSection extends Model4DYCrossSection<LongModel4D> 
 	public long getFromPosition(int x, int y, int z) throws Exception {
 		return source.getFromPosition(x, y, this.y, z);
 	}
-
 }

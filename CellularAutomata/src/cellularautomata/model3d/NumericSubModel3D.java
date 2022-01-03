@@ -18,15 +18,11 @@ package cellularautomata.model3d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class NumericSubModel3D<T extends FieldElement<T> & Comparable<T>> extends SubModel3D<NumericModel3D<T>> implements NumericModel3D<T> {
+public class NumericSubModel3D<T extends FieldElement<T> & Comparable<T>, G extends NumericModel3D<T>> 
+	extends ObjectSubModel3D<T, G> implements NumericModel3D<T> {
 
-	public NumericSubModel3D(NumericModel3D<T> source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public NumericSubModel3D(G source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
-
-	@Override
-	public T getFromPosition(int x, int y, int z) throws Exception {
-		return source.getFromPosition(x, y, z);
-	}
-
+	
 }

@@ -19,13 +19,235 @@ package cellularautomata.model4d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid4d.Grid4DWXDiagonalCrossSection;
 import cellularautomata.model3d.Model3D;
 
-public class Model4DWXDiagonalCrossSection<M extends Model4D> extends Grid4DWXDiagonalCrossSection<M> implements Model3D {
+public class Model4DWXDiagonalCrossSection<G extends Model4D> implements Model3D {
 
-	public Model4DWXDiagonalCrossSection(M source, int xOffsetFromW) {
-		super(source, xOffsetFromW);
+	protected G source;
+	protected int xOffsetFromW;
+	protected int crossSectionMinW;
+	protected int crossSectionMaxW;
+	protected int crossSectionMinY;
+	protected int crossSectionMaxY;
+	protected int crossSectionMinZ;
+	protected int crossSectionMaxZ;
+	
+	/*
+	 * w -> x
+	 * y -> y
+	 * z -> z
+	 * */
+	
+	public Model4DWXDiagonalCrossSection(G source, int xOffsetFromW) {		
+		this.source = source;
+		this.xOffsetFromW = xOffsetFromW;
+		if (!getBounds()) {
+			throw new IllegalArgumentException("Cross section is out of bounds.");
+		}
+	}
+	
+	protected boolean getBounds() {
+		int w = source.getMinW();
+		int maxW = source.getMaxW();
+		int crossSectionX = w + xOffsetFromW;
+		while (w <= maxW && (crossSectionX < source.getMinXAtW(w) || crossSectionX > source.getMaxXAtW(w))) {
+			w++;
+			crossSectionX++;
+		}
+		if (w <= maxW) {
+			crossSectionMinW = w;
+			crossSectionMaxW = w;
+			crossSectionMaxY = source.getMaxYAtWX(w, crossSectionX);
+			crossSectionMinY = source.getMinYAtWX(w, crossSectionX);
+			crossSectionMaxZ = source.getMaxZAtWX(w, crossSectionX);
+			crossSectionMinZ = source.getMinZAtWX(w, crossSectionX);
+			w++;
+			crossSectionX++;
+			while (w <= maxW && crossSectionX >= source.getMinXAtW(w) && crossSectionX <= source.getMaxXAtW(w)) {
+				crossSectionMaxW = w;
+				int localMaxY = source.getMaxYAtWX(w, crossSectionX), localMinY = source.getMinYAtWX(w, crossSectionX);
+				if (localMaxY > crossSectionMaxY) {
+					crossSectionMaxY = localMaxY;
+				}
+				if (localMinY < crossSectionMinY) {
+					crossSectionMinY = localMinY;
+				}
+				int localMaxZ = source.getMaxZAtWX(w, crossSectionX), localMinZ = source.getMinZAtWX(w, crossSectionX);
+				if (localMaxZ > crossSectionMaxZ) {
+					crossSectionMaxZ = localMaxZ;
+				}
+				if (localMinZ < crossSectionMinZ) {
+					crossSectionMinZ = localMinZ;
+				}
+				w++;
+				crossSectionX++;
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int getMinX() { 
+		return crossSectionMinW; 
+	}
+
+	@Override
+	public int getMaxX() { 
+		return crossSectionMaxW; 
+	}
+
+	@Override
+	public int getMinXAtY(int y) { 
+		for (int crossSectionW = crossSectionMinW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX++) {
+			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
+			if (y >= localMinY && y <= localMaxY) {
+				return crossSectionW;
+			}
+		}
+		throw new IllegalArgumentException("Y coordinate out of bounds.");
+	}
+
+	@Override
+	public int getMaxXAtY(int y) { 
+		for (int crossSectionW = crossSectionMaxW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX--) {
+			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
+			if (y >= localMinY && y <= localMaxY) {
+				return crossSectionW;
+			}
+		}
+		throw new IllegalArgumentException("Y coordinate out of bounds.");
+	}
+
+	@Override
+	public int getMinXAtZ(int z) { 
+		for (int crossSectionW = crossSectionMinW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX++) {
+			int localMaxZ = source.getMaxZAtWX(crossSectionW, crossSectionX), localMinZ = source.getMinZAtWX(crossSectionW, crossSectionX);
+			if (z >= localMinZ && z <= localMaxZ) {
+				return crossSectionW;
+			}
+		}
+		throw new IllegalArgumentException("Z coordinate out of bounds.");
+	}
+
+	@Override
+	public int getMaxXAtZ(int z) {
+		for (int crossSectionW = crossSectionMaxW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX--) {
+			int localMaxZ = source.getMaxZAtWX(crossSectionW, crossSectionX), localMinZ = source.getMinZAtWX(crossSectionW, crossSectionX);
+			if (z >= localMinZ && z <= localMaxZ) {
+				return crossSectionW;
+			}
+		}
+		throw new IllegalArgumentException("Z coordinate out of bounds.");
+	}
+
+	@Override
+	public int getMinX(int y, int z) { 
+		for (int crossSectionW = crossSectionMinW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX++) {
+			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
+			if (y >= localMinY && y <= localMaxY) {
+				int localMaxZ = source.getMaxZ(crossSectionW, crossSectionX, y), localMinZ = source.getMinZ(crossSectionW, crossSectionX, y);
+				if (z >= localMinZ && z <= localMaxZ) {
+					return crossSectionW;
+				}
+			}
+		}
+		throw new IllegalArgumentException("Coordinates out of bounds.");
+	}
+
+	@Override
+	public int getMaxX(int y, int z) { 
+		for (int crossSectionW = crossSectionMaxW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX--) {
+			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
+			if (y >= localMinY && y <= localMaxY) {
+				int localMaxZ = source.getMaxZ(crossSectionW, crossSectionX, y), localMinZ = source.getMinZ(crossSectionW, crossSectionX, y);
+				if (z >= localMinZ && z <= localMaxZ) {
+					return crossSectionW;
+				}
+			}
+		}
+		throw new IllegalArgumentException("Coordinates out of bounds.");
+	}
+
+	@Override
+	public int getMinY() { 
+		return crossSectionMinY;
+	}
+
+	@Override
+	public int getMaxY() { 
+		return crossSectionMaxY;
+	}
+
+	@Override
+	public int getMinYAtX(int x) { 
+		return source.getMinYAtWX(x, x + xOffsetFromW);
+	}
+
+	@Override
+	public int getMaxYAtX(int x) { 
+		return source.getMaxYAtWX(x, x + xOffsetFromW);
+	}
+
+	@Override
+	public int getMinYAtZ(int z) { 
+		return source.getMinYAtZ(z);
+	}
+
+	@Override
+	public int getMaxYAtZ(int z) { 
+		return source.getMaxYAtZ(z);
+	}
+
+	@Override
+	public int getMinY(int x, int z) { 
+		return source.getMinY(x, x + xOffsetFromW, z);
+	}
+
+	@Override
+	public int getMaxY(int x, int z) {
+		return source.getMaxY(x, x + xOffsetFromW, z);
+	}
+
+	@Override
+	public int getMinZ() {
+		return crossSectionMinZ;
+	}
+
+	@Override
+	public int getMaxZ() { 
+		return crossSectionMaxZ;
+	}
+
+	@Override
+	public int getMinZAtX(int x) {
+		return source.getMinZAtWX(x, x + xOffsetFromW);
+	}
+
+	@Override
+	public int getMaxZAtX(int x) {
+		return source.getMaxZAtWX(x, x + xOffsetFromW);
+	}
+
+	@Override
+	public int getMinZAtY(int y) { 
+		return source.getMinZAtY(y); 
+	}
+
+	@Override
+	public int getMaxZAtY(int y) {
+		return source.getMaxZAtY(y); 
+	}
+
+	@Override
+	public int getMinZ(int x, int y) {
+		return source.getMinZ(x, x + xOffsetFromW, y);
+	}
+
+	@Override
+	public int getMaxZ(int x, int y) {
+		return source.getMaxZ(x, x + xOffsetFromW, y);
 	}
 	
 	@Override

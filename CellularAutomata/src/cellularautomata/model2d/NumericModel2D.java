@@ -18,12 +18,139 @@ package cellularautomata.model2d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.grid2d.NumberGrid2D;
+import cellularautomata.model.MinAndMax;
 import cellularautomata.model.NumericModel;
 
-public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> extends NumberGrid2D<T>, NumericModel<T>, Model2D {
+public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> extends ObjectModel2D<T>, NumericModel<T> {
+	
+	@Override
+	default MinAndMax<T> getMinAndMax() throws Exception {
+		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
+		T maxValue = getFromPosition(minX, getMinY(minX));
+		T minValue = maxValue;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinY(x);
+			maxY = getMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				T value = getFromPosition(x, y);
+				if (value.compareTo(maxValue) > 0)
+					maxValue = value;
+				if (value.compareTo(minValue) < 0)
+					minValue = value;
+			}
+		}
+		return new MinAndMax<T>(minValue, maxValue);
+	}
+	
+	@Override
+	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		T maxValue = null;
+		T minValue = null;
+		int x = minX;
+		for (; x <= maxX && maxValue == null; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isPositionEven != isEven) {
+				minY++;
+			}
+			if (minY <= maxY) {
+				T value = getFromPosition(x, minY);
+				maxValue = value;
+				minValue = value;
+				for (int y = minY + 2; y <= maxY; y+=2) {
+					value = getFromPosition(x, y);
+					if (value.compareTo(maxValue) > 0)
+						maxValue = value;
+					if (value.compareTo(minValue) < 0)
+						minValue = value;
+				}
+			}
+		}
+		for (; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isPositionEven != isEven) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				T value = getFromPosition(x, y);
+				if (value.compareTo(maxValue) > 0)
+					maxValue = value;
+				if (value.compareTo(minValue) < 0)
+					minValue = value;
+			}
+		}
+		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+	}
+	
+	default MinAndMax<T> getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		T maxValue = null;
+		T minValue = null;
+		int x = minX;
+		for (; x <= maxX && maxValue == null; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isYEven = minY%2 == 0;
+			if (isYEven != isEven) {
+				minY++;
+			}
+			if (minY <= maxY) {
+				T value = getFromPosition(x, minY);
+				maxValue = value;
+				minValue = value;
+				for (int y = minY + 2; y <= maxY; y+=2) {
+					value = getFromPosition(x, y);
+					if (value.compareTo(maxValue) > 0)
+						maxValue = value;
+					if (value.compareTo(minValue) < 0)
+						minValue = value;
+				}
+			}
+		}
+		for (; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isYEven = minY%2 == 0;
+			if (isYEven != isEven) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				T value = getFromPosition(x, y);
+				if (value.compareTo(maxValue) > 0)
+					maxValue = value;
+				if (value.compareTo(minValue) < 0)
+					minValue = value;
+			}
+		}
+		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+	}
+	
+	@Override
+	default T getTotal() throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		int minY = getMinY(minX);
+		T total = getFromPosition(minX, minY);
+		int maxY = getMaxY(minX);
+		for (int y = minY + 1; y <= maxY; y++) {
+			total = total.add(getFromPosition(minX, y));
+		}
+		for (int x = minX + 1; x <= maxX; x++) {
+			minY = getMinY(x);
+			maxY = getMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				total = total.add(getFromPosition(x, y));
+			}
+		}
+		return total;
+	}
+	
 	@Override
 	default NumericModel2D<T> subsection(int minX, int maxX, int minY, int maxY) {
-		return new NumericSubModel2D<T>(this, minX, maxX, minY, maxY);
+		return new NumericSubModel2D<T, NumericModel2D<T>>(this, minX, maxX, minY, maxY);
 	}
+
 }

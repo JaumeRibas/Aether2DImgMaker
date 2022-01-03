@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-import cellularautomata.grid.Coordinates;
+import cellularautomata.model.Coordinates;
 
 public class Test {	
 

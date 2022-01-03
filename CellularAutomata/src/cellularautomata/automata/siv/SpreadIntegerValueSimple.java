@@ -24,7 +24,7 @@ import java.util.function.IntConsumer;
 
 import cellularautomata.arrays.HypercubicIntArray;
 import cellularautomata.arrays.Utils;
-import cellularautomata.grid.Coordinates;
+import cellularautomata.model.Coordinates;
 import cellularautomata.model.IntModel;
 
 public class SpreadIntegerValueSimple implements IntModel {

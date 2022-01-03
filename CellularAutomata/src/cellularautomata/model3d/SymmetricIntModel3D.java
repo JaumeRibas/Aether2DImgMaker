@@ -16,11 +16,33 @@
  */
 package cellularautomata.model3d;
 
-import cellularautomata.grid3d.SymmetricIntGrid3D;
+import cellularautomata.model.Coordinates;
+import cellularautomata.model.SymmetricIntModel;
 
-public interface SymmetricIntModel3D extends SymmetricIntGrid3D, SymmetricModel3D, IntModel3D {
+public interface SymmetricIntModel3D extends IntModel3D, SymmetricModel3D, SymmetricIntModel {
+	
+	/**
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this section is undefined.
+	 * <p>
+	 * 
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
+	 * @return the value at (x,y,z)
+	 * @throws Exception 
+	 */
+	int getFromAsymmetricPosition(int x, int y, int z) throws Exception;
+	
+	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
+	}
+
 	@Override
 	default IntModel3D asymmetricSection() {
-		return new AsymmetricIntModelSection3D(this);
+		return new AsymmetricIntModelSection3D<SymmetricIntModel3D>(this);
 	}
 }

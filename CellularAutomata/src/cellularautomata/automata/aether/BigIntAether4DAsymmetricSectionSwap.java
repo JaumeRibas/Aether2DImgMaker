@@ -28,14 +28,14 @@ import org.apache.commons.io.FileUtils;
 
 import cellularautomata.Constants;
 import cellularautomata.Utils;
-import cellularautomata.grid4d.AnisotropicBigIntGrid4DSlice;
-import cellularautomata.grid4d.AnisotropicGrid4DA;
-import cellularautomata.grid4d.ImmutableNumberGrid4D;
-import cellularautomata.grid4d.NumberGrid4D;
-import cellularautomata.grid4d.NumberSubGrid4D;
-import cellularautomata.grid4d.NumberSubGrid4DWithWBounds;
-import cellularautomata.grid4d.SizeLimitedAnisotropicBigIntGrid4DBlock;
 import cellularautomata.model4d.ActionableModel4D;
+import cellularautomata.model4d.AnisotropicBigIntModel4DSlice;
+import cellularautomata.model4d.AnisotropicModel4DA;
+import cellularautomata.model4d.ImmutableNumericModel4D;
+import cellularautomata.model4d.NumericModel4D;
+import cellularautomata.model4d.NumericSubModel4D;
+import cellularautomata.model4d.NumericSubModel4DWithWBounds;
+import cellularautomata.model4d.SizeLimitedAnisotropicBigIntModel4DBlock;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -44,7 +44,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<NumberGrid4D<BigInt>> implements AnisotropicGrid4DA {
+public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<NumericModel4D<BigInt>> implements AnisotropicModel4DA {
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
 	private static final String GRID_FOLDER_NAME = "grid";
@@ -62,8 +62,8 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 	private static final byte Z_POSITIVE = 6;
 	private static final byte Z_NEGATIVE = 7;
 	
-	private SizeLimitedAnisotropicBigIntGrid4DBlock gridBlockA;
-	private SizeLimitedAnisotropicBigIntGrid4DBlock gridBlockB;
+	private SizeLimitedAnisotropicBigIntModel4DBlock gridBlockA;
+	private SizeLimitedAnisotropicBigIntModel4DBlock gridBlockB;
 	private BigInt initialValue;
 	private int step;
 	private int maxW, maxX, maxY, maxZ;
@@ -84,7 +84,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 	public BigIntAether4DAsymmetricSectionSwap(BigInt initialValue, int maxGridSideInHeap, String folderPath) throws Exception {
 		this.initialValue = initialValue;
 		gridBlockSide = maxGridSideInHeap/2;
-		gridBlockA = new SizeLimitedAnisotropicBigIntGrid4DBlock(0, gridBlockSide);
+		gridBlockA = new SizeLimitedAnisotropicBigIntModel4DBlock(0, gridBlockSide);
 		gridBlockA.setValueAtPosition(0, 0, 0, 0, initialValue);
 		maxW = 1;//we leave a buffer of one position to account for 'negative growth'
 		maxX = 0;
@@ -129,10 +129,10 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 
-	private SizeLimitedAnisotropicBigIntGrid4DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicBigIntModel4DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedAnisotropicBigIntGrid4DBlock gridBlock = null;
+		SizeLimitedAnisotropicBigIntModel4DBlock gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -151,14 +151,14 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicBigIntGrid4DBlock) in.readObject();
+			gridBlock = (SizeLimitedAnisotropicBigIntModel4DBlock) in.readObject();
 			in.close();
 		}
 		return gridBlock;
 	}
 	
-	private SizeLimitedAnisotropicBigIntGrid4DBlock loadGridBlock(int minW) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicBigIntGrid4DBlock gridBlock = loadGridBlockSafe(minW);
+	private SizeLimitedAnisotropicBigIntModel4DBlock loadGridBlock(int minW) throws IOException, ClassNotFoundException {
+		SizeLimitedAnisotropicBigIntModel4DBlock gridBlock = loadGridBlockSafe(minW);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minW=" + minW + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -166,7 +166,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 	
-	private void saveGridBlock(SizeLimitedAnisotropicBigIntGrid4DBlock gridBlock) throws FileNotFoundException, IOException {
+	private void saveGridBlock(SizeLimitedAnisotropicBigIntModel4DBlock gridBlock) throws FileNotFoundException, IOException {
 		String name = "minW=" + gridBlock.minW + "_maxW=" + gridBlock.maxW + ".ser";
 		String pathName = this.gridFolder.getPath() + File.separator + name;
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
@@ -175,12 +175,12 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		out.close();
 	}
 	
-	private SizeLimitedAnisotropicBigIntGrid4DBlock loadOrBuildGridBlock(int minW) throws ClassNotFoundException, IOException {		
-		SizeLimitedAnisotropicBigIntGrid4DBlock gridBlock = loadGridBlockSafe(minW);
+	private SizeLimitedAnisotropicBigIntModel4DBlock loadOrBuildGridBlock(int minW) throws ClassNotFoundException, IOException {		
+		SizeLimitedAnisotropicBigIntModel4DBlock gridBlock = loadGridBlockSafe(minW);
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedAnisotropicBigIntGrid4DBlock(minW, gridBlockSide);
+			return new SizeLimitedAnisotropicBigIntModel4DBlock(minW, gridBlockSide);
 		}
 	}
 
@@ -189,14 +189,14 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		step++;
 		triggerBeforeProcessing();
 		boolean gridChanged = false;		
-		AnisotropicBigIntGrid4DSlice[] newGridSlices = 
-				new AnisotropicBigIntGrid4DSlice[] {
+		AnisotropicBigIntModel4DSlice[] newGridSlices = 
+				new AnisotropicBigIntModel4DSlice[] {
 						null, 
-						new AnisotropicBigIntGrid4DSlice(0), 
-						new AnisotropicBigIntGrid4DSlice(1)};
+						new AnisotropicBigIntModel4DSlice(0), 
+						new AnisotropicBigIntModel4DSlice(1)};
 		if (gridBlockA.minW > 0) {
 			if (gridBlockB != null && gridBlockB.minW == 0) {
-				SizeLimitedAnisotropicBigIntGrid4DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicBigIntModel4DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			} else {
@@ -212,7 +212,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		w++;
 		while (w <= currentMaxW) {
 			while (w <= currentMaxW && w < gridBlockA.maxW) {
-				slideGridSlices(newGridSlices, new AnisotropicBigIntGrid4DSlice(w + 1));
+				slideGridSlices(newGridSlices, new AnisotropicBigIntModel4DSlice(w + 1));
 				anySlicePositionToppled = computeGridSlice(gridBlockA, w, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(w - 1, newGridSlices[0]);
@@ -228,18 +228,18 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 				} else {
 					gridBlockB = loadOrBuildGridBlock(w + 1);
 				}
-				slideGridSlices(newGridSlices, new AnisotropicBigIntGrid4DSlice(w + 1));
+				slideGridSlices(newGridSlices, new AnisotropicBigIntModel4DSlice(w + 1));
 				anySlicePositionToppled = computeLastGridSlice(gridBlockA, gridBlockB, w, newGridSlices);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(w - 1, newGridSlices[0]);
 				w++;
 				if (w <= currentMaxW) {
-					slideGridSlices(newGridSlices, new AnisotropicBigIntGrid4DSlice(w + 1));
+					slideGridSlices(newGridSlices, new AnisotropicBigIntModel4DSlice(w + 1));
 					anySlicePositionToppled = computeFirstGridSlice(gridBlockA, gridBlockB, w, newGridSlices);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(w - 1, newGridSlices[0]);
 					processGridBlock(gridBlockA);
-					SizeLimitedAnisotropicBigIntGrid4DBlock swp = gridBlockA;
+					SizeLimitedAnisotropicBigIntModel4DBlock swp = gridBlockA;
 					gridBlockA = gridBlockB;
 					gridBlockB = swp;
 					w++;
@@ -259,37 +259,37 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		return gridChanged;
 	}
 	
-	private void processGridBlock(SizeLimitedAnisotropicBigIntGrid4DBlock block) throws Exception {
+	private void processGridBlock(SizeLimitedAnisotropicBigIntModel4DBlock block) throws Exception {
 		if (block.minW <= maxW) {
-			NumberGrid4D<BigInt> subBlock = null;
+			NumericModel4D<BigInt> subBlock = null;
 			int maxX = getMaxX();
 			int maxY = getMaxY();
 			int maxZ = getMaxZ();
 			if (block.maxW > maxW) {
 				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
-					subBlock = new NumberSubGrid4D<BigInt, NumberGrid4D<BigInt>>(block, block.minW, maxW, 0, maxX, 0, maxY, 0, maxZ);
+					subBlock = new NumericSubModel4D<BigInt, NumericModel4D<BigInt>>(block, block.minW, maxW, 0, maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new NumberSubGrid4DWithWBounds<BigInt>(block, block.minW, maxW);
+					subBlock = new NumericSubModel4DWithWBounds<BigInt>(block, block.minW, maxW);
 				}
 			} else {
 				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
-					subBlock = new NumberSubGrid4D<BigInt, NumberGrid4D<BigInt>>(block, block.minW, block.maxW, 0, maxX, 0, maxY, 0, maxZ);
+					subBlock = new NumericSubModel4D<BigInt, NumericModel4D<BigInt>>(block, block.minW, block.maxW, 0, maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new ImmutableNumberGrid4D<BigInt>(block);
+					subBlock = new ImmutableNumericModel4D<BigInt>(block);
 				}
 			}
-			triggerProcessGridBlock(subBlock);
+			triggerProcessModelBlock(subBlock);
 		}
 	}
 	
 	@Override
-	public void processGrid() throws Exception {
+	public void processModel() throws Exception {
 		triggerBeforeProcessing();
 		if (gridBlockB == null) { //one block
 			processGridBlock(gridBlockA);
 		} else {
 			if (gridBlockA.minW < gridBlockB.minW) {
-				SizeLimitedAnisotropicBigIntGrid4DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicBigIntModel4DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
@@ -326,28 +326,28 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		triggerAfterProcessing();
 	}
 
-	private void slideGridSlices(AnisotropicBigIntGrid4DSlice[] newGridSlices, AnisotropicBigIntGrid4DSlice newSlice) {
+	private void slideGridSlices(AnisotropicBigIntModel4DSlice[] newGridSlices, AnisotropicBigIntModel4DSlice newSlice) {
 		newGridSlices[0] = newGridSlices[1];
 		newGridSlices[1] = newGridSlices[2];
 		newGridSlices[2] = newSlice;
 	}
 	
-	private boolean computeGridSlice(SizeLimitedAnisotropicBigIntGrid4DBlock gridBlock, int w, AnisotropicBigIntGrid4DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedAnisotropicBigIntModel4DBlock gridBlock, int w, AnisotropicBigIntModel4DSlice[] newGridSlices) {
 		return computeGridSlice(gridBlock, gridBlock, gridBlock, w, newGridSlices);
 	}
 	
-	private boolean computeLastGridSlice(SizeLimitedAnisotropicBigIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicBigIntGrid4DBlock rightGridBlock,
-			int w, AnisotropicBigIntGrid4DSlice[] newGridSlices) {
+	private boolean computeLastGridSlice(SizeLimitedAnisotropicBigIntModel4DBlock leftGridBlock, SizeLimitedAnisotropicBigIntModel4DBlock rightGridBlock,
+			int w, AnisotropicBigIntModel4DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, leftGridBlock, rightGridBlock, w, newGridSlices);
 	}
 	
-	private boolean computeFirstGridSlice(SizeLimitedAnisotropicBigIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicBigIntGrid4DBlock rightGridBlock,
-			int w, AnisotropicBigIntGrid4DSlice[] newGridSlices) {
+	private boolean computeFirstGridSlice(SizeLimitedAnisotropicBigIntModel4DBlock leftGridBlock, SizeLimitedAnisotropicBigIntModel4DBlock rightGridBlock,
+			int w, AnisotropicBigIntModel4DSlice[] newGridSlices) {
 		return computeGridSlice(leftGridBlock, rightGridBlock, rightGridBlock, w, newGridSlices);
 	}
 
-	private boolean computeGridSlice(SizeLimitedAnisotropicBigIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicBigIntGrid4DBlock centerGridBlock, 
-			SizeLimitedAnisotropicBigIntGrid4DBlock rightGridBlock, int w, AnisotropicBigIntGrid4DSlice[] newGridSlices) {
+	private boolean computeGridSlice(SizeLimitedAnisotropicBigIntModel4DBlock leftGridBlock, SizeLimitedAnisotropicBigIntModel4DBlock centerGridBlock, 
+			SizeLimitedAnisotropicBigIntModel4DBlock rightGridBlock, int w, AnisotropicBigIntModel4DSlice[] newGridSlices) {
 		boolean anyPositionToppled = false;
 		for (int x = 0; x <= w; x++) {
 			for (int y = 0; y <= x; y++) {
@@ -374,8 +374,8 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		return anyPositionToppled;
 	}
 	
-	private BigInt getFromPosition(int centerW, SizeLimitedAnisotropicBigIntGrid4DBlock lowerWGridBlock, 
-			SizeLimitedAnisotropicBigIntGrid4DBlock centerGridBlock, SizeLimitedAnisotropicBigIntGrid4DBlock upperWGridBlock, int w, int x, int y, int z) {
+	private BigInt getFromPosition(int centerW, SizeLimitedAnisotropicBigIntModel4DBlock lowerWGridBlock, 
+			SizeLimitedAnisotropicBigIntModel4DBlock centerGridBlock, SizeLimitedAnisotropicBigIntModel4DBlock upperWGridBlock, int w, int x, int y, int z) {
 		int[] asymmetricCoords = getAsymmetricCoords(w, x, y, z);
 		w = asymmetricCoords[0];
 		x = asymmetricCoords[1];
@@ -397,7 +397,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 			BigInt upperXNeighborValue, BigInt lowerXNeighborValue, 
 			BigInt upperYNeighborValue, BigInt lowerYNeighborValue, 
 			BigInt upperZNeighborValue, BigInt lowerZNeighborValue, 
-			int w, int x, int y, int z, AnisotropicBigIntGrid4DSlice[] newGridSlices) {
+			int w, int x, int y, int z, AnisotropicBigIntModel4DSlice[] newGridSlices) {
 		BigInt[] neighborValues = new BigInt[8];
 		byte[] neighborDirections = new byte[8];
 		int relevantNeighborCount = 0;
@@ -470,7 +470,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		return toppled;
 	}
 
-	private void addToNeighbor(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, byte direction, BigInt value) {
+	private void addToNeighbor(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, byte direction, BigInt value) {
 		switch(direction) {
 		case W_POSITIVE:
 			addToWPositive(newGridSlices, w, x, y, z, value);
@@ -498,14 +498,14 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 			break;
 		}
 	}
-	private void addToWPositive(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToWPositive(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		newGridSlices[2].addToPosition(x, y, z, value);
 		if (w == maxW - 1) {
 			maxW++;
 		}
 	}
 				
-	private void addToWNegative(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToWNegative(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		if (w > x) {
 			BigInt valueToAdd = value;
 			if (w == x + 1) {
@@ -527,7 +527,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 
-	private void addToXPositive(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToXPositive(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		if (x < w) {
 			BigInt valueToAdd = value;
 			if (x == w - 1) {
@@ -540,7 +540,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 
-	private void addToXNegative(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToXNegative(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		if (x > y) {
 			BigInt valueToAdd = value;									
 			if (y == x - 1) {
@@ -558,7 +558,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 
-	private void addToYPositive(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToYPositive(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		if (y < x) {
 			BigInt valueToAdd = value;									
 			if (y == x - 1) {
@@ -574,7 +574,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 
-	private void addToYNegative(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToYNegative(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		if (y > z) {	
 			BigInt valueToAdd = value;
 			if (z == y - 1) {
@@ -589,7 +589,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 
-	private void addToZPositive(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToZPositive(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		if (z < y) {
 			BigInt valueToAdd = value;
 			if (z == y - 1) {
@@ -608,7 +608,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numbe
 		}
 	}
 
-	private void addToZNegative(AnisotropicBigIntGrid4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
+	private void addToZNegative(AnisotropicBigIntModel4DSlice[] newGridSlices, int w, int x, int y, int z, BigInt value) {
 		if (z > 0) {
 			BigInt valueToAdd = value;
 			if (z == 1) {

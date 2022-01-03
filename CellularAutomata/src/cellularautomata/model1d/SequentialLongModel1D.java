@@ -16,8 +16,8 @@
  */
 package cellularautomata.model1d;
 
-import cellularautomata.grid1d.SequentialLongGrid1D;
+import cellularautomata.model.SequentialLongModel;
 
-public interface SequentialLongModel1D extends SequentialLongGrid1D, Model1D {
-
+public interface SequentialLongModel1D extends Model1D, SequentialLongModel {
+	
 }

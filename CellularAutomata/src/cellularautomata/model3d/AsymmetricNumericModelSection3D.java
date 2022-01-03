@@ -18,15 +18,11 @@ package cellularautomata.model3d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class AsymmetricNumericModelSection3D<T extends FieldElement<T> & Comparable<T>> extends AsymmetricModelSection3D<SymmetricNumericModel3D<T>> implements NumericModel3D<T> {
-
-	public AsymmetricNumericModelSection3D(SymmetricNumericModel3D<T> source) {
-		super(source);
-	}
-
-	@Override
-	public T getFromPosition(int x, int y, int z) throws Exception {
-		return source.getFromAsymmetricPosition(x, y, z);
+public class AsymmetricNumericModelSection3D<T extends FieldElement<T> & Comparable<T>, G extends SymmetricNumericModel3D<T>> 
+	extends AsymmetricObjectModelSection3D<T, G> implements NumericModel3D<T> {
+	
+	public AsymmetricNumericModelSection3D(G grid) {
+		super(grid);
 	}
 
 }

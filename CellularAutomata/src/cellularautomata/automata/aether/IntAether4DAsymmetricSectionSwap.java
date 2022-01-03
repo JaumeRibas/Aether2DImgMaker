@@ -27,14 +27,14 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.Utils;
-import cellularautomata.grid4d.AnisotropicGrid4DA;
-import cellularautomata.grid4d.AnisotropicIntGrid4DSlice;
-import cellularautomata.grid4d.ImmutableIntGrid4D;
-import cellularautomata.grid4d.IntGrid4D;
-import cellularautomata.grid4d.IntSubGrid4D;
-import cellularautomata.grid4d.IntSubGrid4DWithWBounds;
-import cellularautomata.grid4d.SizeLimitedAnisotropicIntGrid4DBlock;
 import cellularautomata.model4d.ActionableModel4D;
+import cellularautomata.model4d.AnisotropicModel4DA;
+import cellularautomata.model4d.AnisotropicIntModel4DSlice;
+import cellularautomata.model4d.ImmutableIntModel4D;
+import cellularautomata.model4d.IntModel4D;
+import cellularautomata.model4d.IntSubModel4D;
+import cellularautomata.model4d.IntSubModel4DWithWBounds;
+import cellularautomata.model4d.SizeLimitedAnisotropicIntModel4DBlock;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -42,7 +42,7 @@ import cellularautomata.model4d.ActionableModel4D;
  * @author Jaume
  *
  */
-public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4D> implements AnisotropicGrid4DA {
+public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntModel4D> implements AnisotropicModel4DA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -613566757;
@@ -54,8 +54,8 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	private static final byte CENTER = 1;
 	private static final byte RIGHT = 2;
 	
-	private SizeLimitedAnisotropicIntGrid4DBlock gridBlockA;
-	private SizeLimitedAnisotropicIntGrid4DBlock gridBlockB;
+	private SizeLimitedAnisotropicIntModel4DBlock gridBlockA;
+	private SizeLimitedAnisotropicIntModel4DBlock gridBlockB;
 	private int initialValue;
 	private long step;
 	private int maxW;
@@ -77,7 +77,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
-		gridBlockA = new SizeLimitedAnisotropicIntGrid4DBlock(0, maxGridBlockSize);
+		gridBlockA = new SizeLimitedAnisotropicIntModel4DBlock(0, maxGridBlockSize);
 		if (gridBlockA.maxW < 7) {
 			throw new IllegalArgumentException("Passed heap space limit is too small.");
 		}
@@ -118,10 +118,10 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		readWriteGridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
-	private SizeLimitedAnisotropicIntGrid4DBlock loadGridBlockSafe(int minW) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicIntModel4DBlock loadGridBlockSafe(int minW) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedAnisotropicIntGrid4DBlock gridBlock = null;
+		SizeLimitedAnisotropicIntModel4DBlock gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -140,14 +140,14 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicIntGrid4DBlock) in.readObject();
+			gridBlock = (SizeLimitedAnisotropicIntModel4DBlock) in.readObject();
 			in.close();
 		}
 		return gridBlock;
 	}
 	
-	private SizeLimitedAnisotropicIntGrid4DBlock loadGridBlock(int minW) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicIntGrid4DBlock gridBlock = loadGridBlockSafe(minW);
+	private SizeLimitedAnisotropicIntModel4DBlock loadGridBlock(int minW) throws IOException, ClassNotFoundException {
+		SizeLimitedAnisotropicIntModel4DBlock gridBlock = loadGridBlockSafe(minW);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minW=" + minW + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -155,7 +155,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		}
 	}
 	
-	private void saveGridBlock(SizeLimitedAnisotropicIntGrid4DBlock gridBlock) throws FileNotFoundException, IOException {
+	private void saveGridBlock(SizeLimitedAnisotropicIntModel4DBlock gridBlock) throws FileNotFoundException, IOException {
 		String name = "minW=" + gridBlock.minW + "_maxW=" + gridBlock.maxW + ".ser";
 		String pathName = this.gridFolder.getPath() + File.separator + name;
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
@@ -164,12 +164,12 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		out.close();
 	}
 	
-	private SizeLimitedAnisotropicIntGrid4DBlock loadOrBuildGridBlock(int minW) throws ClassNotFoundException, IOException {		
-		SizeLimitedAnisotropicIntGrid4DBlock gridBlock = loadGridBlockSafe(minW);
+	private SizeLimitedAnisotropicIntModel4DBlock loadOrBuildGridBlock(int minW) throws ClassNotFoundException, IOException {		
+		SizeLimitedAnisotropicIntModel4DBlock gridBlock = loadGridBlockSafe(minW);
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedAnisotropicIntGrid4DBlock(minW, maxGridBlockSize);
+			return new SizeLimitedAnisotropicIntModel4DBlock(minW, maxGridBlockSize);
 		}
 	}
 
@@ -190,14 +190,14 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		int[][] relevantAsymmetricNeighborCoords = new int[8][4];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[8];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[8];// to compensate for omitted symmetric positions		
-		AnisotropicIntGrid4DSlice[] newWSlices = 
-				new AnisotropicIntGrid4DSlice[] {
+		AnisotropicIntModel4DSlice[] newWSlices = 
+				new AnisotropicIntModel4DSlice[] {
 						null, 
-						new AnisotropicIntGrid4DSlice(0), 
-						new AnisotropicIntGrid4DSlice(1)};
+						new AnisotropicIntModel4DSlice(0), 
+						new AnisotropicIntModel4DSlice(1)};
 		if (gridBlockA.minW > 0) {
 			if (gridBlockB != null && gridBlockB.minW == 0) {
-				SizeLimitedAnisotropicIntGrid4DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicIntModel4DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			} else {
@@ -212,13 +212,13 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 				relevantAsymmetricNeighborSymmetryCounts);
 		gridChanged = gridChanged || anySlicePositionToppled;
 		int w = 5;
-		AnisotropicIntGrid4DSlice[] wSlices = new AnisotropicIntGrid4DSlice[] {
+		AnisotropicIntModel4DSlice[] wSlices = new AnisotropicIntModel4DSlice[] {
 				null,
 				gridBlockA.getSlice(4),
 				gridBlockA.getSlice(5)};
 		while (w <= currentMaxW) {
 			while (w <= currentMaxW && w < gridBlockA.maxW) {
-				slideGridSlices(newWSlices, new AnisotropicIntGrid4DSlice(w + 1));
+				slideGridSlices(newWSlices, new AnisotropicIntModel4DSlice(w + 1));
 				anySlicePositionToppled = toppleSliceBeyondFour(gridBlockA, w, wSlices, newWSlices, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
@@ -236,7 +236,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 				} else {
 					gridBlockB = loadOrBuildGridBlock(w + 1);
 				}
-				slideGridSlices(newWSlices, new AnisotropicIntGrid4DSlice(w + 1));
+				slideGridSlices(newWSlices, new AnisotropicIntModel4DSlice(w + 1));
 				anySlicePositionToppled = toppleLastSliceOfBlock(gridBlockA, gridBlockB, w, wSlices, newWSlices, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
@@ -244,14 +244,14 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 				gridBlockA.setSlice(w - 1, newWSlices[LEFT]);
 				w++;
 				if (w <= currentMaxW) {
-					slideGridSlices(newWSlices, new AnisotropicIntGrid4DSlice(w + 1));
+					slideGridSlices(newWSlices, new AnisotropicIntModel4DSlice(w + 1));
 					anySlicePositionToppled = toppleFirstSliceOfBlock(gridBlockA, gridBlockB, w, wSlices, newWSlices, 
 							relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(w - 1, newWSlices[LEFT]);
 					processGridBlock(gridBlockA);
-					SizeLimitedAnisotropicIntGrid4DBlock swp = gridBlockA;
+					SizeLimitedAnisotropicIntModel4DBlock swp = gridBlockA;
 					gridBlockA = gridBlockB;
 					gridBlockB = swp;
 					w++;
@@ -271,15 +271,15 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return gridChanged;
 	}
 	
-	private boolean toppleRangeFromZeroToFour(SizeLimitedAnisotropicIntGrid4DBlock gridBlock,
-			AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
+	private boolean toppleRangeFromZeroToFour(SizeLimitedAnisotropicIntModel4DBlock gridBlock,
+			AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice smallerWSlice = null, 
+		AnisotropicIntModel4DSlice smallerWSlice = null, 
 				currentWSlice = gridBlock.getSlice(0), 
 				greaterWSlice = gridBlock.getSlice(1);
-		AnisotropicIntGrid4DSlice newSmallerWSlice = null, 
+		AnisotropicIntModel4DSlice newSmallerWSlice = null, 
 				newCurrentWSlice = newWSlices[1], 
 				newGreaterWSlice = newWSlices[2];
 		// w = 0, x = 0, y = 0, z = 0
@@ -294,7 +294,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		greaterWSlice = gridBlock.getSlice(2);
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
-		newGreaterWSlice = new AnisotropicIntGrid4DSlice(3);
+		newGreaterWSlice = new AnisotropicIntModel4DSlice(3);
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
@@ -344,10 +344,10 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		smallerWSlice = currentWSlice;
 		currentWSlice = greaterWSlice;
 		greaterWSlice = gridBlock.getSlice(3);
-		AnisotropicIntGrid4DSlice[] wSlices = new AnisotropicIntGrid4DSlice[] { smallerWSlice, currentWSlice, greaterWSlice};
+		AnisotropicIntModel4DSlice[] wSlices = new AnisotropicIntModel4DSlice[] { smallerWSlice, currentWSlice, greaterWSlice};
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
-		newGreaterWSlice = new AnisotropicIntGrid4DSlice(4);
+		newGreaterWSlice = new AnisotropicIntModel4DSlice(4);
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
@@ -473,7 +473,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		wSlices[2] = greaterWSlice;
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
-		newGreaterWSlice = new AnisotropicIntGrid4DSlice(5);
+		newGreaterWSlice = new AnisotropicIntModel4DSlice(5);
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
@@ -618,7 +618,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		wSlices[2] = greaterWSlice;
 		newSmallerWSlice = newCurrentWSlice;
 		newCurrentWSlice = newGreaterWSlice;
-		newGreaterWSlice = new AnisotropicIntGrid4DSlice(6);
+		newGreaterWSlice = new AnisotropicIntModel4DSlice(6);
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
@@ -686,37 +686,37 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicIntGrid4DBlock gridBlock, int w, AnisotropicIntGrid4DSlice[] wSlices, 
-			AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicIntModel4DBlock gridBlock, int w, AnisotropicIntModel4DSlice[] wSlices, 
+			AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFour(gridBlock, gridBlock, gridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
-	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock,
-			int w, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
+	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicIntModel4DBlock leftGridBlock, SizeLimitedAnisotropicIntModel4DBlock rightGridBlock,
+			int w, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFour(leftGridBlock, leftGridBlock, rightGridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
-	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock,
-			int w, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
+	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicIntModel4DBlock leftGridBlock, SizeLimitedAnisotropicIntModel4DBlock rightGridBlock,
+			int w, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFour(leftGridBlock, rightGridBlock, rightGridBlock, w, wSlices, newWSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
-	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicIntGrid4DBlock leftGridBlock, SizeLimitedAnisotropicIntGrid4DBlock centerGridBlock, 
-			SizeLimitedAnisotropicIntGrid4DBlock rightGridBlock, int w, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, 
+	private boolean toppleSliceBeyondFour(SizeLimitedAnisotropicIntModel4DBlock leftGridBlock, SizeLimitedAnisotropicIntModel4DBlock centerGridBlock, 
+			SizeLimitedAnisotropicIntModel4DBlock rightGridBlock, int w, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, 
 			int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean anyToppled = false;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wMinusThree = w - 3, wPlusOne = w + 1;
-		AnisotropicIntGrid4DSlice smallerWSlice = wSlices[1], 
+		AnisotropicIntModel4DSlice smallerWSlice = wSlices[1], 
 				currentWSlice = wSlices[2], 
 				greaterWSlice = rightGridBlock.getSlice(wPlusOne);
 		wSlices[0] = smallerWSlice;
@@ -1293,10 +1293,10 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return anyToppled;
 	}
 	
-	private static boolean toppleRangeType1(AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType1(AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
+		AnisotropicIntModel4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w | 00 | 00 | 00 | 06
 		int currentValue = currentWSlice.getFromPosition(0, 0, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(0, 0, 0);
@@ -1347,11 +1347,11 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int x, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType2(int x, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1;
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
+		AnisotropicIntModel4DSlice currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 10
 		int currentValue = currentWSlice.getFromPosition(x, 0, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(x, 0, 0);
@@ -1389,11 +1389,11 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int coord, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType3(int coord, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1;
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
+		AnisotropicIntModel4DSlice currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x |  y | 00 | 13
 		int currentValue = currentWSlice.getFromPosition(coord, coord, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(coord, coord, 0);
@@ -1454,14 +1454,14 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType4(AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		AnisotropicIntGrid4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
+		AnisotropicIntModel4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w | 02 | 00 | 00 | 32
 		int currentValue = currentWSlice.getFromPosition(2, 0, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(2, 0, 0);
@@ -1543,11 +1543,11 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(int x, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType5(int x, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
+		AnisotropicIntModel4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 19
 		int currentValue = currentWSlice.getFromPosition(x, 0, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(x, 0, 0);
@@ -1592,10 +1592,10 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int coord, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType6(int coord, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
-		AnisotropicIntGrid4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];	
+		AnisotropicIntModel4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];	
 		boolean changed = false;		
 	//  w |  x |  y | 00 | 22
 		int currentValue = currentWSlice.getFromPosition(coord, coord, 0);
@@ -1715,11 +1715,11 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int x, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType7(int x, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {		
 		int y = x - 1, xMinusOne = x - 1, xMinusTwo = x - 2, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
+		AnisotropicIntModel4DSlice currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x |  y | 00 | 27
 		int currentValue = currentWSlice.getFromPosition(x, y, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(x, y, 0);
@@ -1798,11 +1798,11 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int x, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType8(int x, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
+		AnisotropicIntModel4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 	//  w |  x | 00 | 00 | 32
 		int currentValue = currentWSlice.getFromPosition(x, 0, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(x, 0, 0);
@@ -1847,11 +1847,11 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int coord, AnisotropicIntGrid4DSlice[] wSlices, AnisotropicIntGrid4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType9(int coord, AnisotropicIntModel4DSlice[] wSlices, AnisotropicIntModel4DSlice[] newWSlices, int[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
-		AnisotropicIntGrid4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
+		AnisotropicIntModel4DSlice smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 	//  w |  x |  y | 00 | 35
 		int currentValue = currentWSlice.getFromPosition(coord, coord, 0);
 		int greaterWNeighborValue = greaterWSlice.getFromPosition(coord, coord, 0);
@@ -1926,7 +1926,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return changed;
 	}
 	
-	private static boolean topplePositionType1(int currentValue, int gWValue, AnisotropicIntGrid4DSlice newCurrentWSlice, AnisotropicIntGrid4DSlice newGreaterWSlice) {
+	private static boolean topplePositionType1(int currentValue, int gWValue, AnisotropicIntModel4DSlice newCurrentWSlice, AnisotropicIntModel4DSlice newGreaterWSlice) {
 		boolean toppled = false;
 		if (gWValue < currentValue) {
 			int toShare = currentValue - gWValue;
@@ -1944,7 +1944,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(int currentValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType2(int currentValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -1986,7 +1986,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(int currentValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType3(int currentValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2028,7 +2028,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, 1, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(int currentValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType4(int currentValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2070,7 +2070,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, 1, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType5(int currentValue, int gWValue, int sZValue, AnisotropicIntGrid4DSlice newCurrentWSlice, AnisotropicIntGrid4DSlice newGreaterWSlice) {
+	private static boolean topplePositionType5(int currentValue, int gWValue, int sZValue, AnisotropicIntModel4DSlice newCurrentWSlice, AnisotropicIntModel4DSlice newGreaterWSlice) {
 		boolean toppled = false;
 		if (sZValue < currentValue) {
 			if (gWValue < currentValue) {
@@ -2146,7 +2146,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 
-	private static boolean topplePositionType6(int currentValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType6(int currentValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2185,7 +2185,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType7(int x, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType7(int x, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2251,7 +2251,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int coord, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType8(int coord, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2317,7 +2317,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int coord, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType9(int coord, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2371,7 +2371,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int x, int currentValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType10(int x, int currentValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2410,7 +2410,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType11(int x, int y, int currentValue, int gWValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType11(int x, int y, int currentValue, int gWValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2476,7 +2476,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int x, int coord, int currentValue, int gWValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType12(int x, int coord, int currentValue, int gWValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2530,7 +2530,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int coord, int currentValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType13(int coord, int currentValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2569,7 +2569,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int coord, int z, int currentValue, int gWValue, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType14(int coord, int z, int currentValue, int gWValue, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2623,7 +2623,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int coord, int currentValue, int gWValue, int sZValue, AnisotropicIntGrid4DSlice newCurrentWSlice, AnisotropicIntGrid4DSlice newGreaterWSlice) {
+	private static boolean topplePositionType15(int coord, int currentValue, int gWValue, int sZValue, AnisotropicIntModel4DSlice newCurrentWSlice, AnisotropicIntModel4DSlice newGreaterWSlice) {
 		 // 4*GW, 4*SZ | 15 | 15
 		boolean toppled = false;
 		if (sZValue < currentValue) {
@@ -2701,7 +2701,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 
-	private static boolean topplePositionType16(int x, int y, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType16(int x, int y, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2791,7 +2791,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType17(int x, int coord, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType17(int x, int coord, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2869,7 +2869,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType18(int coord, int z, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType18(int coord, int z, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -2947,7 +2947,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType19(int x, int y, int z, int currentValue, int gWValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType19(int x, int y, int z, int currentValue, int gWValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3025,7 +3025,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType20(int x, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType20(int x, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3086,7 +3086,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType21(int coord, int currentValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType21(int coord, int currentValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3147,7 +3147,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType22(int coord, int currentValue, int gWValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType22(int coord, int currentValue, int gWValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3197,7 +3197,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType23(int x, int y, int z, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType23(int x, int y, int z, int currentValue, int gWValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
 	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
@@ -3282,7 +3282,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType24(int x, int y, int currentValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType24(int x, int y, int currentValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3343,7 +3343,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType25(int x, int coord, int currentValue, int gWValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType25(int x, int coord, int currentValue, int gWValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3393,7 +3393,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType26(int coord, int z, int currentValue, int gWValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType26(int coord, int z, int currentValue, int gWValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3443,7 +3443,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType27(int x, int y, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType27(int x, int y, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3526,7 +3526,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType28(int x, int coord, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType28(int x, int coord, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3598,7 +3598,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType29(int coord, int z, int currentValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType29(int coord, int z, int currentValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3670,7 +3670,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType30(int x, int y, int z, int currentValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType30(int x, int y, int z, int currentValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantAsymmetricNeighborCount = 0;
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
@@ -3742,7 +3742,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType31(int x, int y, int z, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, AnisotropicIntGrid4DSlice[] newWSlices) {
+	private static boolean topplePositionType31(int x, int y, int z, int currentValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, AnisotropicIntModel4DSlice[] newWSlices) {
 	    int relevantNeighborCount = 0;
 	    if (gWValue < currentValue) {
 	        relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
@@ -3819,7 +3819,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 	    return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantNeighborCount);
 	}
 	
-	private static boolean topplePosition(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, int[] neighborValues,
+	private static boolean topplePosition(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, int[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -3898,7 +3898,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, 
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, 
 			int[] neighborValues, int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
@@ -3936,7 +3936,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 	
-	private static boolean topplePosition(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -4022,7 +4022,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -4061,7 +4061,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 	
-	private static boolean topplePosition(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, int[] neighborValues,
+	private static boolean topplePosition(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, int[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -4142,7 +4142,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, int[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, int[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
@@ -4180,7 +4180,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 	
-	private static boolean topplePosition(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -4265,7 +4265,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicIntGrid4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel4DSlice[] newWSlices, int value, int x, int y, int z, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -4304,37 +4304,37 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		return toppled;
 	}	
 
-	private void processGridBlock(SizeLimitedAnisotropicIntGrid4DBlock block) throws Exception {
+	private void processGridBlock(SizeLimitedAnisotropicIntModel4DBlock block) throws Exception {
 		if (block.minW <= maxW) {
-			IntGrid4D subBlock = null;
+			IntModel4D subBlock = null;
 			int maxX = getMaxX();
 			int maxY = getMaxY();
 			int maxZ = getMaxZ();
 			if (block.maxW > maxW) {
 				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
-					subBlock = new IntSubGrid4D(block, block.minW, maxW, 0, maxX, 0, maxY, 0, maxZ);
+					subBlock = new IntSubModel4D(block, block.minW, maxW, 0, maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new IntSubGrid4DWithWBounds(block, block.minW, maxW);
+					subBlock = new IntSubModel4DWithWBounds(block, block.minW, maxW);
 				}
 			} else {
 				if (block.maxW > maxX || block.maxW > maxY || block.maxW > maxZ) {
-					subBlock = new IntSubGrid4D(block, block.minW, block.maxW, 0, maxX, 0, maxY, 0, maxZ);
+					subBlock = new IntSubModel4D(block, block.minW, block.maxW, 0, maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new ImmutableIntGrid4D(block);
+					subBlock = new ImmutableIntModel4D(block);
 				}
 			}
-			triggerProcessGridBlock(subBlock);
+			triggerProcessModelBlock(subBlock);
 		}
 	}
 	
 	@Override
-	public void processGrid() throws Exception {
+	public void processModel() throws Exception {
 		triggerBeforeProcessing();
 		if (gridBlockB == null) { //one block
 			processGridBlock(gridBlockA);
 		} else {
 			if (gridBlockA.minW < gridBlockB.minW) {
-				SizeLimitedAnisotropicIntGrid4DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicIntModel4DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
@@ -4372,7 +4372,7 @@ public class IntAether4DAsymmetricSectionSwap extends ActionableModel4D<IntGrid4
 		triggerAfterProcessing();
 	}
 
-	private void slideGridSlices(AnisotropicIntGrid4DSlice[] newGridSlices, AnisotropicIntGrid4DSlice newSlice) {
+	private void slideGridSlices(AnisotropicIntModel4DSlice[] newGridSlices, AnisotropicIntModel4DSlice newSlice) {
 		newGridSlices[LEFT] = newGridSlices[CENTER];
 		newGridSlices[CENTER] = newGridSlices[RIGHT];
 		newGridSlices[RIGHT] = newSlice;

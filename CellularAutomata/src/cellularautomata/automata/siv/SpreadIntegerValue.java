@@ -25,13 +25,13 @@ import java.util.function.IntConsumer;
 import cellularautomata.arrays.AnisotropicIntArray;
 import cellularautomata.arrays.HyperrectangularArray;
 import cellularautomata.arrays.Utils;
-import cellularautomata.grid.Coordinates;
-import cellularautomata.grid.IsotropicHypercubicGrid;
-import cellularautomata.grid.PartialCoordinates;
+import cellularautomata.model.Coordinates;
+import cellularautomata.model.IsotropicHypercubicModel;
+import cellularautomata.model.PartialCoordinates;
 import cellularautomata.model.SymmetricIntModel;
 
 
-public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubicGrid {
+public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubicModel {
 
 	private int step;
 	private int initialValue;

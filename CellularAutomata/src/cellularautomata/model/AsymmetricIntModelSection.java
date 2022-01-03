@@ -16,40 +16,15 @@
  */
 package cellularautomata.model;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import cellularautomata.grid.AsymmetricIntGridSection;
-
-public class AsymmetricIntModelSection<G extends SymmetricIntModel> extends AsymmetricIntGridSection<G> implements IntModel {
-
+public class AsymmetricIntModelSection<G extends SymmetricIntModel> extends AsymmetricModelSection<G> implements IntModel {
+	
 	public AsymmetricIntModelSection(G grid) {
 		super(grid);
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		return source.nextStep();
-	}
-
-	@Override
-	public long getStep() {
-		return source.getStep();
-	}
-
-	@Override
-	public String getName() {
-		return source.getName();
-	}
-
-	@Override
-	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/asymmetric_section";
-	}
-
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
+	public int getFromPosition(Coordinates coordinates) throws Exception {
+		return source.getFromAsymmetricPosition(coordinates);
 	}
 
 }

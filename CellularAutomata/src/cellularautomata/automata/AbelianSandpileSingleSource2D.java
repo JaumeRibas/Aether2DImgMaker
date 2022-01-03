@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid2d.IsotropicSquareGrid2DA;
+import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricIntModel2D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicSquareGrid2DA, Serializable {
+public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicSquareModelA, Serializable {
 
 	/**
 	 * 

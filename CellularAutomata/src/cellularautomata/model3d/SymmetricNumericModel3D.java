@@ -18,11 +18,10 @@ package cellularautomata.model3d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.grid3d.SymmetricNumberGrid3D;
+public interface SymmetricNumericModel3D<T extends FieldElement<T> & Comparable<T>> extends NumericModel3D<T>, SymmetricObjectModel3D<T> {
 
-public interface SymmetricNumericModel3D<T extends FieldElement<T> & Comparable<T>> extends SymmetricNumberGrid3D<T>, SymmetricModel3D, NumericModel3D<T> {
 	@Override
 	default NumericModel3D<T> asymmetricSection() {
-		return new AsymmetricNumericModelSection3D<T>(this);
+		return new AsymmetricNumericModelSection3D<T, SymmetricNumericModel3D<T>>(this);
 	}
 }

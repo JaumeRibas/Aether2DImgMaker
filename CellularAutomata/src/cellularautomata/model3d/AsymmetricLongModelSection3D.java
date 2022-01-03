@@ -16,10 +16,10 @@
  */
 package cellularautomata.model3d;
 
-public class AsymmetricLongModelSection3D extends AsymmetricModelSection3D<SymmetricLongModel3D> implements LongModel3D {
-
-	public AsymmetricLongModelSection3D(SymmetricLongModel3D source) {
-		super(source);
+public class AsymmetricLongModelSection3D<G extends SymmetricLongModel3D> extends AsymmetricModelSection3D<G> implements LongModel3D {
+	
+	public AsymmetricLongModelSection3D(G grid) {
+		super(grid);
 	}
 
 	@Override

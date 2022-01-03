@@ -22,8 +22,8 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.IntAether3DAsymmetricSectionSwap;
-import cellularautomata.grid3d.IntGrid3D;
 import cellularautomata.model3d.ActionableModel3D;
+import cellularautomata.model3d.IntModel3D;
 
 public class IntAether3DSwapXScan {
 	
@@ -61,7 +61,7 @@ public class IntAether3DSwapXScan {
 				path = "./";
 			}
 			
-			ActionableModel3D<IntGrid3D> ca;
+			ActionableModel3D<IntModel3D> ca;
 			if (isRestore) {
 				ca = new IntAether3DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -75,7 +75,7 @@ public class IntAether3DSwapXScan {
 			path += ca.getSubfolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createXScanningImages(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+			imgMaker.createXScanningImagesFromIntModel3D(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img");
 
 		}		

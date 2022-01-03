@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-import cellularautomata.grid.Coordinates;
+import cellularautomata.model.Coordinates;
 
 public class AnisotropicIntArray extends AnisotropicArray implements MultidimensionalIntArray {
 

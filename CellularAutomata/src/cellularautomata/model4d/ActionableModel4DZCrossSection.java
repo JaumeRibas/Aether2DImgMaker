@@ -19,12 +19,11 @@ package cellularautomata.model4d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid3d.Grid3D;
-import cellularautomata.grid4d.Grid4D;
+import cellularautomata.model.ModelProcessor;
 import cellularautomata.model3d.ActionableModel3D;
+import cellularautomata.model3d.Model3D;
 
-public class ActionableModel4DZCrossSection<G1 extends Grid4D, G2 extends Grid3D> 
+public class ActionableModel4DZCrossSection<G1 extends Model4D, G2 extends Model3D> 
 	extends ActionableModel3D<G2> {
 
 	protected int z;	
@@ -55,8 +54,8 @@ public class ActionableModel4DZCrossSection<G1 extends Grid4D, G2 extends Grid3D
 	}
 	
 	@Override
-	public void processGrid() throws Exception {
-		source.processGrid();
+	public void processModel() throws Exception {
+		source.processModel();
 	}
 	
 	public int getZ() {
@@ -212,7 +211,7 @@ public class ActionableModel4DZCrossSection<G1 extends Grid4D, G2 extends Grid3D
 		source.backUp(backupPath, backupName);
 	}
 	
-	private class InternalProcessor implements GridProcessor<G1> {
+	private class InternalProcessor implements ModelProcessor<G1> {
 
 		@Override
 		public void beforeProcessing() throws Exception {
@@ -221,9 +220,9 @@ public class ActionableModel4DZCrossSection<G1 extends Grid4D, G2 extends Grid3D
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public void processGridBlock(G1 gridBlock) throws Exception {
+		public void processModelBlock(G1 gridBlock) throws Exception {
 			if (z >= gridBlock.getMinZ() && z <= gridBlock.getMaxZ()) {
-				triggerProcessGridBlock((G2) gridBlock.crossSectionAtZ(z));
+				triggerProcessModelBlock((G2) gridBlock.crossSectionAtZ(z));
 			}
 		}
 

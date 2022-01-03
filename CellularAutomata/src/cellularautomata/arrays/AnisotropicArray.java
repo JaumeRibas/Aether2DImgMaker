@@ -18,7 +18,7 @@ package cellularautomata.arrays;
 
 import java.util.function.Consumer;
 
-import cellularautomata.grid.Coordinates;
+import cellularautomata.model.Coordinates;
 
 /**
  * An array with the shape of an asymmetric sub-region of an hypercubic shape with isotropic symmetry around a center position.

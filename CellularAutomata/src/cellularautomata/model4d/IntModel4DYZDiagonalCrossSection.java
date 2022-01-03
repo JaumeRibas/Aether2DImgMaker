@@ -18,9 +18,9 @@ package cellularautomata.model4d;
 
 import cellularautomata.model3d.IntModel3D;
 
-public class IntModel4DYZDiagonalCrossSection extends Model4DYZDiagonalCrossSection<IntModel4D> implements IntModel3D {
+public class IntModel4DYZDiagonalCrossSection<G extends IntModel4D> extends Model4DYZDiagonalCrossSection<G> implements IntModel3D {
 
-	public IntModel4DYZDiagonalCrossSection(IntModel4D source, int zOffsetFromY) {
+	public IntModel4DYZDiagonalCrossSection(G source, int zOffsetFromY) {
 		super(source, zOffsetFromY);
 	}
 

@@ -16,14 +16,114 @@
  */
 package cellularautomata.model2d;
 
-import cellularautomata.grid2d.LongGrid2D;
+import java.util.Iterator;
+
+import cellularautomata.model.Coordinates;
 import cellularautomata.model.LongModel;
 
-public interface LongModel2D extends LongGrid2D, LongModel, Model2D {
+public interface LongModel2D extends Model2D, LongModel {
+	
+	/**
+	 * Returns the value at a given position
+	 * 
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @return the value at (x,y)
+	 * @throws Exception 
+	 */
+	long getFromPosition(int x, int y) throws Exception;
+	
+	default long getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0), coordinates.get(1));
+	}
+	
+	@Override
+	default long[] getMinAndMax() throws Exception {
+		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinY(x);
+			maxY = getMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				long value = getFromPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return new long[]{ minValue, maxValue };
+	}
+	
+	@Override
+	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
+		int maxX = getMaxX(), minX = getMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		for (int x = minX; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isPositionEven = (minY+x)%2 == 0;
+			if (isPositionEven != isEven) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				anyPositionMatches = true;
+				long value = getFromPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return anyPositionMatches ? new long[]{ minValue, maxValue } : null;
+	}
+	
+	default long[] getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
+		int maxX = getMaxX(), minX = getMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		for (int x = minX; x <= maxX; x++) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			boolean isYEven = minY%2 == 0;
+			if (isYEven != isEven) {
+				minY++;
+			}
+			for (int y = minY; y <= maxY; y+=2) {
+				anyPositionMatches = true;
+				long value = getFromPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return anyPositionMatches ? new long[]{ minValue, maxValue } : null;
+	}
+	
+	@Override
+	default long getTotal() throws Exception {
+		long total = 0;
+		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
+		for (int x = minX; x <= maxX; x++) {
+			minY = getMinY(x);
+			maxY = getMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				total += getFromPosition(x, y);
+			}	
+		}
+		return total;
+	}
 	
 	@Override
 	default LongModel2D subsection(int minX, int maxX, int minY, int maxY) {
-		return new LongSubModel2D(this, minX, maxX, minY, maxY);
+		return new LongSubModel2D<LongModel2D>(this, minX, maxX, minY, maxY);
 	}
-	
+
+	@Override
+	default Iterator<Long> iterator() {
+		return new LongModel2DIterator(this);
+	}
+
 }

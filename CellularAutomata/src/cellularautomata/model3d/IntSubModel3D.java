@@ -16,9 +16,9 @@
  */
 package cellularautomata.model3d;
 
-public class IntSubModel3D extends SubModel3D<IntModel3D> implements IntModel3D {
+public class IntSubModel3D<G extends IntModel3D> extends SubModel3D<G> implements IntModel3D {
 
-	public IntSubModel3D(IntModel3D source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public IntSubModel3D(G source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 

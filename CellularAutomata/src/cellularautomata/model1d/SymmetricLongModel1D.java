@@ -16,12 +16,26 @@
  */
 package cellularautomata.model1d;
 
-import cellularautomata.grid1d.SymmetricLongGrid1D;
-import cellularautomata.model.SymmetricModel;
-
-public interface SymmetricLongModel1D extends SymmetricLongGrid1D, SymmetricModel, LongModel1D {
+public interface SymmetricLongModel1D extends LongModel1D, SymmetricModel1D {
+	
+	/**
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * That is, where the x-coordinate is inside the [{@link #getAsymmetricMinX()}, {@link #getAsymmetricMaxX()}] bounds.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this bounds is undefined.
+	 * <p>
+	 * 
+	 * @param x the position on the x-axis
+	 * @return the {@link long} value at (x)
+	 * @throws Exception 
+	 */
+	long getFromAsymmetricPosition(int x);
+	
 	@Override
 	default LongModel1D asymmetricSection() {
-		return new AsymmetricLongModelSection1D(this);
+		return new AsymmetricLongModelSection1D<SymmetricLongModel1D>(this);
 	}
+
 }

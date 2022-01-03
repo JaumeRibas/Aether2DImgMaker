@@ -103,10 +103,10 @@ public class BigIntAether3DSwapOddImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createXScanningAndZCrossSectionOddImages(ca, scanInitialZIndex, 0, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionOddImagesFromNumberModel3D(ca, scanInitialZIndex, 0, colorMapper, 
 						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createXScanningAndZCrossSectionOddImages(ca, 0, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionOddImagesFromNumberModel3D(ca, 0, colorMapper, 
 						ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
 			

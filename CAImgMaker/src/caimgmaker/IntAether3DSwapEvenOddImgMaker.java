@@ -93,10 +93,10 @@ public class IntAether3DSwapEvenOddImgMaker {
 			}
 			final int crossSectionZ = 0;
 			if (isScanInitialXIndexDefined) {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, scanXInitialIndex, crossSectionZ, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImagesFromIntModel3D(ca, scanXInitialIndex, crossSectionZ, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createXScanningAndZCrossSectionEvenOddImages(ca, crossSectionZ, colorMapper, 
+				imgMaker.createXScanningAndZCrossSectionEvenOddImagesFromIntModel3D(ca, crossSectionZ, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}	
 		}		

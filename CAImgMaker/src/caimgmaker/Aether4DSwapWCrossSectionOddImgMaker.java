@@ -22,10 +22,10 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.Aether4DAsymmetricSectionSwap;
-import cellularautomata.grid3d.LongGrid3D;
-import cellularautomata.grid4d.LongGrid4D;
+import cellularautomata.model3d.LongModel3D;
 import cellularautomata.model4d.ActionableModel4D;
 import cellularautomata.model4d.ActionableModel4DWCrossSection;
+import cellularautomata.model4d.LongModel4D;
 
 public class Aether4DSwapWCrossSectionOddImgMaker {
 	
@@ -90,7 +90,7 @@ public class Aether4DSwapWCrossSectionOddImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableModel4D<LongGrid4D> ca;
+			ActionableModel4D<LongModel4D> ca;
 			if (isRestore) {
 				ca = new Aether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -112,15 +112,15 @@ public class Aether4DSwapWCrossSectionOddImgMaker {
 					imgMaker = new ImgMaker();
 				}
 				String backupPath = path + ca.getSubfolderPath() + "/backups";
-				ActionableModel4DWCrossSection<LongGrid4D, LongGrid3D> crossSection = 
-						new ActionableModel4DWCrossSection<LongGrid4D, LongGrid3D>(ca, crossSectionW);
+				ActionableModel4DWCrossSection<LongModel4D, LongModel3D> crossSection = 
+						new ActionableModel4DWCrossSection<LongModel4D, LongModel3D>(ca, crossSectionW);
 				String imagesPath = path + crossSection.getSubfolderPath();
 				if (isScanInitialIndexesDefined) {
-					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
+					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongModel3D(
 							crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				} else {
-					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongGrid3D(
+					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongModel3D(
 							crossSection, 0, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				}				

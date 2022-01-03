@@ -22,10 +22,10 @@ import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.math3.util.Decimal64;
 
-import cellularautomata.grid2d.NumberGrid2D;
-import cellularautomata.grid2d.ObjectGrid2D;
-import cellularautomata.grid2d.IntGrid2D;
-import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.model2d.IntModel2D;
+import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.NumericModel2D;
+import cellularautomata.model2d.ObjectModel2D;
 import cellularautomata.numbers.BigInt;
 
 public class GrayscaleMapper implements ColorMapper {
@@ -52,7 +52,7 @@ public class GrayscaleMapper implements ColorMapper {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue) {
+	public <T extends FieldElement<T> & Comparable<T>> ObjectModel2D<Color> getMappedModel(NumericModel2D<T> grid, T minValue, T maxValue) {
 		ColorMap<T> colorMap = null;
 		if (minValue.equals(maxValue)) {
 			colorMap = new SolidColorMap<T>(new Color(0, 0, minBrightness/255));
@@ -73,11 +73,11 @@ public class GrayscaleMapper implements ColorMapper {
 		if (outOfLowerBoundColor != null) {
 			colorMap = new UnboundedColorMap<T>(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedGrid2D<T>(grid, colorMap);
+		return new ColorMappedModel2D<T>(grid, colorMap);
 	}
 
 	@Override
-	public ObjectGrid2D<Color> getMappedGrid(LongGrid2D grid, long minValue, long maxValue) {
+	public ObjectModel2D<Color> getMappedModel(LongModel2D grid, long minValue, long maxValue) {
 		LongColorMap colorMap = null;
 		if (minValue == maxValue) {
 			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
@@ -87,11 +87,11 @@ public class GrayscaleMapper implements ColorMapper {
 		if (outOfLowerBoundColor != null) {
 			colorMap = new LongUnboundedColorMap(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedLongGrid2D(grid, colorMap);
+		return new ColorMappedLongModel2D(grid, colorMap);
 	}
 
 	@Override
-	public ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue) {
+	public ObjectModel2D<Color> getMappedModel(IntModel2D grid, int minValue, int maxValue) {
 		IntColorMap colorMap = null;
 		if (minValue == maxValue) {
 			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
@@ -101,7 +101,7 @@ public class GrayscaleMapper implements ColorMapper {
 		if (outOfLowerBoundColor != null) {
 			colorMap = new IntUnboundedColorMap(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedIntGrid2D(grid, colorMap);
+		return new ColorMappedIntModel2D(grid, colorMap);
 	}
 
 	@Override

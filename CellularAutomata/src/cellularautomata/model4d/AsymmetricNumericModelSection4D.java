@@ -18,15 +18,11 @@ package cellularautomata.model4d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class AsymmetricNumericModelSection4D<T extends FieldElement<T> & Comparable<T>> extends AsymmetricModelSection4D<SymmetricNumericModel4D<T>> implements NumericModel4D<T> {
-
-	public AsymmetricNumericModelSection4D(SymmetricNumericModel4D<T> source) {
-		super(source);
-	}
-
-	@Override
-	public T getFromPosition(int w, int x, int y, int z) throws Exception {
-		return source.getFromAsymmetricPosition(w, x, y, z);
+public class AsymmetricNumericModelSection4D<T extends FieldElement<T> & Comparable<T>, G extends SymmetricNumericModel4D<T>> 
+	extends AsymmetricObjectModelSection4D<T, G> implements NumericModel4D<T> {
+	
+	public AsymmetricNumericModelSection4D(G grid) {
+		super(grid);
 	}
 
 }

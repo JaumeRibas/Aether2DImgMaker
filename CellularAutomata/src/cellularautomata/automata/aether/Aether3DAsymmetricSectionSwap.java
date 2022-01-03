@@ -26,15 +26,15 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
-import cellularautomata.grid3d.LongGrid3D;
-import cellularautomata.grid3d.LongSubGrid3D;
 import cellularautomata.Utils;
-import cellularautomata.grid3d.AnisotropicGrid3DA;
-import cellularautomata.grid3d.AnisotropicLongGrid3DSlice;
-import cellularautomata.grid3d.ImmutableLongGrid3D;
-import cellularautomata.grid3d.LongSubGrid3DWithXBounds;
-import cellularautomata.grid3d.SizeLimitedAnisotropicLongGrid3DBlock;
 import cellularautomata.model3d.ActionableModel3D;
+import cellularautomata.model3d.AnisotropicModel3DA;
+import cellularautomata.model3d.AnisotropicLongModel3DSlice;
+import cellularautomata.model3d.ImmutableLongModel3D;
+import cellularautomata.model3d.LongModel3D;
+import cellularautomata.model3d.LongSubModel3D;
+import cellularautomata.model3d.LongSubModel3DWithXBounds;
+import cellularautomata.model3d.SizeLimitedAnisotropicLongModel3DBlock;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
@@ -42,7 +42,7 @@ import cellularautomata.model3d.ActionableModel3D;
  * @author Jaume
  *
  */
-public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D> implements AnisotropicGrid3DA {
+public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongModel3D> implements AnisotropicModel3DA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -54,8 +54,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	private static final byte CENTER = 1;
 	private static final byte RIGHT = 2;
 	
-	private SizeLimitedAnisotropicLongGrid3DBlock gridBlockA;
-	private SizeLimitedAnisotropicLongGrid3DBlock gridBlockB;
+	private SizeLimitedAnisotropicLongModel3DBlock gridBlockA;
+	private SizeLimitedAnisotropicLongModel3DBlock gridBlockB;
 	private long initialValue;
 	private int step;
 	private int maxX;
@@ -77,7 +77,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
-		gridBlockA = new SizeLimitedAnisotropicLongGrid3DBlock(0, maxGridBlockSize);
+		gridBlockA = new SizeLimitedAnisotropicLongModel3DBlock(0, maxGridBlockSize);
 		if (gridBlockA.maxX < 6) {
 			throw new IllegalArgumentException("Passed heap space limit is too small.");
 		}
@@ -118,10 +118,10 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		readWriteGridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
-	private SizeLimitedAnisotropicLongGrid3DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicLongModel3DBlock loadGridBlockSafe(int minX) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedAnisotropicLongGrid3DBlock gridBlock = null;
+		SizeLimitedAnisotropicLongModel3DBlock gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -140,14 +140,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicLongGrid3DBlock) in.readObject();
+			gridBlock = (SizeLimitedAnisotropicLongModel3DBlock) in.readObject();
 			in.close();
 		}
 		return gridBlock;
 	}
 	
-	private SizeLimitedAnisotropicLongGrid3DBlock loadGridBlock(int minX) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicLongGrid3DBlock gridBlock = loadGridBlockSafe(minX);
+	private SizeLimitedAnisotropicLongModel3DBlock loadGridBlock(int minX) throws IOException, ClassNotFoundException {
+		SizeLimitedAnisotropicLongModel3DBlock gridBlock = loadGridBlockSafe(minX);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minX=" + minX + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -155,7 +155,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		}
 	}
 	
-	private void saveGridBlock(SizeLimitedAnisotropicLongGrid3DBlock gridBlock) throws FileNotFoundException, IOException {
+	private void saveGridBlock(SizeLimitedAnisotropicLongModel3DBlock gridBlock) throws FileNotFoundException, IOException {
 		String name = "minX=" + gridBlock.minX + "_maxX=" + gridBlock.maxX + ".ser";
 		String pathName = this.gridFolder.getPath() + File.separator + name;
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
@@ -164,12 +164,12 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		out.close();
 	}
 	
-	private SizeLimitedAnisotropicLongGrid3DBlock loadOrBuildGridBlock(int minX) throws ClassNotFoundException, IOException {		
-		SizeLimitedAnisotropicLongGrid3DBlock gridBlock = loadGridBlockSafe(minX);
+	private SizeLimitedAnisotropicLongModel3DBlock loadOrBuildGridBlock(int minX) throws ClassNotFoundException, IOException {		
+		SizeLimitedAnisotropicLongModel3DBlock gridBlock = loadGridBlockSafe(minX);
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedAnisotropicLongGrid3DBlock(minX, maxGridBlockSize);
+			return new SizeLimitedAnisotropicLongModel3DBlock(minX, maxGridBlockSize);
 		}
 	}
 
@@ -190,14 +190,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		int[][] relevantAsymmetricNeighborCoords = new int[6][3];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[6];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[6];// to compensate for omitted symmetric positions		
-		AnisotropicLongGrid3DSlice[] newXSlices = 
-				new AnisotropicLongGrid3DSlice[] {
+		AnisotropicLongModel3DSlice[] newXSlices = 
+				new AnisotropicLongModel3DSlice[] {
 						null, 
-						new AnisotropicLongGrid3DSlice(0), 
-						new AnisotropicLongGrid3DSlice(1)};
+						new AnisotropicLongModel3DSlice(0), 
+						new AnisotropicLongModel3DSlice(1)};
 		if (gridBlockA.minX > 0) {
 			if (gridBlockB != null && gridBlockB.minX == 0) {
-				SizeLimitedAnisotropicLongGrid3DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicLongModel3DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			} else {
@@ -212,13 +212,13 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 				relevantAsymmetricNeighborSymmetryCounts);
 		gridChanged = gridChanged || anySlicePositionToppled;
 		int x = 4;
-		AnisotropicLongGrid3DSlice[] xSlices = new AnisotropicLongGrid3DSlice[] {
+		AnisotropicLongModel3DSlice[] xSlices = new AnisotropicLongModel3DSlice[] {
 				null,
 				gridBlockA.getSlice(3),
 				gridBlockA.getSlice(4)};
 		while (x <= currentMaxX) {
 			while (x <= currentMaxX && x < gridBlockA.maxX) {
-				slideGridSlices(newXSlices, new AnisotropicLongGrid3DSlice(x + 1));
+				slideGridSlices(newXSlices, new AnisotropicLongModel3DSlice(x + 1));
 				anySlicePositionToppled = toppleSliceBeyondThree(gridBlockA, x, xSlices, newXSlices, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
@@ -236,7 +236,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 				} else {
 					gridBlockB = loadOrBuildGridBlock(x + 1);
 				}
-				slideGridSlices(newXSlices, new AnisotropicLongGrid3DSlice(x + 1));
+				slideGridSlices(newXSlices, new AnisotropicLongModel3DSlice(x + 1));
 				anySlicePositionToppled = toppleLastSliceOfBlock(gridBlockA, gridBlockB, x, xSlices, newXSlices, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
@@ -244,14 +244,14 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 				gridBlockA.setSlice(x - 1, newXSlices[LEFT]);
 				x++;
 				if (x <= currentMaxX) {
-					slideGridSlices(newXSlices, new AnisotropicLongGrid3DSlice(x + 1));
+					slideGridSlices(newXSlices, new AnisotropicLongModel3DSlice(x + 1));
 					anySlicePositionToppled = toppleFirstSliceOfBlock(gridBlockA, gridBlockB, x, xSlices, newXSlices, 
 							relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(x - 1, newXSlices[LEFT]);
 					processGridBlock(gridBlockA);
-					SizeLimitedAnisotropicLongGrid3DBlock swp = gridBlockA;
+					SizeLimitedAnisotropicLongModel3DBlock swp = gridBlockA;
 					gridBlockA = gridBlockB;
 					gridBlockB = swp;
 					x++;
@@ -271,15 +271,15 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return gridChanged;
 	}
 	
-	private boolean toppleRangeFromZeroToThree(SizeLimitedAnisotropicLongGrid3DBlock gridBlock,
-			AnisotropicLongGrid3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
+	private boolean toppleRangeFromZeroToThree(SizeLimitedAnisotropicLongModel3DBlock gridBlock,
+			AnisotropicLongModel3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
-		AnisotropicLongGrid3DSlice smallerXSlice = null, 
+		AnisotropicLongModel3DSlice smallerXSlice = null, 
 				currentXSlice = gridBlock.getSlice(0), 
 				greaterXSlice = gridBlock.getSlice(1);
-		AnisotropicLongGrid3DSlice newSmallerXSlice = null, 
+		AnisotropicLongModel3DSlice newSmallerXSlice = null, 
 				newCurrentXSlice = newXSlices[1], 
 				newGreaterXSlice = newXSlices[2];
 		// x = 0, y = 0, z = 0
@@ -294,7 +294,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		greaterXSlice = gridBlock.getSlice(2);
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = new AnisotropicLongGrid3DSlice(3);
+		newGreaterXSlice = new AnisotropicLongModel3DSlice(3);
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
@@ -334,7 +334,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		greaterXSlice = gridBlock.getSlice(3);
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = new AnisotropicLongGrid3DSlice(4);
+		newGreaterXSlice = new AnisotropicLongModel3DSlice(4);
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
@@ -414,7 +414,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		greaterXSlice = gridBlock.getSlice(4);
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = new AnisotropicLongGrid3DSlice(5);
+		newGreaterXSlice = new AnisotropicLongModel3DSlice(5);
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
@@ -545,40 +545,40 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return changed;
 	}
 
-	private boolean toppleSliceBeyondThree(SizeLimitedAnisotropicLongGrid3DBlock gridBlock, int x, AnisotropicLongGrid3DSlice[] xSlices, 
-			AnisotropicLongGrid3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+	private boolean toppleSliceBeyondThree(SizeLimitedAnisotropicLongModel3DBlock gridBlock, int x, AnisotropicLongModel3DSlice[] xSlices, 
+			AnisotropicLongModel3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondThree(gridBlock, gridBlock, gridBlock, x, xSlices, newXSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
-	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicLongGrid3DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid3DBlock rightGridBlock,
-			int x, AnisotropicLongGrid3DSlice[] xSlices, AnisotropicLongGrid3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
+	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicLongModel3DBlock leftGridBlock, SizeLimitedAnisotropicLongModel3DBlock rightGridBlock,
+			int x, AnisotropicLongModel3DSlice[] xSlices, AnisotropicLongModel3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondThree(leftGridBlock, leftGridBlock, rightGridBlock, x, xSlices, newXSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
-	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicLongGrid3DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid3DBlock rightGridBlock,
-			int x, AnisotropicLongGrid3DSlice[] xSlices, AnisotropicLongGrid3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
+	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicLongModel3DBlock leftGridBlock, SizeLimitedAnisotropicLongModel3DBlock rightGridBlock,
+			int x, AnisotropicLongModel3DSlice[] xSlices, AnisotropicLongModel3DSlice[] newXSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondThree(leftGridBlock, rightGridBlock, rightGridBlock, x, xSlices, newXSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 	
-	private boolean toppleSliceBeyondThree(SizeLimitedAnisotropicLongGrid3DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid3DBlock centerGridBlock, 
-			SizeLimitedAnisotropicLongGrid3DBlock rightGridBlock, int x, AnisotropicLongGrid3DSlice[] xSlices, AnisotropicLongGrid3DSlice[] newXSlices, 
+	private boolean toppleSliceBeyondThree(SizeLimitedAnisotropicLongModel3DBlock leftGridBlock, SizeLimitedAnisotropicLongModel3DBlock centerGridBlock, 
+			SizeLimitedAnisotropicLongModel3DBlock rightGridBlock, int x, AnisotropicLongModel3DSlice[] xSlices, AnisotropicLongModel3DSlice[] newXSlices, 
 			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean anyToppled = false;
 		int xPlusOne = x + 1;
-		AnisotropicLongGrid3DSlice smallerXSlice = xSlices[1], 
+		AnisotropicLongModel3DSlice smallerXSlice = xSlices[1], 
 				currentXSlice = xSlices[2], 
 				greaterXSlice = rightGridBlock.getSlice(xPlusOne);
-		AnisotropicLongGrid3DSlice newCurrentXSlice = newXSlices[1], 
+		AnisotropicLongModel3DSlice newCurrentXSlice = newXSlices[1], 
 				newGreaterXSlice = newXSlices[2];
 		// y = 0, z = 0
 		long currentValue = currentXSlice.getFromPosition(0, 0);
@@ -886,8 +886,8 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return anyToppled;
 	}
 	
-	private static boolean topplePositionType1(long currentValue, long greaterXNeighborValue, AnisotropicLongGrid3DSlice newCurrentXSlice, 
-			AnisotropicLongGrid3DSlice newGreaterXSlice) {
+	private static boolean topplePositionType1(long currentValue, long greaterXNeighborValue, AnisotropicLongModel3DSlice newCurrentXSlice, 
+			AnisotropicLongModel3DSlice newGreaterXSlice) {
 		boolean toppled = false;
 		if (greaterXNeighborValue < currentValue) {
 //			coverage.add(new Exception().getStackTrace()[0].getLineNumber());//debug
@@ -908,7 +908,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 
 	private static boolean topplePositionType2(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
 			long greaterYNeighborValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid3DSlice[] newXSlices) {
+			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -951,7 +951,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	private static boolean topplePositionType3(long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			AnisotropicLongGrid3DSlice[] newXSlices) {
+			AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -992,7 +992,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	}
 
 	private static boolean topplePositionType4(long currentValue, long greaterXNeighborValue, long smallerZNeighborValue, 
-			AnisotropicLongGrid3DSlice newCurrentXSlice, AnisotropicLongGrid3DSlice newGreaterXSlice) {
+			AnisotropicLongModel3DSlice newCurrentXSlice, AnisotropicLongModel3DSlice newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue < currentValue) {
 			if (greaterXNeighborValue < currentValue) {
@@ -1071,7 +1071,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	private static boolean topplePositionType5(long currentValue, long greaterXNeighborValue, 
 			long smallerXNeighborValue, long greaterYNeighborValue, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
-			AnisotropicLongGrid3DSlice[] newXSlices) {
+			AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -1112,7 +1112,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, 
 			long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid3DSlice[] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gXValue < currentValue) {
@@ -1178,7 +1178,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, 
 			int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid3DSlice[] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gXValue < currentValue) {
@@ -1231,7 +1231,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 
 	private static boolean topplePositionType8(int y, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid3DSlice[] newXSlices ) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel3DSlice[] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -1272,7 +1272,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 			int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, 
 			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			AnisotropicLongGrid3DSlice[] newXSlices) {
+			AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gXValue < currentValue) {
@@ -1324,7 +1324,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	}
 
 	private static boolean topplePositionType10(int coord, long currentValue, long greaterXNeighborValue, 
-			long smallerZNeighborValue, AnisotropicLongGrid3DSlice newCurrentXSlice, AnisotropicLongGrid3DSlice newGreaterXSlice) {
+			long smallerZNeighborValue, AnisotropicLongModel3DSlice newCurrentXSlice, AnisotropicLongModel3DSlice newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue < currentValue) {
 			if (greaterXNeighborValue < currentValue) {
@@ -1405,7 +1405,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, 
 			long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantNeighborValues, int[][] relevantNeighborCoords, 
 			int[] relevantNeighborShareMultipliers, 
-			AnisotropicLongGrid3DSlice[] newXSlices) {
+			AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantNeighborCount = 0;
 		if (gXValue < currentValue) {
 			relevantNeighborValues[relevantNeighborCount ] = gXValue;
@@ -1469,7 +1469,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 			long smallerXNeighborValue, long greaterYNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
-			AnisotropicLongGrid3DSlice[] newXSlices) {
+			AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -1530,7 +1530,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	private static boolean topplePositionType13(int coord, long currentValue, long greaterXNeighborValue, 
 			long smallerXNeighborValue, long greaterYNeighborValue, long smallerZNeighborValue, 
 			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid3DSlice[] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -1580,7 +1580,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	private static boolean topplePositionType14(int y, int z, long currentValue, long greaterXNeighborValue, 
 			long smallerYNeighborValue,	long greaterZNeighborValue, long smallerZNeighborValue, 
 			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
-			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid3DSlice[] newXSlices) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
@@ -1630,7 +1630,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 	private static boolean topplePositionType15(int y, int z, long currentValue, long greaterXNeighborValue, 
 			long smallerXNeighborValue,	long greaterYNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long smallerZNeighborValue, long[] relevantNeighborValues, 
-			int[][] relevantNeighborCoords, AnisotropicLongGrid3DSlice[] newXSlices) {
+			int[][] relevantNeighborCoords, AnisotropicLongModel3DSlice[] newXSlices) {
 		int relevantNeighborCount = 0;
 		if (greaterXNeighborValue < currentValue) {
 			relevantNeighborValues[relevantNeighborCount] = greaterXNeighborValue;
@@ -1684,7 +1684,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 				relevantNeighborCount);
 	}
 	
-	private static boolean topplePosition(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, long[] neighborValues,
+	private static boolean topplePosition(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -1763,7 +1763,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, 
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, 
 			long[] neighborValues, int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
@@ -1801,7 +1801,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 	
-	private static boolean topplePosition(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -1887,7 +1887,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -1926,7 +1926,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 	
-	private static boolean topplePosition(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, long[] neighborValues,
+	private static boolean topplePosition(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -2007,7 +2007,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, long[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
@@ -2045,7 +2045,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 	
-	private static boolean topplePosition(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -2130,7 +2130,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel3DSlice[] newXSlices, long value, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -2169,36 +2169,36 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		return toppled;
 	}
 
-	private void processGridBlock(SizeLimitedAnisotropicLongGrid3DBlock block) throws Exception {
+	private void processGridBlock(SizeLimitedAnisotropicLongModel3DBlock block) throws Exception {
 		if (block.minX <= maxX) {
-			LongGrid3D subBlock = null;
+			LongModel3D subBlock = null;
 			int maxY = getMaxY();
 			int maxZ = getMaxZ();
 			if (block.maxX > maxX) {
 				if (block.maxX > maxY || block.maxX > maxZ) {
-					subBlock = new LongSubGrid3D<LongGrid3D>(block, block.minX, maxX, 0, maxY, 0, maxZ);
+					subBlock = new LongSubModel3D<LongModel3D>(block, block.minX, maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new LongSubGrid3DWithXBounds(block, block.minX, maxX);
+					subBlock = new LongSubModel3DWithXBounds(block, block.minX, maxX);
 				}
 			} else {
 				if (block.maxX > maxY || block.maxX > maxZ) {
-					subBlock = new LongSubGrid3D<LongGrid3D>(block, block.minX, block.maxX, 0, maxY, 0, maxZ);
+					subBlock = new LongSubModel3D<LongModel3D>(block, block.minX, block.maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new ImmutableLongGrid3D(block);
+					subBlock = new ImmutableLongModel3D(block);
 				}
 			}
-			triggerProcessGridBlock(subBlock);
+			triggerProcessModelBlock(subBlock);
 		}
 	}
 	
 	@Override
-	public void processGrid() throws Exception {
+	public void processModel() throws Exception {
 		triggerBeforeProcessing();
 		if (gridBlockB == null) { //one block
 			processGridBlock(gridBlockA);
 		} else {
 			if (gridBlockA.minX < gridBlockB.minX) {
-				SizeLimitedAnisotropicLongGrid3DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicLongModel3DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
@@ -2236,7 +2236,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongGrid3D>
 		triggerAfterProcessing();
 	}
 
-	private void slideGridSlices(AnisotropicLongGrid3DSlice[] newGridSlices, AnisotropicLongGrid3DSlice newSlice) {
+	private void slideGridSlices(AnisotropicLongModel3DSlice[] newGridSlices, AnisotropicLongModel3DSlice newSlice) {
 		newGridSlices[LEFT] = newGridSlices[CENTER];
 		newGridSlices[CENTER] = newGridSlices[RIGHT];
 		newGridSlices[RIGHT] = newSlice;

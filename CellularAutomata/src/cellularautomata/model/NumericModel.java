@@ -12,14 +12,18 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    aBigInteger with this program.  If not, see <http://www.gnu.org/licenses/>
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 package cellularautomata.model;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.grid.NumberGrid;
+public interface NumericModel<T extends FieldElement<T> & Comparable<T>> extends ObjectModel<T> {
 
-public interface NumericModel<T extends FieldElement<T> & Comparable<T>> extends NumberGrid<T>, Model {
-
+	MinAndMax<T> getMinAndMax() throws Exception;
+	
+	MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception;
+	
+	T getTotal() throws Exception;
+	
 }

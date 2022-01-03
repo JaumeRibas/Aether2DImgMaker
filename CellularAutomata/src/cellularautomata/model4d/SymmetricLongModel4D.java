@@ -16,11 +16,33 @@
  */
 package cellularautomata.model4d;
 
-import cellularautomata.grid4d.SymmetricLongGrid4D;
+import cellularautomata.model.Coordinates;
 
-public interface SymmetricLongModel4D extends SymmetricLongGrid4D, SymmetricModel4D, LongModel4D {
+public interface SymmetricLongModel4D extends LongModel4D, SymmetricModel4D {
+
+	/**
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this section is undefined.
+	 * <p>
+	 * 
+	 * @param w the position on the w-axis
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
+	 * @return the value at (w,x,y,z)
+	 * @throws Exception 
+	 */
+	long getFromAsymmetricPosition(int w, int x, int y, int z) throws Exception;
+	
+	default long getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
+	}
+
 	@Override
 	default LongModel4D asymmetricSection() {
-		return new AsymmetricLongModelSection4D(this);
+		return new AsymmetricLongModelSection4D<SymmetricLongModel4D>(this);
 	}
 }

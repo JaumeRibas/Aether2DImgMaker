@@ -18,15 +18,11 @@ package cellularautomata.model2d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class NumericSubModel2D<T extends FieldElement<T> & Comparable<T>> extends SubModel2D<NumericModel2D<T>> implements NumericModel2D<T> {
-
-	public NumericSubModel2D(NumericModel2D<T> source, int minX, int maxX, int minY, int maxY) {
+public class NumericSubModel2D<T extends FieldElement<T> & Comparable<T>, G extends NumericModel2D<T>> 
+	extends ObjectSubModel2D<T, G> implements NumericModel2D<T> {
+	
+	public NumericSubModel2D(G source, int minX, int maxX, int minY, int maxY) {
 		super(source, minX, maxX, minY, maxY);
-	}
-
-	@Override
-	public T getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(x, y);
 	}
 
 }

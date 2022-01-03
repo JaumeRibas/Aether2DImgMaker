@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid3d.IsotropicCubicGrid3DA;
+import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class Aether3D implements SymmetricLongModel3D, IsotropicCubicGrid3DA, Serializable {
+public class Aether3D implements SymmetricLongModel3D, IsotropicCubicModelA, Serializable {
 	
 	//debug
 //	private static HashSet<Integer> coverage = new HashSet<Integer>();

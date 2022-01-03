@@ -21,17 +21,17 @@ import java.awt.Color;
 import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
 
-import cellularautomata.grid2d.NumberGrid2D;
-import cellularautomata.grid2d.ObjectGrid2D;
-import cellularautomata.grid2d.IntGrid2D;
-import cellularautomata.grid2d.LongGrid2D;
+import cellularautomata.model2d.IntModel2D;
+import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.NumericModel2D;
+import cellularautomata.model2d.ObjectModel2D;
 import cellularautomata.numbers.BigInt;
 
 public class HueMapper implements ColorMapper {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue) {
+	public <T extends FieldElement<T> & Comparable<T>> ObjectModel2D<Color> getMappedModel(NumericModel2D<T> grid, T minValue, T maxValue) {
 		ColorMap<T> colorMap = null;
 		if (minValue.equals(maxValue)) {
 			colorMap = new SolidColorMap<T>(getEmptyColor());
@@ -47,29 +47,29 @@ public class HueMapper implements ColorMapper {
 								+ HueMapper.class.getSimpleName());
 			} 
 		}
-		return new ColorMappedGrid2D<T>(grid, colorMap);
+		return new ColorMappedModel2D<T>(grid, colorMap);
 	}
 	
 	@Override
-	public ObjectGrid2D<Color> getMappedGrid(LongGrid2D grid, long minValue, long maxValue) {
+	public ObjectModel2D<Color> getMappedModel(LongModel2D grid, long minValue, long maxValue) {
 		LongColorMap colorMap = null;
 		if (minValue == maxValue) {
 			colorMap = new SolidColorMap<Object>(getEmptyColor());
 		} else {
 			colorMap = new LongHueMap(minValue, maxValue);
 		}
-		return new ColorMappedLongGrid2D(grid, colorMap);
+		return new ColorMappedLongModel2D(grid, colorMap);
 	}
 
 	@Override
-	public ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue) {
+	public ObjectModel2D<Color> getMappedModel(IntModel2D grid, int minValue, int maxValue) {
 		IntColorMap colorMap = null;
 		if (minValue == maxValue) {
 			colorMap = new SolidColorMap<Object>(getEmptyColor());
 		} else {
 			colorMap = new IntHueMap(minValue, maxValue);
 		}
-		return new ColorMappedIntGrid2D(grid, colorMap);
+		return new ColorMappedIntModel2D(grid, colorMap);
 	}
 	
 	private Color getEmptyColor() {

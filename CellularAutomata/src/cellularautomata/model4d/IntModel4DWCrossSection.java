@@ -18,15 +18,14 @@ package cellularautomata.model4d;
 
 import cellularautomata.model3d.IntModel3D;
 
-public class IntModel4DWCrossSection extends Model4DWCrossSection<IntModel4D> implements IntModel3D {
+public class IntModel4DWCrossSection<G extends IntModel4D> extends Model4DWCrossSection<G> implements IntModel3D {
 
-	public IntModel4DWCrossSection(IntModel4D source, int w) {
+	public IntModel4DWCrossSection(G source, int w) {
 		super(source, w);
 	}
 
 	@Override
 	public int getFromPosition(int x, int y, int z) throws Exception {
-		return source.getFromPosition(this.w, x, y, z);
+		return source.getFromPosition(w, x, y, z);
 	}
-
 }

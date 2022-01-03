@@ -17,8 +17,9 @@
 package cellularautomata.model4d;
 
 public class LongSubModel4D extends SubModel4D<LongModel4D> implements LongModel4D {
-
-	public LongSubModel4D(LongModel4D source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	
+	public LongSubModel4D(LongModel4D source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ,
+			int maxZ) {
 		super(source, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 
@@ -26,5 +27,5 @@ public class LongSubModel4D extends SubModel4D<LongModel4D> implements LongModel
 	public long getFromPosition(int w, int x, int y, int z) throws Exception {
 		return source.getFromPosition(w, x, y, z);
 	}
-
+	
 }

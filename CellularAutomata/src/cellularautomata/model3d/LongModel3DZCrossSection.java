@@ -18,15 +18,15 @@ package cellularautomata.model3d;
 
 import cellularautomata.model2d.LongModel2D;
 
-public class LongModel3DZCrossSection extends Model3DZCrossSection<LongModel3D> implements LongModel2D {
+public class LongModel3DZCrossSection<G extends LongModel3D> extends Model3DZCrossSection<G> implements LongModel2D {
 
-	public LongModel3DZCrossSection(LongModel3D source, int z) {
+	public LongModel3DZCrossSection(G source, int z) {
 		super(source, z);
 	}
 
 	@Override
 	public long getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(x, y, this.z);
+		return source.getFromPosition(x, y, z);
 	}
 
 }

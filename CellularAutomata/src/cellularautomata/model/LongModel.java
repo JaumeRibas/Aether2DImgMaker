@@ -16,8 +16,60 @@
  */
 package cellularautomata.model;
 
-import cellularautomata.grid.LongGrid;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.function.Consumer;
+import java.util.function.LongConsumer;
 
-public interface LongModel extends LongGrid, Model {
+public interface LongModel extends SequentialLongModel {
 
+	/**
+	 * <p>Returns the value at the given coordinates.</p>
+	 * <p>It is not defined to call this method with coordinates of a dimension different form the grid's dimension. This is obtained by calling the {@link #getGridDimension()} method.
+	 * <p>It is also not defined to call this method passing coordinates outside the bounds of the region. 
+	 * To get these bounds use the {@link #getMaxCoordinate(int)}, {@link #getMaxCoordinate(int, PartialCoordinates)}, 
+	 * {@link #getMinCoordinate(int)} and {@link #getMinCoordinate(int, PartialCoordinates)} methods.</p>
+	 * 
+	 * @param coordinates a {@link Coordinates} object
+	 * @return the value at the given position.
+	 * @throws Exception 
+	 */
+	long getFromPosition(Coordinates coordinates) throws Exception;
+	
+	/**
+	 * Feeds every value of the region in a consistent order to an {@link LongConsumer}.
+	 * @param consumer
+	 * @throws IOException 
+	 */
+	default void forEach(LongConsumer consumer) throws IOException {
+		forEachPosition(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coords) {
+				try {
+					consumer.accept(getFromPosition(coords));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+		});
+	}
+	
+	default long[] getEvenPositionsMinAndMax() throws Exception {
+		LongModelMinAndMaxCoordinateConsumer consumer = new LongModelMinAndMaxCoordinateConsumer(this);
+		forEachEvenPosition(consumer);
+		return new long[] {consumer.min, consumer.max};
+	}
+	
+	default long[] getOddPositionsMinAndMax() throws Exception {
+		LongModelMinAndMaxCoordinateConsumer consumer = new LongModelMinAndMaxCoordinateConsumer(this);
+		forEachOddPosition(consumer);
+		return new long[] {consumer.min, consumer.max};
+	}
+
+	@Override
+	default Iterator<Long> iterator() {
+		return new LongModelIterator(this);
+	}
 }

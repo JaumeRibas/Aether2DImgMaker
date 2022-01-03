@@ -16,9 +16,9 @@
  */
 package cellularautomata.model2d;
 
-public class LongSubModel2D extends SubModel2D<LongModel2D> implements LongModel2D {
-
-	public LongSubModel2D(LongModel2D source, int minX, int maxX, int minY, int maxY) {
+public class LongSubModel2D<G extends LongModel2D> extends SubModel2D<G> implements LongModel2D {
+	
+	public LongSubModel2D(G source, int minX, int maxX, int minY, int maxY) {
 		super(source, minX, maxX, minY, maxY);
 	}
 

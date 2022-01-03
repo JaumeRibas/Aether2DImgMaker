@@ -19,13 +19,59 @@ package cellularautomata.model3d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid3d.Grid3DXCrossSection;
 import cellularautomata.model2d.Model2D;
 
-public class Model3DXCrossSection<M extends Model3D> extends Grid3DXCrossSection<M> implements Model2D {
+public class Model3DXCrossSection<G extends Model3D> implements Model2D {
 
-	public Model3DXCrossSection(M source, int x) {
-		super(source, x);
+	protected G source;
+	protected int x;
+	
+	public Model3DXCrossSection(G source, int x) {
+		if (x > source.getMaxX() || x < source.getMinX()) {
+			throw new IllegalArgumentException("X coordinate is out of bounds.");
+		}
+		this.source = source;
+		this.x = x;
+	}
+
+	@Override
+	public int getMinX() {
+		return source.getMinZAtX(x);
+	}
+	
+	@Override
+	public int getMinX(int y) {
+		return source.getMinZ(x, y);
+	}
+	
+	@Override
+	public int getMaxX() {
+		return source.getMaxZAtX(x);
+	}
+	
+	@Override
+	public int getMaxX(int y) {
+		return source.getMaxZ(x, y);
+	}
+	
+	@Override
+	public int getMinY() {
+		return source.getMinYAtX(x);
+	}
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinY(this.x, x);
+	}
+	
+	@Override
+	public int getMaxY() {
+		return source.getMaxYAtX(x);
+	}
+	
+	@Override
+	public int getMaxY(int x) {
+		return source.getMaxY(this.x, x);
 	}
 	
 	@Override

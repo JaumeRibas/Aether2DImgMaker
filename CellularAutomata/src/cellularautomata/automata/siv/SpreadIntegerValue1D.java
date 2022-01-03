@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid1d.IsotropicGrid1DA;
+import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicGrid1DA, Serializable {
+public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicModel1DA, Serializable {
 
 	/**
 	 * 

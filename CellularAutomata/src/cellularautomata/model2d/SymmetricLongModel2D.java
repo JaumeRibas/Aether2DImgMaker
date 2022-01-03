@@ -16,12 +16,37 @@
  */
 package cellularautomata.model2d;
 
-import cellularautomata.grid2d.SymmetricLongGrid2D;
-import cellularautomata.model.SymmetricModel;
+import cellularautomata.model.Coordinates;
 
-public interface SymmetricLongModel2D extends SymmetricLongGrid2D, SymmetricModel, LongModel2D {
+public interface SymmetricLongModel2D extends LongModel2D, SymmetricModel2D {
+	
+	/**
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * That is, where the x-coordinate is inside the [{@link #getAsymmetricMinX()}, {@link #getAsymmetricMaxX()}] bounds 
+	 * and the y-coordinate is inside the [{@link #getAsymmetricMinY(int x)}, {@link #getAsymmetricMaxY(int x)}] bounds.
+	 * </p>
+	 * <p>
+	 * Or where the y-coordinate is inside the [{@link #getAsymmetricMinY()}, {@link #getAsymmetricMaxY()}] bounds 
+	 * and the x-coordinate is inside the [{@link #getAsymmetricMinX(int y)}, {@link #getAsymmetricMaxX(int y)}] bounds.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this bounds is undefined.
+	 * <p>
+	 * 
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @return the {@link long} value at (x,y)
+	 * @throws Exception 
+	 */
+	long getFromAsymmetricPosition(int x, int y) throws Exception;
+	
+	default long getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1));
+	}
+	
 	@Override
 	default LongModel2D asymmetricSection() {
-		return new AsymmetricLongModelSection2D(this);
+		return new AsymmetricLongModelSection2D<SymmetricLongModel2D>(this);
 	}
 }

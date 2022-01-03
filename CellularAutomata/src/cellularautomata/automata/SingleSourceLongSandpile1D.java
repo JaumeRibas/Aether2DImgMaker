@@ -19,7 +19,7 @@ package cellularautomata.automata;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid1d.IsotropicGrid1DA;
+import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
@@ -28,7 +28,7 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class SingleSourceLongSandpile1D implements SymmetricLongModel1D, IsotropicGrid1DA {	
+public class SingleSourceLongSandpile1D implements SymmetricLongModel1D, IsotropicModel1DA {	
 
 	private static final byte RIGHT = 1;
 	private static final byte LEFT = 0;

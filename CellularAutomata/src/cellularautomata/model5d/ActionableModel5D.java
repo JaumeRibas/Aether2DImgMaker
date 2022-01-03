@@ -16,11 +16,9 @@
  */
 package cellularautomata.model5d;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid5d.Grid5D;
-import cellularautomata.model.Model;
+import cellularautomata.model.ActionableModel;
 
-public abstract class ActionableModel5D<G extends Grid5D> 
-	extends ActionableGrid<G> implements Model, Grid5D {
+public abstract class ActionableModel5D<G extends Model5D> 
+	extends ActionableModel<G> implements Model5D {
 	
 }

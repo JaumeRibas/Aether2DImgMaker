@@ -16,52 +16,13 @@
  */
 package cellularautomata.model1d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.grid1d.NumberSubGrid1D;
+public class NumericSubModel1D<T extends FieldElement<T> & Comparable<T>, G extends NumericModel1D<T>> 
+	extends ObjectSubModel1D<T, G> implements NumericModel1D<T> {
 
-public class NumericSubModel1D<T extends FieldElement<T> & Comparable<T>> 
-	extends NumberSubGrid1D<T, NumericModel1D<T>> implements NumericModel1D<T> {
-
-	protected int absoluteMinX;
-	protected int absoluteMaxX;
-	
-	public NumericSubModel1D(NumericModel1D<T> source, int minX, int maxX) {
+	public NumericSubModel1D(G source, int minX, int maxX) {
 		super(source, minX, maxX);
-		this.absoluteMaxX = maxX;
-		this.absoluteMinX = minX;
-	}
-
-	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
-		if (!getActualBounds(absoluteMinX, absoluteMaxX)) {
-			throw new UnsupportedOperationException("Subsection is out of bounds.");
-		}
-		return changed;
-	}
-
-	@Override
-	public long getStep() {
-		return source.getStep();
-	}
-
-	@Override
-	public String getName() {
-		return source.getName();
-	}
-
-	@Override
-	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/minX=" + absoluteMinX + "_maxX=" + absoluteMaxX;
-	}
-
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
 	}
 
 }

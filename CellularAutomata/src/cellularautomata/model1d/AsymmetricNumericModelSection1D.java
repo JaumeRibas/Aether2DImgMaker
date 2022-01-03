@@ -16,43 +16,18 @@
  */
 package cellularautomata.model1d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.grid1d.AsymmetricNumberGridSection1D;
-
-public class AsymmetricNumericModelSection1D<T extends FieldElement<T> & Comparable<T>> 
-	extends AsymmetricNumberGridSection1D<T, SymmetricNumericModel1D<T>> implements NumericModel1D<T> {
-
-	public AsymmetricNumericModelSection1D(SymmetricNumericModel1D<T> source) {
-		super(source);
+public class AsymmetricNumericModelSection1D<T extends FieldElement<T> & Comparable<T>, G extends SymmetricNumericModel1D<T>> 
+	extends AsymmetricModelSection1D<G> implements NumericModel1D<T> {
+	
+	public AsymmetricNumericModelSection1D(G grid) {
+		super(grid);
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		return source.nextStep();
-	}
-
-	@Override
-	public long getStep() {
-		return source.getStep();
-	}
-
-	@Override
-	public String getName() {
-		return source.getName();
-	}
-
-	@Override
-	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/asymmetric_section";
-	}
-
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
+	public T getFromPosition(int x) {
+		return source.getFromAsymmetricPosition(x);
 	}
 
 }

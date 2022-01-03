@@ -20,15 +20,10 @@ import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.model3d.NumericModel3D;
 
-public class NumericModel4DZCrossSection<T extends FieldElement<T> & Comparable<T>> extends Model4DZCrossSection<NumericModel4D<T>> implements NumericModel3D<T> {
+public class NumericModel4DZCrossSection<T extends FieldElement<T> & Comparable<T>, G extends NumericModel4D<T>> 
+	extends ObjectModel4DZCrossSection<T, G> implements NumericModel3D<T> {
 
-	public NumericModel4DZCrossSection(NumericModel4D<T> source, int z) {
+	public NumericModel4DZCrossSection(G source, int z) {
 		super(source, z);
 	}
-
-	@Override
-	public T getFromPosition(int x, int y, int z) throws Exception {
-		return source.getFromPosition(x, y, z, this.z);
-	}
-
 }

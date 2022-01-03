@@ -19,13 +19,108 @@ package cellularautomata.model3d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid3d.Grid3DXZDiagonalCrossSection;
 import cellularautomata.model2d.Model2D;
 
-public class Model3DXZDiagonalCrossSection<M extends Model3D> extends Grid3DXZDiagonalCrossSection<M> implements Model2D {
+public class Model3DXZDiagonalCrossSection<G extends Model3D> implements Model2D {
 
-	public Model3DXZDiagonalCrossSection(M source, int zOffsetFromX) {
-		super(source, zOffsetFromX);
+	protected G source;
+	protected int zOffsetFromX;
+	protected int crossSectionMinX;
+	protected int crossSectionMaxX;
+	protected int crossSectionMinY;
+	protected int crossSectionMaxY;
+	
+	public Model3DXZDiagonalCrossSection(G source, int zOffsetFromX) {		
+		this.source = source;
+		this.zOffsetFromX = zOffsetFromX;
+		if (!getBounds()) {
+			throw new IllegalArgumentException("Cross section is out of bounds.");
+		}
+	}
+	
+	protected boolean getBounds() {
+		int x = source.getMinX();
+		int maxX = source.getMaxX();
+		int crossSectionZ = x + zOffsetFromX;
+		while (x <= maxX && (crossSectionZ < source.getMinZAtX(x) || crossSectionZ > source.getMaxZAtX(x))) {
+			x++;
+			crossSectionZ++;
+		}
+		if (x <= maxX) {
+			crossSectionMinX = x;
+			crossSectionMaxX = x;
+			crossSectionMaxY = source.getMaxY(x, crossSectionZ);
+			crossSectionMinY = source.getMinY(x, crossSectionZ);
+			x++;
+			crossSectionZ++;
+			while (x <= maxX && crossSectionZ >= source.getMinZAtX(x) && crossSectionZ <= source.getMaxZAtX(x)) {
+				crossSectionMaxX = x;
+				int localMaxY = source.getMaxY(x, crossSectionZ), localMinY = source.getMinY(x, crossSectionZ);
+				if (localMaxY > crossSectionMaxY) {
+					crossSectionMaxY = localMaxY;
+				}
+				if (localMinY < crossSectionMinY) {
+					crossSectionMinY = localMinY;
+				}
+				x++;
+				crossSectionZ++;
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int getMinX() {
+		return crossSectionMinX;
+	}
+	
+	@Override
+	public int getMinX(int y) {
+		for (int crossSectionX = crossSectionMinX, crossSectionZ = crossSectionX + zOffsetFromX; crossSectionX <= crossSectionMaxX; crossSectionX++, crossSectionZ++) {
+			int localMaxY = source.getMaxY(crossSectionX, crossSectionZ), localMinY = source.getMinY(crossSectionX, crossSectionZ);
+			if (y >= localMinY && y <= localMaxY) {
+				return crossSectionX;
+			}
+		}
+		throw new IllegalArgumentException("Y coordinate out of bounds.");
+	}
+	
+	@Override
+	public int getMaxX() {
+		return crossSectionMaxX;
+	}
+	
+	@Override
+	public int getMaxX(int y) {
+		for (int crossSectionX = crossSectionMaxX, crossSectionZ = crossSectionX + zOffsetFromX; crossSectionX >= crossSectionMinX; crossSectionX--, crossSectionZ--) {
+			int localMaxY = source.getMaxY(crossSectionX, crossSectionZ), localMinY = source.getMinY(crossSectionX, crossSectionZ);
+			if (y >= localMinY && y <= localMaxY) {
+				return crossSectionX;
+			}
+		}
+		throw new IllegalArgumentException("Y coordinate out of bounds.");
+	}
+	
+	@Override
+	public int getMinY() {
+		return crossSectionMinY;
+	}
+	
+	@Override
+	public int getMinY(int x) {
+		return source.getMinY(x, x + zOffsetFromX);
+	}
+	
+	@Override
+	public int getMaxY() {
+		return crossSectionMaxY;
+	}
+	
+	@Override
+	public int getMaxY(int x) {
+		return source.getMaxY(x, x + zOffsetFromX);
 	}
 	
 	@Override

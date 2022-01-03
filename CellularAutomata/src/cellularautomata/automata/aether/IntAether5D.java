@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
-import cellularautomata.grid5d.IsotropicHypercubicGrid5DA;
+import cellularautomata.model5d.IsotropicHypercubicModel5DA;
 import cellularautomata.model5d.SymmetricIntModel5D;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.model5d.SymmetricIntModel5D;
  * @author Jaume
  *
  */
-public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicGrid5DA, Serializable {
+public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicModel5DA, Serializable {
 	
 	/**
 	 * 

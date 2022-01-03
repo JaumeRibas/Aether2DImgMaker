@@ -22,11 +22,11 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.IntAether4DAsymmetricSectionSwap;
-import cellularautomata.grid3d.IntGrid3D;
-import cellularautomata.grid4d.Grid4D;
-import cellularautomata.grid4d.IntGrid4D;
+import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model4d.ActionableModel4D;
 import cellularautomata.model4d.ActionableModel4DWXDiagonalCrossSection;
+import cellularautomata.model4d.Model4D;
+import cellularautomata.model4d.IntModel4D;
 
 public class IntAether4DSwapWXDiagonalCrossSectionEvenOddImgMaker {
 	
@@ -90,7 +90,7 @@ public class IntAether4DSwapWXDiagonalCrossSectionEvenOddImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableModel4D<IntGrid4D> ca;
+			ActionableModel4D<IntModel4D> ca;
 			if (isRestore) {
 				ca = new IntAether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -112,16 +112,16 @@ public class IntAether4DSwapWXDiagonalCrossSectionEvenOddImgMaker {
 					imgMaker = new ImgMaker();
 				}
 				String backupPath = path + ca.getSubfolderPath() + "/backups";
-				ActionableModel4DWXDiagonalCrossSection<IntGrid4D, IntGrid3D> crossSection = 
-						new ActionableModel4DWXDiagonalCrossSection<IntGrid4D, IntGrid3D>(ca, xOffsetFromW);
+				ActionableModel4DWXDiagonalCrossSection<IntModel4D, IntModel3D> crossSection = 
+						new ActionableModel4DWXDiagonalCrossSection<IntModel4D, IntModel3D>(ca, xOffsetFromW);
 				String imagesPath = path + crossSection.getSubfolderPath();
 				int crossSectionZ = 0;
 				if (isScanInitialIndexesDefined) {
-					imgMaker.createXScanningAndZCrossSectionImagesFromEvenOddYZ(
+					imgMaker.createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel3D(
 							crossSection, zScanInitialIndex, crossSectionZ, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				} else {
-					imgMaker.createXScanningAndZCrossSectionImagesFromEvenOddYZ(
+					imgMaker.createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel3D(
 							crossSection, crossSectionZ, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				}				
@@ -129,7 +129,7 @@ public class IntAether4DSwapWXDiagonalCrossSectionEvenOddImgMaker {
 		}
 	}
 	
-	private static boolean checkCrossSectionInBounds(Grid4D grid, int xOffsetFromW) {
+	private static boolean checkCrossSectionInBounds(Model4D grid, int xOffsetFromW) {
 		int w = grid.getMinW();
 		int maxW = grid.getMaxW();
 		int crossSectionX = w + xOffsetFromW;

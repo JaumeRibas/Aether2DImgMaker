@@ -16,10 +16,10 @@
  */
 package cellularautomata.model3d;
 
-import cellularautomata.grid.ActionableGrid;
-import cellularautomata.grid3d.Grid3D;
+import cellularautomata.model.ActionableModel;
+import cellularautomata.model3d.Model3D;
 
-public abstract class ActionableModel3D<G extends Grid3D> 
-	extends ActionableGrid<G> implements Model3D {
+public abstract class ActionableModel3D<G extends Model3D> 
+	extends ActionableModel<G> implements Model3D {
 	
 }

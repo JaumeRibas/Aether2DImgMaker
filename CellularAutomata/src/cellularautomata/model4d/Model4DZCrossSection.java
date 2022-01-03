@@ -19,13 +19,147 @@ package cellularautomata.model4d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid4d.Grid4DZCrossSection;
 import cellularautomata.model3d.Model3D;
 
-public class Model4DZCrossSection<M extends Model4D> extends Grid4DZCrossSection<M> implements Model3D {
 
-	public Model4DZCrossSection(M source, int z) {
-		super(source, z);
+public class Model4DZCrossSection<G extends Model4D> implements Model3D {
+
+	protected G source;
+	protected int z;
+	
+	public Model4DZCrossSection(G source, int z) {
+		if (z > source.getMaxZ() || z < source.getMinZ()) {
+			throw new IllegalArgumentException("Z coordinate is out of bounds.");
+		}
+		this.source = source;
+		this.z = z;
+	}
+
+	
+	 /*
+	 * 	x -> w
+	 * 	y -> x
+	 * 	z -> y
+	 */
+	 
+	@Override
+	public int getMinX() {
+		return source.getMinWAtZ(z);
+	}
+	
+	@Override
+	public int getMinXAtY(int y) {
+		return source.getMinWAtXZ(y, z);
+	}
+	
+	@Override
+	public int getMinXAtZ(int z) {
+		return source.getMinWAtYZ(z, this.z);
+	}
+	
+	@Override
+	public int getMinX(int y, int z) {
+		return source.getMinW(y, z, this.z);
+	}
+
+	@Override
+	public int getMaxX() {
+		return source.getMaxWAtZ(z);
+	}
+	
+	@Override
+	public int getMaxXAtY(int y) {
+		return source.getMaxWAtXZ(y, z);
+	}
+	
+	@Override
+	public int getMaxXAtZ(int z) {
+		return source.getMaxWAtYZ(z, this.z);
+	}
+	
+	@Override
+	public int getMaxX(int y, int z) {
+		return source.getMaxW(y, z, this.z);
+	}
+
+	@Override
+	public int getMinY() {
+		return source.getMinXAtZ(z);
+	}
+	
+	@Override
+	public int getMinYAtX(int x) {
+		return source.getMinXAtWZ(x, z);
+	}
+	
+	@Override
+	public int getMinYAtZ(int z) {
+		return source.getMinXAtYZ(z, this.z);
+	}
+	
+	@Override
+	public int getMinY(int x, int z) {
+		return source.getMinX(x, z, this.z);
+	}
+	
+	@Override
+	public int getMaxY() {
+		return source.getMaxXAtZ(z);
+	}
+	
+	@Override
+	public int getMaxYAtX(int x) {
+		return source.getMaxXAtWZ(x, z);
+	}
+	
+	@Override
+	public int getMaxYAtZ(int z) {
+		return source.getMaxXAtYZ(z, this.z);
+	}
+	
+	@Override
+	public int getMaxY(int x, int z) {
+		return source.getMaxX(x, z, this.z);
+	}
+	
+	@Override
+	public int getMinZ() {
+		return source.getMinYAtZ(z);
+	}
+	
+	@Override
+	public int getMinZAtX(int x) {
+		return source.getMinYAtWZ(x, z);
+	}
+	
+	@Override
+	public int getMinZAtY(int y) {
+		return source.getMinYAtXZ(y, z);
+	}
+	
+	@Override
+	public int getMinZ(int x, int y) {
+		return source.getMinY(x, y, z);
+	}
+	
+	@Override
+	public int getMaxZ() {
+		return source.getMaxYAtZ(z);
+	}
+	
+	@Override
+	public int getMaxZAtX(int x) {
+		return source.getMaxYAtWZ(x, z);
+	}
+	
+	@Override
+	public int getMaxZAtY(int y) {
+		return source.getMaxYAtXZ(y, z);
+	}
+	
+	@Override
+	public int getMaxZ(int x, int y) {
+		return source.getMaxY(x, y, z);
 	}
 	
 	@Override
@@ -71,5 +205,4 @@ public class Model4DZCrossSection<M extends Model4D> extends Grid4DZCrossSection
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		source.backUp(backupPath, backupName);
 	}
-
 }

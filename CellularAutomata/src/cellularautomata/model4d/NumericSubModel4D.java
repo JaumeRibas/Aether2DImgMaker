@@ -18,15 +18,12 @@ package cellularautomata.model4d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class NumericSubModel4D<T extends FieldElement<T> & Comparable<T>> extends SubModel4D<NumericModel4D<T>> implements NumericModel4D<T> {
-
-	public NumericSubModel4D(NumericModel4D<T> source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+public class NumericSubModel4D<T extends FieldElement<T> & Comparable<T>, G extends NumericModel4D<T>> 
+	extends ObjectSubModel4D<T, G> implements NumericModel4D<T> {
+	
+	public NumericSubModel4D(G source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ,
+			int maxZ) {
 		super(source, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
-
-	@Override
-	public T getFromPosition(int w, int x, int y, int z) throws Exception {
-		return source.getFromPosition(w, x, y, z);
-	}
-
+	
 }

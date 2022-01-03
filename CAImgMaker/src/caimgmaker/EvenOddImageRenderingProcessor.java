@@ -19,10 +19,10 @@ package caimgmaker;
 import java.awt.Color;
 import java.io.IOException;
 
-import cellularautomata.grid.GridProcessor;
-import cellularautomata.grid2d.ObjectGrid2D;
+import cellularautomata.model.ModelProcessor;
+import cellularautomata.model2d.ObjectModel2D;
 
-public class EvenOddImageRenderingProcessor implements GridProcessor<ObjectGrid2D<Color>>{
+public class EvenOddImageRenderingProcessor implements ModelProcessor<ObjectModel2D<Color>>{
 
 	private boolean isEven;
 	private int minX;
@@ -36,8 +36,8 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ObjectGrid2
 	private int canvasTopMargin;
 	private int imageWidth;
 	private int imageHeight;
-	private int framedGridWidth;
-	private int framedGridHeight;
+	private int framedModelWidth;
+	private int framedModelHeight;
 
 	public EvenOddImageRenderingProcessor(boolean isEven, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) throws Exception {
 		this.isEven = isEven;
@@ -47,15 +47,15 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ObjectGrid2
 		this.maxY = maxY;
 		this.path = path;
 		this.name = name;
-		this.gridPositionSize = ImgMaker.getGridPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
-		framedGridWidth = maxX - minX + 1;
-		framedGridHeight = maxY - minY + 1;
+		this.gridPositionSize = ImgMaker.getModelPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
+		framedModelWidth = maxX - minX + 1;
+		framedModelHeight = maxY - minY + 1;
 		
-		int framedGridWidthInPixels = framedGridWidth * gridPositionSize;
-		int framedGridHeightInPixels = framedGridHeight * gridPositionSize;
+		int framedModelWidthInPixels = framedModelWidth * gridPositionSize;
+		int framedModelHeightInPixels = framedModelHeight * gridPositionSize;
 		
-		imageWidth = Math.max(framedGridWidthInPixels, minWidth);
-		imageHeight = Math.max(framedGridHeightInPixels, minHeight);	
+		imageWidth = Math.max(framedModelWidthInPixels, minWidth);
+		imageHeight = Math.max(framedModelHeightInPixels, minHeight);	
 		
 		
 		long longByteCount = (long)imageWidth * imageHeight * 3;
@@ -65,7 +65,7 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ObjectGrid2
 		pixelData = new byte[byteCount];	
 		
 		
-		canvasTopMargin = imageHeight - framedGridHeightInPixels;
+		canvasTopMargin = imageHeight - framedModelHeightInPixels;
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ObjectGrid2
 	}
 
 	@Override
-	public void processGridBlock(ObjectGrid2D<Color> gridBlock) throws Exception {
+	public void processModelBlock(ObjectModel2D<Color> gridBlock) throws Exception {
 		int regionMinX = gridBlock.getMinX();
 		int regionMaxX = gridBlock.getMaxX();
 		int framedRegionMinX, framedRegionMaxX;
@@ -118,9 +118,9 @@ public class EvenOddImageRenderingProcessor implements GridProcessor<ObjectGrid2
 					java.awt.Color c = gridBlock.getFromPosition(x, y);
 					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 					
-					int framedGridSquentialIndex = (framedGridHeight - yy - 1) * framedGridWidth + xx;
-					int dataIndex = (((framedGridSquentialIndex / framedGridWidth) * gridPositionSize * imageWidth)
-							+ ((framedGridSquentialIndex % framedGridWidth) * gridPositionSize) 
+					int framedModelSquentialIndex = (framedModelHeight - yy - 1) * framedModelWidth + xx;
+					int dataIndex = (((framedModelSquentialIndex / framedModelWidth) * gridPositionSize * imageWidth)
+							+ ((framedModelSquentialIndex % framedModelWidth) * gridPositionSize) 
 							+ (hBandIndex * imageWidth)
 							+ (canvasTopMargin * imageWidth)) * 3;
 					

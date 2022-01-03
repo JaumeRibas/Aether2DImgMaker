@@ -18,7 +18,7 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-//ColorGridRegion1D?
+//ColorModelRegion1D?
 public interface IntColorMap {
 	Color getColor(int value) throws Exception;
 }

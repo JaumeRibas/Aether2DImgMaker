@@ -16,17 +16,62 @@
  */
 package cellularautomata.model1d;
 
-import cellularautomata.grid1d.Grid1D;
 import cellularautomata.model.Model;
+import cellularautomata.model.PartialCoordinates;
 
-public interface Model1D extends Grid1D, Model {
+public interface Model1D extends Model {
 	
 	default String getXLabel() {
 		return "x";
 	}
 	
 	@Override
+	default int getGridDimension() {
+		return 1;
+	}
+	
+	/**
+	 * Returns the smallest x-coordinate
+	 * 
+	 * @return the smallest x
+	 */
+	int getMinX();
+	
+	/**
+	 * Returns the largest x-coordinate
+	 * 
+	 * @return the largest x
+	 */
+	int getMaxX();
+	
+	/**
+	 * Returns a decorated {@link Model1D} with the passed bounds.
+	 * 
+	 * @param minX
+	 * @param maxX
+	 * @return a {@link Model1D} decorating the current grid 
+	 */
 	default Model1D subsection(int minX, int maxX) {
 		return new SubModel1D<Model1D>(this, minX, maxX);
+	}
+
+	@Override
+	default int getMaxCoordinate(int axis) {
+		return getMaxX();
+	}
+
+	@Override
+	default int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		return getMaxX();
+	}
+
+	@Override
+	default int getMinCoordinate(int axis) {
+		return getMinX();
+	}
+
+	@Override
+	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
+		return getMinX();
 	}
 }

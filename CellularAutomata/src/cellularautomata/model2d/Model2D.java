@@ -16,10 +16,10 @@
  */
 package cellularautomata.model2d;
 
-import cellularautomata.grid2d.Grid2D;
 import cellularautomata.model.Model;
+import cellularautomata.model.PartialCoordinates;
 
-public interface Model2D extends Grid2D, Model {
+public interface Model2D extends Model {
 	
 	default String getXLabel() {
 		return "x";
@@ -30,7 +30,161 @@ public interface Model2D extends Grid2D, Model {
 	}
 	
 	@Override
+	default int getGridDimension() {
+		return 2;
+	}
+	
+	/**
+	 * Returns the smallest x-coordinate
+	 * 
+	 * @return the smallest x
+	 */
+	int getMinX();
+	
+	/**
+	 * Returns the smallest x-coordinate at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
+	 * or bigger than {@link #getMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the smallest x
+	 */
+	default int getMinX(int y) {
+		return getMinX();
+	}
+	
+	/**
+	 * Returns the largest x-coordinate
+	 * 
+	 * @return the largest x
+	 */
+	int getMaxX();
+	
+	/**
+	 * Returns the largest x-coordinate at y.<br/>
+	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()}
+	 * or bigger than {@link #getMaxY()}
+	 * 
+	 * @param y the y-coordinate
+	 * @return the largest x
+	 */
+	default int getMaxX(int y) {
+		return getMaxX();
+	}
+	
+	/**
+	 * Returns the smallest y-coordinate
+	 * 
+	 * @return the smallest y
+	 */
+	int getMinY();
+	
+	/**
+	 * Returns the smallest y-coordinate at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()}
+	 * or bigger than {@link #getMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the smallest y
+	 */
+	default int getMinY(int x) {
+		return getMinY();
+	}
+	
+	/**
+	 * Returns the largest y-coordinate
+	 * 
+	 * @return the largest y
+	 */
+	int getMaxY();
+	
+	/**
+	 * Returns the largest y-coordinate at x.<br/>
+	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()}
+	 * or bigger than {@link #getMaxX()}
+	 * 
+	 * @param x the x-coordinate
+	 * @return the largest y
+	 */
+	default int getMaxY(int x) {
+		return getMaxY();
+	}
+	
+	/**
+	 * Returns a decorated {@link Model2D} with the passed bounds.
+	 * 
+	 * @param minX
+	 * @param maxX
+	 * @param minY
+	 * @param maxY
+	 * @return a {@link Model2D} decorating the current grid 
+	 */
 	default Model2D subsection(int minX, int maxX, int minY, int maxY) {
 		return new SubModel2D<Model2D>(this, minX, maxX, minY, maxY);
 	}
+	
+	@Override
+	default int getMaxCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMaxX();
+		case 1: 
+			return getMaxY();
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		switch (axis) {
+		case 0: 
+			Integer y = coordinates.get(1);
+			if (y == null) {
+				return getMaxX();
+			} else {
+				return getMaxX(y);
+			}
+		case 1: 
+			Integer x = coordinates.get(0);
+			if (x == null) {
+				return getMaxY();
+			} else {
+				return getMaxY(x);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+	
+	@Override
+	default int getMinCoordinate(int axis) {
+		switch (axis) {
+		case 0: 
+			return getMinX();
+		case 1: 
+			return getMinY();
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+
+	@Override
+	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
+		switch (axis) {
+		case 0: 
+			Integer y = coordinates.get(1);
+			if (y == null) {
+				return getMinX();
+			} else {
+				return getMinX(y);
+			}
+		case 1: 
+			Integer x = coordinates.get(0);
+			if (x == null) {
+				return getMinY();
+			} else {
+				return getMinY(x);
+			}
+		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		}
+	}
+	
 }

@@ -16,12 +16,38 @@
  */
 package cellularautomata.model2d;
 
-import cellularautomata.grid2d.SymmetricIntGrid2D;
-import cellularautomata.model.SymmetricModel;
+import cellularautomata.model.Coordinates;
+import cellularautomata.model.SymmetricIntModel;
 
-public interface SymmetricIntModel2D extends SymmetricIntGrid2D, SymmetricModel, IntModel2D {
+public interface SymmetricIntModel2D extends IntModel2D, SymmetricModel2D, SymmetricIntModel {
+	
+	/**
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * That is, where the x-coordinate is inside the [{@link #getAsymmetricMinX()}, {@link #getAsymmetricMaxX()}] bounds 
+	 * and the y-coordinate is inside the [{@link #getAsymmetricMinY(int x)}, {@link #getAsymmetricMaxY(int x)}] bounds.
+	 * </p>
+	 * <p>
+	 * Or where the y-coordinate is inside the [{@link #getAsymmetricMinY()}, {@link #getAsymmetricMaxY()}] bounds 
+	 * and the x-coordinate is inside the [{@link #getAsymmetricMinX(int y)}, {@link #getAsymmetricMaxX(int y)}] bounds.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this bounds is undefined.
+	 * <p>
+	 * 
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @return the {@link int} value at (x,y)
+	 * @throws Exception 
+	 */
+	int getFromAsymmetricPosition(int x, int y) throws Exception;
+	
+	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1));
+	}
+	
 	@Override
 	default IntModel2D asymmetricSection() {
-		return new AsymmetricIntModelSection2D(this);
+		return new AsymmetricIntModelSection2D<SymmetricIntModel2D>(this);
 	}
 }

@@ -21,9 +21,9 @@ import java.awt.Color;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.automata.aether.Aether2D;
-import cellularautomata.grid2d.LongGrid2D;
-import cellularautomata.grid2d.ObjectGrid2D;
-import cellularautomata.grid2d.SubareaGrid;
+import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.ObjectModel2D;
+import cellularautomata.model2d.SubareaModel;
 
 public class Aether2DLastStepsImgMaker {
 	
@@ -54,24 +54,24 @@ public class Aether2DLastStepsImgMaker {
 			while (ae.nextStep());
 			long lastStep = ae.getStep() - 1;
 			System.out.println("Last step: " + lastStep);
-			LongGrid2D asymmetricSection = ae.asymmetricSection();
-			SubareaGrid<LongGrid2D> subareaGrid = new SubareaGrid<LongGrid2D>(asymmetricSection, imageWidth, imageHeight);
-			int subareasGridMinX = subareaGrid.getMinX();
-			int subareasGridMaxX = subareaGrid.getMaxX();
-			for (int subareasX = subareasGridMinX; subareasX <= subareasGridMaxX; subareasX++) {
-				int subareasGridLocalMinY = subareaGrid.getMinY(subareasX);
-				int subareasGridLocalMaxY = subareaGrid.getMaxY(subareasX);
-				for (int subareasY = subareasGridLocalMinY; subareasY <= subareasGridLocalMaxY; subareasY++) {
+			LongModel2D asymmetricSection = ae.asymmetricSection();
+			SubareaModel<LongModel2D> subareaModel = new SubareaModel<LongModel2D>(asymmetricSection, imageWidth, imageHeight);
+			int subareasModelMinX = subareaModel.getMinX();
+			int subareasModelMaxX = subareaModel.getMaxX();
+			for (int subareasX = subareasModelMinX; subareasX <= subareasModelMaxX; subareasX++) {
+				int subareasModelLocalMinY = subareaModel.getMinY(subareasX);
+				int subareasModelLocalMaxY = subareaModel.getMaxY(subareasX);
+				for (int subareasY = subareasModelLocalMinY; subareasY <= subareasModelLocalMaxY; subareasY++) {
 					System.out.println("Subarea " + subareasX + "," + subareasY);
-					int framedGridMinX = subareasX * imageWidth;
-					int framedGridMaxX = framedGridMinX + imageWidth - 1;
-					int framedGridMinY = subareasY * imageHeight;
-					int framedGridMaxY = framedGridMinY + imageHeight - 1;
-					LongGrid2D subarea = subareaGrid.getSubareaAtPosition(subareasX, subareasY);
+					int framedModelMinX = subareasX * imageWidth;
+					int framedModelMaxX = framedModelMinX + imageWidth - 1;
+					int framedModelMinY = subareasY * imageHeight;
+					int framedModelMaxY = framedModelMinY + imageHeight - 1;
+					LongModel2D subarea = subareaModel.getSubareaAtPosition(subareasX, subareasY);
 					long[] minAndMaxValue = subarea.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
-					ObjectGrid2D<Color> colorGrid = colorMapper.getMappedGrid(subarea, minAndMaxValue[0], minAndMaxValue[1]);
-					ImgMaker.createImage(colorGrid, framedGridMinX, framedGridMaxX, framedGridMinY, framedGridMaxY, 
+					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(subarea, minAndMaxValue[0], minAndMaxValue[1]);
+					ImgMaker.createImage(colorModel, framedModelMinX, framedModelMaxX, framedModelMinY, framedModelMaxY, 
 							imageWidth, imageHeight, imgPath + subareasX + "," + subareasY, 
 							ae.getName() + "_" + initialValue + ".png");
 				}						

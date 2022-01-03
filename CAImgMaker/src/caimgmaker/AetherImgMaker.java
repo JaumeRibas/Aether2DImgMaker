@@ -56,13 +56,13 @@ import cellularautomata.automata.siv.SpreadIntegerValue4D;
 import cellularautomata.model.Model;
 import cellularautomata.model.SymmetricModel;
 import cellularautomata.model1d.Model1D;
+import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
-import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.NumericModel2D;
+import cellularautomata.model3d.Model3D;
 import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model3d.LongModel3D;
-import cellularautomata.model3d.Model3D;
 import cellularautomata.model3d.NumericModel3D;
 import cellularautomata.model4d.Model4D;
 import cellularautomata.numbers.BigInt;
@@ -106,9 +106,6 @@ public class AetherImgMaker {
 			String path = args.path + "/" + model.getSubfolderPath();
 			String backupsPath = path + "/backups";
 			evolveModelToInitialStep(model, args, backupsPath);		
-			if (args.asymmetric && model instanceof SymmetricModel) {
-				model = ((SymmetricModel)model).asymmetricSection();
-			}	
 			Model modelSection = getModelSection(model, args);
 			if (modelSection == null) {
 				System.out.println(useHelpMessage);
@@ -321,6 +318,9 @@ public class AetherImgMaker {
 	}
 	
 	private static Model getModelSection(Model model, Args args) {
+		if (args.asymmetric && model instanceof SymmetricModel) {
+			model = ((SymmetricModel)model).asymmetricSection();
+		}	
 		final String onlyRangesOnAllCoordsAreSupported = "Currently it is only supported to use coordinate ranges if they are used in all coordinates. Try passing ranges in all coordinates";
 		final String coordRelativeToItselfError = "A coordinate cannot be set relative to itself.";
 		Integer vCoord = null, wCoord = null, xCoord = null, yCoord = null, zCoord = null;

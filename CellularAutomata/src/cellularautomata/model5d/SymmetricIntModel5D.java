@@ -16,12 +16,35 @@
  */
 package cellularautomata.model5d;
 
-import cellularautomata.grid5d.SymmetricIntGrid5D;
-import cellularautomata.model.SymmetricModel;
+import cellularautomata.model.Coordinates;
+import cellularautomata.model.SymmetricIntModel;
 
-public interface SymmetricIntModel5D extends SymmetricIntGrid5D, SymmetricModel, IntModel5D {
+public interface SymmetricIntModel5D extends IntModel5D, SymmetricModel5D, SymmetricIntModel {
+
+	/**
+	 * <p>
+	 * Returns the value at a given position within the asymmetric section of the grid.
+	 * </p>
+	 * <p>
+	 * The result of getting the value of a position outside this section is undefined.
+	 * <p>
+	 * 
+	 * @param v the position on the v-axis
+	 * @param w the position on the w-axis
+	 * @param x the position on the x-axis
+	 * @param y the position on the y-axis
+	 * @param z the position on the z-axis
+	 * @return the value at (v,w,x,y,z)
+	 * @throws Exception 
+	 */
+	int getFromAsymmetricPosition(int v, int w, int x, int y, int z) throws Exception;
+	
+	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
+	}
+
 	@Override
 	default IntModel5D asymmetricSection() {
-		return new AsymmetricIntModelSection5D(this);
+		return new AsymmetricIntModelSection5D<SymmetricIntModel5D>(this);
 	}
 }

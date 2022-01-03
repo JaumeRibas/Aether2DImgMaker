@@ -27,14 +27,14 @@ import java.util.HashMap;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.Utils;
-import cellularautomata.grid5d.AnisotropicGrid5DA;
-import cellularautomata.grid5d.AnisotropicLongGrid5DSlice;
-import cellularautomata.grid5d.ImmutableLongGrid5D;
-import cellularautomata.grid5d.LongGrid5D;
-import cellularautomata.grid5d.LongSubGrid5D;
-import cellularautomata.grid5d.LongSubGrid5DWithVBounds;
-import cellularautomata.grid5d.SizeLimitedAnisotropicLongGrid5DBlock;
 import cellularautomata.model5d.ActionableModel5D;
+import cellularautomata.model5d.AnisotropicModel5DA;
+import cellularautomata.model5d.AnisotropicLongModel5DSlice;
+import cellularautomata.model5d.ImmutableLongModel5D;
+import cellularautomata.model5d.LongModel5D;
+import cellularautomata.model5d.LongSubModel5D;
+import cellularautomata.model5d.LongSubModel5DWithVBounds;
+import cellularautomata.model5d.SizeLimitedAnisotropicLongModel5DBlock;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D with a single source initial configuration
@@ -42,7 +42,7 @@ import cellularautomata.model5d.ActionableModel5D;
  * @author Jaume
  *
  */
-public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D> implements AnisotropicGrid5DA {
+public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongModel5D> implements AnisotropicModel5DA {
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -54,8 +54,8 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 	private static final byte CENTER = 1;
 	private static final byte RIGHT = 2;
 
-	private SizeLimitedAnisotropicLongGrid5DBlock gridBlockA;
-	private SizeLimitedAnisotropicLongGrid5DBlock gridBlockB;
+	private SizeLimitedAnisotropicLongModel5DBlock gridBlockA;
+	private SizeLimitedAnisotropicLongModel5DBlock gridBlockB;
 	private long initialValue;
 	private long step;
 	private int maxV;
@@ -77,7 +77,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		}
 		this.initialValue = initialValue;
 		maxGridBlockSize = maxGridHeapSize/2;
-		gridBlockA = new SizeLimitedAnisotropicLongGrid5DBlock(0, maxGridBlockSize);
+		gridBlockA = new SizeLimitedAnisotropicLongModel5DBlock(0, maxGridBlockSize);
 		if (gridBlockA.maxV < 8) {
 			throw new IllegalArgumentException("Passed heap space limit is too small.");
 		}
@@ -118,10 +118,10 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		readWriteGridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
 	}
 
-	private SizeLimitedAnisotropicLongGrid5DBlock loadGridBlockSafe(int minV) throws IOException, ClassNotFoundException {
+	private SizeLimitedAnisotropicLongModel5DBlock loadGridBlockSafe(int minV) throws IOException, ClassNotFoundException {
 		File[] files = gridFolder.listFiles();
 		boolean found = false;
-		SizeLimitedAnisotropicLongGrid5DBlock gridBlock = null;
+		SizeLimitedAnisotropicLongModel5DBlock gridBlock = null;
 		File gridBlockFile = null;
 		for (int i = 0; i < files.length && !found; i++) {
 			File currentFile = files[i];
@@ -140,14 +140,14 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		}
 		if (found) {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(gridBlockFile));
-			gridBlock = (SizeLimitedAnisotropicLongGrid5DBlock) in.readObject();
+			gridBlock = (SizeLimitedAnisotropicLongModel5DBlock) in.readObject();
 			in.close();
 		}
 		return gridBlock;
 	}
 
-	private SizeLimitedAnisotropicLongGrid5DBlock loadGridBlock(int minV) throws IOException, ClassNotFoundException {
-		SizeLimitedAnisotropicLongGrid5DBlock gridBlock = loadGridBlockSafe(minV);
+	private SizeLimitedAnisotropicLongModel5DBlock loadGridBlock(int minV) throws IOException, ClassNotFoundException {
+		SizeLimitedAnisotropicLongModel5DBlock gridBlock = loadGridBlockSafe(minV);
 		if (gridBlock == null) {
 			throw new FileNotFoundException("No grid block with minW=" + minV + " could be found at folder path \"" + gridFolder.getAbsolutePath() + "\".");
 		} else {
@@ -155,7 +155,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		}
 	}
 
-	private void saveGridBlock(SizeLimitedAnisotropicLongGrid5DBlock gridBlock) throws FileNotFoundException, IOException {
+	private void saveGridBlock(SizeLimitedAnisotropicLongModel5DBlock gridBlock) throws FileNotFoundException, IOException {
 		String name = "minV=" + gridBlock.minV + "_maxV=" + gridBlock.maxV + ".ser";
 		String pathName = this.gridFolder.getPath() + File.separator + name;
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(pathName));
@@ -164,12 +164,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		out.close();
 	}
 
-	private SizeLimitedAnisotropicLongGrid5DBlock loadOrBuildGridBlock(int minV) throws ClassNotFoundException, IOException {		
-		SizeLimitedAnisotropicLongGrid5DBlock gridBlock = loadGridBlockSafe(minV);
+	private SizeLimitedAnisotropicLongModel5DBlock loadOrBuildGridBlock(int minV) throws ClassNotFoundException, IOException {		
+		SizeLimitedAnisotropicLongModel5DBlock gridBlock = loadGridBlockSafe(minV);
 		if (gridBlock != null) {
 			return gridBlock;
 		} else {
-			return new SizeLimitedAnisotropicLongGrid5DBlock(minV, maxGridBlockSize);
+			return new SizeLimitedAnisotropicLongModel5DBlock(minV, maxGridBlockSize);
 		}
 	}
 
@@ -190,14 +190,14 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		int[][] relevantAsymmetricNeighborCoords = new int[10][5];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[10];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[10];// to compensate for omitted symmetric positions		
-		AnisotropicLongGrid5DSlice[] newVSlices = 
-				new AnisotropicLongGrid5DSlice[] {
+		AnisotropicLongModel5DSlice[] newVSlices = 
+				new AnisotropicLongModel5DSlice[] {
 						null, 
-						new AnisotropicLongGrid5DSlice(0), 
-						new AnisotropicLongGrid5DSlice(1)};
+						new AnisotropicLongModel5DSlice(0), 
+						new AnisotropicLongModel5DSlice(1)};
 		if (gridBlockA.minV > 0) {
 			if (gridBlockB != null && gridBlockB.minV == 0) {
-				SizeLimitedAnisotropicLongGrid5DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicLongModel5DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			} else {
@@ -212,13 +212,13 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 				relevantAsymmetricNeighborSymmetryCounts);
 		gridChanged = gridChanged || anySlicePositionToppled;
 		int v = 6;
-		AnisotropicLongGrid5DSlice[] vSlices = new AnisotropicLongGrid5DSlice[] {
+		AnisotropicLongModel5DSlice[] vSlices = new AnisotropicLongModel5DSlice[] {
 				null,
 				gridBlockA.getSlice(5),
 				gridBlockA.getSlice(6)};
 		while (v <= currentMaxV) {
 			while (v <= currentMaxV && v < gridBlockA.maxV) {
-				slideGridSlices(newVSlices, new AnisotropicLongGrid5DSlice(v + 1));
+				slideGridSlices(newVSlices, new AnisotropicLongModel5DSlice(v + 1));
 				anySlicePositionToppled = toppleSliceBeyondFive(gridBlockA, v, vSlices, newVSlices, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
@@ -236,7 +236,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 				} else {
 					gridBlockB = loadOrBuildGridBlock(v + 1);
 				}
-				slideGridSlices(newVSlices, new AnisotropicLongGrid5DSlice(v + 1));
+				slideGridSlices(newVSlices, new AnisotropicLongModel5DSlice(v + 1));
 				anySlicePositionToppled = toppleLastSliceOfBlock(gridBlockA, gridBlockB, v, vSlices, newVSlices, 
 						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
@@ -244,14 +244,14 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 				gridBlockA.setSlice(v - 1, newVSlices[LEFT]);
 				v++;
 				if (v <= currentMaxV) {
-					slideGridSlices(newVSlices, new AnisotropicLongGrid5DSlice(v + 1));
+					slideGridSlices(newVSlices, new AnisotropicLongModel5DSlice(v + 1));
 					anySlicePositionToppled = toppleFirstSliceOfBlock(gridBlockA, gridBlockB, v, vSlices, newVSlices, 
 							relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(v - 1, newVSlices[LEFT]);
 					processGridBlock(gridBlockA);
-					SizeLimitedAnisotropicLongGrid5DBlock swp = gridBlockA;
+					SizeLimitedAnisotropicLongModel5DBlock swp = gridBlockA;
 					gridBlockA = gridBlockB;
 					gridBlockB = swp;
 					v++;
@@ -271,15 +271,15 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return gridChanged;
 	}
 
-	private boolean toppleRangeFromZeroToFive(SizeLimitedAnisotropicLongGrid5DBlock gridBlock,
-			AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, 
+	private boolean toppleRangeFromZeroToFive(SizeLimitedAnisotropicLongModel5DBlock gridBlock,
+			AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = null, 
+		AnisotropicLongModel5DSlice smallerVSlice = null, 
 				currentVSlice = gridBlock.getSlice(0), 
 				greaterVSlice = gridBlock.getSlice(1);
-		AnisotropicLongGrid5DSlice newSmallerVSlice = null, 
+		AnisotropicLongModel5DSlice newSmallerVSlice = null, 
 				newCurrentVSlice = newVSlices[1], 
 				newGreaterVSlice = newVSlices[2];
 		// 0 | 0 | 0 | 0 | 0 | 1
@@ -294,7 +294,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		greaterVSlice = gridBlock.getSlice(2);
 		newSmallerVSlice = newCurrentVSlice;
 		newCurrentVSlice = newGreaterVSlice;
-		newGreaterVSlice = new AnisotropicLongGrid5DSlice(3);
+		newGreaterVSlice = new AnisotropicLongModel5DSlice(3);
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
@@ -354,10 +354,10 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		smallerVSlice = currentVSlice;
 		currentVSlice = greaterVSlice;
 		greaterVSlice = gridBlock.getSlice(3);
-		AnisotropicLongGrid5DSlice[] vSlices = new AnisotropicLongGrid5DSlice[] { smallerVSlice, currentVSlice, greaterVSlice};
+		AnisotropicLongModel5DSlice[] vSlices = new AnisotropicLongModel5DSlice[] { smallerVSlice, currentVSlice, greaterVSlice};
 		newSmallerVSlice = newCurrentVSlice;
 		newCurrentVSlice = newGreaterVSlice;
-		newGreaterVSlice = new AnisotropicLongGrid5DSlice(4);
+		newGreaterVSlice = new AnisotropicLongModel5DSlice(4);
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
@@ -541,7 +541,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		vSlices[2] = greaterVSlice;
 		newSmallerVSlice = newCurrentVSlice;
 		newCurrentVSlice = newGreaterVSlice;
-		newGreaterVSlice = new AnisotropicLongGrid5DSlice(5);
+		newGreaterVSlice = new AnisotropicLongModel5DSlice(5);
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
@@ -825,7 +825,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		vSlices[2] = greaterVSlice;
 		newSmallerVSlice = newCurrentVSlice;
 		newCurrentVSlice = newGreaterVSlice;
-		newGreaterVSlice = new AnisotropicLongGrid5DSlice(6);
+		newGreaterVSlice = new AnisotropicLongModel5DSlice(6);
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
@@ -1043,7 +1043,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		vSlices[2] = greaterVSlice;
 		newSmallerVSlice = newCurrentVSlice;
 		newCurrentVSlice = newGreaterVSlice;
-		newGreaterVSlice = new AnisotropicLongGrid5DSlice(7);
+		newGreaterVSlice = new AnisotropicLongModel5DSlice(7);
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
@@ -1117,37 +1117,37 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private boolean toppleSliceBeyondFive(SizeLimitedAnisotropicLongGrid5DBlock gridBlock, int v, AnisotropicLongGrid5DSlice[] vSlices, 
-			AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+	private boolean toppleSliceBeyondFive(SizeLimitedAnisotropicLongModel5DBlock gridBlock, int v, AnisotropicLongModel5DSlice[] vSlices, 
+			AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFive(gridBlock, gridBlock, gridBlock, v, vSlices, newVSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
-	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicLongGrid5DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid5DBlock rightGridBlock,
-			int v, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, 
+	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicLongModel5DBlock leftGridBlock, SizeLimitedAnisotropicLongModel5DBlock rightGridBlock,
+			int v, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFive(leftGridBlock, leftGridBlock, rightGridBlock, v, vSlices, newVSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
-	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicLongGrid5DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid5DBlock rightGridBlock,
-			int v, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, 
+	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicLongModel5DBlock leftGridBlock, SizeLimitedAnisotropicLongModel5DBlock rightGridBlock,
+			int v, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFive(leftGridBlock, rightGridBlock, rightGridBlock, v, vSlices, newVSlices, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
-	private boolean toppleSliceBeyondFive(SizeLimitedAnisotropicLongGrid5DBlock leftGridBlock, SizeLimitedAnisotropicLongGrid5DBlock centerGridBlock, 
-			SizeLimitedAnisotropicLongGrid5DBlock rightGridBlock, int v, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, 
+	private boolean toppleSliceBeyondFive(SizeLimitedAnisotropicLongModel5DBlock leftGridBlock, SizeLimitedAnisotropicLongModel5DBlock centerGridBlock, 
+			SizeLimitedAnisotropicLongModel5DBlock rightGridBlock, int v, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, 
 			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
 		int vMinusOne = v - 1, vMinusTwo = v - 2, vMinusThree = v - 3, vMinusFour = v - 4, vPlusOne = v + 1;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[1], 
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[1], 
 				currentVSlice = vSlices[2], 
 				greaterVSlice = rightGridBlock.getSlice(vPlusOne);
 		vSlices[0] = smallerVSlice;
@@ -2324,10 +2324,10 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType1(AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType1(AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | 0 | 0 | 0 | 0 | 7
 		long currentValue = currentVSlice.getFromPosition(0, 0, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(0, 0, 0, 0);
@@ -2391,11 +2391,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType2(int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | 0 | 0 | 0 | 12
 		long currentValue = currentVSlice.getFromPosition(crd, 0, 0, 0);		
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, 0, 0, 0);
@@ -2446,11 +2446,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType3(int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | crd | 0 | 0 | 16
 		long currentValue = currentVSlice.getFromPosition(crd, crd, 0, 0);		
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, crd, 0, 0);
@@ -2488,11 +2488,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType4(int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | crd | crd | 0 | 19
 		long currentValue = currentVSlice.getFromPosition(crd, crd, crd, 0);		
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, crd, crd, 0);
@@ -2549,10 +2549,10 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType5(AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeType1(vSlices, newVSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
@@ -2692,12 +2692,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int w, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType6(int w, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
 		int  wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | 0 | 0 | 0 | 26
 		long currentValue = currentVSlice.getFromPosition(w, 0, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, 0, 0, 0);
@@ -2757,12 +2757,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType7(int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd = v - 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | 0 | 0 | 30
 		long currentValue = currentVSlice.getFromPosition(crd, crd, 0, 0);		
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, crd, 0, 0);
@@ -2807,12 +2807,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType8(int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int v = crd + 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | crd | 0 | 33
 		long currentValue = currentVSlice.getFromPosition(crd, crd, crd, 0);		
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, crd, crd, 0);
@@ -2967,12 +2967,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int crd, int x, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType9(int crd, int x, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int x = crd - 1;
 		int  crdMinusOne = x, xMinusOne = x - 1, xPlusOne = crd;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | x | 0 | 0 | 39
 		long currentValue = currentVSlice.getFromPosition(crd, x, 0, 0);		
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, x, 0, 0);
@@ -3017,12 +3017,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType10(int crd1, int crd2, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType10(int crd1, int crd2, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd2 = crd1 - 1;
 		int crd2MinusOne = crd2 - 1, crd2PlusOne = crd1, crd1MinusOne = crd2, crd1MinusTwo = crd2MinusOne;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd1 | crd1 | crd2 | crd2 | 0 | 42
 		long currentValue = currentVSlice.getFromPosition(crd1, crd2, crd2, 0);		
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd1, crd2, crd2, 0);
@@ -3281,10 +3281,10 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType11(AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType11(AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeType5(vSlices, newVSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
@@ -3440,12 +3440,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType12(int w, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType12(int w, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
 		int  wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeType6(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
@@ -3545,11 +3545,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType13(int w, int x, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType13(int w, int x, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 65
 		long currentValue = currentVSlice.getFromPosition(w, x, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, x, 0, 0);
@@ -3600,12 +3600,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType14(int w, int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType14(int w, int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 68
 		long currentValue = currentVSlice.getFromPosition(w, crd, crd, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, crd, crd, 0);
@@ -4402,11 +4402,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType15(int w, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType15(int w, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeType22(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
@@ -4504,11 +4504,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType16(int w, int x, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType16(int w, int x, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 100
 		long currentValue = currentVSlice.getFromPosition(w, x, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, x, 0, 0);
@@ -4559,12 +4559,12 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType17(int w, int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType17(int w, int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd = w - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 103
 		long currentValue = currentVSlice.getFromPosition(w, crd, crd, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, crd, crd, 0);
@@ -4857,11 +4857,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType18(int w, int x, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType18(int w, int x, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 148
 		long currentValue = currentVSlice.getFromPosition(w, x, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, x, 0, 0);
@@ -4911,11 +4911,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType19(int w, int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType19(int w, int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 151
 		long currentValue = currentVSlice.getFromPosition(w, crd, crd, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, crd, crd, 0);
@@ -4996,11 +4996,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType20(int w, int x, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType20(int w, int x, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 113
 		long currentValue = currentVSlice.getFromPosition(w, x, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, x, 0, 0);
@@ -5051,11 +5051,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType21(int w, int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType21(int w, int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 116
 		long currentValue = currentVSlice.getFromPosition(w, crd, crd, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, crd, crd, 0);
@@ -5138,11 +5138,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType22(int w, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType22(int w, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | 0 | 0 | 0 | 52
 		long currentValue = currentVSlice.getFromPosition(w, 0, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, 0, 0, 0);
@@ -5201,11 +5201,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType23(int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType23(int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | 0 | 0 | 56
 		long currentValue = currentVSlice.getFromPosition(crd, crd, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, crd, 0, 0);
@@ -5249,11 +5249,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType24(int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType24(int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | crd | 0 | 59
 		long currentValue = currentVSlice.getFromPosition(crd, crd, crd, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(crd, crd, crd, 0);
@@ -5323,11 +5323,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType25(int w, int x, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType25(int w, int x, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int wMinusOne = w - 1, xPlusOne = x + 1, xMinusOne = x - 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 78
 		long currentValue = currentVSlice.getFromPosition(w, x, 0, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, x, 0, 0);
@@ -5371,11 +5371,11 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}
 
-	private static boolean toppleRangeType26(int w, int crd, AnisotropicLongGrid5DSlice[] vSlices, AnisotropicLongGrid5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType26(int w, int crd, AnisotropicLongModel5DSlice[] vSlices, AnisotropicLongModel5DSlice[] newVSlices, long[] relevantAsymmetricNeighborValues,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1;
 		boolean changed = false;
-		AnisotropicLongGrid5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
+		AnisotropicLongModel5DSlice currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 81
 		long currentValue = currentVSlice.getFromPosition(w, crd, crd, 0);
 		long greaterVNeighborValue = greaterVSlice.getFromPosition(w, crd, crd, 0);
@@ -5445,7 +5445,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return changed;
 	}		
 
-	private static boolean topplePositionType1(long currentValue, long gVValue, AnisotropicLongGrid5DSlice newCurrentVSlice, AnisotropicLongGrid5DSlice newGreaterVSlice) {
+	private static boolean topplePositionType1(long currentValue, long gVValue, AnisotropicLongModel5DSlice newCurrentVSlice, AnisotropicLongModel5DSlice newGreaterVSlice) {
 		boolean toppled = false;
 		if (gVValue < currentValue) {
 			long toShare = currentValue - gVValue;
@@ -5463,7 +5463,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(long currentValue, long gVValue, long sVValue, long gWValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType2(long currentValue, long gVValue, long sVValue, long gWValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5508,7 +5508,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(long currentValue, long gVValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType3(long currentValue, long gVValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5553,7 +5553,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, 1, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(long currentValue, long gVValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType4(long currentValue, long gVValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5598,7 +5598,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, 1, 1, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType5(long currentValue, long gVValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType5(long currentValue, long gVValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5643,7 +5643,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, 1, 1, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType6(long currentValue, long gVValue, long sZValue, AnisotropicLongGrid5DSlice newCurrentVSlice, AnisotropicLongGrid5DSlice newGreaterVSlice) {
+	private static boolean topplePositionType6(long currentValue, long gVValue, long sZValue, AnisotropicLongModel5DSlice newCurrentVSlice, AnisotropicLongModel5DSlice newGreaterVSlice) {
 		boolean toppled = false;
 		if (sZValue < currentValue) {
 			if (gVValue < currentValue) {
@@ -5719,7 +5719,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePositionType7(long currentValue, long gVValue, long sVValue, long gWValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType7(long currentValue, long gVValue, long sVValue, long gWValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5761,7 +5761,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int w, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType8(int w, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5832,7 +5832,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType9(int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5903,7 +5903,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType10(int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5974,7 +5974,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType11(int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType11(int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6032,7 +6032,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int w, long currentValue, long gVValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType12(int w, long currentValue, long gVValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6074,7 +6074,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int w, int x, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType13(int w, int x, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6145,7 +6145,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int w, int coord, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType14(int w, int coord, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6216,7 +6216,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int w, int coord, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType15(int w, int coord, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6274,7 +6274,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType16(int coord, long currentValue, long gVValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType16(int coord, long currentValue, long gVValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6316,7 +6316,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType17(int coord, int y, long currentValue, long gVValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType17(int coord, int y, long currentValue, long gVValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6387,7 +6387,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType18(int coord1, int coord2, long currentValue, long gVValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType18(int coord1, int coord2, long currentValue, long gVValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6445,7 +6445,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType19(int coord, long currentValue, long gVValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType19(int coord, long currentValue, long gVValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6487,7 +6487,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType20(int coord, int z, long currentValue, long gVValue, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType20(int coord, int z, long currentValue, long gVValue, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6545,7 +6545,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType21(int coord, long currentValue, long gVValue, long sZValue, AnisotropicLongGrid5DSlice newCurrentVSlice, AnisotropicLongGrid5DSlice newGreaterVSlice) {
+	private static boolean topplePositionType21(int coord, long currentValue, long gVValue, long sZValue, AnisotropicLongModel5DSlice newCurrentVSlice, AnisotropicLongModel5DSlice newGreaterVSlice) {
 		boolean toppled = false;
 		if (sZValue < currentValue) {
 			if (gVValue < currentValue) {
@@ -6622,7 +6622,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePositionType22(int w, int x, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType22(int w, int x, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6719,7 +6719,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType23(int w, int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType23(int w, int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6816,7 +6816,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType24(int w, int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType24(int w, int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6900,7 +6900,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType25(int coord, int y, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType25(int coord, int y, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6997,7 +6997,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType26(int coord1, int coord2, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType26(int coord1, int coord2, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7081,7 +7081,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType27(int coord, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType27(int coord, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7165,7 +7165,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType28(int w, int x, int y, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType28(int w, int x, int y, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7262,7 +7262,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType29(int w, int x, int coord, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType29(int w, int x, int coord, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7346,7 +7346,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType30(int w, int coord, int z, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType30(int w, int coord, int z, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7430,7 +7430,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType31(int coord, int y, int z, long currentValue, long gVValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType31(int coord, int y, int z, long currentValue, long gVValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7514,7 +7514,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType32(int w, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType32(int w, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7580,7 +7580,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType33(int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType33(int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7646,7 +7646,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType34(int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType34(int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7712,7 +7712,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType35(int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType35(int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7766,7 +7766,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType36(int w, int x, int y, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType36(int w, int x, int y, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7889,7 +7889,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType37(int w, int x, int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType37(int w, int x, int coord, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7999,7 +7999,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType38(int w, int coord, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType38(int w, int coord, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8109,7 +8109,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType39(int coord, int y, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType39(int coord, int y, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8219,7 +8219,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType40(int w, int x, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType40(int w, int x, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8285,7 +8285,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType41(int w, int coord, long currentValue, long gVValue, long sWValue, long gXValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType41(int w, int coord, long currentValue, long gVValue, long sWValue, long gXValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8351,7 +8351,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType42(int w, int coord, long currentValue, long gVValue, long sWValue, long gXValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType42(int w, int coord, long currentValue, long gVValue, long sWValue, long gXValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8405,7 +8405,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType43(int w, int x, int y, int z, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType43(int w, int x, int y, int z, long currentValue, long gVValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8515,7 +8515,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType44(int coord, int y, long currentValue, long gVValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType44(int coord, int y, long currentValue, long gVValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8581,7 +8581,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType45(int coord1, int coord2, long currentValue, long gVValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType45(int coord1, int coord2, long currentValue, long gVValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8635,7 +8635,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType46(int coord, int z, long currentValue, long gVValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType46(int coord, int z, long currentValue, long gVValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8689,7 +8689,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType47(int w, int x, int y, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType47(int w, int x, int y, int z, long currentValue, long gVValue, long sVValue, int sVShareMultiplier, long gWValue, int gWShareMultiplier, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gVValue;
@@ -8804,7 +8804,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType48(int w, int x, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType48(int w, int x, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8894,7 +8894,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType49(int w, int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType49(int w, int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8984,7 +8984,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType50(int w, int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType50(int w, int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9062,7 +9062,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType51(int coord, int y, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType51(int coord, int y, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9152,7 +9152,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType52(int coord1, int coord2, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType52(int coord1, int coord2, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9230,7 +9230,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType53(int coord, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType53(int coord, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9308,7 +9308,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType54(int w, int x, int y, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType54(int w, int x, int y, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9398,7 +9398,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType55(int w, int x, int coord, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType55(int w, int x, int coord, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9476,7 +9476,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType56(int w, int coord, int z, long currentValue, long gVValue, long sWValue, long gXValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType56(int w, int coord, int z, long currentValue, long gVValue, long sWValue, long gXValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9554,7 +9554,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType57(int coord, int y, int z, long currentValue, long gVValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType57(int coord, int y, int z, long currentValue, long gVValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9632,7 +9632,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType58(int w, int x, int y, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType58(int w, int x, int y, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9746,7 +9746,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType59(int w, int x, int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType59(int w, int x, int coord, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9848,7 +9848,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType60(int w, int coord, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType60(int w, int coord, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9950,7 +9950,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType61(int coord, int y, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType61(int coord, int y, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -10052,7 +10052,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType62(int w, int x, int y, int z, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType62(int w, int x, int y, int z, long currentValue, long gVValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -10154,7 +10154,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType63(int w, int x, int y, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, AnisotropicLongGrid5DSlice[] newVSlices) {
+	private static boolean topplePositionType63(int w, int x, int y, int z, long currentValue, long gVValue, long sVValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, AnisotropicLongModel5DSlice[] newVSlices) {
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gVValue;
@@ -10259,7 +10259,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantNeighborCount);
 	}
 
-	private static boolean topplePosition(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] neighborValues,
+	private static boolean topplePosition(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -10338,7 +10338,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, 
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, 
 			long[] neighborValues, int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
@@ -10376,7 +10376,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePosition(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -10462,7 +10462,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -10501,7 +10501,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePosition(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] neighborValues,
+	private static boolean topplePosition(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -10582,7 +10582,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
@@ -10620,7 +10620,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePosition(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -10705,7 +10705,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}
 
-	private static boolean topplePositionSortedNeighbors(AnisotropicLongGrid5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicLongModel5DSlice[] newVSlices, long value, int w, int x, int y, int z, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -10744,38 +10744,38 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		return toppled;
 	}	
 
-	private void processGridBlock(SizeLimitedAnisotropicLongGrid5DBlock block) throws Exception {
+	private void processGridBlock(SizeLimitedAnisotropicLongModel5DBlock block) throws Exception {
 		if (block.minV <= maxV) {
-			LongGrid5D subBlock = null;
+			LongModel5D subBlock = null;
 			int maxW = getMaxW();
 			int maxX = getMaxX();
 			int maxY = getMaxY();
 			int maxZ = getMaxZ();
 			if (block.maxV > maxV) {
 				if (block.maxV > maxW || block.maxV > maxX || block.maxV > maxY || block.maxV > maxZ) {
-					subBlock = new LongSubGrid5D(block, block.minV, maxV, 0, maxW, 0, maxX, 0, maxY, 0, maxZ);
+					subBlock = new LongSubModel5D(block, block.minV, maxV, 0, maxW, 0, maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new LongSubGrid5DWithVBounds(block, block.minV, maxV);
+					subBlock = new LongSubModel5DWithVBounds(block, block.minV, maxV);
 				}
 			} else {
 				if (block.maxV > maxW || block.maxV > maxX || block.maxV > maxY || block.maxV > maxZ) {
-					subBlock = new LongSubGrid5D(block, block.minV, block.maxV, 0, maxW, 0, maxX, 0, maxY, 0, maxZ);
+					subBlock = new LongSubModel5D(block, block.minV, block.maxV, 0, maxW, 0, maxX, 0, maxY, 0, maxZ);
 				} else {
-					subBlock = new ImmutableLongGrid5D(block);
+					subBlock = new ImmutableLongModel5D(block);
 				}
 			}
-			triggerProcessGridBlock(subBlock);
+			triggerProcessModelBlock(subBlock);
 		}
 	}
 
 	@Override
-	public void processGrid() throws Exception {
+	public void processModel() throws Exception {
 		triggerBeforeProcessing();
 		if (gridBlockB == null) { //one block
 			processGridBlock(gridBlockA);
 		} else {
 			if (gridBlockA.minV < gridBlockB.minV) {
-				SizeLimitedAnisotropicLongGrid5DBlock swp = gridBlockA;
+				SizeLimitedAnisotropicLongModel5DBlock swp = gridBlockA;
 				gridBlockA = gridBlockB;
 				gridBlockB = swp;
 			}
@@ -10813,7 +10813,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongGrid5D>
 		triggerAfterProcessing();
 	}
 
-	private void slideGridSlices(AnisotropicLongGrid5DSlice[] newGridSlices, AnisotropicLongGrid5DSlice newSlice) {
+	private void slideGridSlices(AnisotropicLongModel5DSlice[] newGridSlices, AnisotropicLongModel5DSlice newSlice) {
 		newGridSlices[LEFT] = newGridSlices[CENTER];
 		newGridSlices[CENTER] = newGridSlices[RIGHT];
 		newGridSlices[RIGHT] = newSlice;

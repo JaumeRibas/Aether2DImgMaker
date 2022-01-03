@@ -19,17 +19,46 @@ package cellularautomata.model1d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.grid1d.SubGrid1D;
-
-public class SubModel1D<M extends Model1D> extends SubGrid1D<M> implements Model1D {
+public class SubModel1D<G extends Model1D> implements Model1D {
 	
+	protected G source;
+	protected int minX;
+	protected int maxX;
 	protected int absoluteMinX;
 	protected int absoluteMaxX;
 	
-	public SubModel1D(M source, int minX, int maxX) {
-		super(source, minX, maxX);
+	public SubModel1D(G source, int minX, int maxX) {
+		if (minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		}
+		this.source = source;
+		if (!getActualBounds(minX, maxX)) {
+			throw new IllegalArgumentException("Subsection is out of bounds.");
+		}
 		this.absoluteMaxX = maxX;
 		this.absoluteMinX = minX;
+	}
+	
+	protected boolean getActualBounds(int minX, int maxX) {
+		int sourceMinX = source.getMinX();
+		int sourceMaxX = source.getMaxX();
+		if (minX > sourceMaxX || maxX < sourceMinX) {
+			return false;
+		} else {
+			this.minX = Math.max(minX, sourceMinX);
+			this.maxX = Math.min(maxX, sourceMaxX);
+			return true;
+		}
+	}
+
+	@Override
+	public int getMinX() {
+		return minX;
+	}
+
+	@Override
+	public int getMaxX() {
+		return maxX;
 	}
 
 	@Override
@@ -60,5 +89,5 @@ public class SubModel1D<M extends Model1D> extends SubGrid1D<M> implements Model
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		source.backUp(backupPath, backupName);
 	}
-	
+
 }

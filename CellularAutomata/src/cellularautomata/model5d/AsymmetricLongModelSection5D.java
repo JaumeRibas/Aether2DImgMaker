@@ -16,40 +16,15 @@
  */
 package cellularautomata.model5d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import cellularautomata.grid5d.AsymmetricLongGridSection5D;
-
-public class AsymmetricLongModelSection5D extends AsymmetricLongGridSection5D<SymmetricLongModel5D> implements LongModel5D {
-
-	public AsymmetricLongModelSection5D(SymmetricLongModel5D source) {
-		super(source);
+public class AsymmetricLongModelSection5D<G extends SymmetricLongModel5D> extends AsymmetricModelSection5D<G> implements LongModel5D {
+	
+	public AsymmetricLongModelSection5D(G grid) {
+		super(grid);
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		return source.nextStep();
-	}
-
-	@Override
-	public long getStep() {
-		return source.getStep();
-	}
-
-	@Override
-	public String getName() {
-		return source.getName();
-	}
-
-	@Override
-	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/asymmetric_section";
-	}
-
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
+	public long getFromPosition(int v, int w, int x, int y, int z) throws Exception {
+		return source.getFromAsymmetricPosition(v, w, x, y, z);
 	}
 
 }

@@ -16,40 +16,132 @@
  */
 package cellularautomata.model3d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import cellularautomata.model.AsymmetricModelSection;
 
-import cellularautomata.grid3d.AsymmetricGridSection3D;
+public class AsymmetricModelSection3D<G extends SymmetricModel3D> extends AsymmetricModelSection<G> implements Model3D {
 
-public class AsymmetricModelSection3D<M extends SymmetricModel3D> extends AsymmetricGridSection3D<M> implements Model3D {
-
-	public AsymmetricModelSection3D(M source) {
+	public AsymmetricModelSection3D(G source) {
 		super(source);
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		return source.nextStep();
+	public int getMinX() {
+		return source.getAsymmetricMinX();
 	}
 
 	@Override
-	public long getStep() {
-		return source.getStep();
+	public int getMaxX() {
+		return source.getAsymmetricMaxX();
+	}
+	
+	@Override
+	public int getMinXAtY(int y) {
+		return source.getAsymmetricMinXAtY(y);
 	}
 
 	@Override
-	public String getName() {
-		return source.getName();
+	public int getMaxXAtY(int y) {
+		return source.getAsymmetricMaxXAtY(y);
+	}
+	
+	@Override
+	public int getMinXAtZ(int z) {
+		return source.getAsymmetricMinXAtZ(z);
 	}
 
 	@Override
-	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/asymmetric_section";
+	public int getMaxXAtZ(int z) {
+		return source.getAsymmetricMaxXAtZ(z);
+	}
+	
+	@Override
+	public int getMinX(int y, int z) {
+		return source.getAsymmetricMinX(y, z);
 	}
 
 	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
+	public int getMaxX(int y, int z) {
+		return source.getAsymmetricMaxX(y, z);
+	}
+
+	@Override
+	public int getMinY() {
+		return source.getAsymmetricMinY();
+	}
+
+	@Override
+	public int getMaxY() {
+		return source.getAsymmetricMaxY();
+	}
+	
+	@Override
+	public int getMinYAtX(int x) {
+		return source.getAsymmetricMinYAtX(x);
+	}
+
+	@Override
+	public int getMaxYAtX(int x) {
+		return source.getAsymmetricMaxYAtX(x);
+	}
+	
+	@Override
+	public int getMinYAtZ(int z) {
+		return source.getAsymmetricMinYAtZ(z);
+	}
+
+	@Override
+	public int getMaxYAtZ(int z) {
+		return source.getAsymmetricMaxYAtZ(z);
+	}
+	
+	@Override
+	public int getMinY(int x, int z) {
+		return source.getAsymmetricMinY(x, z);
+	}
+
+	@Override
+	public int getMaxY(int x, int z) {
+		return source.getAsymmetricMaxY(x, z);
+	}
+	
+	@Override
+	public int getMinZ() {
+		return source.getAsymmetricMinZ();
+	}
+
+	@Override
+	public int getMaxZ() {
+		return source.getAsymmetricMaxZ();
+	}
+	
+	@Override
+	public int getMinZAtY(int y) {
+		return source.getAsymmetricMinZAtY(y);
+	}
+
+	@Override
+	public int getMaxZAtY(int y) {
+		return source.getAsymmetricMaxZAtY(y);
+	}
+	
+	@Override
+	public int getMinZAtX(int x) {
+		return source.getAsymmetricMinZAtX(x);
+	}
+
+	@Override
+	public int getMaxZAtX(int x) {
+		return source.getAsymmetricMaxZAtX(x);
+	}
+	
+	@Override
+	public int getMinZ(int x, int y) {
+		return source.getAsymmetricMinZ(x, y);
+	}
+
+	@Override
+	public int getMaxZ(int x, int y) {
+		return source.getAsymmetricMaxZ(x, y);
 	}
 
 }

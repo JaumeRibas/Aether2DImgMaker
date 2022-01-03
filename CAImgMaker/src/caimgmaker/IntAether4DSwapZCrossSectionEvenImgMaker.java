@@ -22,10 +22,10 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.IntAether4DAsymmetricSectionSwap;
-import cellularautomata.grid3d.IntGrid3D;
-import cellularautomata.grid4d.IntGrid4D;
+import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model4d.ActionableModel4D;
 import cellularautomata.model4d.ActionableModel4DZCrossSection;
+import cellularautomata.model4d.IntModel4D;
 
 public class IntAether4DSwapZCrossSectionEvenImgMaker {
 	
@@ -90,7 +90,7 @@ public class IntAether4DSwapZCrossSectionEvenImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableModel4D<IntGrid4D> ca;
+			ActionableModel4D<IntModel4D> ca;
 			if (isRestore) {
 				ca = new IntAether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -112,16 +112,16 @@ public class IntAether4DSwapZCrossSectionEvenImgMaker {
 					imgMaker = new ImgMaker();
 				}
 				String backupPath = path + ca.getSubfolderPath() + "/backups";
-				ActionableModel4DZCrossSection<IntGrid4D, IntGrid3D> crossSection = 
-						new ActionableModel4DZCrossSection<IntGrid4D, IntGrid3D>(ca, crossSectionZ);
+				ActionableModel4DZCrossSection<IntModel4D, IntModel3D> crossSection = 
+						new ActionableModel4DZCrossSection<IntModel4D, IntModel3D>(ca, crossSectionZ);
 				String imagesPath = path + crossSection.getSubfolderPath();
 				int crossSectionY = 1;
 				if (isScanInitialIndexesDefined) {
-					imgMaker.createXZScanningAndZCrossSectionEvenImagesFromIntGrid3D(
+					imgMaker.createXZScanningAndZCrossSectionEvenImagesFromIntModel3D(
 							crossSection, xScanInitialIndex, zScanInitialIndex, crossSectionY, colorMapper, ImgMakerConstants.HD_WIDTH/4, ImgMakerConstants.HD_HEIGHT/4, 
 							imagesPath, backupPath);
 				} else {
-					imgMaker.createXZScanningAndZCrossSectionEvenImagesFromIntGrid3D(
+					imgMaker.createXZScanningAndZCrossSectionEvenImagesFromIntModel3D(
 							crossSection, crossSectionY, colorMapper, ImgMakerConstants.HD_WIDTH/4, ImgMakerConstants.HD_HEIGHT/4, 
 							imagesPath, backupPath);
 				}				

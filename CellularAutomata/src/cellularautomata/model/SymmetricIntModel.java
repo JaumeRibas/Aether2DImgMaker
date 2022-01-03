@@ -16,13 +16,46 @@
  */
 package cellularautomata.model;
 
-import cellularautomata.grid.SymmetricIntGrid;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
-public interface SymmetricIntModel extends SymmetricIntGrid, SymmetricModel, IntModel {
+public interface SymmetricIntModel extends IntModel, SymmetricModel {
 	
 	@Override
 	default IntModel asymmetricSection() {
 		return new AsymmetricIntModelSection<SymmetricIntModel>(this);
 	}
 
+	/**
+	 * <p>Returns the value at the given coordinates from an asymmetric section.</p>
+	 * <p>It is not defined to call this method with coordinates of a dimension different form the grid's dimension. This is obtained by calling the {@link #getGridDimension()} method.
+	 * <p>It is also not defined to call this method passing coordinates outside the bounds of the asymmetric section. 
+	 * To get these bounds use the {@link #getAsymmetricMaxCoordinate(int)}, {@link #getAsymmetricMaxCoordinate(int, PartialCoordinates)}, 
+	 * {@link #getAsymmetricMinCoordinate(int)} and {@link #getAsymmetricMinCoordinate(int, PartialCoordinates)} methods.</p>
+	 * 
+	 * @param coordinates a {@link int} array
+	 * @return the value at the given position.
+	 * @throws Exception 
+	 */
+	int getFromAsymmetricPosition(Coordinates coordinates) throws Exception;
+	
+	/**
+	 * Feeds every value of an asymmetric section, in a consistent order, to an {@link IntConsumer}.
+	 * @param consumer
+	 */
+	default void forEachInAsymmetricSection(IntConsumer consumer) {
+		forEachPositionInAsymmetricSection(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coords) {
+				try {
+					consumer.accept(getFromPosition(coords));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+		});
+	}
+	
 }

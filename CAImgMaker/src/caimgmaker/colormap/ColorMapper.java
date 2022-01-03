@@ -19,18 +19,19 @@ package caimgmaker.colormap;
 import java.awt.Color;
 
 import org.apache.commons.math3.FieldElement;
-import cellularautomata.grid2d.NumberGrid2D;
-import cellularautomata.grid2d.ObjectGrid2D;
-import cellularautomata.grid2d.IntGrid2D;
-import cellularautomata.grid2d.LongGrid2D;
+
+import cellularautomata.model2d.IntModel2D;
+import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.NumericModel2D;
+import cellularautomata.model2d.ObjectModel2D;
 
 public interface ColorMapper {
 	
-	<T extends FieldElement<T> & Comparable<T>> ObjectGrid2D<Color> getMappedGrid(NumberGrid2D<T> grid, T minValue, T maxValue);
+	<T extends FieldElement<T> & Comparable<T>> ObjectModel2D<Color> getMappedModel(NumericModel2D<T> grid, T minValue, T maxValue);
 	
-	ObjectGrid2D<Color> getMappedGrid(LongGrid2D grid, long minValue, long maxValue);
+	ObjectModel2D<Color> getMappedModel(LongModel2D grid, long minValue, long maxValue);
 	
-	ObjectGrid2D<Color> getMappedGrid(IntGrid2D grid, int minValue, int maxValue);
+	ObjectModel2D<Color> getMappedModel(IntModel2D grid, int minValue, int maxValue);
 	
 	/**
 	 * Return the colormap's name in a format that can be used in file names

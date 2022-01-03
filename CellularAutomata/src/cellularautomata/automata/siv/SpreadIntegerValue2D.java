@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import cellularautomata.Utils;
-import cellularautomata.grid2d.IsotropicSquareGrid2DA;
+import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricLongModel2D;
 
 /**
@@ -31,7 +31,7 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSquareGrid2DA, Serializable {
+public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSquareModelA, Serializable {
 
 	/**
 	 * 

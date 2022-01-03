@@ -22,10 +22,10 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import cellularautomata.Constants;
 import cellularautomata.automata.aether.IntAether4DAsymmetricSectionSwap;
-import cellularautomata.grid3d.IntGrid3D;
-import cellularautomata.grid4d.IntGrid4D;
+import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model4d.ActionableModel4D;
 import cellularautomata.model4d.ActionableModel4DZCrossSection;
+import cellularautomata.model4d.IntModel4D;
 
 public class IntAether4DSwapBisectingRegionOddImgMaker {
 	
@@ -79,7 +79,7 @@ public class IntAether4DSwapBisectingRegionOddImgMaker {
 			} else {
 				path = "./";
 			}
-			ActionableModel4D<IntGrid4D> ca;
+			ActionableModel4D<IntModel4D> ca;
 			if (isRestore) {
 				ca = new IntAether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
@@ -97,16 +97,16 @@ public class IntAether4DSwapBisectingRegionOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			ActionableModel4DZCrossSection<IntGrid4D, IntGrid3D> crossSection = 
-					new ActionableModel4DZCrossSection<IntGrid4D, IntGrid3D>(ca, 0);
+			ActionableModel4DZCrossSection<IntModel4D, IntModel3D> crossSection = 
+					new ActionableModel4DZCrossSection<IntModel4D, IntModel3D>(ca, 0);
 			String imgsPath = path + crossSection.getSubfolderPath() + "/img";
 			String backupPath = path + ca.getSubfolderPath() + "/backups";
 			if (isScanInitialIndexesDefined) {
-				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntGrid3D(
+				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntModel3D(
 						crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 						imgsPath, backupPath);
 			} else {
-				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntGrid3D(
+				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntModel3D(
 						crossSection, 0, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 						imgsPath, backupPath);
 			}
