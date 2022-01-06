@@ -22,7 +22,7 @@ import java.util.function.LongConsumer;
 public interface SequentialLongModel extends Model, Iterable<Long> {
 	
 	/**
-	 * Feeds every value of the region in a consistent order to an {@link LongConsumer}.
+	 * Feeds every value of the region, in a consistent order, to a {@link LongConsumer}.
 	 * @param consumer
 	 * @throws IOException 
 	 */
