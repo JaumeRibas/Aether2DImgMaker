@@ -31,7 +31,7 @@ import cellularautomata.model4d.LongModel4D;
 public class Aether4DSwapYZDiagonalCrossSectionEvenOddImgMaker {
 	
 	public static void main(String[] args) throws Exception {
-		args = new String[]{"-2635249153387078803", "0", "D:/data/test", "0"/*, "0", "0"*/};//debug
+//		args = new String[]{"-2635249153387078803", "0", "D:/data/test", "0"/*, "0", "0"*/};//debug
 		if (args.length < 2) {
 			System.err.println("You must specify an initial value and a z offset from y for the cross section.");
 		} else {
@@ -94,7 +94,7 @@ public class Aether4DSwapYZDiagonalCrossSectionEvenOddImgMaker {
 			if (isRestore) {
 				ca = new Aether4DAsymmetricSectionSwap(initValOrBackupPath, path);
 			} else {
-				ca = new Aether4DAsymmetricSectionSwap(initialValue, Constants.ONE_MB*8, path);
+				ca = new Aether4DAsymmetricSectionSwap(initialValue, Constants.ONE_GB*8, path);
 			}
 			boolean finished = false;
 			while ((ca.getStep() < initialStep || !checkCrossSectionInBounds(ca, zOffsetFromY)) && !finished) {
