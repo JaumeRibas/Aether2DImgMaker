@@ -36,9 +36,18 @@ import org.apache.commons.io.FileUtils;
 import cellularautomata.LongInputStreamIterator;
 import cellularautomata.model1d.SequentialLongModel1D;
 
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
 public class SequentialAether1DAsymmetricSection implements SequentialLongModel1D {
 	
-	private static final String fileNameFormat = "anisotropic_grid_d=1_step=%d.data";
+	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
+	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
+	
+	private static final String fileNameFormat = "step=%d.data";
 	private File gridFolder;
 	private File currentFile;
 	private long step;
@@ -47,6 +56,9 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 	private List<LongInputStreamIterator> iterators = new ArrayList<LongInputStreamIterator>();
 	
 	public SequentialAether1DAsymmetricSection(long initialValue, String folderPath) throws IOException {
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
+			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
+	    }
 		this.initialValue = initialValue;
 		gridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + "grid");
 		if (!gridFolder.exists()) {
@@ -95,25 +107,25 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 	}
 	
 	/**
-	 * Computes the next step of the model and executes an action for each new value in a consistent order.
+	 * Computes the next step of the model and feeds each new value to a consumer in a consistent order.
 	 * 
-	 * @param action an action to execute for each value
+	 * @param consumer a {@link LongConsumer} that accepts each value
 	 * @return true if the state changed or false otherwise
 	 * @throws IOException
 	 */
-	public boolean nextStep(LongConsumer action) throws IOException {
+	public boolean nextStep(LongConsumer consumer) throws IOException {
 		invalidateIterators();//to release the current file so it can be deleted
-		DataInputStream oldInput = null;
-		DataOutputStream newOutput = null;
+		DataInputStream oldGridReader = null;
+		DataOutputStream newGridWriter = null;
 		try {
-			oldInput = new DataInputStream(new BufferedInputStream(new FileInputStream(currentFile)));
+			oldGridReader = new DataInputStream(new BufferedInputStream(new FileInputStream(currentFile)));
 			File newFile = new File(gridFolder.getPath() + File.separator + String.format(fileNameFormat, step + 1));
-			newOutput = new DataOutputStream(new FileOutputStream(newFile));
+			newGridWriter = new DataOutputStream(new FileOutputStream(newFile));
 			boolean firstTwoSlicesChanged = false;
 			long currentOldValue, greaterXOldValue, smallerXOldValue, currentNewValue = 0, greaterXNewValue = 0, smallerXNewValue = 0;
 			//x = 0
-			currentOldValue = oldInput.readLong();
-			greaterXOldValue = oldInput.readLong();
+			currentOldValue = oldGridReader.readLong();
+			greaterXOldValue = oldGridReader.readLong();
 			if (greaterXOldValue < currentOldValue) {
 				long toShare = currentOldValue - greaterXOldValue;
 				long share = toShare/3;
@@ -135,7 +147,7 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 			//reuse values obtained previously
 			smallerXOldValue = currentOldValue;
 			currentOldValue = greaterXOldValue;
-			greaterXOldValue = oldInput.readLong();
+			greaterXOldValue = oldGridReader.readLong();
 			if (smallerXOldValue < currentOldValue) {
 				if (greaterXOldValue < currentOldValue) {
 					if (smallerXOldValue == greaterXOldValue) {
@@ -207,28 +219,28 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 					currentNewValue += currentOldValue;
 				}
 			}
-			newOutput.writeLong(smallerXNewValue);
-			action.accept(smallerXNewValue);
+			newGridWriter.writeLong(smallerXNewValue);
+			consumer.accept(smallerXNewValue);
 			// x >= 2
-			boolean anyOtherChanged = toppleRangeBeyondX1(oldInput, newOutput, currentOldValue, greaterXOldValue, smallerXOldValue, 
-						currentNewValue, greaterXNewValue, smallerXNewValue, action);
-			oldInput.close();
-			newOutput.close();
+			boolean anyOtherChanged = toppleRangeBeyondX1(oldGridReader, newGridWriter, currentOldValue, greaterXOldValue, smallerXOldValue, 
+						currentNewValue, greaterXNewValue, smallerXNewValue, consumer);
+			oldGridReader.close();
+			newGridWriter.close();
 			currentFile.delete();
 			currentFile = newFile;
 			step++;
 			return firstTwoSlicesChanged || anyOtherChanged;
 		} finally {
-			if (oldInput != null) {
-				oldInput.close();
+			if (oldGridReader != null) {
+				oldGridReader.close();
 			}
-			if (newOutput != null) {
-				newOutput.close();
+			if (newGridWriter != null) {
+				newGridWriter.close();
 			}
 		}		
 	}
 	
-	private boolean toppleRangeBeyondX1(DataInputStream oldInput, DataOutputStream newOutput, long currentOldValue, long greaterXOldValue, long smallerXOldValue, 
+	private boolean toppleRangeBeyondX1(DataInputStream oldGridInput, DataOutputStream newGridOutput, long currentOldValue, long greaterXOldValue, long smallerXOldValue, 
 			long currentNewValue, long greaterXNewValue, long smallerXNewValue, LongConsumer action) throws IOException {
 		boolean anySliceToppled = false;
 		boolean currentSliceToppled = false;
@@ -243,7 +255,7 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 			smallerXOldValue = currentOldValue;
 			currentOldValue = greaterXOldValue;
 			try {
-				greaterXOldValue = oldInput.readLong();					
+				greaterXOldValue = oldGridInput.readLong();					
 			} catch (EOFException e) {
 				endReached = true;
 			}
@@ -323,13 +335,13 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 				}
 				anySliceToppled = anySliceToppled || currentSliceToppled;
 			}
-			newOutput.writeLong(smallerXNewValue);
+			newGridOutput.writeLong(smallerXNewValue);
 			action.accept(smallerXNewValue);
 		}
-		newOutput.writeLong(currentNewValue);
+		newGridOutput.writeLong(currentNewValue);
 		action.accept(currentNewValue);
 		if (currentSliceToppled || previousSliceToppled) {
-			newOutput.writeLong(0); //extend the grid
+			newGridOutput.writeLong(0); //extend the grid
 			maxX++;
 		}
 		return anySliceToppled;
