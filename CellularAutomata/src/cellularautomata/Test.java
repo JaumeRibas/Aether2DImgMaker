@@ -729,38 +729,6 @@ public class Test {
 		printVonNeumannNeighborhood(ae, w, x, y, z);
 	}
 	
-	public static void testSort() {
-		int testCount = 1000000;
-		int arrayLength = 6;
-		
-		int lengthMinusOne = arrayLength - 1;
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-		boolean error = false;
-		int[][] array2 = new int[arrayLength][];
-		for (int i = 0; i < testCount; i++) {
-			int[] array = new int[arrayLength];
-			for (int j = 0; j < arrayLength; j++) {
-				array[j] = random.nextInt();
-			}
-			Utils.sortNeighborsByValueDesc(arrayLength, array, array2);
-			error = false;
-//			System.out.println(Arrays.toString(array));
-			for (int j = 0; j < lengthMinusOne; j++) {
-				if (array[j] < array[j + 1]) {
-					System.out.println("Error!");
-					error = true;
-					break;
-				}
-			}
-			if (error) {
-				break;
-			}
-		}
-		if (!error) {
-			System.out.println("Success!");
-		}
-	}
-	
 	public static void timeIntAether3D(int singleSource) {
 		IntAether3D ae1 = new IntAether3D(singleSource);
 		long millis = System.currentTimeMillis();
@@ -1181,11 +1149,11 @@ public class Test {
 		}
 	}
 	
-	public static void compareAllSteps(LongModel3D ca1, ActionableModel3D<IntModel3D> ca2) {
-		compareAllSteps(ca2 , ca1);
+	public static void compareAllStepsFromIntModel(LongModel3D ca1, ActionableModel3D<IntModel3D> ca2) {
+		compareAllStepsFromIntModel(ca2 , ca1);
 	}
 	
-	public static void compareAllSteps(ActionableModel3D<IntModel3D> ca1, LongModel3D ca2) {
+	public static void compareAllStepsFromIntModel(ActionableModel3D<IntModel3D> ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1235,7 +1203,7 @@ public class Test {
 		}
 	}
 	
-	public static void compare2(ActionableModel3D<LongModel3D> ca1, LongModel3D ca2) {
+	public static void compareAllStepsFromLongModel(ActionableModel3D<LongModel3D> ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1287,11 +1255,11 @@ public class Test {
 		}
 	}
 	
-	public static void compareAllSteps(LongModel4D ca1, ActionableModel4D<LongModel4D> ca2) {
-		compareAllSteps(ca2, ca1);
+	public static void compareAllStepsFromLongModel(LongModel4D ca1, ActionableModel4D<LongModel4D> ca2) {
+		compareAllStepsFromLongModel(ca2, ca1);
 	}
 	
-	public static void compareAllSteps(ActionableModel4D<LongModel4D> ca1, LongModel4D ca2) {
+	public static void compareAllStepsFromLongModel(ActionableModel4D<LongModel4D> ca1, LongModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
