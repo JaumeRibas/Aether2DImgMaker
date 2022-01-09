@@ -24,7 +24,7 @@ public interface SymmetricLongModel1D extends LongModel1D, SymmetricModel1D {
 	 * That is, where the x-coordinate is inside the [{@link #getAsymmetricMinX()}, {@link #getAsymmetricMaxX()}] bounds.
 	 * </p>
 	 * <p>
-	 * The result of getting the value of a position outside this bounds is undefined.
+	 * The result of getting the value of a position outside these bounds is undefined.
 	 * <p>
 	 * 
 	 * @param x the position on the x-axis

@@ -31,7 +31,7 @@ public interface SymmetricLongModel2D extends LongModel2D, SymmetricModel2D {
 	 * and the x-coordinate is inside the [{@link #getAsymmetricMinX(int y)}, {@link #getAsymmetricMaxX(int y)}] bounds.
 	 * </p>
 	 * <p>
-	 * The result of getting the value of a position outside this bounds is undefined.
+	 * The result of getting the value of a position outside these bounds is undefined.
 	 * <p>
 	 * 
 	 * @param x the position on the x-axis
