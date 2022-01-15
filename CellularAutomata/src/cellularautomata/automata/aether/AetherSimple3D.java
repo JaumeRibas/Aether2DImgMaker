@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.LongModel3D;
+import cellularautomata.model3d.IsotropicCubicModelA;
+import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +31,7 @@ import cellularautomata.model3d.LongModel3D;
  * @author Jaume
  *
  */
-public class AetherSimple3D implements LongModel3D {	
+public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModelA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -237,6 +238,11 @@ public class AetherSimple3D implements LongModel3D {
 	}
 	
 	@Override
+	public long getFromAsymmetricPosition(int x, int y, int z){
+		return getFromPosition(x, y, z);
+	}
+	
+	@Override
 	public int getMinX() {
 		int arrayMinX = - originIndex;
 		int valuesMinX;
@@ -258,6 +264,11 @@ public class AetherSimple3D implements LongModel3D {
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
+	}
+	
+	@Override
+	public int getAsymmetricMaxX() {
+		return getMaxX();
 	}
 	
 	@Override

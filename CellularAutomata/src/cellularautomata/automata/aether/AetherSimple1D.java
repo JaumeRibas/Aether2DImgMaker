@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model1d.LongModel1D;
+import cellularautomata.model1d.IsotropicModel1DA;
+import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +31,7 @@ import cellularautomata.model1d.LongModel1D;
  * @author Jaume
  *
  */
-public class AetherSimple1D implements LongModel1D {	
+public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -185,6 +186,11 @@ public class AetherSimple1D implements LongModel1D {
 	}
 	
 	@Override
+	public long getFromAsymmetricPosition(int x){
+		return getFromPosition(x);
+	}	
+	
+	@Override
 	public int getMinX() {
 		int arrayMinX = - xOriginIndex;
 		int valuesMinX;
@@ -206,6 +212,11 @@ public class AetherSimple1D implements LongModel1D {
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
+	}
+	
+	@Override
+	public int getAsymmetricMaxX() {
+		return getMaxX();
 	}
 	
 	@Override

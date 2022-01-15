@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model5d.LongModel5D;
+import cellularautomata.model5d.IsotropicHypercubicModel5DA;
+import cellularautomata.model5d.SymmetricLongModel5D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +31,7 @@ import cellularautomata.model5d.LongModel5D;
  * @author Jaume
  *
  */
-public class AetherSimple5D implements LongModel5D {	
+public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubicModel5DA {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -283,6 +284,11 @@ public class AetherSimple5D implements LongModel5D {
 	}
 	
 	@Override
+	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z){
+		return getFromPosition(v, w, x, y, z);
+	}
+	
+	@Override
 	public int getMinV() {
 		int arrayMinV = - originIndex;
 		int valuesMinV;
@@ -304,6 +310,11 @@ public class AetherSimple5D implements LongModel5D {
 			valuesMaxV = arrayMaxV - 1;
 		}
 		return valuesMaxV;
+	}
+
+	@Override
+	public int getAsymmetricMaxV() {
+		return getMaxV();
 	}
 	
 	@Override

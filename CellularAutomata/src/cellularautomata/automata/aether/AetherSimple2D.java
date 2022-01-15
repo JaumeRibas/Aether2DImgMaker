@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.IsotropicSquareModelA;
+import cellularautomata.model2d.SymmetricLongModel2D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +31,7 @@ import cellularautomata.model2d.LongModel2D;
  * @author Jaume
  *
  */
-public class AetherSimple2D implements LongModel2D {	
+public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -220,6 +221,11 @@ public class AetherSimple2D implements LongModel2D {
 	}
 	
 	@Override
+	public long getFromAsymmetricPosition(int x, int y){
+		return getFromPosition(x, y);
+	}	
+	
+	@Override
 	public int getMinX() {
 		int arrayMinX = - xOriginIndex;
 		int valuesMinX;
@@ -241,6 +247,11 @@ public class AetherSimple2D implements LongModel2D {
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
+	}
+	
+	@Override
+	public int getAsymmetricMaxX() {
+		return getMaxX();
 	}
 	
 	@Override

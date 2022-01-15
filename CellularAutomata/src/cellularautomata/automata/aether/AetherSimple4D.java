@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model4d.LongModel4D;
+import cellularautomata.model4d.IsotropicHypercubicModel4DA;
+import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
@@ -30,7 +31,7 @@ import cellularautomata.model4d.LongModel4D;
  * @author Jaume
  *
  */
-public class AetherSimple4D implements LongModel4D {	
+public class AetherSimple4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
@@ -259,6 +260,11 @@ public class AetherSimple4D implements LongModel4D {
 	}
 	
 	@Override
+	public long getFromAsymmetricPosition(int w, int x, int y, int z){
+		return getFromPosition(w, x, y, z);
+	}
+	
+	@Override
 	public int getMinW() {
 		int arrayMinW = - originIndex;
 		int valuesMinW;
@@ -280,6 +286,11 @@ public class AetherSimple4D implements LongModel4D {
 			valuesMaxW = arrayMaxW - 1;
 		}
 		return valuesMaxW;
+	}
+
+	@Override
+	public int getAsymmetricMaxW() {
+		return getMaxW();
 	}
 
 	@Override
