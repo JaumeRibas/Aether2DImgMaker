@@ -938,7 +938,7 @@ public class CodeGeneration {
 		char firstAxisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, 0);
 		if (neighborCount > 2) {
 			//add arrays to reuse
-			method.append("long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, ");
+			method.append("long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, ");
 			if (type.hasMultipliers) {
 				method.append("int[] relevantAsymmetricNeighborShareMultipliers, ");
 			}
@@ -1058,7 +1058,7 @@ public class CodeGeneration {
 				}
 				method.append(", ");
 			}
-			method.append("relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, ");
+			method.append("relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, ");
 			if (type.hasMultipliers) {
 				method.append("relevantAsymmetricNeighborShareMultipliers, ");
 			}
@@ -1692,7 +1692,7 @@ public class CodeGeneration {
 		return count;
 	}
 	
-	private static int[] getAsymmetricCoords(int[] coords){	
+	private static int[] getAsymmetricCoords(int[] coords) {	
 		int[] asymmetricCoords = coords.clone();
 		for (int i = 0; i < asymmetricCoords.length; i++) {
 			int coord = asymmetricCoords[i];

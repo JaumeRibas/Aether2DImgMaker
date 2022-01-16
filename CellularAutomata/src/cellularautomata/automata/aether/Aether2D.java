@@ -80,7 +80,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		long[][] newGrid = new long[maxX + 3][];
 		boolean changed = false;
 		long currentValue, greaterXNeighborValue;
@@ -116,6 +116,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		long[] relevantAsymmetricNeighborValues = new long[4];
+		int[] sortedNeighborsIndexes = new int[4];
 		int[][] relevantAsymmetricNeighborCoords = new int[4][2];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[4];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[4];// to compensate for omitted symmetric positions
@@ -155,7 +156,8 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 			relevantAsymmetricNeighborCount++;
 		}
 		if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+				relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
 		}
 		// x = 1, y = 1
@@ -281,7 +283,8 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 			relevantAsymmetricNeighborCount++;
 		}
 		if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, 
-				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
+				relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
 		}
 		// x = 2, y = 1
@@ -325,7 +328,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 			relevantAsymmetricNeighborCount++;
 		}
 		if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
 		}
 		// x = 2, y = 2
@@ -412,12 +415,14 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
 		if (toppleRangeBeyondX2(xSlices, newXSlices, newGrid, 3, edgeMinusTwo, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse these arrays?
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes)) { // is it faster to reuse these arrays?
 			changed = true;
 		}
 		//edge - 2 <= x < edge
 		if (toppleRangeBeyondX2(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
+				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes)) {
 			changed = true;
 			maxX++;
 		}
@@ -431,7 +436,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	
 	private boolean toppleRangeBeyondX2(long[][] xSlices, long[][] newXSlices, long[][] newGrid, int minX, int maxX, 
 			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
-			int[] relevantAsymmetricNeighborSymmetryCounts) {
+			int[] relevantAsymmetricNeighborSymmetryCounts, int[] sortedNeighborsIndexes) {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		long[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
@@ -482,7 +487,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 				relevantAsymmetricNeighborCount++;
 			}
 			if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, 
-					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
+					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
 			}
 			// y = 1
@@ -526,7 +531,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 				relevantAsymmetricNeighborCount++;
 			}
 			if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
 			}
 			// 2 >= y < x - 1
@@ -568,7 +573,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 					relevantAsymmetricNeighborCount++;
 				}
 				if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, 
-						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount)) {
+						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 					anyToppled = true;
 				}
 			}
@@ -613,7 +618,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 				relevantAsymmetricNeighborCount++;
 			}
 			if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
 			}
 			// y = x
@@ -704,18 +709,18 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
-			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
+			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		switch (neighborCount) {
 			case 4:
-				Utils.sort4NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+				Utils.sortDescendingLength4(neighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
-						neighborCoords, neighborShareMultipliers, neighborCount);
+						neighborCoords, neighborShareMultipliers, neighborCount, sortedNeighborsIndexes);
 				break;
 			case 3:
-				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
+				Utils.sortDescendingLength3(neighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
-						neighborCoords, neighborShareMultipliers, neighborCount);
+						neighborCoords, neighborShareMultipliers, neighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
 				long n0Val = neighborValues[0], n1Val = neighborValues[1];
@@ -787,7 +792,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
-			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
+			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		boolean isFirstNeighbor = true;
 		long previousNeighborValue = 0;
@@ -800,8 +805,8 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < neighborCount; j++) {
-						int[] nc = neighborCoords[j];
-						newXSlices[nc[0]][nc[1]] += share * neighborShareMultipliers[j];
+						int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
+						newXSlices[nc[0]][nc[1]] += share * neighborShareMultipliers[sortedNeighborsIndexes[j]];
 					}
 				}
 				previousNeighborValue = neighborValue;
@@ -812,18 +817,18 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
-			int[][] neighborCoords, int neighborCount) {
+			int[][] neighborCoords, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		switch (neighborCount) {
 			case 4:
-				Utils.sort4NeighborsByValueDesc(neighborValues, neighborCoords);
+				Utils.sortDescendingLength4(neighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
-						neighborCoords, neighborCount);
+						neighborCoords, neighborCount, sortedNeighborsIndexes);
 				break;
 			case 3:
-				Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
+				Utils.sortDescendingLength3(neighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, neighborValues, 
-						neighborCoords, neighborCount);
+						neighborCoords, neighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
 				long n0Val = neighborValues[0], n1Val = neighborValues[1];
@@ -894,7 +899,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
-			int[][] neighborCoords, int neighborCount) {
+			int[][] neighborCoords, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		boolean isFirstNeighbor = true;
 		long previousNeighborValue = 0;
@@ -907,7 +912,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < neighborCount; j++) {
-						int[] nc = neighborCoords[j];
+						int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
 						newXSlices[nc[0]][nc[1]] += share;
 					}
 				}
@@ -919,18 +924,18 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
-			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount) {
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 4:
-				Utils.sort4NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				Utils.sortDescendingLength4(asymmetricNeighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
-						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount, sortedNeighborsIndexes);
 				break;
 			case 3:
-				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
+				Utils.sortDescendingLength3(asymmetricNeighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
-						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
 				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
@@ -1002,7 +1007,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
-			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount) {
+			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		boolean isFirstNeighbor = true;
 		long previousNeighborValue = 0;
@@ -1016,13 +1021,13 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < asymmetricNeighborCount; j++) {
-						int[] nc = asymmetricNeighborCoords[j];
+						int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
 						newXSlices[nc[0]][nc[1]] += share;
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
-			shareCount -= asymmetricNeighborSymmetryCounts[i];
+			shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[i]];
 		}
 		newXSlices[1][y] += value;
 		return toppled;
@@ -1030,18 +1035,18 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	
 	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
-			int neighborCount, int asymmetricNeighborCount) {
+			int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 			case 4:
-				Utils.sort4NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				Utils.sortDescendingLength4(asymmetricNeighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
-						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount, sortedNeighborsIndexes);
 				break;
 			case 3:
-				Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
+				Utils.sortDescendingLength3(asymmetricNeighborValues, sortedNeighborsIndexes);
 				toppled = topplePositionSortedNeighbors(newXSlices, value, y, asymmetricNeighborValues, 
-						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
+						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
 				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
@@ -1115,7 +1120,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	
 	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
-			int neighborCount, int asymmetricNeighborCount) {
+			int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		boolean isFirstNeighbor = true;
 		long previousNeighborValue = 0;
@@ -1129,20 +1134,20 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < asymmetricNeighborCount; j++) {
-						int[] nc = asymmetricNeighborCoords[j];
-						newXSlices[nc[0]][nc[1]] += share * asymmetricNeighborShareMultipliers[j];
+						int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
+						newXSlices[nc[0]][nc[1]] += share * asymmetricNeighborShareMultipliers[sortedNeighborsIndexes[j]];
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
-			shareCount -= asymmetricNeighborSymmetryCounts[i];
+			shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[i]];
 		}
 		newXSlices[1][y] += value;
 		return toppled;
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y){	
+	public long getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		long value = 0;
@@ -1161,7 +1166,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y){	
+	public long getFromAsymmetricPosition(int x, int y) {	
 		return grid[x][y];
 	}
 

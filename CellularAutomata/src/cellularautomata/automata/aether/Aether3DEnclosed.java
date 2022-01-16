@@ -94,13 +94,14 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicCubicMod
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		long[][][] newGrid = null;
 		newGrid = new long[grid.length][][];
 		boolean changed = false;
 		newGrid[0] = Utils.buildAnisotropic2DLongArray(1);
 		boolean first = true;
 		long[] neighborValues = new long[6];
+		int[] sortedNeighborsIndexes = new int[6];
 		byte[] neighborDirections = new byte[6];
 		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, first = false) {
 			if (nextX < newGrid.length) {
@@ -150,7 +151,7 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicCubicMod
 					
 					if (relevantNeighborCount > 0) {
 						//sort
-						Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
+						Utils.sortDescending(relevantNeighborCount, neighborValues, sortedNeighborsIndexes);
 						//divide
 						boolean isFirstNeighbor = true;
 						long previousNeighborValue = 0;
@@ -164,7 +165,7 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicCubicMod
 									changed = true;
 									value = value - toShare + toShare%shareCount + share;
 									for (int j = i; j < relevantNeighborCount; j++) {
-										addToNeighbor(newGrid, x, y, z, neighborDirections[j], share);
+										addToNeighbor(newGrid, x, y, z, neighborDirections[sortedNeighborsIndexes[j]], share);
 									}
 								}
 								previousNeighborValue = neighborValue;
@@ -275,7 +276,7 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicCubicMod
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y, int z){
+	public long getFromPosition(int x, int y, int z) {
 		x = getEnclosedCoord(x);
 		y = getEnclosedCoord(y);
 		z = getEnclosedCoord(z);
@@ -317,7 +318,7 @@ public class Aether3DEnclosed implements SymmetricLongModel3D, IsotropicCubicMod
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z){	
+	public long getFromAsymmetricPosition(int x, int y, int z) {	
 		return grid[x][y][z];
 	}
 

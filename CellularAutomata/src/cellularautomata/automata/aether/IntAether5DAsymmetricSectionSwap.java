@@ -187,6 +187,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		triggerBeforeProcessing();
 		boolean gridChanged = false;
 		int[] relevantAsymmetricNeighborValues = new int[10];
+		int[] sortedNeighborsIndexes = new int[10];
 		int[][] relevantAsymmetricNeighborCoords = new int[10][5];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[10];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[10];// to compensate for omitted symmetric positions		
@@ -207,7 +208,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			}
 		}
 		int currentMaxV = maxV;//it can change during computing
-		boolean anySlicePositionToppled = toppleRangeFromZeroToFive(gridBlockA, newVSlices, relevantAsymmetricNeighborValues, 
+		boolean anySlicePositionToppled = toppleRangeFromZeroToFive(gridBlockA, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts);
 		gridChanged = gridChanged || anySlicePositionToppled;
@@ -220,7 +221,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			while (v <= currentMaxV && v < gridBlockA.maxV) {
 				slideGridSlices(newVSlices, new AnisotropicIntModel5DSlice(v + 1));
 				anySlicePositionToppled = toppleSliceBeyondFive(gridBlockA, v, vSlices, newVSlices, 
-						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(v - 1, newVSlices[LEFT]);
@@ -238,7 +239,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				}
 				slideGridSlices(newVSlices, new AnisotropicIntModel5DSlice(v + 1));
 				anySlicePositionToppled = toppleLastSliceOfBlock(gridBlockA, gridBlockB, v, vSlices, newVSlices, 
-						relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 				gridChanged = gridChanged || anySlicePositionToppled;
 				gridBlockA.setSlice(v - 1, newVSlices[LEFT]);
@@ -246,7 +247,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				if (v <= currentMaxV) {
 					slideGridSlices(newVSlices, new AnisotropicIntModel5DSlice(v + 1));
 					anySlicePositionToppled = toppleFirstSliceOfBlock(gridBlockA, gridBlockB, v, vSlices, newVSlices, 
-							relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+							relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 					gridChanged = gridChanged || anySlicePositionToppled;
 					gridBlockA.setSlice(v - 1, newVSlices[LEFT]);
@@ -272,7 +273,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 	}
 
 	private boolean toppleRangeFromZeroToFive(SizeLimitedAnisotropicIntModel5DBlock gridBlock,
-			AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, 
+			AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
@@ -305,7 +306,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterVNeighborValue = greaterVSlice.getFromPosition(0, 0, 0, 0);
 		int greaterWNeighborValue = currentVSlice.getFromPosition(1, 0, 0, 0);
 		if (topplePositionType2(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -316,7 +317,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterVNeighborValue = greaterVSlice.getFromPosition(1, 0, 0, 0);
 		int greaterXNeighborValue = currentVSlice.getFromPosition(1, 1, 0, 0);
 		if (topplePositionType3(currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -327,7 +328,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterVNeighborValue = greaterVSlice.getFromPosition(1, 1, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 0);
 		if (topplePositionType4(currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -337,7 +338,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		currentValue = greaterYNeighborValue;
 		greaterVNeighborValue = greaterVSlice.getFromPosition(1, 1, 1, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 1);
-		if (topplePositionType5(currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, 
+		if (topplePositionType5(currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -367,7 +368,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(0, 0, 0, 0);
 		greaterWNeighborValue = currentVSlice.getFromPosition(1, 0, 0, 0);
 		if (topplePositionType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// 2 | 1 | 0 | 0 | 0 | 8
@@ -379,7 +380,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 0, 0, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(1, 1, 0, 0);
 		if (topplePositionType8(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
-				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -392,7 +393,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 0);
 		if (topplePositionType9(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 6, 
-				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -405,7 +406,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 1);
 		if (topplePositionType10(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 4, 
-				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -417,7 +418,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(1, 1, 1, 1);
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		if (topplePositionType11(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 2, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -427,7 +428,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(1, 0, 0, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		if (topplePositionType12(2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// 2 | 2 | 1 | 0 | 0 | 13
@@ -439,7 +440,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 0);
 		if (topplePositionType13(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 6, 
-				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -452,7 +453,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		if (topplePositionType14(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 4, 
-				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -464,7 +465,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 1);
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		if (topplePositionType15(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 2, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -474,7 +475,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 0);
 		if (topplePositionType16(2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// 2 | 2 | 2 | 1 | 0 | 17
@@ -486,7 +487,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		if (topplePositionType17(2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 4, 
-				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -498,7 +499,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 1);
 		if (topplePositionType18(2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 2, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -509,7 +510,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		currentValue = currentVSlice.getFromPosition(2, 2, 2, 0);		
 		greaterVNeighborValue = greaterVSlice.getFromPosition(2, 2, 2, 0);
 		if (topplePositionType19(2, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// 2 | 2 | 2 | 2 | 1 | 20
@@ -520,7 +521,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 2);
 		if (topplePositionType20(2, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 2,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// 2 | 2 | 2 | 2 | 2 | 21
@@ -545,7 +546,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
-		if (toppleRangeType1(vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -557,7 +558,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(1, 0, 0, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		if (topplePositionType8(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
-				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -572,7 +573,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 0);
 		if (topplePositionType22(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
-				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -587,7 +588,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		if (topplePositionType23(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -601,7 +602,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 1);
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		if (topplePositionType24(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -613,7 +614,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 0);
 		if (topplePositionType9(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -628,7 +629,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		if (topplePositionType25(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -642,7 +643,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 1);
 		if (topplePositionType26(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -655,7 +656,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(2, 2, 2, 0);
 		greaterWNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 0);
 		if (topplePositionType10(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, 
-				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -669,7 +670,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 2);
 		if (topplePositionType27(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -681,11 +682,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(2, 2, 2, 2);
 		greaterWNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);
 		if (topplePositionType11(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 1, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType2(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType2(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -697,7 +698,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 1, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 0);
 		if (topplePositionType13(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -712,7 +713,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 1);
 		if (topplePositionType28(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -726,7 +727,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 1);
 		if (topplePositionType29(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -739,7 +740,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 0);
 		if (topplePositionType14(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, 
-				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -753,7 +754,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);		
 		if (topplePositionType30(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -765,11 +766,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 2);
 		greaterXNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 2);
 		if (topplePositionType15(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 1, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType3(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType3(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -781,7 +782,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 3, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 1);
 		if (topplePositionType17(3, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
-				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -795,7 +796,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 2);
 		if (topplePositionType31(3, 2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 2, 
-				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -807,11 +808,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 3, 3, 2);
 		if (topplePositionType18(3, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 1, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType4(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType4(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -829,11 +830,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
-		if (toppleRangeType5(vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType6(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType6(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -847,7 +848,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 1, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 0);
 		if (topplePositionType22(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
-				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -864,7 +865,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 1);
 		if (topplePositionType36(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -880,7 +881,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 1);
 		if (topplePositionType37(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -895,7 +896,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 0);
 		if (topplePositionType23(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -911,7 +912,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);
 		if (topplePositionType38(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -925,11 +926,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 2);
 		greaterXNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 2);
 		if (topplePositionType24(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType7(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType7(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -943,7 +944,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 3, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 1);
 		if (topplePositionType25(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -959,7 +960,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 2);
 		if (topplePositionType39(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -973,15 +974,15 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 3, 3, 2);
 		if (topplePositionType26(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType8(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType8(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType9(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType9(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -995,7 +996,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(4, 3, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(4, 3, 2, 1);
 		if (topplePositionType28(4, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -1011,7 +1012,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(4, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(4, 3, 2, 2);
 		if (topplePositionType43(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -1025,11 +1026,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(4, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(4, 3, 3, 2);
 		if (topplePositionType29(4, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType10(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType10(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -1047,15 +1048,15 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
-		if (toppleRangeType11(vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType12(4, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType12(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType13(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType13(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -1071,7 +1072,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(4, 3, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(4, 3, 2, 1);
 		if (topplePositionType36(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -1089,7 +1090,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(4, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(4, 3, 2, 2);
 		if (topplePositionType47(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
 		}
@@ -1105,11 +1106,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(4, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(4, 3, 3, 2);
 		if (topplePositionType37(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType14(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType14(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -1118,32 +1119,32 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 	}
 
 	private boolean toppleSliceBeyondFive(SizeLimitedAnisotropicIntModel5DBlock gridBlock, int v, AnisotropicIntModel5DSlice[] vSlices, 
-			AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, 
+			AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFive(gridBlock, gridBlock, gridBlock, v, vSlices, newVSlices, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
 	private boolean toppleLastSliceOfBlock(SizeLimitedAnisotropicIntModel5DBlock leftGridBlock, SizeLimitedAnisotropicIntModel5DBlock rightGridBlock,
-			int v, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, 
+			int v, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFive(leftGridBlock, leftGridBlock, rightGridBlock, v, vSlices, newVSlices, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
 	private boolean toppleFirstSliceOfBlock(SizeLimitedAnisotropicIntModel5DBlock leftGridBlock, SizeLimitedAnisotropicIntModel5DBlock rightGridBlock,
-			int v, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, 
+			int v, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts) {
 		return toppleSliceBeyondFive(leftGridBlock, rightGridBlock, rightGridBlock, v, vSlices, newVSlices, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers,	relevantAsymmetricNeighborSymmetryCounts);
 	}
 
 	private boolean toppleSliceBeyondFive(SizeLimitedAnisotropicIntModel5DBlock leftGridBlock, SizeLimitedAnisotropicIntModel5DBlock centerGridBlock, 
 			SizeLimitedAnisotropicIntModel5DBlock rightGridBlock, int v, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, 
-			int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+			int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts) {
 		boolean changed = false;
 		int vMinusOne = v - 1, vMinusTwo = v - 2, vMinusThree = v - 3, vMinusFour = v - 4, vPlusOne = v + 1;
@@ -1153,15 +1154,15 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		vSlices[0] = smallerVSlice;
 		vSlices[1] = currentVSlice;
 		vSlices[2] = greaterVSlice;
-		if (toppleRangeType11(vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType15(4, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType15(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType16(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType16(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -1177,7 +1178,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(4, 3, 1, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(4, 3, 2, 1);
 		if (topplePositionType36(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -1195,7 +1196,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(4, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(4, 3, 2, 2);
 		if (topplePositionType47(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
 		}
@@ -1211,21 +1212,21 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(4, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(4, 3, 3, 2);
 		if (topplePositionType37(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType17(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType17(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		int w = 5, wMinusOne = w - 1, wPlusOne = w + 1;
 		for (int wMinusTwo = w - 2, wMinusThree = w - 3; w != vMinusOne; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne++) {
-			if (toppleRangeType15(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType15(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType18(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType18(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1241,7 +1242,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, 3, 1, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 1);
 			if (topplePositionType36(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -1259,7 +1260,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, 3, 1, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 2);
 			if (topplePositionType47(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -1275,17 +1276,17 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 2);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, 3, 3, 2);
 			if (topplePositionType37(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
-					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType19(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType19(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}			
 			int x = 4, xMinusOne = x - 1, xPlusOne = x + 1;
 			for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-				if (toppleRangeType18(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+				if (toppleRangeType18(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -1301,7 +1302,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 				if (topplePositionType58(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
-						greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+						greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -1319,7 +1320,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 				if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1335,7 +1336,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 2, 2);
 				greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 				if (topplePositionType59(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-						smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+						smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -1353,7 +1354,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 					greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 					if (topplePositionType58(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
-							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
 					}
@@ -1371,7 +1372,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 					greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 					if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
@@ -1391,7 +1392,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 						smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 						greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 						if (topplePositionType63(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
-								greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, newVSlices)) {
+								greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newVSlices)) {
 							changed = true;
 						}
 					}
@@ -1409,7 +1410,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
@@ -1426,7 +1427,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 					greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 					if (topplePositionType59(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-							smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+							smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
 					}
@@ -1443,7 +1444,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 				if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -1461,7 +1462,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 				if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1481,7 +1482,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
@@ -1500,7 +1501,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1517,16 +1518,16 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 				greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 				if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
-						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
-				if (toppleRangeType19(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+				if (toppleRangeType19(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType16(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType16(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1542,7 +1543,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 			if (topplePositionType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -1560,7 +1561,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 			if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -1576,7 +1577,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 2, 2);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 			if (topplePositionType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -1594,7 +1595,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 				if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -1612,7 +1613,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 				if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1632,7 +1633,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
@@ -1651,7 +1652,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1668,7 +1669,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 				greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 				if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -1685,7 +1686,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 			if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -1703,7 +1704,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 			if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -1723,7 +1724,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1742,7 +1743,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -1759,20 +1760,20 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
-					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType17(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType17(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 		}
-		if (toppleRangeType12(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType12(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType20(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType20(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -1788,7 +1789,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, 3, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 1);
 		if (topplePositionType36(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -1806,7 +1807,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 2);
 		if (topplePositionType47(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
 		}
@@ -1822,17 +1823,17 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 3, 3, 2);
 		if (topplePositionType37(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType21(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType21(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		int x = 4, xMinusOne = x - 1, xPlusOne = x + 1;
 		for (int xMinusTwo = x - 2; x != vMinusTwo; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-			if (toppleRangeType20(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType20(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1848,7 +1849,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 			if (topplePositionType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -1866,7 +1867,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 			if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -1882,7 +1883,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 2, 2);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 			if (topplePositionType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -1900,7 +1901,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 				if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -1918,7 +1919,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 				if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1938,7 +1939,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
@@ -1957,7 +1958,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -1974,7 +1975,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 				greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 				if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -1991,7 +1992,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 			if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -2009,7 +2010,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 			if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -2029,7 +2030,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -2048,7 +2049,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -2065,16 +2066,16 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
-					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType21(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType21(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 		}
-		if (toppleRangeType13(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType13(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -2090,7 +2091,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2108,7 +2109,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 		if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
 		}
@@ -2124,7 +2125,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 		if (topplePositionType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2142,7 +2143,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 			if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -2160,7 +2161,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 			if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -2180,7 +2181,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
@@ -2199,7 +2200,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -2216,7 +2217,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -2233,7 +2234,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 		if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2251,7 +2252,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 		if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
 		}
@@ -2271,7 +2272,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
@@ -2290,7 +2291,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 		if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
 		}
@@ -2307,11 +2308,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 		if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType14(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType14(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}		
@@ -2324,7 +2325,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		return changed;
 	}
 
-	private static boolean toppleRangeType1(AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType1(AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		AnisotropicIntModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
@@ -2334,7 +2335,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerVNeighborValue = smallerVSlice.getFromPosition(0, 0, 0, 0);
 		int greaterWNeighborValue = currentVSlice.getFromPosition(1, 0, 0, 0);
 		if (topplePositionType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | 1 | 0 | 0 | 0 | 22
@@ -2346,7 +2347,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 0, 0, 0);
 		int greaterXNeighborValue = currentVSlice.getFromPosition(1, 1, 0, 0);
 		if (topplePositionType8(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, 
-				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2359,7 +2360,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 0);
 		if (topplePositionType9(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 6, 
-				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2372,7 +2373,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 1);
 		if (topplePositionType10(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 4, 
-				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2384,14 +2385,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(1, 1, 1, 1);
 		greaterWNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		if (topplePositionType11(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerZNeighborValue, 2, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType2(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
@@ -2402,7 +2403,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerWNeighborValue = currentVSlice.getFromPosition(crdMinusOne, 0, 0, 0);
 		int greaterXNeighborValue = currentVSlice.getFromPosition(crd, 1, 0, 0);
 		if (topplePositionType12(crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// crd | crd | 1 | 0 | 0 | 36
@@ -2414,7 +2415,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(crd, 2, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(crd, 1, 1, 0);
 		if (topplePositionType13(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, 
-				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2427,7 +2428,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(crd, 2, 1, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, 1, 1, 1);
 		if (topplePositionType14(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, 
-				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2439,14 +2440,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(crdMinusOne, 1, 1, 1);
 		greaterXNeighborValue = currentVSlice.getFromPosition(crd, 2, 1, 1);
 		if (topplePositionType15(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType3(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
@@ -2457,7 +2458,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(crd, crdMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 1, 0);
 		if (topplePositionType16(crd, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// crd | crd | crd | 1 | 0 | 45
@@ -2469,7 +2470,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, 1, 1);
 		if (topplePositionType17(crd, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, 
-				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2481,14 +2482,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(crd, crdMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 2, 1);
 		if (topplePositionType18(crd, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType4(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
@@ -2499,7 +2500,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, 1);
 		if (topplePositionType19(crd, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// crd | crd | crd | crd | 1 | 50
@@ -2510,7 +2511,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, 2);
 		if (topplePositionType20(crd, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		int z = 2, zPlusOne = z + 1;
@@ -2523,7 +2524,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, zPlusOne);
 			if (topplePositionType46(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue,
-					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 		}
@@ -2535,7 +2536,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, zPlusOne);
 		if (topplePositionType20(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 1,
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// crd | crd | crd | crd | crd | 21
@@ -2549,11 +2550,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType5(AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		AnisotropicIntModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType1(vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -2565,7 +2566,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerWNeighborValue = currentVSlice.getFromPosition(1, 0, 0, 0);
 		int greaterXNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		if (topplePositionType32(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
-				greaterXNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterXNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | 2 | 1 | 0 | 0 | 53
@@ -2579,7 +2580,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 0);
 		if (topplePositionType22(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
-				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2594,7 +2595,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		if (topplePositionType23(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2608,7 +2609,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(1, 1, 1, 1);
 		greaterXNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		if (topplePositionType24(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2620,7 +2621,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(2, 1, 0, 0);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 0);
 		if (topplePositionType33(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
-				greaterYNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | 2 | 2 | 1 | 0 | 57
@@ -2634,7 +2635,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		if (topplePositionType25(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2648,7 +2649,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(2, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 1);
 		if (topplePositionType26(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2661,7 +2662,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(2, 2, 2, 0);
 		greaterWNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 0);
 		if (topplePositionType34(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
-				greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | 2 | 2 | 2 | 1 | 60
@@ -2674,7 +2675,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(2, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 2);
 		if (topplePositionType27(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2686,13 +2687,13 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(2, 2, 2, 2);
 		greaterWNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);
 		if (topplePositionType35(2,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType6(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
 		int  wMinusOne = w - 1, wPlusOne = w + 1;
@@ -2706,7 +2707,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 0, 0, 0);
 		int greaterXNeighborValue = currentVSlice.getFromPosition(w, 1, 0, 0);
 		if (topplePositionType8(w, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
-				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2721,7 +2722,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 2, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, 1, 1, 0);
 		if (topplePositionType22(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2736,7 +2737,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, 1, 1, 1);
 		if (topplePositionType23(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2750,14 +2751,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 1, 1, 1);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		if (topplePositionType24(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType7(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd = v - 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -2771,7 +2772,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(crd, crdMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 1, 0);
 		if (topplePositionType9(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2786,7 +2787,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, 1, 1);
 		if (topplePositionType25(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2800,14 +2801,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(crd, crdMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 2, 1);
 		if (topplePositionType26(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType8(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int v = crd + 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -2821,7 +2822,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, 1);
 		if (topplePositionType10(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, 
-				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2835,7 +2836,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, 2);
 		if (topplePositionType27(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2851,7 +2852,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, zPlusOne);
 			if (topplePositionType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
-					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -2866,7 +2867,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, zPlusOne);
 		if (topplePositionType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2878,12 +2879,12 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(crd, crd, crd, crd);
 		greaterWNeighborValue = currentVSlice.getFromPosition(crdPlusOne, crd, crd, crd);
 		if (topplePositionType11(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 1, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		int w = crdPlusOne, wMinusOne = crd;
-		if (toppleRangeType2(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType2(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -2895,7 +2896,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, 1, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 0);
 		if (topplePositionType40(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
-				greaterYNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | 2 | 1 | 0 | 79
@@ -2909,7 +2910,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		if (topplePositionType28(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2923,7 +2924,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 1);
 		if (topplePositionType29(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2936,7 +2937,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 2, 2, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 0);
 		if (topplePositionType41(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
-				greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | 2 | 2 | 1 | 82
@@ -2949,7 +2950,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 2);		
 		if (topplePositionType30(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2961,13 +2962,13 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 2, 2, 2);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 2);
 		if (topplePositionType42(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int crd, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType9(int crd, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int x = crd - 1;
 		int  crdMinusOne = x, xMinusOne = x - 1, xPlusOne = crd;
@@ -2981,7 +2982,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(crd, xMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(crd, x, 1, 0);
 		if (topplePositionType13(crd, x, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2996,7 +2997,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, x, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, x, 1, 1);
 		if (topplePositionType28(crd, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3010,14 +3011,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(crd, xMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, x, 2, 1);
 		if (topplePositionType29(crd, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType10(int crd1, int crd2, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType10(int crd1, int crd2, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd2 = crd1 - 1;
 		int crd2MinusOne = crd2 - 1, crd2PlusOne = crd1, crd1MinusOne = crd2, crd1MinusTwo = crd2MinusOne;
@@ -3031,7 +3032,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2MinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2, 1);
 		if (topplePositionType14(crd1, crd2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, 
-				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3045,7 +3046,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2MinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2, 2);		
 		if (topplePositionType30(crd1, crd2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3061,7 +3062,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2MinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2, zPlusOne);		
 			if (topplePositionType30(crd1, crd2, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
-					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3076,7 +3077,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2MinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd2, crd2, zPlusOne);		
 		if (topplePositionType30(crd1, crd2, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3088,11 +3089,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(crd1MinusOne, crd2, crd2, crd2);
 		greaterXNeighborValue = currentVSlice.getFromPosition(crd1, crd2PlusOne, crd2, crd2);
 		if (topplePositionType15(crd1, crd2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 1, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType3(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType3(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3104,7 +3105,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, 2, 1);
 		if (topplePositionType44(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
-				greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// crd1 | crd1 | crd1 | 2 | 1 | 92
@@ -3117,7 +3118,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, 2, 2);
 		if (topplePositionType31(crd1, 2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, 
-				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3129,7 +3130,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(crd1, crd1MinusOne, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, 3, 2);
 		if (topplePositionType45(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
@@ -3142,7 +3143,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, 1);
 			if (topplePositionType44(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
-					greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			// crd1 | crd1 | crd1 | y | 1 | 145
@@ -3155,7 +3156,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, 2);
 			if (topplePositionType31(crd1, y, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, 
-					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3172,7 +3173,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, zPlusOne);
 				if (topplePositionType57(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
-						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
 			}
@@ -3186,7 +3187,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, zPlusOne);
 			if (topplePositionType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, 
-					greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3199,7 +3200,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(crd1, crd1MinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yPlusOne, z);
 			if (topplePositionType45(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
-					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 		}
@@ -3211,7 +3212,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, 1);
 		if (topplePositionType17(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
-				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3225,7 +3226,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, 2);
 		if (topplePositionType31(crd1, y, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
-				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3242,7 +3243,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, zPlusOne);
 			if (topplePositionType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
-					greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3257,7 +3258,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd1, crd1, y, zPlusOne);
 		if (topplePositionType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 2, 
-				greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3270,26 +3271,26 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(crd1, crd1MinusOne, y, z);
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd1, crd1, yPlusOne, z);
 		if (topplePositionType18(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 1, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType4(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType4(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType11(AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType11(AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		AnisotropicIntModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType5(vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType22(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType22(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3303,7 +3304,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(3, 1, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 0);
 		if (topplePositionType22(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
-				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3320,7 +3321,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 1);
 		if (topplePositionType36(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3336,7 +3337,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 1);
 		if (topplePositionType37(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3351,7 +3352,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 0);
 		if (topplePositionType23(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3367,7 +3368,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);
 		if (topplePositionType38(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3381,11 +3382,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(2, 2, 2, 2);
 		greaterXNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 2);
 		if (topplePositionType24(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType23(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType23(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3399,7 +3400,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 3, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 1);
 		if (topplePositionType25(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3415,7 +3416,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(3, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(3, 3, 2, 2);
 		if (topplePositionType39(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3429,24 +3430,24 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(3, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(3, 3, 3, 2);
 		if (topplePositionType26(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType24(3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType24(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType12(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType12(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
 		int  wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		AnisotropicIntModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType6(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType6(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3460,7 +3461,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, 1, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 0);
 		if (topplePositionType22(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3477,7 +3478,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		if (topplePositionType36(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3493,7 +3494,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 1);
 		if (topplePositionType37(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3508,7 +3509,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 2, 2, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 0);
 		if (topplePositionType23(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3524,7 +3525,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 2);
 		if (topplePositionType38(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3538,14 +3539,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 2, 2, 2);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 2);
 		if (topplePositionType24(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType13(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType13(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
@@ -3560,7 +3561,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		if (topplePositionType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
-				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3577,7 +3578,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3593,14 +3594,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType14(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType14(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -3616,7 +3617,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 1);
 		if (topplePositionType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3632,7 +3633,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 2);
 		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3650,7 +3651,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 			if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3667,7 +3668,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3681,11 +3682,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, crd, crd, crd);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, crdPlusOne, crd, crd);
 		if (topplePositionType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType7(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType7(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3700,7 +3701,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType25(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3716,7 +3717,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 		if (topplePositionType39(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3730,7 +3731,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 		if (topplePositionType26(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3746,7 +3747,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 			if (topplePositionType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3762,7 +3763,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 			if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3781,7 +3782,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -3798,7 +3799,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3813,7 +3814,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3828,7 +3829,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 		if (topplePositionType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3844,7 +3845,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 		if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3863,7 +3864,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3880,7 +3881,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 		if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3895,11 +3896,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 		if (topplePositionType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType8(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType8(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3908,7 +3909,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		wMinusOne = w;
 		w = wPlusOne;
 		wPlusOne++;
-		if (toppleRangeType25(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType25(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3922,7 +3923,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, 3, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 1);
 		if (topplePositionType28(w, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3938,7 +3939,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, 3, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 2);
 		if (topplePositionType43(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -3952,11 +3953,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 3, 3, 2);
 		if (topplePositionType29(w, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType26(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType26(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3964,7 +3965,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		xMinusOne = x - 1;
 		int xPlusOne = x + 1;
 		for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-			if (toppleRangeType25(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType25(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -3978,7 +3979,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 			if (topplePositionType54(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			// v | w | x | 2 | 1 | 184
@@ -3993,7 +3994,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 			if (topplePositionType43(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4007,7 +4008,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 2, 2);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 			if (topplePositionType55(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-					smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			y = 3;
@@ -4024,7 +4025,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 				if (topplePositionType54(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
 				// v | w | x | y | 1 | 219
@@ -4039,7 +4040,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 				if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -4058,7 +4059,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionType62(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
-							smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+							smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
 					}
@@ -4075,7 +4076,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -4090,7 +4091,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 				greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 				if (topplePositionType55(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-						smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
 			}
@@ -4104,7 +4105,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 			if (topplePositionType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4120,7 +4121,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 			if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4139,7 +4140,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -4156,7 +4157,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4171,16 +4172,16 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
-					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType26(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+			if (toppleRangeType26(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 		}
-		if (toppleRangeType9(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType9(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -4194,7 +4195,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType28(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4210,7 +4211,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 		if (topplePositionType43(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4224,7 +4225,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 		if (topplePositionType29(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4242,7 +4243,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 			if (topplePositionType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4258,7 +4259,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 			if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4277,7 +4278,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -4294,7 +4295,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4309,7 +4310,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4324,7 +4325,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 		if (topplePositionType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4340,7 +4341,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 		if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4359,7 +4360,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4376,7 +4377,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 		if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4391,23 +4392,23 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 		if (topplePositionType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType10(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType10(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType15(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType15(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		AnisotropicIntModel5DSlice smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType22(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType22(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -4421,7 +4422,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, 1, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 0);
 		if (topplePositionType48(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | 2 | 1 | 0 | 149
@@ -4437,7 +4438,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		if (topplePositionType36(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
-				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4453,7 +4454,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, 1, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 1);
 		if (topplePositionType37(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
-				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4468,7 +4469,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 2, 2, 0);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 0);
 		if (topplePositionType49(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | 2 | 2 | 1 | 152
@@ -4483,7 +4484,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 2);
 		if (topplePositionType38(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4498,13 +4499,13 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 3, 2, 2);
 		smallerZNeighborValue = currentVSlice.getFromPosition(w, 2, 2, 1);
 		if (topplePositionType50(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType16(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType16(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
@@ -4519,7 +4520,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		if (topplePositionType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
-				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4536,7 +4537,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4552,14 +4553,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType17(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType17(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd = w - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -4575,7 +4576,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 1);
 		if (topplePositionType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4591,7 +4592,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 2);
 		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4609,7 +4610,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 			if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4626,7 +4627,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4640,11 +4641,11 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, crd, crd, crd);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, crdPlusOne, crd, crd);
 		if (topplePositionType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType23(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType23(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -4659,7 +4660,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType51(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
-				greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | x | 2 | 1 | 162
@@ -4674,7 +4675,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 2, 2);
 		if (topplePositionType39(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4688,7 +4689,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(x, xMinusOne, 2, 2);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 3, 2);
 		if (topplePositionType52(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
@@ -4703,7 +4704,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 			if (topplePositionType51(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
-					greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			// v | w | x | y | 1 | 206
@@ -4718,7 +4719,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 			if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4735,7 +4736,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 				smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionType61(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
-						smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+						smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -4752,7 +4753,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4767,7 +4768,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerXNeighborValue = currentVSlice.getFromPosition(x, xMinusOne, y, z);
 			greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionType52(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
-					smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 		}
@@ -4781,7 +4782,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 0);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 1);
 		if (topplePositionType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4797,7 +4798,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, 2);
 		if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4814,7 +4815,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4831,7 +4832,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, x, yMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, x, y, zPlusOne);
 		if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4846,18 +4847,18 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, y, z);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, yPlusOne, z);
 		if (topplePositionType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType24(w, vSlices, newVSlices, relevantAsymmetricNeighborValues,
+		if (toppleRangeType24(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType18(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType18(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
@@ -4872,7 +4873,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		if (topplePositionType48(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | x | 1 | 0 | 193
@@ -4888,7 +4889,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4904,14 +4905,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType19(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType19(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
@@ -4926,7 +4927,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 1);
 		if (topplePositionType49(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | crd | crd | 1 | 198
@@ -4941,7 +4942,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 2);
 		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4959,7 +4960,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 			if (topplePositionType60(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
-					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 		}
@@ -4975,7 +4976,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4990,13 +4991,13 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, crdPlusOne, crd, crd);
 		smallerZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, crdMinusOne);
 		if (topplePositionType50(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
-				smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType20(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType20(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
@@ -5011,7 +5012,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		if (topplePositionType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5028,7 +5029,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5044,14 +5045,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
-				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType21(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType21(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int  wMinusOne = w - 1, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
@@ -5066,7 +5067,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 1);
 		if (topplePositionType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5082,7 +5083,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 2);
 		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5100,7 +5101,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 			if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -5117,7 +5118,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);
 		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5131,14 +5132,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, crd, crd, crd);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, crdPlusOne, crd, crd);
 		if (topplePositionType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType22(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType22(int w, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
@@ -5151,7 +5152,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 0, 0, 0);
 		int greaterXNeighborValue = currentVSlice.getFromPosition(w, 1, 0, 0);
 		if (topplePositionType32(w, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
-				greaterXNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterXNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | 1 | 0 | 0 | 97
@@ -5165,7 +5166,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 2, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, 1, 1, 0);
 		if (topplePositionType22(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5180,7 +5181,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, 1, 1, 1);
 		if (topplePositionType23(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5194,14 +5195,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, 1, 1, 1);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, 2, 1, 1);
 		if (topplePositionType24(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType23(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType23(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
@@ -5214,7 +5215,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(crd, crdMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 1, 0);
 		if (topplePositionType33(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
-				greaterYNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | crd | crd | 1 | 0 | 106
@@ -5228,7 +5229,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, 1, 1);
 		if (topplePositionType25(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5242,14 +5243,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(crd, crdMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(crd, crd, 2, 1);
 		if (topplePositionType26(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType24(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType24(int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
@@ -5262,7 +5263,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, 1);
 		if (topplePositionType34(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
-				greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | crd | crd | crd | 1 | 111
@@ -5275,7 +5276,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, 2);
 		if (topplePositionType27(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5291,7 +5292,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, zPlusOne);
 			if (topplePositionType53(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
-					smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 		}
@@ -5305,7 +5306,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(crd, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(crd, crd, crd, zPlusOne);
 		if (topplePositionType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5317,13 +5318,13 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerVNeighborValue = smallerVSlice.getFromPosition(crd, crd, crd, crd);
 		greaterWNeighborValue = currentVSlice.getFromPosition(crdPlusOne, crd, crd, crd);
 		if (topplePositionType35(crd,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType25(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType25(int w, int x, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int wMinusOne = w - 1, xPlusOne = x + 1, xMinusOne = x - 1;
 		boolean changed = false;
@@ -5336,7 +5337,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 0, 0);
 		int greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 1, 0);
 		if (topplePositionType40(w, x, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
-				greaterYNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | x | 1 | 0 | 132
@@ -5350,7 +5351,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, x, 1, 1);
 		if (topplePositionType28(w, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5364,14 +5365,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerXNeighborValue = currentVSlice.getFromPosition(w, xMinusOne, 1, 1);
 		greaterYNeighborValue = currentVSlice.getFromPosition(w, x, 2, 1);
 		if (topplePositionType29(w, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType26(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues,
+	private static boolean toppleRangeType26(int w, int crd, AnisotropicIntModel5DSlice[] vSlices, AnisotropicIntModel5DSlice[] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1;
 		boolean changed = false;
@@ -5384,7 +5385,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		int smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 0);
 		int greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 1);
 		if (topplePositionType41(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
-				greaterZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		// v | w | crd | crd | 1 | 137
@@ -5397,7 +5398,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, 1);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, 2);		
 		if (topplePositionType30(w, crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
-				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5413,7 +5414,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 			greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);		
 			if (topplePositionType56(w, crd, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
-					smallerZNeighborValue, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 		}
@@ -5427,7 +5428,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerYNeighborValue = currentVSlice.getFromPosition(w, crd, crdMinusOne, z);
 		greaterZNeighborValue = currentVSlice.getFromPosition(w, crd, crd, zPlusOne);		
 		if (topplePositionType30(w, crd, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
-				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
+				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5439,7 +5440,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		smallerWNeighborValue = currentVSlice.getFromPosition(wMinusOne, crd, crd, crd);
 		greaterXNeighborValue = currentVSlice.getFromPosition(w, crdPlusOne, crd, crd);
 		if (topplePositionType42(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
+				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
@@ -5463,7 +5464,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType2(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5505,10 +5506,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 8;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType3(int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5550,10 +5551,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 6;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, 1, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, 1, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType4(int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5595,10 +5596,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, 1, 1, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, 1, 1, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType5(int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType5(int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5640,7 +5641,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, 1, 1, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, 1, 1, 1, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType6(int currentValue, int gVValue, int sZValue, AnisotropicIntModel5DSlice newCurrentVSlice, AnisotropicIntModel5DSlice newGreaterVSlice) {
@@ -5719,7 +5720,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		return toppled;
 	}
 
-	private static boolean topplePositionType7(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType7(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5758,10 +5759,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 8;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int w, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType8(int w, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5829,10 +5830,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 6;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType9(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5900,10 +5901,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType10(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5971,10 +5972,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType11(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType11(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6029,10 +6030,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int w, int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType12(int w, int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6071,10 +6072,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 6;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int w, int x, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType13(int w, int x, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6142,10 +6143,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType14(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6213,10 +6214,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType15(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6271,10 +6272,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 3;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType16(int coord, int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType16(int coord, int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6313,10 +6314,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType17(int coord, int y, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType17(int coord, int y, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6384,10 +6385,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType18(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType18(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6442,10 +6443,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType19(int coord, int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType19(int coord, int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6484,10 +6485,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType20(int coord, int z, int currentValue, int gVValue, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType20(int coord, int z, int currentValue, int gVValue, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6542,7 +6543,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
 	private static boolean topplePositionType21(int coord, int currentValue, int gVValue, int sZValue, AnisotropicIntModel5DSlice newCurrentVSlice, AnisotropicIntModel5DSlice newGreaterVSlice) {
@@ -6622,7 +6623,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		return toppled;
 	}
 
-	private static boolean topplePositionType22(int w, int x, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType22(int w, int x, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6716,10 +6717,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType23(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType23(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6813,10 +6814,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType24(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType24(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6897,10 +6898,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 3;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType25(int coord, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType25(int coord, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6994,10 +6995,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType26(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType26(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7078,10 +7079,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType27(int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType27(int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7162,10 +7163,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType28(int w, int x, int y, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType28(int w, int x, int y, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7259,10 +7260,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType29(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType29(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7343,10 +7344,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType30(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType30(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7427,10 +7428,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType31(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType31(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7511,10 +7512,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType32(int w, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType32(int w, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7577,10 +7578,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 6;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType33(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType33(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7643,10 +7644,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType34(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType34(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7709,10 +7710,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType35(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType35(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7763,10 +7764,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType36(int w, int x, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType36(int w, int x, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7886,10 +7887,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType37(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType37(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7996,10 +7997,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType38(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType38(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8106,10 +8107,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType39(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType39(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8216,10 +8217,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType40(int w, int x, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType40(int w, int x, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8282,10 +8283,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType41(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType41(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8348,10 +8349,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType42(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType42(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8402,10 +8403,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 3;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType43(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType43(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8512,10 +8513,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType44(int coord, int y, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType44(int coord, int y, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8578,10 +8579,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType45(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType45(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8632,10 +8633,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType46(int coord, int z, int currentValue, int gVValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType46(int coord, int z, int currentValue, int gVValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8686,10 +8687,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType47(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType47(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gVValue;
@@ -8801,10 +8802,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantAsymmetricNeighborShareMultipliers[relevantNeighborCount] = sZShareMultiplier;
 			relevantNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType48(int w, int x, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType48(int w, int x, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8891,10 +8892,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 4;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType49(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType49(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8981,10 +8982,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType50(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType50(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9059,10 +9060,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 3;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType51(int coord, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType51(int coord, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9149,10 +9150,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType52(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType52(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9227,10 +9228,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType53(int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType53(int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9305,10 +9306,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType54(int w, int x, int y, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType54(int w, int x, int y, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9395,10 +9396,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType55(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType55(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9473,10 +9474,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType56(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType56(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9551,10 +9552,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType57(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType57(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9629,10 +9630,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType58(int w, int x, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType58(int w, int x, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9743,10 +9744,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType59(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType59(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9845,10 +9846,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 2;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType60(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType60(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9947,10 +9948,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType61(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType61(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -10049,10 +10050,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType62(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType62(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -10151,10 +10152,10 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			relevantNeighborCount += 1;
 			relevantAsymmetricNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType63(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, AnisotropicIntModel5DSlice[] newVSlices) {
+	private static boolean topplePositionType63(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, AnisotropicIntModel5DSlice[] newVSlices) {
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gVValue;
@@ -10256,16 +10257,16 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			nc[4] = z - 1;
 			relevantNeighborCount++;
 		}
-		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, relevantNeighborCount);
+		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantNeighborCount);
 	}
 
-	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] neighborValues,
+	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] neighborValues, int[] sortedNeighborsIndexes,
 			int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
 		case 3:
-			Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, 
+			Utils.sortDescendingLength3(neighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, sortedNeighborsIndexes, 
 					neighborCoords, 3);
 			break;
 		case 2:
@@ -10331,15 +10332,15 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			newVSlices[1].addToPosition(w, x, y, z, value);
 			break;
 		default: //10, 9, 8, 7, 6, 5, 4
-			Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, neighborCoords, 
+			Utils.sortDescending(neighborCount, neighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, sortedNeighborsIndexes, neighborCoords, 
 					neighborCount);
 		}
 		return toppled;
 	}
 
 	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, 
-			int[] neighborValues, int[][] neighborCoords, int neighborCount) {
+			int[] neighborValues, int[] sortedNeighborsIndexes, int[][] neighborCoords, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
 		int neighborValue = neighborValues[0];
@@ -10349,7 +10350,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < neighborCount; j++) {
-				int[] nc = neighborCoords[j];
+				int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
 				newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share);
 			}
 		}
@@ -10364,7 +10365,7 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < neighborCount; j++) {
-						int[] nc = neighborCoords[j];
+						int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
 						newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share);
 					}
 				}
@@ -10376,14 +10377,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		return toppled;
 	}
 
-	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 		case 3:
-			Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, 
+			Utils.sortDescendingLength3(asymmetricNeighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, sortedNeighborsIndexes, 
 					asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 			break;
 		case 2:
@@ -10454,15 +10455,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			newVSlices[1].addToPosition(w, x, y, z, value);
 			break;
 		default: //10, 9, 8, 7, 6, 5, 4
-			Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
-					asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+			Utils.sortDescending(asymmetricNeighborCount, asymmetricNeighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, sortedNeighborsIndexes, asymmetricNeighborCoords, 
 					asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;
 	}
 
-	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -10474,12 +10474,12 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
-				int[] nc = asymmetricNeighborCoords[j];
-				newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * asymmetricNeighborShareMultipliers[j]);
+				int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
+				newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * asymmetricNeighborShareMultipliers[sortedNeighborsIndexes[j]]);
 			}
 		}
 		int previousNeighborValue = neighborValue;
-		shareCount -= asymmetricNeighborSymmetryCounts[0];
+		shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[0]];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
 			if (neighborValue != previousNeighborValue) {
@@ -10489,25 +10489,25 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < asymmetricNeighborCount; j++) {
-						int[] nc = asymmetricNeighborCoords[j];
-						newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * asymmetricNeighborShareMultipliers[j]);
+						int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
+						newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * asymmetricNeighborShareMultipliers[sortedNeighborsIndexes[j]]);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
-			shareCount -= asymmetricNeighborSymmetryCounts[i];
+			shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[i]];
 		}
 		newVSlices[1].addToPosition(w, x, y, z, value);
 		return toppled;
 	}
 
-	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] neighborValues,
+	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] neighborValues, int[] sortedNeighborsIndexes,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		switch (neighborCount) {
 		case 3:
-			Utils.sort3NeighborsByValueDesc(neighborValues, neighborCoords, neighborShareMultipliers);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, 
+			Utils.sortDescendingLength3(neighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, sortedNeighborsIndexes, 
 					neighborCoords, neighborShareMultipliers, 3);
 			break;
 		case 2:
@@ -10574,15 +10574,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			newVSlices[1].addToPosition(w, x, y, z, value);
 			break;
 		default: //10, 9, 8, 7, 6, 5, 4
-			Utils.sortNeighborsByValueDesc(neighborCount, neighborValues, neighborCoords, 
-					neighborShareMultipliers);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, neighborCoords, 
+			Utils.sortDescending(neighborCount, neighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, neighborValues, sortedNeighborsIndexes, neighborCoords, 
 					neighborShareMultipliers, neighborCount);
 		}
 		return toppled;
 	}
 
-	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] neighborValues, int[] sortedNeighborsIndexes,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
@@ -10593,8 +10592,8 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < neighborCount; j++) {
-				int[] nc = neighborCoords[j];
-				newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * neighborShareMultipliers[j]);
+				int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
+				newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * neighborShareMultipliers[sortedNeighborsIndexes[j]]);
 			}
 		}
 		int previousNeighborValue = neighborValue;
@@ -10608,8 +10607,8 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < neighborCount; j++) {
-						int[] nc = neighborCoords[j];
-						newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * neighborShareMultipliers[j]);
+						int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
+						newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share * neighborShareMultipliers[sortedNeighborsIndexes[j]]);
 					}
 				}
 				previousNeighborValue = neighborValue;
@@ -10620,14 +10619,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 		return toppled;
 	}
 
-	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePosition(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
 		case 3:
-			Utils.sort3NeighborsByValueDesc(asymmetricNeighborValues, asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, 
+			Utils.sortDescendingLength3(asymmetricNeighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, sortedNeighborsIndexes, 
 					asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 			break;
 		case 2:
@@ -10697,15 +10696,14 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			newVSlices[1].addToPosition(w, x, y, z, value);
 			break;
 		default: //10, 9, 8, 7, 6, 5, 4
-			Utils.sortNeighborsByValueDesc(asymmetricNeighborCount, asymmetricNeighborValues, asymmetricNeighborCoords, 
-					asymmetricNeighborSymmetryCounts);
-			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, asymmetricNeighborCoords, 
+			Utils.sortDescending(asymmetricNeighborCount, asymmetricNeighborValues, sortedNeighborsIndexes);
+			toppled = topplePositionSortedNeighbors(newVSlices, value, w, x, y, z, asymmetricNeighborValues, sortedNeighborsIndexes, asymmetricNeighborCoords, 
 					asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount);
 		}
 		return toppled;
 	}
 
-	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(AnisotropicIntModel5DSlice[] newVSlices, int value, int w, int x, int y, int z, int[] asymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount) {
 		boolean toppled = false;
@@ -10717,12 +10715,12 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
 			for (int j = 0; j < asymmetricNeighborCount; j++) {
-				int[] nc = asymmetricNeighborCoords[j];
+				int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
 				newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share);
 			}
 		}
 		int previousNeighborValue = neighborValue;
-		shareCount -= asymmetricNeighborSymmetryCounts[0];
+		shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[0]];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
 			if (neighborValue != previousNeighborValue) {
@@ -10732,13 +10730,13 @@ public class IntAether5DAsymmetricSectionSwap extends ActionableModel5D<IntModel
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
 					for (int j = i; j < asymmetricNeighborCount; j++) {
-						int[] nc = asymmetricNeighborCoords[j];
+						int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
 						newVSlices[nc[0]].addToPosition(nc[1], nc[2], nc[3], nc[4], share);
 					}
 				}
 				previousNeighborValue = neighborValue;
 			}
-			shareCount -= asymmetricNeighborSymmetryCounts[i];
+			shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[i]];
 		}
 		newVSlices[1].addToPosition(w, x, y, z, value);
 		return toppled;

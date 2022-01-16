@@ -399,6 +399,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numer
 			BigInt upperZNeighborValue, BigInt lowerZNeighborValue, 
 			int w, int x, int y, int z, AnisotropicBigIntModel4DSlice[] newGridSlices) {
 		BigInt[] neighborValues = new BigInt[8];
+		int[] sortedNeighborsIndexes = new int[8];
 		byte[] neighborDirections = new byte[8];
 		int relevantNeighborCount = 0;
 		if (upperWNeighborValue.compareTo(value) < 0) {
@@ -444,7 +445,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numer
 		boolean toppled = false;
 		if (relevantNeighborCount > 0) {
 			//sort							
-			Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
+			Utils.sortDescending(relevantNeighborCount, neighborValues, sortedNeighborsIndexes);
 			//divide
 			boolean isFirstNeighbor = true;
 			BigInt previousNeighborValue = null;
@@ -459,7 +460,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numer
 						toppled = true;
 						value = value.subtract(toShare).add(shareAndReminder[1]).add(share);
 						for (int j = i; j < relevantNeighborCount; j++) {
-							addToNeighbor(newGridSlices, w, x, y, z, neighborDirections[j], share);
+							addToNeighbor(newGridSlices, w, x, y, z, neighborDirections[sortedNeighborsIndexes[j]], share);
 						}
 					}
 					previousNeighborValue = neighborValue;

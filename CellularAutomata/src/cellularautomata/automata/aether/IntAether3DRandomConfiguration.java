@@ -137,7 +137,7 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		int[][][] newGrid = null;
 		int indexOffset = 0;
@@ -159,6 +159,7 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		boolean changed = false;
 		boolean first = true;
 		int[] neighborValues = new int[6];
+		int[] sortedNeighborsIndexes = new int[6];
 		byte[] neighborDirections = new byte[6];
 		//For every position
 		for (int x = 0, nextX = x + 1 + indexOffset; x < grid.length; x++, nextX++) {
@@ -209,7 +210,7 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 					
 					if (relevantNeighborCount > 0) {
 						//sort
-						Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
+						Utils.sortDescending(relevantNeighborCount, neighborValues, sortedNeighborsIndexes);
 						//divide
 						boolean isFirstNeighbor = true;
 						int previousNeighborValue = 0;
@@ -224,7 +225,7 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 									changed = true;
 									value = value - toShare + toShare%shareCount + share;
 									for (int j = i; j < relevantNeighborCount; j++) {
-										int[] nc = getNeighborCoordinates(x, y, z, neighborDirections[j]);
+										int[] nc = getNeighborCoordinates(x, y, z, neighborDirections[sortedNeighborsIndexes[j]]);
 										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
 									}
 								}
@@ -286,14 +287,14 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 	}
 	
 	@Override
-	public int getFromPosition(int x, int y, int z){	
+	public int getFromPosition(int x, int y, int z) {	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
 		return getFromIndex(arrayX, arrayY, arrayZ);
 	}
 	
-	private int getFromIndex(int arrayX, int arrayY, int arrayZ){
+	private int getFromIndex(int arrayX, int arrayY, int arrayZ) {
 		if (arrayX < 0 || arrayX > grid.length - 1 
 				|| arrayY < 0 || arrayY > grid.length - 1
 				|| arrayZ < 0 || arrayZ > grid.length - 1) {

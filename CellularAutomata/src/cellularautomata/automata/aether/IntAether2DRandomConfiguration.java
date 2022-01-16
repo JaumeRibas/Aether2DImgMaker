@@ -128,7 +128,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		int[][] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -143,6 +143,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		}
 		boolean changed = false;
 		int[] neighborValues = new int[4];
+		int[] sortedNeighborsIndexes = new int[4];
 		byte[] neighborDirections = new byte[4];
 		//For every position
 		for (int x = 0; x < grid.length; x++) {
@@ -182,7 +183,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 				//If there are any
 				if (relevantNeighborCount > 0) {
 					//sort
-					Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborDirections);
+					Utils.sortDescending(relevantNeighborCount, neighborValues, sortedNeighborsIndexes);
 					//divide
 					boolean isFirstNeighbor = true;
 					int previousNeighborValue = 0;
@@ -197,7 +198,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 								changed = true;
 								value = value - toShare + toShare%shareCount + share;
 								for (int j = i; j < relevantNeighborCount; j++) {
-									int[] nc = getNeighborCoordinates(x, y, neighborDirections[j]);
+									int[] nc = getNeighborCoordinates(x, y, neighborDirections[sortedNeighborsIndexes[j]]);
 									newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
 								}
 							}
@@ -244,7 +245,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 	}
 	
 	@Override
-	public int getFromPosition(int x, int y){
+	public int getFromPosition(int x, int y) {
 		if (x < 0 || x > grid.length - 1 
 				|| y < 0 || y > grid[0].length - 1) {
 			//If the entered position is outside the array the value will be 0

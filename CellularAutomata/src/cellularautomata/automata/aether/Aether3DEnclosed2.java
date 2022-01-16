@@ -104,12 +104,13 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][] newGrid = new long[xSide][ySide][zSide];
 		boolean changed = false;
 		//For every position
 		long[] neighborValues = new long[6];
+		int[] sortedNeighborsIndexes = new int[6];
 		int[][] neighborCoordinates = new int[6][3];
 		for (int x = 0; x < xSide; x++) {
 			for (int y = 0; y < ySide; y++) {
@@ -210,7 +211,7 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 					}					
 					if (relevantNeighborCount > 0) {
 						//sort
-						Utils.sortNeighborsByValueDesc(relevantNeighborCount, neighborValues, neighborCoordinates);
+						Utils.sortDescending(relevantNeighborCount, neighborValues, sortedNeighborsIndexes);
 						//divide
 						boolean isFirstNeighbor = true;
 						long previousNeighborValue = 0;
@@ -224,7 +225,7 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 									changed = true;
 									value = value - toShare + toShare%shareCount + share;
 									for (int j = i; j < relevantNeighborCount; j++) {
-										int[] nc = neighborCoordinates[j];
+										int[] nc = neighborCoordinates[sortedNeighborsIndexes[j]];
 										newGrid[nc[0]][nc[1]][nc[2]] += share;
 									}
 								}
@@ -245,7 +246,7 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y, int z){
+	public long getFromPosition(int x, int y, int z) {
 		return grid[x][y][z];
 	}
 	
