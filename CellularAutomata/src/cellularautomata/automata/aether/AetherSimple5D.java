@@ -79,7 +79,7 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][][][] newGrid = null;
 		int indexOffset = 0;
@@ -265,7 +265,7 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 	}
 	
 	@Override
-	public long getFromPosition(int v, int w, int x, int y, int z){
+	public long getFromPosition(int v, int w, int x, int y, int z) {
 		int arrayV = originIndex + v;
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
@@ -274,7 +274,8 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 		if (arrayV < 0 || arrayV > grid.length - 1 
 				|| arrayW < 0 || arrayW > grid.length - 1 
 				|| arrayX < 0 || arrayX > grid[0].length - 1
-				|| arrayY < 0 || arrayY > grid[0][0].length - 1) {
+				|| arrayY < 0 || arrayY > grid[0][0].length - 1
+				|| arrayZ < 0 || arrayZ > grid[0][0][0].length - 1) {
 			//If the entered position is outside the array the value will be the background value
 			return 0;
 		} else {
@@ -284,7 +285,7 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z){
+	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {
 		return getFromPosition(v, w, x, y, z);
 	}
 	

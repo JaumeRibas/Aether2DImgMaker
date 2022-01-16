@@ -75,7 +75,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		int[][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
@@ -172,7 +172,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	}
 	
 	@Override
-	public int getFromPosition(int x, int y){	
+	public int getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -189,7 +189,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	}
 	
 	@Override
-	public int getFromAsymmetricPosition(int x, int y){	
+	public int getFromAsymmetricPosition(int x, int y) {	
 		return grid[x][y];
 	}
 

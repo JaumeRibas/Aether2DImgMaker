@@ -82,7 +82,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		long[][][][] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
@@ -244,7 +244,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 	}
 	
 	@Override
-	public long getFromPosition(int w, int x, int y, int z){	
+	public long getFromPosition(int w, int x, int y, int z) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -283,7 +283,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z){	
+	public long getFromAsymmetricPosition(int w, int x, int y, int z) {	
 		if (w < grid.length 
 				&& x < grid[w].length 
 				&& y < grid[w][x].length 

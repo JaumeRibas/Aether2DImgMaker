@@ -72,7 +72,7 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -174,7 +174,7 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	}
 	
 	@Override
-	public long getFromPosition(int x){	
+	public long getFromPosition(int x) {	
 		int arrayX = xOriginIndex + x;
 		if (arrayX < 0 || arrayX > grid.length - 1) {
 			//If the entered position is outside the array the value will be 0
@@ -186,7 +186,7 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x){
+	public long getFromAsymmetricPosition(int x) {
 		return getFromPosition(x);
 	}	
 	

@@ -76,7 +76,7 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -207,7 +207,7 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y){	
+	public long getFromPosition(int x, int y) {	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 
@@ -221,7 +221,7 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y){
+	public long getFromAsymmetricPosition(int x, int y) {
 		return getFromPosition(x, y);
 	}	
 	

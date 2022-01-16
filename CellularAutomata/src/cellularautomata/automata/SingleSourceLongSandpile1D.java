@@ -62,7 +62,7 @@ public class SingleSourceLongSandpile1D implements SymmetricLongModel1D, Isotrop
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		long[] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
@@ -134,7 +134,7 @@ public class SingleSourceLongSandpile1D implements SymmetricLongModel1D, Isotrop
 	}
 	
 	@Override
-	public long getFromPosition(int x){	
+	public long getFromPosition(int x) {	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
 			return grid[x];

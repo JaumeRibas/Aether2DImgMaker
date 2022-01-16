@@ -92,7 +92,7 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicCubicMod
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		int[][][] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
@@ -301,7 +301,7 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicCubicMod
 	}
 	
 	@Override
-	public int getFromPosition(int x, int y, int z){	
+	public int getFromPosition(int x, int y, int z) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -332,7 +332,7 @@ public class IntNearAether1_3D implements SymmetricIntModel3D, IsotropicCubicMod
 	}
 	
 	@Override
-	public int getFromAsymmetricPosition(int x, int y, int z){	
+	public int getFromAsymmetricPosition(int x, int y, int z) {	
 		return grid[x][y][z];
 	}
 

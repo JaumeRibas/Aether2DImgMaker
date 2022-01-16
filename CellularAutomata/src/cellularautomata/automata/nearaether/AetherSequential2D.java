@@ -116,7 +116,7 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -268,7 +268,7 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y){	
+	public long getFromPosition(int x, int y) {	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 

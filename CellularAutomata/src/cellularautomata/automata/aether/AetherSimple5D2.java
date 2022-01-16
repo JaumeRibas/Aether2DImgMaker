@@ -75,7 +75,7 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][][][] newGrid = null;
 		//If at the previous step the values reached the edge, make the new array bigger
@@ -222,7 +222,7 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 		};
 	}
 
-	private void addToPosition(long[][][][][] newGrid, int v, int w, int x, int y, int z, long value){	
+	private void addToPosition(long[][][][][] newGrid, int v, int w, int x, int y, int z, long value) {	
 		if (!(x < 0 || y < 0 || z < 0 || w < 0 || v < 0 
 				|| z > y || y > x || x > w || w > v)) {
 			newGrid[v][w][x][y][z] += value;
@@ -230,7 +230,7 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 	}
 
 	@Override
-	public long getFromPosition(int v, int w, int x, int y, int z){	
+	public long getFromPosition(int v, int w, int x, int y, int z) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -273,8 +273,11 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 	}
 
 	@Override
-	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z){	
-		return grid[v][w][x][y][z];
+	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {	
+		if (v < grid.length)
+			return grid[v][w][x][y][z];
+		else
+			return 0;
 	}
 
 	@Override

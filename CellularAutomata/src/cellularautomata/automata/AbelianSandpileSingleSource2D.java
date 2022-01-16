@@ -77,7 +77,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		int[][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
@@ -148,7 +148,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 	}
 	
 	@Override
-	public int getFromPosition(int x, int y){	
+	public int getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -165,7 +165,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 	}
 	
 	@Override
-	public int getFromAsymmetricPosition(int x, int y){	
+	public int getFromAsymmetricPosition(int x, int y) {	
 		return grid[x][y];
 	}
 

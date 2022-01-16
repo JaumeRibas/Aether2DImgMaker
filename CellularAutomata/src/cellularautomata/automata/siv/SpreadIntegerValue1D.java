@@ -80,7 +80,7 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		long[] newGrid = null;
 		if (boundReached) {
 			boundReached = false;
@@ -138,7 +138,7 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 	}
 	
 	@Override
-	public long getFromPosition(int x){	
+	public long getFromPosition(int x) {	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
 			return grid[x];
@@ -148,7 +148,7 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x){	
+	public long getFromAsymmetricPosition(int x) {	
 		return grid[x];
 	}
 

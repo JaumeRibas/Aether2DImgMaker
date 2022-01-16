@@ -77,7 +77,7 @@ public class AetherSimple4D implements SymmetricLongModel4D, IsotropicHypercubic
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][][] newGrid = null;
 		int indexOffset = 0;
@@ -242,7 +242,7 @@ public class AetherSimple4D implements SymmetricLongModel4D, IsotropicHypercubic
 	}
 	
 	@Override
-	public long getFromPosition(int w, int x, int y, int z){
+	public long getFromPosition(int w, int x, int y, int z) {
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -260,7 +260,7 @@ public class AetherSimple4D implements SymmetricLongModel4D, IsotropicHypercubic
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z){
+	public long getFromAsymmetricPosition(int w, int x, int y, int z) {
 		return getFromPosition(w, x, y, z);
 	}
 	

@@ -81,7 +81,7 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		long[][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
@@ -178,7 +178,7 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y){	
+	public long getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -195,7 +195,7 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y){	
+	public long getFromAsymmetricPosition(int x, int y) {	
 		return grid[x][y];
 	}
 

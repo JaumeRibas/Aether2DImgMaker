@@ -77,7 +77,7 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][] newGrid = null;
 		int indexOffset = 0;
@@ -222,7 +222,7 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y, int z){	
+	public long getFromPosition(int x, int y, int z) {	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
@@ -238,7 +238,7 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z){
+	public long getFromAsymmetricPosition(int x, int y, int z) {
 		return getFromPosition(x, y, z);
 	}
 	

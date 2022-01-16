@@ -65,7 +65,7 @@ public class RegularIntGrid4D implements IntModel4D {
 	}
 
 	@Override
-	public int getFromPosition(int w, int x, int y, int z){	
+	public int getFromPosition(int w, int x, int y, int z) {	
 		int arrayW = w - minW;
 		int arrayX = x - minX;
 		int arrayY = y - minY;

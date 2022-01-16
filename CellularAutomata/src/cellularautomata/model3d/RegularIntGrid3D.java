@@ -54,7 +54,7 @@ public class RegularIntGrid3D implements IntModel3D {
 	}
 
 	@Override
-	public int getFromPosition(int x, int y, int z){	
+	public int getFromPosition(int x, int y, int z) {	
 		int arrayX = x - minX;
 		int arrayY = y - minY;
 		int arrayZ = z - minZ;

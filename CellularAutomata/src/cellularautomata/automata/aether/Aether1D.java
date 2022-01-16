@@ -80,7 +80,7 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicModel1DA, Serial
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		long[] newGrid = new long[maxX + 3];
 		boolean changed = false;
 		long currentValue, greaterXNeighborValue, smallerXNeighborValue;
@@ -277,7 +277,7 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicModel1DA, Serial
 	}
 	
 	@Override
-	public long getFromPosition(int x){	
+	public long getFromPosition(int x) {	
 		if (x < 0) x = -x;
 		if (x < grid.length) {
 			return grid[x];
