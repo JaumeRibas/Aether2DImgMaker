@@ -987,7 +987,7 @@ public class Test {
 			while (!finished1 && !finished2) {
 				//System.out.println("step " + ca1.getStep());
 				for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
-					System.out.println(x);
+//					System.out.println(x);
 					long a = ca1.getFromPosition(x);
 					long b = ca2.getFromPosition(x);
 					if (a != b) {
@@ -1311,11 +1311,11 @@ public class Test {
 		}
 	}
 	
-	public static void compareAllSteps(IntModel4D ca1, ActionableModel4D<IntModel4D> ca2) {
-		compareAllSteps(ca2, ca1);
+	public static void compareAllStepsFromIntModel(LongModel4D ca1, ActionableModel4D<IntModel4D> ca2) {
+		compareAllStepsFromIntModel(ca2, ca1);
 	}
 	
-	public static void compareAllSteps(ActionableModel4D<IntModel4D> ca1, IntModel4D ca2) {
+	public static void compareAllStepsFromIntModel(ActionableModel4D<IntModel4D> ca1, LongModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1367,11 +1367,11 @@ public class Test {
 		}
 	}
 	
-	public static void compareAllSteps(LongModel5D ca1, ActionableModel5D<LongModel5D> ca2) {
-		compareAllSteps(ca2, ca1);
+	public static void compareAllStepsFromLongModel(LongModel5D ca1, ActionableModel5D<LongModel5D> ca2) {
+		compareAllStepsFromLongModel(ca2, ca1);
 	}
 	
-	public static void compareAllSteps(ActionableModel5D<LongModel5D> ca1, LongModel5D ca2) {
+	public static void compareAllStepsFromLongModel(ActionableModel5D<LongModel5D> ca1, LongModel5D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1425,11 +1425,69 @@ public class Test {
 		}
 	}
 	
-	public static void compareAllSteps(IntModel5D ca1, ActionableModel5D<IntModel5D> ca2) {
-		compareAllSteps(ca2, ca1);
+	public static void compareAllStepsFromIntModel(IntModel5D ca1, ActionableModel5D<IntModel5D> ca2) {
+		compareAllStepsFromIntModel(ca2, ca1);
 	}
 	
-	public static void compareAllSteps(ActionableModel5D<IntModel5D> ca1, IntModel5D ca2) {
+	public static void compareAllStepsFromIntModel(ActionableModel5D<IntModel5D> ca1, IntModel5D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			ModelProcessor<IntModel5D> comparator = new ModelProcessor<IntModel5D>() {
+				
+				@Override
+				public void processModelBlock(IntModel5D gridBlock) throws Exception {
+					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
+						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
+							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
+								for (int w = gridBlock.getMinWAtXYZ(x,y,z); w <= gridBlock.getMaxWAtXYZ(x,y,z); w++) {
+									for (int v = gridBlock.getMinV(w,x,y,z); v <= gridBlock.getMaxV(w,x,y,z); v++) {
+										if (gridBlock.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
+											System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
+													+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(v, w, x, y, z) 
+													+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
+										}
+									}
+								}
+							}	
+						}	
+					}						
+				}
+				
+				@Override
+				public void beforeProcessing() throws Exception {
+					// do nothing					
+				}
+				
+				@Override
+				public void afterProcessing() throws Exception {
+					// do nothing			
+				}
+			};
+			
+			while (!finished1 && !finished2) {
+				System.out.println("Step " + ca1.getStep());
+				ca1.addProcessor(comparator);
+				ca1.processModel();
+				ca1.removeProcessor(comparator);
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compareAllStepsFromIntModel(LongModel5D ca1, ActionableModel5D<IntModel5D> ca2) {
+		compareAllStepsFromIntModel(ca2, ca1);
+	}
+	
+	public static void compareAllStepsFromIntModel(ActionableModel5D<IntModel5D> ca1, LongModel5D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1484,7 +1542,7 @@ public class Test {
 	}
 	
 	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compareAllSteps(ActionableModel3D<NumericModel3D<T>> ca1, NumericModel3D<T> ca2) {
+		compareAllStepsFromNumericModel(ActionableModel3D<NumericModel3D<T>> ca1, NumericModel3D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1535,7 +1593,7 @@ public class Test {
 	}
 	
 	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compareAllSteps(ActionableModel4D<NumericModel4D<T>> ca1, NumericModel4D<T> ca2) {
+		compareAllStepsFromNumericModel(ActionableModel4D<NumericModel4D<T>> ca1, NumericModel4D<T> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -2210,6 +2268,10 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void compareAllSteps(IntModel5D ca1, LongModel5D ca2) {
+		compareAllSteps(ca2, ca1);
 	}
 	
 	public static void compareAllSteps(LongModel5D ca1, IntModel5D ca2) {
