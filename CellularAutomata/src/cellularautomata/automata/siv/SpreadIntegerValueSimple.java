@@ -25,9 +25,10 @@ import java.util.function.IntConsumer;
 import cellularautomata.arrays.HypercubicIntArray;
 import cellularautomata.arrays.Utils;
 import cellularautomata.model.Coordinates;
-import cellularautomata.model.IntModel;
+import cellularautomata.model.IsotropicHypercubicModel;
+import cellularautomata.model.SymmetricIntModel;
 
-public class SpreadIntegerValueSimple implements IntModel {
+public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHypercubicModel {
 
 	private int gridDimension;
 	private int step;
@@ -84,6 +85,11 @@ public class SpreadIntegerValueSimple implements IntModel {
 		coordinates.copyIntoArray(indexes);
 		Utils.addToArray(indexes, originIndex);
 		return grid.get(immutableIndexes);
+	}
+
+	@Override
+	public int getFromAsymmetricPosition(Coordinates coordinates) {
+		return getFromPosition(coordinates);
 	}
 
 	@Override
@@ -250,6 +256,11 @@ public class SpreadIntegerValueSimple implements IntModel {
 	@Override
 	public int getMaxCoordinate(int axis) {
 		return grid.getSide() - 1 - originIndex;
+	}
+
+	@Override
+	public int getAsymmetricMaxCoordinate(int axis) {
+		return getMaxCoordinate(axis);
 	}
 
 	@Override

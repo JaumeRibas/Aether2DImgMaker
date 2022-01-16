@@ -20,7 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
-import cellularautomata.model1d.LongModel1D;
+import cellularautomata.model1d.IsotropicModel1DA;
+import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 1D, with a single source initial configuration, for review and testing purposes
@@ -28,7 +29,7 @@ import cellularautomata.model1d.LongModel1D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple1D implements LongModel1D {	
+public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {	
 
 	/** A 1D array representing the grid */
 	private long[] grid;
@@ -68,7 +69,7 @@ public class SpreadIntegerValueSimple1D implements LongModel1D {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -147,7 +148,7 @@ public class SpreadIntegerValueSimple1D implements LongModel1D {
 	}
 	
 	@Override
-	public long getFromPosition(int x){	
+	public long getFromPosition(int x) {	
 		int arrayX = xOriginIndex + x;
 		if (arrayX < 0 || arrayX > grid.length - 1) {
 			//If the entered position is outside the array the value will be the backgroundValue
@@ -155,6 +156,11 @@ public class SpreadIntegerValueSimple1D implements LongModel1D {
 		} else {
 			return grid[arrayX];
 		}
+	}
+	
+	@Override
+	public long getFromAsymmetricPosition(int x) {	
+		return getFromPosition(x);
 	}
 	
 	@Override
@@ -167,6 +173,11 @@ public class SpreadIntegerValueSimple1D implements LongModel1D {
 			valuesMinX = arrayMinX + 1;
 		}
 		return valuesMinX;
+	}
+	
+	@Override
+	public int getAsymmetricMaxX() {
+		return getMaxX();
 	}
 	
 	@Override

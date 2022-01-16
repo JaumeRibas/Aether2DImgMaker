@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.LongModel3D;
+import cellularautomata.model3d.IsotropicCubicModelA;
+import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
  * Implementation of a CA that behaves the same way as the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton, but with opposite values.
@@ -30,7 +31,7 @@ import cellularautomata.model3d.LongModel3D;
  * @author Jaume
  *
  */
-public class ReverseAetherSimple3D implements LongModel3D {	
+public class ReverseAetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModelA {	
 	
 	public static final long MAX_INITIAL_VALUE = 3689348814741910323L;
 	public static final long MIN_INITIAL_VALUE = Long.MIN_VALUE;
@@ -76,7 +77,7 @@ public class ReverseAetherSimple3D implements LongModel3D {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][] newGrid = null;
 		int indexOffset = 0;
@@ -221,7 +222,7 @@ public class ReverseAetherSimple3D implements LongModel3D {
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y, int z){	
+	public long getFromPosition(int x, int y, int z) {	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
@@ -234,6 +235,11 @@ public class ReverseAetherSimple3D implements LongModel3D {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY][arrayZ];
 		}
+	}
+	
+	@Override
+	public long getFromAsymmetricPosition(int x, int y, int z) {
+		return getFromPosition(x, y, z);
 	}
 	
 	@Override
@@ -258,6 +264,11 @@ public class ReverseAetherSimple3D implements LongModel3D {
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
+	}
+	
+	@Override
+	public int getAsymmetricMaxX() {
+		return getMaxX();
 	}
 	
 	@Override

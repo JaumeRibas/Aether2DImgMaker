@@ -19,7 +19,8 @@ package cellularautomata.automata.siv;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.model4d.LongModel4D;
+import cellularautomata.model4d.IsotropicHypercubicModel4DA;
+import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
@@ -27,7 +28,7 @@ import cellularautomata.model4d.LongModel4D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple4D implements LongModel4D {	
+public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
 	
 	private long[][][][] grid;
 	
@@ -71,7 +72,7 @@ public class SpreadIntegerValueSimple4D implements LongModel4D {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][][] newGrid = null;
 		int indexOffset = 0;
@@ -223,7 +224,7 @@ public class SpreadIntegerValueSimple4D implements LongModel4D {
 	}
 	
 	@Override
-	public long getFromPosition(int w, int x, int y, int z){
+	public long getFromPosition(int w, int x, int y, int z) {
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -238,6 +239,11 @@ public class SpreadIntegerValueSimple4D implements LongModel4D {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayW][arrayX][arrayY][arrayZ];
 		}
+	}
+	
+	@Override
+	public long getFromAsymmetricPosition(int w, int x, int y, int z) {
+		return getFromPosition(w, x, y, z);
 	}
 
 	@Override
@@ -262,6 +268,11 @@ public class SpreadIntegerValueSimple4D implements LongModel4D {
 			valuesMaxW = arrayMaxW - 1;
 		}
 		return valuesMaxW;
+	}
+
+	@Override
+	public int getAsymmetricMaxW() {
+		return getMaxW();
 	}
 
 	@Override

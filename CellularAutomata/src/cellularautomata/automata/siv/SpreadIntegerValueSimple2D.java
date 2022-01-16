@@ -19,7 +19,8 @@ package cellularautomata.automata.siv;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.IsotropicSquareModelA;
+import cellularautomata.model2d.SymmetricLongModel2D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
@@ -27,7 +28,7 @@ import cellularautomata.model2d.LongModel2D;
  * @author Jaume Ribas
  *
  */
-public class SpreadIntegerValueSimple2D implements LongModel2D {	
+public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
 
 	/** A 2D array representing the grid */
 	private long[][] grid;
@@ -73,7 +74,7 @@ public class SpreadIntegerValueSimple2D implements LongModel2D {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -175,7 +176,7 @@ public class SpreadIntegerValueSimple2D implements LongModel2D {
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y){	
+	public long getFromPosition(int x, int y) {	
 		int arrayX = xOriginIndex + x;
 		int arrayY = yOriginIndex + y;
 		if (arrayX < 0 || arrayX > grid.length - 1 
@@ -185,6 +186,11 @@ public class SpreadIntegerValueSimple2D implements LongModel2D {
 		} else {
 			return grid[arrayX][arrayY];
 		}
+	}
+	
+	@Override
+	public long getFromAsymmetricPosition(int x, int y) {
+		return getFromPosition(x, y);
 	}
 	
 	@Override
@@ -209,6 +215,11 @@ public class SpreadIntegerValueSimple2D implements LongModel2D {
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
+	}
+	
+	@Override
+	public int getAsymmetricMaxX() {
+		return getMaxX();
 	}
 	
 	@Override
