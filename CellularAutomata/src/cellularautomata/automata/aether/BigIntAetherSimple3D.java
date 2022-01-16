@@ -24,7 +24,8 @@ import java.util.List;
 
 import cellularautomata.Constants;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.NumericModel3D;
+import cellularautomata.model3d.IsotropicCubicModelA;
+import cellularautomata.model3d.SymmetricNumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -33,7 +34,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAetherSimple3D implements NumericModel3D<BigInt> {	
+public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, IsotropicCubicModelA {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -79,7 +80,7 @@ public class BigIntAetherSimple3D implements NumericModel3D<BigInt> {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigInt[][][] newGrid = null;
 		int indexOffset = 0;
@@ -234,7 +235,7 @@ public class BigIntAetherSimple3D implements NumericModel3D<BigInt> {
 	}
 	
 	@Override
-	public BigInt getFromPosition(int x, int y, int z){	
+	public BigInt getFromPosition(int x, int y, int z) {	
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
 		int arrayZ = originIndex + z;
@@ -247,6 +248,11 @@ public class BigIntAetherSimple3D implements NumericModel3D<BigInt> {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY][arrayZ];
 		}
+	}
+	
+	@Override
+	public BigInt getFromAsymmetricPosition(int x, int y, int z) {
+		return getFromPosition(x, y, z);
 	}
 	
 	@Override
@@ -271,6 +277,11 @@ public class BigIntAetherSimple3D implements NumericModel3D<BigInt> {
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
+	}
+	
+	@Override
+	public int getAsymmetricMaxX() {
+		return getMaxX();
 	}
 	
 	@Override

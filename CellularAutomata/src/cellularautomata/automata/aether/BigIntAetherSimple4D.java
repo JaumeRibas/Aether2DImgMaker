@@ -24,7 +24,8 @@ import java.util.List;
 
 import cellularautomata.Constants;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model4d.NumericModel4D;
+import cellularautomata.model4d.IsotropicHypercubicModel4DA;
+import cellularautomata.model4d.SymmetricNumericModel4D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -33,7 +34,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAetherSimple4D implements NumericModel4D<BigInt> {	
+public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {	
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;
@@ -87,7 +88,7 @@ public class BigIntAetherSimple4D implements NumericModel4D<BigInt> {
 	}
 	
 	@Override
-	public boolean nextStep(){
+	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigInt[][][][] newGrid = null;
 		int indexOffset = 0;
@@ -267,7 +268,7 @@ public class BigIntAetherSimple4D implements NumericModel4D<BigInt> {
 	}
 	
 	@Override
-	public BigInt getFromPosition(int w, int x, int y, int z){
+	public BigInt getFromPosition(int w, int x, int y, int z) {
 		int arrayW = originIndex + w;
 		int arrayX = originIndex + x;
 		int arrayY = originIndex + y;
@@ -282,6 +283,11 @@ public class BigIntAetherSimple4D implements NumericModel4D<BigInt> {
 			//Note that the positions whose value hasn't been defined have value zero by default
 			return grid[arrayW][arrayX][arrayY][arrayZ];
 		}
+	}
+	
+	@Override
+	public BigInt getFromAsymmetricPosition(int w, int x, int y, int z) {
+		return getFromPosition(w, x, y, z);
 	}
 	
 	@Override
@@ -306,6 +312,11 @@ public class BigIntAetherSimple4D implements NumericModel4D<BigInt> {
 			valuesMaxW = arrayMaxW - 1;
 		}
 		return valuesMaxW;
+	}
+
+	@Override
+	public int getAsymmetricMaxW() {
+		return getMaxW();
 	}
 
 	@Override
