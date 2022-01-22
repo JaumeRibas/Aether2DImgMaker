@@ -24,7 +24,7 @@ import cellularautomata.model.NumericModel;
 public interface NumericModel1D<T extends FieldElement<T> & Comparable<T>> extends ObjectModel1D<T>, NumericModel<T> {
 	
 	@Override
-	default MinAndMax<T> getMinAndMax() {
+	default MinAndMax<T> getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		T minValue = getFromPosition(minX);
 		T maxValue = minValue;
@@ -63,7 +63,7 @@ public interface NumericModel1D<T extends FieldElement<T> & Comparable<T>> exten
 	}
 	
 	@Override
-	default T getTotal() {
+	default T getTotal() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		T total = getFromPosition(minX);
 		for (int x = minX + 1; x <= maxX; x++) {

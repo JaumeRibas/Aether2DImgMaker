@@ -20,7 +20,7 @@ import org.apache.commons.math3.FieldElement;
 
 public interface SymmetricNumericModel1D<T extends FieldElement<T> & Comparable<T>> extends NumericModel1D<T>, SymmetricModel1D {
 	
-	T getFromAsymmetricPosition(int x);
+	T getFromAsymmetricPosition(int x) throws Exception;
 	
 	@Override
 	default NumericModel1D<T> asymmetricSection() {

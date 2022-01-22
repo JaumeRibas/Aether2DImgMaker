@@ -28,15 +28,16 @@ public interface LongModel1D extends Model1D, LongModel {
 	 * 
 	 * @param x the position on the x-axis
 	 * @return the value at (x)
+	 * @throws Exception 
 	 */
-	long getFromPosition(int x);
+	long getFromPosition(int x) throws Exception;
 	
 	default long getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0));
 	}
 	
 	@Override
-	default long[] getMinAndMax() {
+	default long[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		long maxValue = getFromPosition(minX), minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
@@ -70,7 +71,7 @@ public interface LongModel1D extends Model1D, LongModel {
 	}
 	
 	@Override
-	default long getTotal() {
+	default long getTotal() throws Exception {
 		long total = 0;
 		int maxX = getMaxX(), minX = getMinX();
 		for (int x = minX; x <= maxX; x++) {

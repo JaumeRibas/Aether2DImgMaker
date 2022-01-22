@@ -26,7 +26,7 @@ public class AsymmetricNumericModelSection1D<T extends FieldElement<T> & Compara
 	}
 
 	@Override
-	public T getFromPosition(int x) {
+	public T getFromPosition(int x) throws Exception {
 		return source.getFromAsymmetricPosition(x);
 	}
 

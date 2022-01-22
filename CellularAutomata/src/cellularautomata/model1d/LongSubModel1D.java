@@ -23,7 +23,7 @@ public class LongSubModel1D<G extends LongModel1D> extends SubModel1D<G> impleme
 	}
 
 	@Override
-	public long getFromPosition(int x) {
+	public long getFromPosition(int x) throws Exception {
 		return source.getFromPosition(x);
 	}
 	

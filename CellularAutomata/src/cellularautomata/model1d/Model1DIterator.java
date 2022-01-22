@@ -42,7 +42,12 @@ public abstract class Model1DIterator<G extends Model1D, T> implements Iterator<
 	public T next() {
 		if (!hasNext)
 			throw new NoSuchElementException();
-		T next = getFromModelPosition(x);
+		T next;
+		try {
+			next = getFromModelPosition(x);
+		} catch (Exception e) {
+			throw new NoSuchElementException(e.toString());
+		}
 		if (x == maxX) {
 			hasNext = false;
 		} else {
@@ -51,6 +56,6 @@ public abstract class Model1DIterator<G extends Model1D, T> implements Iterator<
 		return next;
 	}
 	
-	protected abstract T getFromModelPosition(int x);
+	protected abstract T getFromModelPosition(int x) throws Exception;
 
 }

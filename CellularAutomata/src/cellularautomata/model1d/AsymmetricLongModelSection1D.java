@@ -23,7 +23,7 @@ public class AsymmetricLongModelSection1D<G extends SymmetricLongModel1D> extend
 	}
 
 	@Override
-	public long getFromPosition(int x) {
+	public long getFromPosition(int x) throws Exception {
 		return source.getFromAsymmetricPosition(x);
 	}
 

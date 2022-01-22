@@ -23,7 +23,7 @@ public class ObjectModel1DIterator<T> extends Model1DIterator<ObjectModel1D<T>, 
 	}
 
 	@Override
-	protected T getFromModelPosition(int x) {
+	protected T getFromModelPosition(int x) throws Exception {
 		return grid.getFromPosition(x);
 	}
 

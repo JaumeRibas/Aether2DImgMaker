@@ -31,7 +31,7 @@ public interface SymmetricLongModel1D extends LongModel1D, SymmetricModel1D {
 	 * @return the {@link long} value at (x)
 	 * @throws Exception 
 	 */
-	long getFromAsymmetricPosition(int x);
+	long getFromAsymmetricPosition(int x) throws Exception;
 	
 	@Override
 	default LongModel1D asymmetricSection() {

@@ -27,8 +27,9 @@ public interface ObjectModel1D<T> extends Model1D, ObjectModel<T> {
 	 * 
 	 * @param x the position on the x-axis
 	 * @return the value at (x)
+	 * @throws Exception 
 	 */
-	T getFromPosition(int x);
+	T getFromPosition(int x) throws Exception;
 	
 	@Override
 	default ObjectModel1D<T> subsection(int minX, int maxX) {

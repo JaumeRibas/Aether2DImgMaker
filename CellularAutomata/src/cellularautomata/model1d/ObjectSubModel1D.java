@@ -23,7 +23,7 @@ public class ObjectSubModel1D<T, G extends ObjectModel1D<T>> extends SubModel1D<
 	}
 
 	@Override
-	public T getFromPosition(int x) {
+	public T getFromPosition(int x) throws Exception {
 		return source.getFromPosition(x);
 	}
 
