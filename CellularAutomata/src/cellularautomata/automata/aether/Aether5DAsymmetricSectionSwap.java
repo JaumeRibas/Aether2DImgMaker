@@ -62,7 +62,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongModel5D
 	private File gridFolder;
 	private File readWriteGridFolder;
 	private long maxGridBlockSize;
-	private boolean readOnlyMode = false;
+	private boolean readingBackup = false;
 
 	/**
 	 * 
@@ -102,7 +102,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongModel5D
 	 * @throws FileNotFoundException 
 	 */
 	public Aether5DAsymmetricSectionSwap(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		readOnlyMode = true;
+		readingBackup = true;
 		gridFolder = new File(backupPath + File.separator + GRID_FOLDER_NAME);
 		if (!gridFolder.exists()) {
 			throw new FileNotFoundException("Missing grid folder at '" + gridFolder.getAbsolutePath() + "'");
@@ -176,8 +176,8 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongModel5D
 	@Override
 	public boolean nextStep() throws Exception {
 		step++;
-		if (readOnlyMode) {
-			readOnlyMode = false;
+		if (readingBackup) {
+			readingBackup = false;
 			if (readWriteGridFolder.exists()) {
 				FileUtils.cleanDirectory(readWriteGridFolder);
 			}
@@ -10784,7 +10784,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongModel5D
 			} else { //more than two blocks
 				//I keep the one closest to zero (in case it can be reused when computing the next step)
 				//and save the other
-				if (!readOnlyMode)
+				if (!readingBackup)
 					saveGridBlock(gridBlockA);
 				if (gridBlockB.minV > 0) {
 					gridBlockA.free();
@@ -10850,7 +10850,7 @@ public class Aether5DAsymmetricSectionSwap extends ActionableModel5D<LongModel5D
 		} else {
 			backupFolder.mkdirs();
 		}
-		if (!readOnlyMode) {
+		if (!readingBackup) {
 			if (gridBlockA != null) {
 				saveGridBlock(gridBlockA);
 			}
