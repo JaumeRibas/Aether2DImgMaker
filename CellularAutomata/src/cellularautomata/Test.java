@@ -2659,7 +2659,7 @@ public class Test {
 		System.out.println(headFoot);
 	}
 	
-	public static <T> void printAsGrid(ObjectModel1D<T> grid, T backgroundValue) {
+	public static <T> void printAsGrid(ObjectModel1D<T> grid, T backgroundValue) throws Exception {
 		int maxDigits = 3;
 		int maxX = grid.getMaxX();
 		int minX = grid.getMinX();
@@ -2735,7 +2735,7 @@ public class Test {
 		System.out.println(headFoot);
 	}
 	
-	public static void printAsGrid(LongModel1D grid, long backgroundValue) {
+	public static void printAsGrid(LongModel1D grid, long backgroundValue) throws Exception {
 		int maxDigits = 3;
 		int maxX = grid.getMaxX();
 		int minX = grid.getMinX();
