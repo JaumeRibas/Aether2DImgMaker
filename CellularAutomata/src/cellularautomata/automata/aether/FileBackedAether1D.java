@@ -434,6 +434,8 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 	@Override
 	public void close() throws IOException {
 		grid.close();
-		currentFile.delete();
+		if (!readingBackup) {
+			currentFile.delete();				
+		}
 	}
 }
