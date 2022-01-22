@@ -63,7 +63,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableModel3D<Numer
 	private SizeLimitedAnisotropicBigIntModel3DBlock gridBlockA;
 	private SizeLimitedAnisotropicBigIntModel3DBlock gridBlockB;
 	private BigInt initialValue;
-	private int step;
+	private long step;
 	private int maxX;
 	private File gridFolder;
 	private int gridBlockSide;
@@ -2350,7 +2350,7 @@ public class BigIntAether3DAsymmetricSectionSwap extends ActionableModel3D<Numer
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (BigInt) properties.get("initialValue");
-		step = (int) properties.get("step");
+		step = (long) properties.get("step");
 		maxX = (int) properties.get("maxX");
 		gridBlockSide = (int) properties.get("gridBlockSide");
 		creationTimestamp = (String) properties.get("creationTimestamp");

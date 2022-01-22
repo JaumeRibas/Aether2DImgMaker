@@ -57,7 +57,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongModel3D
 	private SizeLimitedAnisotropicLongModel3DBlock gridBlockA;
 	private SizeLimitedAnisotropicLongModel3DBlock gridBlockB;
 	private long initialValue;
-	private int step;
+	private long step;
 	private int maxX;
 	private File gridFolder;
 	private File readWriteGridFolder;
@@ -2298,7 +2298,7 @@ public class Aether3DAsymmetricSectionSwap extends ActionableModel3D<LongModel3D
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (long) properties.get("initialValue");
-		step = (int) properties.get("step");
+		step = (long) properties.get("step");
 		maxX = (int) properties.get("maxX");
 		maxGridBlockSize = (long) properties.get("maxGridBlockSize");
 	}

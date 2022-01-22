@@ -31,7 +31,7 @@ import cellularautomata.model.SymmetricIntModel;
 public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHypercubicModel {
 
 	private int gridDimension;
-	private int step;
+	private long step;
 	private int initialValue;
 	private int backgroundValue;
 	

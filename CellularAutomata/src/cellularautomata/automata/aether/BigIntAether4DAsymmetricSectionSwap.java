@@ -65,7 +65,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numer
 	private SizeLimitedAnisotropicBigIntModel4DBlock gridBlockA;
 	private SizeLimitedAnisotropicBigIntModel4DBlock gridBlockB;
 	private BigInt initialValue;
-	private int step;
+	private long step;
 	private int maxW, maxX, maxY, maxZ;
 	private File gridFolder;
 	private int gridBlockSide;
@@ -684,7 +684,7 @@ public class BigIntAether4DAsymmetricSectionSwap extends ActionableModel4D<Numer
 	
 	private void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (BigInt) properties.get("initialValue");
-		step = (int) properties.get("step");
+		step = (long) properties.get("step");
 		maxW = (int) properties.get("maxW"); 
 		maxX = (int) properties.get("maxX"); 
 		maxY = (int) properties.get("maxY"); 
