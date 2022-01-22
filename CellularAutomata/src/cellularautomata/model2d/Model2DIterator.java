@@ -50,7 +50,7 @@ public abstract class Model2DIterator<G extends Model2D, T> implements Iterator<
 		try {
 			next = getFromModelPosition(x, y);
 		} catch (Exception e) {
-			throw new NoSuchElementException(e.getMessage());
+			throw new NoSuchElementException(e.toString());
 		}
 		if (y == localMaxY) {
 			if (x == maxX) {

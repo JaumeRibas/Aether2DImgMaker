@@ -58,7 +58,7 @@ public abstract class Model4DIterator<G extends Model4D, T> implements Iterator<
 		try {
 			next = getFromModelPosition(w, x, y, z);
 		} catch (Exception e) {
-			throw new NoSuchElementException(e.getMessage());
+			throw new NoSuchElementException(e.toString());
 		}
 		if (z == localMaxZ) {
 			if (y == localMaxY) {

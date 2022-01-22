@@ -62,7 +62,7 @@ public abstract class ModelIterator<G extends Model, T> implements Iterator<T> {
 		try {
 			next = getFromModelPosition(immutableCoords);
 		} catch (Exception e) {
-			throw new NoSuchElementException(e.getMessage());
+			throw new NoSuchElementException(e.toString());
 		}
 		int axis = dimensionMinusOne;
 		while (axis >= 0 && coords[axis] == maxCoords[axis]) {

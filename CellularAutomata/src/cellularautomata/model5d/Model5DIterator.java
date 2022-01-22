@@ -62,7 +62,7 @@ public abstract class Model5DIterator<G extends Model5D, T> implements Iterator<
 		try {
 			next = getFromModelPosition(v, w, x, y, z);
 		} catch (Exception e) {
-			throw new NoSuchElementException(e.getMessage());
+			throw new NoSuchElementException(e.toString());
 		}
 		if (z == localMaxZ) {
 			if (y == localMaxY) {
