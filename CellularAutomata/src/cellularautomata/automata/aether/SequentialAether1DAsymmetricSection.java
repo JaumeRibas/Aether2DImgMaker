@@ -48,7 +48,7 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
 	
 	private static final String fileNameFormat = "step=%d.data";
-	private File gridFolder;
+	private String gridFolderPath;
 	private File currentFile;
 	private long step;
 	private long initialValue;
@@ -60,12 +60,13 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
-		gridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + "grid");
+		File gridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + "grid");
 		if (!gridFolder.exists()) {
 			gridFolder.mkdirs();
 		} else {
 			FileUtils.cleanDirectory(gridFolder);
 		}
+		gridFolderPath = gridFolder.getPath();
 		step = 0;
 		maxX = 2;
 		createFirstFile();
@@ -74,7 +75,7 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 	private void createFirstFile() throws IOException {
 		DataOutputStream outputStream = null;
 		try {
-			currentFile = new File(gridFolder.getPath() + File.separator + String.format(fileNameFormat, step));
+			currentFile = new File(gridFolderPath + File.separator + String.format(fileNameFormat, step));
 			outputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(currentFile)));
 			outputStream.writeLong(initialValue);
 			outputStream.writeLong(0);
@@ -119,7 +120,7 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 		DataOutputStream newGridWriter = null;
 		try {
 			oldGridReader = new DataInputStream(new BufferedInputStream(new FileInputStream(currentFile)));
-			File newFile = new File(gridFolder.getPath() + File.separator + String.format(fileNameFormat, step + 1));
+			File newFile = new File(gridFolderPath + File.separator + String.format(fileNameFormat, step + 1));
 			newGridWriter = new DataOutputStream(new FileOutputStream(newFile));
 			boolean firstTwoSlicesChanged = false;
 			long currentOldValue, greaterXOldValue, smallerXOldValue, currentNewValue = 0, greaterXNewValue = 0, smallerXNewValue = 0;
