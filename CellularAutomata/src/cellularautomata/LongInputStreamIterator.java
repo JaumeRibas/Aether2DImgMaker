@@ -29,7 +29,7 @@ public class LongInputStreamIterator implements Iterator<Long> {
 	private boolean hasNext;
 	private boolean invalidated = false;
 	private List<LongInputStreamIterator> iteratorList;
-	private static final String invalidatedExceptionMessage = "This iterator has been invalidated.";
+	private static final String INVALIDATED_EXCEPTION_MESSAGE = "This iterator has been invalidated.";
 	
 	public LongInputStreamIterator(DataInputStream inputStream, List<LongInputStreamIterator> iteratorList) {
 		this.inputStream = inputStream;
@@ -53,7 +53,7 @@ public class LongInputStreamIterator implements Iterator<Long> {
 	@Override
 	public boolean hasNext() {
 		if (invalidated) {
-			throw new IllegalStateException(invalidatedExceptionMessage);
+			throw new IllegalStateException(INVALIDATED_EXCEPTION_MESSAGE);
 		}
 		return hasNext;
 	}
@@ -61,7 +61,7 @@ public class LongInputStreamIterator implements Iterator<Long> {
 	@Override
 	public Long next() {
 		if (invalidated) {
-			throw new IllegalStateException(invalidatedExceptionMessage);
+			throw new IllegalStateException(INVALIDATED_EXCEPTION_MESSAGE);
 		}
 		if (hasNext) {
 			long valueToReturn = nextValue;
