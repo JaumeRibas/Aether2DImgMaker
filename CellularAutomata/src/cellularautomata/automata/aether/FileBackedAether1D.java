@@ -68,8 +68,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 		gridFolderPath = gridFolder.getPath();
 		currentFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step));
 		grid = new RandomAccessFile(currentFile, "rw");
-		grid.setLength(5*POSITION_BYTES);
-		grid.seek(0);
+		grid.setLength(5*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
 		grid.writeLong(initialValue);
 		step = 0;
 		maxX = 2;
@@ -105,10 +104,9 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 		try {
 			File newFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
 			newGrid = new RandomAccessFile(newFile, "rw");
-			newGrid.setLength((maxX + 4)*POSITION_BYTES);
+			newGrid.setLength((maxX + 4)*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
 			boolean changed = false;
-			long oldCurrentValue, oldGreaterXValue, oldSmallerXValue,
-				newCurrentIncrement, newGreaterXIncrement, newSmallerXIncrement;
+			long oldCurrentValue, oldGreaterXValue, oldSmallerXValue;
 			//x = 0
 			oldCurrentValue = getFromAsymmetricPosition(0);
 			oldGreaterXValue = getFromAsymmetricPosition(1);
@@ -117,15 +115,14 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 				long share = toShare/3;
 				if (share != 0) {
 					changed = true;
-					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%3;
+					addToPosition(newGrid, 0, oldCurrentValue - toShare + share + toShare%3);
 					addToPosition(newGrid, 1, share);
 				} else {
-					newCurrentIncrement = oldCurrentValue;
+					addToPosition(newGrid, 0, oldCurrentValue);
 				}			
 			} else {
-				newCurrentIncrement = oldCurrentValue;
+				addToPosition(newGrid, 0, oldCurrentValue);
 			}
-			addToPosition(newGrid, 0, newCurrentIncrement);
 			//x = 1
 			//reuse values obtained previously
 			oldSmallerXValue = oldCurrentValue;
@@ -141,8 +138,8 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 							changed = true;
 						}
 						addToPosition(newGrid, 0, share + share);//one more for the symmetric position at the other side
-						newCurrentIncrement = oldCurrentValue - toShare + share + toShare%3;
-						newGreaterXIncrement = share;
+						addToPosition(newGrid, 1, oldCurrentValue - toShare + share + toShare%3);
+						addToPosition(newGrid, 2, share);
 					} else if (oldSmallerXValue < oldGreaterXValue) {
 						// sn < gn < current
 						long toShare = oldCurrentValue - oldGreaterXValue; 
@@ -150,18 +147,16 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						if (share != 0) {
 							changed = true;
 						}
-						newSmallerXIncrement = share + share;//one more for the symmetric position at the other side
-						newGreaterXIncrement = share;
+						addToPosition(newGrid, 0, share + share);//one more for the symmetric position at the other side
+						addToPosition(newGrid, 2, share);
 						long currentRemainingValue = oldCurrentValue - share - share;
 						toShare = currentRemainingValue - oldSmallerXValue; 
 						share = toShare/2;
 						if (share != 0) {
 							changed = true;
 						}
-						newSmallerXIncrement += share + share;//one more for the symmetric position at the other side
-						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
-						addToPosition(newGrid, 0, newSmallerXIncrement);
-						addToPosition(newGrid, 2, newGreaterXIncrement);
+						addToPosition(newGrid, 0, share + share);//one more for the symmetric position at the other side
+						addToPosition(newGrid, 1, currentRemainingValue - toShare + share + toShare%2);
 					} else {
 						// gn < sn < current
 						long toShare = oldCurrentValue - oldSmallerXValue; 
@@ -170,16 +165,15 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 							changed = true;
 						}
 						addToPosition(newGrid, 0, share + share);//one more for the symmetric position at the other side
-						newGreaterXIncrement = share;
+						addToPosition(newGrid, 2, share);
 						long currentRemainingValue = oldCurrentValue - share - share;
 						toShare = currentRemainingValue - oldGreaterXValue; 
 						share = toShare/2;
 						if (share != 0) {
 							changed = true;
 						}
-						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
-						newGreaterXIncrement += share;
-						addToPosition(newGrid, 2, newGreaterXIncrement);
+						addToPosition(newGrid, 1, currentRemainingValue - toShare + share + toShare%2);
+						addToPosition(newGrid, 2, share);
 					}
 				} else {
 					// sn < current <= gn
@@ -189,7 +183,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						changed = true;
 					}
 					addToPosition(newGrid, 0, share + share);//one more for the symmetric position at the other side
-					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
+					addToPosition(newGrid, 1, oldCurrentValue - toShare + share + toShare%2);
 				}
 			} else {
 				if (oldGreaterXValue < oldCurrentValue) {
@@ -199,14 +193,12 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 					if (share != 0) {
 						changed = true;
 					}
-					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
-					newGreaterXIncrement = share;
-					addToPosition(newGrid, 2, newGreaterXIncrement);
+					addToPosition(newGrid, 1, oldCurrentValue - toShare + share + toShare%2);
+					addToPosition(newGrid, 2, share);
 				} else {
-					newCurrentIncrement = oldCurrentValue;
+					addToPosition(newGrid, 1, oldCurrentValue);
 				}
 			}
-			addToPosition(newGrid, 1, newCurrentIncrement);
 			//2 <= x < edge - 2
 			int edge = maxX + 2;
 			int edgeMinusTwo = edge - 2;
@@ -240,8 +232,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 	private boolean toppleRangeBeyondX1(RandomAccessFile newGrid, int minX, int maxX) throws IOException {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
-		long oldSmallerXValue, oldCurrentValue = getFromAsymmetricPosition(xMinusOne), oldGreaterXValue = getFromAsymmetricPosition(x),
-				newCurrentIncrement, newGreaterXIncrement, newSmallerXIncrement;
+		long oldSmallerXValue, oldCurrentValue = getFromAsymmetricPosition(xMinusOne), oldGreaterXValue = getFromAsymmetricPosition(x);
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
 			//reuse values obtained previously
 			oldSmallerXValue = oldCurrentValue;
@@ -257,9 +248,8 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 							anyToppled = true;
 						}
 						addToPosition(newGrid, xMinusOne, share);
-						newCurrentIncrement = oldCurrentValue - toShare + share + toShare%3;
-						newGreaterXIncrement = share;
-						addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
+						addToPosition(newGrid, x, oldCurrentValue - toShare + share + toShare%3);
+						addToPosition(newGrid, xPlusOne, share);
 					} else if (oldSmallerXValue < oldGreaterXValue) {
 						// sn < gn < current
 						long toShare = oldCurrentValue - oldGreaterXValue; 
@@ -267,18 +257,16 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						if (share != 0) {
 							anyToppled = true;
 						}
-						newSmallerXIncrement = share;
-						newGreaterXIncrement = share;
+						addToPosition(newGrid, xMinusOne, share);
+						addToPosition(newGrid, xPlusOne, share);
 						long currentRemainingValue = oldCurrentValue - share - share;
 						toShare = currentRemainingValue - oldSmallerXValue; 
 						share = toShare/2;
 						if (share != 0) {
 							anyToppled = true;
 						}
-						newSmallerXIncrement += share;
-						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
-						addToPosition(newGrid, xMinusOne, newSmallerXIncrement);
-						addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
+						addToPosition(newGrid, xMinusOne, share);
+						addToPosition(newGrid, x, currentRemainingValue - toShare + share + toShare%2);
 					} else {
 						// gn < sn < current
 						long toShare = oldCurrentValue - oldSmallerXValue; 
@@ -287,16 +275,15 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 							anyToppled = true;
 						}
 						addToPosition(newGrid, xMinusOne, share);
-						newGreaterXIncrement = share;
+						addToPosition(newGrid, xPlusOne, share);
 						long currentRemainingValue = oldCurrentValue - share - share;
 						toShare = currentRemainingValue - oldGreaterXValue; 
 						share = toShare/2;
 						if (share != 0) {
 							anyToppled = true;
 						}
-						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
-						newGreaterXIncrement += share;
-						addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
+						addToPosition(newGrid, x, currentRemainingValue - toShare + share + toShare%2);
+						addToPosition(newGrid, xPlusOne, share);
 					}
 				} else {
 					// sn < current <= gn
@@ -306,7 +293,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						anyToppled = true;
 					}
 					addToPosition(newGrid, xMinusOne, share);
-					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
+					addToPosition(newGrid, x, oldCurrentValue - toShare + share + toShare%2);
 				}
 			} else {
 				if (oldGreaterXValue < oldCurrentValue) {
@@ -316,14 +303,12 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 					if (share != 0) {
 						anyToppled = true;
 					}
-					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
-					newGreaterXIncrement = share;
-					addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
+					addToPosition(newGrid, x, oldCurrentValue - toShare + share + toShare%2);
+					addToPosition(newGrid, xPlusOne, share);
 				} else {
-					newCurrentIncrement = oldCurrentValue;
+					addToPosition(newGrid, x, oldCurrentValue);
 				}
 			}
-			addToPosition(newGrid, x, newCurrentIncrement);
 		}
 		return anyToppled;
 	}
