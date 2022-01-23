@@ -91,7 +91,7 @@ public class IntAether3DSwapEvenOddImgMaker {
 			} else {
 				imgMaker = new ImgMaker();
 			}
-			final int crossSectionZ = 0;
+			int crossSectionZ = 0;
 			if (isScanInitialXIndexDefined) {
 				imgMaker.createXScanningAndZCrossSectionEvenOddImagesFromIntModel3D(ca, scanXInitialIndex, crossSectionZ, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
