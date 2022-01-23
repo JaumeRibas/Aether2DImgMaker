@@ -42,9 +42,8 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 	public static final int POSITION_BYTES = Long.BYTES;
 
 	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
-	private static final String GRID_FOLDER_NAME = "grid";
-	
-	private static final String fileNameFormat = "step=%d.data";
+	private static final String GRID_FOLDER_NAME = "grid";	
+	private static final String FILE_NAME_FORMAT = "step=%d.data";
 
 	private RandomAccessFile grid;
 	private String gridFolderPath;
@@ -67,26 +66,13 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 			FileUtils.cleanDirectory(gridFolder);
 		}
 		gridFolderPath = gridFolder.getPath();
+		currentFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step));
+		grid = new RandomAccessFile(currentFile, "rw");
+		grid.setLength(5*POSITION_BYTES);
+		grid.seek(0);
+		grid.writeLong(initialValue);
 		step = 0;
 		maxX = 2;
-		createFirstFile();
-	}
-	
-	private void createFirstFile() throws IOException {
-		try {
-			currentFile = new File(gridFolderPath + File.separator + String.format(fileNameFormat, step));
-			grid = new RandomAccessFile(currentFile, "rw");
-			grid.writeLong(initialValue);
-			grid.writeLong(0);
-			grid.writeLong(0);
-			grid.writeLong(0);
-			grid.writeLong(0);
-		} catch (Exception e) {
-			if (grid != null) {
-				grid.close();
-			}
-			throw e;
-		}
 	}
 	
 	/**
@@ -108,7 +94,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 		HashMap<String, Object> properties = 
 				(HashMap<String, Object>) Utils.deserializeFromFile(backupPath + File.separator + PROPERTIES_BACKUP_FILE_NAME);
 		setPropertiesFromMap(properties);
-		currentFile = new File(backupGridFolder.getPath() + File.separator + String.format(fileNameFormat, step));
+		currentFile = new File(backupGridFolder.getPath() + File.separator + String.format(FILE_NAME_FORMAT, step));
 		grid = new RandomAccessFile(currentFile, "r");
 		gridFolderPath = folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME;
 	}
@@ -117,8 +103,9 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 	public boolean nextStep() throws IOException {
 		RandomAccessFile newGrid = null;
 		try {
-			File newFile = new File(gridFolderPath + File.separator + String.format(fileNameFormat, step + 1));
+			File newFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
 			newGrid = new RandomAccessFile(newFile, "rw");
+			newGrid.setLength((maxX + 4)*POSITION_BYTES);
 			boolean changed = false;
 			long oldCurrentValue, oldGreaterXValue, oldSmallerXValue,
 				newCurrentIncrement, newGreaterXIncrement, newSmallerXIncrement;
@@ -131,17 +118,14 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 				if (share != 0) {
 					changed = true;
 					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%3;
-					newGreaterXIncrement = share;
+					addToPosition(newGrid, 1, share);
 				} else {
 					newCurrentIncrement = oldCurrentValue;
-					newGreaterXIncrement = 0;
 				}			
 			} else {
 				newCurrentIncrement = oldCurrentValue;
-				newGreaterXIncrement = 0;
 			}
-			setAtPosition(newGrid, 0, newCurrentIncrement);
-			setAtPosition(newGrid, 1, newGreaterXIncrement);
+			addToPosition(newGrid, 0, newCurrentIncrement);
 			//x = 1
 			//reuse values obtained previously
 			oldSmallerXValue = oldCurrentValue;
@@ -177,6 +161,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						newSmallerXIncrement += share + share;//one more for the symmetric position at the other side
 						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
 						addToPosition(newGrid, 0, newSmallerXIncrement);
+						addToPosition(newGrid, 2, newGreaterXIncrement);
 					} else {
 						// gn < sn < current
 						long toShare = oldCurrentValue - oldSmallerXValue; 
@@ -194,6 +179,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						}
 						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
 						newGreaterXIncrement += share;
+						addToPosition(newGrid, 2, newGreaterXIncrement);
 					}
 				} else {
 					// sn < current <= gn
@@ -204,7 +190,6 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 					}
 					addToPosition(newGrid, 0, share + share);//one more for the symmetric position at the other side
 					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
-					newGreaterXIncrement = 0;
 				}
 			} else {
 				if (oldGreaterXValue < oldCurrentValue) {
@@ -216,13 +201,12 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 					}
 					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
 					newGreaterXIncrement = share;
+					addToPosition(newGrid, 2, newGreaterXIncrement);
 				} else {
 					newCurrentIncrement = oldCurrentValue;
-					newGreaterXIncrement = 0;
 				}
 			}
 			addToPosition(newGrid, 1, newCurrentIncrement);
-			setAtPosition(newGrid, 2, newGreaterXIncrement);
 			//2 <= x < edge - 2
 			int edge = maxX + 2;
 			int edgeMinusTwo = edge - 2;
@@ -232,7 +216,6 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 			//edge - 2 <= x < edge
 			if (toppleRangeBeyondX1(newGrid, edgeMinusTwo, edge)) {
 				changed = true;
-				setAtPosition(newGrid, edge + 1, 0); //extend the grid
 				maxX++;
 			}
 			grid.close();
@@ -276,6 +259,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						addToPosition(newGrid, xMinusOne, share);
 						newCurrentIncrement = oldCurrentValue - toShare + share + toShare%3;
 						newGreaterXIncrement = share;
+						addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
 					} else if (oldSmallerXValue < oldGreaterXValue) {
 						// sn < gn < current
 						long toShare = oldCurrentValue - oldGreaterXValue; 
@@ -294,6 +278,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						newSmallerXIncrement += share;
 						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
 						addToPosition(newGrid, xMinusOne, newSmallerXIncrement);
+						addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
 					} else {
 						// gn < sn < current
 						long toShare = oldCurrentValue - oldSmallerXValue; 
@@ -311,6 +296,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 						}
 						newCurrentIncrement = currentRemainingValue - toShare + share + toShare%2;
 						newGreaterXIncrement += share;
+						addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
 					}
 				} else {
 					// sn < current <= gn
@@ -321,7 +307,6 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 					}
 					addToPosition(newGrid, xMinusOne, share);
 					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
-					newGreaterXIncrement = 0;
 				}
 			} else {
 				if (oldGreaterXValue < oldCurrentValue) {
@@ -333,13 +318,12 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 					}
 					newCurrentIncrement = oldCurrentValue - toShare + share + toShare%2;
 					newGreaterXIncrement = share;
+					addToPosition(newGrid, xPlusOne, newGreaterXIncrement);
 				} else {
 					newCurrentIncrement = oldCurrentValue;
-					newGreaterXIncrement = 0;
 				}
 			}
 			addToPosition(newGrid, x, newCurrentIncrement);
-			setAtPosition(newGrid, xPlusOne, newGreaterXIncrement);
 		}
 		return anyToppled;
 	}
@@ -358,11 +342,6 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 	public long getFromAsymmetricPosition(int x) throws IOException {
 		grid.seek(x*POSITION_BYTES);
 		return grid.readLong();
-	}
-	
-	private static void setAtPosition(RandomAccessFile grid, int x, long value) throws IOException {
-		grid.seek(x*POSITION_BYTES);
-		grid.writeLong(value);
 	}
 	
 	private static void addToPosition(RandomAccessFile grid, int x, long value) throws IOException {
