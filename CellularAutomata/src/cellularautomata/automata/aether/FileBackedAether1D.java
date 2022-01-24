@@ -102,14 +102,14 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 	public boolean nextStep() throws IOException {
 		RandomAccessFile newGrid = null;
 		try {
-			File newFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
-			newGrid = new RandomAccessFile(newFile, "rw");
-			newGrid.setLength((maxX + 4)*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
 			boolean changed = false;
 			long currentValue, greaterXNeighborValue, smallerXNeighborValue;
 			//x = 0
 			currentValue = getFromAsymmetricPosition(0);
 			greaterXNeighborValue = getFromAsymmetricPosition(1);
+			File newFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
+			newGrid = new RandomAccessFile(newFile, "rw");
+			newGrid.setLength((maxX + 4)*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
 			if (greaterXNeighborValue < currentValue) {
 				long toShare = currentValue - greaterXNeighborValue;
 				long share = toShare/3;
@@ -221,10 +221,9 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 			step++;
 			return changed;
 		} catch (Exception ex) {
-			if (grid != null)
-				grid.close();
 			if (newGrid != null)
 				newGrid.close();
+			close();
 			throw ex;
 		}
 	}
@@ -399,7 +398,7 @@ public class FileBackedAether1D implements SymmetricLongModel1D, IsotropicModel1
 	public void close() throws IOException {
 		grid.close();
 		if (!readingBackup) {
-			currentFile.delete();				
+			FileUtils.deleteDirectory(new File(gridFolderPath));
 		}
 	}
 }

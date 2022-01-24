@@ -101,338 +101,345 @@ public class FileBackedAether2D implements SymmetricLongModel2D, IsotropicSquare
 	@Override
 	public boolean nextStep() throws IOException {
 		RandomAccessFile newGrid = null;
-		File newFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
-		newGrid = new RandomAccessFile(newFile, "rw");
-		long newGridXLength = (maxX + 4);
-		long newGridLength = (newGridXLength*newGridXLength-newGridXLength)/2+newGridXLength;
-		newGrid.setLength(newGridLength*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
-		boolean changed = false;
-		long currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue;
-		// x = 0, y = 0
-		currentValue = getFromAsymmetricPosition(0, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(1, 0);
-		if (greaterXNeighborValue < currentValue) {
-			long toShare = currentValue - greaterXNeighborValue;
-			long share = toShare/5;
-			if (share != 0) {
-				changed = true;
-				addToPosition(newGrid, 0, 0, currentValue - toShare + share + toShare%5);
-				addToPosition(newGrid, 1, 0, share);
+		try {
+			boolean changed = false;
+			long currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue;
+			// x = 0, y = 0
+			currentValue = getFromAsymmetricPosition(0, 0);
+			greaterXNeighborValue = getFromAsymmetricPosition(1, 0);
+			File newFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
+			newGrid = new RandomAccessFile(newFile, "rw");
+			long newGridXLength = (maxX + 4);
+			long newGridLength = (newGridXLength*newGridXLength-newGridXLength)/2+newGridXLength;
+			newGrid.setLength(newGridLength*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
+			if (greaterXNeighborValue < currentValue) {
+				long toShare = currentValue - greaterXNeighborValue;
+				long share = toShare/5;
+				if (share != 0) {
+					changed = true;
+					addToPosition(newGrid, 0, 0, currentValue - toShare + share + toShare%5);
+					addToPosition(newGrid, 1, 0, share);
+				} else {
+					addToPosition(newGrid, 0, 0, currentValue);
+				}			
 			} else {
 				addToPosition(newGrid, 0, 0, currentValue);
-			}			
-		} else {
-			addToPosition(newGrid, 0, 0, currentValue);
-		}
-		// x = 1, y = 0
-		int relevantAsymmetricNeighborCount = 0;
-		int relevantNeighborCount = 0;
-		long[] relevantAsymmetricNeighborValues = new long[4];
-		int[] sortedNeighborsIndexes = new int[4];
-		int[][] relevantAsymmetricNeighborCoords = new int[4][2];
-		int[] relevantAsymmetricNeighborShareMultipliers = new int[4];// to compensate for omitted symmetric positions
-		int[] relevantAsymmetricNeighborSymmetryCounts = new int[4];// to compensate for omitted symmetric positions
-		// reuse values obtained previously
-		smallerXNeighborValue = currentValue;
-		currentValue = greaterXNeighborValue;
-		greaterYNeighborValue = getFromAsymmetricPosition(1, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(2, 0);
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 0;// x coordinate
-			nc[1] = 0;// y coordinate
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (topplePosition(newGrid, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
-				relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
-			changed = true;
-		}
-		// x = 1, y = 1
-		// reuse values obtained previously
-		smallerYNeighborValue = currentValue;
-		currentValue = greaterYNeighborValue;
-		greaterXNeighborValue = getFromAsymmetricPosition(2, 1);
-		if (smallerYNeighborValue < currentValue) {
+			}
+			// x = 1, y = 0
+			int relevantAsymmetricNeighborCount = 0;
+			int relevantNeighborCount = 0;
+			long[] relevantAsymmetricNeighborValues = new long[4];
+			int[] sortedNeighborsIndexes = new int[4];
+			int[][] relevantAsymmetricNeighborCoords = new int[4][2];
+			int[] relevantAsymmetricNeighborShareMultipliers = new int[4];// to compensate for omitted symmetric positions
+			int[] relevantAsymmetricNeighborSymmetryCounts = new int[4];// to compensate for omitted symmetric positions
+			// reuse values obtained previously
+			smallerXNeighborValue = currentValue;
+			currentValue = greaterXNeighborValue;
+			greaterYNeighborValue = getFromAsymmetricPosition(1, 1);
+			greaterXNeighborValue = getFromAsymmetricPosition(2, 0);
+			if (smallerXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 0;// x coordinate
+				nc[1] = 0;// y coordinate
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 4;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+				relevantNeighborCount++;
+				relevantAsymmetricNeighborCount++;
+			}
 			if (greaterXNeighborValue < currentValue) {
-				if (smallerYNeighborValue == greaterXNeighborValue) {
-					// gx = sy < current
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
-					if (share != 0) {
-						changed = true;
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 2;
+				nc[1] = 0;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+				relevantNeighborCount++;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = 1;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+				relevantNeighborCount += 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (topplePosition(newGrid, currentValue, 1, 0, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
+					relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
+				changed = true;
+			}
+			// x = 1, y = 1
+			// reuse values obtained previously
+			smallerYNeighborValue = currentValue;
+			currentValue = greaterYNeighborValue;
+			greaterXNeighborValue = getFromAsymmetricPosition(2, 1);
+			if (smallerYNeighborValue < currentValue) {
+				if (greaterXNeighborValue < currentValue) {
+					if (smallerYNeighborValue == greaterXNeighborValue) {
+						// gx = sy < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 1, 0, share + share);// one more for the symmetric position at the other side
+						addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%5);
+						addToPosition(newGrid, 2, 1, share);
+					} else if (smallerYNeighborValue < greaterXNeighborValue) {
+						// sy < gx < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 1, 0, share + share);
+						addToPosition(newGrid, 2, 1, share);
+						long currentRemainingValue = currentValue - 4*share;
+						toShare = currentRemainingValue - smallerYNeighborValue; 
+						share = toShare/3;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 1, 0, share + share);
+						addToPosition(newGrid, 1, 1, currentRemainingValue - toShare + share + toShare%3);
+					} else {
+						// gx < sy < current
+						long toShare = currentValue - smallerYNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 1, 0, share + share);
+						addToPosition(newGrid, 2, 1, share);
+						long currentRemainingValue = currentValue - 4*share;
+						toShare = currentRemainingValue - greaterXNeighborValue; 
+						share = toShare/3;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 1, 1, currentRemainingValue - toShare + share + toShare%3);
+						addToPosition(newGrid, 2, 1, share);
 					}
-					addToPosition(newGrid, 1, 0, share + share);// one more for the symmetric position at the other side
-					addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%5);
-					addToPosition(newGrid, 2, 1, share);
-				} else if (smallerYNeighborValue < greaterXNeighborValue) {
-					// sy < gx < current
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 1, 0, share + share);
-					addToPosition(newGrid, 2, 1, share);
-					long currentRemainingValue = currentValue - 4*share;
-					toShare = currentRemainingValue - smallerYNeighborValue; 
-					share = toShare/3;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 1, 0, share + share);
-					addToPosition(newGrid, 1, 1, currentRemainingValue - toShare + share + toShare%3);
 				} else {
-					// gx < sy < current
+					// sy < current <= gx
 					long toShare = currentValue - smallerYNeighborValue; 
-					long share = toShare/5;
+					long share = toShare/3;
 					if (share != 0) {
 						changed = true;
 					}
 					addToPosition(newGrid, 1, 0, share + share);
-					addToPosition(newGrid, 2, 1, share);
-					long currentRemainingValue = currentValue - 4*share;
-					toShare = currentRemainingValue - greaterXNeighborValue; 
-					share = toShare/3;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 1, 1, currentRemainingValue - toShare + share + toShare%3);
-					addToPosition(newGrid, 2, 1, share);
+					addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%3);
 				}
 			} else {
-				// sy < current <= gx
-				long toShare = currentValue - smallerYNeighborValue; 
-				long share = toShare/3;
-				if (share != 0) {
-					changed = true;
-				}
-				addToPosition(newGrid, 1, 0, share + share);
-				addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%3);
-			}
-		} else {
-			if (greaterXNeighborValue < currentValue) {
-				// gx < current <= sy
-				long toShare = currentValue - greaterXNeighborValue; 
-				long share = toShare/3;
-				if (share != 0) {
-					changed = true;
-				}
-				addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%3);
-				addToPosition(newGrid, 2, 1, share);
-			} else {
-				addToPosition(newGrid, 1, 1, currentValue);
-			}
-		}
-		// x = 2, y = 0
-		relevantAsymmetricNeighborCount = 0;
-		relevantNeighborCount = 0;
-		// reuse values obtained previously
-		greaterYNeighborValue = greaterXNeighborValue;
-		currentValue = getFromAsymmetricPosition(2, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(3, 0);
-		smallerXNeighborValue = getFromAsymmetricPosition(1, 0);
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 0;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 3;
-			nc[1] = 0;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
-			relevantNeighborCount++;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = 1;
-			relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
-			relevantNeighborCount += 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (topplePosition(newGrid, currentValue, 2, 0, relevantAsymmetricNeighborValues, 
-				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
-				relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
-			changed = true;
-		}
-		// x = 2, y = 1
-		relevantAsymmetricNeighborCount = 0;
-		// reuse values obtained previously
-		smallerYNeighborValue = currentValue;
-		currentValue = greaterYNeighborValue;
-		greaterYNeighborValue = getFromAsymmetricPosition(2, 2);
-		smallerXNeighborValue = getFromAsymmetricPosition(1, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(3, 1);
-		if (smallerXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 1;
-			nc[1] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterXNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 3;
-			nc[1] = 1;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (smallerYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = 0;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (greaterYNeighborValue < currentValue) {
-			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
-			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
-			nc[0] = 2;
-			nc[1] = 2;
-			relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
-			relevantAsymmetricNeighborCount++;
-		}
-		if (topplePosition(newGrid, currentValue, 2, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
-			changed = true;
-		}
-		// x = 2, y = 2
-		// reuse values obtained previously
-		smallerYNeighborValue = currentValue;
-		currentValue = greaterYNeighborValue;
-		greaterXNeighborValue = getFromAsymmetricPosition(3, 2);
-		if (smallerYNeighborValue < currentValue) {
-			if (greaterXNeighborValue < currentValue) {
-				if (smallerYNeighborValue == greaterXNeighborValue) {
-					// gx = sy < current
+				if (greaterXNeighborValue < currentValue) {
+					// gx < current <= sy
 					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
+					long share = toShare/3;
 					if (share != 0) {
 						changed = true;
 					}
+					addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%3);
 					addToPosition(newGrid, 2, 1, share);
-					addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%5);
-					addToPosition(newGrid, 3, 2, share);
-				} else if (smallerYNeighborValue < greaterXNeighborValue) {
-					// sy < gx < current
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 2, 1, share);
-					addToPosition(newGrid, 3, 2, share);
-					long currentRemainingValue = currentValue - 4*share;
-					toShare = currentRemainingValue - smallerYNeighborValue; 
-					share = toShare/3;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 2, 1, share);
-					addToPosition(newGrid, 2, 2, currentRemainingValue - toShare + share + toShare%3);
 				} else {
-					// gx < sy < current
+					addToPosition(newGrid, 1, 1, currentValue);
+				}
+			}
+			// x = 2, y = 0
+			relevantAsymmetricNeighborCount = 0;
+			relevantNeighborCount = 0;
+			// reuse values obtained previously
+			greaterYNeighborValue = greaterXNeighborValue;
+			currentValue = getFromAsymmetricPosition(2, 0);
+			greaterXNeighborValue = getFromAsymmetricPosition(3, 0);
+			smallerXNeighborValue = getFromAsymmetricPosition(1, 0);
+			if (smallerXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = 0;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+				relevantNeighborCount++;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 3;
+				nc[1] = 0;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 1;
+				relevantNeighborCount++;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 2;
+				nc[1] = 1;
+				relevantAsymmetricNeighborSymmetryCounts[relevantAsymmetricNeighborCount] = 2;
+				relevantNeighborCount += 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (topplePosition(newGrid, currentValue, 2, 0, relevantAsymmetricNeighborValues, 
+					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
+					relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
+				changed = true;
+			}
+			// x = 2, y = 1
+			relevantAsymmetricNeighborCount = 0;
+			// reuse values obtained previously
+			smallerYNeighborValue = currentValue;
+			currentValue = greaterYNeighborValue;
+			greaterYNeighborValue = getFromAsymmetricPosition(2, 2);
+			smallerXNeighborValue = getFromAsymmetricPosition(1, 1);
+			greaterXNeighborValue = getFromAsymmetricPosition(3, 1);
+			if (smallerXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 1;
+				nc[1] = 1;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterXNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 3;
+				nc[1] = 1;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 1;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (smallerYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 2;
+				nc[1] = 0;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (greaterYNeighborValue < currentValue) {
+				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
+				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
+				nc[0] = 2;
+				nc[1] = 2;
+				relevantAsymmetricNeighborShareMultipliers[relevantAsymmetricNeighborCount] = 2;
+				relevantAsymmetricNeighborCount++;
+			}
+			if (topplePosition(newGrid, currentValue, 2, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
+				changed = true;
+			}
+			// x = 2, y = 2
+			// reuse values obtained previously
+			smallerYNeighborValue = currentValue;
+			currentValue = greaterYNeighborValue;
+			greaterXNeighborValue = getFromAsymmetricPosition(3, 2);
+			if (smallerYNeighborValue < currentValue) {
+				if (greaterXNeighborValue < currentValue) {
+					if (smallerYNeighborValue == greaterXNeighborValue) {
+						// gx = sy < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 2, 1, share);
+						addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%5);
+						addToPosition(newGrid, 3, 2, share);
+					} else if (smallerYNeighborValue < greaterXNeighborValue) {
+						// sy < gx < current
+						long toShare = currentValue - greaterXNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 2, 1, share);
+						addToPosition(newGrid, 3, 2, share);
+						long currentRemainingValue = currentValue - 4*share;
+						toShare = currentRemainingValue - smallerYNeighborValue; 
+						share = toShare/3;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 2, 1, share);
+						addToPosition(newGrid, 2, 2, currentRemainingValue - toShare + share + toShare%3);
+					} else {
+						// gx < sy < current
+						long toShare = currentValue - smallerYNeighborValue; 
+						long share = toShare/5;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 2, 1, share);
+						addToPosition(newGrid, 3, 2, share);
+						long currentRemainingValue = currentValue - 4*share;
+						toShare = currentRemainingValue - greaterXNeighborValue; 
+						share = toShare/3;
+						if (share != 0) {
+							changed = true;
+						}
+						addToPosition(newGrid, 2, 2, currentRemainingValue - toShare + share + toShare%3);
+						addToPosition(newGrid, 3, 2, share);
+					}
+				} else {
+					// sy < current <= gx
 					long toShare = currentValue - smallerYNeighborValue; 
-					long share = toShare/5;
+					long share = toShare/3;
 					if (share != 0) {
 						changed = true;
 					}
 					addToPosition(newGrid, 2, 1, share);
-					addToPosition(newGrid, 3, 2, share);
-					long currentRemainingValue = currentValue - 4*share;
-					toShare = currentRemainingValue - greaterXNeighborValue; 
-					share = toShare/3;
+					addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%3);
+				}
+			} else {
+				if (greaterXNeighborValue < currentValue) {
+					// gx < current <= sy
+					long toShare = currentValue - greaterXNeighborValue; 
+					long share = toShare/3;
 					if (share != 0) {
 						changed = true;
 					}
-					addToPosition(newGrid, 2, 2, currentRemainingValue - toShare + share + toShare%3);
+					addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%3);
 					addToPosition(newGrid, 3, 2, share);
+				} else {
+					addToPosition(newGrid, 2, 2, currentValue);
 				}
-			} else {
-				// sy < current <= gx
-				long toShare = currentValue - smallerYNeighborValue; 
-				long share = toShare/3;
-				if (share != 0) {
-					changed = true;
-				}
-				addToPosition(newGrid, 2, 1, share);
-				addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%3);
 			}
-		} else {
-			if (greaterXNeighborValue < currentValue) {
-				// gx < current <= sy
-				long toShare = currentValue - greaterXNeighborValue; 
-				long share = toShare/3;
-				if (share != 0) {
-					changed = true;
-				}
-				addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%3);
-				addToPosition(newGrid, 3, 2, share);
-			} else {
-				addToPosition(newGrid, 2, 2, currentValue);
+			// 3 <= x < edge - 2
+			int edge = maxX + 2;
+			int edgeMinusTwo = edge - 2;
+			if (toppleRangeBeyondX2(newGrid, 3, edgeMinusTwo, 
+					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes)) { // is it faster to reuse these arrays?
+				changed = true;
 			}
+			//edge - 2 <= x < edge
+			if (toppleRangeBeyondX2(newGrid, edgeMinusTwo, edge, 
+					relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
+					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes)) {
+				changed = true;
+				maxX++;
+			}
+			grid.close();
+			if (readingBackup) {
+				readingBackup = false;
+			} else {
+				currentFile.delete();				
+			}
+			currentFile = newFile;
+			grid = newGrid;
+			step++;
+			return changed;
+		} catch (Exception ex) {
+			if (newGrid != null)
+				newGrid.close();
+			close();
+			throw ex;
 		}
-		// 3 <= x < edge - 2
-		int edge = maxX + 2;
-		int edgeMinusTwo = edge - 2;
-		if (toppleRangeBeyondX2(newGrid, 3, edgeMinusTwo, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes)) { // is it faster to reuse these arrays?
-			changed = true;
-		}
-		//edge - 2 <= x < edge
-		if (toppleRangeBeyondX2(newGrid, edgeMinusTwo, edge, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes)) {
-			changed = true;
-			maxX++;
-		}
-		grid.close();
-		if (readingBackup) {
-			readingBackup = false;
-		} else {
-			currentFile.delete();				
-		}
-		currentFile = newFile;
-		grid = newGrid;
-		step++;
-		return changed;
 	}
 	
 	private boolean toppleRangeBeyondX2(RandomAccessFile newGrid, int minX, int maxX, 
@@ -1223,7 +1230,7 @@ public class FileBackedAether2D implements SymmetricLongModel2D, IsotropicSquare
 	public void close() throws IOException {
 		grid.close();
 		if (!readingBackup) {
-			currentFile.delete();				
+			FileUtils.deleteDirectory(new File(gridFolderPath));			
 		}
 	}
 }
