@@ -172,7 +172,6 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 						long toShare = value - biggestSmallerNeighborValue;
 						long share = toShare/shareCount;
 						if (share != 0) {
-							neighborValue += share;
 							checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
 							changed = true;
 							value = value - toShare + toShare%shareCount + share;
