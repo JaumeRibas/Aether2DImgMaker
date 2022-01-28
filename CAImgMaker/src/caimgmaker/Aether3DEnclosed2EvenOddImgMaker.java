@@ -39,9 +39,9 @@ public class Aether3DEnclosed2EvenOddImgMaker {
 			String strInitialValue = args[0];
 			if (strInitialValue.matches("-?\\d+")) {
 				BigInteger tmp = new BigInteger(strInitialValue);
-				if (tmp.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0 
-						&& tmp.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) {
-					initialValue = tmp.intValue();
+				if (tmp.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0 
+						&& tmp.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) {
+					initialValue = tmp.longValue();
 				} else {
 					System.err.println("Initial value out of range.");
 					return;
