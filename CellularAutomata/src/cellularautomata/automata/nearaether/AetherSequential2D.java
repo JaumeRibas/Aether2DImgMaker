@@ -325,7 +325,7 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 
 	@Override
 	public String getName() {
-		return "Aether";
+		return "AetherSequential";
 	}
 	
 	@Override
