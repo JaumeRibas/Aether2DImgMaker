@@ -26,7 +26,7 @@ import java.util.Map;
 public class CodeGeneration {
 	
 	public static void main(String[] args) {
-		printAetherTopplingMethods(5);
+		printFileBackedAetherTopplingMethods(3);
 	}
 	
 	public static void printBoundsMethodsForAnisotropicGrid(int dimension) {
@@ -1070,6 +1070,191 @@ public class CodeGeneration {
 			//add new grid slices parameter
 			method.append("long").append(arrayBrackets).append(" newCurrent").append(firstAxisLetter).append("Slice, long")
 			.append(arrayBrackets).append(" newGreater").append(firstAxisLetter).append("Slice) {").append(getNL(ind0));
+			
+			//TODO finish
+			
+		}		
+		method.append("}");
+		System.out.println(method);
+	}
+	
+	public static void printFileBackedAetherTopplingMethods(int dimension) {
+		List<AnysotropicVonNeumannNeighborhoodType> neighborhoodTypes = new ArrayList<AnysotropicVonNeumannNeighborhoodType>();
+		int[] coordinates = new int[dimension];
+		int size = (dimension - 1)*2 + 3;//it seems to work
+		int sizeMinusOne = size - 1;
+		int dimensionMinusOne = dimension - 1;
+		int currentAxis = dimensionMinusOne;
+		while (currentAxis > -1) {
+			if (currentAxis == dimensionMinusOne) {
+				getAnisotropicVonNeumannNeighborhoodTypes(coordinates, neighborhoodTypes);
+			}
+			int currentCoordinate = coordinates[currentAxis];
+			int max;
+			if (currentAxis == 0) {
+				max = sizeMinusOne;
+			} else {
+				max = coordinates[currentAxis - 1];
+			}
+			if (currentCoordinate < max) {
+				currentCoordinate++;
+				coordinates[currentAxis] = currentCoordinate;
+				currentAxis = dimensionMinusOne;
+			} else {
+				coordinates[currentAxis] = 0;
+				currentAxis--;
+			}
+		}
+		for (int i = 0, num = 1; i < neighborhoodTypes.size(); i = num, num++) {
+			AnysotropicVonNeumannNeighborhoodType type = neighborhoodTypes.get(i);
+			printFileBackedAetherTopplingMethod(type, num);
+			System.out.println();
+		}
+	}
+	
+	private static void printFileBackedAetherTopplingMethod(AnysotropicVonNeumannNeighborhoodType type, int number) {
+		//TODO finish
+		int ind0 = 0;
+		int ind1 = ind0 + 1;
+		int ind2 = ind1 + 1;
+		int dimension = type.coordinates.length;
+		StringBuilder method = new StringBuilder(); 
+		method.append("private static boolean topplePositionType").append(number).append("(");
+		//add coordinates parameters if needed
+		for (int i = 0; i < dimension; i++) {
+			if (type.coordinates[i] == null) {
+				method.append("int ").append(Utils.getAxisLetterFromIndex(dimension, i)).append(", ");
+			}
+		}
+		//add current value parameter
+		method.append("long currentValue, ");
+		//add neighbors parameters 
+		int neighborCount = type.neighbors.size();
+		for (int i = 0; i < neighborCount; i++) {
+			NeighborType neighbor = type.neighbors.get(i);
+			char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+			String dir = neighbor.isPositiveDirection? "g" : "s";
+			String varPrefix = dir + axisLetter;
+			method.append("long ").append(varPrefix).append("Value, ");
+			if (neighbor.symmetryCount == null) {
+				method.append("int ").append(varPrefix).append("SymmetryCount, ");
+			}
+			if (neighbor.multiplier == null) {
+				method.append("int ").append(varPrefix).append("ShareMultiplier, ");
+			}
+		}
+		if (neighborCount > 2) {
+			//add arrays to reuse
+			method.append("long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, ");
+			if (type.hasMultipliers) {
+				method.append("int[] relevantAsymmetricNeighborShareMultipliers, ");
+			}
+			if (type.hasSymmetries) {
+				method.append("int[] relevantAsymmetricNeighborSymmetryCounts, ");
+			}
+			//add new grid parameter
+			method.append("RandomAccessFile newGrid) throws IOException {").append(getNL(ind1));
+			String regularCountVariable;
+			if (type.hasSymmetries) {
+				regularCountVariable = "relevantAsymmetricNeighborCount";
+				method.append("int ").append(regularCountVariable).append(" = 0;").append(getNL(ind1));
+			} else {
+				regularCountVariable = "relevantNeighborCount";
+			}
+			method.append("int relevantNeighborCount = 0;").append(getNL(ind1));
+			for (int i = 0; i < neighborCount; i++) {
+				NeighborType neighbor = type.neighbors.get(i);
+				char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+				String dir = neighbor.isPositiveDirection? "g" : "s";
+				String varPrefix = dir + axisLetter;
+				String valueVarName = varPrefix + "Value";
+				method.append("if (").append(valueVarName).append(" < currentValue) {").append(getNL(ind2))
+				.append("relevantAsymmetricNeighborValues[").append(regularCountVariable).append("] = ").append(valueVarName).append(";").append(getNL(ind2))
+				.append("int[] nc = relevantAsymmetricNeighborCoords[").append(regularCountVariable).append("];").append(getNL(ind2));
+				int axis = 0;
+				Integer coordinate;
+				for (; axis < neighbor.axisIndex; axis++) {
+					method.append("nc[").append(axis).append("] = ");
+					coordinate = type.coordinates[axis];
+					if (coordinate == null) {
+						method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+					} else {
+						method.append(coordinate);
+					}
+					method.append(";").append(getNL(ind2));
+				}
+				method.append("nc[").append(axis).append("] = ");
+				coordinate = type.coordinates[axis];
+				if (coordinate == null) {
+					method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+					if (neighbor.isPositiveDirection) {
+						method.append(" + 1");
+					} else {
+						method.append(" - 1");
+					}
+				} else {
+					int neighborCoordinate = coordinate;
+					if (neighbor.isPositiveDirection) {
+						neighborCoordinate++;
+					} else {
+						neighborCoordinate--;
+					}
+					method.append(neighborCoordinate);
+				}
+				method.append(";").append(getNL(ind2));
+				axis++;
+				for (; axis < dimension; axis++) {
+					method.append("nc[").append(axis).append("] = ");
+					coordinate = type.coordinates[axis];
+					if (coordinate == null) {
+						method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+					} else {
+						method.append(coordinate);
+					}
+					method.append(";").append(getNL(ind2));
+				}
+				if (type.hasMultipliers) {
+					method.append("relevantAsymmetricNeighborShareMultipliers[").append(regularCountVariable).append("] = ");
+					if (neighbor.multiplier == null) {
+						method.append(varPrefix).append("ShareMultiplier");
+					} else {
+						method.append(neighbor.multiplier);
+					}
+					method.append(";").append(getNL(ind2));
+				}
+				if (type.hasSymmetries) {
+					method.append("relevantAsymmetricNeighborSymmetryCounts[").append(regularCountVariable).append("] = ");
+					String symmetryCount;
+					if (neighbor.symmetryCount == null) {
+						symmetryCount = varPrefix + "SymmetryCount";
+					} else {
+						symmetryCount = neighbor.symmetryCount.toString();
+					}
+					method.append(symmetryCount).append(";").append(getNL(ind2))
+					.append("relevantNeighborCount += ").append(symmetryCount).append(";").append(getNL(ind2));
+				}
+				method.append(regularCountVariable).append("++;").append(getNL(ind1)).append("}").append(getNL(ind1));
+			}
+			method.append("return topplePosition(newGrid, currentValue, ");
+			for (int i = 0; i < dimension; i++) {
+				if (type.coordinates[i] == null) {
+					method.append(Utils.getAxisLetterFromIndex(dimension, i));
+				} else {
+					method.append(type.coordinates[i]);
+				}
+				method.append(", ");
+			}
+			method.append("relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, ");
+			if (type.hasMultipliers) {
+				method.append("relevantAsymmetricNeighborShareMultipliers, ");
+			}
+			if (type.hasSymmetries) {
+				method.append("relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, ");
+			}
+			method.append(regularCountVariable).append(");").append(getNL(ind0));
+		} else {
+			//add new grid slices parameter
+			method.append("RandomAccessFile newGrid) throws IOException {").append(getNL(ind0));
 			
 			//TODO finish
 			
