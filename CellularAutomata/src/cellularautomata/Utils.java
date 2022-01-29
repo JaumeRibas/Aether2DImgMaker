@@ -273,6 +273,14 @@ public class Utils {
 		}
 	}
 	
+	public static long getAnisotropic3DGridPositionCount(int side) {
+		long count = 0;
+		for (int i = 1; i <= side; i++) {
+			count += (i*i-i)/2+i;
+		}
+		return count;
+	}
+	
 	public static <T extends Comparable<T>> void sortDescending(int length, T[] array, int[] sortedIndexes) {
 		for (int i = 0; i != length; i++) {
 			sortedIndexes[i] = i;
