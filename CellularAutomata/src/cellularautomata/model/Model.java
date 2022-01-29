@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 import cellularautomata.arrays.Utils;
 
 /**
- * A model consisting of a finite convex region of an n-dimensional grid whose state evolves in discrete time steps.
+ * A model consisting of a finite convex region of an n-dimensional grid whose shape, size and configuration evolve in discrete time steps.
  *  
  * @author Jaume
  *
