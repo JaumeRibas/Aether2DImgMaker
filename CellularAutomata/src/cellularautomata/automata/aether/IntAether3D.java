@@ -922,7 +922,7 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, S
 		}
 		return topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
-	};
+	}
 
 	private static boolean topplePositionType6(int y, int currentValue, int gXValue, int sXValue, 
 			int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, 

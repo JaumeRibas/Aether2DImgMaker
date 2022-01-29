@@ -933,7 +933,7 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicModelA, Ser
 		}
 		return topplePosition(newXSlices, currentValue, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
-	};
+	}
 
 	private static boolean topplePositionType6(int y, long currentValue, long gXValue, long sXValue, 
 			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, 
