@@ -33,6 +33,16 @@ public class Model3DYCrossSection<G extends Model3D> implements Model2D {
 		this.source = source;
 		this.y = y;
 	}
+	
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getZLabel();
+	}
 
 	@Override
 	public int getMinX() {
@@ -72,16 +82,6 @@ public class Model3DYCrossSection<G extends Model3D> implements Model2D {
 	@Override
 	public int getMaxY(int x) {
 		return source.getMaxZ(x, y);
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getXLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getZLabel();
 	}
 
 	@Override

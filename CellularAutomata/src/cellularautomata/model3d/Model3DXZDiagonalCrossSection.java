@@ -38,6 +38,16 @@ public class Model3DXZDiagonalCrossSection<G extends Model3D> implements Model2D
 		}
 	}
 	
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
 	protected boolean getBounds() {
 		int x = source.getMinX();
 		int maxX = source.getMaxX();
@@ -121,16 +131,6 @@ public class Model3DXZDiagonalCrossSection<G extends Model3D> implements Model2D
 	@Override
 	public int getMaxY(int x) {
 		return source.getMaxY(x, x + zOffsetFromX);
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getXLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getYLabel();
 	}
 
 	@Override

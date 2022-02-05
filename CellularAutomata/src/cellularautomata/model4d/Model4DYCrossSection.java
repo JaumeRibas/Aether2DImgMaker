@@ -34,12 +34,21 @@ public class Model4DYCrossSection<G extends Model4D> implements Model3D {
 		this.source = source;
 		this.y = y;
 	}
-
-	/*
-	 * x -> w
-	 * y -> x
-	 * z -> z
-	 */
+	
+	@Override
+	public String getXLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
+	}
 	
 	@Override
 	public int getMinX() {
@@ -159,21 +168,6 @@ public class Model4DYCrossSection<G extends Model4D> implements Model3D {
 	@Override
 	public int getMaxZ(int x, int y) {
 		return source.getMaxZ(x, y, this.y);
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getWLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getXLabel();
-	}
-	
-	@Override
-	public String getZLabel() {
-		return source.getZLabel();
 	}
 
 	@Override

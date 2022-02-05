@@ -32,18 +32,27 @@ public class Model4DWXDiagonalCrossSection<G extends Model4D> implements Model3D
 	protected int crossSectionMinZ;
 	protected int crossSectionMaxZ;
 	
-	/*
-	 * w -> x
-	 * y -> y
-	 * z -> z
-	 * */
-	
 	public Model4DWXDiagonalCrossSection(G source, int xOffsetFromW) {		
 		this.source = source;
 		this.xOffsetFromW = xOffsetFromW;
 		if (!getBounds()) {
 			throw new IllegalArgumentException("Cross section is out of bounds.");
 		}
+	}
+	
+	@Override
+	public String getXLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
 	}
 	
 	protected boolean getBounds() {
@@ -248,21 +257,6 @@ public class Model4DWXDiagonalCrossSection<G extends Model4D> implements Model3D
 	@Override
 	public int getMaxZ(int x, int y) {
 		return source.getMaxZ(x, x + xOffsetFromW, y);
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getWLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getYLabel();
-	}
-	
-	@Override
-	public String getZLabel() {
-		return source.getZLabel();
 	}
 
 	@Override

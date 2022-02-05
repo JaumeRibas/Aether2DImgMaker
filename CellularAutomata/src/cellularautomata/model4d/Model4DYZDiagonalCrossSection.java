@@ -40,6 +40,21 @@ public class Model4DYZDiagonalCrossSection<G extends Model4D> implements Model3D
 		}
 	}
 	
+	@Override
+	public String getXLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getYLabel();
+	}
+	
 	protected boolean getBounds() {
 		int y = source.getMinY();
 		int maxY = source.getMaxY();
@@ -242,21 +257,6 @@ public class Model4DYZDiagonalCrossSection<G extends Model4D> implements Model3D
 			}
 		}
 		throw new IllegalArgumentException("Coordinates out of bounds.");
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getWLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getXLabel();
-	}
-	
-	@Override
-	public String getZLabel() {
-		return source.getYLabel();
 	}
 
 	@Override

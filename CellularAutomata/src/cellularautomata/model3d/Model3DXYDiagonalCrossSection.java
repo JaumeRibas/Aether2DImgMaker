@@ -38,6 +38,16 @@ public class Model3DXYDiagonalCrossSection<G extends Model3D> implements Model2D
 		}
 	}
 	
+	@Override
+	public String getXLabel() {
+		return source.getZLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getXLabel();
+	}
+	
 	protected boolean getBounds() {
 		int x = source.getMinX();
 		int maxX = source.getMaxX();
@@ -121,16 +131,6 @@ public class Model3DXYDiagonalCrossSection<G extends Model3D> implements Model2D
 			}
 		}
 		throw new IllegalArgumentException("X coordinate out of bounds.");
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getZLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getXLabel();
 	}
 
 	@Override
