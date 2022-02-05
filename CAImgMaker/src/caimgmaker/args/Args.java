@@ -36,7 +36,7 @@ public class Args {
 	@Parameter(names = { "-initial-config" }, validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class, description = "The initial configuration. The currently available configurations are: 'single-source_{value}', for a single source initial configuration (e.g. 'single-source_-1000'), and 'random-region_{side}_{min}_{max}', for an initial configuration consisting of an hypercubic region of side {side} filled with random values ranging form {min} to {max} (e.g. 'random-region_250_-45_60'). Note that outside this region the value will be zero.")
     public InitialConfigOptionValue initialConfiguration = null;
 
-	@Parameter(names = { "-asymmetric" }, description = "The app generates images only of an asymmetric section of a symmetric model.")
+	@Parameter(names = { "-asymmetric" }, description = "Generate images only of an asymmetric section of a symmetric model.")
 	public boolean asymmetric = false;
 	
 	@Parameter(names = { "-v" }, validateWith = CoordinateValidator.class, converter = CoordianteConverter.class, description = "The app generates images from this v-coordinate. It can be either an integer (e.g. '0'), an integer range (e.g. '[0,100]'), another coordinate (e.g. 'x') or another coordinate plus/minus an integer (e.g. 'x+2'). Only applies to models with dimension greater than four.")
@@ -84,13 +84,13 @@ public class Args {
     @Parameter(names = { "-img-generation-mode" }, description = "Option to affect image generation. The currently available modes are: '" + NORMAL + "', '" + SPLIT_PARITY + "', '" + EVEN_ONLY + "' and '" + ODD_ONLY + "'.")
     public String imgGenerationMode = NORMAL;
     
-//    @Parameter(names = { "-memory-safe" }, description = "The app swaps data between the main memory and one or more temporary files, within the -path folder, to try to avoid overflowing the main memory.")
-//	public boolean memorySafe = false;
+    @Parameter(names = { "-memory-safe" }, description = "Use temporary files, within the -path folder, to store the grid so as to avoid running out of memory. In exchange, processing speed and storage space are sacrificed.")
+	public boolean memorySafe = false;
     
-    @Parameter(names = "-version", description = "Prints the version of the app.")
+    @Parameter(names = "-version", description = "Print the version of the app.")
 	public boolean outputVersion;
 	
-	@Parameter(names = "-help", help = true, description = "Prints the list of options.")
+	@Parameter(names = "-help", help = true, description = "Print the list of options.")
 	public boolean help;
 	
 }
