@@ -47,7 +47,7 @@ public class RegularIntGrid4D implements IntModel4D {
 					throw new IllegalArgumentException("Array lengths must be regular. Expected " + yLength + " but found " + values[i][j].length + " at index [" + i + "][" + j + "].");
 				}
 				for (int k = 0; k < yLength; k++) {
-					if (values[i][i][k].length != zLength) {
+					if (values[i][j][k].length != zLength) {
 						throw new IllegalArgumentException("Array lengths must be regular. Expected " + zLength + " but found " + values[i][j][k].length + " at index [" + i + "][" + j + "][" + k + "].");
 					}
 				}
