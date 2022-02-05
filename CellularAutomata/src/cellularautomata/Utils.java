@@ -289,6 +289,14 @@ public class Utils {
 		return count;
 	}
 	
+	public static long getAnisotropic5DGridPositionCount(int side) {
+		long count = 0;
+		for (int i = 1; i <= side; i++) {
+			count += getAnisotropic4DGridPositionCount(i);
+		}
+		return count;
+	}
+	
 	public static <T extends Comparable<T>> void sortDescending(int length, T[] array, int[] sortedIndexes) {
 		for (int i = 0; i != length; i++) {
 			sortedIndexes[i] = i;
