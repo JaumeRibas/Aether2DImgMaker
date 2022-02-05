@@ -18,6 +18,7 @@ package cellularautomata.model5d;
 
 import cellularautomata.model.Model;
 import cellularautomata.model.PartialCoordinates;
+import cellularautomata.model4d.Model4D;
 
 public interface Model5D extends Model {
 	
@@ -366,23 +367,23 @@ public interface Model5D extends Model {
 
 	default int getMaxZ(int v, int w, int x, int y) { return getMaxZ(); }
 
-//	default Model2D crossSectionAtV(int v) {
-//		return new Model5DVCrossSection<Model5D>(this, v);
-//	}
+	default Model4D crossSectionAtV(int v) {
+		return new Model5DVCrossSection<Model5D>(this, v);
+	}
 //	
-//	default Model2D crossSectionAtW(int v) {
+//	default Model4D crossSectionAtW(int v) {
 //		return new Model5DWCrossSection<Model5D>(this, w);
 //	}
 //	
-//	default Model2D crossSectionAtX(int v) {
+//	default Model4D crossSectionAtX(int v) {
 //		return new Model5DXCrossSection<Model5D>(this, x);
 //	}
 //	
-//	default Model2D crossSectionAtY(int v) {
+//	default Model4D crossSectionAtY(int v) {
 //		return new Model5DYCrossSection<Model5D>(this, y);
 //	}
 //	
-//	default Model2D crossSectionAtZ(int v) {
+//	default Model4D crossSectionAtZ(int v) {
 //		return new Model5DZCrossSection<Model5D>(this, z);
 //	}
 

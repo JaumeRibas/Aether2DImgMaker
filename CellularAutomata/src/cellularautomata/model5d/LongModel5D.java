@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import cellularautomata.model.Coordinates;
 import cellularautomata.model.LongModel;
+import cellularautomata.model4d.LongModel4D;
 
 public interface LongModel5D extends Model5D, LongModel {
 	
@@ -129,6 +130,11 @@ public interface LongModel5D extends Model5D, LongModel {
 			}
 		}
 		return total;
+	}
+
+	@Override
+	default LongModel4D crossSectionAtV(int v) {
+		return new LongModel5DVCrossSection<LongModel5D>(this, v);
 	}
 	
 	@Override
