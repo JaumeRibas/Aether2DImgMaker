@@ -367,6 +367,10 @@ public interface Model5D extends Model {
 
 	default int getMaxZ(int v, int w, int x, int y) { return getMaxZ(); }
 
+	default Model5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new SubModel5D<Model5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+
 	default Model4D crossSectionAtV(int v) {
 		return new Model5DVCrossSection<Model5D>(this, v);
 	}
@@ -386,9 +390,9 @@ public interface Model5D extends Model {
 //	default Model4D crossSectionAtZ(int v) {
 //		return new Model5DZCrossSection<Model5D>(this, z);
 //	}
-
-	default Model5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new SubModel5D<Model5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	
+	default Model4D diagonalCrossSectionOnVW(int wOffsetFromV) {
+		return new Model5DVWDiagonalCrossSection<Model5D>(this, wOffsetFromV);
 	}
 	
 	@Override

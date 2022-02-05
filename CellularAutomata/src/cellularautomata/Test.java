@@ -82,6 +82,7 @@ import cellularautomata.model4d.RegularIntGrid4D;
 import cellularautomata.model5d.ActionableModel5D;
 import cellularautomata.model5d.IntModel5D;
 import cellularautomata.model5d.LongModel5D;
+import cellularautomata.model5d.RegularIntGrid5D;
 import cellularautomata.numbers.BigInt;
 
 public class Test {
@@ -658,6 +659,62 @@ public class Test {
 							System.out.println("Different value at (" + x + ", " + y + ", " + z + "): " 
 									+ grid1.getClass().getSimpleName() + ":" + grid1.getFromPosition(x, y, z) 
 									+ " != " + grid2.getClass().getSimpleName() + ":" + grid2.getFromPosition(x, y, z));
+						}
+					}	
+				}	
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void test4DDiagonals() throws Exception {
+		int[][][][][] sourceValues;
+		int[][][][] resultValues;
+		RegularIntGrid5D grid;
+		IntModel4D diagonal;
+		int side = 20;
+		int offset = 5;
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		//vw
+		for (int off = 0; off <= offset; off += offset) {
+			sourceValues = new int[side][side][side][side][side];
+			resultValues = new int[side][side][side][side];
+			for (int v = 0; v < side; v++) {
+				for (int x = 0; x < side; x++) {
+					for (int y = 0; y < side; y++) {
+						for (int z = 0; z < side; z++) {
+							int value = random.nextInt();
+							int w = v+off;
+							if (w < side) {
+								sourceValues[v][w][x][y][z] = value;
+								resultValues[v][x][y][z] = value;	
+							}
+						}
+					}
+				}
+			}			
+			grid = new RegularIntGrid5D(sourceValues, 0, 0, 0, 0, 0);
+			diagonal = grid.diagonalCrossSectionOnVW(off);
+			compare(diagonal, new RegularIntGrid4D(resultValues, 0, 0, 0, 0));
+		}
+	}
+	
+	public static void compare(IntModel4D grid1, IntModel4D grid2) {
+		try {
+			boolean equal = true;
+			for (int z = grid1.getMinZ(); z <= grid1.getMaxZ(); z++) {
+				for (int y = grid1.getMinYAtZ(z); y <= grid1.getMaxYAtZ(z); y++) {
+					for (int x = grid1.getMinXAtYZ(y,z); x <= grid1.getMaxXAtYZ(y,z); x++) {
+						for (int w = grid1.getMinW(x,y,z); w <= grid1.getMaxW(x,y,z); w++) {
+							if (grid1.getFromPosition(w, x, y, z) != grid2.getFromPosition(w, x, y, z)) {
+								equal = false;
+								System.out.println("Different value at (" + w + ", " + x + ", " + y + ", " + z + "): " 
+										+ grid1.getClass().getSimpleName() + ":" + grid1.getFromPosition(w, x, y, z) 
+										+ " != " + grid2.getClass().getSimpleName() + ":" + grid2.getFromPosition(w, x, y, z));
+							}
 						}
 					}	
 				}	

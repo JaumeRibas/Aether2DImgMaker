@@ -131,6 +131,11 @@ public interface IntModel5D extends Model5D, IntModel {
 		}
 		return total;
 	}
+	
+	@Override
+	default IntModel5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new IntSubModel5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
 
 	@Override
 	default IntModel4D crossSectionAtV(int v) {
@@ -138,8 +143,8 @@ public interface IntModel5D extends Model5D, IntModel {
 	}
 	
 	@Override
-	default IntModel5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new IntSubModel5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	default IntModel4D diagonalCrossSectionOnVW(int wOffsetFromV) {
+		return new IntModel5DVWDiagonalCrossSection<IntModel5D>(this, wOffsetFromV);
 	}
 
 	@Override

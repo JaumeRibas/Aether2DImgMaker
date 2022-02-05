@@ -131,6 +131,11 @@ public interface LongModel5D extends Model5D, LongModel {
 		}
 		return total;
 	}
+	
+	@Override
+	default LongModel5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new LongSubModel5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
 
 	@Override
 	default LongModel4D crossSectionAtV(int v) {
@@ -138,8 +143,8 @@ public interface LongModel5D extends Model5D, LongModel {
 	}
 	
 	@Override
-	default LongModel5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new LongSubModel5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	default LongModel4D diagonalCrossSectionOnVW(int wOffsetFromV) {
+		return new LongModel5DVWDiagonalCrossSection<LongModel5D>(this, wOffsetFromV);
 	}
 
 	@Override
