@@ -93,10 +93,10 @@ public class Aether3DSwapImgMaker {
 				imgMaker = new ImgMaker();
 			}
 			if (isScanInitialZIndexDefined) {
-				imgMaker.createScanningAndCrossSectionImagesFromLongModel3D(ca, scanInitialZIndex, 0, colorMapper, 
+				imgMaker.createScanningAndCrossSectionImagesFromLongModel(ca, scanInitialZIndex, 0, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			} else {
-				imgMaker.createScanningAndCrossSectionImagesFromLongModel3D(ca, 0, colorMapper, 
+				imgMaker.createScanningAndCrossSectionImagesFromLongModel(ca, 0, colorMapper, 
 						ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, path + "/img", path + "/backups");
 			}
 			

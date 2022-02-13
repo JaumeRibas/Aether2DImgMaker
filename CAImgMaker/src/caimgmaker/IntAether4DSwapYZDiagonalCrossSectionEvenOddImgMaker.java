@@ -117,11 +117,11 @@ public class IntAether4DSwapYZDiagonalCrossSectionEvenOddImgMaker {
 				String imagesPath = path + crossSection.getSubfolderPath();
 				int crossSectionZ = 0;
 				if (isScanInitialIndexesDefined) {
-					imgMaker.createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel3D(
+					imgMaker.createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel(
 							crossSection, zScanInitialIndex, crossSectionZ, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				} else {
-					imgMaker.createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel3D(
+					imgMaker.createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel(
 							crossSection, crossSectionZ, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				}				

@@ -102,11 +102,11 @@ public class IntAether4DSwapBisectingRegionOddImgMaker {
 			String imgsPath = path + crossSection.getSubfolderPath() + "/img";
 			String backupPath = path + ca.getSubfolderPath() + "/backups";
 			if (isScanInitialIndexesDefined) {
-				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntModel3D(
+				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntModel(
 						crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 						imgsPath, backupPath);
 			} else {
-				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntModel3D(
+				imgMaker.createXZScanningAndZCrossSectionOddImagesFromIntModel(
 						crossSection, 0, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 						imgsPath, backupPath);
 			}

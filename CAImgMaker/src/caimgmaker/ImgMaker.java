@@ -1366,17 +1366,17 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createXZScanningAndZCrossSectionOddImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
+	public void createXZScanningAndZCrossSectionOddImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
 		int zScanInitialIndex = ca.getMaxZ();
-		createXZScanningAndZCrossSectionOddImagesFromLongModel3D(ca, xScanInitialIndex, zScanInitialIndex, crossSectionZ, 
+		createXZScanningAndZCrossSectionOddImagesFromLongModel(ca, xScanInitialIndex, zScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createXZScanningAndZCrossSectionOddImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int xScanInitialIndex, int zScanInitialIndex, int crossSectionZ, 
+	public void createXZScanningAndZCrossSectionOddImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int xScanInitialIndex, int zScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -1490,17 +1490,17 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createXZScanningAndZCrossSectionOddImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
+	public void createXZScanningAndZCrossSectionOddImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
 		int zScanInitialIndex = ca.getMaxZ();
-		createXZScanningAndZCrossSectionOddImagesFromIntModel3D(ca, xScanInitialIndex, zScanInitialIndex, crossSectionZ, 
+		createXZScanningAndZCrossSectionOddImagesFromIntModel(ca, xScanInitialIndex, zScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createXZScanningAndZCrossSectionOddImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int zScanInitialIndex, int crossSectionZ, 
+	public void createXZScanningAndZCrossSectionOddImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int zScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -1614,17 +1614,17 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createXZScanningAndZCrossSectionEvenImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
+	public void createXZScanningAndZCrossSectionEvenImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
 		int zScanInitialIndex = ca.getMaxZ();
-		createXZScanningAndZCrossSectionEvenImagesFromIntModel3D(ca, xScanInitialIndex, zScanInitialIndex, crossSectionZ, 
+		createXZScanningAndZCrossSectionEvenImagesFromIntModel(ca, xScanInitialIndex, zScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createXZScanningAndZCrossSectionEvenImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int zScanInitialIndex, int crossSectionZ, 
+	public void createXZScanningAndZCrossSectionEvenImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int zScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -1738,16 +1738,16 @@ public class ImgMaker {
 		inputThread.join();
 	}	
 	
-	public void createScanningAndCrossSectionImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
+	public void createScanningAndCrossSectionImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int scanInitialZIndex = ca.getMinZ();
-		createScanningAndCrossSectionImagesFromIntModel3D(ca, scanInitialZIndex, crossSectionZ, 
+		createScanningAndCrossSectionImagesFromIntModel(ca, scanInitialZIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createScanningAndCrossSectionImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int scanInitialZIndex, int crossSectionZ, 
+	public void createScanningAndCrossSectionImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -1855,16 +1855,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createScanningAndCrossSectionImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
+	public void createScanningAndCrossSectionImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int scanInitialZIndex = ca.getMinZ();
-		createScanningAndCrossSectionImagesFromLongModel3D(ca, scanInitialZIndex, crossSectionZ, 
+		createScanningAndCrossSectionImagesFromLongModel(ca, scanInitialZIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createScanningAndCrossSectionImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int scanInitialZIndex, int crossSectionZ, 
+	public void createScanningAndCrossSectionImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -1972,16 +1972,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
-		createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel3D(ca, xScanInitialIndex, crossSectionZ, 
+		createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel(ca, xScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddYZImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -2117,16 +2117,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
-		createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel3D(ca, xScanInitialIndex, crossSectionZ, 
+		createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel(ca, xScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddXYImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -2262,16 +2262,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddXYImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddXYImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
-		createXScanningAndZCrossSectionEvenOddXYImagesFromLongModel3D(ca, xScanInitialIndex, crossSectionZ, 
+		createXScanningAndZCrossSectionEvenOddXYImagesFromLongModel(ca, xScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddXYImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddXYImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -2407,16 +2407,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
-		createXScanningAndZCrossSectionEvenOddImagesFromIntModel3D(ca, xScanInitialIndex, crossSectionZ, 
+		createXScanningAndZCrossSectionEvenOddImagesFromIntModel(ca, xScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createXScanningAndZCrossSectionEvenOddImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
+	public void createXScanningAndZCrossSectionEvenOddImagesFromIntModel(ActionableModel3D<IntModel3D> ca, int xScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -2561,16 +2561,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public <T extends FieldElement<T> & Comparable<T>> void createXScanningAndZCrossSectionOddImagesFromNumberModel3D(ActionableModel3D<NumericModel3D<T>> ca, int crossSectionZ, 
+	public <T extends FieldElement<T> & Comparable<T>> void createXScanningAndZCrossSectionOddImagesFromNumberModel(ActionableModel3D<NumericModel3D<T>> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int xScanInitialIndex = ca.getMaxX();
-		createXScanningAndZCrossSectionOddImagesFromNumberModel3D(ca, xScanInitialIndex, crossSectionZ, 
+		createXScanningAndZCrossSectionOddImagesFromNumberModel(ca, xScanInitialIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public <T extends FieldElement<T> & Comparable<T>> void createXScanningAndZCrossSectionOddImagesFromNumberModel3D(ActionableModel3D<NumericModel3D<T>> ca, int xScanInitialIndex, int crossSectionZ, 
+	public <T extends FieldElement<T> & Comparable<T>> void createXScanningAndZCrossSectionOddImagesFromNumberModel(ActionableModel3D<NumericModel3D<T>> ca, int xScanInitialIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String imagesPath, String backupPath) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
@@ -2663,16 +2663,16 @@ public class ImgMaker {
 		inputThread.join();
 	}
 	
-	public void createZScanningAndCrossSectionEvenOddImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
+	public void createZScanningAndCrossSectionEvenOddImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 				
 		int scanInitialZIndex = ca.getMinZ();
-		createZScanningAndCrossSectionEvenOddImagesFromLongModel3D(ca, scanInitialZIndex, crossSectionZ, 
+		createZScanningAndCrossSectionEvenOddImagesFromLongModel(ca, scanInitialZIndex, crossSectionZ, 
 			colorMapper, minWidth, minHeight, imagesPath, backupPath);	
 	}
 	
-	public void createZScanningAndCrossSectionEvenOddImagesFromLongModel3D(ActionableModel3D<LongModel3D> ca, int scanInitialZIndex, int crossSectionZ, 
+	public void createZScanningAndCrossSectionEvenOddImagesFromLongModel(ActionableModel3D<LongModel3D> ca, int scanInitialZIndex, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, 
 			String imagesPath, String backupPath) throws Exception {
 		
@@ -2875,7 +2875,7 @@ public class ImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createXScanningImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, ColorMapper colorMapper, 
+	public void createXScanningImagesFromIntModel(ActionableModel3D<IntModel3D> ca, ColorMapper colorMapper, 
 			int minWidth, int minHeight, String imagesPath) throws Exception {
 		long step = ca.getStep();
 		String caName = ca.getName();
@@ -2915,7 +2915,7 @@ public class ImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createXScanningEvenOddImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca, ColorMapper colorMapper, 
+	public void createXScanningEvenOddImagesFromIntModel(ActionableModel3D<IntModel3D> ca, ColorMapper colorMapper, 
 			int imageWidth, int imageHeight, String imagesPath) throws Exception {
 		long step = ca.getStep();
 		String caName = ca.getName();
@@ -2993,7 +2993,7 @@ public class ImgMaker {
 		System.out.println("Finished!");
 	}
 	
-	public void createZScanningEvenOddImagesFromIntModel3D(ActionableModel3D<IntModel3D> ca,
+	public void createZScanningEvenOddImagesFromIntModel(ActionableModel3D<IntModel3D> ca,
 			ColorMapper colorMapper, String imagesPath) throws Exception {
 		long step = ca.getStep();
 		String caName = ca.getName();

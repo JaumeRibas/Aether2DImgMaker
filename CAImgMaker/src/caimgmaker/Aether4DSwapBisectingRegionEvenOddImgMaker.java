@@ -98,11 +98,11 @@ public class Aether4DSwapBisectingRegionEvenOddImgMaker {
 					new ActionableModel4DZCrossSection<LongModel4D, LongModel3D>(ca, 0);
 			String imagesPath = path + ca.getSubfolderPath() + "/bisecting_region/img";
 			if (isScanInitialYIndexDefined) {
-				imgMaker.createZScanningAndCrossSectionEvenOddImagesFromLongModel3D(
+				imgMaker.createZScanningAndCrossSectionEvenOddImagesFromLongModel(
 						crossSection, 0, scanInitialYIndex, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 						imagesPath, backupPath);
 			} else {
-				imgMaker.createZScanningAndCrossSectionEvenOddImagesFromLongModel3D(
+				imgMaker.createZScanningAndCrossSectionEvenOddImagesFromLongModel(
 						crossSection, 0, colorMapper, ImgMakerConstants.HD_WIDTH/2, ImgMakerConstants.HD_HEIGHT/2, 
 						imagesPath, backupPath);
 			}

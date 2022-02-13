@@ -75,7 +75,7 @@ public class IntAether3DSwapXScan {
 			path += ca.getSubfolderPath();
 			ColorMapper colorMapper = new GrayscaleMapper(0);
 			ImgMaker imgMaker = new ImgMaker();
-			imgMaker.createXScanningImagesFromIntModel3D(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
+			imgMaker.createXScanningImagesFromIntModel(ca, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 					path + "/img");
 
 		}		

@@ -116,11 +116,11 @@ public class Aether4DSwapWCrossSectionOddImgMaker {
 						new ActionableModel4DWCrossSection<LongModel4D, LongModel3D>(ca, crossSectionW);
 				String imagesPath = path + crossSection.getSubfolderPath();
 				if (isScanInitialIndexesDefined) {
-					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongModel3D(
+					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongModel(
 							crossSection, xScanInitialIndex, zScanInitialIndex, 0, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				} else {
-					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongModel3D(
+					imgMaker.createXZScanningAndZCrossSectionOddImagesFromLongModel(
 							crossSection, 0, colorMapper, ImgMakerConstants.HD_HEIGHT/2, ImgMakerConstants.HD_HEIGHT/2, 
 							imagesPath, backupPath);
 				}				
