@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.math.BigInteger;
 import java.util.Arrays;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -88,9 +87,7 @@ public class Utils {
 		for (int x = 0; x < anisotropic2DArray.length; x++) {
 			int length = x + 1;
 			BigInt[] array = new BigInt[length];
-			for (int i = 0; i < length; i++) {
-				array[i] = BigInt.ZERO;
-			}
+			Arrays.fill(array, BigInt.ZERO);
 			anisotropic2DArray[x] = array;
 		}
 		return anisotropic2DArray;
@@ -117,9 +114,7 @@ public class Utils {
 		for (int x = 0; x < anisotropic2DArray.length; x++) {
 			int length = x + 1;
 			BigFraction[] array = new BigFraction[length];
-			for (int i = 0; i < length; i++) {
-				array[i] = BigFraction.ZERO;
-			}
+			Arrays.fill(array, BigFraction.ZERO);
 			anisotropic2DArray[x] = array;
 		}
 		return anisotropic2DArray;
@@ -321,22 +316,22 @@ public class Utils {
 		}
 	}
 
-	public static void sortDescendingLength4(BigInteger[] array, int[] sortedIndexes) {
+	public static void sortDescendingLength4(BigInt[] array, int[] sortedIndexes) {
 		sortedIndexes[0] = 0;
 		sortedIndexes[1] = 1;
 		sortedIndexes[2] = 2;
 		sortedIndexes[3] = 3;
 		for (int i = 0; i < 3; i++) {
-			BigInteger max = array[i];
+			BigInt max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < 4; j++) {
-				BigInteger value = array[j];
+				BigInt value = array[j];
 				if (value.compareTo(max) > 0) {
 					max = value;
 					swapPosition = j;
 				}
 			}
-			BigInteger valSwap = array[i];
+			BigInt valSwap = array[i];
 			array[i] = array[swapPosition];
 			array[swapPosition] = valSwap;
 			int indexSwap = sortedIndexes[i];
