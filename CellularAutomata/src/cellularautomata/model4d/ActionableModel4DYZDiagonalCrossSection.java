@@ -44,6 +44,21 @@ public class ActionableModel4DYZDiagonalCrossSection<G1 extends Model4D, G2 exte
 		this.source.addProcessor(new InternalProcessor());
 	}
 	
+	@Override
+	public String getXLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getYLabel();
+	}
+	
 	protected boolean getBounds() {
 		int y = source.getMinY();
 		int maxY = source.getMaxY();
@@ -84,21 +99,6 @@ public class ActionableModel4DYZDiagonalCrossSection<G1 extends Model4D, G2 exte
 		} else {
 			return false;
 		}
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getWLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getXLabel();
-	}
-	
-	@Override
-	public String getZLabel() {
-		return source.getYLabel();
 	}
 	
 	@Override

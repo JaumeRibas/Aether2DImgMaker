@@ -35,12 +35,6 @@ public class ActionableModel4DWXDiagonalCrossSection<G1 extends Model4D, G2 exte
 	protected int crossSectionMinZ;
 	protected int crossSectionMaxZ;
 	
-	/*
-	 * w -> x
-	 * y -> y
-	 * z -> z
-	 * */
-
 	public ActionableModel4DWXDiagonalCrossSection(ActionableModel4D<G1> grid, int xOffsetFromW) {
 		this.source = grid;
 		this.xOffsetFromW = xOffsetFromW;
@@ -48,6 +42,21 @@ public class ActionableModel4DWXDiagonalCrossSection<G1 extends Model4D, G2 exte
 			throw new IllegalArgumentException("Cross section is out of bounds.");
 		}
 		this.source.addProcessor(new InternalProcessor());
+	}
+	
+	@Override
+	public String getXLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
 	}
 	
 	protected boolean getBounds() {
@@ -90,21 +99,6 @@ public class ActionableModel4DWXDiagonalCrossSection<G1 extends Model4D, G2 exte
 		} else {
 			return false;
 		}
-	}
-	
-	@Override
-	public String getXLabel() {
-		return source.getWLabel();
-	}
-	
-	@Override
-	public String getYLabel() {
-		return source.getYLabel();
-	}
-	
-	@Override
-	public String getZLabel() {
-		return source.getZLabel();
 	}
 	
 	@Override
