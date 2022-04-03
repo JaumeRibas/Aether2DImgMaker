@@ -16,14 +16,14 @@
  */
 package cellularautomata.model3d;
 
-public class AsymmetricObjectModelSection3D<T, G extends SymmetricObjectModel3D<T>> extends AsymmetricModelSection3D<G> implements ObjectModel3D<T> {
+public class AsymmetricObjectModelSection3D<Source_Type extends SymmetricObjectModel3D<Object_Type>, Object_Type> extends AsymmetricModelSection3D<Source_Type> implements ObjectModel3D<Object_Type> {
 	
-	public AsymmetricObjectModelSection3D(G grid) {
+	public AsymmetricObjectModelSection3D(Source_Type grid) {
 		super(grid);
 	}
 
 	@Override
-	public T getFromPosition(int x, int y, int z) throws Exception {
+	public Object_Type getFromPosition(int x, int y, int z) throws Exception {
 		return source.getFromAsymmetricPosition(x, y, z);
 	}
 

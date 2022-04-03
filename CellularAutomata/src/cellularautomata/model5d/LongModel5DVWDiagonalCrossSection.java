@@ -18,9 +18,9 @@ package cellularautomata.model5d;
 
 import cellularautomata.model4d.LongModel4D;
 
-public class LongModel5DVWDiagonalCrossSection<G extends LongModel5D> extends Model5DVWDiagonalCrossSection<G> implements LongModel4D {
+public class LongModel5DVWDiagonalCrossSection extends Model5DVWDiagonalCrossSection<LongModel5D> implements LongModel4D {
 
-	public LongModel5DVWDiagonalCrossSection(G source, int xOffsetFromW) {
+	public LongModel5DVWDiagonalCrossSection(LongModel5D source, int xOffsetFromW) {
 		super(source, xOffsetFromW);
 	}
 

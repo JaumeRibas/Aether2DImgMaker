@@ -20,7 +20,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-import cellularautomata.arrays.Utils;
+import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
+import cellularautomata.Utils;
 
 /**
  * A model consisting of a finite convex region of an n-dimensional grid whose shape, size and configuration evolve in discrete time steps.
@@ -36,6 +38,16 @@ public interface Model {
 	 * @return the dimension of the grid containing this region.
 	 */
 	int getGridDimension();
+	
+	/**
+	 * Returns the label of the given axis.
+	 * 
+	 * @param axis the index of the axis whose label is requested.
+	 * @return the label
+	 */
+	default String getAxisLabel(int axis) {
+		return "" + Utils.getAxisLetterFromIndex(getGridDimension(), axis);
+	}
 	
 	/**
 	 * Returns the max coordinate of the region on the given axis.
@@ -269,7 +281,22 @@ public interface Model {
 				}
 			}
 		}
+	}	
+	
+	/**
+	 * Returns a decorated {@link Model1D} with the passed bounds.
+	 * 
+	 * @param minCoordinates
+	 * @param maxCoordinates
+	 * @return a {@link Model} decorating the current grid 
+	 */
+	default Model subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return new SubModel<Model>(this, minCoordinates, maxCoordinates);
 	}
+	
+//	default Model crossSection(int axis, int coordinate) {
+//		return new ModelCrossSection<Model>(this, axis, coordinate);
+//	}
 	
 	/**
 	 * Computes the next step of the model and returns whether

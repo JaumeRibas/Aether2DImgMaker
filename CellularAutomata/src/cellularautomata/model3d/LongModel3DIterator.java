@@ -24,7 +24,7 @@ public class LongModel3DIterator extends Model3DIterator<LongModel3D, Long> {
 
 	@Override
 	protected Long getFromModelPosition(int x, int y, int z) throws Exception {
-		return grid.getFromPosition(x, y, z);
+		return source.getFromPosition(x, y, z);
 	}
 
 }

@@ -21,11 +21,11 @@ import java.awt.Color;
 import cellularautomata.model2d.Model2DDecorator;
 import cellularautomata.model2d.ObjectModel2D;
 
-public class ColorMappedModel2D<T> extends Model2DDecorator<ObjectModel2D<T>> implements ObjectModel2D<Color> {
+public class ColorMappedModel2D<Object_Type> extends Model2DDecorator<ObjectModel2D<Object_Type>> implements ObjectModel2D<Color> {
 
-	protected ColorMap<T> colorMap;
+	protected ColorMap<Object_Type> colorMap;
 	
-	public ColorMappedModel2D(ObjectModel2D<T> source, ColorMap<T> colorMap) {
+	public ColorMappedModel2D(ObjectModel2D<Object_Type> source, ColorMap<Object_Type> colorMap) {
 		super(source);
 		this.colorMap = colorMap;
 	}
@@ -33,5 +33,10 @@ public class ColorMappedModel2D<T> extends Model2DDecorator<ObjectModel2D<T>> im
 	@Override
 	public Color getFromPosition(int x, int y) throws Exception {
 		return colorMap.getColor(source.getFromPosition(x, y));
+	}
+	
+	@Override
+	public ObjectModel2D<Color> subsection(int minX, int maxX, int minY, int maxY) {
+		return ObjectModel2D.super.subsection(minX, maxX, minY, maxY);
 	}
 }

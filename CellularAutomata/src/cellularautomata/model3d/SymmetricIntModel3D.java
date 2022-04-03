@@ -16,7 +16,7 @@
  */
 package cellularautomata.model3d;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.SymmetricIntModel;
 
 public interface SymmetricIntModel3D extends IntModel3D, SymmetricModel3D, SymmetricIntModel {
@@ -37,12 +37,13 @@ public interface SymmetricIntModel3D extends IntModel3D, SymmetricModel3D, Symme
 	 */
 	int getFromAsymmetricPosition(int x, int y, int z) throws Exception;
 	
+	@Override
 	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
 		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
 	}
 
 	@Override
 	default IntModel3D asymmetricSection() {
-		return new AsymmetricIntModelSection3D<SymmetricIntModel3D>(this);
+		return new AsymmetricIntModelSection3D(this);
 	}
 }

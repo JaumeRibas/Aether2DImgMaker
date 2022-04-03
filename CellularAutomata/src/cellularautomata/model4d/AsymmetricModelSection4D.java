@@ -18,9 +18,9 @@ package cellularautomata.model4d;
 
 import cellularautomata.model.AsymmetricModelSection;
 
-public class AsymmetricModelSection4D<G extends SymmetricModel4D> extends AsymmetricModelSection<G> implements Model4D {
+public class AsymmetricModelSection4D<Source_Type extends SymmetricModel4D> extends AsymmetricModelSection<Source_Type> implements Model4D {
 	
-	public AsymmetricModelSection4D(G source) {
+	public AsymmetricModelSection4D(Source_Type source) {
 		super(source);
 	}
 

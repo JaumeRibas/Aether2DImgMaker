@@ -18,7 +18,7 @@ package cellularautomata.model3d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.IntModel;
 import cellularautomata.model2d.IntModel2D;
 
@@ -35,6 +35,7 @@ public interface IntModel3D extends Model3D, IntModel {
 	 */
 	int getFromPosition(int x, int y, int z) throws Exception;
 	
+	@Override
 	default int getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
 	}
@@ -109,37 +110,37 @@ public interface IntModel3D extends Model3D, IntModel {
 	
 	@Override
 	default IntModel3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new IntSubModel3D<IntModel3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
+		return new IntSubModel3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
 	default IntModel2D crossSectionAtX(int x) {
-		return new IntModel3DXCrossSection<IntModel3D>(this, x);
+		return new IntModel3DXCrossSection(this, x);
 	}
 	
 	@Override
 	default IntModel2D crossSectionAtY(int y) {
-		return new IntModel3DYCrossSection<IntModel3D>(this, y);
+		return new IntModel3DYCrossSection(this, y);
 	}
 	
 	@Override
 	default IntModel2D crossSectionAtZ(int z) {
-		return new IntModel3DZCrossSection<IntModel3D>(this, z);
+		return new IntModel3DZCrossSection(this, z);
 	}
 	
 	@Override
 	default IntModel2D diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new IntModel3DXYDiagonalCrossSection<IntModel3D>(this, yOffsetFromX);
+		return new IntModel3DXYDiagonalCrossSection(this, yOffsetFromX);
 	}
 	
 	@Override
 	default IntModel2D diagonalCrossSectionOnXZ(int zOffsetFromX) {
-		return new IntModel3DXZDiagonalCrossSection<IntModel3D>(this, zOffsetFromX);
+		return new IntModel3DXZDiagonalCrossSection(this, zOffsetFromX);
 	}
 	
 	@Override
 	default IntModel2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new IntModel3DYZDiagonalCrossSection<IntModel3D>(this, zOffsetFromY);
+		return new IntModel3DYZDiagonalCrossSection(this, zOffsetFromY);
 	}
 
 	@Override

@@ -17,10 +17,15 @@
 package cellularautomata.model5d;
 
 import cellularautomata.model.Model;
-import cellularautomata.model.PartialCoordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model4d.Model4D;
 
 public interface Model5D extends Model {
+	
+	@Override
+	default int getGridDimension() {
+		return 5;
+	}
 	
 	default String getVLabel() {
 		return "v";
@@ -43,8 +48,20 @@ public interface Model5D extends Model {
 	}
 	
 	@Override
-	default int getGridDimension() {
-		return 5;
+	default String getAxisLabel(int axis) {
+		switch (axis) {
+		case 0: 
+			return getVLabel();
+		case 1: 
+			return getWLabel();
+		case 2: 
+			return getXLabel();
+		case 3: 
+			return getYLabel();
+		case 4: 
+			return getZLabel();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		}
 	}
 	
 	int getMinV();
@@ -375,19 +392,19 @@ public interface Model5D extends Model {
 		return new Model5DVCrossSection<Model5D>(this, v);
 	}
 //	
-//	default Model4D crossSectionAtW(int v) {
+//	default Model4D crossSectionAtW(int w) {
 //		return new Model5DWCrossSection<Model5D>(this, w);
 //	}
 //	
-//	default Model4D crossSectionAtX(int v) {
+//	default Model4D crossSectionAtX(int x) {
 //		return new Model5DXCrossSection<Model5D>(this, x);
 //	}
 //	
-//	default Model4D crossSectionAtY(int v) {
+//	default Model4D crossSectionAtY(int y) {
 //		return new Model5DYCrossSection<Model5D>(this, y);
 //	}
 //	
-//	default Model4D crossSectionAtZ(int v) {
+//	default Model4D crossSectionAtZ(int z) {
 //		return new Model5DZCrossSection<Model5D>(this, z);
 //	}
 	

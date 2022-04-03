@@ -19,9 +19,9 @@ package cellularautomata.model4d;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class Model4DIterator<G extends Model4D, T> implements Iterator<T> {
+public abstract class Model4DIterator<Source_Type extends Model4D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected G grid;
+	protected Source_Type source;
 	private int w;
 	private int x;
 	private int y;
@@ -32,16 +32,16 @@ public abstract class Model4DIterator<G extends Model4D, T> implements Iterator<
 	private int localMaxZ;
 	private boolean hasNext;
 	
-	public Model4DIterator(G grid) {
-		this.grid = grid;
-		w = grid.getMinW();
-		maxW = grid.getMaxW();
-		x = grid.getMinXAtW(w);
-		localMaxX = grid.getMaxXAtW(w);
-		y = grid.getMinYAtWX(w, x);
-		localMaxY = grid.getMaxYAtWX(w, x);
-		z = grid.getMinZ(w, x, y);
-		localMaxZ = grid.getMaxZ(w, x, y);
+	public Model4DIterator(Source_Type source) {
+		this.source = source;
+		w = source.getMinW();
+		maxW = source.getMaxW();
+		x = source.getMinXAtW(w);
+		localMaxX = source.getMaxXAtW(w);
+		y = source.getMinYAtWX(w, x);
+		localMaxY = source.getMaxYAtWX(w, x);
+		z = source.getMinZ(w, x, y);
+		localMaxZ = source.getMaxZ(w, x, y);
 		hasNext = true;
 	}
 
@@ -51,10 +51,10 @@ public abstract class Model4DIterator<G extends Model4D, T> implements Iterator<
 	}
 
 	@Override
-	public T next() {
+	public Element_Type next() {
 		if (!hasNext)
 			throw new NoSuchElementException();
-		T next = null;
+		Element_Type next = null;
 		try {
 			next = getFromModelPosition(w, x, y, z);
 		} catch (Exception e) {
@@ -67,24 +67,24 @@ public abstract class Model4DIterator<G extends Model4D, T> implements Iterator<
 						hasNext = false;
 					} else {
 						w++;
-						x = grid.getMinXAtW(w);
-						localMaxX = grid.getMaxXAtW(w);
-						y = grid.getMinYAtWX(w, x);
-						localMaxY = grid.getMaxYAtWX(w, x);
-						z = grid.getMinZ(w, x, y);
-						localMaxZ = grid.getMaxZ(w, x, y);
+						x = source.getMinXAtW(w);
+						localMaxX = source.getMaxXAtW(w);
+						y = source.getMinYAtWX(w, x);
+						localMaxY = source.getMaxYAtWX(w, x);
+						z = source.getMinZ(w, x, y);
+						localMaxZ = source.getMaxZ(w, x, y);
 					}
 				} else {
 					x++;
-					y = grid.getMinYAtWX(w, x);
-					localMaxY = grid.getMaxYAtWX(w, x);
-					z = grid.getMinZ(w, x, y);
-					localMaxZ = grid.getMaxZ(w, x, y);
+					y = source.getMinYAtWX(w, x);
+					localMaxY = source.getMaxYAtWX(w, x);
+					z = source.getMinZ(w, x, y);
+					localMaxZ = source.getMaxZ(w, x, y);
 				}
 			} else {
 				y++;
-				z = grid.getMinZ(w, x, y);
-				localMaxZ = grid.getMaxZ(w, x, y);
+				z = source.getMinZ(w, x, y);
+				localMaxZ = source.getMaxZ(w, x, y);
 			}
 		} else {
 			z++;
@@ -92,6 +92,6 @@ public abstract class Model4DIterator<G extends Model4D, T> implements Iterator<
 		return next;
 	}
 	
-	protected abstract T getFromModelPosition(int w, int x, int y, int z) throws Exception;
+	protected abstract Element_Type getFromModelPosition(int w, int x, int y, int z) throws Exception;
 
 }

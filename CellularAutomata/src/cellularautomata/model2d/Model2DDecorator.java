@@ -18,10 +18,20 @@ package cellularautomata.model2d;
 
 import cellularautomata.model.ModelDecorator;
 
-public class Model2DDecorator<G extends Model2D> extends ModelDecorator<G> implements Model2D {
+public class Model2DDecorator<Source_Type extends Model2D> extends ModelDecorator<Source_Type> implements Model2D {
 	
-	public Model2DDecorator(G source) {
+	public Model2DDecorator(Source_Type source) {
 		super(source);
+	}
+
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
 	}
 
 	@Override
@@ -47,5 +57,10 @@ public class Model2DDecorator<G extends Model2D> extends ModelDecorator<G> imple
 
 	@Override
 	public int getMaxY(int x) { return source.getMaxY(x); }
+	
+	@Override
+	public Model2D subsection(int minX, int maxX, int minY, int maxY) {
+		return source.subsection(minX, maxX, minY, maxY);
+	}
 
 }

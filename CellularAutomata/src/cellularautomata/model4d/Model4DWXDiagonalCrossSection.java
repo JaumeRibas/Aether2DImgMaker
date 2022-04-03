@@ -21,9 +21,9 @@ import java.io.IOException;
 
 import cellularautomata.model3d.Model3D;
 
-public class Model4DWXDiagonalCrossSection<G extends Model4D> implements Model3D {
+public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implements Model3D {
 
-	protected G source;
+	protected Source_Type source;
 	protected int xOffsetFromW;
 	protected int crossSectionMinW;
 	protected int crossSectionMaxW;
@@ -32,7 +32,7 @@ public class Model4DWXDiagonalCrossSection<G extends Model4D> implements Model3D
 	protected int crossSectionMinZ;
 	protected int crossSectionMaxZ;
 	
-	public Model4DWXDiagonalCrossSection(G source, int xOffsetFromW) {		
+	public Model4DWXDiagonalCrossSection(Source_Type source, int xOffsetFromW) {		
 		this.source = source;
 		this.xOffsetFromW = xOffsetFromW;
 		if (!getBounds()) {

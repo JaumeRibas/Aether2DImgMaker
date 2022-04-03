@@ -16,10 +16,10 @@
  */
 package cellularautomata.model4d;
 
-public class AsymmetricIntModelSection4D<G extends SymmetricIntModel4D> extends AsymmetricModelSection4D<G> implements IntModel4D {
+public class AsymmetricIntModelSection4D extends AsymmetricModelSection4D<SymmetricIntModel4D> implements IntModel4D {
 	
-	public AsymmetricIntModelSection4D(G grid) {
-		super(grid);
+	public AsymmetricIntModelSection4D(SymmetricIntModel4D source) {
+		super(source);
 	}
 
 	@Override

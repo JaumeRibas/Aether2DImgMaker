@@ -21,12 +21,12 @@ import java.io.IOException;
 
 import cellularautomata.model2d.Model2D;
 
-public class Model3DYCrossSection<G extends Model3D> implements Model2D {
+public class Model3DYCrossSection<Source_Type extends Model3D> implements Model2D {
 
-	protected G source;
+	protected Source_Type source;
 	protected int y;
 	
-	public Model3DYCrossSection(G source, int y) {
+	public Model3DYCrossSection(Source_Type source, int y) {
 		if (y > source.getMaxY() || y < source.getMinY()) {
 			throw new IllegalArgumentException("Y coordinate is out of bounds.");
 		}

@@ -19,9 +19,12 @@ package cellularautomata.model;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class ModelIterator<G extends Model, T> implements Iterator<T> {
+import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
+
+public abstract class ModelIterator<Source_Type extends Model, Element_Type> implements Iterator<Element_Type> {
 	
-	protected G region;
+	protected Source_Type region;
 	private int dimension;
 	private int dimensionMinusOne;
 	private int[] coords;
@@ -31,7 +34,7 @@ public abstract class ModelIterator<G extends Model, T> implements Iterator<T> {
 	private PartialCoordinates immutablePartialCoords;
 	private boolean hasNext;
 	
-	public ModelIterator(G region) {
+	public ModelIterator(Source_Type region) {
 		this.region = region;
 		dimension = region.getGridDimension();
 		dimensionMinusOne = dimension - 1;
@@ -55,10 +58,10 @@ public abstract class ModelIterator<G extends Model, T> implements Iterator<T> {
 	}
 
 	@Override
-	public T next() {
+	public Element_Type next() {
 		if (!hasNext)
 			throw new NoSuchElementException();
-		T next = null;
+		Element_Type next = null;
 		try {
 			next = getFromModelPosition(immutableCoords);
 		} catch (Exception e) {
@@ -87,6 +90,6 @@ public abstract class ModelIterator<G extends Model, T> implements Iterator<T> {
 		return next;
 	}
 	
-	protected abstract T getFromModelPosition(Coordinates coordinates) throws Exception;
+	protected abstract Element_Type getFromModelPosition(Coordinates coordinates) throws Exception;
 
 }

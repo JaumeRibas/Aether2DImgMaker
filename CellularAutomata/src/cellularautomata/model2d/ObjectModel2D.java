@@ -18,9 +18,10 @@ package cellularautomata.model2d;
 
 import java.util.Iterator;
 
+import cellularautomata.Coordinates;
 import cellularautomata.model.ObjectModel;
 
-public interface ObjectModel2D<T> extends Model2D, ObjectModel<T> {
+public interface ObjectModel2D<Object_Type> extends Model2D, ObjectModel<Object_Type> {
 
 	/**
 	 * Returns the object at a given position
@@ -30,15 +31,20 @@ public interface ObjectModel2D<T> extends Model2D, ObjectModel<T> {
 	 * @return the object at (x,y)
 	 * @throws Exception 
 	 */
-	T getFromPosition(int x, int y) throws Exception;
+	Object_Type getFromPosition(int x, int y) throws Exception;
 	
 	@Override
-	default ObjectModel2D<T> subsection(int minX, int maxX, int minY, int maxY) {
-		return new ObjectSubModel2D<T, ObjectModel2D<T>>(this, minX, maxX, minY, maxY);
+	default Object_Type getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0), coordinates.get(1));
+	}
+	
+	@Override
+	default ObjectModel2D<Object_Type> subsection(int minX, int maxX, int minY, int maxY) {
+		return new ObjectSubModel2D<ObjectModel2D<Object_Type>, Object_Type>(this, minX, maxX, minY, maxY);
 	}
 
 	@Override
-	default Iterator<T> iterator() {
-		return new ObjectModel2DIterator<T>(this);
+	default Iterator<Object_Type> iterator() {
+		return new ObjectModel2DIterator<Object_Type>(this);
 	}
 }

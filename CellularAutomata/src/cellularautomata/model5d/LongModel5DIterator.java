@@ -24,7 +24,7 @@ public class LongModel5DIterator extends Model5DIterator<LongModel5D, Long> {
 
 	@Override
 	protected Long getFromModelPosition(int v, int w, int x, int y, int z) throws Exception {
-		return grid.getFromPosition(v, w, x, y, z);
+		return source.getFromPosition(v, w, x, y, z);
 	}
 
 }

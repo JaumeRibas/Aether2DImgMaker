@@ -16,9 +16,10 @@
  */
 package cellularautomata.model5d;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
+import cellularautomata.model.SymmetricLongModel;
 
-public interface SymmetricLongModel5D extends LongModel5D, SymmetricModel5D {
+public interface SymmetricLongModel5D extends LongModel5D, SymmetricModel5D, SymmetricLongModel {
 
 	/**
 	 * <p>
@@ -38,12 +39,13 @@ public interface SymmetricLongModel5D extends LongModel5D, SymmetricModel5D {
 	 */
 	long getFromAsymmetricPosition(int v, int w, int x, int y, int z) throws Exception;
 	
+	@Override
 	default long getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
 		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
 	}
 
 	@Override
 	default LongModel5D asymmetricSection() {
-		return new AsymmetricLongModelSection5D<SymmetricLongModel5D>(this);
+		return new AsymmetricLongModelSection5D(this);
 	}
 }

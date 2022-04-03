@@ -18,19 +18,19 @@ package cellularautomata.model4d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.model.MinAndMax;
+import cellularautomata.MinAndMax;
 import cellularautomata.model.NumericModel;
 import cellularautomata.model3d.NumericModel3D;
 
-public interface NumericModel4D<T extends FieldElement<T> & Comparable<T>> extends ObjectModel4D<T>, NumericModel<T> {
+public interface NumericModel4D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel4D<Number_Type>, NumericModel<Number_Type> {
 
 	@Override
-	default MinAndMax<T> getMinAndMax() throws Exception {
+	default MinAndMax<Number_Type> getMinAndMax() throws Exception {
 		int maxW = getMaxW(), minW = getMinW(), maxX, maxY, maxZ, minZ;
 		int minX = getMinXAtW(minW);
 		int minY = getMinYAtWX(minW, minX);
-		T minValue = getFromPosition(minW, minX, minY, getMinZ(minW, minX, minY));
-		T maxValue = minValue;
+		Number_Type minValue = getFromPosition(minW, minX, minY, getMinZ(minW, minX, minY));
+		Number_Type maxValue = minValue;
 		for (int w = minW; w <= maxW; w++) {
 			minX = getMinXAtW(w);
 			maxX = getMaxXAtW(w);
@@ -41,7 +41,7 @@ public interface NumericModel4D<T extends FieldElement<T> & Comparable<T>> exten
 					minZ = getMinZ(w, x, y);
 					maxZ = getMaxZ(w, x, y);
 					for (int z = minZ; z <= maxZ; z++) {
-						T value = getFromPosition(w, x, y, z);
+						Number_Type value = getFromPosition(w, x, y, z);
 						if (value.compareTo(maxValue) > 0)
 							maxValue = value;
 						if (value.compareTo(minValue) < 0)
@@ -50,13 +50,13 @@ public interface NumericModel4D<T extends FieldElement<T> & Comparable<T>> exten
 				}
 			}
 		}
-		return new MinAndMax<T>(minValue, maxValue);
+		return new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+	default MinAndMax<Number_Type> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxW = getMaxW(), minW = getMinW(), maxX, minX, maxY, minY, maxZ, minZ;
-		T minValue = null, maxValue = null;
+		Number_Type minValue = null, maxValue = null;
 		int w = minW;
 		for (; w <= maxW && maxValue == null; w++) {
 			minX = getMinXAtW(w);
@@ -72,7 +72,7 @@ public interface NumericModel4D<T extends FieldElement<T> & Comparable<T>> exten
 						minZ++;
 					}
 					if (minZ <= maxZ) {
-						T value = getFromPosition(w, x, y, minZ);
+						Number_Type value = getFromPosition(w, x, y, minZ);
 						maxValue = value;
 						minValue = value;
 						for (int z = minZ + 2; z <= maxZ; z+=2) {
@@ -100,7 +100,7 @@ public interface NumericModel4D<T extends FieldElement<T> & Comparable<T>> exten
 						minZ++;
 					}
 					for (int z = minZ; z <= maxZ; z+=2) {
-						T value = getFromPosition(w, x, y, z);
+						Number_Type value = getFromPosition(w, x, y, z);
 						if (value.compareTo(maxValue) > 0)
 							maxValue = value;
 						if (value.compareTo(minValue) < 0)
@@ -109,16 +109,16 @@ public interface NumericModel4D<T extends FieldElement<T> & Comparable<T>> exten
 				}
 			}
 		}
-		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default T getTotal() throws Exception {
+	default Number_Type getTotal() throws Exception {
 		int maxW = getMaxW(), minW = getMinW();
 		int minX = getMinXAtW(minW);
 		int minY = getMinYAtWX(minW, minX);
 		int minZ = getMinZ(minW, minX, minY);
-		T total = getFromPosition(minW, minX, minY, minZ);
+		Number_Type total = getFromPosition(minW, minX, minY, minZ);
 		int maxZ = getMaxZ(minW, minX, minY);
 		for (int z = minZ + 1; z <= maxZ; z++) {
 			total = total.add(getFromPosition(minW, minX, minY, z));
@@ -162,27 +162,37 @@ public interface NumericModel4D<T extends FieldElement<T> & Comparable<T>> exten
 	}
 	
 	@Override
-	default NumericModel4D<T> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new NumericSubModel4D<T, NumericModel4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	default NumericModel4D<Number_Type> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new NumericSubModel4D<Number_Type>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
-	default NumericModel3D<T> crossSectionAtW(int w) {
-		return new NumericModel4DWCrossSection<T, NumericModel4D<T>>(this, w);
+	default NumericModel3D<Number_Type> crossSectionAtW(int w) {
+		return new NumericModel4DWCrossSection<Number_Type>(this, w);
 	}
 	
 	@Override
-	default NumericModel3D<T> crossSectionAtX(int x) {
-		return new NumericModel4DXCrossSection<T, NumericModel4D<T>>(this, x);
+	default NumericModel3D<Number_Type> crossSectionAtX(int x) {
+		return new NumericModel4DXCrossSection<Number_Type>(this, x);
 	}
 	
 	@Override
-	default NumericModel3D<T> crossSectionAtY(int y) {
-		return new NumericModel4DYCrossSection<T, NumericModel4D<T>>(this, y);
+	default NumericModel3D<Number_Type> crossSectionAtY(int y) {
+		return new NumericModel4DYCrossSection<Number_Type>(this, y);
 	}
 	
 	@Override
-	default NumericModel3D<T> crossSectionAtZ(int z) {
-		return new NumericModel4DZCrossSection<T, NumericModel4D<T>>(this, z);
+	default NumericModel3D<Number_Type> crossSectionAtZ(int z) {
+		return new NumericModel4DZCrossSection<Number_Type>(this, z);
+	}
+	
+	@Override
+	default NumericModel3D<Number_Type> diagonalCrossSectionOnWX(int xOffsetFromW) {
+		return new NumericModel4DWXDiagonalCrossSection<Number_Type>(this, xOffsetFromW);
+	}
+	
+	@Override
+	default NumericModel3D<Number_Type> diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new NumericModel4DYZDiagonalCrossSection<Number_Type>(this, zOffsetFromY);
 	}
 }

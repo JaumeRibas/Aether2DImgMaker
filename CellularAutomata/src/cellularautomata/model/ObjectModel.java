@@ -16,6 +16,72 @@
  */
 package cellularautomata.model;
 
-public interface ObjectModel<T> extends Model, Iterable<T> {
+import java.util.Iterator;
+import java.util.function.Consumer;
+
+import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
+
+public interface ObjectModel<Object_Type> extends Model, Iterable<Object_Type> {
+
+	/**
+	 * <p>Returns the value at the given coordinates.</p>
+	 * <p>It is not defined to call this method with coordinates of a dimension different form the grid's dimension. This is obtained by calling the {@link #getGridDimension()} method.
+	 * <p>It is also not defined to call this method passing coordinates outside the bounds of the region. 
+	 * To get these bounds use the {@link #getMaxCoordinate(int)}, {@link #getMaxCoordinate(int, PartialCoordinates)}, 
+	 * {@link #getMinCoordinate(int)} and {@link #getMinCoordinate(int, PartialCoordinates)} methods.</p>
+	 * 
+	 * @param coordinates a {@link Coordinates} object
+	 * @return the value at the given position.
+	 * @throws Exception 
+	 */
+	Object_Type getFromPosition(Coordinates coordinates) throws Exception;
+	
+	/**
+	 * Feeds every value at an even position of the region in a consistent order to a {@link Consumer}.
+	 * 
+	 * @param consumer
+	 * @throws Exception 
+	 */
+	default void forEachAtEvenPosition(Consumer<Object_Type> consumer) throws Exception {
+		forEachEvenPosition(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coordinates) {
+				try {
+					Object_Type value = getFromPosition(coordinates);
+					consumer.accept(value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Feeds every value at an odd position of the region in a consistent order to a {@link Consumer}.
+	 * 
+	 * @param consumer
+	 * @throws Exception 
+	 */
+	default void forEachAtOddPosition(Consumer<Object_Type> consumer) throws Exception {
+		forEachOddPosition(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coordinates) {
+				try {
+					Object_Type value = getFromPosition(coordinates);
+					consumer.accept(value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	@Override
+	default Iterator<Object_Type> iterator() {
+		return new ObjectModelIterator<Object_Type>(this);
+	}
 	
 }

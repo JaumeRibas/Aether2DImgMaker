@@ -18,9 +18,9 @@ package cellularautomata.model3d;
 
 import cellularautomata.model2d.IntModel2D;
 
-public class IntModel3DXCrossSection<G extends IntModel3D> extends Model3DXCrossSection<G> implements IntModel2D {
+public class IntModel3DXCrossSection extends Model3DXCrossSection<IntModel3D> implements IntModel2D {
 	
-	public IntModel3DXCrossSection(G source, int x) {
+	public IntModel3DXCrossSection(IntModel3D source, int x) {
 		super(source, x);
 	}
 

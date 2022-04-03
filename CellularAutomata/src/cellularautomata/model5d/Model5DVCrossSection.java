@@ -22,12 +22,12 @@ import java.io.IOException;
 import cellularautomata.model4d.Model4D;
 
 
-public class Model5DVCrossSection<G extends Model5D> implements Model4D {
+public class Model5DVCrossSection<Source_Type extends Model5D> implements Model4D {
 
-	protected G source;
+	protected Source_Type source;
 	protected int v;
 	
-	public Model5DVCrossSection(G source, int v) {
+	public Model5DVCrossSection(Source_Type source, int v) {
 		if (v > source.getMaxV() || v < source.getMinV()) {
 			throw new IllegalArgumentException("V coordinate is out of bounds.");
 		}

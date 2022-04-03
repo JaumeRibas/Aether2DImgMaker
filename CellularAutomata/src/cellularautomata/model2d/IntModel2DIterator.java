@@ -24,7 +24,7 @@ public class IntModel2DIterator extends Model2DIterator<IntModel2D, Integer> {
 
 	@Override
 	protected Integer getFromModelPosition(int x, int y) throws Exception {
-		return grid.getFromPosition(x, y);
+		return source.getFromPosition(x, y);
 	}
 
 }

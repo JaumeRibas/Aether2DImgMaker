@@ -16,15 +16,15 @@
  */
 package cellularautomata.model3d;
 
-public class ObjectModel3DIterator<T> extends Model3DIterator<ObjectModel3D<T>, T> {
+public class ObjectModel3DIterator<Object_Type> extends Model3DIterator<ObjectModel3D<Object_Type>, Object_Type> {
 
-	public ObjectModel3DIterator(ObjectModel3D<T> grid) {
-		super(grid);
+	public ObjectModel3DIterator(ObjectModel3D<Object_Type> source) {
+		super(source);
 	}
 
 	@Override
-	protected T getFromModelPosition(int x, int y, int z) throws Exception {
-		return grid.getFromPosition(x, y, z);
+	protected Object_Type getFromModelPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(x, y, z);
 	}
 
 }

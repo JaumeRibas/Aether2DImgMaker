@@ -16,7 +16,10 @@
  */
 package cellularautomata.model1d;
 
-public interface SymmetricLongModel1D extends LongModel1D, SymmetricModel1D {
+import cellularautomata.Coordinates;
+import cellularautomata.model.SymmetricLongModel;
+
+public interface SymmetricLongModel1D extends LongModel1D, SymmetricModel1D, SymmetricLongModel {
 	
 	/**
 	 * <p>
@@ -34,8 +37,13 @@ public interface SymmetricLongModel1D extends LongModel1D, SymmetricModel1D {
 	long getFromAsymmetricPosition(int x) throws Exception;
 	
 	@Override
+	default long getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0));
+	}
+	
+	@Override
 	default LongModel1D asymmetricSection() {
-		return new AsymmetricLongModelSection1D<SymmetricLongModel1D>(this);
+		return new AsymmetricLongModelSection1D(this);
 	}
 
 }

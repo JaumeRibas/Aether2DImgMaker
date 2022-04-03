@@ -16,22 +16,22 @@
  */
 package cellularautomata.automata;
 
-public class Neighbor<T> {
+public class Neighbor<Object_Type> {
 	
-	private T value;
+	private Object_Type value;
 
 	private byte direction;
 	
-	public Neighbor(byte direction, T value) {
+	public Neighbor(byte direction, Object_Type value) {
 		this.value = value;
 		this.direction = direction;
 	}
 	
-	public T getValue() {
+	public Object_Type getValue() {
 		return value;
 	}
 	
-	public void setValue(T value) {
+	public void setValue(Object_Type value) {
 		this.value = value;
 	}
 	

@@ -18,7 +18,7 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-public class SolidColorMap<T> implements IntColorMap, LongColorMap, ColorMap<T> {
+public class SolidColorMap<Object_Type> implements IntColorMap, LongColorMap, ColorMap<Object_Type> {
 	
 	private Color color;
 	
@@ -32,7 +32,7 @@ public class SolidColorMap<T> implements IntColorMap, LongColorMap, ColorMap<T> 
 	}
 
 	@Override
-	public Color getColor(T value) throws Exception {
+	public Color getColor(Object_Type value) throws Exception {
 		return color;
 	}
 

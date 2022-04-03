@@ -19,15 +19,15 @@ package cellularautomata.model1d;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class Model1DIterator<G extends Model1D, T> implements Iterator<T> {
+public abstract class Model1DIterator<Source_Type extends Model1D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected G grid;
+	protected Source_Type source;
 	private int x;
 	private int maxX;
 	private boolean hasNext;
 	
-	public Model1DIterator(G grid) {
-		this.grid = grid;
+	public Model1DIterator(Source_Type grid) {
+		this.source = grid;
 		this.x = grid.getMinX();
 		maxX = grid.getMaxX();
 		hasNext = true;
@@ -39,10 +39,10 @@ public abstract class Model1DIterator<G extends Model1D, T> implements Iterator<
 	}
 
 	@Override
-	public T next() {
+	public Element_Type next() {
 		if (!hasNext)
 			throw new NoSuchElementException();
-		T next;
+		Element_Type next;
 		try {
 			next = getFromModelPosition(x);
 		} catch (Exception e) {
@@ -56,6 +56,6 @@ public abstract class Model1DIterator<G extends Model1D, T> implements Iterator<
 		return next;
 	}
 	
-	protected abstract T getFromModelPosition(int x) throws Exception;
+	protected abstract Element_Type getFromModelPosition(int x) throws Exception;
 
 }

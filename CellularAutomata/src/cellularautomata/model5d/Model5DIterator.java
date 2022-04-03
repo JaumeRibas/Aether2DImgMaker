@@ -19,9 +19,9 @@ package cellularautomata.model5d;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class Model5DIterator<G extends Model5D, T> implements Iterator<T> {
+public abstract class Model5DIterator<Source_Type extends Model5D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected G grid;
+	protected Source_Type source;
 	private int v;
 	private int w;
 	private int x;
@@ -34,8 +34,8 @@ public abstract class Model5DIterator<G extends Model5D, T> implements Iterator<
 	private int localMaxZ;
 	private boolean hasNext;
 	
-	public Model5DIterator(G grid) {
-		this.grid = grid;
+	public Model5DIterator(Source_Type grid) {
+		this.source = grid;
 		v = grid.getMinV();
 		maxV = grid.getMaxV();
 		w = grid.getMinWAtV(v);
@@ -55,10 +55,10 @@ public abstract class Model5DIterator<G extends Model5D, T> implements Iterator<
 	}
 
 	@Override
-	public T next() {
+	public Element_Type next() {
 		if (!hasNext)
 			throw new NoSuchElementException();
-		T next = null;
+		Element_Type next = null;
 		try {
 			next = getFromModelPosition(v, w, x, y, z);
 		} catch (Exception e) {
@@ -72,35 +72,35 @@ public abstract class Model5DIterator<G extends Model5D, T> implements Iterator<
 							hasNext = false;
 						} else {
 							v++;
-							w = grid.getMinWAtV(v);
-							localMaxW = grid.getMaxWAtV(v);
-							x = grid.getMinXAtVW(v, w);
-							localMaxX = grid.getMaxXAtVW(v, w);
-							y = grid.getMinYAtVWX(v, w, x);
-							localMaxY = grid.getMaxYAtVWX(v, w, x);
-							z = grid.getMinZ(v, w, x, y);
-							localMaxZ = grid.getMaxZ(v, w, x, y);
+							w = source.getMinWAtV(v);
+							localMaxW = source.getMaxWAtV(v);
+							x = source.getMinXAtVW(v, w);
+							localMaxX = source.getMaxXAtVW(v, w);
+							y = source.getMinYAtVWX(v, w, x);
+							localMaxY = source.getMaxYAtVWX(v, w, x);
+							z = source.getMinZ(v, w, x, y);
+							localMaxZ = source.getMaxZ(v, w, x, y);
 						}
 					} else {
 						w++;
-						x = grid.getMinXAtVW(v, w);
-						localMaxX = grid.getMaxXAtVW(v, w);
-						y = grid.getMinYAtVWX(v, w, x);
-						localMaxY = grid.getMaxYAtVWX(v, w, x);
-						z = grid.getMinZ(v, w, x, y);
-						localMaxZ = grid.getMaxZ(v, w, x, y);
+						x = source.getMinXAtVW(v, w);
+						localMaxX = source.getMaxXAtVW(v, w);
+						y = source.getMinYAtVWX(v, w, x);
+						localMaxY = source.getMaxYAtVWX(v, w, x);
+						z = source.getMinZ(v, w, x, y);
+						localMaxZ = source.getMaxZ(v, w, x, y);
 					}
 				} else {
 					x++;
-					y = grid.getMinYAtVWX(v, w, x);
-					localMaxY = grid.getMaxYAtVWX(v, w, x);
-					z = grid.getMinZ(v, w, x, y);
-					localMaxZ = grid.getMaxZ(v, w, x, y);
+					y = source.getMinYAtVWX(v, w, x);
+					localMaxY = source.getMaxYAtVWX(v, w, x);
+					z = source.getMinZ(v, w, x, y);
+					localMaxZ = source.getMaxZ(v, w, x, y);
 				}
 			} else {
 				y++;
-				z = grid.getMinZ(v, w, x, y);
-				localMaxZ = grid.getMaxZ(v, w, x, y);
+				z = source.getMinZ(v, w, x, y);
+				localMaxZ = source.getMaxZ(v, w, x, y);
 			}
 		} else {
 			z++;
@@ -108,6 +108,6 @@ public abstract class Model5DIterator<G extends Model5D, T> implements Iterator<
 		return next;
 	}
 	
-	protected abstract T getFromModelPosition(int v, int w, int x, int y, int z) throws Exception;
+	protected abstract Element_Type getFromModelPosition(int v, int w, int x, int y, int z) throws Exception;
 
 }

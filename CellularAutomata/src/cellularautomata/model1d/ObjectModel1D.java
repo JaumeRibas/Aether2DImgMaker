@@ -18,9 +18,10 @@ package cellularautomata.model1d;
 
 import java.util.Iterator;
 
+import cellularautomata.Coordinates;
 import cellularautomata.model.ObjectModel;
 
-public interface ObjectModel1D<T> extends Model1D, ObjectModel<T> {
+public interface ObjectModel1D<Object_Type> extends Model1D, ObjectModel<Object_Type> {
 	
 	/**
 	 * Returns the value at a given position
@@ -29,15 +30,20 @@ public interface ObjectModel1D<T> extends Model1D, ObjectModel<T> {
 	 * @return the value at (x)
 	 * @throws Exception 
 	 */
-	T getFromPosition(int x) throws Exception;
+	Object_Type getFromPosition(int x) throws Exception;
 	
 	@Override
-	default ObjectModel1D<T> subsection(int minX, int maxX) {
-		return new ObjectSubModel1D<T, ObjectModel1D<T>>(this, minX, maxX);
+	default Object_Type getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0));
+	}
+	
+	@Override
+	default ObjectModel1D<Object_Type> subsection(int minX, int maxX) {
+		return new ObjectSubModel1D<ObjectModel1D<Object_Type>, Object_Type>(this, minX, maxX);
 	}
 
 	@Override
-	default Iterator<T> iterator() {
-		return new ObjectModel1DIterator<T>(this);
+	default Iterator<Object_Type> iterator() {
+		return new ObjectModel1DIterator<Object_Type>(this);
 	}
 }

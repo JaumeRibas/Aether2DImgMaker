@@ -17,7 +17,7 @@
 package cellularautomata.model3d;
 
 /**
- * An asymmetric section of an isotropic region of a 3D grid with center at the origin of coordinates.
+ * An asymmetric section of an isotropic region of a 3D grid with its center at the origin of coordinates.
  * The asymmetric section is the one within the region where x >= y >= z >= 0.
  *  
  * @author Jaume

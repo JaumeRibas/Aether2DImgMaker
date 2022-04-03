@@ -19,9 +19,9 @@ package cellularautomata.model5d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SubModel5D<G extends Model5D> implements Model5D {
+public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 
-	protected G source;
+	protected Source_Type source;
 	protected int minV;
 	protected int maxV;
 	protected int minW;
@@ -42,10 +42,8 @@ public class SubModel5D<G extends Model5D> implements Model5D {
 	protected int absoluteMaxY;
 	protected int absoluteMinZ;
 	protected int absoluteMaxZ;
-	
-	protected SubModel5D() {}
 
-	public SubModel5D(G source, int minV, int maxV, int minW, int maxW, 
+	public SubModel5D(Source_Type source, int minV, int maxV, int minW, int maxW, 
 			int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minV > maxV) {
 			throw new IllegalArgumentException("Min v cannot be bigger than max v.");

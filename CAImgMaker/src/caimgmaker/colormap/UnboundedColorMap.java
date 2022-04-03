@@ -20,21 +20,21 @@ import java.awt.Color;
 
 import org.apache.commons.math3.FieldElement;
 
-public class UnboundedColorMap<T extends FieldElement<T> & Comparable<T>> implements BoundedColorMap<T> {
+public class UnboundedColorMap<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> implements BoundedColorMap<Number_Type> {
 	
-	private T minValue;
-	private T maxValue;
-	private ColorMap<T> colorMap;
+	private Number_Type minValue;
+	private Number_Type maxValue;
+	private ColorMap<Number_Type> colorMap;
 	private Color outOfLowerBoundColor;
 	private Color outOfUpperBoundColor;
 	
-	public UnboundedColorMap(ColorMap<T> colorMap, T minValue, T maxValue, 
+	public UnboundedColorMap(ColorMap<Number_Type> colorMap, Number_Type minValue, Number_Type maxValue, 
 			Color outOfLowerBoundColor, Color outOfUpperBoundColor) {
 		this.colorMap = colorMap;
 		this.outOfLowerBoundColor = outOfLowerBoundColor;
 		this.outOfUpperBoundColor = outOfUpperBoundColor;
 		if (minValue.compareTo(maxValue) > 0) {
-			T swap = minValue;
+			Number_Type swap = minValue;
 			minValue = maxValue;
 			maxValue = swap;
 		}
@@ -42,7 +42,7 @@ public class UnboundedColorMap<T extends FieldElement<T> & Comparable<T>> implem
 		this.maxValue = maxValue;
 	}
 	
-	public Color getColor(T value) throws Exception {
+	public Color getColor(Number_Type value) throws Exception {
 		if (value.compareTo(minValue) < 0) {
 			return outOfLowerBoundColor;
 		} else if (value.compareTo(maxValue) > 0) {
@@ -53,12 +53,12 @@ public class UnboundedColorMap<T extends FieldElement<T> & Comparable<T>> implem
 	}
 
 	@Override
-	public T getMaxValue() {
+	public Number_Type getMaxValue() {
 		return maxValue;
 	}
 
 	@Override
-	public T getMinValue() {
+	public Number_Type getMinValue() {
 		return minValue;
 	}
 

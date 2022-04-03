@@ -17,7 +17,7 @@
 package cellularautomata.model1d;
 
 import cellularautomata.model.Model;
-import cellularautomata.model.PartialCoordinates;
+import cellularautomata.PartialCoordinates;
 
 public interface Model1D extends Model {
 	

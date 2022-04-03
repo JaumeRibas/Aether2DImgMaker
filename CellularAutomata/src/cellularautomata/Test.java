@@ -28,9 +28,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 import org.apache.commons.math3.FieldElement;
-import org.apache.commons.math3.fraction.BigFraction;
-
-import cellularautomata.automata.SingleSourceLongSandpile1D;
 import cellularautomata.automata.aether.Aether2D;
 import cellularautomata.automata.aether.Aether3DEnclosed;
 import cellularautomata.automata.aether.Aether3DEnclosed2;
@@ -40,12 +37,9 @@ import cellularautomata.automata.aether.AetherSimple2D;
 import cellularautomata.automata.aether.AetherSimple5D;
 import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether4D;
-import cellularautomata.automata.siv.SpreadIntegerValue1D;
 import cellularautomata.automata.siv.SpreadIntegerValue2D;
-import cellularautomata.automata.siv.SpreadIntegerValueRules;
 import cellularautomata.automata.siv.SpreadIntegerValueSimple2D;
-import cellularautomata.model.Coordinates;
-import cellularautomata.model.ModelProcessor;
+import cellularautomata.Coordinates;
 import cellularautomata.model.Model;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
@@ -53,7 +47,6 @@ import cellularautomata.model.NumericModel;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.NumericModel1D;
 import cellularautomata.model1d.ObjectModel1D;
-import cellularautomata.model1d.SequentialLongModel1D;
 import cellularautomata.model2d.ArrayIntGrid2D;
 import cellularautomata.model2d.ArrayNumberGrid2D;
 import cellularautomata.model2d.Model2D;
@@ -61,25 +54,15 @@ import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
 import cellularautomata.model2d.ObjectModel2D;
-import cellularautomata.model3d.ActionableModel3D;
-import cellularautomata.model3d.BigFractionModel3DPattern;
-import cellularautomata.model3d.BigIntModel3DPattern;
 import cellularautomata.model3d.Model3D;
-import cellularautomata.model3d.Model3DZCrossSectionCopierProcessor;
 import cellularautomata.model3d.IntModel3D;
-import cellularautomata.model3d.IntModel3DXCrossSectionCopierProcessor;
-import cellularautomata.model3d.IntModel3DZCrossSectionCopierProcessor;
 import cellularautomata.model3d.LongModel3D;
-import cellularautomata.model3d.LongModel3DZCrossSectionCopierProcessor;
 import cellularautomata.model3d.NumericModel3D;
-import cellularautomata.model3d.ObjectModel3D;
 import cellularautomata.model3d.RegularIntGrid3D;
-import cellularautomata.model4d.ActionableModel4D;
 import cellularautomata.model4d.IntModel4D;
 import cellularautomata.model4d.LongModel4D;
 import cellularautomata.model4d.NumericModel4D;
 import cellularautomata.model4d.RegularIntGrid4D;
-import cellularautomata.model5d.ActionableModel5D;
 import cellularautomata.model5d.IntModel5D;
 import cellularautomata.model5d.LongModel5D;
 import cellularautomata.model5d.RegularIntGrid5D;
@@ -497,12 +480,12 @@ public class Test {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T[][] testGenericArrayBySample(T sample, int width, int height) {
-		Class<T> clazz = (Class<T>) sample.getClass();
-		Class<T[]> arrayClass = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
-		T[][] arr = (T[][]) Array.newInstance(arrayClass, width);
+	public static <Object_Type> Object_Type[][] testGenericArrayBySample(Object_Type sample, int width, int height) {
+		Class<Object_Type> clazz = (Class<Object_Type>) sample.getClass();
+		Class<Object_Type[]> arrayClass = (Class<Object_Type[]>) Array.newInstance(clazz, 0).getClass();
+		Object_Type[][] arr = (Object_Type[][]) Array.newInstance(arrayClass, width);
 		for (int i = 0; i < arr.length; i++) {
-			arr[i] = (T[]) Array.newInstance(clazz, height);
+			arr[i] = (Object_Type[]) Array.newInstance(clazz, height);
 		}
 		return arr;
 	}
@@ -1028,13 +1011,6 @@ public class Test {
 		return (int)minValue;
 	}
 	
-	public static void raceSandpileImplementations() {
-		long initialValue = 2000;
-		SpreadIntegerValue1D siv1 = new SpreadIntegerValue1D(initialValue, 0);
-		SingleSourceLongSandpile1D siv2 = new SingleSourceLongSandpile1D(new SpreadIntegerValueRules(), initialValue);
-		race(new Model[] { siv1, siv2 });
-	}
-	
 	public static void compareAllSteps(LongModel1D ca1, LongModel1D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -1172,6 +1148,41 @@ public class Test {
 		}
 	}
 	
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel2D<Number_Type> ca1, LongModel2D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+//				System.out.println("Comparing step " + ca1.getStep());
+				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
+						if (ca1.getFromPosition(x, y).longValue() != ca2.getFromPosition(x, y)) {
+							equal = false;
+							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+									+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y) 
+									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y));
+						}
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal)
+					return;
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void compareAllSteps(IntModel3D ca1, IntModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -1201,507 +1212,6 @@ public class Test {
 			}
 			if (equal)
 				System.out.println("Equal!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compareAllStepsFromIntModel(LongModel3D ca1, ActionableModel3D<IntModel3D> ca2) {
-		compareAllStepsFromIntModel(ca2 , ca1);
-	}
-	
-	public static void compareAllStepsFromIntModel(ActionableModel3D<IntModel3D> ca1, LongModel3D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<IntModel3D> comparator = new ModelProcessor<IntModel3D>() {
-				
-				@Override
-				public void processModelBlock(IntModel3D gridBlock) throws Exception {
-					for (int x = gridBlock.getMinX(); x <= gridBlock.getMaxX(); x++) {
-						for (int z = gridBlock.getMinZAtX(x); z <= gridBlock.getMaxZAtX(x); z++) {
-							for (int y = gridBlock.getMinY(x, z); y <= gridBlock.getMaxY(x, z); y++) {
-								if (gridBlock.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
-									System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-											+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(x, y, z) 
-											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z));
-								}	
-							}	
-						}
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing					
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compareAllStepsFromLongModel(ActionableModel3D<LongModel3D> ca1, LongModel3D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<LongModel3D> comparator = new ModelProcessor<LongModel3D>() {
-				
-				@Override
-				public void processModelBlock(LongModel3D gridBlock) throws Exception {
-					for (int x = gridBlock.getMinX(); x <= gridBlock.getMaxX(); x++) {
-						for (int z = gridBlock.getMinZAtX(x); z <= gridBlock.getMaxZAtX(x); z++) {
-							for (int y = gridBlock.getMinY(x, z); y <= gridBlock.getMaxY(x, z); y++) {
-//								System.out.println("Comparing position (" + x + ", " + y + ", " + z + ")");
-								if (gridBlock.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
-									System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-											+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(x, y, z) 
-											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z));
-									//return;
-								}	
-							}	
-						}
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing			
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compareAllStepsFromLongModel(LongModel4D ca1, ActionableModel4D<LongModel4D> ca2) {
-		compareAllStepsFromLongModel(ca2, ca1);
-	}
-	
-	public static void compareAllStepsFromLongModel(ActionableModel4D<LongModel4D> ca1, LongModel4D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<LongModel4D> comparator = new ModelProcessor<LongModel4D>() {
-				
-				@Override
-				public void processModelBlock(LongModel4D gridBlock) throws Exception {
-					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
-						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
-							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
-								for (int w = gridBlock.getMinW(x,y,z); w <= gridBlock.getMaxW(x,y,z); w++) {
-									if (gridBlock.getFromPosition(w, x, y, z) != ca2.getFromPosition(w, x, y, z)) {
-										System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
-												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(w, x, y, z) 
-												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
-									}
-								}
-							}	
-						}	
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing			
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compareAllStepsFromIntModel(LongModel4D ca1, ActionableModel4D<IntModel4D> ca2) {
-		compareAllStepsFromIntModel(ca2, ca1);
-	}
-	
-	public static void compareAllStepsFromIntModel(ActionableModel4D<IntModel4D> ca1, LongModel4D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<IntModel4D> comparator = new ModelProcessor<IntModel4D>() {
-				
-				@Override
-				public void processModelBlock(IntModel4D gridBlock) throws Exception {
-					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
-						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
-							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
-								for (int w = gridBlock.getMinW(x,y,z); w <= gridBlock.getMaxW(x,y,z); w++) {
-									if (gridBlock.getFromPosition(w, x, y, z) != ca2.getFromPosition(w, x, y, z)) {
-										System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
-												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(w, x, y, z) 
-												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
-									}
-								}
-							}	
-						}	
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing			
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compareAllStepsFromLongModel(LongModel5D ca1, ActionableModel5D<LongModel5D> ca2) {
-		compareAllStepsFromLongModel(ca2, ca1);
-	}
-	
-	public static void compareAllStepsFromLongModel(ActionableModel5D<LongModel5D> ca1, LongModel5D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<LongModel5D> comparator = new ModelProcessor<LongModel5D>() {
-				
-				@Override
-				public void processModelBlock(LongModel5D gridBlock) throws Exception {
-					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
-						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
-							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
-								for (int w = gridBlock.getMinWAtXYZ(x,y,z); w <= gridBlock.getMaxWAtXYZ(x,y,z); w++) {
-									for (int v = gridBlock.getMinV(w,x,y,z); v <= gridBlock.getMaxV(w,x,y,z); v++) {
-										if (gridBlock.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
-											System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
-													+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(v, w, x, y, z) 
-													+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
-										}
-									}
-								}
-							}	
-						}	
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing			
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compareAllStepsFromIntModel(IntModel5D ca1, ActionableModel5D<IntModel5D> ca2) {
-		compareAllStepsFromIntModel(ca2, ca1);
-	}
-	
-	public static void compareAllStepsFromIntModel(ActionableModel5D<IntModel5D> ca1, IntModel5D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<IntModel5D> comparator = new ModelProcessor<IntModel5D>() {
-				
-				@Override
-				public void processModelBlock(IntModel5D gridBlock) throws Exception {
-					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
-						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
-							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
-								for (int w = gridBlock.getMinWAtXYZ(x,y,z); w <= gridBlock.getMaxWAtXYZ(x,y,z); w++) {
-									for (int v = gridBlock.getMinV(w,x,y,z); v <= gridBlock.getMaxV(w,x,y,z); v++) {
-										if (gridBlock.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
-											System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
-													+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(v, w, x, y, z) 
-													+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
-										}
-									}
-								}
-							}	
-						}	
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing			
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void compareAllStepsFromIntModel(LongModel5D ca1, ActionableModel5D<IntModel5D> ca2) {
-		compareAllStepsFromIntModel(ca2, ca1);
-	}
-	
-	public static void compareAllStepsFromIntModel(ActionableModel5D<IntModel5D> ca1, LongModel5D ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<IntModel5D> comparator = new ModelProcessor<IntModel5D>() {
-				
-				@Override
-				public void processModelBlock(IntModel5D gridBlock) throws Exception {
-					for (int z = gridBlock.getMinZ(); z <= gridBlock.getMaxZ(); z++) {
-						for (int y = gridBlock.getMinYAtZ(z); y <= gridBlock.getMaxYAtZ(z); y++) {
-							for (int x = gridBlock.getMinXAtYZ(y,z); x <= gridBlock.getMaxXAtYZ(y,z); x++) {
-								for (int w = gridBlock.getMinWAtXYZ(x,y,z); w <= gridBlock.getMaxWAtXYZ(x,y,z); w++) {
-									for (int v = gridBlock.getMinV(w,x,y,z); v <= gridBlock.getMaxV(w,x,y,z); v++) {
-										if (gridBlock.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
-											System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
-													+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(v, w, x, y, z) 
-													+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
-										}
-									}
-								}
-							}	
-						}	
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing			
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compareAllStepsFromNumericModel(ActionableModel3D<NumericModel3D<T>> ca1, NumericModel3D<T> ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<NumericModel3D<T>> comparator = new ModelProcessor<NumericModel3D<T>>() {
-				
-				@Override
-				public void processModelBlock(NumericModel3D<T> gridBlock) throws Exception {
-					for (int x = gridBlock.getMinX(); x <= gridBlock.getMaxX(); x++) {
-						for (int z = gridBlock.getMinZAtX(x); z <= gridBlock.getMaxZAtX(x); z++) {
-							for (int y = gridBlock.getMinY(x, z); y <= gridBlock.getMaxY(x, z); y++) {
-								if (!gridBlock.getFromPosition(x, y, z).equals(ca2.getFromPosition(x, y, z))) {
-									System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-											+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(x, y, z) 
-											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z));
-								}	
-							}	
-						}
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing					
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void 
-		compareAllStepsFromNumericModel(ActionableModel4D<NumericModel4D<T>> ca1, NumericModel4D<T> ca2) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			ModelProcessor<NumericModel4D<T>> comparator = new ModelProcessor<NumericModel4D<T>>() {
-				
-				@Override
-				public void processModelBlock(NumericModel4D<T> gridBlock) throws Exception {
-					int minW = gridBlock.getMinW(), maxW = gridBlock.getMaxW();
-					for (int w = minW; w <= maxW; w++) {
-						int minX = gridBlock.getMinXAtW(w), maxX = gridBlock.getMaxXAtW(w);
-						for (int x = minX; x <= maxX; x++) {
-							int minY = gridBlock.getMinYAtWX(w, x), maxY = gridBlock.getMaxYAtWX(w, x);
-							for (int y = minY; y <= maxY; y++) {
-								int minZ = gridBlock.getMinZ(w, x, y), maxZ = gridBlock.getMaxZ(w, x, y);
-								for (int z = minZ; z <= maxZ; z++) {
-									if (!gridBlock.getFromPosition(w, x, y, z).equals(ca2.getFromPosition(w, x, y, z))) {
-										System.out.println("Different value at step " + ca1.getStep() 
-											+ " (" + w + ", " + x + ", " + y + ", " + z + "): " 
-												+ ca1.getClass().getSimpleName() + ":" + gridBlock.getFromPosition(w, x, y, z) 
-												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
-									}	
-								}	
-							}
-						}
-					}						
-				}
-				
-				@Override
-				public void beforeProcessing() throws Exception {
-					// do nothing					
-				}
-				
-				@Override
-				public void afterProcessing() throws Exception {
-					// do nothing					
-				}
-			};
-			
-			while (!finished1 && !finished2) {
-				System.out.println("Step " + ca1.getStep());
-				ca1.addProcessor(comparator);
-				ca1.processModel();
-				ca1.removeProcessor(comparator);
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1941,7 +1451,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compareAllSteps(NumericModel3D<T> ca1, LongModel3D ca2) {
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel3D<Number_Type> ca1, LongModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1978,7 +1488,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compareAllSteps(NumericModel4D<T> ca1, LongModel4D ca2) {
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel4D<Number_Type> ca1, LongModel4D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -2017,130 +1527,7 @@ public class Test {
 		}
 	}
 	
-	public static void comparePatterns(NumericModel3D<BigInt> ca1, NumericModel3D<BigInt> ca2, double maxDifference) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			boolean equal = true;
-			while (!finished1 && !finished2) {
-				BigIntModel3DPattern<NumericModel3D<BigInt>> p1 = new BigIntModel3DPattern<NumericModel3D<BigInt>>(ca1);
-				BigIntModel3DPattern<NumericModel3D<BigInt>> p2 = new BigIntModel3DPattern<NumericModel3D<BigInt>>(ca2);
-				System.out.println("Comparing step " + ca1.getStep());
-				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
-						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
-							double val1 = p1.getFromPosition(x, y, z).doubleValue(),
-									val2 = p2.getFromPosition(x, y, z).doubleValue();
-							if (Math.abs(val1 - val2) > maxDifference) {
-								equal = false;
-								System.out.println("Difference in pattern at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-										+ ca2.getClass().getSimpleName() + ":" + val2 
-										+ " != " + ca1.getClass().getSimpleName() + ":" + val1);
-							}
-						}	
-					}	
-				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					equal = false;
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-				if (!equal)
-					return;
-			}
-			if (equal)
-				System.out.println("Equal!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void comparePatterns2(NumericModel3D<BigFraction> ca1, NumericModel3D<BigInt> ca2, double maxDifference) {
-		try {
-			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
-			boolean equal = true;
-			while (!finished1 && !finished2) {
-				BigFractionModel3DPattern p1 = new BigFractionModel3DPattern(ca1);
-				BigIntModel3DPattern<NumericModel3D<BigInt>> p2 = new BigIntModel3DPattern<NumericModel3D<BigInt>>(ca2);
-				System.out.println("Comparing step " + ca1.getStep());
-				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
-					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
-						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
-							double val1 = p1.getFromPosition(x, y, z).doubleValue(),
-									val2 = p2.getFromPosition(x, y, z).doubleValue();
-							if (Math.abs(val1 - val2) > maxDifference) {
-								equal = false;
-								System.out.println("Difference in pattern at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-										+ ca2.getClass().getSimpleName() + ":" + val2 
-										+ " != " + ca1.getClass().getSimpleName() + ":" + val1);
-							}
-						}	
-					}	
-				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-				if (finished1 != finished2) {
-					equal = false;
-					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
-				}
-				if (!equal)
-					return;
-			}
-			if (equal)
-				System.out.println("Equal!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void printAveragePatternDifferenceAtEachStep(NumericModel3D<BigFraction> ca1, NumericModel3D<BigInt> ca2) {
-		try {
-			boolean finished1 = false;
-			boolean finished2 = false;
-			while (!finished1 && !finished2) {
-				System.out.println("Average difference in pattern at step " + ca1.getStep() + ": " + getAveragePatternDifference(ca1, ca2));
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static double getAveragePatternDifference(NumericModel3D<BigFraction> ca1, 
-			NumericModel3D<BigInt> ca2) throws Exception {
-		BigFractionModel3DPattern p1 = new BigFractionModel3DPattern(ca1);
-		BigIntModel3DPattern<NumericModel3D<BigInt>> p2 = new BigIntModel3DPattern<NumericModel3D<BigInt>>(ca2);
-		double totalDifference = 0;
-		long positionCount = 0;
-		int maxZ = ca1.getMaxZ();
-		for (int z = ca1.getMinZ(); z <= maxZ; z++) {
-			int maxY = ca1.getMaxYAtZ(z);
-			for (int y = ca1.getMinYAtZ(z); y <= maxY; y++) {
-				int minX = ca1.getMinX(y,z);
-				int maxX = ca1.getMaxX(y,z);
-				for (int x = minX; x <= maxX; x++) {
-					double val1 = p1.getFromPosition(x, y, z).doubleValue(),
-							val2 = p2.getFromPosition(x, y, z).doubleValue();
-					double difference = val1 - val2;
-					if (difference < 0) {
-						difference = -difference;
-					}
-					totalDifference += difference;
-					positionCount++;
-				}	
-			}	
-		}
-		return totalDifference/positionCount;
-	}
-	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compareAllSteps(NumericModel1D<T> ca1, LongModel1D ca2) {
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel1D<Number_Type> ca1, LongModel1D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -2173,7 +1560,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void compareAllSteps(NumericModel3D<T> ca1, IntModel3D ca2) {
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel3D<Number_Type> ca1, IntModel3D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -2210,7 +1597,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void compareAllSteps(NumericModel3D<T> ca1, NumericModel3D<T> ca2) {
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel3D<Number_Type> ca1, NumericModel3D<Number_Type> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -2247,7 +1634,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void compareAllSteps(NumericModel4D<T> ca1, NumericModel4D<T> ca2) {
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel4D<Number_Type> ca1, NumericModel4D<Number_Type> ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -2372,7 +1759,7 @@ public class Test {
 		}
 	}
 	
-	public static void compareAllSteps(SequentialLongModel1D ca1, LongModel1D ca2) {
+	public static void compareAllStepsWithIterators(LongModel1D ca1, LongModel1D ca2) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -2441,10 +1828,10 @@ public class Test {
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void checkTotalValueConservation(NumericModel<T> ca) {
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void checkTotalValueConservation(NumericModel<Number_Type> ca) {
 		System.out.println("Checking total value conservation...");
 		try {
-			T value = ca.getTotal(), newValue = value;
+			Number_Type value = ca.getTotal(), newValue = value;
 			boolean finished = false;
 			while (value.equals(newValue) && !finished) {
 				finished = !ca.nextStep();
@@ -2535,7 +1922,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends FieldElement<T> & Comparable<T>> void stepByStep(NumericModel1D<T> ca) {
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void stepByStep(NumericModel1D<Number_Type> ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -2550,7 +1937,7 @@ public class Test {
 		}
 	}
 	
-	public static <T extends Number & FieldElement<T> & Comparable<T>> void stepByStep(NumericModel2D<T> ca) {
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void stepByStep(NumericModel2D<Number_Type> ca) {
 		try {
 			Scanner s = new Scanner(System.in);
 			do {
@@ -2558,97 +1945,6 @@ public class Test {
 				printAsGrid(ca, null);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
-			} while (ca.nextStep());
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static <T> void stepByStepZCrossSection(ActionableModel3D<ObjectModel3D<T>> ca, T backgroundValue, int z) {
-		try {
-			Scanner s = new Scanner(System.in);
-			Model3DZCrossSectionCopierProcessor<T> copier = new Model3DZCrossSectionCopierProcessor<T>();
-			ca.addProcessor(copier);
-			copier.requestCopy(z);
-			ca.processModel();
-			do {
-				System.out.println("step " + ca.getStep());
-				ObjectModel2D<T> crossSectionCopy = copier.getCopy(z);
-				if (crossSectionCopy != null) {
-					printAsGrid(crossSectionCopy, backgroundValue);
-				}
-				s.nextLine();
-				copier.requestCopy(z);
-			} while (ca.nextStep());
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}	
-	
-	public static void stepByStepZCrossSectionOfLongGrid(ActionableModel3D<LongModel3D> ca, int z) {
-		try {
-			Scanner s = new Scanner(System.in);
-			LongModel3DZCrossSectionCopierProcessor copier = new LongModel3DZCrossSectionCopierProcessor();
-			ca.addProcessor(copier);
-			copier.requestCopy(z);
-			ca.processModel();
-			do {
-				System.out.println("step " + ca.getStep());
-				LongModel2D crossSectionCopy = copier.getCopy(z);
-				if (crossSectionCopy != null) {
-					printAsGrid(crossSectionCopy, 0);
-					System.out.println("total value " + crossSectionCopy.getTotal());
-				}
-				s.nextLine();
-				copier.requestCopy(z);
-			} while (ca.nextStep());
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}	
-	
-	public static void stepByStepZCrossSectionOfIntGrid(ActionableModel3D<IntModel3D> ca, int z) {
-		try {
-			Scanner s = new Scanner(System.in);
-			IntModel3DZCrossSectionCopierProcessor copier = new IntModel3DZCrossSectionCopierProcessor();
-			ca.addProcessor(copier);
-			copier.requestCopy(z);
-			ca.processModel();
-			do {
-				System.out.println("step " + ca.getStep());
-				IntModel2D crossSectionCopy = copier.getCopy(z);
-				if (crossSectionCopy != null) {
-					printAsGrid(crossSectionCopy, 0);
-					System.out.println("total value " + crossSectionCopy.getTotal());
-				}
-				s.nextLine();
-				copier.requestCopy(z);
-			} while (ca.nextStep());
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}	
-	
-	public static void stepByStepXCrossSection(ActionableModel3D<IntModel3D> ca, int x) {
-		try {
-			Scanner s = new Scanner(System.in);
-			IntModel3DXCrossSectionCopierProcessor copier = new IntModel3DXCrossSectionCopierProcessor();
-			ca.addProcessor(copier);
-			copier.requestCopy(x);
-			ca.processModel();
-			do {
-				System.out.println("step " + ca.getStep());
-				IntModel2D crossSectionCopy = copier.getCopy(x);
-				if (crossSectionCopy != null) {
-					printAsGrid(crossSectionCopy, 0);
-					System.out.println("total value " + crossSectionCopy.getTotal());
-				}
-				s.nextLine();
-				copier.requestCopy(x);
 			} while (ca.nextStep());
 			s.close();
 		} catch (Exception e) {
@@ -2669,7 +1965,7 @@ public class Test {
 		}
 	}
 	
-	public static <T> void printAsGrid(ObjectModel2D<T> grid, T backgroundValue) throws Exception {
+	public static <Object_Type> void printAsGrid(ObjectModel2D<Object_Type> grid, Object_Type backgroundValue) throws Exception {
 		
 		int maxDigits = 3;
 		int maxY = grid.getMaxY();
@@ -2702,7 +1998,7 @@ public class Test {
 			}
 			for (; x <= localMaxX; x++) {
 				String strVal = " ";
-				T val = grid.getFromPosition(x, y);
+				Object_Type val = grid.getFromPosition(x, y);
 				if (!val.equals(backgroundValue)) {
 					strVal = val.toString();
 				}
@@ -2716,7 +2012,7 @@ public class Test {
 		System.out.println(headFoot);
 	}
 	
-	public static <T> void printAsGrid(ObjectModel1D<T> grid, T backgroundValue) throws Exception {
+	public static <Object_Type> void printAsGrid(ObjectModel1D<Object_Type> grid, Object_Type backgroundValue) throws Exception {
 		int maxDigits = 3;
 		int maxX = grid.getMaxX();
 		int minX = grid.getMinX();
@@ -2736,7 +2032,7 @@ public class Test {
 		System.out.println(headFoot);
 		for (int x = minX; x <= maxX; x++) {
 			String strVal = " ";
-			T val = grid.getFromPosition(x);
+			Object_Type val = grid.getFromPosition(x);
 			if (!val.equals(backgroundValue)) {
 				strVal = val + "";
 			}

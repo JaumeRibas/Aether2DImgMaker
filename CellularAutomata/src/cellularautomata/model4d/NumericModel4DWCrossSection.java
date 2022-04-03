@@ -20,10 +20,10 @@ import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.model3d.NumericModel3D;
 
-public class NumericModel4DWCrossSection<T extends FieldElement<T> & Comparable<T>, G extends NumericModel4D<T>> 
-	extends ObjectModel4DWCrossSection<T, G> implements NumericModel3D<T> {
+public class NumericModel4DWCrossSection<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
+	extends ObjectModel4DWCrossSection<NumericModel4D<Number_Type>, Number_Type> implements NumericModel3D<Number_Type> {
 
-	public NumericModel4DWCrossSection(G source, int w) {
+	public NumericModel4DWCrossSection(NumericModel4D<Number_Type> source, int w) {
 		super(source, w);
 	}
 }

@@ -18,14 +18,14 @@ package cellularautomata.model3d;
 
 import cellularautomata.model2d.ObjectModel2D;
 
-public class ObjectModel3DXCrossSection<T, G extends ObjectModel3D<T>> extends Model3DXCrossSection<G> implements ObjectModel2D<T> {
+public class ObjectModel3DXCrossSection<Source_Type extends ObjectModel3D<Object_Type>, Object_Type> extends Model3DXCrossSection<Source_Type> implements ObjectModel2D<Object_Type> {
 
-	public ObjectModel3DXCrossSection(G source, int x) {
+	public ObjectModel3DXCrossSection(Source_Type source, int x) {
 		super(source, x);
 	}
 
 	@Override
-	public T getFromPosition(int x, int y) throws Exception {
+	public Object_Type getFromPosition(int x, int y) throws Exception {
 		return source.getFromPosition(this.x, y, x);
 	}
 

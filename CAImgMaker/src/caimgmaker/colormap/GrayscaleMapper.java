@@ -52,17 +52,17 @@ public class GrayscaleMapper implements ColorMapper {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends FieldElement<T> & Comparable<T>> ObjectModel2D<Color> getMappedModel(NumericModel2D<T> grid, T minValue, T maxValue) {
-		ColorMap<T> colorMap = null;
+	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> ObjectModel2D<Color> getMappedModel(NumericModel2D<Number_Type> grid, Number_Type minValue, Number_Type maxValue) {
+		ColorMap<Number_Type> colorMap = null;
 		if (minValue.equals(maxValue)) {
-			colorMap = new SolidColorMap<T>(new Color(0, 0, minBrightness/255));
+			colorMap = new SolidColorMap<Number_Type>(new Color(0, 0, minBrightness/255));
 		} else {
 			if (minValue instanceof BigInt) {
-				colorMap = (ColorMap<T>) new BigIntGrayscaleMap((BigInt)minValue, (BigInt)maxValue, minBrightness);
+				colorMap = (ColorMap<Number_Type>) new BigIntGrayscaleMap((BigInt)minValue, (BigInt)maxValue, minBrightness);
 			}  else if (minValue instanceof BigFraction) {
-				colorMap = (ColorMap<T>) new BigFractionGrayscaleMap((BigFraction)minValue, (BigFraction)maxValue, minBrightness);
+				colorMap = (ColorMap<Number_Type>) new BigFractionGrayscaleMap((BigFraction)minValue, (BigFraction)maxValue, minBrightness);
 			} else if (minValue instanceof Decimal64) {
-				colorMap = (ColorMap<T>) new Decimal64GrayscaleMap((Decimal64)minValue, (Decimal64)maxValue, minBrightness);
+				colorMap = (ColorMap<Number_Type>) new Decimal64GrayscaleMap((Decimal64)minValue, (Decimal64)maxValue, minBrightness);
 			} else {
 				throw new UnsupportedOperationException(
 						"Missing " + ColorMap.class.getSimpleName() + "<"
@@ -71,9 +71,9 @@ public class GrayscaleMapper implements ColorMapper {
 			} 
 		}
 		if (outOfLowerBoundColor != null) {
-			colorMap = new UnboundedColorMap<T>(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
+			colorMap = new UnboundedColorMap<Number_Type>(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedModel2D<T>(grid, colorMap);
+		return new ColorMappedModel2D<Number_Type>(grid, colorMap);
 	}
 
 	@Override

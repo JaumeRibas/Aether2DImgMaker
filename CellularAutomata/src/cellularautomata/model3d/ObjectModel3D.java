@@ -18,10 +18,11 @@ package cellularautomata.model3d;
 
 import java.util.Iterator;
 
+import cellularautomata.Coordinates;
 import cellularautomata.model.ObjectModel;
 import cellularautomata.model2d.ObjectModel2D;
 
-public interface ObjectModel3D<T> extends Model3D, ObjectModel<T> {
+public interface ObjectModel3D<Object_Type> extends Model3D, ObjectModel<Object_Type> {
 	
 	/**
 	 * Returns the object at a given position
@@ -32,46 +33,51 @@ public interface ObjectModel3D<T> extends Model3D, ObjectModel<T> {
 	 * @return the object at (x,y,z)
 	 * @throws Exception 
 	 */
-	T getFromPosition(int x, int y, int z) throws Exception;
-	
+	Object_Type getFromPosition(int x, int y, int z) throws Exception;
+
 	@Override
-	default ObjectModel3D<T> subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new ObjectSubModel3D<T, ObjectModel3D<T>>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	default Object_Type getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
 	}
 	
 	@Override
-	default ObjectModel2D<T> crossSectionAtX(int x) {
-		return new ObjectModel3DXCrossSection<T, ObjectModel3D<T>>(this, x);
+	default ObjectModel3D<Object_Type> subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new ObjectSubModel3D<ObjectModel3D<Object_Type>, Object_Type>(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
-	default ObjectModel2D<T> crossSectionAtY(int y) {
-		return new ObjectModel3DYCrossSection<T, ObjectModel3D<T>>(this, y);
+	default ObjectModel2D<Object_Type> crossSectionAtX(int x) {
+		return new ObjectModel3DXCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, x);
 	}
 	
 	@Override
-	default ObjectModel2D<T> crossSectionAtZ(int z) {
-		return new ObjectModel3DZCrossSection<T, ObjectModel3D<T>>(this, z);
+	default ObjectModel2D<Object_Type> crossSectionAtY(int y) {
+		return new ObjectModel3DYCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, y);
 	}
 	
 	@Override
-	default ObjectModel2D<T> diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new ObjectModel3DXYDiagonalCrossSection<T, ObjectModel3D<T>>(this, yOffsetFromX);
+	default ObjectModel2D<Object_Type> crossSectionAtZ(int z) {
+		return new ObjectModel3DZCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, z);
 	}
 	
 	@Override
-	default ObjectModel2D<T> diagonalCrossSectionOnXZ(int zOffsetFromX) {
-		return new ObjectModel3DXZDiagonalCrossSection<T, ObjectModel3D<T>>(this, zOffsetFromX);
+	default ObjectModel2D<Object_Type> diagonalCrossSectionOnXY(int yOffsetFromX) {
+		return new ObjectModel3DXYDiagonalCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, yOffsetFromX);
 	}
 	
 	@Override
-	default ObjectModel2D<T> diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new ObjectModel3DYZDiagonalCrossSection<T, ObjectModel3D<T>>(this, zOffsetFromY);
+	default ObjectModel2D<Object_Type> diagonalCrossSectionOnXZ(int zOffsetFromX) {
+		return new ObjectModel3DXZDiagonalCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, zOffsetFromX);
+	}
+	
+	@Override
+	default ObjectModel2D<Object_Type> diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new ObjectModel3DYZDiagonalCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, zOffsetFromY);
 	}
 
 	@Override
-	default Iterator<T> iterator() {
-		return new ObjectModel3DIterator<T>(this);
+	default Iterator<Object_Type> iterator() {
+		return new ObjectModel3DIterator<Object_Type>(this);
 	}
 
 }

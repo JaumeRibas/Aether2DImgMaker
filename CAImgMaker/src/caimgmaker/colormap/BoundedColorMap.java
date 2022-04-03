@@ -16,10 +16,10 @@
  */
 package caimgmaker.colormap;
 
-public interface BoundedColorMap<T extends Comparable<T>> extends ColorMap<T> {
+public interface BoundedColorMap<Number_Type extends Comparable<Number_Type>> extends ColorMap<Number_Type> {
 
-	T getMaxValue();
+	Number_Type getMaxValue();
 
-	T getMinValue();
+	Number_Type getMinValue();
 	
 }

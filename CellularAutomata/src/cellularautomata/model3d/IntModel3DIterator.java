@@ -24,7 +24,7 @@ public class IntModel3DIterator extends Model3DIterator<IntModel3D, Integer> {
 
 	@Override
 	protected Integer getFromModelPosition(int x, int y, int z) throws Exception {
-		return grid.getFromPosition(x, y, z);
+		return source.getFromPosition(x, y, z);
 	}
 
 }

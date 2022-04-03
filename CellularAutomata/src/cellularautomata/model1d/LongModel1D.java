@@ -18,7 +18,7 @@ package cellularautomata.model1d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.LongModel;
 
 public interface LongModel1D extends Model1D, LongModel {
@@ -32,6 +32,7 @@ public interface LongModel1D extends Model1D, LongModel {
 	 */
 	long getFromPosition(int x) throws Exception;
 	
+	@Override
 	default long getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0));
 	}

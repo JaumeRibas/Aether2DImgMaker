@@ -18,10 +18,11 @@ package cellularautomata.model4d;
 
 import java.util.Iterator;
 
+import cellularautomata.Coordinates;
 import cellularautomata.model.ObjectModel;
 import cellularautomata.model3d.ObjectModel3D;
 
-public interface ObjectModel4D<T> extends Model4D, ObjectModel<T> {
+public interface ObjectModel4D<Object_Type> extends Model4D, ObjectModel<Object_Type> {
 	
 	/**
 	 * Returns the value at a given position
@@ -33,36 +34,51 @@ public interface ObjectModel4D<T> extends Model4D, ObjectModel<T> {
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */
-	T getFromPosition(int w, int x, int y, int z) throws Exception;
-	
+	Object_Type getFromPosition(int w, int x, int y, int z) throws Exception;
+
 	@Override
-	default ObjectModel4D<T> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new ObjectSubModel4D<T, ObjectModel4D<T>>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	default Object_Type getFromPosition(Coordinates coordinates) throws Exception {
+		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
 	}
 	
 	@Override
-	default ObjectModel3D<T> crossSectionAtW(int w) {
-		return new ObjectModel4DWCrossSection<T, ObjectModel4D<T>>(this, w);
+	default ObjectModel4D<Object_Type> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new ObjectSubModel4D<ObjectModel4D<Object_Type>, Object_Type>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
-	default ObjectModel3D<T> crossSectionAtX(int x) {
-		return new ObjectModel4DXCrossSection<T, ObjectModel4D<T>>(this, x);
+	default ObjectModel3D<Object_Type> crossSectionAtW(int w) {
+		return new ObjectModel4DWCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, w);
 	}
 	
 	@Override
-	default ObjectModel3D<T> crossSectionAtY(int y) {
-		return new ObjectModel4DYCrossSection<T, ObjectModel4D<T>>(this, y);
+	default ObjectModel3D<Object_Type> crossSectionAtX(int x) {
+		return new ObjectModel4DXCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, x);
 	}
 	
 	@Override
-	default ObjectModel3D<T> crossSectionAtZ(int z) {
-		return new ObjectModel4DZCrossSection<T, ObjectModel4D<T>>(this, z);
+	default ObjectModel3D<Object_Type> crossSectionAtY(int y) {
+		return new ObjectModel4DYCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, y);
+	}
+	
+	@Override
+	default ObjectModel3D<Object_Type> crossSectionAtZ(int z) {
+		return new ObjectModel4DZCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, z);
+	}
+	
+	@Override
+	default ObjectModel3D<Object_Type> diagonalCrossSectionOnWX(int xOffsetFromW) {
+		return new ObjectModel4DWXDiagonalCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, xOffsetFromW);
+	}
+	
+	@Override
+	default ObjectModel3D<Object_Type> diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new ObjectModel4DYZDiagonalCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, zOffsetFromY);
 	}
 
 	@Override
-	default Iterator<T> iterator() {
-		return new ObjectModel4DIterator<T>(this);
+	default Iterator<Object_Type> iterator() {
+		return new ObjectModel4DIterator<Object_Type>(this);
 	}
 
 }

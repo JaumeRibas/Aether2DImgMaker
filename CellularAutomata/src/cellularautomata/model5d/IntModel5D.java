@@ -18,7 +18,7 @@ package cellularautomata.model5d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.IntModel;
 import cellularautomata.model4d.IntModel4D;
 
@@ -37,6 +37,7 @@ public interface IntModel5D extends Model5D, IntModel {
 	 */
 	int getFromPosition(int v, int w, int x, int y, int z) throws Exception;
 	
+	@Override
 	default int getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
 	}
@@ -139,12 +140,12 @@ public interface IntModel5D extends Model5D, IntModel {
 
 	@Override
 	default IntModel4D crossSectionAtV(int v) {
-		return new IntModel5DVCrossSection<IntModel5D>(this, v);
+		return new IntModel5DVCrossSection(this, v);
 	}
 	
 	@Override
 	default IntModel4D diagonalCrossSectionOnVW(int wOffsetFromV) {
-		return new IntModel5DVWDiagonalCrossSection<IntModel5D>(this, wOffsetFromV);
+		return new IntModel5DVWDiagonalCrossSection(this, wOffsetFromV);
 	}
 
 	@Override

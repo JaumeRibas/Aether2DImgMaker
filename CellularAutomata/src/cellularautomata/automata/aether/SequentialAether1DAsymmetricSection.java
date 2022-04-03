@@ -34,7 +34,7 @@ import java.util.function.LongConsumer;
 import org.apache.commons.io.FileUtils;
 
 import cellularautomata.LongInputStreamIterator;
-import cellularautomata.model1d.SequentialLongModel1D;
+import cellularautomata.model1d.LongModel1D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
@@ -42,7 +42,7 @@ import cellularautomata.model1d.SequentialLongModel1D;
  * @author Jaume
  *
  */
-public class SequentialAether1DAsymmetricSection implements SequentialLongModel1D {
+public class SequentialAether1DAsymmetricSection implements LongModel1D {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -450,6 +450,11 @@ public class SequentialAether1DAsymmetricSection implements SequentialLongModel1
 	@Override
 	public long[] getOddPositionsMinAndMax() throws Exception {
 		return getEvenOddPositionsMinAndMax(false);
+	}
+
+	@Override
+	public long getFromPosition(int x) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 	
 }

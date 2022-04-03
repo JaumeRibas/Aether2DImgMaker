@@ -18,7 +18,7 @@ package cellularautomata.model3d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.LongModel;
 import cellularautomata.model2d.LongModel2D;
 
@@ -35,6 +35,7 @@ public interface LongModel3D extends Model3D, LongModel {
 	 */
 	long getFromPosition(int x, int y, int z) throws Exception;
 	
+	@Override
 	default long getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
 	}
@@ -109,37 +110,37 @@ public interface LongModel3D extends Model3D, LongModel {
 	
 	@Override
 	default LongModel3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new LongSubModel3D<LongModel3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
+		return new LongSubModel3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
 	default LongModel2D crossSectionAtX(int x) {
-		return new LongModel3DXCrossSection<LongModel3D>(this, x);
+		return new LongModel3DXCrossSection(this, x);
 	}
 	
 	@Override
 	default LongModel2D crossSectionAtY(int y) {
-		return new LongModel3DYCrossSection<LongModel3D>(this, y);
+		return new LongModel3DYCrossSection(this, y);
 	}
 	
 	@Override
 	default LongModel2D crossSectionAtZ(int z) {
-		return new LongModel3DZCrossSection<LongModel3D>(this, z);
+		return new LongModel3DZCrossSection(this, z);
 	}
 	
 	@Override
 	default LongModel2D diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new LongModel3DXYDiagonalCrossSection<LongModel3D>(this, yOffsetFromX);
+		return new LongModel3DXYDiagonalCrossSection(this, yOffsetFromX);
 	}
 	
 	@Override
 	default LongModel2D diagonalCrossSectionOnXZ(int zOffsetFromX) {
-		return new LongModel3DXZDiagonalCrossSection<LongModel3D>(this, zOffsetFromX);
+		return new LongModel3DXZDiagonalCrossSection(this, zOffsetFromX);
 	}
 	
 	@Override
 	default LongModel2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new LongModel3DYZDiagonalCrossSection<LongModel3D>(this, zOffsetFromY);
+		return new LongModel3DYZDiagonalCrossSection(this, zOffsetFromY);
 	}
 
 	@Override

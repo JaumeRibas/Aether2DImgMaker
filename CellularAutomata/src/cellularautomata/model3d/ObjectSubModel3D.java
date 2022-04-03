@@ -16,14 +16,14 @@
  */
 package cellularautomata.model3d;
 
-public class ObjectSubModel3D<T, G extends ObjectModel3D<T>> extends SubModel3D<G> implements ObjectModel3D<T> {
+public class ObjectSubModel3D<Source_Type extends ObjectModel3D<Object_Type>, Object_Type> extends SubModel3D<Source_Type> implements ObjectModel3D<Object_Type> {
 
-	public ObjectSubModel3D(G source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public ObjectSubModel3D(Source_Type source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 
 	@Override
-	public T getFromPosition(int x, int y, int z) throws Exception {
+	public Object_Type getFromPosition(int x, int y, int z) throws Exception {
 		return source.getFromPosition(x, y, z);
 	}
 

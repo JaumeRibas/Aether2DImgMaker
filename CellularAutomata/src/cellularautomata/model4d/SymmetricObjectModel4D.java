@@ -16,7 +16,10 @@
  */
 package cellularautomata.model4d;
 
-public interface SymmetricObjectModel4D<T> extends ObjectModel4D<T>, SymmetricModel4D {
+import cellularautomata.Coordinates;
+import cellularautomata.model.SymmetricObjectModel;
+
+public interface SymmetricObjectModel4D<Object_Type> extends ObjectModel4D<Object_Type>, SymmetricModel4D, SymmetricObjectModel<Object_Type> {
 	
 	/**
 	 * <p>
@@ -33,10 +36,15 @@ public interface SymmetricObjectModel4D<T> extends ObjectModel4D<T>, SymmetricMo
 	 * @return the value at (w,x,y,z)
 	 * @throws Exception 
 	 */
-	T getFromAsymmetricPosition(int w, int x, int y, int z) throws Exception;
+	Object_Type getFromAsymmetricPosition(int w, int x, int y, int z) throws Exception;
+	
+	@Override
+	default Object_Type getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
+		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
+	}
 
 	@Override
-	default ObjectModel4D<T> asymmetricSection() {
-		return new AsymmetricObjectModelSection4D<T, SymmetricObjectModel4D<T>>(this);
+	default ObjectModel4D<Object_Type> asymmetricSection() {
+		return new AsymmetricObjectModelSection4D<SymmetricObjectModel4D<Object_Type>, Object_Type>(this);
 	}
 }

@@ -16,10 +16,10 @@
  */
 package cellularautomata.model2d;
 
-public class AsymmetricLongModelSection2D<G extends SymmetricLongModel2D> extends AsymmetricModelSection2D<G> implements LongModel2D{
+public class AsymmetricLongModelSection2D extends AsymmetricModelSection2D<SymmetricLongModel2D> implements LongModel2D {
 	
-	public AsymmetricLongModelSection2D(G grid) {
-		super(grid);
+	public AsymmetricLongModelSection2D(SymmetricLongModel2D source) {
+		super(source);
 	}
 
 	@Override

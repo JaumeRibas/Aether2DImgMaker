@@ -22,12 +22,12 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
+import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.arrays.AnisotropicIntArray;
 import cellularautomata.arrays.HyperrectangularArray;
-import cellularautomata.arrays.Utils;
-import cellularautomata.model.Coordinates;
+import cellularautomata.Utils;
 import cellularautomata.model.IsotropicHypercubicModel;
-import cellularautomata.model.PartialCoordinates;
 import cellularautomata.model.SymmetricIntModel;
 
 

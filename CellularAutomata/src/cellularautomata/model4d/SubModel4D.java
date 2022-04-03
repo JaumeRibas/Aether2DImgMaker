@@ -19,9 +19,9 @@ package cellularautomata.model4d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SubModel4D<G extends Model4D> implements Model4D {
+public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 
-	protected G source;
+	protected Source_Type source;
 	protected int minW;
 	protected int maxW;
 	protected int minX;
@@ -38,10 +38,8 @@ public class SubModel4D<G extends Model4D> implements Model4D {
 	protected int absoluteMaxY;
 	protected int absoluteMinZ;
 	protected int absoluteMaxZ;
-	
-	protected SubModel4D() {}
 
-	public SubModel4D(G source, int minW, int maxW, int minX, 
+	public SubModel4D(Source_Type source, int minW, int maxW, int minX, 
 			int maxX, int minY, int maxY, int minZ, int maxZ) {
 		if (minW > maxW) {
 			throw new IllegalArgumentException("Min w cannot be bigger than max w.");

@@ -18,12 +18,42 @@ package cellularautomata.model;
 
 import org.apache.commons.math3.FieldElement;
 
-public interface NumericModel<T extends FieldElement<T> & Comparable<T>> extends ObjectModel<T> {
+import cellularautomata.MinAndMax;
+import cellularautomata.MinAndMaxConsumer;
+import cellularautomata.TotalConsumer;
 
-	MinAndMax<T> getMinAndMax() throws Exception;
+public interface NumericModel<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel<Number_Type> {
+
+	default MinAndMax<Number_Type> getMinAndMax() throws Exception {
+		MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
+		forEach(consumer);
+		return consumer.getMinAndMaxValue();
+	}
 	
-	MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception;
+	default Number_Type getTotal() throws Exception {
+		TotalConsumer<Number_Type> consumer = new TotalConsumer<Number_Type>();
+		forEach(consumer);
+		return consumer.total;
+	}
 	
-	T getTotal() throws Exception;
+	default MinAndMax<Number_Type> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		if (isEven) {
+			return getEvenPositionsMinAndMax();
+		} else {
+			return getOddPositionsMinAndMax();
+		}
+	}
+	
+	default MinAndMax<Number_Type> getEvenPositionsMinAndMax() throws Exception {
+		MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
+		forEachAtEvenPosition(consumer);
+		return consumer.getMinAndMaxValue();
+	}
+	
+	default MinAndMax<Number_Type> getOddPositionsMinAndMax() throws Exception {
+		MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
+		forEachAtOddPosition(consumer);
+		return consumer.getMinAndMaxValue();
+	}
 	
 }

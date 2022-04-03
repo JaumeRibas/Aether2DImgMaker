@@ -16,6 +16,8 @@
  */
 package cellularautomata.model;
 
+import cellularautomata.Coordinates;
+
 public class IntModelIterator extends ModelIterator<IntModel, Integer> {
 
 	public IntModelIterator(IntModel region) {

@@ -24,7 +24,7 @@ public class LongModel1DIterator extends Model1DIterator<LongModel1D, Long> {
 
 	@Override
 	protected Long getFromModelPosition(int x) throws Exception {
-		return grid.getFromPosition(x);
+		return source.getFromPosition(x);
 	}
 
 }

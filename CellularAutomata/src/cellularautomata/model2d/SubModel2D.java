@@ -19,9 +19,9 @@ package cellularautomata.model2d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SubModel2D<G extends Model2D> implements Model2D {
+public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 	
-	protected G source;
+	protected Source_Type source;
 	protected int minX;
 	protected int maxX;
 	protected int minY;
@@ -31,7 +31,7 @@ public class SubModel2D<G extends Model2D> implements Model2D {
 	protected int absoluteMinY;
 	protected int absoluteMaxY;
 	
-	public SubModel2D(G source, int minX, int maxX, int minY, int maxY) {
+	public SubModel2D(Source_Type source, int minX, int maxX, int minY, int maxY) {
 		if (minX > maxX) {
 			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
 		}

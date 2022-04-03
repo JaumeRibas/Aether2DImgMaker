@@ -17,11 +17,27 @@
 package cellularautomata.model3d;
 
 import cellularautomata.model.ModelDecorator;
+import cellularautomata.model2d.Model2D;
 
-public class Model3DDecorator<G extends Model3D> extends ModelDecorator<G> implements Model3D {
+public class Model3DDecorator<Source_Type extends Model3D> extends ModelDecorator<Source_Type> implements Model3D {
 
-	public Model3DDecorator(G source) {
+	public Model3DDecorator(Source_Type source) {
 		super(source);
+	}
+
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getYLabel();
 	}
 
 	@Override
@@ -95,5 +111,39 @@ public class Model3DDecorator<G extends Model3D> extends ModelDecorator<G> imple
 
 	@Override
 	public int getMaxZ(int x, int y) { return source.getMaxZ(x, y); }
+	
+	@Override
+	public Model3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return source.subsection(minX, maxX, minY, maxY, minZ, maxZ);
+	}
+
+	@Override
+	public Model2D crossSectionAtX(int x) {
+		return source.crossSectionAtX(x);
+	}
+
+	@Override
+	public Model2D crossSectionAtY(int y) {
+		return source.crossSectionAtY(y);
+	}
+
+	@Override
+	public Model2D crossSectionAtZ(int z) {
+		return source.crossSectionAtZ(z);
+	}
+
+	@Override
+	public Model2D diagonalCrossSectionOnXY(int yOffsetFromX) {
+		return source.diagonalCrossSectionOnXY(yOffsetFromX);
+	}
+
+	@Override
+	public Model2D diagonalCrossSectionOnXZ(int zOffsetFromX) {
+		return source.diagonalCrossSectionOnXZ(zOffsetFromX);
+	}
+
+	public Model2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return source.diagonalCrossSectionOnYZ(zOffsetFromY);
+	}
 
 }

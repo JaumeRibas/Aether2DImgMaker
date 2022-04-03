@@ -16,14 +16,14 @@
  */
 package cellularautomata.model1d;
 
-public class ObjectSubModel1D<T, G extends ObjectModel1D<T>> extends SubModel1D<G> implements ObjectModel1D<T> {
+public class ObjectSubModel1D<Source_Type extends ObjectModel1D<Object_Type>, Object_Type> extends SubModel1D<Source_Type> implements ObjectModel1D<Object_Type> {
 
-	public ObjectSubModel1D(G source, int minX, int maxX) {
+	public ObjectSubModel1D(Source_Type source, int minX, int maxX) {
 		super(source, minX, maxX);
 	}
 
 	@Override
-	public T getFromPosition(int x) throws Exception {
+	public Object_Type getFromPosition(int x) throws Exception {
 		return source.getFromPosition(x);
 	}
 

@@ -16,14 +16,14 @@
  */
 package cellularautomata.model2d;
 
-public class ObjectSubModel2D<T, G extends ObjectModel2D<T>> extends SubModel2D<G> implements ObjectModel2D<T> {
+public class ObjectSubModel2D<Source_Type extends ObjectModel2D<Object_Type>, Object_Type> extends SubModel2D<Source_Type> implements ObjectModel2D<Object_Type> {
 	
-	public ObjectSubModel2D(G source, int minX, int maxX, int minY, int maxY) {
+	public ObjectSubModel2D(Source_Type source, int minX, int maxX, int minY, int maxY) {
 		super(source, minX, maxX, minY, maxY);
 	}
 
 	@Override
-	public T getFromPosition(int x, int y) throws Exception {
+	public Object_Type getFromPosition(int x, int y) throws Exception {
 		return source.getFromPosition(x, y);
 	}
 

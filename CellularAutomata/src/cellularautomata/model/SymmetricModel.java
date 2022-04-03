@@ -18,7 +18,9 @@ package cellularautomata.model;
 
 import java.util.function.Consumer;
 
-import cellularautomata.arrays.Utils;
+import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
+import cellularautomata.Utils;
 
 public interface SymmetricModel extends Model {	
 	/**
@@ -100,6 +102,7 @@ public interface SymmetricModel extends Model {
 	
 	/**
 	 * Feeds every position of the asymmetric section to a {@link Consumer<Coordinates>}.
+	 * 
 	 * @param consumer
 	 */
 	default void forEachPositionInAsymmetricSection(Consumer<Coordinates> consumer) {
@@ -154,6 +157,7 @@ public interface SymmetricModel extends Model {
 	
 	/**
 	 * Feeds every even position of the asymmetric section to a {@link Consumer<Coordinates>}.
+	 * 
 	 * @param consumers
 	 */
 	default void forEachEvenPositionInAsymmetricSection(Consumer<Coordinates> consumer) {
@@ -213,6 +217,7 @@ public interface SymmetricModel extends Model {
 	
 	/**
 	 * Feeds every odd position of the asymmetric section to a {@link Consumer<Coordinates>}.
+	 * 
 	 * @param consumers
 	 */
 	default void forEachOddPositionInAsymmetricSection(Consumer<Coordinates> consumer) {

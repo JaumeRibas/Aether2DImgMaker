@@ -18,18 +18,18 @@ package cellularautomata.model3d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.model.MinAndMax;
+import cellularautomata.MinAndMax;
 import cellularautomata.model.NumericModel;
 import cellularautomata.model2d.NumericModel2D;
 
-public interface NumericModel3D<T extends FieldElement<T> & Comparable<T>> extends ObjectModel3D<T>, NumericModel<T> {
+public interface NumericModel3D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel3D<Number_Type>, NumericModel<Number_Type> {
 
 	@Override
-	default MinAndMax<T> getMinAndMax() throws Exception {
+	default MinAndMax<Number_Type> getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY, maxZ, minZ;
 		minY = getMinYAtX(minX);
-		T maxValue = getFromPosition(minX, minY, getMinZ(minX, minY));
-		T minValue = maxValue;
+		Number_Type maxValue = getFromPosition(minX, minY, getMinZ(minX, minY));
+		Number_Type minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinYAtX(x);
 			maxY = getMaxYAtX(x);
@@ -37,7 +37,7 @@ public interface NumericModel3D<T extends FieldElement<T> & Comparable<T>> exten
 				minZ = getMinZ(x, y);
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
-					T value = getFromPosition(x, y, z);
+					Number_Type value = getFromPosition(x, y, z);
 					if (value.compareTo(maxValue) > 0)
 						maxValue = value;
 					if (value.compareTo(minValue) < 0)
@@ -45,14 +45,14 @@ public interface NumericModel3D<T extends FieldElement<T> & Comparable<T>> exten
 				}
 			}
 		}
-		return new MinAndMax<T>(minValue, maxValue);
+		return new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+	default MinAndMax<Number_Type> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
-		T maxValue = null;
-		T minValue = null;
+		Number_Type maxValue = null;
+		Number_Type minValue = null;
 		int x = minX;
 		for (; x <= maxX && maxValue == null; x++) {
 			int minY = getMinYAtX(x);
@@ -65,7 +65,7 @@ public interface NumericModel3D<T extends FieldElement<T> & Comparable<T>> exten
 					minZ++;
 				}
 				if (minZ <= maxZ) {
-					T value = getFromPosition(x, y, minZ);
+					Number_Type value = getFromPosition(x, y, minZ);
 					maxValue = value;
 					minValue = value;
 					for (int z = minZ + 2; z <= maxZ; z+=2) {
@@ -89,7 +89,7 @@ public interface NumericModel3D<T extends FieldElement<T> & Comparable<T>> exten
 					minZ++;
 				}
 				for (int z = minZ; z <= maxZ; z+=2) {
-					T value = getFromPosition(x, y, z);
+					Number_Type value = getFromPosition(x, y, z);
 					if (value.compareTo(maxValue) > 0)
 						maxValue = value;
 					if (value.compareTo(minValue) < 0)
@@ -97,15 +97,15 @@ public interface NumericModel3D<T extends FieldElement<T> & Comparable<T>> exten
 				}
 			}
 		}
-		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default T getTotal() throws Exception {
+	default Number_Type getTotal() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		int minY = getMinYAtX(minX);
 		int minZ = getMinZ(minX, minY);		
-		T total = getFromPosition(minX, minY, minZ);
+		Number_Type total = getFromPosition(minX, minY, minZ);
 		int maxZ = getMaxZ(minX, minY);
 		for (int z = minZ + 1; z <= maxZ; z++) {
 			total = total.add(getFromPosition(minX, minY, z));
@@ -133,38 +133,38 @@ public interface NumericModel3D<T extends FieldElement<T> & Comparable<T>> exten
 	}
 	
 	@Override
-	default NumericModel3D<T> subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		return new NumericSubModel3D<T, NumericModel3D<T>>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	default NumericModel3D<Number_Type> subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return new NumericSubModel3D<Number_Type>(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
 	@Override
-	default NumericModel2D<T> crossSectionAtX(int x) {
-		return new NumericModel3DXCrossSection<T, NumericModel3D<T>>(this, x);
+	default NumericModel2D<Number_Type> crossSectionAtX(int x) {
+		return new NumericModel3DXCrossSection<Number_Type>(this, x);
 	}
 	
 	@Override
-	default NumericModel2D<T> crossSectionAtY(int y) {
-		return new NumericModel3DYCrossSection<T, NumericModel3D<T>>(this, y);
+	default NumericModel2D<Number_Type> crossSectionAtY(int y) {
+		return new NumericModel3DYCrossSection<Number_Type>(this, y);
 	}
 	
 	@Override
-	default NumericModel2D<T> crossSectionAtZ(int z) {
-		return new NumericModel3DZCrossSection<T, NumericModel3D<T>>(this, z);
+	default NumericModel2D<Number_Type> crossSectionAtZ(int z) {
+		return new NumericModel3DZCrossSection<Number_Type>(this, z);
 	}
 	
 	@Override
-	default NumericModel2D<T> diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new NumericModel3DXYDiagonalCrossSection<T, NumericModel3D<T>>(this, yOffsetFromX);
+	default NumericModel2D<Number_Type> diagonalCrossSectionOnXY(int yOffsetFromX) {
+		return new NumericModel3DXYDiagonalCrossSection<Number_Type>(this, yOffsetFromX);
 	}
 	
 	@Override
-	default NumericModel2D<T> diagonalCrossSectionOnXZ(int zOffsetFromX) {
-		return new NumericModel3DXZDiagonalCrossSection<T, NumericModel3D<T>>(this, zOffsetFromX);
+	default NumericModel2D<Number_Type> diagonalCrossSectionOnXZ(int zOffsetFromX) {
+		return new NumericModel3DXZDiagonalCrossSection<Number_Type>(this, zOffsetFromX);
 	}
 	
 	@Override
-	default NumericModel2D<T> diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new NumericModel3DYZDiagonalCrossSection<T, NumericModel3D<T>>(this, zOffsetFromY);
+	default NumericModel2D<Number_Type> diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return new NumericModel3DYZDiagonalCrossSection<Number_Type>(this, zOffsetFromY);
 	}
 
 }

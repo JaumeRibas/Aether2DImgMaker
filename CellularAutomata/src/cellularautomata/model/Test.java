@@ -18,7 +18,8 @@ package cellularautomata.model;
 
 import java.util.function.Consumer;
 
-import cellularautomata.arrays.Utils;
+import cellularautomata.Coordinates;
+import cellularautomata.Utils;
 
 public class Test {
 	public static void main(String[] args) {

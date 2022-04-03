@@ -16,7 +16,7 @@
  */
 package cellularautomata.model5d;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.SymmetricIntModel;
 
 public interface SymmetricIntModel5D extends IntModel5D, SymmetricModel5D, SymmetricIntModel {
@@ -39,12 +39,13 @@ public interface SymmetricIntModel5D extends IntModel5D, SymmetricModel5D, Symme
 	 */
 	int getFromAsymmetricPosition(int v, int w, int x, int y, int z) throws Exception;
 	
+	@Override
 	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
 		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
 	}
 
 	@Override
 	default IntModel5D asymmetricSection() {
-		return new AsymmetricIntModelSection5D<SymmetricIntModel5D>(this);
+		return new AsymmetricIntModelSection5D(this);
 	}
 }

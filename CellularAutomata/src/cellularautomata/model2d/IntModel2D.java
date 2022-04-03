@@ -18,7 +18,7 @@ package cellularautomata.model2d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.IntModel;
 
 public interface IntModel2D extends Model2D, IntModel {
@@ -33,6 +33,7 @@ public interface IntModel2D extends Model2D, IntModel {
 	 */
 	int getFromPosition(int x, int y) throws Exception;
 	
+	@Override
 	default int getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1));
 	}
@@ -118,7 +119,7 @@ public interface IntModel2D extends Model2D, IntModel {
 	
 	@Override
 	default IntModel2D subsection(int minX, int maxX, int minY, int maxY) {
-		return new IntSubModel2D<IntModel2D>(this, minX, maxX, minY, maxY);
+		return new IntSubModel2D(this, minX, maxX, minY, maxY);
 	}
 
 	@Override

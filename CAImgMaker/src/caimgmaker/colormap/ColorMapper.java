@@ -27,7 +27,7 @@ import cellularautomata.model2d.ObjectModel2D;
 
 public interface ColorMapper {
 	
-	<T extends FieldElement<T> & Comparable<T>> ObjectModel2D<Color> getMappedModel(NumericModel2D<T> grid, T minValue, T maxValue);
+	<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> ObjectModel2D<Color> getMappedModel(NumericModel2D<Number_Type> grid, Number_Type minValue, Number_Type maxValue);
 	
 	ObjectModel2D<Color> getMappedModel(LongModel2D grid, long minValue, long maxValue);
 	

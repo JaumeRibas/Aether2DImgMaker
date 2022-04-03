@@ -16,9 +16,9 @@
  */
 package cellularautomata.model4d;
 
-public class AsymmetricLongModelSection4D<G extends SymmetricLongModel4D> extends AsymmetricModelSection4D<G> implements LongModel4D {
+public class AsymmetricLongModelSection4D extends AsymmetricModelSection4D<SymmetricLongModel4D> implements LongModel4D {
 	
-	public AsymmetricLongModelSection4D(G grid) {
+	public AsymmetricLongModelSection4D(SymmetricLongModel4D grid) {
 		super(grid);
 	}
 

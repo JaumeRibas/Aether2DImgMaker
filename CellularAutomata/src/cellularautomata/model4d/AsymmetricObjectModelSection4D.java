@@ -16,14 +16,15 @@
  */
 package cellularautomata.model4d;
 
-public class AsymmetricObjectModelSection4D<T, G extends SymmetricObjectModel4D<T>> extends AsymmetricModelSection4D<G> implements ObjectModel4D<T> {
+public class AsymmetricObjectModelSection4D<Source_Type extends SymmetricObjectModel4D<Object_Type>, Object_Type> 
+	extends AsymmetricModelSection4D<Source_Type> implements ObjectModel4D<Object_Type> {
 	
-	public AsymmetricObjectModelSection4D(G grid) {
+	public AsymmetricObjectModelSection4D(Source_Type grid) {
 		super(grid);
 	}
 
 	@Override
-	public T getFromPosition(int w, int x, int y, int z) throws Exception {
+	public Object_Type getFromPosition(int w, int x, int y, int z) throws Exception {
 		return source.getFromAsymmetricPosition(w, x, y, z);
 	}
 

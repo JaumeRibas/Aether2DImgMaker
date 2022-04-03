@@ -38,15 +38,15 @@ public class HueWithBackgroundMapper implements ColorMapper {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends FieldElement<T> & Comparable<T>> ObjectModel2D<Color> getMappedModel(NumericModel2D<T> grid, T minValue, T maxValue) {
-		ColorMap<T> colorMap = null;
+	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> ObjectModel2D<Color> getMappedModel(NumericModel2D<Number_Type> grid, Number_Type minValue, Number_Type maxValue) {
+		ColorMap<Number_Type> colorMap = null;
 		if (minValue.equals(maxValue)) {
-			colorMap = new SolidColorMap<T>(getEmptyColor());
+			colorMap = new SolidColorMap<Number_Type>(getEmptyColor());
 		} else {
 			if (minValue instanceof BigInt) {
-				colorMap = (ColorMap<T>) new BigIntHueMap((BigInt)minValue, (BigInt)maxValue);
+				colorMap = (ColorMap<Number_Type>) new BigIntHueMap((BigInt)minValue, (BigInt)maxValue);
 			}  else if (minValue instanceof BigFraction) {
-				colorMap = (ColorMap<T>) new BigFractionHueMap((BigFraction)minValue, (BigFraction)maxValue);
+				colorMap = (ColorMap<Number_Type>) new BigFractionHueMap((BigFraction)minValue, (BigFraction)maxValue);
 			} else {
 				throw new UnsupportedOperationException(
 						"Missing " + ColorMap.class.getSimpleName() + "<"
@@ -54,7 +54,7 @@ public class HueWithBackgroundMapper implements ColorMapper {
 								+ HueWithBackgroundMapper.class.getSimpleName());
 			} 
 		}
-		return new ColorMappedModel2DWithBackground<T>(grid, colorMap, (T) backgroundValue, backgroundColor);
+		return new ColorMappedModel2DWithBackground<Number_Type>(grid, colorMap, (Number_Type) backgroundValue, backgroundColor);
 	}
 
 	@Override

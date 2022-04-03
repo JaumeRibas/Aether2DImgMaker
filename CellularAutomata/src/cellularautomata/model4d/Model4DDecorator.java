@@ -17,11 +17,32 @@
 package cellularautomata.model4d;
 
 import cellularautomata.model.ModelDecorator;
+import cellularautomata.model3d.Model3D;
 
-public class Model4DDecorator<G extends Model4D> extends ModelDecorator<G> implements Model4D {
+public class Model4DDecorator<Source_Type extends Model4D> extends ModelDecorator<Source_Type> implements Model4D {
 
-	public Model4DDecorator(G source) {
+	public Model4DDecorator(Source_Type source) {
 		super(source);
+	}
+	
+	@Override
+	public String getWLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
 	}
 
 	@Override
@@ -215,5 +236,40 @@ public class Model4DDecorator<G extends Model4D> extends ModelDecorator<G> imple
 
 	@Override
 	public int getMaxZ(int w, int x, int y) { return source.getMaxZ(w, x, y); }
+
+	@Override
+	public Model4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return source.subsection(minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	public Model3D crossSectionAtW(int w) {
+		return source.crossSectionAtW(w);
+	}
+	
+	@Override
+	public Model3D crossSectionAtX(int x) {
+		return source.crossSectionAtX(x);
+	}
+	
+	@Override
+	public Model3D crossSectionAtY(int y) {
+		return source.crossSectionAtY(y);
+	}
+	
+	@Override
+	public Model3D crossSectionAtZ(int z) {
+		return source.crossSectionAtZ(z);
+	}
+	
+	@Override
+	public Model3D diagonalCrossSectionOnWX(int xOffsetFromW) {
+		return source.diagonalCrossSectionOnWX(xOffsetFromW);
+	}
+	
+	@Override
+	public Model3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
+		return source.diagonalCrossSectionOnYZ(zOffsetFromY);
+	}
 
 }

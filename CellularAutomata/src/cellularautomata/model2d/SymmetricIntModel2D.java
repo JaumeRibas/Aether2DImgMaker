@@ -16,7 +16,7 @@
  */
 package cellularautomata.model2d;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.SymmetricIntModel;
 
 public interface SymmetricIntModel2D extends IntModel2D, SymmetricModel2D, SymmetricIntModel {
@@ -42,12 +42,13 @@ public interface SymmetricIntModel2D extends IntModel2D, SymmetricModel2D, Symme
 	 */
 	int getFromAsymmetricPosition(int x, int y) throws Exception;
 	
+	@Override
 	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
 		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1));
 	}
 	
 	@Override
 	default IntModel2D asymmetricSection() {
-		return new AsymmetricIntModelSection2D<SymmetricIntModel2D>(this);
+		return new AsymmetricIntModelSection2D(this);
 	}
 }

@@ -20,7 +20,12 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-public interface IntModel extends SequentialIntModel {
+import cellularautomata.Coordinates;
+import cellularautomata.MinAndMaxIntConsumer;
+import cellularautomata.PartialCoordinates;
+import cellularautomata.TotalIntConsumer;
+
+public interface IntModel extends Model, Iterable<Integer> {
 	
 	/**
 	 * <p>Returns the value at the given coordinates.</p>
@@ -37,6 +42,7 @@ public interface IntModel extends SequentialIntModel {
 	
 	/**
 	 * Feeds every value of the region, in a consistent order, to an {@link IntConsumer}.
+	 * 
 	 * @param consumer
 	 */
 	default void forEach(IntConsumer consumer) {
@@ -54,16 +60,78 @@ public interface IntModel extends SequentialIntModel {
 		});
 	}
 	
+	/**
+	 * Feeds every value at an even position of the region in a consistent order to a {@link IntConsumer}.
+	 * 
+	 * @param consumer
+	 * @throws Exception 
+	 */
+	default void forEachAtEvenPosition(IntConsumer consumer) throws Exception {
+		forEachEvenPosition(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coordinates) {
+				try {
+					int value = getFromPosition(coordinates);
+					consumer.accept(value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Feeds every value at an odd position of the region in a consistent order to a {@link IntConsumer}.
+	 * 
+	 * @param consumer
+	 * @throws Exception 
+	 */
+	default void forEachAtOddPosition(IntConsumer consumer) throws Exception {
+		forEachOddPosition(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coordinates) {
+				try {
+					int value = getFromPosition(coordinates);
+					consumer.accept(value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	default int[] getMinAndMax() throws Exception {
+		MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+		forEach(consumer);
+		return consumer.getMinAndMaxValue();
+	}
+	
+	default int getTotal() throws Exception {
+		TotalIntConsumer consumer = new TotalIntConsumer();
+		forEach(consumer);
+		return consumer.total;
+	}
+	
+	default int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		if (isEven) {
+			return getEvenPositionsMinAndMax();
+		} else {
+			return getOddPositionsMinAndMax();
+		}
+	}
+	
 	default int[] getEvenPositionsMinAndMax() throws Exception {
-		IntModelMinAndMaxCoordinateConsumer consumer = new IntModelMinAndMaxCoordinateConsumer(this);
-		forEachEvenPosition(consumer);
-		return new int[] {consumer.min, consumer.max};
+		MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+		forEachAtEvenPosition(consumer);
+		return consumer.getMinAndMaxValue();
 	}
 	
 	default int[] getOddPositionsMinAndMax() throws Exception {
-		IntModelMinAndMaxCoordinateConsumer consumer = new IntModelMinAndMaxCoordinateConsumer(this);
-		forEachOddPosition(consumer);
-		return new int[] {consumer.min, consumer.max};
+		MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+		forEachAtOddPosition(consumer);
+		return consumer.getMinAndMaxValue();
 	}
 	
 	//TODO review

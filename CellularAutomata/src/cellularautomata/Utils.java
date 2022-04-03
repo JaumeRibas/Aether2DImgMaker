@@ -24,11 +24,76 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.fraction.BigFraction;
 import cellularautomata.numbers.BigInt;
 
 public class Utils {
+	
+	public static boolean isEvenPosition(int[] coordinates) {
+		int sum = 0;
+		for (int i = 0; i < coordinates.length; i++) {
+			sum += coordinates[i];
+		}
+		return sum%2 == 0;
+	}
+	
+	public static int getRandomInt(int min, int max) {
+		return ThreadLocalRandom.current().nextInt(min, max + 1);
+	}
+	
+	/**
+	 * Adds a value to each element of an array
+	 * 
+	 * @param array
+	 * @param value
+	 * @return
+	 */
+	public static void addToArray(int[] array, int value) {
+		for (int i = 0; i < array.length; i++) {
+			array[i] += value;
+		}
+	}
+	
+	public static void abs(int[] array) {
+		for (int i = 0; i < array.length; i++) {
+			int value = array[i]; 
+			if (value < 0) {
+				array[i] = -value;
+			}
+		}
+	}
+	
+	public static void sortDescending(int[] array) {
+		Arrays.sort(array);
+		//reverse order
+		int halfLength = array.length/2;
+		for (int i = 0, j = array.length - 1; i < halfLength; i++, j--) {
+			int swp = array[i];
+			array[i] = array[j];
+			array[j] = swp;
+		}
+	}
+	
+	public static boolean isSortedDescending(int[] array) {
+		int lengthMinusOne = array.length - 1;
+		for (int i = 0; i < lengthMinusOne; i++) {
+			if (array[i] < array[i + 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean areAllPositive(int[] values) {
+		for (int i = 0; i < values.length; i++) {
+			if (values[i] < 0) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	public static Object deserializeFromFile(String pathName) throws FileNotFoundException, IOException, ClassNotFoundException {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(pathName));
@@ -60,7 +125,7 @@ public class Utils {
 		return Character.toUpperCase(getAxisLetterFromIndex(dimension, axisIndex));
 	}
 	
-	public static <T extends Comparable<T>> T max(T a, T b) {
+	public static <Object_Type extends Comparable<Object_Type>> Object_Type max(Object_Type a, Object_Type b) {
 		if (a.compareTo(b) > 0)
 			return a;
 		return b;
@@ -292,22 +357,22 @@ public class Utils {
 		return count;
 	}
 	
-	public static <T extends Comparable<T>> void sortDescending(int length, T[] array, int[] sortedIndexes) {
+	public static <Object_Type extends Comparable<Object_Type>> void sortDescending(int length, Object_Type[] array, int[] sortedIndexes) {
 		for (int i = 0; i != length; i++) {
 			sortedIndexes[i] = i;
 		}
 		int neighborCountMinusOne = length - 1;
 		for (int i = 0; i < neighborCountMinusOne; i++) {
-			T max = array[i];
+			Object_Type max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < length; j++) {
-				T value = array[j];
+				Object_Type value = array[j];
 				if (value.compareTo(max) > 0) {
 					max = value;
 					swapPosition = j;
 				}
 			}
-			T valSwap = array[i];
+			Object_Type valSwap = array[i];
 			array[i] = array[swapPosition];
 			array[swapPosition] = valSwap;
 			int indexSwap = sortedIndexes[i];
@@ -340,11 +405,11 @@ public class Utils {
 		}
 	}
 	
-	public static <T extends Comparable<T>> void sortDescendingLength3(T[] array, int[] sortedIndexes) {
+	public static <Object_Type extends Comparable<Object_Type>> void sortDescendingLength3(Object_Type[] array, int[] sortedIndexes) {
 		sortedIndexes[0] = 0;
 		sortedIndexes[1] = 1;
 		sortedIndexes[2] = 2;
-		T n0 = array[0], n1 = array[1], n2 = array[2];
+		Object_Type n0 = array[0], n1 = array[1], n2 = array[2];
 		if (n0.compareTo(n1) >= 0) {
 			if (n1.compareTo(n2) < 0) {
 				if (n0.compareTo(n2) >= 0) { 

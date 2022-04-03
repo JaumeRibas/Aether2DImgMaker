@@ -18,13 +18,13 @@ package cellularautomata.model2d;
 
 import java.io.Serializable;
 
-public class ArrayObjectGrid2D<T> extends ArrayGrid2D implements ObjectModel2D<T>, Serializable {
+public class ArrayObjectGrid2D<Object_Type> extends ArrayGrid2D implements ObjectModel2D<Object_Type>, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6271083205749084067L;
-	protected T[][] values;
+	protected Object_Type[][] values;
 	
 	/**
 	 * Constructs an {@code ArrayObjectGrid2D} with the specified bounds
@@ -33,7 +33,7 @@ public class ArrayObjectGrid2D<T> extends ArrayGrid2D implements ObjectModel2D<T
 	 * @param localYMinima an array of the smallest y-coordinates at each x-coordinate of the region. Beginning at {@code minX}.
 	 * @param values a 2D array containing the values of the region
 	 */
-	public ArrayObjectGrid2D(int minX, int[] localYMinima, T[][] values) {
+	public ArrayObjectGrid2D(int minX, int[] localYMinima, Object_Type[][] values) {
 		super(minX, localYMinima);
 		if (localYMinima.length != values.length) {
 			throw new IllegalArgumentException("Local y minima's length must be equal to values' length.");
@@ -107,7 +107,7 @@ public class ArrayObjectGrid2D<T> extends ArrayGrid2D implements ObjectModel2D<T
 	}
 
 	@Override
-	public T getFromPosition(int x, int y) {
+	public Object_Type getFromPosition(int x, int y) {
 		int i = x - minX;
 		int j = y - localYMinima[i];
 		return values[i][j];

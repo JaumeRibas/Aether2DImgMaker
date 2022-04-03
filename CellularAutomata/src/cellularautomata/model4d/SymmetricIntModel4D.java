@@ -16,7 +16,7 @@
  */
 package cellularautomata.model4d;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.SymmetricIntModel;
 
 public interface SymmetricIntModel4D extends IntModel4D, SymmetricModel4D, SymmetricIntModel {
@@ -38,13 +38,14 @@ public interface SymmetricIntModel4D extends IntModel4D, SymmetricModel4D, Symme
 	 */
 	int getFromAsymmetricPosition(int w, int x, int y, int z);
 	
+	@Override
 	default int getFromAsymmetricPosition(Coordinates coordinates) throws Exception {
 		return getFromAsymmetricPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
 	}
 
 	@Override
 	default IntModel4D asymmetricSection() {
-		return new AsymmetricIntModelSection4D<SymmetricIntModel4D>(this);
+		return new AsymmetricIntModelSection4D(this);
 	}
 
 }

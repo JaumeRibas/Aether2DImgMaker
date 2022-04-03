@@ -18,10 +18,11 @@ package cellularautomata.model4d;
 
 import org.apache.commons.math3.FieldElement;
 
-public interface SymmetricNumericModel4D<T extends FieldElement<T> & Comparable<T>> extends NumericModel4D<T>, SymmetricObjectModel4D<T> {
+public interface SymmetricNumericModel4D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
+	extends NumericModel4D<Number_Type>, SymmetricObjectModel4D<Number_Type> {
 
 	@Override
-	default NumericModel4D<T> asymmetricSection() {
-		return new AsymmetricNumericModelSection4D<T, SymmetricNumericModel4D<T>>(this);
+	default NumericModel4D<Number_Type> asymmetricSection() {
+		return new AsymmetricNumericModelSection4D<Number_Type>(this);
 	}
 }

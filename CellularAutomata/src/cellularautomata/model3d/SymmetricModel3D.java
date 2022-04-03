@@ -16,7 +16,7 @@
  */
 package cellularautomata.model3d;
 
-import cellularautomata.model.PartialCoordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.SymmetricModel;
 
 public interface SymmetricModel3D extends Model3D, SymmetricModel {

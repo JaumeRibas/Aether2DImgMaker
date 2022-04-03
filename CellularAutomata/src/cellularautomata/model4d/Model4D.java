@@ -16,11 +16,16 @@
  */
 package cellularautomata.model4d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.Model;
-import cellularautomata.model.PartialCoordinates;
 import cellularautomata.model3d.Model3D;
 
 public interface Model4D extends Model {
+	
+	@Override
+	default int getGridDimension() {
+		return 4;
+	}
 	
 	default String getWLabel() {
 		return "w";
@@ -39,8 +44,18 @@ public interface Model4D extends Model {
 	}
 	
 	@Override
-	default int getGridDimension() {
-		return 4;
+	default String getAxisLabel(int axis) {
+		switch (axis) {
+		case 0: 
+			return getWLabel();
+		case 1: 
+			return getXLabel();
+		case 2: 
+			return getYLabel();
+		case 3: 
+			return getZLabel();
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
 	}
 	
 	/**

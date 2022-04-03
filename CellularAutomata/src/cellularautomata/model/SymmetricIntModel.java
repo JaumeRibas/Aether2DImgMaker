@@ -19,6 +19,8 @@ package cellularautomata.model;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
+import cellularautomata.Coordinates;
+
 public interface SymmetricIntModel extends IntModel, SymmetricModel {
 	
 	@Override
@@ -33,7 +35,7 @@ public interface SymmetricIntModel extends IntModel, SymmetricModel {
 	 * To get these bounds use the {@link #getAsymmetricMaxCoordinate(int)}, {@link #getAsymmetricMaxCoordinate(int, PartialCoordinates)}, 
 	 * {@link #getAsymmetricMinCoordinate(int)} and {@link #getAsymmetricMinCoordinate(int, PartialCoordinates)} methods.</p>
 	 * 
-	 * @param coordinates a {@link int} array
+	 * @param coordinates a {@link Coordinates} object
 	 * @return the value at the given position.
 	 * @throws Exception 
 	 */

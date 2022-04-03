@@ -20,17 +20,25 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-public class ModelDecorator<G extends Model> implements Model {
+import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
+
+public class ModelDecorator<Source_Type extends Model> implements Model {
 	
-	protected G source;
+	protected Source_Type source;
 	
-	public ModelDecorator(G source) {
+	public ModelDecorator(Source_Type source) {
 		this.source = source;
 	}
 
 	@Override
 	public int getGridDimension() {
 		return source.getGridDimension();
+	}
+	
+	@Override
+	public String getAxisLabel(int axis) {
+		return source.getAxisLabel(axis);
 	}
 	
 	@Override
@@ -50,7 +58,7 @@ public class ModelDecorator<G extends Model> implements Model {
 	
 	@Override
 	public int getMinCoordinate(int axis, PartialCoordinates coordinates) {
-		return getMinCoordinate(axis, coordinates);
+		return source.getMinCoordinate(axis, coordinates);
 	}
 	
 	@Override
@@ -66,6 +74,11 @@ public class ModelDecorator<G extends Model> implements Model {
 	@Override
 	public void forEachOddPosition(Consumer<Coordinates> consumer) {
 		source.forEachOddPosition(consumer);
+	}
+	
+	@Override
+	public Model subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return source.subsection(minCoordinates, maxCoordinates);
 	}
 
 	@Override

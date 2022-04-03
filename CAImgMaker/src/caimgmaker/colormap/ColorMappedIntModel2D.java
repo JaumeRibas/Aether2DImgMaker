@@ -35,5 +35,10 @@ public class ColorMappedIntModel2D extends Model2DDecorator<IntModel2D> implemen
 	public Color getFromPosition(int x, int y) throws Exception {
 		return colorMap.getColor(source.getFromPosition(x, y));
 	}
+	
+	@Override
+	public ObjectModel2D<Color> subsection(int minX, int maxX, int minY, int maxY) {
+		return ObjectModel2D.super.subsection(minX, maxX, minY, maxY);
+	}
 
 }

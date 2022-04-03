@@ -18,7 +18,7 @@ package cellularautomata.model4d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.LongModel;
 import cellularautomata.model3d.LongModel3D;
 
@@ -36,6 +36,7 @@ public interface LongModel4D extends Model4D, LongModel {
 	 */
 	long getFromPosition(int w, int x, int y, int z) throws Exception;
 	
+	@Override
 	default long getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
 	}
@@ -127,32 +128,32 @@ public interface LongModel4D extends Model4D, LongModel {
 	
 	@Override
 	default LongModel3D crossSectionAtW(int w) {
-		return new LongModel4DWCrossSection<LongModel4D>(this, w);
+		return new LongModel4DWCrossSection(this, w);
 	}
 	
 	@Override
 	default LongModel3D crossSectionAtX(int x) {
-		return new LongModel4DXCrossSection<LongModel4D>(this, x);
+		return new LongModel4DXCrossSection(this, x);
 	}
 	
 	@Override
 	default LongModel3D crossSectionAtY(int y) {
-		return new LongModel4DYCrossSection<LongModel4D>(this, y);
+		return new LongModel4DYCrossSection(this, y);
 	}
 	
 	@Override
 	default LongModel3D crossSectionAtZ(int z) {
-		return new LongModel4DZCrossSection<LongModel4D>(this, z);
+		return new LongModel4DZCrossSection(this, z);
 	}
 	
 	@Override
 	default LongModel3D diagonalCrossSectionOnWX(int xOffsetFromW) {
-		return new LongModel4DWXDiagonalCrossSection<LongModel4D>(this, xOffsetFromW);
+		return new LongModel4DWXDiagonalCrossSection(this, xOffsetFromW);
 	}
 
 	@Override
 	default LongModel3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new LongModel4DYZDiagonalCrossSection<LongModel4D>(this, zOffsetFromY);
+		return new LongModel4DYZDiagonalCrossSection(this, zOffsetFromY);
 	}
 
 	@Override

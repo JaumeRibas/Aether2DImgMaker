@@ -21,7 +21,11 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
-public interface LongModel extends SequentialLongModel {
+import cellularautomata.Coordinates;
+import cellularautomata.MinAndMaxLongConsumer;
+import cellularautomata.TotalLongConsumer;
+
+public interface LongModel extends Model, Iterable<Long> {
 
 	/**
 	 * <p>Returns the value at the given coordinates.</p>
@@ -37,7 +41,7 @@ public interface LongModel extends SequentialLongModel {
 	long getFromPosition(Coordinates coordinates) throws Exception;
 	
 	/**
-	 * Feeds every value of the region in a consistent order to an {@link LongConsumer}.
+	 * Feeds every value of the region, in a consistent order, to a {@link LongConsumer}.
 	 * @param consumer
 	 * @throws IOException 
 	 */
@@ -55,21 +59,84 @@ public interface LongModel extends SequentialLongModel {
 			}
 		});
 	}
+
+	/**
+	 * Feeds every value at an even position of the region in a consistent order to a {@link LongConsumer}.
+	 * 
+	 * @param consumer
+	 * @throws Exception 
+	 */
+	default void forEachAtEvenPosition(LongConsumer consumer) throws Exception {
+		forEachEvenPosition(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coordinates) {
+				try {
+					long value = getFromPosition(coordinates);
+					consumer.accept(value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Feeds every value at an odd position of the region in a consistent order to a {@link LongConsumer}.
+	 * 
+	 * @param consumer
+	 * @throws Exception 
+	 */
+	default void forEachAtOddPosition(LongConsumer consumer) throws Exception {
+		forEachOddPosition(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates coordinates) {
+				try {
+					long value = getFromPosition(coordinates);
+					consumer.accept(value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	default long[] getMinAndMax() throws Exception {
+		MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+		forEach(consumer);
+		return consumer.getMinAndMaxValue();
+	}
+	
+	default long getTotal() throws Exception {
+		TotalLongConsumer consumer = new TotalLongConsumer();
+		forEach(consumer);
+		return consumer.total;
+	}
+	
+	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		if (isEven) {
+			return getEvenPositionsMinAndMax();
+		} else {
+			return getOddPositionsMinAndMax();
+		}
+	}
 	
 	default long[] getEvenPositionsMinAndMax() throws Exception {
-		LongModelMinAndMaxCoordinateConsumer consumer = new LongModelMinAndMaxCoordinateConsumer(this);
-		forEachEvenPosition(consumer);
-		return new long[] {consumer.min, consumer.max};
+		MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+		forEachAtEvenPosition(consumer);
+		return consumer.getMinAndMaxValue();
 	}
 	
 	default long[] getOddPositionsMinAndMax() throws Exception {
-		LongModelMinAndMaxCoordinateConsumer consumer = new LongModelMinAndMaxCoordinateConsumer(this);
-		forEachOddPosition(consumer);
-		return new long[] {consumer.min, consumer.max};
+		MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+		forEachAtOddPosition(consumer);
+		return consumer.getMinAndMaxValue();
 	}
 
 	@Override
 	default Iterator<Long> iterator() {
 		return new LongModelIterator(this);
 	}
+	
 }

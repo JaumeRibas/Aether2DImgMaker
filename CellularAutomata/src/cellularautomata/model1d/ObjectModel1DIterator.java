@@ -16,15 +16,15 @@
  */
 package cellularautomata.model1d;
 
-public class ObjectModel1DIterator<T> extends Model1DIterator<ObjectModel1D<T>, T> {
+public class ObjectModel1DIterator<Object_Type> extends Model1DIterator<ObjectModel1D<Object_Type>, Object_Type> {
 
-	public ObjectModel1DIterator(ObjectModel1D<T> grid) {
+	public ObjectModel1DIterator(ObjectModel1D<Object_Type> grid) {
 		super(grid);
 	}
 
 	@Override
-	protected T getFromModelPosition(int x) throws Exception {
-		return grid.getFromPosition(x);
+	protected Object_Type getFromModelPosition(int x) throws Exception {
+		return source.getFromPosition(x);
 	}
 
 }

@@ -18,6 +18,6 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-public interface ColorMap<T> {
-	Color getColor(T value) throws Exception;
+public interface ColorMap<Object_Type> {
+	Color getColor(Object_Type value) throws Exception;
 }

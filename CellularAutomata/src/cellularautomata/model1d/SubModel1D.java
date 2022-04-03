@@ -19,15 +19,15 @@ package cellularautomata.model1d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SubModel1D<G extends Model1D> implements Model1D {
+public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 	
-	protected G source;
+	protected Source_Type source;
 	protected int minX;
 	protected int maxX;
 	protected int absoluteMinX;
 	protected int absoluteMaxX;
 	
-	public SubModel1D(G source, int minX, int maxX) {
+	public SubModel1D(Source_Type source, int minX, int maxX) {
 		if (minX > maxX) {
 			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
 		}

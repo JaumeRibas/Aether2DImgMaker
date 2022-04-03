@@ -21,16 +21,16 @@ import java.io.IOException;
 
 import cellularautomata.model2d.Model2D;
 
-public class Model3DXYDiagonalCrossSection<G extends Model3D> implements Model2D {
+public class Model3DXYDiagonalCrossSection<Source_Type extends Model3D> implements Model2D {
 
-	protected G source;
+	protected Source_Type source;
 	protected int yOffsetFromX;
 	protected int crossSectionMinX;
 	protected int crossSectionMaxX;
 	protected int crossSectionMinZ;
 	protected int crossSectionMaxZ;
 	
-	public Model3DXYDiagonalCrossSection(G source, int yOffsetFromX) {		
+	public Model3DXYDiagonalCrossSection(Source_Type source, int yOffsetFromX) {		
 		this.source = source;
 		this.yOffsetFromX = yOffsetFromX;
 		if (!getBounds()) {

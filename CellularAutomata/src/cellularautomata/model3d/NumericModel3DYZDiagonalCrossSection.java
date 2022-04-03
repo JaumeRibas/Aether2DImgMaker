@@ -20,10 +20,10 @@ import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.model2d.NumericModel2D;
 
-public class NumericModel3DYZDiagonalCrossSection<T extends FieldElement<T> & Comparable<T>, G extends NumericModel3D<T>> 
-	extends ObjectModel3DYZDiagonalCrossSection<T, G> implements NumericModel2D<T> {
+public class NumericModel3DYZDiagonalCrossSection<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
+	extends ObjectModel3DYZDiagonalCrossSection<NumericModel3D<Number_Type>, Number_Type> implements NumericModel2D<Number_Type> {
 
-	public NumericModel3DYZDiagonalCrossSection(G source, int zOffsetFromY) {
+	public NumericModel3DYZDiagonalCrossSection(NumericModel3D<Number_Type> source, int zOffsetFromY) {
 		super(source, zOffsetFromY);
 	}
 

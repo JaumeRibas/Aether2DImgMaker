@@ -18,9 +18,9 @@ package cellularautomata.model4d;
 
 import cellularautomata.model3d.LongModel3D;
 
-public class LongModel4DXCrossSection<G extends LongModel4D> extends Model4DXCrossSection<G> implements LongModel3D {
+public class LongModel4DXCrossSection extends Model4DXCrossSection<LongModel4D> implements LongModel3D {
 
-	public LongModel4DXCrossSection(G source, int x) {
+	public LongModel4DXCrossSection(LongModel4D source, int x) {
 		super(source, x);
 	}
 

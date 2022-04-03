@@ -23,8 +23,8 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import cellularautomata.arrays.HypercubicIntArray;
-import cellularautomata.arrays.Utils;
-import cellularautomata.model.Coordinates;
+import cellularautomata.Utils;
+import cellularautomata.Coordinates;
 import cellularautomata.model.IsotropicHypercubicModel;
 import cellularautomata.model.SymmetricIntModel;
 

@@ -20,13 +20,13 @@ import java.awt.Color;
 
 import cellularautomata.model2d.ObjectModel2D;
 
-public class ColorMappedModel2DWithBackground<T> extends ColorMappedModel2D<T> {
+public class ColorMappedModel2DWithBackground<Object_Type> extends ColorMappedModel2D<Object_Type> {
 
-	protected T backgroundValue;
+	protected Object_Type backgroundValue;
 	protected Color backgroundColor;
 	
-	public ColorMappedModel2DWithBackground(ObjectModel2D<T> grid, ColorMap<T> colorMap, 
-			T backgroundValue, Color backgroundColor) {
+	public ColorMappedModel2DWithBackground(ObjectModel2D<Object_Type> grid, ColorMap<Object_Type> colorMap, 
+			Object_Type backgroundValue, Color backgroundColor) {
 		super(grid, colorMap);
 		this.backgroundColor = backgroundColor;
 		this.backgroundValue = backgroundValue;
@@ -34,7 +34,7 @@ public class ColorMappedModel2DWithBackground<T> extends ColorMappedModel2D<T> {
 
 	@Override
 	public Color getFromPosition(int x, int y) throws Exception {
-		T value = source.getFromPosition(x, y);
+		Object_Type value = source.getFromPosition(x, y);
 		if (value.equals(backgroundValue)) {
 			return backgroundColor;
 		}

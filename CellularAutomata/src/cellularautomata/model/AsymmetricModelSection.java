@@ -16,21 +16,15 @@
  */
 package cellularautomata.model;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.function.Consumer;
 
-public class AsymmetricModelSection<G extends SymmetricModel> implements Model {
+import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 
-	protected G source;
+public class AsymmetricModelSection<Source_Type extends SymmetricModel> extends ModelDecorator<Source_Type> {
 	
-	public AsymmetricModelSection(G source) {
-		this.source = source;
-	}
-
-	@Override
-	public int getGridDimension() {
-		return source.getGridDimension();
+	public AsymmetricModelSection(Source_Type source) {
+		super(source);
 	}
 
 	@Override
@@ -69,27 +63,7 @@ public class AsymmetricModelSection<G extends SymmetricModel> implements Model {
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		return source.nextStep();
-	}
-
-	@Override
-	public long getStep() {
-		return source.getStep();
-	}
-
-	@Override
-	public String getName() {
-		return source.getName();
-	}
-
-	@Override
 	public String getSubfolderPath() {
 		return source.getSubfolderPath() + "/asymmetric_section";
-	}
-
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
 	}
 }

@@ -16,60 +16,60 @@
  */
 package cellularautomata.model2d;
 
-public class SubareaModel<G extends Model2D> implements Model2D { 
+public class SubareaModel<Source_Type extends Model2D> implements Model2D { 
 
-	private G baseModel;
+	private Source_Type source;
 	private int subareaWidth;
 	private int subareaHeight;
 	
-	public SubareaModel(G baseModel, int subareaWidth, int subareaHeight) {
+	public SubareaModel(Source_Type baseModel, int subareaWidth, int subareaHeight) {
 		if (subareaWidth < 1) {
 			throw new IllegalArgumentException("Subarea width cannot be smaller than one.");
 		}
 		if (subareaHeight < 1) {
 			throw new IllegalArgumentException("Subarea height cannot be smaller than one.");
 		}
-		this.baseModel = baseModel;
+		this.source = baseModel;
 		this.subareaWidth = subareaWidth;
 		this.subareaHeight = subareaHeight;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public G getSubareaAtPosition(int x, int y) {
+	public Source_Type getSubareaAtPosition(int x, int y) {
 		int minX = x * subareaWidth;
 		int maxX = minX + subareaWidth - 1;
 		int minY = y * subareaHeight;
 		int maxY = minY + subareaHeight - 1;
-		return (G) baseModel.subsection(minX, maxX, minY, maxY);
+		return (Source_Type) source.subsection(minX, maxX, minY, maxY);
 	}
 
 	@Override
 	public int getMinX() {
-		return baseModel.getMinX() / subareaWidth;
+		return source.getMinX() / subareaWidth;
 	}
 
 	@Override
 	public int getMaxX() {
-		return baseModel.getMaxX() / subareaWidth;
+		return source.getMaxX() / subareaWidth;
 	}
 
 	@Override
 	public int getMinY() {
-		return baseModel.getMinY() / subareaHeight;
+		return source.getMinY() / subareaHeight;
 	}
 
 	@Override
 	public int getMaxY() {
-		return baseModel.getMaxY() / subareaHeight;
+		return source.getMaxY() / subareaHeight;
 	}
 	
 	@Override
 	public int getMinX(int y) {
 		int subareaMinY = y * subareaHeight;
 		int subareaMaxY = subareaMinY + subareaHeight - 1;
-		int subareaMinX = baseModel.getMinX(subareaMinY);
+		int subareaMinX = source.getMinX(subareaMinY);
 		for (int baseY = subareaMinY + 1; baseY <= subareaMaxY; baseY++) {
-			int minX = baseModel.getMinX(baseY);
+			int minX = source.getMinX(baseY);
 			if (minX < subareaMinX) {
 				subareaMinX = minX;
 			}
@@ -81,9 +81,9 @@ public class SubareaModel<G extends Model2D> implements Model2D {
 	public int getMaxX(int y) {
 		int subareaMinY = y * subareaHeight;
 		int subareaMaxY = subareaMinY + subareaHeight - 1;
-		int subareaMaxX = baseModel.getMaxX(subareaMinY);
+		int subareaMaxX = source.getMaxX(subareaMinY);
 		for (int baseY = subareaMinY + 1; baseY <= subareaMaxY; baseY++) {
-			int maxX = baseModel.getMaxX(baseY);
+			int maxX = source.getMaxX(baseY);
 			if (maxX > subareaMaxX) {
 				subareaMaxX = maxX;
 			}
@@ -95,9 +95,9 @@ public class SubareaModel<G extends Model2D> implements Model2D {
 	public int getMinY(int x) {
 		int subareaMinX = x * subareaWidth;
 		int subareaMaxX = subareaMinX + subareaWidth - 1;
-		int subareaMinY = baseModel.getMinY(subareaMinX);
+		int subareaMinY = source.getMinY(subareaMinX);
 		for (int baseX = subareaMinX + 1; baseX <= subareaMaxX; baseX++) {
-			int minY = baseModel.getMinY(baseX);
+			int minY = source.getMinY(baseX);
 			if (minY < subareaMinY) {
 				subareaMinY = minY;
 			}
@@ -109,9 +109,9 @@ public class SubareaModel<G extends Model2D> implements Model2D {
 	public int getMaxY(int x) {
 		int subareaMinX = x * subareaWidth;
 		int subareaMaxX = subareaMinX + subareaWidth - 1;
-		int subareaMaxY = baseModel.getMaxY(subareaMinX);
+		int subareaMaxY = source.getMaxY(subareaMinX);
 		for (int baseX = subareaMinX + 1; baseX <= subareaMaxX; baseX++) {
-			int maxY = baseModel.getMaxY(baseX);
+			int maxY = source.getMaxY(baseX);
 			if (maxY > subareaMaxY) {
 				subareaMaxY = maxY;
 			}
@@ -120,7 +120,7 @@ public class SubareaModel<G extends Model2D> implements Model2D {
 	}
 
 	@Override
-	public G subsection(int minX, int maxX, int minY, int maxY) {
+	public Source_Type subsection(int minX, int maxX, int minY, int maxY) {
 		throw new UnsupportedOperationException();
 	}
 

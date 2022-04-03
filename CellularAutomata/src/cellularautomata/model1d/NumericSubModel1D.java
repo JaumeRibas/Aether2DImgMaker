@@ -18,10 +18,10 @@ package cellularautomata.model1d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class NumericSubModel1D<T extends FieldElement<T> & Comparable<T>, G extends NumericModel1D<T>> 
-	extends ObjectSubModel1D<T, G> implements NumericModel1D<T> {
+public class NumericSubModel1D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
+	extends ObjectSubModel1D<NumericModel1D<Number_Type>, Number_Type> implements NumericModel1D<Number_Type> {
 
-	public NumericSubModel1D(G source, int minX, int maxX) {
+	public NumericSubModel1D(NumericModel1D<Number_Type> source, int minX, int maxX) {
 		super(source, minX, maxX);
 	}
 

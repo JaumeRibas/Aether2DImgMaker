@@ -18,7 +18,7 @@ package cellularautomata.arrays;
 
 import java.util.function.Consumer;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 
 /**
  * A multidimensional array with hyperrectangular shape.

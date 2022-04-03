@@ -18,37 +18,37 @@ package cellularautomata.model1d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.model.MinAndMax;
+import cellularautomata.MinAndMax;
 import cellularautomata.model.NumericModel;
 
-public interface NumericModel1D<T extends FieldElement<T> & Comparable<T>> extends ObjectModel1D<T>, NumericModel<T> {
+public interface NumericModel1D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel1D<Number_Type>, NumericModel<Number_Type> {
 	
 	@Override
-	default MinAndMax<T> getMinAndMax() throws Exception {
+	default MinAndMax<Number_Type> getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
-		T minValue = getFromPosition(minX);
-		T maxValue = minValue;
+		Number_Type minValue = getFromPosition(minX);
+		Number_Type maxValue = minValue;
 		for (int x = minX; x <= maxX; x++) {
-			T value = getFromPosition(x);
+			Number_Type value = getFromPosition(x);
 			if (value.compareTo(minValue) < 0)
 				minValue = value;
 			if (value.compareTo(maxValue) > 0)
 				maxValue = value;
 		}
-		return new MinAndMax<T>(minValue, maxValue);
+		return new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
-		T minValue = null;
-		T maxValue = null;
+	default MinAndMax<Number_Type> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+		Number_Type minValue = null;
+		Number_Type maxValue = null;
 		int maxX = getMaxX(), minX = getMinX();
 		boolean isPositionEven = minX%2 == 0;
 		if (isPositionEven != isEven) {
 			minX++;
 		}
 		if (minX <= maxX) {
-			T value = getFromPosition(minX);
+			Number_Type value = getFromPosition(minX);
 			minValue = value;
 			maxValue = value;
 			for (int x = minX + 2; x <= maxX; x+=2) {
@@ -59,13 +59,13 @@ public interface NumericModel1D<T extends FieldElement<T> & Comparable<T>> exten
 					maxValue = value;
 			}
 		}
-		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default T getTotal() throws Exception {
+	default Number_Type getTotal() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
-		T total = getFromPosition(minX);
+		Number_Type total = getFromPosition(minX);
 		for (int x = minX + 1; x <= maxX; x++) {
 			total = total.add(getFromPosition(x));
 		}
@@ -73,7 +73,7 @@ public interface NumericModel1D<T extends FieldElement<T> & Comparable<T>> exten
 	}
 	
 	@Override
-	default NumericModel1D<T> subsection(int minX, int maxX) {
-		return new NumericSubModel1D<T, NumericModel1D<T>>(this, minX, maxX);
+	default NumericModel1D<Number_Type> subsection(int minX, int maxX) {
+		return new NumericSubModel1D<Number_Type>(this, minX, maxX);
 	}
 }

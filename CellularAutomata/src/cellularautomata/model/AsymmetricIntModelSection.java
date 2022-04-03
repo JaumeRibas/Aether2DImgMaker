@@ -16,9 +16,11 @@
  */
 package cellularautomata.model;
 
-public class AsymmetricIntModelSection<G extends SymmetricIntModel> extends AsymmetricModelSection<G> implements IntModel {
+import cellularautomata.Coordinates;
+
+public class AsymmetricIntModelSection<Source_Type extends SymmetricIntModel> extends AsymmetricModelSection<Source_Type> implements IntModel {
 	
-	public AsymmetricIntModelSection(G grid) {
+	public AsymmetricIntModelSection(Source_Type grid) {
 		super(grid);
 	}
 

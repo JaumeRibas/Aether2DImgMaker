@@ -16,6 +16,8 @@
  */
 package cellularautomata.model;
 
+import cellularautomata.Coordinates;
+
 public class LongModelIterator extends ModelIterator<LongModel, Long> {
 
 	public LongModelIterator(LongModel region) {

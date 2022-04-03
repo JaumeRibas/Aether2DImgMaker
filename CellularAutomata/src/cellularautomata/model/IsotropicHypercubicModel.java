@@ -16,6 +16,8 @@
  */
 package cellularautomata.model;
 
+import cellularautomata.PartialCoordinates;
+
 /**
  * An isotropic hypercubic region of a grid with center at the origin of coordinates.
  * Its underlying asymmetric section being the one within the region where c1 >= c2 >= c3 ... >= cN >= 0.

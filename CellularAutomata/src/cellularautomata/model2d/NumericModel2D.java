@@ -18,35 +18,35 @@ package cellularautomata.model2d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.model.MinAndMax;
+import cellularautomata.MinAndMax;
 import cellularautomata.model.NumericModel;
 
-public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> extends ObjectModel2D<T>, NumericModel<T> {
+public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel2D<Number_Type>, NumericModel<Number_Type> {
 	
 	@Override
-	default MinAndMax<T> getMinAndMax() throws Exception {
+	default MinAndMax<Number_Type> getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
-		T maxValue = getFromPosition(minX, getMinY(minX));
-		T minValue = maxValue;
+		Number_Type maxValue = getFromPosition(minX, getMinY(minX));
+		Number_Type minValue = maxValue;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				T value = getFromPosition(x, y);
+				Number_Type value = getFromPosition(x, y);
 				if (value.compareTo(maxValue) > 0)
 					maxValue = value;
 				if (value.compareTo(minValue) < 0)
 					minValue = value;
 			}
 		}
-		return new MinAndMax<T>(minValue, maxValue);
+		return new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default MinAndMax<T> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
+	default MinAndMax<Number_Type> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
-		T maxValue = null;
-		T minValue = null;
+		Number_Type maxValue = null;
+		Number_Type minValue = null;
 		int x = minX;
 		for (; x <= maxX && maxValue == null; x++) {
 			int minY = getMinY(x);
@@ -56,7 +56,7 @@ public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> exten
 				minY++;
 			}
 			if (minY <= maxY) {
-				T value = getFromPosition(x, minY);
+				Number_Type value = getFromPosition(x, minY);
 				maxValue = value;
 				minValue = value;
 				for (int y = minY + 2; y <= maxY; y+=2) {
@@ -76,20 +76,20 @@ public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> exten
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
-				T value = getFromPosition(x, y);
+				Number_Type value = getFromPosition(x, y);
 				if (value.compareTo(maxValue) > 0)
 					maxValue = value;
 				if (value.compareTo(minValue) < 0)
 					minValue = value;
 			}
 		}
-		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
-	default MinAndMax<T> getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
+	default MinAndMax<Number_Type> getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
-		T maxValue = null;
-		T minValue = null;
+		Number_Type maxValue = null;
+		Number_Type minValue = null;
 		int x = minX;
 		for (; x <= maxX && maxValue == null; x++) {
 			int minY = getMinY(x);
@@ -99,7 +99,7 @@ public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> exten
 				minY++;
 			}
 			if (minY <= maxY) {
-				T value = getFromPosition(x, minY);
+				Number_Type value = getFromPosition(x, minY);
 				maxValue = value;
 				minValue = value;
 				for (int y = minY + 2; y <= maxY; y+=2) {
@@ -119,21 +119,21 @@ public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> exten
 				minY++;
 			}
 			for (int y = minY; y <= maxY; y+=2) {
-				T value = getFromPosition(x, y);
+				Number_Type value = getFromPosition(x, y);
 				if (value.compareTo(maxValue) > 0)
 					maxValue = value;
 				if (value.compareTo(minValue) < 0)
 					minValue = value;
 			}
 		}
-		return minValue == null? null : new MinAndMax<T>(minValue, maxValue);
+		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
 	@Override
-	default T getTotal() throws Exception {
+	default Number_Type getTotal() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		int minY = getMinY(minX);
-		T total = getFromPosition(minX, minY);
+		Number_Type total = getFromPosition(minX, minY);
 		int maxY = getMaxY(minX);
 		for (int y = minY + 1; y <= maxY; y++) {
 			total = total.add(getFromPosition(minX, y));
@@ -149,8 +149,8 @@ public interface NumericModel2D<T extends FieldElement<T> & Comparable<T>> exten
 	}
 	
 	@Override
-	default NumericModel2D<T> subsection(int minX, int maxX, int minY, int maxY) {
-		return new NumericSubModel2D<T, NumericModel2D<T>>(this, minX, maxX, minY, maxY);
+	default NumericModel2D<Number_Type> subsection(int minX, int maxX, int minY, int maxY) {
+		return new NumericSubModel2D<Number_Type>(this, minX, maxX, minY, maxY);
 	}
 
 }

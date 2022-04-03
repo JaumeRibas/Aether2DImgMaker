@@ -19,9 +19,9 @@ package cellularautomata.model3d;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SubModel3D<G extends Model3D> implements Model3D {
+public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 	
-	protected G source;
+	protected Source_Type source;
 	protected int minX;
 	protected int maxX;
 	protected int minY;
@@ -35,9 +35,7 @@ public class SubModel3D<G extends Model3D> implements Model3D {
 	protected int absoluteMinZ;
 	protected int absoluteMaxZ;
 	
-	protected SubModel3D() {	}
-	
-	public SubModel3D(G source, int minX, int maxX, int minY, 
+	public SubModel3D(Source_Type source, int minX, int maxX, int minY, 
 			int maxY, int minZ, int maxZ) {
 		if (minX > maxX) {
 			throw new IllegalArgumentException("Min x cannot be bigger than max x.");

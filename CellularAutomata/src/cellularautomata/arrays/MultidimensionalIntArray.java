@@ -18,7 +18,7 @@ package cellularautomata.arrays;
 
 import java.util.function.IntConsumer;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 
 public interface MultidimensionalIntArray extends MultidimensionalArray {
 	

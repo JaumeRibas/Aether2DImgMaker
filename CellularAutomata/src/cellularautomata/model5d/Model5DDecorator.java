@@ -17,11 +17,37 @@
 package cellularautomata.model5d;
 
 import cellularautomata.model.ModelDecorator;
+import cellularautomata.model4d.Model4D;
 
-public class Model5DDecorator<G extends Model5D> extends ModelDecorator<G> implements Model5D {
+public class Model5DDecorator<Source_Type extends Model5D> extends ModelDecorator<Source_Type> implements Model5D {
 
-	public Model5DDecorator(G source) {
+	public Model5DDecorator(Source_Type source) {
 		super(source);
+	}
+	
+	@Override
+	public String getVLabel() {
+		return source.getVLabel();
+	}
+	
+	@Override
+	public String getWLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
 	}
 
 	@Override
@@ -503,5 +529,40 @@ public class Model5DDecorator<G extends Model5D> extends ModelDecorator<G> imple
 
 	@Override
 	public int getMaxZ(int v, int w, int x, int y) { return source.getMaxZ(v, w, x, y); }
+
+	@Override
+	public Model5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+		return source.subsection(minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+
+	@Override
+	public Model4D crossSectionAtV(int v) {
+		return source.crossSectionAtV(v);
+	}
+//	
+//	@Override
+//	public Model4D crossSectionAtW(int w) {
+//		return source.crossSectionAtW(w);
+//	}
+//	
+//	@Override
+//	public Model4D crossSectionAtX(int x) {
+//		return source.crossSectionAtX(x);
+//	}
+//	
+//	@Override
+//	public Model4D crossSectionAtY(int y) {
+//		return source.crossSectionAtY(y);
+//	}
+//	
+//	@Override
+//	public Model4D crossSectionAtZ(int z) {
+//		return source.crossSectionAtZ(z);
+//	}
+	
+	@Override
+	public Model4D diagonalCrossSectionOnVW(int wOffsetFromV) {
+		return source.diagonalCrossSectionOnVW(wOffsetFromV);
+	}
 
 }

@@ -17,7 +17,7 @@
 package cellularautomata.model2d;
 
 import cellularautomata.model.Model;
-import cellularautomata.model.PartialCoordinates;
+import cellularautomata.PartialCoordinates;
 
 public interface Model2D extends Model {
 	
@@ -117,7 +117,7 @@ public interface Model2D extends Model {
 	 * @param maxX
 	 * @param minY
 	 * @param maxY
-	 * @return a {@link Model2D} decorating the current grid 
+	 * @return a {@link Model2D} decorating the current grid
 	 */
 	default Model2D subsection(int minX, int maxX, int minY, int maxY) {
 		return new SubModel2D<Model2D>(this, minX, maxX, minY, maxY);

@@ -18,15 +18,15 @@ package cellularautomata.model2d;
 
 import org.apache.commons.math3.FieldElement;
 
-public class ArrayNumberGrid2D<T extends FieldElement<T> & Comparable<T>> extends ArrayObjectGrid2D<T> implements NumericModel2D<T> {
+public class ArrayNumberGrid2D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ArrayObjectGrid2D<Number_Type> implements NumericModel2D<Number_Type> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 137229734119632292L;
-	protected T[][] values;
+	protected Number_Type[][] values;
 
-	public ArrayNumberGrid2D(int minX, int[] localYMinima, T[][] values) {
+	public ArrayNumberGrid2D(int minX, int[] localYMinima, Number_Type[][] values) {
 		super(minX, localYMinima, values);
 	}	
 

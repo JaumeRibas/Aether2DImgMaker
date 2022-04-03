@@ -19,17 +19,17 @@ package cellularautomata.model2d;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class Model2DIterator<G extends Model2D, T> implements Iterator<T> {
+public abstract class Model2DIterator<Source_Type extends Model2D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected G grid;
+	protected Source_Type source;
 	private int x;
 	private int y;
 	private int maxX;
 	private int localMaxY;
 	private boolean hasNext;
 	
-	public Model2DIterator(G grid) {
-		this.grid = grid;
+	public Model2DIterator(Source_Type grid) {
+		this.source = grid;
 		x = grid.getMinX();
 		maxX = grid.getMaxX();
 		y = grid.getMinY(x);
@@ -43,10 +43,10 @@ public abstract class Model2DIterator<G extends Model2D, T> implements Iterator<
 	}
 
 	@Override
-	public T next() {
+	public Element_Type next() {
 		if (!hasNext)
 			throw new NoSuchElementException();
-		T next = null;
+		Element_Type next = null;
 		try {
 			next = getFromModelPosition(x, y);
 		} catch (Exception e) {
@@ -57,8 +57,8 @@ public abstract class Model2DIterator<G extends Model2D, T> implements Iterator<
 				hasNext = false;
 			} else {
 				x++;
-				y = grid.getMinY(x);
-				localMaxY = grid.getMaxY(x);
+				y = source.getMinY(x);
+				localMaxY = source.getMaxY(x);
 			}
 		} else {
 			y++;
@@ -66,6 +66,6 @@ public abstract class Model2DIterator<G extends Model2D, T> implements Iterator<
 		return next;
 	}
 	
-	protected abstract T getFromModelPosition(int x, int y) throws Exception;
+	protected abstract Element_Type getFromModelPosition(int x, int y) throws Exception;
 
 }

@@ -18,7 +18,7 @@ package cellularautomata.model5d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.LongModel;
 import cellularautomata.model4d.LongModel4D;
 
@@ -37,6 +37,7 @@ public interface LongModel5D extends Model5D, LongModel {
 	 */
 	long getFromPosition(int v, int w, int x, int y, int z) throws Exception;
 	
+	@Override
 	default long getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3), coordinates.get(4));
 	}
@@ -139,12 +140,12 @@ public interface LongModel5D extends Model5D, LongModel {
 
 	@Override
 	default LongModel4D crossSectionAtV(int v) {
-		return new LongModel5DVCrossSection<LongModel5D>(this, v);
+		return new LongModel5DVCrossSection(this, v);
 	}
 	
 	@Override
 	default LongModel4D diagonalCrossSectionOnVW(int wOffsetFromV) {
-		return new LongModel5DVWDiagonalCrossSection<LongModel5D>(this, wOffsetFromV);
+		return new LongModel5DVWDiagonalCrossSection(this, wOffsetFromV);
 	}
 
 	@Override

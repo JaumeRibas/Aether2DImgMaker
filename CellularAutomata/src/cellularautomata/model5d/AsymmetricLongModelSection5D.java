@@ -16,9 +16,9 @@
  */
 package cellularautomata.model5d;
 
-public class AsymmetricLongModelSection5D<G extends SymmetricLongModel5D> extends AsymmetricModelSection5D<G> implements LongModel5D {
+public class AsymmetricLongModelSection5D extends AsymmetricModelSection5D<SymmetricLongModel5D> implements LongModel5D {
 	
-	public AsymmetricLongModelSection5D(G grid) {
+	public AsymmetricLongModelSection5D(SymmetricLongModel5D grid) {
 		super(grid);
 	}
 

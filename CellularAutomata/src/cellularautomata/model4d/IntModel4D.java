@@ -18,7 +18,7 @@ package cellularautomata.model4d;
 
 import java.util.Iterator;
 
-import cellularautomata.model.Coordinates;
+import cellularautomata.Coordinates;
 import cellularautomata.model.IntModel;
 import cellularautomata.model3d.IntModel3D;
 
@@ -36,6 +36,7 @@ public interface IntModel4D extends Model4D, IntModel {
 	 */
 	int getFromPosition(int w, int x, int y, int z) throws Exception;
 	
+	@Override
 	default int getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
 	}
@@ -127,32 +128,32 @@ public interface IntModel4D extends Model4D, IntModel {
 	
 	@Override
 	default IntModel3D crossSectionAtW(int w) {
-		return new IntModel4DWCrossSection<IntModel4D>(this, w);
+		return new IntModel4DWCrossSection(this, w);
 	}
 	
 	@Override
 	default IntModel3D crossSectionAtX(int x) {
-		return new IntModel4DXCrossSection<IntModel4D>(this, x);
+		return new IntModel4DXCrossSection(this, x);
 	}
 	
 	@Override
 	default IntModel3D crossSectionAtY(int y) {
-		return new IntModel4DYCrossSection<IntModel4D>(this, y);
+		return new IntModel4DYCrossSection(this, y);
 	}
 	
 	@Override
 	default IntModel3D crossSectionAtZ(int z) {
-		return new IntModel4DZCrossSection<IntModel4D>(this, z);
+		return new IntModel4DZCrossSection(this, z);
 	}
 	
 	@Override
 	default IntModel3D diagonalCrossSectionOnWX(int xOffsetFromW) {
-		return new IntModel4DWXDiagonalCrossSection<IntModel4D>(this, xOffsetFromW);
+		return new IntModel4DWXDiagonalCrossSection(this, xOffsetFromW);
 	}
 
 	@Override
 	default IntModel3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new IntModel4DYZDiagonalCrossSection<IntModel4D>(this, zOffsetFromY);
+		return new IntModel4DYZDiagonalCrossSection(this, zOffsetFromY);
 	}
 
 	@Override

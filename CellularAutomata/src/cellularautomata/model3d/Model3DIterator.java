@@ -19,9 +19,9 @@ package cellularautomata.model3d;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class Model3DIterator<G extends Model3D, T> implements Iterator<T> {
+public abstract class Model3DIterator<Source_Type extends Model3D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected G grid;
+	protected Source_Type source;
 	private int x;
 	private int y;
 	private int z;
@@ -30,14 +30,14 @@ public abstract class Model3DIterator<G extends Model3D, T> implements Iterator<
 	private int localMaxZ;
 	private boolean hasNext;
 	
-	public Model3DIterator(G grid) {
-		this.grid = grid;
-		x = grid.getMinX();
-		maxX = grid.getMaxX();
-		y = grid.getMinYAtX(x);
-		localMaxY = grid.getMaxYAtX(x);
-		z = grid.getMinZ(x, y);
-		localMaxZ = grid.getMaxZ(x, y);
+	public Model3DIterator(Source_Type source) {
+		this.source = source;
+		x = source.getMinX();
+		maxX = source.getMaxX();
+		y = source.getMinYAtX(x);
+		localMaxY = source.getMaxYAtX(x);
+		z = source.getMinZ(x, y);
+		localMaxZ = source.getMaxZ(x, y);
 		hasNext = true;
 	}
 
@@ -47,10 +47,10 @@ public abstract class Model3DIterator<G extends Model3D, T> implements Iterator<
 	}
 
 	@Override
-	public T next() {
+	public Element_Type next() {
 		if (!hasNext)
 			throw new NoSuchElementException();
-		T next = null;
+		Element_Type next = null;
 		try {
 			next = getFromModelPosition(x, y, z);
 		} catch (Exception e) {
@@ -62,15 +62,15 @@ public abstract class Model3DIterator<G extends Model3D, T> implements Iterator<
 					hasNext = false;
 				} else {
 					x++;
-					y = grid.getMinYAtX(x);
-					localMaxY = grid.getMaxYAtX(x);
-					z = grid.getMinZ(x, y);
-					localMaxZ = grid.getMaxZ(x, y);					
+					y = source.getMinYAtX(x);
+					localMaxY = source.getMaxYAtX(x);
+					z = source.getMinZ(x, y);
+					localMaxZ = source.getMaxZ(x, y);					
 				}
 			} else {
 				y++;
-				z = grid.getMinZ(x, y);
-				localMaxZ = grid.getMaxZ(x, y);
+				z = source.getMinZ(x, y);
+				localMaxZ = source.getMaxZ(x, y);
 			}
 		} else {
 			z++;
@@ -78,6 +78,6 @@ public abstract class Model3DIterator<G extends Model3D, T> implements Iterator<
 		return next;
 	}
 	
-	protected abstract T getFromModelPosition(int x, int y, int z) throws Exception;
+	protected abstract Element_Type getFromModelPosition(int x, int y, int z) throws Exception;
 
 }
