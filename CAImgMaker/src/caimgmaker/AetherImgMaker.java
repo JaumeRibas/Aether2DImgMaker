@@ -87,7 +87,7 @@ public class AetherImgMaker {
 	private static final String memorySafeNotSupportedForThisInitialConfigMessageFormat = "The %s model is currently not supported with the -memory-safe option and the selected initial configuration.%n";
 
 	public static void main(String[] rawArgs) throws Exception {
-//		String debugArgs = "-initial-config single-source_9223372036854775807 -grid 3d_infinite -x y -memory-safe -path D:/data/test";//debug
+//		String debugArgs = "-initial-config single-source_9223372036854775807 -grid 3d_infinite -x 10 -first-step 20 -memory-safe -path D:/data/test";//debug
 //		debugArgs = "-help";//debug
 //		rawArgs = debugArgs.split(" ");//debug
 		final String useHelpMessage = "Use -help to view the list of available options and their accepted values.";
@@ -102,7 +102,7 @@ public class AetherImgMaker {
 				return;
 			}
 			if (args.outputVersion) {
-				System.out.println("0.3.1");
+				System.out.println("0.4.0");
 				return;
 			}
 			Model model = getModel(args);
@@ -130,7 +130,10 @@ public class AetherImgMaker {
 			}
 		} catch (Exception ex) {
 			String message = ex.getMessage();
-			if (message.contains("main parameter")) {
+			if (message == null) {
+				System.out.println("Unexpected error.");
+				ex.printStackTrace();
+			} else if (message.contains("main parameter")) {
 				System.out.println("One or more unrecognized options found.");
 			} else {
 				System.out.println(message);
@@ -303,23 +306,24 @@ public class AetherImgMaker {
 	
 	private static Integer getCoordIndex(String coord) {
 		Integer index = null;
-		//if (coord != null)
-		switch (coord) {
-		case "v":
-			index = 4;
-			break;
-		case "w":
-			index = 3;
-			break;
-		case "x":
-			index = 2;
-			break;
-		case "y":
-			index = 1;
-			break;
-		case "z":
-			index = 0;
-			break;
+		if (coord != null) {
+			switch (coord) {
+			case "v":
+				index = 4;
+				break;
+			case "w":
+				index = 3;
+				break;
+			case "x":
+				index = 2;
+				break;
+			case "y":
+				index = 1;
+				break;
+			case "z":
+				index = 0;
+				break;
+			}
 		}
 		return index;
 	}
@@ -339,7 +343,7 @@ public class AetherImgMaker {
 			vRange = args.v.range;
 			vRefCoord = getCoordIndex(args.v.referenceCoordinate);
 			vOffset = args.v.offset;
-			if (vRefCoord == 4) {
+			if (vRefCoord != null && vRefCoord == 4) {
 				if (vOffset == 0) {
 					vRefCoord = null;
 					vOffset = null;
@@ -353,7 +357,7 @@ public class AetherImgMaker {
 			wRange = args.w.range;
 			wRefCoord = getCoordIndex(args.w.referenceCoordinate);
 			wOffset = args.w.offset;
-			if (wRefCoord == 3) {
+			if (wRefCoord != null && wRefCoord == 3) {
 				if (wOffset == 0) {
 					wRefCoord = null;
 					wOffset = null;
@@ -367,7 +371,7 @@ public class AetherImgMaker {
 			xRange = args.x.range;
 			xRefCoord = getCoordIndex(args.x.referenceCoordinate);
 			xOffset = args.x.offset;
-			if (xRefCoord == 2) {
+			if (xRefCoord != null && xRefCoord == 2) {
 				if (xOffset == 0) {
 					xRefCoord = null;
 					xOffset = null;
@@ -381,7 +385,7 @@ public class AetherImgMaker {
 			yRange = args.y.range;
 			yRefCoord = getCoordIndex(args.y.referenceCoordinate);
 			yOffset = args.y.offset;
-			if (yRefCoord == 1) {
+			if (yRefCoord != null && yRefCoord == 1) {
 				if (yOffset == 0) {
 					yRefCoord = null;
 					yOffset = null;
@@ -395,7 +399,7 @@ public class AetherImgMaker {
 			zRange = args.z.range;
 			zRefCoord = getCoordIndex(args.z.referenceCoordinate);
 			zOffset = args.z.offset;
-			if (zRefCoord == 0) {
+			if (zRefCoord != null && zRefCoord == 0) {
 				if (zOffset == 0) {
 					zRefCoord = null;
 					zOffset = null;
