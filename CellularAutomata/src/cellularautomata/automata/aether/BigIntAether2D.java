@@ -1319,7 +1319,7 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 		String strInitialValue = initialValue.toString();
 		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
 			strInitialValue = creationTimestamp;
-		return getName() + "/3D/" + strInitialValue;
+		return getName() + "/2D/" + strInitialValue;
 	}
 	
 	@Override
