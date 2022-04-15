@@ -38,6 +38,7 @@ import cellularautomata.automata.aether.Aether3D;
 import cellularautomata.automata.aether.Aether3DEnclosed;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.Aether5D;
+import cellularautomata.automata.aether.BigIntAether2D;
 import cellularautomata.automata.aether.BigIntAether3D;
 import cellularautomata.automata.aether.BigIntAether3DEnclosed;
 import cellularautomata.automata.aether.BigIntAether4D;
@@ -87,7 +88,7 @@ public class AetherImgMaker {
 	private static final String memorySafeNotSupportedForThisInitialConfigMessageFormat = "The %s model is currently not supported with the -memory-safe option and the selected initial configuration.%n";
 
 	public static void main(String[] rawArgs) throws Exception {
-//		String debugArgs = "-initial-config single-source_9223372036854775807 -grid 3d_infinite -x 10 -first-step 20 -memory-safe -path D:/data/test";//debug
+//		String debugArgs = "-initial-config single-source_92233720368547758079999 -path D:/data/test";//debug
 //		debugArgs = "-help";//debug
 //		rawArgs = debugArgs.split(" ");//debug
 		final String useHelpMessage = "Use -help to view the list of available options and their accepted values.";
@@ -102,7 +103,7 @@ public class AetherImgMaker {
 				return;
 			}
 			if (args.outputVersion) {
-				System.out.println("0.4.0");
+				System.out.println("0.5.0");
 				return;
 			}
 			Model model = getModel(args);
@@ -732,15 +733,20 @@ public class AetherImgMaker {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MIN_INITIAL_VALUE)) >= 0) {
-									if (args.memorySafe) {
+								if (args.memorySafe) {
+									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether2D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether2D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new FileBackedAether2D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										model = new Aether2D(args.initialConfiguration.singleSource.longValue());
-									}
+										System.out.printf(singleSourceOutOfRangeMessageFormat, Aether2D.MIN_INITIAL_VALUE, Aether2D.MAX_INITIAL_VALUE);
+									}	
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, Aether2D.MIN_INITIAL_VALUE, Aether2D.MAX_INITIAL_VALUE);
+									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new Aether2D(args.initialConfiguration.singleSource.longValue());
+									} else {
+										model = new BigIntAether2D(args.initialConfiguration.singleSource);
+									}
 								}								
 							} else {
 								if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
@@ -759,7 +765,11 @@ public class AetherImgMaker {
 								try {		
 									model = new Aether2D(args.backupToRestorePath);			
 								} catch (Exception ex) {
-									model = new IntAether2DRandomConfiguration(args.backupToRestorePath);							
+									try {
+										model = new BigIntAether2D(args.backupToRestorePath);							
+									} catch (Exception ex3) {
+										model = new IntAether2DRandomConfiguration(args.backupToRestorePath);								
+									}						
 								}	
 							}
 						}
@@ -770,9 +780,7 @@ public class AetherImgMaker {
 				case 3:
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) { 
-								//TODO use swap implementations depending on asymmetric and single source options and available heap space?
-								//long heapFreeSize = Runtime.getRuntime().freeMemory();
+							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								if (args.memorySafe) {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether3D.MAX_INITIAL_VALUE)) <= 0
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether3D.MIN_INITIAL_VALUE)) >= 0) {
