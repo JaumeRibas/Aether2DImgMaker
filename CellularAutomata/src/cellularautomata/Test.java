@@ -39,7 +39,6 @@ import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether4D;
 import cellularautomata.automata.siv.SpreadIntegerValue2D;
 import cellularautomata.automata.siv.SpreadIntegerValueSimple2D;
-import cellularautomata.Coordinates;
 import cellularautomata.model.Model;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
