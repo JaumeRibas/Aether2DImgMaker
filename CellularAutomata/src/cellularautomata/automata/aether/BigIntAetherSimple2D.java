@@ -100,7 +100,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 			for (int y = 0; y < grid[0].length; y++) {
 				BigInt value = grid[x][y];
 				//make list of von Neumann neighbors with value smaller than current position's value
-				List<Neighbor<BigInt>> neighbors = new ArrayList<Neighbor<BigInt>>(6);						
+				List<Neighbor<BigInt>> neighbors = new ArrayList<Neighbor<BigInt>>(4);						
 				BigInt neighborValue;
 				if (x < grid.length - 1)
 					neighborValue = grid[x + 1][y];
