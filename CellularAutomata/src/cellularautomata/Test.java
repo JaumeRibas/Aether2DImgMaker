@@ -1147,6 +1147,10 @@ public class Test {
 		}
 	}
 	
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(LongModel2D ca1, NumericModel2D<Number_Type> ca2) {
+		compareAllSteps(ca2, ca1);
+	}
+	
 	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel2D<Number_Type> ca1, LongModel2D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -1158,6 +1162,41 @@ public class Test {
 				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getFromPosition(x, y).longValue() != ca2.getFromPosition(x, y)) {
+							equal = false;
+							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+									+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y) 
+									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y));
+						}
+					}	
+				}
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal)
+					return;
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel2D<Number_Type> ca1, NumericModel2D<Number_Type> ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("Comparing step " + ca1.getStep());
+				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
+					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
+						if (ca1.getFromPosition(x, y).compareTo(ca2.getFromPosition(x, y)) != 0) {
 							equal = false;
 							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y) 
