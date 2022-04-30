@@ -16,16 +16,14 @@
  */
 package cellularautomata.automata.aether;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 
-import org.apache.commons.io.FileUtils;
-
 import cellularautomata.Utils;
+import cellularautomata.model.FileBackedModel;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricLongModel2D;
 
@@ -35,37 +33,23 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume
  *
  */
-public class FileBackedAether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Closeable {
+public class FileBackedAether2D extends FileBackedModel implements SymmetricLongModel2D, IsotropicSquareModelA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
 	public static final int POSITION_BYTES = Long.BYTES;
 	
-	private static final String PROPERTIES_BACKUP_FILE_NAME = "properties.ser";
-	private static final String GRID_FOLDER_NAME = "grid";	
-	private static final String FILE_NAME_FORMAT = "step=%d.data";
-
-	private RandomAccessFile grid;
-	private String gridFolderPath;
-	private File currentFile;
 	private long initialValue;
 	private long step;
 	private int maxX;
-	private boolean readingBackup = false;
 
 	public FileBackedAether2D(long initialValue, String folderPath) throws IOException {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
-		File gridFolder = new File(folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME);
-		if (!gridFolder.exists()) {
-			gridFolder.mkdirs();
-		} else {
-			FileUtils.cleanDirectory(gridFolder);
-		}
-		gridFolderPath = gridFolder.getPath();
-		currentFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step));
+		createGridFolder(folderPath);
+		currentFile = new File(getGridFolderPath() + File.separator + String.format(FILE_NAME_FORMAT, step));
 		grid = new RandomAccessFile(currentFile, "rw");
 		int gridLength = (6*6-6)/2+6;
 		grid.setLength(gridLength*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
@@ -84,18 +68,7 @@ public class FileBackedAether2D implements SymmetricLongModel2D, IsotropicSquare
 	 * @throws FileNotFoundException 
 	 */
 	public FileBackedAether2D(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		readingBackup = true;
-		File backupGridFolder = new File(backupPath + File.separator + GRID_FOLDER_NAME);
-		if (!backupGridFolder.exists()) {
-			throw new FileNotFoundException("Missing grid folder at '" + backupGridFolder.getAbsolutePath() + "'");
-		}
-		@SuppressWarnings("unchecked")
-		HashMap<String, Object> properties = 
-				(HashMap<String, Object>) Utils.deserializeFromFile(backupPath + File.separator + PROPERTIES_BACKUP_FILE_NAME);
-		setPropertiesFromMap(properties);
-		currentFile = new File(backupGridFolder.getPath() + File.separator + String.format(FILE_NAME_FORMAT, step));
-		grid = new RandomAccessFile(currentFile, "r");
-		gridFolderPath = folderPath + File.separator + getSubfolderPath() + File.separator + GRID_FOLDER_NAME;
+		super(backupPath, folderPath);
 	}
 	
 	@Override
@@ -107,7 +80,7 @@ public class FileBackedAether2D implements SymmetricLongModel2D, IsotropicSquare
 			// x = 0, y = 0
 			currentValue = getFromAsymmetricPosition(0, 0);
 			greaterXNeighborValue = getFromAsymmetricPosition(1, 0);
-			File newFile = new File(gridFolderPath + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
+			File newFile = new File(getGridFolderPath() + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
 			newGrid = new RandomAccessFile(newFile, "rw");
 			long newGridXLength = (maxX + 4);
 			long newGridLength = (newGridXLength*newGridXLength-newGridXLength)/2+newGridXLength;
@@ -1196,23 +1169,9 @@ public class FileBackedAether2D implements SymmetricLongModel2D, IsotropicSquare
 	public String getSubfolderPath() {
 		return getName() + "/2D/" + initialValue;
 	}
-
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		String backupFolderPath = backupPath + File.separator + backupName;
-		File backupFolder = new File(backupFolderPath);
-		if (backupFolder.exists()) {
-			FileUtils.cleanDirectory(backupFolder);
-		} else {
-			backupFolder.mkdirs();
-		}
-		File gridBackupFile = new File(backupFolderPath + File.separator + GRID_FOLDER_NAME + File.separator + currentFile.getName());
-	    FileUtils.copyFile(currentFile, gridBackupFile);
-		HashMap<String, Object> properties = getPropertiesMap();
-		Utils.serializeToFile(properties, backupFolderPath, PROPERTIES_BACKUP_FILE_NAME);
-	}
 	
-	private HashMap<String, Object> getPropertiesMap() {
+	@Override
+	protected HashMap<String, Object> getPropertiesMap() {
 		HashMap<String, Object> properties = new HashMap<String, Object>();
 		properties.put("initialValue", initialValue);
 		properties.put("step", step);
@@ -1220,17 +1179,10 @@ public class FileBackedAether2D implements SymmetricLongModel2D, IsotropicSquare
 		return properties;
 	}
 	
-	private void setPropertiesFromMap(HashMap<String, Object> properties) {
+	@Override
+	protected void setPropertiesFromMap(HashMap<String, Object> properties) {
 		initialValue = (long) properties.get("initialValue");
 		step = (long) properties.get("step");
 		maxX = (int) properties.get("maxX");
-	}
-
-	@Override
-	public void close() throws IOException {
-		grid.close();
-		if (!readingBackup) {
-			FileUtils.deleteDirectory(new File(gridFolderPath));			
-		}
 	}
 }
