@@ -103,7 +103,7 @@ public class AetherImgMaker {
 				return;
 			}
 			if (args.outputVersion) {
-				System.out.println("0.5.2");
+				System.out.println("0.5.3");
 				return;
 			}
 			Model model = getModel(args);
@@ -269,7 +269,6 @@ public class AetherImgMaker {
 						error = true;
 				}
 			} else {
-				//TODO ActionableModel3D
 				System.out.printf(unsupportedModelSectionMessageFormat, model.getClass().getName());
 				error = true;
 			}
