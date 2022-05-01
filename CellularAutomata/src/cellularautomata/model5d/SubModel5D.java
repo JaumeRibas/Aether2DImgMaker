@@ -610,11 +610,12 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" + absoluteMinV + "<=" + source.getVLabel() + "<=" + absoluteMaxV 
-				+ "_" + absoluteMinW + "<=" + source.getWLabel() + "<=" + absoluteMaxW 
-				+ "_" + absoluteMinX + "<=" + source.getXLabel() + "<=" + absoluteMaxX 
-				+ "_" + absoluteMinY + "<=" + source.getYLabel() + "<=" + absoluteMaxY 
-				+ "_" + absoluteMinZ + "<=" + source.getZLabel() + "<=" + absoluteMaxZ;
+		return source.getSubfolderPath() + "/" 
+				+ source.getVLabel() + "[" + absoluteMinV + "," + absoluteMaxV + "]_"
+				+ source.getWLabel() + "[" + absoluteMinW + "," + absoluteMaxW + "]_"
+				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
+				+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]_"
+				+ source.getZLabel() + "[" + absoluteMinZ + "," + absoluteMaxZ + "]";
 	}
 
 	@Override

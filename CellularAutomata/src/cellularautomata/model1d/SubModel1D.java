@@ -82,7 +82,8 @@ public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/minX=" + absoluteMinX + "_maxX=" + absoluteMaxX;
+		return source.getSubfolderPath() + "/" 
+				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]";
 	}
 
 	@Override

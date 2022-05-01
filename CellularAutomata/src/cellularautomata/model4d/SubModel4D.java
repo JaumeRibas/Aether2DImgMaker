@@ -308,10 +308,11 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" + absoluteMinW + "<=" + source.getWLabel() + "<=" + absoluteMaxW 
-				+ "_" + absoluteMinX + "<=" + source.getXLabel() + "<=" + absoluteMaxX 
-				+ "_" + absoluteMinY + "<=" + source.getYLabel() + "<=" + absoluteMaxY 
-				+ "_" + absoluteMinZ + "<=" + source.getZLabel() + "<=" + absoluteMaxZ;
+		return source.getSubfolderPath() + "/" 
+				+ source.getWLabel() + "[" + absoluteMinW + "," + absoluteMaxW + "]_"
+				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
+				+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]_"
+				+ source.getZLabel() + "[" + absoluteMinZ + "," + absoluteMaxZ + "]";
 	}
 
 	@Override

@@ -174,9 +174,10 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" + absoluteMinX + "<=" + source.getXLabel() + "<=" + absoluteMaxX 
-				+ "_" + absoluteMinY + "<=" + source.getYLabel() + "<=" + absoluteMaxY 
-				+ "_" + absoluteMinZ + "<=" + source.getZLabel() + "<=" + absoluteMaxZ;
+		return source.getSubfolderPath() + "/" 
+				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
+				+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]_"
+				+ source.getZLabel() + "[" + absoluteMinZ + "," + absoluteMaxZ + "]";
 	}
 
 	@Override

@@ -154,8 +154,9 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" + absoluteMinX + "<=" + source.getXLabel() + "<=" + absoluteMaxX 
-				+ "_" + absoluteMinY + "<=" + source.getYLabel() + "<=" + absoluteMaxY;
+		return source.getSubfolderPath() + "/" 
+			+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
+			+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]";
 	}
 
 	@Override

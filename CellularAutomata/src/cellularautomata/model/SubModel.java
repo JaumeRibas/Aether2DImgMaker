@@ -126,24 +126,36 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 			int axis = 0;
 			Integer minCoord = absoluteMinCoordinates.get(axis);
 			Integer maxCoord = absoluteMaxCoordinates.get(axis);
-			if (minCoord != null) {
-				strCoordinateBounds.append(minCoord).append("<=").append(getAxisLabel(axis));
-				if (maxCoord != null) {
-					strCoordinateBounds.append("<=").append(maxCoord);
+			if (minCoord != null || maxCoord != null) {
+				strCoordinateBounds.append(getAxisLabel(axis));
+				if (minCoord == null) {
+					strCoordinateBounds.append("(∞");
+				} else {
+					strCoordinateBounds.append("[").append(minCoord);
 				}
-			} else if (maxCoord != null) {
-				strCoordinateBounds.append(getAxisLabel(axis)).append("<=").append(maxCoord);
+				strCoordinateBounds.append(",");
+				if (maxCoord == null) {
+					strCoordinateBounds.append("∞)");
+				} else {
+					strCoordinateBounds.append(maxCoord).append("]");
+				}
 			}
 			for (axis++; axis < minCoordinates.length; axis++) {
 				minCoord = absoluteMinCoordinates.get(axis);
 				maxCoord = absoluteMaxCoordinates.get(axis);
-				if (minCoord != null) {
-					strCoordinateBounds.append("_").append(minCoord).append("<=").append(getAxisLabel(axis));
-					if (maxCoord != null) {
-						strCoordinateBounds.append("<=").append(maxCoord);
+				if (minCoord != null || maxCoord != null) {
+					strCoordinateBounds.append("_").append(getAxisLabel(axis));
+					if (minCoord == null) {
+						strCoordinateBounds.append("(∞");
+					} else {
+						strCoordinateBounds.append("[").append(minCoord);
 					}
-				} else if (maxCoord != null) {
-					strCoordinateBounds.append("_").append(getAxisLabel(axis)).append("<=").append(maxCoord);
+					strCoordinateBounds.append(",");
+					if (maxCoord == null) {
+						strCoordinateBounds.append("∞)");
+					} else {
+						strCoordinateBounds.append(maxCoord).append("]");
+					}
 				}
 			}
 		}
