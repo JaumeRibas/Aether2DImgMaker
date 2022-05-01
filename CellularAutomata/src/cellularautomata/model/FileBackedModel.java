@@ -56,7 +56,7 @@ public abstract class FileBackedModel implements Closeable, Model {
 		 });
 	}
 	
-	public String getGridFolderPath() {
+	protected String getGridFolderPath() {
 		return gridFolderPath;
 	}
 
