@@ -56,7 +56,6 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
-//		throw new UnsupportedOperationException("Not implemented");
 	}
 	
 	@Override
