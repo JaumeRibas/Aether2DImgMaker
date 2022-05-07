@@ -284,7 +284,7 @@ public interface Model {
 	}	
 	
 	/**
-	 * Returns a decorated {@link Model1D} with the passed bounds.
+	 * Returns a decorated {@link Model} with the passed bounds.
 	 * 
 	 * @param minCoordinates
 	 * @param maxCoordinates
@@ -294,9 +294,9 @@ public interface Model {
 		return new SubModel<Model>(this, minCoordinates, maxCoordinates);
 	}
 	
-//	default Model crossSection(int axis, int coordinate) {
-//		return new ModelCrossSection<Model>(this, axis, coordinate);
-//	}
+	default Model crossSection(int axis, int coordinate) {
+		return new ModelCrossSection<Model>(this, axis, coordinate);
+	}
 	
 	/**
 	 * Computes the next step of the model and returns whether
