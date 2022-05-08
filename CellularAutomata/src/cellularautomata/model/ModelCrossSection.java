@@ -26,6 +26,7 @@ public class ModelCrossSection<Source_Type extends Model> implements Model {
 	protected Source_Type source;
 	protected int axis;
 	protected int coordinate;
+	protected int sourceDimension;
 	protected int dimension;
 	protected PartialCoordinates coordinates;
 	
@@ -33,21 +34,20 @@ public class ModelCrossSection<Source_Type extends Model> implements Model {
 		if (axis < 0) {
 			throw new IllegalArgumentException("Axis cannot be negative.");
 		}
-		int dimension = source.getGridDimension();
-		int dimensionMinusOne = dimension - 1;
-		if (axis > dimensionMinusOne) {
-			throw new IllegalArgumentException("Axis cannot be greater than " + dimensionMinusOne + ".");
+		sourceDimension = source.getGridDimension();
+		dimension = sourceDimension - 1;
+		if (axis > dimension) {
+			throw new IllegalArgumentException("Axis cannot be greater than " + dimension + ".");
 		}
 		if (coordinate > source.getMaxCoordinate(axis) || coordinate < source.getMinCoordinate(axis)) {
 			throw new IllegalArgumentException("The coordinate is out of bounds.");
 		}
 		this.source = source;
-		this.dimension = dimensionMinusOne;
 		this.axis = axis;
 		this.coordinate = coordinate;
 		Integer[] coordArray = new Integer[dimension];
 		coordArray[axis] = coordinate;
-		this.coordinates = new PartialCoordinates(coordArray);
+		coordinates = new PartialCoordinates(coordArray);
 	}
 	
 	@Override
@@ -63,6 +63,21 @@ public class ModelCrossSection<Source_Type extends Model> implements Model {
 		}
 	}
 	
+	protected PartialCoordinates getSourceCoordinates(PartialCoordinates coordinates) {
+		Integer[] sourceCoordinatesArray = new Integer[sourceDimension];
+		int sourceAxis = 0;
+		for (; sourceAxis != this.axis; sourceAxis++) {
+			sourceCoordinatesArray[sourceAxis] = coordinates.get(sourceAxis);
+		}
+		sourceCoordinatesArray[sourceAxis] = coordinate;
+		int crossSectionAxis = sourceAxis; 
+		sourceAxis++;
+		for (; sourceAxis != sourceDimension; crossSectionAxis = sourceAxis, sourceAxis++) {
+			sourceCoordinatesArray[sourceAxis] = coordinates.get(crossSectionAxis);
+		}
+		return new PartialCoordinates(sourceCoordinatesArray);
+	}
+	
 	@Override
 	public String getAxisLabel(int axis) {
 		return source.getAxisLabel(getSourceAxis(axis));
@@ -74,8 +89,18 @@ public class ModelCrossSection<Source_Type extends Model> implements Model {
 	}
 	
 	@Override
+	public int getMinCoordinate(int axis, PartialCoordinates coordinates) {
+		return source.getMinCoordinate(getSourceAxis(axis), getSourceCoordinates(coordinates));
+	}
+	
+	@Override
 	public int getMaxCoordinate(int axis) {
 		return source.getMaxCoordinate(getSourceAxis(axis), coordinates);
+	}
+	
+	@Override
+	public int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
+		return source.getMaxCoordinate(getSourceAxis(axis), getSourceCoordinates(coordinates));
 	}
 	
 	@Override
