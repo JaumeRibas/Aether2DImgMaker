@@ -111,30 +111,30 @@ public interface SymmetricModel extends Model {
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
-		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			consumer.accept(immutableCoordinates);
+			consumer.accept(new Coordinates(coordinates));
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
-			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 			int[] upperBounds = new int[dimension];
 			int[] lowerBounds = new int[dimension];
 			int currentAxis = dimension - 1;
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					int lowerBound = getAsymmetricMinCoordinate(0, immutablePartialCoordinates);
-					int upperBound = getAsymmetricMaxCoordinate(0, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int lowerBound = getAsymmetricMinCoordinate(0, partialCoordinatesObj);
+					int upperBound = getAsymmetricMaxCoordinate(0, partialCoordinatesObj);
 					for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(immutableCoordinates);
+						consumer.accept(new Coordinates(coordinates.clone()));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					int localLowerBound = getAsymmetricMinCoordinate(currentAxis, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int localLowerBound = getAsymmetricMinCoordinate(currentAxis, partialCoordinatesObj);
 					lowerBounds[currentAxis] = localLowerBound;
-					upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, immutablePartialCoordinates);
+					upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, partialCoordinatesObj);
 					coordinates[currentAxis] = localLowerBound;
 					partialCoordinates[currentAxis] = localLowerBound;
 					currentAxis--;
@@ -166,20 +166,19 @@ public interface SymmetricModel extends Model {
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
-		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			consumer.accept(immutableCoordinates);
+			consumer.accept(new Coordinates(coordinates));
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
-			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 			int[] upperBounds = new int[dimension];
 			int[] lowerBounds = new int[dimension];
 			int currentAxis = dimension - 1;
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					int lowerBound = getAsymmetricMinCoordinate(0, immutablePartialCoordinates);
-					int upperBound = getAsymmetricMaxCoordinate(0, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int lowerBound = getAsymmetricMinCoordinate(0, partialCoordinatesObj);
+					int upperBound = getAsymmetricMaxCoordinate(0, partialCoordinatesObj);
 					int currentCoordinate = lowerBound;
 					coordinates[0] = currentCoordinate;
 					if (!Utils.isEvenPosition(coordinates)) {
@@ -187,14 +186,15 @@ public interface SymmetricModel extends Model {
 					}
 					for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(immutableCoordinates);
+						consumer.accept(new Coordinates(coordinates.clone()));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					int localLowerBound = getAsymmetricMinCoordinate(currentAxis, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int localLowerBound = getAsymmetricMinCoordinate(currentAxis, partialCoordinatesObj);
 					lowerBounds[currentAxis] = localLowerBound;
-					upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, immutablePartialCoordinates);
+					upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, partialCoordinatesObj);
 					coordinates[currentAxis] = localLowerBound;
 					partialCoordinates[currentAxis] = localLowerBound;
 					currentAxis--;
@@ -226,17 +226,16 @@ public interface SymmetricModel extends Model {
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
-		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		Integer[] partialCoordinates = new Integer[dimension];
-		PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 		int[] upperBounds = new int[dimension];
 		int[] lowerBounds = new int[dimension];
 		int currentAxis = dimension - 1;
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int lowerBound = getAsymmetricMinCoordinate(0, immutablePartialCoordinates);
-				int upperBound = getAsymmetricMaxCoordinate(0, immutablePartialCoordinates);
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				int lowerBound = getAsymmetricMinCoordinate(0, partialCoordinatesObj);
+				int upperBound = getAsymmetricMaxCoordinate(0, partialCoordinatesObj);
 				int currentCoordinate = lowerBound;
 				coordinates[0] = currentCoordinate;
 				if (Utils.isEvenPosition(coordinates)) {
@@ -244,14 +243,15 @@ public interface SymmetricModel extends Model {
 				}
 				for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 					coordinates[0] = currentCoordinate;
-					consumer.accept(immutableCoordinates);
+					consumer.accept(new Coordinates(coordinates.clone()));
 				}
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localLowerBound = getAsymmetricMinCoordinate(currentAxis, immutablePartialCoordinates);
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				int localLowerBound = getAsymmetricMinCoordinate(currentAxis, partialCoordinatesObj);
 				lowerBounds[currentAxis] = localLowerBound;
-				upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, immutablePartialCoordinates);
+				upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, partialCoordinatesObj);
 				coordinates[currentAxis] = localLowerBound;
 				partialCoordinates[currentAxis] = localLowerBound;
 				currentAxis--;

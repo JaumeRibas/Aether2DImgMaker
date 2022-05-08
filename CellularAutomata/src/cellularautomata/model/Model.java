@@ -131,28 +131,28 @@ public interface Model {
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
-		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			consumer.accept(immutableCoordinates);
+			consumer.accept(new Coordinates(coordinates));
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
-			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 			int[] maxCoords = new int[dimension];
 			int currentAxis = dimension - 1;
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					int minCoord = getMinCoordinate(0, immutablePartialCoordinates);
-					int maxCoord = getMaxCoordinate(0, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int minCoord = getMinCoordinate(0, partialCoordinatesObj);
+					int maxCoord = getMaxCoordinate(0, partialCoordinatesObj);
 					for (int currentCoordinate = minCoord; currentCoordinate <= maxCoord; currentCoordinate++) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(immutableCoordinates);
+						consumer.accept(new Coordinates(coordinates.clone()));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					int localMinCoord = getMinCoordinate(currentAxis, immutablePartialCoordinates);
-					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int localMinCoord = getMinCoordinate(currentAxis, partialCoordinatesObj);
+					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, partialCoordinatesObj);
 					coordinates[currentAxis] = localMinCoord;
 					partialCoordinates[currentAxis] = localMinCoord;
 					currentAxis--;
@@ -183,19 +183,18 @@ public interface Model {
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
-		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			consumer.accept(immutableCoordinates);			
+			consumer.accept(new Coordinates(coordinates));			
 		} else {
 			Integer[] partialCoordinates = new Integer[dimension];
-			PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 			int[] maxCoords = new int[dimension];
 			int currentAxis = dimension - 1;
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					int minCoord = getMinCoordinate(0, immutablePartialCoordinates);
-					int maxCoord = getMaxCoordinate(0, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int minCoord = getMinCoordinate(0, partialCoordinatesObj);
+					int maxCoord = getMaxCoordinate(0, partialCoordinatesObj);
 					int currentCoordinate = minCoord;
 					coordinates[0] = currentCoordinate;
 					if (!Utils.isEvenPosition(coordinates)) {
@@ -203,13 +202,14 @@ public interface Model {
 					}
 					for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(immutableCoordinates);
+						consumer.accept(new Coordinates(coordinates.clone()));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					int localMinCoord = getMinCoordinate(currentAxis, immutablePartialCoordinates);
-					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, immutablePartialCoordinates);
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					int localMinCoord = getMinCoordinate(currentAxis, partialCoordinatesObj);
+					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, partialCoordinatesObj);
 					coordinates[currentAxis] = localMinCoord;
 					partialCoordinates[currentAxis] = localMinCoord;
 					currentAxis--;
@@ -240,16 +240,15 @@ public interface Model {
 		}
 		int dimension = getGridDimension();
 		int[] coordinates = new int[dimension];
-		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		Integer[] partialCoordinates = new Integer[dimension];
-		PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 		int[] maxCoords = new int[dimension];
 		int currentAxis = dimension - 1;
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				int minCoord = getMinCoordinate(0, immutablePartialCoordinates);
-				int maxCoord = getMaxCoordinate(0, immutablePartialCoordinates);
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				int minCoord = getMinCoordinate(0, partialCoordinatesObj);
+				int maxCoord = getMaxCoordinate(0, partialCoordinatesObj);
 				int currentCoordinate = minCoord;
 				coordinates[0] = currentCoordinate;
 				if (Utils.isEvenPosition(coordinates)) {
@@ -257,13 +256,14 @@ public interface Model {
 				}
 				for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
 					coordinates[0] = currentCoordinate;
-					consumer.accept(immutableCoordinates);
+					consumer.accept(new Coordinates(coordinates.clone()));
 				}
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				int localMinCoord = getMinCoordinate(currentAxis, immutablePartialCoordinates);
-				maxCoords[currentAxis] = getMaxCoordinate(currentAxis, immutablePartialCoordinates);
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				int localMinCoord = getMinCoordinate(currentAxis, partialCoordinatesObj);
+				maxCoords[currentAxis] = getMaxCoordinate(currentAxis, partialCoordinatesObj);
 				coordinates[currentAxis] = localMinCoord;
 				partialCoordinates[currentAxis] = localMinCoord;
 				currentAxis--;

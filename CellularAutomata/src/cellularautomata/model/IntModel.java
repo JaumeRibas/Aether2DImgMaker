@@ -169,52 +169,55 @@ public interface IntModel extends Model, Iterable<Integer> {
 			secondCrossSectionAxis = horizontalAxis;
 		}
 		Integer[] partialCoordinates = new Integer[gridDimension];//filled with nulls by default
-		PartialCoordinates immutablePartialCoordinates = new PartialCoordinates(partialCoordinates);
 		//check whether or not coordinates are outside the region
 		final String outOfBoundsMessage = "Coordinates are outside the region.";
 		int axis = 0;
 		for (; axis < firstCrossSectionAxis; axis++) {
 			int coordinate = coordinatesArray[axis];
-			if (coordinate < getMinCoordinate(axis, immutablePartialCoordinates)
-					|| coordinate > getMaxCoordinate(axis, immutablePartialCoordinates)) {
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			if (coordinate < getMinCoordinate(axis, partialCoordinatesObj)
+					|| coordinate > getMaxCoordinate(axis, partialCoordinatesObj)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
 			}
 			partialCoordinates[axis] = coordinate;
 		}
 		for (axis++; axis < secondCrossSectionAxis; axis++) {
 			int coordinate = coordinatesArray[axis];
-			if (coordinate < getMinCoordinate(axis, immutablePartialCoordinates)
-					|| coordinate > getMaxCoordinate(axis, immutablePartialCoordinates)) {
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			if (coordinate < getMinCoordinate(axis, partialCoordinatesObj)
+					|| coordinate > getMaxCoordinate(axis, partialCoordinatesObj)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
 			}
 			partialCoordinates[axis] = coordinate;
 		}
 		for (axis++; axis < gridDimension; axis++) {
 			int coordinate = coordinatesArray[axis];
-			if (coordinate < getMinCoordinate(axis, immutablePartialCoordinates)
-					|| coordinate > getMaxCoordinate(axis, immutablePartialCoordinates)) {
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			if (coordinate < getMinCoordinate(axis, partialCoordinatesObj)
+					|| coordinate > getMaxCoordinate(axis, partialCoordinatesObj)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
 			}
 			partialCoordinates[axis] = coordinate;
 		}
-		int maxVerticalCoordinate = getMaxCoordinate(verticalAxis, immutablePartialCoordinates);
-		int minVerticalCoordinate = getMinCoordinate(verticalAxis, immutablePartialCoordinates);
-//		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, immutablePartialCoordinates);
-//		int minHorizontalCoordinate = getLowerBound(horizontalAxis, immutablePartialCoordinates);
+		PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+		int maxVerticalCoordinate = getMaxCoordinate(verticalAxis, partialCoordinatesObj);
+		int minVerticalCoordinate = getMinCoordinate(verticalAxis, partialCoordinatesObj);
+//		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, partialCoordinatesObj);
+//		int minHorizontalCoordinate = getLowerBound(horizontalAxis, partialCoordinatesObj);
 		StringBuilder strBuilder = new StringBuilder();
 		//TODO use directions
-		Coordinates immutableCoordinates = new Coordinates(coordinatesArray);
 		for (int verticalCoordinate = maxVerticalCoordinate; verticalCoordinate >= minVerticalCoordinate; verticalCoordinate--) {
 			partialCoordinates[verticalAxis] = verticalCoordinate;
 			coordinatesArray[verticalAxis] = verticalCoordinate;
-			int localMinHorizontalCoordinate = getMinCoordinate(horizontalAxis, immutablePartialCoordinates);
-			int localMaxHorizontalCoordinate = getMaxCoordinate(horizontalAxis, immutablePartialCoordinates);
+			partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			int localMinHorizontalCoordinate = getMinCoordinate(horizontalAxis, partialCoordinatesObj);
+			int localMaxHorizontalCoordinate = getMaxCoordinate(horizontalAxis, partialCoordinatesObj);
 			//TODO use margins
 //			int localHorizontalMarginLowerEnd = localMinHorizontalCoordinate - minHorizontalCoordinate;
 //			int localHorizontalMarginUpperEnd = maxHorizontalCoordinate - localMaxHorizontalCoordinate;
 			for (int horizontalCoordinate = localMinHorizontalCoordinate; horizontalCoordinate <= localMaxHorizontalCoordinate; horizontalCoordinate++) {
 				coordinatesArray[horizontalAxis] = horizontalCoordinate;
-				strBuilder.append(getFromPosition(immutableCoordinates)).append(",");
+				strBuilder.append(getFromPosition(new Coordinates(coordinatesArray.clone()))).append(",");
 			}
 			strBuilder.append(System.lineSeparator());
 		}

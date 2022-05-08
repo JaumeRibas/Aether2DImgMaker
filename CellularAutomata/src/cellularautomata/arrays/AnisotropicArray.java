@@ -70,16 +70,15 @@ public abstract class AnisotropicArray extends HypercubicArray {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int[] coordinates = new int[dimension];
-		Coordinates immutableCoordinates = new Coordinates(coordinates);
 		if (dimension == 0) {
-			consumer.accept(immutableCoordinates);
+			consumer.accept(new Coordinates(coordinates));
 		} else {
 			int sideMinusOne = side - 1;
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					consumer.accept(immutableCoordinates);
+					consumer.accept(new Coordinates(coordinates.clone()));
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;
@@ -115,13 +114,12 @@ public abstract class AnisotropicArray extends HypercubicArray {
 			if (dimension > 0) {
 				coordinates[0] = side - edgeWidth;
 			}
-			Coordinates immutableCoordinates = new Coordinates(coordinates);
 			int sideMinusOne = side - 1;
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					consumer.accept(immutableCoordinates);
+					consumer.accept(new Coordinates(coordinates.clone()));
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;

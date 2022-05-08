@@ -29,9 +29,7 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 	private int dimensionMinusOne;
 	private int[] coords;
 	private int[] maxCoords;
-	private Coordinates immutableCoords;
 	private Integer[] partialCoords;
-	private PartialCoordinates immutablePartialCoords;
 	private boolean hasNext;
 	
 	public ModelIterator(Source_Type region) {
@@ -40,13 +38,12 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 		dimensionMinusOne = dimension - 1;
 		coords = new int[dimension];
 		maxCoords = new int[dimension];
-		immutableCoords = new Coordinates(coords);
 		partialCoords = new Integer[dimension];
-		immutablePartialCoords = new PartialCoordinates(partialCoords);
 		for (int axis = 0; axis < dimension; axis++) {
-			int minCoord = region.getMinCoordinate(axis, immutablePartialCoords);
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords.clone());
+			int minCoord = region.getMinCoordinate(axis, partialCoordinatesObj);
 			coords[axis] = minCoord;
-			maxCoords[axis] = region.getMaxCoordinate(axis, immutablePartialCoords);
+			maxCoords[axis] = region.getMaxCoordinate(axis, partialCoordinatesObj);
 			partialCoords[axis] = minCoord;
 		}
 		hasNext = true;
@@ -63,7 +60,7 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 			throw new NoSuchElementException();
 		Element_Type next = null;
 		try {
-			next = getFromModelPosition(immutableCoords);
+			next = getFromModelPosition(new Coordinates(coords.clone()));
 		} catch (Exception e) {
 			throw new NoSuchElementException(e.toString());
 		}
@@ -78,9 +75,10 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 			partialCoords[axis] = newCoord;
 			axis++;
 			while (axis < dimension) {
-				int minCoord = region.getMinCoordinate(axis, immutablePartialCoords);
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords.clone());
+				int minCoord = region.getMinCoordinate(axis, partialCoordinatesObj);
 				coords[axis] = minCoord;
-				maxCoords[axis] = region.getMaxCoordinate(axis, immutablePartialCoords);
+				maxCoords[axis] = region.getMaxCoordinate(axis, partialCoordinatesObj);
 				partialCoords[axis] = minCoord;
 				axis++;
 			}

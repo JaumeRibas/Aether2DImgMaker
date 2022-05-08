@@ -45,10 +45,6 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 	private boolean boundsReached;
 	
 	private int shareCount;
-	private int[] indexes;
-	private Coordinates immutableIndexes;
-	private int[] newIndexes;
-	private Coordinates immutableNewIndexes;
 	
 	public SpreadIntegerValueSimple(int gridDimension, int initialValue, int backgroundValue) {
 		this.gridDimension = gridDimension;
@@ -56,10 +52,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		shareCount = gridDimension * 2 + 1;
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
-		indexes = new int[gridDimension];
-		immutableIndexes = new Coordinates(indexes);
-		newIndexes = new int[gridDimension];
-		immutableNewIndexes = new Coordinates(newIndexes);
+		int[] indexes = new int[gridDimension];
 		//Create an hypercubic array to represent the grid. With the initial value at the origin.
 		//Make the array of side 5 so as to leave a margin of two positions around the center.
 		int side = 5;
@@ -68,7 +61,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		//The origin will be at the center of the array
 		originIndex = side/2;
 		Arrays.fill(indexes, originIndex);
-		grid.set(immutableIndexes, initialValue); 
+		grid.set(new Coordinates(indexes.clone()), initialValue); 
 		this.initialValue = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
@@ -82,9 +75,10 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 
 	@Override
 	public int getFromPosition(Coordinates coordinates) {
+		int[] indexes = new int[gridDimension];
 		coordinates.copyIntoArray(indexes);
 		Utils.addToArray(indexes, originIndex);
-		return grid.get(immutableIndexes);
+		return grid.get(new Coordinates(indexes));
 	}
 
 	@Override
@@ -140,6 +134,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		public void accept(Coordinates currentIndexes) {
 			int value = grid.get(currentIndexes);
 			if (value != 0) {
+				int[] indexes = new int[gridDimension];
 				currentIndexes.copyIntoArray(indexes);
 				if (Math.abs(value) >= shareCount) {
 					int[] upperNeighborValues = new int[gridDimension];
@@ -156,10 +151,10 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 						}
 						if (indexOnAxis < gridSideMinusOne) {
 							indexes[axis] = indexOnAxis + 1;
-							upperNeighborValues[axis] = grid.get(immutableIndexes);
+							upperNeighborValues[axis] = grid.get(new Coordinates(indexes.clone()));
 							if (indexOnAxis > 0) {
 								indexes[axis] = indexOnAxis - 1;
-								lowerNeighborValues[axis] = grid.get(immutableIndexes);
+								lowerNeighborValues[axis] = grid.get(new Coordinates(indexes.clone()));
 							} else {
 								lowerNeighborValues[axis] = backgroundValue; 
 							}
@@ -168,7 +163,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 							indexes[axis] = indexOnAxis - 1;
 							//if the grid side where one, this would be out of bounds.
 							//but since it starts at 5 and only gets bigger it's fine
-							lowerNeighborValues[axis] = grid.get(immutableIndexes);
+							lowerNeighborValues[axis] = grid.get(new Coordinates(indexes.clone()));
 						}
 						indexes[axis] = indexOnAxis;//reset index
 						boolean isCurrentUpperNeighborValueEqual = value == upperNeighborValues[axis];
@@ -179,6 +174,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 								&& isCurrentUpperNeighborValueEqual 
 								&& isCurrentLowerNeighborValueEqual;
 					}
+					int[] newIndexes = new int[gridDimension];
 					System.arraycopy(indexes, 0, newIndexes, 0, newIndexes.length);
 					Utils.addToArray(newIndexes, indexOffset);
 					//if the current position is equal to its neighbors the algorithm has no effect
@@ -191,38 +187,38 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 							if (isPositionCloseToEdge)
 								boundsReached = true;
 							//Add the share and the remainder to the corresponding position in the new array
-							newGrid.addAndGet(immutableNewIndexes, value%shareCount + share);
+							newGrid.addAndGet(new Coordinates(newIndexes.clone()), value%shareCount + share);
 							//Add the share to the neighboring positions
 							//if the neighbor's value is equal to the current value, add the share to the current position instead
 							for (int axis = 0; axis < gridDimension; axis++) {
 								int newIndexOnAxis = newIndexes[axis];
 								if (isUpperNeighborValueEqual[axis]) {
-									newGrid.addAndGet(immutableNewIndexes, share);
+									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
 								} else {
 									newIndexes[axis] = newIndexOnAxis + 1;
-									newGrid.addAndGet(immutableNewIndexes, share);
+									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
 									newIndexes[axis] = newIndexOnAxis;//reset index
 								}
 								if (isLowerNeighborValueEqual[axis]) {
-									newGrid.addAndGet(immutableNewIndexes, share);
+									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
 								} else {
 									newIndexes[axis] = newIndexOnAxis - 1;
-									newGrid.addAndGet(immutableNewIndexes, share);
+									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
 									newIndexes[axis] = newIndexOnAxis;//reset index
 								}
 							}
 						} else {
 							//if the share is zero, just add the value to the corresponding position in the new array
-							newGrid.addAndGet(immutableNewIndexes, value);
+							newGrid.addAndGet(new Coordinates(newIndexes), value);
 						}
 					} else {
 						//if all neighbor values are equal the current value won't change (it will get from them the same value it gives them)
-						newGrid.addAndGet(immutableNewIndexes, value);
+						newGrid.addAndGet(new Coordinates(newIndexes), value);
 					}
 				} else {
 					//if the abs value is smaller than the divisor just copy the value to the new grid
 					Utils.addToArray(indexes, indexOffset);
-					newGrid.addAndGet(immutableIndexes, value);
+					newGrid.addAndGet(new Coordinates(indexes), value);
 				}					
 			}
 		}
