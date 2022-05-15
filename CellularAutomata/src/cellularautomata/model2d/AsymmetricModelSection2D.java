@@ -16,6 +16,7 @@
  */
 package cellularautomata.model2d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.AsymmetricModelSection;
 
 public class AsymmetricModelSection2D<Source_Type extends SymmetricModel2D> extends AsymmetricModelSection<Source_Type> implements Model2D {
@@ -62,6 +63,11 @@ public class AsymmetricModelSection2D<Source_Type extends SymmetricModel2D> exte
 	@Override
 	public int getMaxY(int x) {
 		return source.getAsymmetricMaxY(x);
+	}
+	
+	@Override
+	public Model2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return Model2D.super.subsection(minCoordinates, maxCoordinates);
 	}
 
 }

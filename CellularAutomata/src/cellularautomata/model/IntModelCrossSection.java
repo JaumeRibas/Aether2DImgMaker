@@ -17,27 +17,16 @@
 package cellularautomata.model;
 
 import cellularautomata.Coordinates;
-import cellularautomata.PartialCoordinates;
 
-public class AsymmetricIntModelSection<Source_Type extends SymmetricIntModel> extends AsymmetricModelSection<Source_Type> implements IntModel {
+public class IntModelCrossSection extends ModelCrossSection<IntModel> implements IntModel {
 	
-	public AsymmetricIntModelSection(Source_Type grid) {
-		super(grid);
+	public IntModelCrossSection(IntModel grid, int axis, int coordinate) {
+		super(grid, axis, coordinate);
 	}
 
 	@Override
 	public int getFromPosition(Coordinates coordinates) throws Exception {
-		return source.getFromAsymmetricPosition(coordinates);
-	}
-	
-	@Override
-	public IntModel subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public IntModel crossSection(int axis, int coordinate) {
-		return IntModel.super.crossSection(axis, coordinate);
+		return source.getFromPosition(getSourceCoordinates(coordinates));
 	}
 
 }

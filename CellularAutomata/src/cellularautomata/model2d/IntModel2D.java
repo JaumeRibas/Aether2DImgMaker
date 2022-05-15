@@ -19,6 +19,7 @@ package cellularautomata.model2d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.IntModel;
 
 public interface IntModel2D extends Model2D, IntModel {
@@ -115,6 +116,11 @@ public interface IntModel2D extends Model2D, IntModel {
 			}	
 		}
 		return total;
+	}
+	
+	@Override
+	default IntModel2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (IntModel2D) Model2D.super.subsection(minCoordinates, maxCoordinates);
 	}
 	
 	@Override

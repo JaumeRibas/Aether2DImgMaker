@@ -19,15 +19,15 @@ package cellularautomata.model;
 import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 
-public class AsymmetricIntModelSection<Source_Type extends SymmetricIntModel> extends AsymmetricModelSection<Source_Type> implements IntModel {
+public class IntSubModel extends SubModel<IntModel> implements IntModel {
 	
-	public AsymmetricIntModelSection(Source_Type grid) {
-		super(grid);
+	public IntSubModel(IntModel grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		super(grid, minCoordinates, maxCoordinates);
 	}
 
 	@Override
 	public int getFromPosition(Coordinates coordinates) throws Exception {
-		return source.getFromAsymmetricPosition(coordinates);
+		return source.getFromPosition(coordinates);
 	}
 	
 	@Override

@@ -14,30 +14,32 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.model;
+package cellularautomata.model3d;
 
 import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
+import cellularautomata.model.IntModel;
+import cellularautomata.model2d.IntModel2D;
 
-public class AsymmetricIntModelSection<Source_Type extends SymmetricIntModel> extends AsymmetricModelSection<Source_Type> implements IntModel {
-	
-	public AsymmetricIntModelSection(Source_Type grid) {
-		super(grid);
+public class IntModelAs3D extends ModelAs3D<IntModel> implements IntModel3D {
+
+	public IntModelAs3D(IntModel source) {
+		super(source);
 	}
 
 	@Override
-	public int getFromPosition(Coordinates coordinates) throws Exception {
-		return source.getFromAsymmetricPosition(coordinates);
+	public int getFromPosition(int x, int y, int z) throws Exception {
+		return source.getFromPosition(new Coordinates(x, y, z));
 	}
 	
 	@Override
-	public IntModel subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel.super.subsection(minCoordinates, maxCoordinates);
+	public IntModel3D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return IntModel3D.super.subsection(minCoordinates, maxCoordinates);
 	}
 	
 	@Override
-	public IntModel crossSection(int axis, int coordinate) {
-		return IntModel.super.crossSection(axis, coordinate);
+	public IntModel2D crossSection(int axis, int coordinate) {
+		return IntModel3D.super.crossSection(axis, coordinate);
 	}
 
 }

@@ -27,11 +27,11 @@ import cellularautomata.PartialCoordinates;
 import cellularautomata.arrays.AnisotropicIntArray;
 import cellularautomata.arrays.HyperrectangularArray;
 import cellularautomata.Utils;
-import cellularautomata.model.IsotropicHypercubicModel;
+import cellularautomata.model.IsotropicHypercubicModelA;
 import cellularautomata.model.SymmetricIntModel;
 
 
-public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubicModel {
+public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubicModelA {
 
 	private long step;
 	private int initialValue;
@@ -240,7 +240,7 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/" + grid.getDimension() + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + grid.getDimension() + "D/" + initialValue + "/" + backgroundValue;
 	}
 
 	@Override
@@ -278,31 +278,11 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 
 	@Override
 	public int getAsymmetricMaxCoordinate(int axis, PartialCoordinates coordinates) {
-		//side >= c1 >= c2... >= cN >= 0
-		if (axis > 0) {
-			for (int i = axis - 1; i >= 0; i--) {
-				Integer coord = coordinates.get(i);
-				if (coord != null) {
-					return coord;
-				}
-			}
+		if (axis == 0) {
+			return grid.getSide() - 1;
+		} else {
+			return IsotropicHypercubicModelA.super.getAsymmetricMaxCoordinate(axis, coordinates);
 		}
-		return grid.getSide();
-	}
-
-	@Override
-	public int getAsymmetricMinCoordinate(int axis, PartialCoordinates coordinates) {
-		//side >= c1 >= c2... >= cN >= 0
-		int coordCount = coordinates.getCount();
-		if (axis < coordCount - 1) {
-			for (int i = axis + 1; i < coordCount; i++) {
-				Integer coord = coordinates.get(i);
-				if (coord != null) {
-					return coord;
-				}
-			}
-		}
-		return 0;
 	}
 
 	@Override

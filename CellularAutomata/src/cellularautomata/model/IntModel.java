@@ -229,4 +229,14 @@ public interface IntModel extends Model, Iterable<Integer> {
 		return new IntModelIterator(this);
 	}
 	
+	@Override
+	default IntModel subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return new IntSubModel(this, minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default IntModel crossSection(int axis, int coordinate) {
+		return new IntModelCrossSection(this, axis, coordinate);
+	}
+	
 }

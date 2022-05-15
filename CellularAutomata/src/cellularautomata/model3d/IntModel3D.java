@@ -19,6 +19,7 @@ package cellularautomata.model3d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.IntModel;
 import cellularautomata.model2d.IntModel2D;
 
@@ -109,8 +110,18 @@ public interface IntModel3D extends Model3D, IntModel {
 	}
 	
 	@Override
+	default IntModel3D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (IntModel3D) Model3D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
 	default IntModel3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new IntSubModel3D(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default IntModel2D crossSection(int axis, int coordinate) {
+		return (IntModel2D) Model3D.super.crossSection(axis, coordinate);
 	}
 	
 	@Override

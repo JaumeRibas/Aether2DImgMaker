@@ -16,7 +16,9 @@
  */
 package cellularautomata.model5d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.AsymmetricModelSection;
+import cellularautomata.model4d.Model4D;
 
 public class AsymmetricModelSection5D<Source_Type extends SymmetricModel5D> extends AsymmetricModelSection<Source_Type> implements Model5D {
 	
@@ -503,5 +505,15 @@ public class AsymmetricModelSection5D<Source_Type extends SymmetricModel5D> exte
 
 	@Override
 	public int getMaxZ(int v, int w, int x, int y) { return source.getAsymmetricMaxZ(v, w, x, y); }
+	
+	@Override
+	public Model5D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return Model5D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	public Model4D crossSection(int axis, int coordinate) {
+		return Model5D.super.crossSection(axis, coordinate);
+	}
 
 }

@@ -80,6 +80,11 @@ public class ModelDecorator<Source_Type extends Model> implements Model {
 	public Model subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
 		return source.subsection(minCoordinates, maxCoordinates);
 	}
+	
+	@Override
+	public Model crossSection(int axis, int coordinate) {
+		return source.crossSection(axis, coordinate);
+	}
 
 	@Override
 	public boolean nextStep() throws Exception {

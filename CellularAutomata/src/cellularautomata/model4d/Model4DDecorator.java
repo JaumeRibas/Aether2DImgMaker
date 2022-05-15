@@ -16,6 +16,7 @@
  */
 package cellularautomata.model4d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.ModelDecorator;
 import cellularautomata.model3d.Model3D;
 
@@ -236,10 +237,20 @@ public class Model4DDecorator<Source_Type extends Model4D> extends ModelDecorato
 
 	@Override
 	public int getMaxZ(int w, int x, int y) { return source.getMaxZ(w, x, y); }
+	
+	@Override
+	public Model4D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return source.subsection(minCoordinates, maxCoordinates);
+	}
 
 	@Override
 	public Model4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return source.subsection(minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	public Model3D crossSection(int axis, int coordinate) {
+		return source.crossSection(axis, coordinate);
 	}
 	
 	@Override

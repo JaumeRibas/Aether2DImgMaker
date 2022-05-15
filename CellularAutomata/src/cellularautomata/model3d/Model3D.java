@@ -303,6 +303,14 @@ public interface Model3D extends Model {
 		return getMaxZ();
 	}
 	
+	@Override
+	default Model3D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return subsection(
+				minCoordinates.get(0), maxCoordinates.get(0),
+				minCoordinates.get(1), maxCoordinates.get(1),
+				minCoordinates.get(2), maxCoordinates.get(2));
+	}
+	
 	/**
 	 * Returns a decorated {@link Model2D} with the passed bounds.
 	 * 
@@ -316,6 +324,19 @@ public interface Model3D extends Model {
 	 */
 	default Model3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new SubModel3D<Model3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default Model2D crossSection(int axis, int coordinate) {
+		switch (axis) {
+		case 0: 
+			return crossSectionAtX(coordinate);
+		case 1: 
+			return crossSectionAtY(coordinate);
+		case 2: 
+			return crossSectionAtZ(coordinate);
+		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		}
 	}
 	
 	default Model2D crossSectionAtX(int x) {

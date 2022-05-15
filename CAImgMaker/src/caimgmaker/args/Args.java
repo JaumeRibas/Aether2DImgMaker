@@ -39,6 +39,8 @@ public class Args {
 	@Parameter(names = { "-asymmetric" }, description = "Generate images only of an asymmetric section of a symmetric model.")
 	public boolean asymmetric = false;
 	
+	//TODO coordinates option. (all, [0, max], 10, c1+5)
+	
 	@Parameter(names = { "-v" }, validateWith = CoordinateValidator.class, converter = CoordianteConverter.class, description = "The app generates images from this v-coordinate. It can be either an integer (e.g. '0'), an integer range (e.g. '[0,100]'), another coordinate (e.g. 'x') or another coordinate plus/minus an integer (e.g. 'x+2'). Only applies to models with dimension greater than four.")
 	public CoordinateOptionValue v = null;
 	

@@ -16,6 +16,7 @@
  */
 package cellularautomata.model2d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.ModelDecorator;
 
 public class Model2DDecorator<Source_Type extends Model2D> extends ModelDecorator<Source_Type> implements Model2D {
@@ -57,6 +58,11 @@ public class Model2DDecorator<Source_Type extends Model2D> extends ModelDecorato
 
 	@Override
 	public int getMaxY(int x) { return source.getMaxY(x); }
+	
+	@Override
+	public Model2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return source.subsection(minCoordinates, maxCoordinates);
+	}
 	
 	@Override
 	public Model2D subsection(int minX, int maxX, int minY, int maxY) {

@@ -37,7 +37,7 @@ public abstract class AnisotropicArray extends HypercubicArray {
 	protected int getInternalArrayIndex(Coordinates indexes) {
 		int internalIndex = 0;
 		int indexCount = indexes.getCount();
-		for (int i = 0, dim = getDimension(); i < indexCount; i++, dim--) {
+		for (int i = 0, dim = dimension; i < indexCount; i++, dim--) {
 			internalIndex += getPositionCount(dim, indexes.get(i));
 		}
 		return internalIndex;

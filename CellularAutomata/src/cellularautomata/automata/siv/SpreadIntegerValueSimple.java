@@ -25,10 +25,10 @@ import java.util.function.IntConsumer;
 import cellularautomata.arrays.HypercubicIntArray;
 import cellularautomata.Utils;
 import cellularautomata.Coordinates;
-import cellularautomata.model.IsotropicHypercubicModel;
+import cellularautomata.model.IsotropicHypercubicModelA;
 import cellularautomata.model.SymmetricIntModel;
 
-public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHypercubicModel {
+public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHypercubicModelA {
 
 	private int gridDimension;
 	private long step;
@@ -236,7 +236,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/" + gridDimension + "/" + initialValue + "/" + backgroundValue;
+		return getName() + "/" + gridDimension + "D/" + initialValue + "/" + backgroundValue;
 	}
 
 	@Override

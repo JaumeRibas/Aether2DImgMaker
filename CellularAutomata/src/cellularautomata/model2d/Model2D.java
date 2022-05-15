@@ -110,6 +110,13 @@ public interface Model2D extends Model {
 		return getMaxY();
 	}
 	
+	@Override
+	default Model2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return subsection(
+				minCoordinates.get(0), maxCoordinates.get(0),
+				minCoordinates.get(1), maxCoordinates.get(1));
+	}
+	
 	/**
 	 * Returns a decorated {@link Model2D} with the passed bounds.
 	 * 
@@ -122,6 +129,17 @@ public interface Model2D extends Model {
 	default Model2D subsection(int minX, int maxX, int minY, int maxY) {
 		return new SubModel2D<Model2D>(this, minX, maxX, minY, maxY);
 	}
+	
+//	@Override
+//	default Model1D crossSection(int axis, int coordinate) {
+//		switch (axis) {
+//		case 0: 
+//			return crossSectionAtX(coordinate);
+//		case 1: 
+//			return crossSectionAtY(coordinate);
+//		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+//		}
+//	}
 	
 	@Override
 	default int getMaxCoordinate(int axis) {

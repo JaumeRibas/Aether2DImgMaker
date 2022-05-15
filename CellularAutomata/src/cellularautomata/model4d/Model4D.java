@@ -313,9 +313,33 @@ public interface Model4D extends Model {
 	default int getMinZAtXY(int x, int y) { return getMinZ(); }
 
 	default int getMaxZAtXY(int x, int y) { return getMaxZ(); }
+	
+	@Override
+	default Model4D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return subsection(
+				minCoordinates.get(0), maxCoordinates.get(0),
+				minCoordinates.get(1), maxCoordinates.get(1),
+				minCoordinates.get(2), maxCoordinates.get(2),
+				minCoordinates.get(3), maxCoordinates.get(3));
+	}
 
 	default Model4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new SubModel4D<Model4D>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default Model3D crossSection(int axis, int coordinate) {
+		switch (axis) {
+		case 0:
+			return crossSectionAtW(coordinate);
+		case 1:
+			return crossSectionAtX(coordinate);
+		case 2:
+			return crossSectionAtY(coordinate);
+		case 3:
+			return crossSectionAtZ(coordinate);
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		}
 	}
 	
 	default Model3D crossSectionAtW(int w) {

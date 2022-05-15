@@ -25,7 +25,7 @@ import cellularautomata.PartialCoordinates;
  * @author Jaume
  *
  */
-public interface IsotropicHypercubicModel extends SymmetricModel {
+public interface IsotropicHypercubicModelA extends SymmetricModel {
 
 	@Override
 	default int getMinCoordinate(int axis) { 
@@ -62,7 +62,7 @@ public interface IsotropicHypercubicModel extends SymmetricModel {
 				}
 			}
 		}
-		return getAsymmetricMaxCoordinate(axis);
+		return getAsymmetricMaxCoordinate(0);
 	}
 
 	@Override

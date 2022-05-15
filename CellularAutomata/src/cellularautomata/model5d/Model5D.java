@@ -383,9 +383,37 @@ public interface Model5D extends Model {
 	default int getMinZ(int v, int w, int x, int y) { return getMinZ(); }
 
 	default int getMaxZ(int v, int w, int x, int y) { return getMaxZ(); }
+	
+	@Override
+	default Model5D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return subsection(
+				minCoordinates.get(0), maxCoordinates.get(0),
+				minCoordinates.get(1), maxCoordinates.get(1),
+				minCoordinates.get(2), maxCoordinates.get(2),
+				minCoordinates.get(3), maxCoordinates.get(3),
+				minCoordinates.get(4), maxCoordinates.get(4));
+	}
 
 	default Model5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
 		return new SubModel5D<Model5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default Model4D crossSection(int axis, int coordinate) {
+		switch (axis) {
+		case 0:
+			return crossSectionAtV(coordinate);
+		case 1:
+			//return crossSectionAtW(coordinate);
+		case 2:
+//			return crossSectionAtX(coordinate);
+		case 3:
+//			return crossSectionAtY(coordinate);
+		case 4:
+			throw new UnsupportedOperationException("Not implemented yet.");
+//			return crossSectionAtZ(coordinate);
+		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		}
 	}
 
 	default Model4D crossSectionAtV(int v) {

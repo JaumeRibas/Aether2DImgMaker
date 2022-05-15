@@ -16,7 +16,9 @@
  */
 package cellularautomata.model3d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.AsymmetricModelSection;
+import cellularautomata.model2d.Model2D;
 
 public class AsymmetricModelSection3D<Source_Type extends SymmetricModel3D> extends AsymmetricModelSection<Source_Type> implements Model3D {
 
@@ -142,6 +144,16 @@ public class AsymmetricModelSection3D<Source_Type extends SymmetricModel3D> exte
 	@Override
 	public int getMaxZ(int x, int y) {
 		return source.getAsymmetricMaxZ(x, y);
+	}
+	
+	@Override
+	public Model3D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return Model3D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	public Model2D crossSection(int axis, int coordinate) {
+		return Model3D.super.crossSection(axis, coordinate);
 	}
 
 }
