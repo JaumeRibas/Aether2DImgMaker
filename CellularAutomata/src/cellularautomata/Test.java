@@ -559,8 +559,8 @@ public class Test {
 	public static void printRegionBounds(Model region) {
 		int dimension = region.getGridDimension();
 		for (int axis = 0; axis < dimension; axis++) {
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, axis);
-			System.out.printf("%d <= %c <= %d %n", region.getMinCoordinate(axis), axisLetter, region.getMaxCoordinate(axis));
+			String axisLabel = Utils.getAxisLabel(dimension, axis);
+			System.out.printf("%d <= %c <= %d %n", region.getMinCoordinate(axis), axisLabel, region.getMaxCoordinate(axis));
 		}
 	}
 	

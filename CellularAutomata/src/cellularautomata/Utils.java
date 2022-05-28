@@ -113,16 +113,24 @@ public class Utils {
 		out.close();
 	}
 	
-	public static char getAxisLetterFromIndex(int dimension, int axisIndex) {
+	public static String getAxisLabel(int dimension, int axisIndex) {
 		if (dimension < 3) {
-			return (char) (axisIndex + 120);//120 letter 'x'
+			return Constants.LOWERCASE_ABC[axisIndex + 23];// letter 'x'
+		} else if (dimension <= Constants.ABC_LENGTH) {
+			return Constants.LOWERCASE_ABC[Constants.ABC_LENGTH - dimension + axisIndex];
 		} else {
-			return (char) (122 - dimension + axisIndex  + 1);//122 letter 'z'
+			return "x" + (axisIndex + 1);
 		}
 	}
 	
-	public static char getUpperCaseAxisLetterFromIndex(int dimension, int axisIndex) {
-		return Character.toUpperCase(getAxisLetterFromIndex(dimension, axisIndex));
+	public static String getUpperCaseAxisLabel(int dimension, int axisIndex) {
+		if (dimension < 3) {
+			return Constants.UPPERCASE_ABC[axisIndex + 23];// letter 'x'
+		} else if (dimension <= Constants.ABC_LENGTH) {
+			return Constants.UPPERCASE_ABC[Constants.ABC_LENGTH - dimension + axisIndex];
+		} else {
+			return "X" + (axisIndex + 1);
+		}
 	}
 	
 	public static <Object_Type extends Comparable<Object_Type>> Object_Type max(Object_Type a, Object_Type b) {

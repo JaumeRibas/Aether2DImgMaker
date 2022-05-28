@@ -46,7 +46,7 @@ public interface Model {
 	 * @return the label
 	 */
 	default String getAxisLabel(int axis) {
-		return "" + Utils.getAxisLetterFromIndex(getGridDimension(), axis);
+		return "" + Utils.getAxisLabel(getGridDimension(), axis);
 	}
 	
 	/**

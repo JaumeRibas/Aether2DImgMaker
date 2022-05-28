@@ -31,18 +31,17 @@ public class CodeGeneration {
 	
 	public static void printBoundsMethodsForAnisotropicGrid(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int axis = 0; axis < dimension; axis++) {
 			axes[axis] = axis;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, axis);
-			axisLetters[axis] = axisLetter;
-			axisUpperCaseLetters[axis] = Character.toUpperCase(axisLetter);
+			axisLabels[axis] = Utils.getAxisLabel(dimension, axis);
+			axisUpperCaseLabels[axis] = Utils.getUpperCaseAxisLabel(dimension, axis);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int currentAxis = 0; currentAxis < dimension; currentAxis++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[currentAxis];
-			System.out.println("@Override" + System.lineSeparator() + "default int getMin" + currentAxisUppercaseLetter 
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[currentAxis];
+			System.out.println("@Override" + System.lineSeparator() + "default int getMin" + currentAxisUppercaseLabel 
 					+ "() { return 0; }" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int i = 0;
@@ -74,8 +73,8 @@ public class CodeGeneration {
 						}
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxis]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxis]);
 						for (int k = 1; k < indexCount; k++) {
 							otherAxis = otherAxes[indexes[k]];
 							if (otherAxis > currentAxis) {
@@ -87,26 +86,26 @@ public class CodeGeneration {
 								isThereASmallerAxis = true;
 								greatestSmallerAxis = otherAxis;
 							}
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxis]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxis]);
 						}
 						if (isThereAGreaterAxis) {
 							System.out.println("@Override" + System.lineSeparator() 
-							+ "default int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-							+ ") { return " + axisLetters[smallestGreaterAxis] + "; }" + System.lineSeparator());
+							+ "default int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return " + axisLabels[smallestGreaterAxis] + "; }" + System.lineSeparator());
 						} else {
 							System.out.println("@Override" + System.lineSeparator() 
-							+ "default int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ "default int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
 							+ ") { return 0; }" + System.lineSeparator());
 						}
 						if (isThereASmallerAxis) {
 							System.out.println("@Override" + System.lineSeparator() 
-							+ "default int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-							+ ") { return Math.min(" + axisLetters[greatestSmallerAxis] + ", getMax" + currentAxisUppercaseLetter + "()); }" + System.lineSeparator());
+							+ "default int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return Math.min(" + axisLabels[greatestSmallerAxis] + ", getMax" + currentAxisUppercaseLabel + "()); }" + System.lineSeparator());
 						} else {
 							System.out.println("@Override" + System.lineSeparator() 
-							+ "default int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-							+ ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+							+ "default int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+							+ ") { return getMax" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
 						}
 					}
 					int index = indexes[i];
@@ -128,27 +127,27 @@ public class CodeGeneration {
 			}
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
 				for (i = 1; i < otherAxes.length; i++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[i]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[i]]);
 				}
 				if (currentAxis == dimensionMinusOne) {
 					System.out.println("@Override" + System.lineSeparator() 
-					+ "default int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+					+ "default int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
 					+ ") { return 0; }" + System.lineSeparator());
 				} else {
 					System.out.println("@Override" + System.lineSeparator() 
-					+ "default int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-					+ ") { return " + axisLetters[currentAxis + 1] + "; }" + System.lineSeparator());
+					+ "default int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+					+ ") { return " + axisLabels[currentAxis + 1] + "; }" + System.lineSeparator());
 				}
 				if (currentAxis == 0) {
 					System.out.println("@Override" + System.lineSeparator() 
-					+ "default int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-					+ ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+					+ "default int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+					+ ") { return getMax" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
 				} else {
 					System.out.println("@Override" + System.lineSeparator() 
-					+ "default int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-					+ ") { return Math.min(" + axisLetters[currentAxis - 1] + ", getMax" + currentAxisUppercaseLetter + "()); }" + System.lineSeparator());
+					+ "default int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+					+ ") { return Math.min(" + axisLabels[currentAxis - 1] + ", getMax" + currentAxisUppercaseLabel + "()); }" + System.lineSeparator());
 				}	
 			}
 		}
@@ -157,27 +156,26 @@ public class CodeGeneration {
 	public static void printBoundsMethodsForIsotropicHypercubicGrid(int dimension) {
 		if (dimension > 0) {
 			int[] axes = new int[dimension];
-			char[] axisLetters = new char[dimension];
-			char[] axisUpperCaseLetters = new char[dimension];
+			String[] axisLabels = new String[dimension];
+			String[] axisUpperCaseLabels = new String[dimension];
 			for (int axis = 0; axis < dimension; axis++) {
 				axes[axis] = axis;
-				char axisLetter = Utils.getAxisLetterFromIndex(dimension, axis);
-				axisLetters[axis] = axisLetter;
-				axisUpperCaseLetters[axis] = Character.toUpperCase(axisLetter);
+				axisLabels[axis] = Utils.getAxisLabel(dimension, axis);
+				axisUpperCaseLabels[axis] = Utils.getUpperCaseAxisLabel(dimension, axis);
 			}
 			int dimensionMinusOne = dimension - 1;
-			char firstAxisUppercaseLetter = axisUpperCaseLetters[0];
+			String firstAxisUppercaseLabel = axisUpperCaseLabels[0];
 			for (int currentAxis = 0; currentAxis < dimension; currentAxis++) {
-				char currentAxisUppercaseLetter = axisUpperCaseLetters[currentAxis];
-				System.out.println("@Override" + System.lineSeparator() + "default int getMin" + currentAxisUppercaseLetter 
-						+ "() { return -getAsymmetricMax" + firstAxisUppercaseLetter + "(); }" + System.lineSeparator());
-				System.out.println("@Override" + System.lineSeparator() + "default int getMax" + currentAxisUppercaseLetter 
-						+ "() { return getAsymmetricMax" + firstAxisUppercaseLetter + "(); }" + System.lineSeparator());
-				System.out.println("@Override" + System.lineSeparator() + "default int getAsymmetricMin" + currentAxisUppercaseLetter 
+				String currentAxisUppercaseLabel = axisUpperCaseLabels[currentAxis];
+				System.out.println("@Override" + System.lineSeparator() + "default int getMin" + currentAxisUppercaseLabel 
+						+ "() { return -getAsymmetricMax" + firstAxisUppercaseLabel + "(); }" + System.lineSeparator());
+				System.out.println("@Override" + System.lineSeparator() + "default int getMax" + currentAxisUppercaseLabel 
+						+ "() { return getAsymmetricMax" + firstAxisUppercaseLabel + "(); }" + System.lineSeparator());
+				System.out.println("@Override" + System.lineSeparator() + "default int getAsymmetricMin" + currentAxisUppercaseLabel 
 						+ "() { return 0; }" + System.lineSeparator());
 				if (currentAxis != 0) {
-					System.out.println("@Override" + System.lineSeparator() + "default int getAsymmetricMax" + currentAxisUppercaseLetter 
-							+ "() { return getAsymmetricMax" + firstAxisUppercaseLetter + "(); }" + System.lineSeparator());
+					System.out.println("@Override" + System.lineSeparator() + "default int getAsymmetricMax" + currentAxisUppercaseLabel 
+							+ "() { return getAsymmetricMax" + firstAxisUppercaseLabel + "(); }" + System.lineSeparator());
 				}
 				int[] otherAxes = new int[dimensionMinusOne];
 				int i = 0;
@@ -209,8 +207,8 @@ public class CodeGeneration {
 							}
 							StringBuilder otherAxesInMethodName = new StringBuilder();
 							StringBuilder otherAxesParams = new StringBuilder();
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
-							otherAxesParams.append("int ").append(axisLetters[otherAxis]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+							otherAxesParams.append("int ").append(axisLabels[otherAxis]);
 							for (int k = 1; k < indexCount; k++) {
 								otherAxis = otherAxes[indexes[k]];
 								if (otherAxis > currentAxis) {
@@ -222,26 +220,26 @@ public class CodeGeneration {
 									isThereASmallerAxis = true;
 									greatestSmallerAxis = otherAxis;
 								}
-								otherAxesInMethodName.append(axisUpperCaseLetters[otherAxis]);
-								otherAxesParams.append(", int ").append(axisLetters[otherAxis]);
+								otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+								otherAxesParams.append(", int ").append(axisLabels[otherAxis]);
 							}
 							if (isThereAGreaterAxis) {
 								System.out.println("@Override" + System.lineSeparator() 
-								+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-								+ ") { return " + axisLetters[smallestGreaterAxis] + "; }" + System.lineSeparator());
+								+ "default int getAsymmetricMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+								+ ") { return " + axisLabels[smallestGreaterAxis] + "; }" + System.lineSeparator());
 							} else {
 								System.out.println("@Override" + System.lineSeparator() 
-								+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+								+ "default int getAsymmetricMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
 								+ ") { return 0; }" + System.lineSeparator());
 							}
 							if (isThereASmallerAxis) {
 								System.out.println("@Override" + System.lineSeparator() 
-								+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-								+ ") { return " + axisLetters[greatestSmallerAxis] + "; }" + System.lineSeparator());
+								+ "default int getAsymmetricMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+								+ ") { return " + axisLabels[greatestSmallerAxis] + "; }" + System.lineSeparator());
 							} else {
 								System.out.println("@Override" + System.lineSeparator() 
-								+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-								+ ") { return getAsymmetricMax" + firstAxisUppercaseLetter + "(); }" + System.lineSeparator());
+								+ "default int getAsymmetricMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+								+ ") { return getAsymmetricMax" + firstAxisUppercaseLabel + "(); }" + System.lineSeparator());
 							}
 						}
 						int index = indexes[i];
@@ -263,27 +261,27 @@ public class CodeGeneration {
 				}
 				if (otherAxes.length > 0) {
 					StringBuilder otherAxesParams = new StringBuilder();
-					otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+					otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
 					for (i = 1; i < otherAxes.length; i++) {
-						otherAxesParams.append(", int ").append(axisLetters[otherAxes[i]]);
+						otherAxesParams.append(", int ").append(axisLabels[otherAxes[i]]);
 					}
 					if (currentAxis == dimensionMinusOne) {
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+						+ "default int getAsymmetricMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
 						+ ") { return 0; }" + System.lineSeparator());
 					} else {
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "default int getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-						+ ") { return " + axisLetters[currentAxis + 1] + "; }" + System.lineSeparator());
+						+ "default int getAsymmetricMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+						+ ") { return " + axisLabels[currentAxis + 1] + "; }" + System.lineSeparator());
 					}
 					if (currentAxis == 0) {
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-						+ ") { return getAsymmetricMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+						+ "default int getAsymmetricMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+						+ ") { return getAsymmetricMax" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
 					} else {
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "default int getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-						+ ") { return " + axisLetters[currentAxis - 1] + "; }" + System.lineSeparator());
+						+ "default int getAsymmetricMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+						+ ") { return " + axisLabels[currentAxis - 1] + "; }" + System.lineSeparator());
 					}	
 				}
 			}
@@ -292,21 +290,20 @@ public class CodeGeneration {
 	
 	public static void printBoundsMethodsForAsymmetricSection(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
-			axisLetters[i] = axisLetter;
-			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLetter 
-					+ "() { return source.getAsymmetricMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
-			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLetter 
-					+ "() { return source.getAsymmetricMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLabel 
+					+ "() { return source.getAsymmetricMin" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLabel 
+					+ "() { return source.getAsymmetricMax" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int j = 0;
 			for (; j < i; j++) {
@@ -327,20 +324,20 @@ public class CodeGeneration {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
 						StringBuilder otherAxesCsv = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
-						otherAxesCsv.append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
+						otherAxesCsv.append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
-							otherAxesCsv.append(", ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
+							otherAxesCsv.append(", ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-						+ ") { return source.getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+						+ "public int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getAsymmetricMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-						+ ") { return source.getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+						+ "public int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getAsymmetricMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
 					}
 					int index = indexes[j];
 					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
@@ -362,39 +359,38 @@ public class CodeGeneration {
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
 				StringBuilder otherAxesCsv = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
-				otherAxesCsv.append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
+				otherAxesCsv.append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
-					otherAxesCsv.append(", ").append(axisLetters[otherAxes[j]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
+					otherAxesCsv.append(", ").append(axisLabels[otherAxes[j]]);
 				}
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-				+ ") { return source.getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+				+ "public int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+				+ ") { return source.getAsymmetricMin" + currentAxisUppercaseLabel + "(" + otherAxesCsv + "); }" + System.lineSeparator());
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-				+ ") { return source.getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());	
+				+ "public int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+				+ ") { return source.getAsymmetricMax" + currentAxisUppercaseLabel + "(" + otherAxesCsv + "); }" + System.lineSeparator());	
 			}
 		}
 	}
 	
 	public static void printBoundsMethodsForDecorator(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
-			axisLetters[i] = axisLetter;
-			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLetter 
-					+ "() { return source.getMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
-			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLetter 
-					+ "() { return source.getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLabel 
+					+ "() { return source.getMin" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLabel 
+					+ "() { return source.getMax" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int j = 0;
 			for (; j < i; j++) {
@@ -415,20 +411,20 @@ public class CodeGeneration {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
 						StringBuilder otherAxesCsv = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
-						otherAxesCsv.append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
+						otherAxesCsv.append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
-							otherAxesCsv.append(", ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
+							otherAxesCsv.append(", ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-						+ ") { return source.getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+						+ "public int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
-						+ ") { return source.getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+						+ "public int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") { return source.getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesCsv + "); }" + System.lineSeparator());
 					}
 					int index = indexes[j];
 					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
@@ -450,38 +446,37 @@ public class CodeGeneration {
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
 				StringBuilder otherAxesCsv = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
-				otherAxesCsv.append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
+				otherAxesCsv.append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
-					otherAxesCsv.append(", ").append(axisLetters[otherAxes[j]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
+					otherAxesCsv.append(", ").append(axisLabels[otherAxes[j]]);
 				}
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-				+ ") { return source.getMin" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());
+				+ "public int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+				+ ") { return source.getMin" + currentAxisUppercaseLabel + "(" + otherAxesCsv + "); }" + System.lineSeparator());
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
-				+ ") { return source.getMax" + currentAxisUppercaseLetter + "(" + otherAxesCsv + "); }" + System.lineSeparator());	
+				+ "public int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+				+ ") { return source.getMax" + currentAxisUppercaseLabel + "(" + otherAxesCsv + "); }" + System.lineSeparator());	
 			}
 		}
 	}
 	
 	public static void printBoundsMethodsToOverride(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
-			axisLetters[i] = axisLetter;
-			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLetter 
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLabel 
 					+ "() {" + System.lineSeparator() + System.lineSeparator() + "}" + System.lineSeparator());
-			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLetter 
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLabel 
 					+ "() {" + System.lineSeparator() + System.lineSeparator() + "}" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int j = 0;
@@ -503,19 +498,19 @@ public class CodeGeneration {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
 						StringBuilder otherAxesCsv = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
-						otherAxesCsv.append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
+						otherAxesCsv.append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
-							otherAxesCsv.append(", ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
+							otherAxesCsv.append(", ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ "public int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
 						+ ") {" + System.lineSeparator() + System.lineSeparator() + "}" + System.lineSeparator());
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ "public int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
 						+ ") {" + System.lineSeparator() + System.lineSeparator() + "}" + System.lineSeparator());
 					}
 					int index = indexes[j];
@@ -538,17 +533,17 @@ public class CodeGeneration {
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
 				StringBuilder otherAxesCsv = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
-				otherAxesCsv.append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
+				otherAxesCsv.append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
-					otherAxesCsv.append(", ").append(axisLetters[otherAxes[j]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
+					otherAxesCsv.append(", ").append(axisLabels[otherAxes[j]]);
 				}
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+				+ "public int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
 				+ ") {" + System.lineSeparator() + System.lineSeparator() + "}" + System.lineSeparator());
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams 
+				+ "public int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
 				+ ") {" + System.lineSeparator() + System.lineSeparator() + "}" + System.lineSeparator());	
 			}
 		}
@@ -556,21 +551,20 @@ public class CodeGeneration {
 	
 	public static void printBoundsMethodsForSubsection(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
-			axisLetters[i] = axisLetter;
-			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLetter 
-					+ "() { return min" + currentAxisUppercaseLetter + "; }" + System.lineSeparator());
-			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLetter 
-					+ "() { return max" + currentAxisUppercaseLetter + "; }" + System.lineSeparator());
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLabel 
+					+ "() { return min" + currentAxisUppercaseLabel + "; }" + System.lineSeparator());
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLabel 
+					+ "() { return max" + currentAxisUppercaseLabel + "; }" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int j = 0;
 			for (; j < i; j++) {
@@ -591,20 +585,20 @@ public class CodeGeneration {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
 						StringBuilder otherAxesCsv = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
-						otherAxesCsv.append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
+						otherAxesCsv.append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
-							otherAxesCsv.append(", ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
+							otherAxesCsv.append(", ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return Math.max(min" + currentAxisUppercaseLetter 
-						+ ", source.getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
+						+ "public int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return Math.max(min" + currentAxisUppercaseLabel 
+						+ ", source.getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
 						System.out.println("@Override" + System.lineSeparator() 
-						+ "public int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return Math.min(max" + currentAxisUppercaseLetter 
-						+ ", source.getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
+						+ "public int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return Math.min(max" + currentAxisUppercaseLabel 
+						+ ", source.getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
 					}
 					int index = indexes[j];
 					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
@@ -626,37 +620,36 @@ public class CodeGeneration {
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
 				StringBuilder otherAxesCsv = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
-				otherAxesCsv.append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
+				otherAxesCsv.append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
-					otherAxesCsv.append(", ").append(axisLetters[otherAxes[j]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
+					otherAxesCsv.append(", ").append(axisLabels[otherAxes[j]]);
 				}
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams + ") { return Math.max(min" + currentAxisUppercaseLetter 
-				+ ", source.getMin" + currentAxisUppercaseLetter + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
+				+ "public int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams + ") { return Math.max(min" + currentAxisUppercaseLabel 
+				+ ", source.getMin" + currentAxisUppercaseLabel + "(" + otherAxesCsv + ")); }" + System.lineSeparator());
 				System.out.println("@Override" + System.lineSeparator() 
-				+ "public int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ") { return Math.min(max" + currentAxisUppercaseLetter 
-				+ ", source.getMax" + currentAxisUppercaseLetter + "(" + otherAxesCsv + ")); }" + System.lineSeparator());		
+				+ "public int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams + ") { return Math.min(max" + currentAxisUppercaseLabel 
+				+ ", source.getMax" + currentAxisUppercaseLabel + "(" + otherAxesCsv + ")); }" + System.lineSeparator());		
 			}
 		}
 	}
 	
 	public static void printAsymmetricBoundsMethodsForInterface(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
-			axisLetters[i] = axisLetter;
-			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-			System.out.println("int getAsymmetricMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-			System.out.println("int getAsymmetricMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("int getAsymmetricMin" + currentAxisUppercaseLabel + "();" + System.lineSeparator());
+			System.out.println("int getAsymmetricMax" + currentAxisUppercaseLabel + "();" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int j = 0;
 			for (; j < i; j++) {
@@ -676,14 +669,14 @@ public class CodeGeneration {
 					if (j == indexCountMinusOne) {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
-						System.out.println("int getAsymmetricMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
-						System.out.println("int getAsymmetricMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
+						System.out.println("int getAsymmetricMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
+						System.out.println("int getAsymmetricMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
 					}
 					int index = indexes[j];
 					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
@@ -704,31 +697,30 @@ public class CodeGeneration {
 			}
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
 				}
-				System.out.println("int getAsymmetricMin" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());
-				System.out.println("int getAsymmetricMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());
+				System.out.println("int getAsymmetricMin" + currentAxisUppercaseLabel + "(" + otherAxesParams + ");" + System.lineSeparator());
+				System.out.println("int getAsymmetricMax" + currentAxisUppercaseLabel + "(" + otherAxesParams + ");" + System.lineSeparator());
 			}
 		}
 	}
 	
 	public static void printBoundsMethodsForInterface(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
-			axisLetters[i] = axisLetter;
-			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-			System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-			System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("int getMin" + currentAxisUppercaseLabel + "();" + System.lineSeparator());
+			System.out.println("int getMax" + currentAxisUppercaseLabel + "();" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int j = 0;
 			for (; j < i; j++) {
@@ -748,14 +740,14 @@ public class CodeGeneration {
 					if (j == indexCountMinusOne) {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
-						System.out.println("int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
-						System.out.println("int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
+						System.out.println("int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
+						System.out.println("int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ");" + System.lineSeparator());
 					}
 					int index = indexes[j];
 					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
@@ -776,31 +768,30 @@ public class CodeGeneration {
 			}
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
 				}
-				System.out.println("int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());
-				System.out.println("int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ");" + System.lineSeparator());				
+				System.out.println("int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams + ");" + System.lineSeparator());
+				System.out.println("int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams + ");" + System.lineSeparator());				
 			}
 		}
 	}
 	
 	public static void printBoundsMethodsForInterfaceWithDefault(int dimension) {
 		int[] axes = new int[dimension];
-		char[] axisLetters = new char[dimension];
-		char[] axisUpperCaseLetters = new char[dimension];
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < axes.length; i++) {
 			axes[i] = i;
-			char axisLetter = Utils.getAxisLetterFromIndex(dimension, i);
-			axisLetters[i] = axisLetter;
-			axisUpperCaseLetters[i] = Character.toUpperCase(axisLetter);
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
 		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
-			char currentAxisUppercaseLetter = axisUpperCaseLetters[i];
-			System.out.println("int getMin" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
-			System.out.println("int getMax" + currentAxisUppercaseLetter + "();" + System.lineSeparator());
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("int getMin" + currentAxisUppercaseLabel + "();" + System.lineSeparator());
+			System.out.println("int getMax" + currentAxisUppercaseLabel + "();" + System.lineSeparator());
 			int[] otherAxes = new int[dimensionMinusOne];
 			int j = 0;
 			for (; j < i; j++) {
@@ -820,14 +811,14 @@ public class CodeGeneration {
 					if (j == indexCountMinusOne) {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLetters[otherAxes[indexes[0]]]);
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
+						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLetters[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLetters[otherAxes[indexes[k]]]);
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
+							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
-						System.out.println("default int getMin" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
-						System.out.println("default int getMax" + currentAxisUppercaseLetter + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+						System.out.println("default int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMin" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
+						System.out.println("default int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams + ") { return getMax" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
 					}
 					int index = indexes[j];
 					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
@@ -848,12 +839,12 @@ public class CodeGeneration {
 			}
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLetters[otherAxes[0]]);
+				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLetters[otherAxes[j]]);
+					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
 				}
-				System.out.println("default int getMin" + currentAxisUppercaseLetter + "(" + otherAxesParams + ") { return getMin" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
-				System.out.println("default int getMax" + currentAxisUppercaseLetter + "(" + otherAxesParams + ") { return getMax" + currentAxisUppercaseLetter + "(); }" + System.lineSeparator());
+				System.out.println("default int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams + ") { return getMin" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
+				System.out.println("default int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams + ") { return getMax" + currentAxisUppercaseLabel + "(); }" + System.lineSeparator());
 			}
 		}
 	}
@@ -911,7 +902,7 @@ public class CodeGeneration {
 		//add coordinates parameters if needed
 		for (int i = 1; i < dimension; i++) {
 			if (type.coordinates[i] == null) {
-				method.append("int ").append(Utils.getAxisLetterFromIndex(dimension, i)).append(", ");
+				method.append("int ").append(Utils.getAxisLabel(dimension, i)).append(", ");
 			}
 		}
 		//add current value parameter
@@ -920,9 +911,9 @@ public class CodeGeneration {
 		int neighborCount = type.neighbors.size();
 		for (int i = 0; i < neighborCount; i++) {
 			NeighborType neighbor = type.neighbors.get(i);
-			char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+			String axisLabel = Utils.getUpperCaseAxisLabel(dimension, neighbor.axisIndex);
 			String dir = neighbor.isPositiveDirection? "g" : "s";
-			String varPrefix = dir + axisLetter;
+			String varPrefix = dir + axisLabel;
 			method.append("long ").append(varPrefix).append("Value, ");
 			if (neighbor.symmetryCount == null) {
 				method.append("int ").append(varPrefix).append("SymmetryCount, ");
@@ -935,7 +926,7 @@ public class CodeGeneration {
 		for (int i = 1; i < dimension; i++) {
 			arrayBrackets.append("[]");
 		}
-		char firstAxisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, 0);
+		String firstAxisLabel = Utils.getUpperCaseAxisLabel(dimension, 0);
 		if (neighborCount > 2) {
 			//add arrays to reuse
 			method.append("long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, ");
@@ -946,7 +937,7 @@ public class CodeGeneration {
 				method.append("int[] relevantAsymmetricNeighborSymmetryCounts, ");
 			}
 			//add new grid slices parameter
-			method.append("long").append(arrayBrackets).append("[] new").append(firstAxisLetter).append("Slices) {").append(getNL(ind1));
+			method.append("long").append(arrayBrackets).append("[] new").append(firstAxisLabel).append("Slices) {").append(getNL(ind1));
 			String regularCountVariable;
 			if (type.hasSymmetries) {
 				regularCountVariable = "relevantAsymmetricNeighborCount";
@@ -957,9 +948,9 @@ public class CodeGeneration {
 			method.append("int relevantNeighborCount = 0;").append(getNL(ind1));
 			for (int i = 0; i < neighborCount; i++) {
 				NeighborType neighbor = type.neighbors.get(i);
-				char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+				String axisLabel = Utils.getUpperCaseAxisLabel(dimension, neighbor.axisIndex);
 				String dir = neighbor.isPositiveDirection? "g" : "s";
-				String varPrefix = dir + axisLetter;
+				String varPrefix = dir + axisLabel;
 				String valueVarName = varPrefix + "Value";
 				method.append("if (").append(valueVarName).append(" < currentValue) {").append(getNL(ind2))
 				.append("relevantAsymmetricNeighborValues[").append(regularCountVariable).append("] = ").append(valueVarName).append(";").append(getNL(ind2))
@@ -976,7 +967,7 @@ public class CodeGeneration {
 						method.append("nc[").append(axis).append("] = ");
 						Integer coordinate = type.coordinates[axis];
 						if (coordinate == null) {
-							method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+							method.append(Utils.getAxisLabel(dimension, axis));
 						} else {
 							method.append(coordinate);
 						}
@@ -990,7 +981,7 @@ public class CodeGeneration {
 						method.append("nc[").append(axis).append("] = ");
 						coordinate = type.coordinates[axis];
 						if (coordinate == null) {
-							method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+							method.append(Utils.getAxisLabel(dimension, axis));
 						} else {
 							method.append(coordinate);
 						}
@@ -999,7 +990,7 @@ public class CodeGeneration {
 					method.append("nc[").append(axis).append("] = ");
 					coordinate = type.coordinates[axis];
 					if (coordinate == null) {
-						method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+						method.append(Utils.getAxisLabel(dimension, axis));
 						if (neighbor.isPositiveDirection) {
 							method.append(" + 1");
 						} else {
@@ -1020,7 +1011,7 @@ public class CodeGeneration {
 						method.append("nc[").append(axis).append("] = ");
 						coordinate = type.coordinates[axis];
 						if (coordinate == null) {
-							method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+							method.append(Utils.getAxisLabel(dimension, axis));
 						} else {
 							method.append(coordinate);
 						}
@@ -1049,10 +1040,10 @@ public class CodeGeneration {
 				}
 				method.append(regularCountVariable).append("++;").append(getNL(ind1)).append("}").append(getNL(ind1));
 			}
-			method.append("return topplePosition(new").append(firstAxisLetter).append("Slices, currentValue, ");
+			method.append("return topplePosition(new").append(firstAxisLabel).append("Slices, currentValue, ");
 			for (int i = 1; i < dimension; i++) {
 				if (type.coordinates[i] == null) {
-					method.append(Utils.getAxisLetterFromIndex(dimension, i));
+					method.append(Utils.getAxisLabel(dimension, i));
 				} else {
 					method.append(type.coordinates[i]);
 				}
@@ -1068,8 +1059,8 @@ public class CodeGeneration {
 			method.append(regularCountVariable).append(");").append(getNL(ind0));
 		} else {
 			//add new grid slices parameter
-			method.append("long").append(arrayBrackets).append(" newCurrent").append(firstAxisLetter).append("Slice, long")
-			.append(arrayBrackets).append(" newGreater").append(firstAxisLetter).append("Slice) {").append(getNL(ind0));
+			method.append("long").append(arrayBrackets).append(" newCurrent").append(firstAxisLabel).append("Slice, long")
+			.append(arrayBrackets).append(" newGreater").append(firstAxisLabel).append("Slice) {").append(getNL(ind0));
 			
 			//TODO finish
 			
@@ -1123,7 +1114,7 @@ public class CodeGeneration {
 		//add coordinates parameters if needed
 		for (int i = 0; i < dimension; i++) {
 			if (type.coordinates[i] == null) {
-				method.append("int ").append(Utils.getAxisLetterFromIndex(dimension, i)).append(", ");
+				method.append("int ").append(Utils.getAxisLabel(dimension, i)).append(", ");
 			}
 		}
 		//add current value parameter
@@ -1132,9 +1123,9 @@ public class CodeGeneration {
 		int neighborCount = type.neighbors.size();
 		for (int i = 0; i < neighborCount; i++) {
 			NeighborType neighbor = type.neighbors.get(i);
-			char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+			String axisLabel = Utils.getUpperCaseAxisLabel(dimension, neighbor.axisIndex);
 			String dir = neighbor.isPositiveDirection? "g" : "s";
-			String varPrefix = dir + axisLetter;
+			String varPrefix = dir + axisLabel;
 			method.append("long ").append(varPrefix).append("Value, ");
 			if (neighbor.symmetryCount == null) {
 				method.append("int ").append(varPrefix).append("SymmetryCount, ");
@@ -1164,9 +1155,9 @@ public class CodeGeneration {
 			method.append("int relevantNeighborCount = 0;").append(getNL(ind1));
 			for (int i = 0; i < neighborCount; i++) {
 				NeighborType neighbor = type.neighbors.get(i);
-				char axisLetter = Utils.getUpperCaseAxisLetterFromIndex(dimension, neighbor.axisIndex);
+				String axisLabel = Utils.getUpperCaseAxisLabel(dimension, neighbor.axisIndex);
 				String dir = neighbor.isPositiveDirection? "g" : "s";
-				String varPrefix = dir + axisLetter;
+				String varPrefix = dir + axisLabel;
 				String valueVarName = varPrefix + "Value";
 				method.append("if (").append(valueVarName).append(" < currentValue) {").append(getNL(ind2))
 				.append("relevantAsymmetricNeighborValues[").append(regularCountVariable).append("] = ").append(valueVarName).append(";").append(getNL(ind2))
@@ -1177,7 +1168,7 @@ public class CodeGeneration {
 					method.append("nc[").append(axis).append("] = ");
 					coordinate = type.coordinates[axis];
 					if (coordinate == null) {
-						method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+						method.append(Utils.getAxisLabel(dimension, axis));
 					} else {
 						method.append(coordinate);
 					}
@@ -1186,7 +1177,7 @@ public class CodeGeneration {
 				method.append("nc[").append(axis).append("] = ");
 				coordinate = type.coordinates[axis];
 				if (coordinate == null) {
-					method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+					method.append(Utils.getAxisLabel(dimension, axis));
 					if (neighbor.isPositiveDirection) {
 						method.append(" + 1");
 					} else {
@@ -1207,7 +1198,7 @@ public class CodeGeneration {
 					method.append("nc[").append(axis).append("] = ");
 					coordinate = type.coordinates[axis];
 					if (coordinate == null) {
-						method.append(Utils.getAxisLetterFromIndex(dimension, axis));
+						method.append(Utils.getAxisLabel(dimension, axis));
 					} else {
 						method.append(coordinate);
 					}
@@ -1238,7 +1229,7 @@ public class CodeGeneration {
 			method.append("return topplePosition(newGrid, currentValue, ");
 			for (int i = 0; i < dimension; i++) {
 				if (type.coordinates[i] == null) {
-					method.append(Utils.getAxisLetterFromIndex(dimension, i));
+					method.append(Utils.getAxisLabel(dimension, i));
 				} else {
 					method.append(type.coordinates[i]);
 				}
@@ -1408,7 +1399,7 @@ public class CodeGeneration {
 		int size = maxCoord + 1;
 		StringBuilder header = new StringBuilder();
 		StringBuilder underline = new StringBuilder();
-		header.append("  ").append(Utils.getAxisLetterFromIndex(dimension, 0)).append(" ");
+		header.append("  ").append(Utils.getAxisLabel(dimension, 0)).append(" ");
 		underline.append("------------");
 		if (!hideNeighborhood) {
 			underline.append("---------------");
@@ -1417,7 +1408,7 @@ public class CodeGeneration {
 			underline.append("---------");
 		}
 		for (int coord = 1; coord < dimension; coord++) {
-			header.append("|  ").append(Utils.getAxisLetterFromIndex(dimension, coord)).append(" ");
+			header.append("|  ").append(Utils.getAxisLabel(dimension, coord)).append(" ");
 			underline.append("-----");
 		}
 		if (!hideNeighborhood) {
@@ -1466,7 +1457,7 @@ public class CodeGeneration {
 	public static void printAnisotropicPositionsVonNeumannNeighborhoods(int dimension, int size, boolean hideNeighborhood, boolean hideTypeB) {
 		StringBuilder header = new StringBuilder();
 		StringBuilder underline = new StringBuilder();
-		header.append("  ").append(Utils.getAxisLetterFromIndex(dimension, 0)).append(" ");
+		header.append("  ").append(Utils.getAxisLabel(dimension, 0)).append(" ");
 		underline.append("------------");
 		if (!hideNeighborhood) {
 			underline.append("---------------");
@@ -1475,7 +1466,7 @@ public class CodeGeneration {
 			underline.append("---------");
 		}
 		for (int coord = 1; coord < dimension; coord++) {
-			header.append("|  ").append(Utils.getAxisLetterFromIndex(dimension, coord)).append(" ");
+			header.append("|  ").append(Utils.getAxisLabel(dimension, coord)).append(" ");
 			underline.append("-----");
 		}
 		if (!hideNeighborhood) {
@@ -1590,8 +1581,8 @@ public class CodeGeneration {
 	private static void printAnisotropicPosition(int[] coords) {
 		String[] strCoords = new String[coords.length];
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);
-			strCoords[axis] = coordLetter + " = " + coords[axis];
+			String coordLabel = Utils.getAxisLabel(coords.length, axis);
+			strCoords[axis] = coordLabel + " = " + coords[axis];
 		}		
 		System.out.println(String.join(", ", strCoords));
 	}
@@ -1604,7 +1595,7 @@ public class CodeGeneration {
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);
+			String coordLabel = Utils.getAxisLabel(coords.length, axis);
 			strCoords[axis] = coords[axis] > 9 ? coords[axis] + "" : "0" + coords[axis];
 			
 			int[] greaterNeighborCoords = coords.clone();
@@ -1632,7 +1623,7 @@ public class CodeGeneration {
 			}
 			
 			if (greaterNeighborSymmetries > 0) {
-				String neighbor = "G" + Character.toUpperCase(coordLetter);
+				String neighbor = "G" + coordLabel.toUpperCase();
 				String plainNeighbor = neighbor;
 				if (greaterNeighborWeight > 1) {
 					hasMultipliers = true;
@@ -1646,7 +1637,7 @@ public class CodeGeneration {
 				plainNeighbors.add(plainNeighbor);
 			}
 			if (smallerNeighborSymmetries > 0) {
-				String neighbor = "S" + Character.toUpperCase(coordLetter);
+				String neighbor = "S" + coordLabel.toUpperCase();
 				String plainNeighbor = neighbor;
 				if (smallerNeighborWeight > 1) {
 					hasMultipliers = true;
@@ -1694,7 +1685,7 @@ public class CodeGeneration {
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);			
+			String coordLabel = Utils.getAxisLabel(coords.length, axis);			
 			int[] greaterNeighborCoords = coords.clone();
 			int[] smallerNeighborCoords = coords.clone();
 			greaterNeighborCoords[axis]++;
@@ -1720,7 +1711,7 @@ public class CodeGeneration {
 			}
 			
 			if (greaterNeighborSymmetries > 0) {
-				String neighbor = "G" + Character.toUpperCase(coordLetter);
+				String neighbor = "G" + coordLabel.toUpperCase();
 				String plainNeighbor = neighbor;
 				if (greaterNeighborWeight > 1) {
 					hasMultipliers = true;
@@ -1734,7 +1725,7 @@ public class CodeGeneration {
 				plainNeighbors.add(plainNeighbor);
 			}
 			if (smallerNeighborSymmetries > 0) {
-				String neighbor = "S" + Character.toUpperCase(coordLetter);
+				String neighbor = "S" + coordLabel.toUpperCase();
 				String plainNeighbor = neighbor;
 				if (smallerNeighborWeight > 1) {
 					hasMultipliers = true;
@@ -1769,7 +1760,7 @@ public class CodeGeneration {
 		boolean hasSymmetries = false;
 		boolean hasMultipliers = false;
 		for (int axis = 0; axis < coords.length; axis++) {
-			char coordLetter = Utils.getAxisLetterFromIndex(coords.length, axis);			
+			String coordLabel = Utils.getAxisLabel(coords.length, axis);			
 			int[] greaterNeighborCoords = coords.clone();
 			int[] smallerNeighborCoords = coords.clone();
 			greaterNeighborCoords[axis]++;
@@ -1795,7 +1786,7 @@ public class CodeGeneration {
 			}
 			
 			if (greaterNeighborSymmetries > 0) {
-				String neighbor = "G" + Character.toUpperCase(coordLetter);
+				String neighbor = "G" + coordLabel.toUpperCase();
 				String plainNeighbor = neighbor;
 				if (greaterNeighborWeight > 1) {
 					hasMultipliers = true;
@@ -1809,7 +1800,7 @@ public class CodeGeneration {
 				plainNeighbors.add(plainNeighbor);
 			}
 			if (smallerNeighborSymmetries > 0) {
-				String neighbor = "S" + Character.toUpperCase(coordLetter);
+				String neighbor = "S" + coordLabel.toUpperCase();
 				String plainNeighbor = neighbor;
 				if (smallerNeighborWeight > 1) {
 					hasMultipliers = true;
