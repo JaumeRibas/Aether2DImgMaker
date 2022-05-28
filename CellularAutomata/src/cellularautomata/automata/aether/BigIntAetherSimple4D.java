@@ -190,12 +190,12 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 								if (!neighborValue.equals(previousNeighborValue) || isFirst) {
 									int shareCount = neighbors.size() + 1;
 									BigInt toShare = value.subtract(neighborValue);
-									BigInt[] shareAndReminder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-									BigInt share = shareAndReminder[0];
+									BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+									BigInt share = shareAndRemainder[0];
 									if (!share.equals(BigInt.ZERO)) {
 										checkBoundsReached(w + indexOffset, x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
 										changed = true;
-										value = value.subtract(toShare).add(shareAndReminder[1]).add(share);
+										value = value.subtract(toShare).add(shareAndRemainder[1]).add(share);
 										for (Neighbor<BigInt> neighbor : neighbors) {
 											int[] nc = getNeighborCoordinates(w, x, y, z, neighbor.getDirection());
 											nc[0] += indexOffset;
