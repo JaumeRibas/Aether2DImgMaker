@@ -280,6 +280,8 @@ public class ImgMaker {
 			System.out.println();
 		} while (ca.nextStep());
 		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
 	}
 	
 	public void createEvenOddImages(LongModel2D ca, ColorMapper colorMapper, 
@@ -351,6 +353,8 @@ public class ImgMaker {
 			System.out.println();
 		} while (ca.nextStep());
 		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
 	}
 	
 	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void createEvenOddImages(NumericModel2D<Number_Type> ca, ColorMapper colorMapper, 
@@ -422,6 +426,8 @@ public class ImgMaker {
 			System.out.println();
 		} while (ca.nextStep());
 		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
 	}
 	
 	public void createScanningAndZCrossSectionImages(IntModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
