@@ -45,14 +45,13 @@ import cellularautomata.model.LongModel;
 import cellularautomata.model.NumericModel;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.NumericModel1D;
-import cellularautomata.model1d.ObjectModel1D;
 import cellularautomata.model2d.ArrayIntGrid2D;
+import cellularautomata.model2d.ArrayLongGrid2D;
 import cellularautomata.model2d.ArrayNumberGrid2D;
 import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
-import cellularautomata.model2d.ObjectModel2D;
 import cellularautomata.model3d.Model3D;
 import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model3d.LongModel3D;
@@ -74,6 +73,244 @@ public class Test {
 		Aether2D ae1 = new Aether2D(initialValue);
 		AetherSimple2D ae2 = new AetherSimple2D(initialValue);
 		compareAllSteps(ae1, ae2);
+	}
+	
+	public static void test2DModelMinAndMaxValues() throws Exception {
+		int side = 20;
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		String[] names = new String[] { "Global", "Even", "Odd", "Even X", "Odd X", "Even Y", "Odd Y" };
+		//int 
+		System.out.println("Testing IntModel2D");
+		int[][] intValues = new int[side][side];
+		ArrayIntGrid2D intGrid = new ArrayIntGrid2D(0, new int[side], intValues);
+		int[][] intMinAndMaxToCompare = new int[7][2];
+		for (int i = 0; i < intMinAndMaxToCompare.length; i++) {
+			intMinAndMaxToCompare[i][0] = Integer.MAX_VALUE;
+			intMinAndMaxToCompare[i][1] = Integer.MIN_VALUE;
+		}
+		for (int x = 0; x < side; x++) {
+			for (int y = 0; y < side; y++) {
+				boolean isEvenPosition = (x+y)%2 == 0;
+				boolean isEvenX = x%2 == 0;
+				boolean isEvenY = y%2 == 0;
+				int value = random.nextInt();
+				intValues[x][y] = value;
+				int i = 0; //all positions
+				if (value < intMinAndMaxToCompare[i][0])
+					intMinAndMaxToCompare[i][0] = value;
+				if (value > intMinAndMaxToCompare[i][1])
+					intMinAndMaxToCompare[i][1] = value;
+				if (isEvenPosition) {
+					i = 1;//even
+					if (value < intMinAndMaxToCompare[i][0])
+						intMinAndMaxToCompare[i][0] = value;
+					if (value > intMinAndMaxToCompare[i][1])
+						intMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 2;//odd
+					if (value < intMinAndMaxToCompare[i][0])
+						intMinAndMaxToCompare[i][0] = value;
+					if (value > intMinAndMaxToCompare[i][1])
+						intMinAndMaxToCompare[i][1] = value;
+				}
+				if (isEvenX) {
+					i = 3;//even x
+					if (value < intMinAndMaxToCompare[i][0])
+						intMinAndMaxToCompare[i][0] = value;
+					if (value > intMinAndMaxToCompare[i][1])
+						intMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 4;//odd x
+					if (value < intMinAndMaxToCompare[i][0])
+						intMinAndMaxToCompare[i][0] = value;
+					if (value > intMinAndMaxToCompare[i][1])
+						intMinAndMaxToCompare[i][1] = value;
+				}
+				if (isEvenY) {
+					i = 5;//even y
+					if (value < intMinAndMaxToCompare[i][0])
+						intMinAndMaxToCompare[i][0] = value;
+					if (value > intMinAndMaxToCompare[i][1])
+						intMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 6;//odd y
+					if (value < intMinAndMaxToCompare[i][0])
+						intMinAndMaxToCompare[i][0] = value;
+					if (value > intMinAndMaxToCompare[i][1])
+						intMinAndMaxToCompare[i][1] = value;
+				}
+			}
+		}
+		int[][] intMinAndMax = new int[7][2];
+		intMinAndMax[0] = intGrid.getMinAndMax();
+		intMinAndMax[1] = intGrid.getEvenOddPositionsMinAndMax(true);
+		intMinAndMax[2] = intGrid.getEvenOddPositionsMinAndMax(false);
+		intMinAndMax[3] = intGrid.getMinAndMaxAtEvenOddX(true);
+		intMinAndMax[4] = intGrid.getMinAndMaxAtEvenOddX(false);
+		intMinAndMax[5] = intGrid.getMinAndMaxAtEvenOddY(true);
+		intMinAndMax[6] = intGrid.getMinAndMaxAtEvenOddY(false);
+		for (int i = 0; i < intMinAndMaxToCompare.length; i++) {
+			if (intMinAndMax[i][0] != intMinAndMaxToCompare[i][0] || intMinAndMax[i][1] != intMinAndMaxToCompare[i][1]) {
+				System.out.println(names[i] + " min and max don't match [" + intMinAndMax[i][0] + ", " + intMinAndMax[i][1] + "] != [" + intMinAndMaxToCompare[i][0] + ", " + intMinAndMaxToCompare[i][1] + "]");
+				return;
+			}
+		}
+		
+		//long
+		System.out.println("Testing LongModel2D");
+		long[][] longValues = new long[side][side];
+		ArrayLongGrid2D longGrid = new ArrayLongGrid2D(0, new int[side], longValues);
+		long[][] longMinAndMaxToCompare = new long[7][2];
+		for (int i = 0; i < longMinAndMaxToCompare.length; i++) {
+			longMinAndMaxToCompare[i][0] = Long.MAX_VALUE;
+			longMinAndMaxToCompare[i][1] = Long.MIN_VALUE;
+		}
+		for (int x = 0; x < side; x++) {
+			for (int y = 0; y < side; y++) {
+				boolean isEvenPosition = (x+y)%2 == 0;
+				boolean isEvenX = x%2 == 0;
+				boolean isEvenY = y%2 == 0;
+				long value = random.nextLong();
+				longValues[x][y] = value;
+				int i = 0; //all positions
+				if (value < longMinAndMaxToCompare[i][0])
+					longMinAndMaxToCompare[i][0] = value;
+				if (value > longMinAndMaxToCompare[i][1])
+					longMinAndMaxToCompare[i][1] = value;
+				if (isEvenPosition) {
+					i = 1;//even
+					if (value < longMinAndMaxToCompare[i][0])
+						longMinAndMaxToCompare[i][0] = value;
+					if (value > longMinAndMaxToCompare[i][1])
+						longMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 2;//odd
+					if (value < longMinAndMaxToCompare[i][0])
+						longMinAndMaxToCompare[i][0] = value;
+					if (value > longMinAndMaxToCompare[i][1])
+						longMinAndMaxToCompare[i][1] = value;
+				}
+				if (isEvenX) {
+					i = 3;//even x
+					if (value < longMinAndMaxToCompare[i][0])
+						longMinAndMaxToCompare[i][0] = value;
+					if (value > longMinAndMaxToCompare[i][1])
+						longMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 4;//odd x
+					if (value < longMinAndMaxToCompare[i][0])
+						longMinAndMaxToCompare[i][0] = value;
+					if (value > longMinAndMaxToCompare[i][1])
+						longMinAndMaxToCompare[i][1] = value;
+				}
+				if (isEvenY) {
+					i = 5;//even y
+					if (value < longMinAndMaxToCompare[i][0])
+						longMinAndMaxToCompare[i][0] = value;
+					if (value > longMinAndMaxToCompare[i][1])
+						longMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 6;//odd y
+					if (value < longMinAndMaxToCompare[i][0])
+						longMinAndMaxToCompare[i][0] = value;
+					if (value > longMinAndMaxToCompare[i][1])
+						longMinAndMaxToCompare[i][1] = value;
+				}
+			}
+		}
+		long[][] longMinAndMax = new long[7][2];
+		longMinAndMax[0] = longGrid.getMinAndMax();
+		longMinAndMax[1] = longGrid.getEvenOddPositionsMinAndMax(true);
+		longMinAndMax[2] = longGrid.getEvenOddPositionsMinAndMax(false);
+		longMinAndMax[3] = longGrid.getMinAndMaxAtEvenOddX(true);
+		longMinAndMax[4] = longGrid.getMinAndMaxAtEvenOddX(false);
+		longMinAndMax[5] = longGrid.getMinAndMaxAtEvenOddY(true);
+		longMinAndMax[6] = longGrid.getMinAndMaxAtEvenOddY(false);
+		for (int i = 0; i < longMinAndMaxToCompare.length; i++) {
+			if (longMinAndMax[i][0] != longMinAndMaxToCompare[i][0] || longMinAndMax[i][1] != longMinAndMaxToCompare[i][1]) {
+				System.out.println(names[i] + " min and max don't match [" + longMinAndMax[i][0] + ", " + longMinAndMax[i][1] + "] != [" + longMinAndMaxToCompare[i][0] + ", " + longMinAndMaxToCompare[i][1] + "]");
+				return;
+			}
+		}
+
+		//Numeric
+		System.out.println("Testing NumericModel2D");
+		BigInt[][] bigIntValues = new BigInt[side][side];
+		ArrayNumberGrid2D<BigInt> bigIntGrid = new ArrayNumberGrid2D<BigInt>(0, new int[side], bigIntValues);
+		BigInt[][] bigIntMinAndMaxToCompare = new BigInt[7][2];
+		for (int i = 0; i < bigIntMinAndMaxToCompare.length; i++) {
+			bigIntMinAndMaxToCompare[i][0] = BigInt.valueOf(Long.MAX_VALUE);
+			bigIntMinAndMaxToCompare[i][1] = BigInt.valueOf(Long.MIN_VALUE);
+		}
+		for (int x = 0; x < side; x++) {
+			for (int y = 0; y < side; y++) {
+				boolean isEvenPosition = (x+y)%2 == 0;
+				boolean isEvenX = x%2 == 0;
+				boolean isEvenY = y%2 == 0;
+				BigInt value = BigInt.valueOf(random.nextLong());
+				bigIntValues[x][y] = value;
+				int i = 0; //all positions
+				if (value.compareTo(bigIntMinAndMaxToCompare[i][0]) < 0)
+					bigIntMinAndMaxToCompare[i][0] = value;
+				if (value.compareTo(bigIntMinAndMaxToCompare[i][1]) > 0)
+					bigIntMinAndMaxToCompare[i][1] = value;
+				if (isEvenPosition) {
+					i = 1;//even
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][0]) < 0)
+						bigIntMinAndMaxToCompare[i][0] = value;
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][1]) > 0)
+						bigIntMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 2;//odd
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][0]) < 0)
+						bigIntMinAndMaxToCompare[i][0] = value;
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][1]) > 0)
+						bigIntMinAndMaxToCompare[i][1] = value;
+				}
+				if (isEvenX) {
+					i = 3;//even x
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][0]) < 0)
+						bigIntMinAndMaxToCompare[i][0] = value;
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][1]) > 0)
+						bigIntMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 4;//odd x
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][0]) < 0)
+						bigIntMinAndMaxToCompare[i][0] = value;
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][1]) > 0)
+						bigIntMinAndMaxToCompare[i][1] = value;
+				}
+				if (isEvenY) {
+					i = 5;//even y
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][0]) < 0)
+						bigIntMinAndMaxToCompare[i][0] = value;
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][1]) > 0)
+						bigIntMinAndMaxToCompare[i][1] = value;
+				} else {
+					i = 6;//odd y
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][0]) < 0)
+						bigIntMinAndMaxToCompare[i][0] = value;
+					if (value.compareTo(bigIntMinAndMaxToCompare[i][1]) > 0)
+						bigIntMinAndMaxToCompare[i][1] = value;
+				}
+			}
+		}
+		@SuppressWarnings("unchecked")
+		MinAndMax<BigInt>[] bigIntMinAndMax = (MinAndMax<BigInt>[]) Array.newInstance(new MinAndMax<BigInt>(BigInt.ZERO, BigInt.ONE).getClass(), 7);
+		bigIntMinAndMax[0] = bigIntGrid.getMinAndMax();
+		bigIntMinAndMax[1] = bigIntGrid.getEvenOddPositionsMinAndMax(true);
+		bigIntMinAndMax[2] = bigIntGrid.getEvenOddPositionsMinAndMax(false);
+		bigIntMinAndMax[3] = bigIntGrid.getMinAndMaxAtEvenOddX(true);
+		bigIntMinAndMax[4] = bigIntGrid.getMinAndMaxAtEvenOddX(false);
+		bigIntMinAndMax[5] = bigIntGrid.getMinAndMaxAtEvenOddY(true);
+		bigIntMinAndMax[6] = bigIntGrid.getMinAndMaxAtEvenOddY(false);
+		for (int i = 0; i < bigIntMinAndMaxToCompare.length; i++) {
+			if (!bigIntMinAndMax[i].getMin().equals(bigIntMinAndMaxToCompare[i][0]) || !bigIntMinAndMax[i].getMax().equals(bigIntMinAndMaxToCompare[i][1])) {
+				System.out.println(names[i] + " min and max don't match [" + bigIntMinAndMax[i].getMin() + ", " + bigIntMinAndMax[i].getMax() + "] != [" + bigIntMinAndMaxToCompare[i][0] + ", " + bigIntMinAndMaxToCompare[i][1] + "]");
+				return;
+			}
+		}
+		System.out.println("Min and max values match!");
 	}
 	
 	public static void checkBoundsConsistency(Model2D grid) {
@@ -450,29 +687,29 @@ public class Test {
 		try {
 			System.out.println("single dot");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[1], new int[][] {{1}});
-			printAsGrid(grid, 0);
+			Utils.printAsGrid(grid);
 			System.out.println("single line, horiz, vert, diagonal");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[5], new int[][] { {1}, {1}, {1}, {1}, {1} });
-			printAsGrid(grid, 0);
+			Utils.printAsGrid(grid);
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[1], new int[][] { {1, 1, 1, 1, 1 } });
-			printAsGrid(grid, 0);
+			Utils.printAsGrid(grid);
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {-2, -1, 0, 1, 2 }, new int[][] { {1}, {1}, {1}, {1}, {1} });
-			printAsGrid(grid, 0);
+			Utils.printAsGrid(grid);
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {2, 1, 0, -1, -2 }, new int[][] { {1}, {1}, {1}, {1}, {1} });
-			printAsGrid(grid, 0);
+			Utils.printAsGrid(grid);
 			System.out.println("tilted square");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {0, -1, -2, -3, -2, -1, 0 }, 
 					new int[][] { {1}, {1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1}, {1} });
-			printAsGrid(grid, 0);
+			Utils.printAsGrid(grid);
 			System.out.println("aligned square");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {-3, -3, -3, -3, -3 }, 
 					new int[][] { {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1} });
-			printAsGrid(grid, 0);
+			Utils.printAsGrid(grid);
 			System.out.println("object grid");
 			BigInt[][] array = testGenericArrayBySample(BigInt.ZERO, 1, 1);
 			array[0][0] = BigInt.ONE;
 			ArrayNumberGrid2D<BigInt> nubergrid = new ArrayNumberGrid2D<BigInt>(0, new int[1], array);
-			printAsGrid(nubergrid, BigInt.ZERO);
+			Utils.printAsGrid(nubergrid);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1920,7 +2157,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca, 0);
+				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -1935,7 +2172,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca, 0);
+				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -1950,7 +2187,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca, 0);
+				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -1965,7 +2202,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca, null);
+				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -1980,7 +2217,7 @@ public class Test {
 			Scanner s = new Scanner(System.in);
 			do {
 				System.out.println("step " + ca.getStep());
-				printAsGrid(ca, null);
+				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
 			} while (ca.nextStep());
@@ -2001,213 +2238,6 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static <Object_Type> void printAsGrid(ObjectModel2D<Object_Type> grid, Object_Type backgroundValue) throws Exception {
-		
-		int maxDigits = 3;
-		int maxY = grid.getMaxY();
-		int minY = grid.getMinY();
-		int maxX = grid.getMaxX();
-		int minX = grid.getMinX();
-		for (int y = maxY; y >= minY; y--) {
-			int localMaxX = grid.getMaxX(y);
-			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
-				int digits = grid.getFromPosition(x, y).toString().length();
-				if (digits > maxDigits)
-					maxDigits = digits;
-			}
-		}
-		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
-			headFootGap += "-";
-		}
-		String headFoot = "+";
-		for (int i = minX; i <= maxX; i++) {
-			headFoot += headFootGap + "+";
-		}
-		for (int y = maxY; y >= minY; y--) {
-			System.out.println(headFoot);
-			int localMaxX = grid.getMaxX(y);
-			int localMinX = grid.getMinX(y);
-			int x = minX;
-			for (; x < localMinX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			for (; x <= localMaxX; x++) {
-				String strVal = " ";
-				Object_Type val = grid.getFromPosition(x, y);
-				if (!val.equals(backgroundValue)) {
-					strVal = val.toString();
-				}
-				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
-			}
-			for (; x <= maxX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			System.out.println("|");
-		}
-		System.out.println(headFoot);
-	}
-	
-	public static <Object_Type> void printAsGrid(ObjectModel1D<Object_Type> grid, Object_Type backgroundValue) throws Exception {
-		int maxDigits = 3;
-		int maxX = grid.getMaxX();
-		int minX = grid.getMinX();
-		for (int x = minX; x <= maxX; x++) {
-			int digits = grid.getFromPosition(x).toString().length();
-			if (digits > maxDigits)
-				maxDigits = digits;
-		}
-		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
-			headFootGap += "-";
-		}
-		String headFoot = "+";
-		for (int i = minX; i <= maxX; i++) {
-			headFoot += headFootGap + "+";
-		}
-		System.out.println(headFoot);
-		for (int x = minX; x <= maxX; x++) {
-			String strVal = " ";
-			Object_Type val = grid.getFromPosition(x);
-			if (!val.equals(backgroundValue)) {
-				strVal = val + "";
-			}
-			System.out.print("|" + padLeft(strVal, ' ', maxDigits));
-		}
-		System.out.println("|");
-		System.out.println(headFoot);
-	}
-	
-	public static void printAsGrid(LongModel2D grid, long backgroundValue) throws Exception {
-		int maxDigits = 3;
-		int maxY = grid.getMaxY();
-		int minY = grid.getMinY();
-		int maxX = grid.getMaxX();
-		int minX = grid.getMinX();
-		for (int y = maxY; y >= minY; y--) {
-			int localMaxX = grid.getMaxX(y);
-			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
-				int digits = Long.toString(grid.getFromPosition(x, y)).length();
-				if (digits > maxDigits)
-					maxDigits = digits;
-			}
-		}
-		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
-			headFootGap += "-";
-		}
-		String headFoot = "+";
-		for (int i = minX; i <= maxX; i++) {
-			headFoot += headFootGap + "+";
-		}
-		for (int y = maxY; y >= minY; y--) {
-			System.out.println(headFoot);
-			int localMaxX = grid.getMaxX(y);
-			int localMinX = grid.getMinX(y);
-			int x = minX;
-			for (; x < localMinX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			for (; x <= localMaxX; x++) {
-				String strVal = " ";
-				long val = grid.getFromPosition(x, y);
-				if (val != backgroundValue) {
-					strVal = val + "";
-				}
-				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
-			}
-			for (; x <= maxX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			System.out.println("|");
-		}
-		System.out.println(headFoot);
-	}
-	
-	public static void printAsGrid(LongModel1D grid, long backgroundValue) throws Exception {
-		int maxDigits = 3;
-		int maxX = grid.getMaxX();
-		int minX = grid.getMinX();
-		for (int x = minX; x <= maxX; x++) {
-			int digits = Long.toString(grid.getFromPosition(x)).length();
-			if (digits > maxDigits)
-				maxDigits = digits;
-		}
-		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
-			headFootGap += "-";
-		}
-		String headFoot = "+";
-		for (int i = minX; i <= maxX; i++) {
-			headFoot += headFootGap + "+";
-		}
-		System.out.println(headFoot);
-		for (int x = minX; x <= maxX; x++) {
-			String strVal = " ";
-			long val = grid.getFromPosition(x);
-			if (val != backgroundValue) {
-				strVal = val + "";
-			}
-			System.out.print("|" + padLeft(strVal, ' ', maxDigits));
-		}
-		System.out.println("|");
-		System.out.println(headFoot);
-	}
-	
-	public static void printAsGrid(IntModel2D grid, int backgroundValue) throws Exception {
-		int maxDigits = 3;
-		int maxY = grid.getMaxY();
-		int minY = grid.getMinY();
-		int maxX = grid.getMaxX();
-		int minX = grid.getMinX();
-		for (int y = maxY; y >= minY; y--) {
-			int localMaxX = grid.getMaxX(y);
-			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
-				int digits = Long.toString(grid.getFromPosition(x, y)).length();
-				if (digits > maxDigits)
-					maxDigits = digits;
-			}
-		}
-		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
-			headFootGap += "-";
-		}
-		String headFoot = "+";
-		for (int i = minX; i <= maxX; i++) {
-			headFoot += headFootGap + "+";
-		}
-		for (int y = maxY; y >= minY; y--) {
-			System.out.println(headFoot);
-			int localMaxX = grid.getMaxX(y);
-			int localMinX = grid.getMinX(y);
-			int x = minX;
-			for (; x < localMinX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			for (; x <= localMaxX; x++) {
-				String strVal = " ";
-				long val = grid.getFromPosition(x, y);
-				if (val != backgroundValue) {
-					strVal = val + "";
-				}
-				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
-			}
-			for (; x <= maxX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
-			}
-			System.out.println("|");
-		}
-		System.out.println(headFoot);
-	}
-	
-	public static String padLeft(String source, char c, int totalLength) {
-		int margin = totalLength - source.length();
-		for (int i = 0; i < margin; i++) {
-			source = c + source;
-		}
-		return source;
 	}
 	
 	public static long[][] parseCSVLong2DArray(String pathName) throws IOException {

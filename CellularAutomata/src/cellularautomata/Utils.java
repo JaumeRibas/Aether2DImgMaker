@@ -27,6 +27,12 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.fraction.BigFraction;
+
+import cellularautomata.model1d.LongModel1D;
+import cellularautomata.model1d.ObjectModel1D;
+import cellularautomata.model2d.IntModel2D;
+import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.ObjectModel2D;
 import cellularautomata.numbers.BigInt;
 
 public class Utils {
@@ -791,6 +797,192 @@ public class Utils {
 			sortedIndexes[0] = sortedIndexes[2];
 			sortedIndexes[2] = indexSwap;
 		}
+	}
+	
+	public static <Object_Type> void printAsGrid(ObjectModel2D<Object_Type> grid) throws Exception {		
+		int maxDigits = 3;
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		for (int y = maxY; y >= minY; y--) {
+			int localMaxX = grid.getMaxX(y);
+			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
+				int digits = grid.getFromPosition(x, y).toString().length();
+				if (digits > maxDigits)
+					maxDigits = digits;
+			}
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxDigits; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			for (; x <= localMaxX; x++) {
+				String strVal = grid.getFromPosition(x, y) + "";
+				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static <Object_Type> void printAsGrid(ObjectModel1D<Object_Type> grid) throws Exception {
+		int maxDigits = 3;
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		for (int x = minX; x <= maxX; x++) {
+			int digits = grid.getFromPosition(x).toString().length();
+			if (digits > maxDigits)
+				maxDigits = digits;
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxDigits; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		System.out.println(headFoot);
+		for (int x = minX; x <= maxX; x++) {
+			String strVal = grid.getFromPosition(x) + "";
+			System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+		}
+		System.out.println("|");
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(LongModel2D grid) throws Exception {
+		int maxDigits = 3;
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		for (int y = maxY; y >= minY; y--) {
+			int localMaxX = grid.getMaxX(y);
+			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
+				int digits = Long.toString(grid.getFromPosition(x, y)).length();
+				if (digits > maxDigits)
+					maxDigits = digits;
+			}
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxDigits; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			for (; x <= localMaxX; x++) {
+				String strVal = grid.getFromPosition(x, y) + "";
+				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(LongModel1D grid) throws Exception {
+		int maxDigits = 3;
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		for (int x = minX; x <= maxX; x++) {
+			int digits = Long.toString(grid.getFromPosition(x)).length();
+			if (digits > maxDigits)
+				maxDigits = digits;
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxDigits; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		System.out.println(headFoot);
+		for (int x = minX; x <= maxX; x++) {
+			String strVal = grid.getFromPosition(x) + "";
+			System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+		}
+		System.out.println("|");
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(IntModel2D grid) throws Exception {
+		int maxDigits = 3;
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		for (int y = maxY; y >= minY; y--) {
+			int localMaxX = grid.getMaxX(y);
+			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
+				int digits = Long.toString(grid.getFromPosition(x, y)).length();
+				if (digits > maxDigits)
+					maxDigits = digits;
+			}
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxDigits; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			for (; x <= localMaxX; x++) {
+				String strVal = grid.getFromPosition(x, y) + "";
+				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static String padLeft(String source, char c, int totalLength) {
+		int margin = totalLength - source.length();
+		for (int i = 0; i < margin; i++) {
+			source = c + source;
+		}
+		return source;
 	}
 
 }
