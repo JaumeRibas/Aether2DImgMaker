@@ -244,7 +244,7 @@ public class ImgMaker {
 			if (!omitOdd) {
 				int[] oddMinAndMaxValue = ca.getEvenOddPositionsMinAndMax(!isEvenStep);
 				if (oddMinAndMaxValue != null) {
-					System.out.println("odd positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
+					System.out.println("Odd positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
 					ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 					createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
 							imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
@@ -317,7 +317,7 @@ public class ImgMaker {
 			if (!omitOdd) {
 				long[] oddMinAndMaxValue = ca.getEvenOddPositionsMinAndMax(!isEvenStep);
 				if (oddMinAndMaxValue != null) {
-					System.out.println("odd positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
+					System.out.println("Odd positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
 					ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 					createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
 							imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
@@ -390,13 +390,86 @@ public class ImgMaker {
 			if (!omitOdd) {
 				MinAndMax<Number_Type> oddMinAndMaxValue = ca.getEvenOddPositionsMinAndMax(!isEvenStep);
 				if (oddMinAndMaxValue != null) {
-					System.out.println("odd positions: min value: " + oddMinAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + oddMinAndMaxValue.getMax());
+					System.out.println("Odd positions: min value: " + oddMinAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + oddMinAndMaxValue.getMax());
 					ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue.getMin(), oddMinAndMaxValue.getMax());
 					createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
 							imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
 				} else {
 					createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
 							imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+				}
+			}			
+			folderImageCount++;
+			if (folderImageCount == imgsPerFolder) {
+				numberedFolder++;
+				folderImageCount = 0;
+			}		
+			boolean backUp = false;
+			if (saveBackupsAutomatically) {
+				backUp = System.currentTimeMillis() >= nextBckTime;
+				if (backUp) {
+					nextBckTime += millisecondsBetweenBackups;
+				}
+			}
+			if (backupRequested) {
+				backUp = true;
+				backupRequested = false;
+			}
+			if (backUp) {
+				String backupName = ca.getClass().getSimpleName() + "_" + step;
+				System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
+				ca.backUp(backupPath, backupName);		
+				System.out.println("Backing up finished");
+			}	
+			step++;
+			isEvenStep = !isEvenStep;
+			System.out.println();
+		} while (ca.nextStep());
+		System.out.println("Finished!");
+		stdIn.stop();
+		inputThread.join();
+	}
+	
+	public void createImagesFromEvenOddX(IntModel2D ca, ColorMapper colorMapper, 
+			int minWidth, int minHeight, String path, String backupPath, boolean omitEven, boolean omitOdd) throws Exception {	
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		long step = ca.getStep();
+		String caName = ca.getName();
+		String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
+		boolean isEvenStep = step%2 == 0;
+		int numberedFolder = (int) (step/imgsPerFolder);
+		int folderImageCount = (int) (step%imgsPerFolder);
+		String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+		long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
+		do {
+			System.out.println("Step: " + step);
+			int minX = ca.getMinX(), maxX = ca.getMaxX(), 
+					minY = ca.getMinY(), maxY = ca.getMaxY();
+			System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);
+			if (!omitEven) {
+				int[] evenMinAndMaxValue = ca.getMinAndMaxAtEvenOddX(isEvenStep);			
+				if (evenMinAndMaxValue != null) {
+					System.out.println("Even " + xLabel + " positions: min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + evenMinAndMaxValue[1]);
+					ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
+					createImageFromEvenOrOddXPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
+						imgPath + "even_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+				} else {
+					createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
+							imgPath + "even_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+				}
+			}
+			if (!omitOdd) {
+				int[] oddMinAndMaxValue = ca.getMinAndMaxAtEvenOddX(!isEvenStep);
+				if (oddMinAndMaxValue != null) {
+					System.out.println("Odd " + xLabel + " positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
+					ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
+					createImageFromEvenOrOddXPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
+							imgPath + "odd_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+				} else {
+					createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
+							imgPath + "odd_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
 				}
 			}			
 			folderImageCount++;
@@ -1688,6 +1761,88 @@ public class ImgMaker {
 			}
 			boolean isPositionEven = (framedModelMinXAtY+y)%2 == 0;
 			if (isEven != isPositionEven) { 
+				framedModelMinXAtY++;
+				gridLeftMargin += gridPositionSize;
+			}
+			for (int i = 0; i < gridPositionSize; i++) {
+				dataIndex += gridLeftMargin * 3;
+				int x = framedModelMinXAtY;
+				for (; x < framedModelMaxXAtY; x+=2) {
+					java.awt.Color c = grid.getFromPosition(x,y);
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = (byte) c.getRed();
+						pixelData[dataIndex++] = (byte) c.getGreen();
+						pixelData[dataIndex++] = (byte) c.getBlue();
+					}
+					dataIndex += 3 * gridPositionSize;
+				}
+				if (x == framedModelMaxXAtY) {
+					java.awt.Color c = grid.getFromPosition(x,y);
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = (byte) c.getRed();
+						pixelData[dataIndex++] = (byte) c.getGreen();
+						pixelData[dataIndex++] = (byte) c.getBlue();
+					}
+				}
+				dataIndex += (canvasRightMargin + gridRightMargin) * 3;
+			}
+		}
+		saveAsPngImage(pixelData, width, height, path, name);
+	}
+	
+	public static void createImageFromEvenOrOddXPositions(ObjectModel2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
+			throws Exception {
+		int gridPositionSize = getModelPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
+		createImageFromEvenOrOddXPositions(grid, isEven, minX, maxX, minY, maxY, gridPositionSize, minWidth, minHeight, path, name);
+	}
+	
+	public static void createImageFromEvenOrOddXPositions(ObjectModel2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, int gridPositionSize, 
+			int minWidth, int minHeight, String path, String name) throws Exception {
+		int dataWidth = (maxX - minX + 1) * gridPositionSize;
+		int dataHeight = (maxY - minY + 1) * gridPositionSize;
+		int width = Math.max(dataWidth, minWidth);
+		int height = Math.max(dataHeight, minHeight);
+		long longByteCount = (long)width * height * 3;
+		if (longByteCount > Integer.MAX_VALUE)
+			throw new Exception("Integer max value exceeded");
+		int byteCount = (int)longByteCount;
+		byte[] pixelData = new byte[byteCount];
+		int canvasTopMargin = height - dataHeight;
+		int canvasRightMargin = width - dataWidth;
+		int gridTopMargin = 0;
+		int framedModelMinY, framedModelMaxY;
+		int gridMaxY = grid.getMaxY(), gridMinY = grid.getMinY();
+		if (maxY > gridMaxY) {
+			gridTopMargin = (maxY - gridMaxY) * gridPositionSize;
+			framedModelMaxY = gridMaxY;
+		} else {
+			framedModelMaxY = maxY;
+		}
+		if (minY < gridMinY) {
+			framedModelMinY = gridMinY;
+		} else {
+			framedModelMinY = minY;
+		}
+		int dataIndex = (canvasTopMargin + gridTopMargin) * width * 3;
+		for (int y = framedModelMaxY; y >= framedModelMinY; y--) {
+			int gridMinXAtY = grid.getMinX(y);
+			int gridMaxXAtY = grid.getMaxX(y);
+			int gridLeftMargin = 0, gridRightMargin = 0;
+			int framedModelMinXAtY, framedModelMaxXAtY;
+			if (minX < gridMinXAtY) {
+				gridLeftMargin = (gridMinXAtY - minX) * gridPositionSize;
+				framedModelMinXAtY = gridMinXAtY;
+			} else {
+				framedModelMinXAtY = minX;
+			}
+			if (maxX > gridMaxXAtY) {
+				gridRightMargin = (maxX - gridMaxXAtY) * gridPositionSize;
+				framedModelMaxXAtY = gridMaxXAtY;
+			} else {
+				framedModelMaxXAtY = maxX;
+			}
+			boolean isXEven = framedModelMinXAtY%2 == 0;
+			if (isEven != isXEven) { 
 				framedModelMinXAtY++;
 				gridLeftMargin += gridPositionSize;
 			}
