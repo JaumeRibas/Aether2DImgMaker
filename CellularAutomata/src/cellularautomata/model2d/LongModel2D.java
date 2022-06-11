@@ -80,6 +80,30 @@ public interface LongModel2D extends Model2D, LongModel {
 		return anyPositionMatches ? new long[]{ minValue, maxValue } : null;
 	}
 	
+	default long[] getMinAndMaxAtEvenOddX(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
+		int maxX = getMaxX(), minX = getMinX();
+		long maxValue = Long.MIN_VALUE, minValue = Long.MAX_VALUE;
+		int x = minX;
+		boolean isXEven = x%2 == 0;
+		if (isXEven != isEven) {
+			x++;
+		}
+		for (; x <= maxX; x+=2) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				anyPositionMatches = true;
+				long value = getFromPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return anyPositionMatches ? new long[]{ minValue, maxValue } : null;
+	}
+	
 	default long[] getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
 		boolean anyPositionMatches = false;
 		int maxX = getMaxX(), minX = getMinX();

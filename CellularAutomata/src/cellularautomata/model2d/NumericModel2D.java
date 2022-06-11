@@ -86,6 +86,45 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
 	}
 	
+	default MinAndMax<Number_Type> getMinAndMaxAtEvenOddX(boolean isEven) throws Exception {
+		int maxX = getMaxX(), minX = getMinX();
+		Number_Type maxValue = null;
+		Number_Type minValue = null;
+		int x = minX;
+		boolean isXEven = x%2 == 0;
+		if (isXEven != isEven) {
+			x++;
+		}
+		for (; x <= maxX && maxValue == null; x+=2) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			if (minY <= maxY) {
+				Number_Type value = getFromPosition(x, minY);
+				maxValue = value;
+				minValue = value;
+				for (int y = minY + 1; y <= maxY; y++) {
+					value = getFromPosition(x, y);
+					if (value.compareTo(maxValue) > 0)
+						maxValue = value;
+					if (value.compareTo(minValue) < 0)
+						minValue = value;
+				}
+			}
+		}
+		for (; x <= maxX; x+=2) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				Number_Type value = getFromPosition(x, y);
+				if (value.compareTo(maxValue) > 0)
+					maxValue = value;
+				if (value.compareTo(minValue) < 0)
+					minValue = value;
+			}
+		}
+		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
+	}
+	
 	default MinAndMax<Number_Type> getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		Number_Type maxValue = null;

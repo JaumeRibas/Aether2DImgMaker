@@ -81,6 +81,30 @@ public interface IntModel2D extends Model2D, IntModel {
 		return anyPositionMatches ? new int[]{ minValue, maxValue } : null;
 	}
 	
+	default int[] getMinAndMaxAtEvenOddX(boolean isEven) throws Exception {
+		boolean anyPositionMatches = false;
+		int maxX = getMaxX(), minX = getMinX();
+		int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
+		int x = minX;
+		boolean isXEven = x%2 == 0;
+		if (isXEven != isEven) {
+			x++;
+		}
+		for (; x <= maxX; x+=2) {
+			int minY = getMinY(x);
+			int maxY = getMaxY(x);
+			for (int y = minY; y <= maxY; y++) {
+				anyPositionMatches = true;
+				int value = getFromPosition(x, y);
+				if (value > maxValue)
+					maxValue = value;
+				if (value < minValue)
+					minValue = value;
+			}
+		}
+		return anyPositionMatches ? new int[]{ minValue, maxValue } : null;
+	}
+	
 	default int[] getMinAndMaxAtEvenOddY(boolean isEven) throws Exception {
 		boolean anyPositionMatches = false;
 		int maxX = getMaxX(), minX = getMinX();
