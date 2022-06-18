@@ -19,6 +19,8 @@ The `Ctrl`+`C` command can be used to halt the execution.
 
 **Beware that in some cases the app can generate a high number of images in a relatively short time.**
 
+([This other tool can be used to view the generated images](https://github.com/JaumeRibas/image-sequence-viewer)).
+
 ## Examples
 
 * Print the list of available options:
