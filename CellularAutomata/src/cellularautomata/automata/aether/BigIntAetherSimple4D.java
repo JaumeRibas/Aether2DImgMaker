@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cellularautomata.Constants;
@@ -73,9 +74,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				for (int k = 0; k < grid[i][j].length; k++) {
-					for (int l = 0; l < grid[i][j][k].length; l++) {
-						grid[i][j][k][l] = BigInt.ZERO;
-					}
+					Arrays.fill(grid[i][j][k], BigInt.ZERO);
 				}
 			}
 		}
@@ -104,9 +103,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 		for (int i = 0; i < newGrid.length; i++) {
 			for (int j = 0; j < newGrid[i].length; j++) {
 				for (int k = 0; k < newGrid[i][j].length; k++) {
-					for (int l = 0; l < newGrid[i][j][k].length; l++) {
-						newGrid[i][j][k][l] = BigInt.ZERO;
-					}
+					Arrays.fill(newGrid[i][j][k], BigInt.ZERO);
 				}
 			}
 		}

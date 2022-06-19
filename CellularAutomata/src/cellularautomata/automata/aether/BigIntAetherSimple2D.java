@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cellularautomata.Constants;
@@ -63,9 +64,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 		int side = 5;
 		grid = new BigInt[side][side];
 		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid[i].length; j++) {
-				grid[i][j] = BigInt.ZERO;
-			}
+			Arrays.fill(grid[i], BigInt.ZERO);
 		}
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = initialValue;
@@ -90,9 +89,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 			newGrid = new BigInt[grid.length][grid[0].length];
 		}
 		for (int i = 0; i < newGrid.length; i++) {
-			for (int j = 0; j < newGrid[i].length; j++) {
-				newGrid[i][j] = BigInt.ZERO;
-			}
+			Arrays.fill(newGrid[i], BigInt.ZERO);
 		}
 		boolean changed = false;
 		//For every position
