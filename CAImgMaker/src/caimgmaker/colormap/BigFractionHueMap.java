@@ -17,6 +17,8 @@
 package caimgmaker.colormap;
 
 import java.awt.Color;
+import java.math.BigDecimal;
+
 import org.apache.commons.math3.fraction.BigFraction;
 
 public class BigFractionHueMap implements BoundedColorMap<BigFraction> {
@@ -55,7 +57,8 @@ public class BigFractionHueMap implements BoundedColorMap<BigFraction> {
 	public Color getColor(BigFraction value) throws IllegalArgumentException {
 		if (value.compareTo(minValue) < 0 || value.compareTo(maxValue) > 0)
 			throw new IllegalArgumentException("The value " + value + " is out of the [" + minValue + ", " + maxValue + "] range");
-		float hue = (HUE_RANGE.multiply(value.subtract(minValue)).divide(range).floatValue() + HUE_MARGIN)/255;
+		@SuppressWarnings("deprecation")
+		float hue = (HUE_RANGE.multiply(value.subtract(minValue)).divide(range).bigDecimalValue(7, BigDecimal.ROUND_HALF_UP).floatValue() + HUE_MARGIN)/255;
 		hue = (hue + (float)1/6)%1;
 		hue = 1 - hue;
 		Color color = new Color(Color.HSBtoRGB(hue, 1, 1));
