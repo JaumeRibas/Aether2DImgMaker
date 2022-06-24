@@ -20,13 +20,13 @@ import cellularautomata.model2d.ObjectModel2D;
 
 public class ObjectModel3DXYDiagonalCrossSection<Source_Type extends ObjectModel3D<Object_Type>, Object_Type> extends Model3DXYDiagonalCrossSection<Source_Type> implements ObjectModel2D<Object_Type> {
 
-	public ObjectModel3DXYDiagonalCrossSection(Source_Type source, int yOffsetFromX) {
-		super(source, yOffsetFromX);
+	public ObjectModel3DXYDiagonalCrossSection(Source_Type source, boolean positiveSlope, int yOffsetFromX) {
+		super(source, positiveSlope, yOffsetFromX);
 	}
 
 	@Override
 	public Object_Type getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(y, y + yOffsetFromX, x);
+		return source.getFromPosition(y, slope*y + yOffsetFromX, x);
 	}
 
 }

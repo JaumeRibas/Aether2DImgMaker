@@ -129,8 +129,8 @@ public interface LongModel3D extends Model3D, LongModel {
 	}
 	
 	@Override
-	default LongModel2D diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new LongModel3DXYDiagonalCrossSection(this, yOffsetFromX);
+	default LongModel2D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new LongModel3DXYDiagonalCrossSection(this, positiveSlope, yOffsetFromX);
 	}
 	
 	@Override

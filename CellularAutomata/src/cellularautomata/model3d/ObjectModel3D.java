@@ -61,8 +61,8 @@ public interface ObjectModel3D<Object_Type> extends Model3D, ObjectModel<Object_
 	}
 	
 	@Override
-	default ObjectModel2D<Object_Type> diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new ObjectModel3DXYDiagonalCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, yOffsetFromX);
+	default ObjectModel2D<Object_Type> diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new ObjectModel3DXYDiagonalCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, positiveSlope, yOffsetFromX);
 	}
 	
 	@Override

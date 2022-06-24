@@ -153,8 +153,8 @@ public interface NumericModel3D<Number_Type extends FieldElement<Number_Type> & 
 	}
 	
 	@Override
-	default NumericModel2D<Number_Type> diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new NumericModel3DXYDiagonalCrossSection<Number_Type>(this, yOffsetFromX);
+	default NumericModel2D<Number_Type> diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new NumericModel3DXYDiagonalCrossSection<Number_Type>(this, positiveSlope, yOffsetFromX);
 	}
 	
 	@Override

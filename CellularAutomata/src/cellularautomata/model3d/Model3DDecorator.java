@@ -144,8 +144,8 @@ public class Model3DDecorator<Source_Type extends Model3D> extends ModelDecorato
 	}
 
 	@Override
-	public Model2D diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return source.diagonalCrossSectionOnXY(yOffsetFromX);
+	public Model2D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return source.diagonalCrossSectionOnXY(positiveSlope, yOffsetFromX);
 	}
 
 	@Override

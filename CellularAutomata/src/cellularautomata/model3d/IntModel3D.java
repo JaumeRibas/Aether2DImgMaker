@@ -140,8 +140,8 @@ public interface IntModel3D extends Model3D, IntModel {
 	}
 	
 	@Override
-	default IntModel2D diagonalCrossSectionOnXY(int yOffsetFromX) {
-		return new IntModel3DXYDiagonalCrossSection(this, yOffsetFromX);
+	default IntModel2D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new IntModel3DXYDiagonalCrossSection(this, positiveSlope, yOffsetFromX);
 	}
 	
 	@Override

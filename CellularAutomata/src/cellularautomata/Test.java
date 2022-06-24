@@ -731,65 +731,72 @@ public class Test {
 		int[][] resultValues;
 		RegularIntGrid3D grid;
 		IntModel2D diagonal;
-		int side = 20;
+		int side = 21;
+		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		//xy 
-		for (int off = 0; off <= offset; off += offset) {
-			sourceValues = new int[side][side][side];
-			resultValues = new int[side][side];
-			for (int x = 0; x < side; x++) {
-				for (int z = 0; z < side; z++) {
-					int value = random.nextInt();
-					int y = x+off;
-					if (y < side) {
-						sourceValues[x][y][z] = value;
-						resultValues[z][x] = value;	
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = 0; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side];
+				resultValues = new int[side][side];
+				for (int x = -originIndex; x < side-originIndex; x++) {
+					for (int z = -originIndex; z < side-originIndex; z++) {
+						int value = random.nextInt();
+						int y = slope*x+off;
+						if (y < side-originIndex && y >= -originIndex) {
+							sourceValues[x+originIndex][y+originIndex][z+originIndex] = value;
+							resultValues[z+originIndex][x+originIndex] = value;	
+						}
 					}
-				}
-			}			
-			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
-			diagonal = grid.diagonalCrossSectionOnXY(off);
-			compare(diagonal, resultValues, 0, 0);
-			checkBoundsConsistency(diagonal);
+				}			
+				grid = new RegularIntGrid3D(sourceValues, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnXY(slope == 1, off);
+				compare(diagonal, resultValues, originIndex, originIndex);
+				checkBoundsConsistency(diagonal);
+			}
 		}
 		//xz
-		for (int off = 0; off <= offset; off += offset) {
-			sourceValues = new int[side][side][side];
-			resultValues = new int[side][side];
-			for (int x = 0; x < side; x++) {
-				for (int y = 0; y < side; y++) {
-					int value = random.nextInt();
-					int z = x+off;
-					if (z < side) {
-						sourceValues[x][y][z] = value;
-						resultValues[x][y] = value;
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = 0; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side];
+				resultValues = new int[side][side];
+				for (int x = -originIndex; x < side-originIndex; x++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						int value = random.nextInt();
+						int z = slope*x+off;
+						if (z < side-originIndex && z >= -originIndex) {
+							sourceValues[x+originIndex][y+originIndex][z+originIndex] = value;
+							resultValues[x+originIndex][y+originIndex] = value;
+						}
 					}
-				}
-			}			
-			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
-			diagonal = grid.diagonalCrossSectionOnXZ(off);
-			compare(diagonal, resultValues, 0, 0);
-			checkBoundsConsistency(diagonal);
+				}			
+				grid = new RegularIntGrid3D(sourceValues, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnXZ(/*slope == 1,*/off);
+				compare(diagonal, resultValues, originIndex, originIndex);
+				checkBoundsConsistency(diagonal);
+			}
 		}
 		//yz
-		for (int off = 0; off <= offset; off += offset) {
-			sourceValues = new int[side][side][side];
-			resultValues = new int[side][side];
-			for (int x = 0; x < side; x++) {
-				for (int y = 0; y < side; y++) {
-					int value = random.nextInt();
-					int z = y+off;
-					if (z < side) {
-						sourceValues[x][y][z] = value;
-						resultValues[x][y] = value;
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = 0; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side];
+				resultValues = new int[side][side];
+				for (int x = -originIndex; x < side-originIndex; x++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						int value = random.nextInt();
+						int z = slope*y+off;
+						if (z < side-originIndex && z >= -originIndex) {
+							sourceValues[x+originIndex][y+originIndex][z+originIndex] = value;
+							resultValues[x+originIndex][y+originIndex] = value;
+						}
 					}
-				}
-			}			
-			grid = new RegularIntGrid3D(sourceValues, 0, 0, 0);
-			diagonal = grid.diagonalCrossSectionOnYZ(off);
-			compare(diagonal, resultValues, 0, 0);
-			checkBoundsConsistency(diagonal);
+				}			
+				grid = new RegularIntGrid3D(sourceValues, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnYZ(/*slope == 1,*/off);
+				compare(diagonal, resultValues, originIndex, originIndex);
+				checkBoundsConsistency(diagonal);
+			}
 		}
 	}
 	
