@@ -28,7 +28,7 @@ public class Coordinates {
 	private int[] coordinates;
 	
 	public Coordinates(int... coordinates) {
-		this.coordinates = coordinates;
+		this.coordinates = coordinates.clone();
 	}
 	
 	public int get(int axis) {

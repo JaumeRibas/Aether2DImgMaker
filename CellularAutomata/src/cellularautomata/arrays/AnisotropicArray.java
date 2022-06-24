@@ -78,7 +78,7 @@ public abstract class AnisotropicArray extends HypercubicArray {
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					consumer.accept(new Coordinates(coordinates.clone()));
+					consumer.accept(new Coordinates(coordinates));
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;
@@ -119,7 +119,7 @@ public abstract class AnisotropicArray extends HypercubicArray {
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					consumer.accept(new Coordinates(coordinates.clone()));
+					consumer.accept(new Coordinates(coordinates));
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;

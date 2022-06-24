@@ -121,17 +121,17 @@ public interface SymmetricModel extends Model {
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int lowerBound = getAsymmetricMinCoordinate(0, partialCoordinatesObj);
 					int upperBound = getAsymmetricMaxCoordinate(0, partialCoordinatesObj);
 					for (int currentCoordinate = lowerBound; currentCoordinate <= upperBound; currentCoordinate++) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(new Coordinates(coordinates.clone()));
+						consumer.accept(new Coordinates(coordinates));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int localLowerBound = getAsymmetricMinCoordinate(currentAxis, partialCoordinatesObj);
 					lowerBounds[currentAxis] = localLowerBound;
 					upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, partialCoordinatesObj);
@@ -176,7 +176,7 @@ public interface SymmetricModel extends Model {
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int lowerBound = getAsymmetricMinCoordinate(0, partialCoordinatesObj);
 					int upperBound = getAsymmetricMaxCoordinate(0, partialCoordinatesObj);
 					int currentCoordinate = lowerBound;
@@ -186,12 +186,12 @@ public interface SymmetricModel extends Model {
 					}
 					for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(new Coordinates(coordinates.clone()));
+						consumer.accept(new Coordinates(coordinates));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int localLowerBound = getAsymmetricMinCoordinate(currentAxis, partialCoordinatesObj);
 					lowerBounds[currentAxis] = localLowerBound;
 					upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, partialCoordinatesObj);
@@ -233,7 +233,7 @@ public interface SymmetricModel extends Model {
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 				int lowerBound = getAsymmetricMinCoordinate(0, partialCoordinatesObj);
 				int upperBound = getAsymmetricMaxCoordinate(0, partialCoordinatesObj);
 				int currentCoordinate = lowerBound;
@@ -243,12 +243,12 @@ public interface SymmetricModel extends Model {
 				}
 				for (; currentCoordinate <= upperBound; currentCoordinate += 2) {
 					coordinates[0] = currentCoordinate;
-					consumer.accept(new Coordinates(coordinates.clone()));
+					consumer.accept(new Coordinates(coordinates));
 				}
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 				int localLowerBound = getAsymmetricMinCoordinate(currentAxis, partialCoordinatesObj);
 				lowerBounds[currentAxis] = localLowerBound;
 				upperBounds[currentAxis] = getAsymmetricMaxCoordinate(currentAxis, partialCoordinatesObj);

@@ -131,7 +131,7 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 		int gridSideMinusOne = gridSide - 1;
 		int shareCount = gridDimension * 2 + 1;
 		boolean isCurrentPositionInsideGrid = Utils.areAllPositive(indexes) && Utils.isSortedDescending(indexes);
-		int value = getFromPosition(new Coordinates(indexes.clone()));
+		int value = getFromPosition(new Coordinates(indexes));
 		boolean changed = false;
 		if (value != 0) {
 			if (Math.abs(value) >= shareCount) {
@@ -144,10 +144,10 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 					int indexOnAxis = indexes[axis];
 					if (indexOnAxis < gridSideMinusOne) {
 						indexes[axis] = indexOnAxis + 1;
-						upperNeighborValues[axis] = getFromPosition(new Coordinates(indexes.clone()));
+						upperNeighborValues[axis] = getFromPosition(new Coordinates(indexes));
 						if (indexOnAxis > -gridSideMinusOne) {
 							indexes[axis] = indexOnAxis - 1;
-							lowerNeighborValues[axis] = getFromPosition(new Coordinates(indexes.clone()));
+							lowerNeighborValues[axis] = getFromPosition(new Coordinates(indexes));
 						} else {
 							lowerNeighborValues[axis] = backgroundValue; 
 						}
@@ -156,7 +156,7 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 						indexes[axis] = indexOnAxis - 1;
 						//if the grid side where one, this would be out of bounds.
 						//but since it starts at 5 and only gets bigger it's fine
-						lowerNeighborValues[axis] = getFromPosition(new Coordinates(indexes.clone()));
+						lowerNeighborValues[axis] = getFromPosition(new Coordinates(indexes));
 					}
 					indexes[axis] = indexOnAxis;//reset index
 					boolean isCurrentUpperNeighborValueEqual = value == upperNeighborValues[axis];
@@ -178,7 +178,7 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 							boundsReached = true;
 						//Add the share and the remainder to the corresponding position in the new array
 						if (isCurrentPositionInsideGrid) {
-							newGrid.addAndGet(new Coordinates(indexes.clone()), value%shareCount + share);
+							newGrid.addAndGet(new Coordinates(indexes), value%shareCount + share);
 						}
 						//Add the share to the neighboring positions
 						//if the neighbor's value is equal to the current value, add the share to the current position instead
@@ -186,23 +186,23 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 							int indexOnAxis = indexes[axis];
 							if (isUpperNeighborValueEqual[axis]) {
 								if (isCurrentPositionInsideGrid) {
-									newGrid.addAndGet(new Coordinates(indexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(indexes), share);
 								}
 							} else {
 								indexes[axis] = indexOnAxis + 1;
 								if (Utils.areAllPositive(indexes) && Utils.isSortedDescending(indexes)) {
-									newGrid.addAndGet(new Coordinates(indexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(indexes), share);
 								}
 								indexes[axis] = indexOnAxis;//reset index
 							}
 							if (isLowerNeighborValueEqual[axis]) {
 								if (isCurrentPositionInsideGrid) {
-									newGrid.addAndGet(new Coordinates(indexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(indexes), share);
 								}
 							} else {
 								indexes[axis] = indexOnAxis - 1;
 								if (Utils.areAllPositive(indexes) && Utils.isSortedDescending(indexes)) {
-									newGrid.addAndGet(new Coordinates(indexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(indexes), share);
 								}
 								indexes[axis] = indexOnAxis;//reset index
 							}
@@ -210,18 +210,18 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 					} else {
 						//if the share is zero, just add the value to the corresponding position in the new array
 						if (isCurrentPositionInsideGrid) {
-							newGrid.addAndGet(new Coordinates(indexes.clone()), value);
+							newGrid.addAndGet(new Coordinates(indexes), value);
 						}
 					}
 				} else {
 					//if all neighbor values are equal the current value won't change (it will get from them the same value it gives them)
 					if (isCurrentPositionInsideGrid) {
-						newGrid.addAndGet(new Coordinates(indexes.clone()), value);
+						newGrid.addAndGet(new Coordinates(indexes), value);
 					}
 				}
 			} else {
 				if (isCurrentPositionInsideGrid) {
-					newGrid.addAndGet(new Coordinates(indexes.clone()), value);
+					newGrid.addAndGet(new Coordinates(indexes), value);
 				}
 			}					
 		}

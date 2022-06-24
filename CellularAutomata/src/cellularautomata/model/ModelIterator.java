@@ -40,7 +40,7 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 		maxCoords = new int[dimension];
 		partialCoords = new Integer[dimension];
 		for (int axis = 0; axis < dimension; axis++) {
-			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords.clone());
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords);
 			int minCoord = region.getMinCoordinate(axis, partialCoordinatesObj);
 			coords[axis] = minCoord;
 			maxCoords[axis] = region.getMaxCoordinate(axis, partialCoordinatesObj);
@@ -60,7 +60,7 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 			throw new NoSuchElementException();
 		Element_Type next = null;
 		try {
-			next = getFromModelPosition(new Coordinates(coords.clone()));
+			next = getFromModelPosition(new Coordinates(coords));
 		} catch (Exception e) {
 			throw new NoSuchElementException(e.toString());
 		}
@@ -75,7 +75,7 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 			partialCoords[axis] = newCoord;
 			axis++;
 			while (axis < dimension) {
-				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords.clone());
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords);
 				int minCoord = region.getMinCoordinate(axis, partialCoordinatesObj);
 				coords[axis] = minCoord;
 				maxCoords[axis] = region.getMaxCoordinate(axis, partialCoordinatesObj);

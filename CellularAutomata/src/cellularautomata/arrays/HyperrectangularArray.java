@@ -170,7 +170,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 			int currentAxis = 0;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					consumer.accept(new Coordinates(coordinates.clone()));
+					consumer.accept(new Coordinates(coordinates));
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				if (currentCoordinate < upperBounds[currentAxis]) {

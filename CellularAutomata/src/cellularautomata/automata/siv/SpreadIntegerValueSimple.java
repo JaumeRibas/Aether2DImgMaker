@@ -61,7 +61,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		//The origin will be at the center of the array
 		originIndex = side/2;
 		Arrays.fill(indexes, originIndex);
-		grid.set(new Coordinates(indexes.clone()), initialValue); 
+		grid.set(new Coordinates(indexes), initialValue); 
 		this.initialValue = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
@@ -151,10 +151,10 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 						}
 						if (indexOnAxis < gridSideMinusOne) {
 							indexes[axis] = indexOnAxis + 1;
-							upperNeighborValues[axis] = grid.get(new Coordinates(indexes.clone()));
+							upperNeighborValues[axis] = grid.get(new Coordinates(indexes));
 							if (indexOnAxis > 0) {
 								indexes[axis] = indexOnAxis - 1;
-								lowerNeighborValues[axis] = grid.get(new Coordinates(indexes.clone()));
+								lowerNeighborValues[axis] = grid.get(new Coordinates(indexes));
 							} else {
 								lowerNeighborValues[axis] = backgroundValue; 
 							}
@@ -163,7 +163,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 							indexes[axis] = indexOnAxis - 1;
 							//if the grid side where one, this would be out of bounds.
 							//but since it starts at 5 and only gets bigger it's fine
-							lowerNeighborValues[axis] = grid.get(new Coordinates(indexes.clone()));
+							lowerNeighborValues[axis] = grid.get(new Coordinates(indexes));
 						}
 						indexes[axis] = indexOnAxis;//reset index
 						boolean isCurrentUpperNeighborValueEqual = value == upperNeighborValues[axis];
@@ -187,23 +187,23 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 							if (isPositionCloseToEdge)
 								boundsReached = true;
 							//Add the share and the remainder to the corresponding position in the new array
-							newGrid.addAndGet(new Coordinates(newIndexes.clone()), value%shareCount + share);
+							newGrid.addAndGet(new Coordinates(newIndexes), value%shareCount + share);
 							//Add the share to the neighboring positions
 							//if the neighbor's value is equal to the current value, add the share to the current position instead
 							for (int axis = 0; axis < gridDimension; axis++) {
 								int newIndexOnAxis = newIndexes[axis];
 								if (isUpperNeighborValueEqual[axis]) {
-									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(newIndexes), share);
 								} else {
 									newIndexes[axis] = newIndexOnAxis + 1;
-									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(newIndexes), share);
 									newIndexes[axis] = newIndexOnAxis;//reset index
 								}
 								if (isLowerNeighborValueEqual[axis]) {
-									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(newIndexes), share);
 								} else {
 									newIndexes[axis] = newIndexOnAxis - 1;
-									newGrid.addAndGet(new Coordinates(newIndexes.clone()), share);
+									newGrid.addAndGet(new Coordinates(newIndexes), share);
 									newIndexes[axis] = newIndexOnAxis;//reset index
 								}
 							}

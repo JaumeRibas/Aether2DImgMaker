@@ -140,17 +140,17 @@ public interface Model {
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int minCoord = getMinCoordinate(0, partialCoordinatesObj);
 					int maxCoord = getMaxCoordinate(0, partialCoordinatesObj);
 					for (int currentCoordinate = minCoord; currentCoordinate <= maxCoord; currentCoordinate++) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(new Coordinates(coordinates.clone()));
+						consumer.accept(new Coordinates(coordinates));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int localMinCoord = getMinCoordinate(currentAxis, partialCoordinatesObj);
 					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, partialCoordinatesObj);
 					coordinates[currentAxis] = localMinCoord;
@@ -192,7 +192,7 @@ public interface Model {
 			boolean isBeginningOfLoop = true;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int minCoord = getMinCoordinate(0, partialCoordinatesObj);
 					int maxCoord = getMaxCoordinate(0, partialCoordinatesObj);
 					int currentCoordinate = minCoord;
@@ -202,12 +202,12 @@ public interface Model {
 					}
 					for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
 						coordinates[0] = currentCoordinate;
-						consumer.accept(new Coordinates(coordinates.clone()));
+						consumer.accept(new Coordinates(coordinates));
 					}
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
-					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int localMinCoord = getMinCoordinate(currentAxis, partialCoordinatesObj);
 					maxCoords[currentAxis] = getMaxCoordinate(currentAxis, partialCoordinatesObj);
 					coordinates[currentAxis] = localMinCoord;
@@ -246,7 +246,7 @@ public interface Model {
 		boolean isBeginningOfLoop = true;
 		while (currentAxis < dimension) {
 			if (currentAxis == 0) {
-				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 				int minCoord = getMinCoordinate(0, partialCoordinatesObj);
 				int maxCoord = getMaxCoordinate(0, partialCoordinatesObj);
 				int currentCoordinate = minCoord;
@@ -256,12 +256,12 @@ public interface Model {
 				}
 				for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
 					coordinates[0] = currentCoordinate;
-					consumer.accept(new Coordinates(coordinates.clone()));
+					consumer.accept(new Coordinates(coordinates));
 				}
 				isBeginningOfLoop = false;
 				currentAxis++;
 			} else if (isBeginningOfLoop) {
-				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 				int localMinCoord = getMinCoordinate(currentAxis, partialCoordinatesObj);
 				maxCoords[currentAxis] = getMaxCoordinate(currentAxis, partialCoordinatesObj);
 				coordinates[currentAxis] = localMinCoord;
@@ -282,6 +282,26 @@ public interface Model {
 			}
 		}
 	}	
+	
+	/**
+	 * Checks whether or not a set of coordinates are within the grid bounds.
+	 * 
+	 * @param coordinates
+	 * @return
+	 */
+	default boolean isWithinBounds(Coordinates coordinates) {
+		int coordCount = coordinates.getCount();
+		Integer[] partialCoordinates = new Integer[coordCount];
+		for (int axis = 0; axis < coordCount; axis++) {
+			int coord = coordinates.get(axis);
+			PartialCoordinates pc = new PartialCoordinates(partialCoordinates);
+			if (coord < getMinCoordinate(axis, pc) || coord > getMaxCoordinate(axis, pc)) {
+				return false;
+			}
+			partialCoordinates[axis] = coord;
+		}
+		return true;
+	}
 	
 	/**
 	 * Returns a decorated {@link Model} with the passed bounds.

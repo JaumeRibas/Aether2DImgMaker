@@ -174,7 +174,7 @@ public interface IntModel extends Model, Iterable<Integer> {
 		int axis = 0;
 		for (; axis < firstCrossSectionAxis; axis++) {
 			int coordinate = coordinatesArray[axis];
-			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 			if (coordinate < getMinCoordinate(axis, partialCoordinatesObj)
 					|| coordinate > getMaxCoordinate(axis, partialCoordinatesObj)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
@@ -183,7 +183,7 @@ public interface IntModel extends Model, Iterable<Integer> {
 		}
 		for (axis++; axis < secondCrossSectionAxis; axis++) {
 			int coordinate = coordinatesArray[axis];
-			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 			if (coordinate < getMinCoordinate(axis, partialCoordinatesObj)
 					|| coordinate > getMaxCoordinate(axis, partialCoordinatesObj)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
@@ -192,14 +192,14 @@ public interface IntModel extends Model, Iterable<Integer> {
 		}
 		for (axis++; axis < gridDimension; axis++) {
 			int coordinate = coordinatesArray[axis];
-			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 			if (coordinate < getMinCoordinate(axis, partialCoordinatesObj)
 					|| coordinate > getMaxCoordinate(axis, partialCoordinatesObj)) {
 				throw new IllegalArgumentException(outOfBoundsMessage);
 			}
 			partialCoordinates[axis] = coordinate;
 		}
-		PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+		PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 		int maxVerticalCoordinate = getMaxCoordinate(verticalAxis, partialCoordinatesObj);
 		int minVerticalCoordinate = getMinCoordinate(verticalAxis, partialCoordinatesObj);
 //		int maxHorizontalCoordinate = getUpperBound(horizontalAxis, partialCoordinatesObj);
@@ -209,7 +209,7 @@ public interface IntModel extends Model, Iterable<Integer> {
 		for (int verticalCoordinate = maxVerticalCoordinate; verticalCoordinate >= minVerticalCoordinate; verticalCoordinate--) {
 			partialCoordinates[verticalAxis] = verticalCoordinate;
 			coordinatesArray[verticalAxis] = verticalCoordinate;
-			partialCoordinatesObj = new PartialCoordinates(partialCoordinates.clone());
+			partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 			int localMinHorizontalCoordinate = getMinCoordinate(horizontalAxis, partialCoordinatesObj);
 			int localMaxHorizontalCoordinate = getMaxCoordinate(horizontalAxis, partialCoordinatesObj);
 			//TODO use margins
@@ -217,7 +217,7 @@ public interface IntModel extends Model, Iterable<Integer> {
 //			int localHorizontalMarginUpperEnd = maxHorizontalCoordinate - localMaxHorizontalCoordinate;
 			for (int horizontalCoordinate = localMinHorizontalCoordinate; horizontalCoordinate <= localMaxHorizontalCoordinate; horizontalCoordinate++) {
 				coordinatesArray[horizontalAxis] = horizontalCoordinate;
-				strBuilder.append(getFromPosition(new Coordinates(coordinatesArray.clone()))).append(",");
+				strBuilder.append(getFromPosition(new Coordinates(coordinatesArray))).append(",");
 			}
 			strBuilder.append(System.lineSeparator());
 		}
