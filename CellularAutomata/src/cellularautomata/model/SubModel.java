@@ -18,7 +18,7 @@ package cellularautomata.model;
 
 import cellularautomata.PartialCoordinates;
 
-public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_Type> implements Model {
+public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_Type> {
 	
 	protected int[] minCoordinates;
 	protected int[] maxCoordinates;
