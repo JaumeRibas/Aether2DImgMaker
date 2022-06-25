@@ -24,14 +24,16 @@ import cellularautomata.model2d.Model2D;
 public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implements Model2D {
 
 	protected Source_Type source;
+	protected int slope;
 	protected int zOffsetFromX;
 	protected int crossSectionMinX;
 	protected int crossSectionMaxX;
 	protected int crossSectionMinY;
 	protected int crossSectionMaxY;
 	
-	public Model3DXZDiagonalCrossSection(Source_Type source, int zOffsetFromX) {		
+	public Model3DXZDiagonalCrossSection(Source_Type source, boolean positiveSlope, int zOffsetFromX) {		
 		this.source = source;
+		this.slope = positiveSlope ? 1 : -1;
 		this.zOffsetFromX = zOffsetFromX;
 		if (!getBounds()) {
 			throw new IllegalArgumentException("Cross section is out of bounds.");
@@ -51,10 +53,10 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 	protected boolean getBounds() {
 		int x = source.getMinX();
 		int maxX = source.getMaxX();
-		int crossSectionZ = x + zOffsetFromX;
+		int crossSectionZ = slope*x + zOffsetFromX;
 		while (x <= maxX && (crossSectionZ < source.getMinZAtX(x) || crossSectionZ > source.getMaxZAtX(x))) {
 			x++;
-			crossSectionZ++;
+			crossSectionZ += slope;
 		}
 		if (x <= maxX) {
 			crossSectionMinX = x;
@@ -62,7 +64,7 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 			crossSectionMaxY = source.getMaxY(x, crossSectionZ);
 			crossSectionMinY = source.getMinY(x, crossSectionZ);
 			x++;
-			crossSectionZ++;
+			crossSectionZ += slope;
 			while (x <= maxX && crossSectionZ >= source.getMinZAtX(x) && crossSectionZ <= source.getMaxZAtX(x)) {
 				crossSectionMaxX = x;
 				int localMaxY = source.getMaxY(x, crossSectionZ), localMinY = source.getMinY(x, crossSectionZ);
@@ -73,7 +75,7 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 					crossSectionMinY = localMinY;
 				}
 				x++;
-				crossSectionZ++;
+				crossSectionZ += slope;
 			}
 			return true;
 		} else {
@@ -88,7 +90,7 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 	
 	@Override
 	public int getMinX(int y) {
-		for (int crossSectionX = crossSectionMinX, crossSectionZ = crossSectionX + zOffsetFromX; crossSectionX <= crossSectionMaxX; crossSectionX++, crossSectionZ++) {
+		for (int crossSectionX = crossSectionMinX, crossSectionZ = slope*crossSectionX + zOffsetFromX; crossSectionX <= crossSectionMaxX; crossSectionX++, crossSectionZ+=slope) {
 			int localMaxY = source.getMaxY(crossSectionX, crossSectionZ), localMinY = source.getMinY(crossSectionX, crossSectionZ);
 			if (y >= localMinY && y <= localMaxY) {
 				return crossSectionX;
@@ -104,7 +106,7 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 	
 	@Override
 	public int getMaxX(int y) {
-		for (int crossSectionX = crossSectionMaxX, crossSectionZ = crossSectionX + zOffsetFromX; crossSectionX >= crossSectionMinX; crossSectionX--, crossSectionZ--) {
+		for (int crossSectionX = crossSectionMaxX, crossSectionZ = slope*crossSectionX + zOffsetFromX; crossSectionX >= crossSectionMinX; crossSectionX--, crossSectionZ-=slope) {
 			int localMaxY = source.getMaxY(crossSectionX, crossSectionZ), localMinY = source.getMinY(crossSectionX, crossSectionZ);
 			if (y >= localMinY && y <= localMaxY) {
 				return crossSectionX;
@@ -120,7 +122,7 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 	
 	@Override
 	public int getMinY(int x) {
-		return source.getMinY(x, x + zOffsetFromX);
+		return source.getMinY(x, slope*x + zOffsetFromX);
 	}
 	
 	@Override
@@ -130,7 +132,7 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 	
 	@Override
 	public int getMaxY(int x) {
-		return source.getMaxY(x, x + zOffsetFromX);
+		return source.getMaxY(x, slope*x + zOffsetFromX);
 	}
 
 	@Override
@@ -154,13 +156,18 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 
 	@Override
 	public String getSubfolderPath() {
-		String path = source.getSubfolderPath() + "/" + source.getZLabel() + "=" + source.getXLabel();
-		if (zOffsetFromX < 0) {
-			path += zOffsetFromX;
-		} else if (zOffsetFromX > 0) {
-			path += "+" + zOffsetFromX;
+		StringBuilder path = new StringBuilder();
+		path.append(source.getSubfolderPath()).append("/").append(source.getZLabel()).append("=");
+		if (slope == -1) {
+			path.append("-");
 		}
-		return path;
+		path.append(source.getXLabel());
+		if (zOffsetFromX < 0) {
+			path.append(zOffsetFromX);
+		} else if (zOffsetFromX > 0) {
+			path.append("+").append(zOffsetFromX);
+		}
+		return path.toString();
 	}
 
 	@Override

@@ -772,7 +772,7 @@ public class Test {
 					}
 				}			
 				grid = new RegularIntGrid3D(sourceValues, -originIndex, -originIndex, -originIndex);
-				diagonal = grid.diagonalCrossSectionOnXZ(/*slope == 1,*/off);
+				diagonal = grid.diagonalCrossSectionOnXZ(slope == 1, off);
 				compare(diagonal, resultValues, originIndex, originIndex);
 				checkBoundsConsistency(diagonal);
 			}
@@ -793,7 +793,7 @@ public class Test {
 					}
 				}			
 				grid = new RegularIntGrid3D(sourceValues, -originIndex, -originIndex, -originIndex);
-				diagonal = grid.diagonalCrossSectionOnYZ(/*slope == 1,*/off);
+				diagonal = grid.diagonalCrossSectionOnYZ(slope == 1, off);
 				compare(diagonal, resultValues, originIndex, originIndex);
 				checkBoundsConsistency(diagonal);
 			}

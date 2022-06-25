@@ -355,12 +355,12 @@ public interface Model3D extends Model {
 		return new Model3DXYDiagonalCrossSection<Model3D>(this, positiveSlope, yOffsetFromX);
 	}
 	
-	default Model2D diagonalCrossSectionOnXZ(int zOffsetFromX) {
-		return new Model3DXZDiagonalCrossSection<Model3D>(this, zOffsetFromX);
+	default Model2D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
+		return new Model3DXZDiagonalCrossSection<Model3D>(this, positiveSlope, zOffsetFromX);
 	}
 	
-	default Model2D diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new Model3DYZDiagonalCrossSection<Model3D>(this, zOffsetFromY);
+	default Model2D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
+		return new Model3DYZDiagonalCrossSection<Model3D>(this, positiveSlope, zOffsetFromY);
 	}
 	
 	@Override

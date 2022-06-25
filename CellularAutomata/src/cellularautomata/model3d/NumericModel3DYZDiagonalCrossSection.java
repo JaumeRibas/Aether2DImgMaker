@@ -23,8 +23,8 @@ import cellularautomata.model2d.NumericModel2D;
 public class NumericModel3DYZDiagonalCrossSection<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
 	extends ObjectModel3DYZDiagonalCrossSection<NumericModel3D<Number_Type>, Number_Type> implements NumericModel2D<Number_Type> {
 
-	public NumericModel3DYZDiagonalCrossSection(NumericModel3D<Number_Type> source, int zOffsetFromY) {
-		super(source, zOffsetFromY);
+	public NumericModel3DYZDiagonalCrossSection(NumericModel3D<Number_Type> source, boolean positiveSlope, int zOffsetFromY) {
+		super(source, positiveSlope, zOffsetFromY);
 	}
 
 }

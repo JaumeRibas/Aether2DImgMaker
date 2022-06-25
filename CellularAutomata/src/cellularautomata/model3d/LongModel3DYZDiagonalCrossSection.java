@@ -20,13 +20,13 @@ import cellularautomata.model2d.LongModel2D;
 
 public class LongModel3DYZDiagonalCrossSection extends Model3DYZDiagonalCrossSection<LongModel3D> implements LongModel2D {
 
-	public LongModel3DYZDiagonalCrossSection(LongModel3D source, int zOffsetFromY) {
-		super(source, zOffsetFromY);
+	public LongModel3DYZDiagonalCrossSection(LongModel3D source, boolean positiveSlope, int zOffsetFromY) {
+		super(source, positiveSlope, zOffsetFromY);
 	}
 
 	@Override
 	public long getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(x, y, y + zOffsetFromY);
+		return source.getFromPosition(x, y, slope*y + zOffsetFromY);
 	}
 
 }
