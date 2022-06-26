@@ -24,6 +24,7 @@ import cellularautomata.model4d.Model4D;
 public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implements Model4D {
 
 	protected Source_Type source;
+	protected int slope;
 	protected int wOffsetFromV;
 	protected int crossSectionMinV;
 	protected int crossSectionMaxV;
@@ -34,8 +35,9 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 	protected int crossSectionMinZ;
 	protected int crossSectionMaxZ;
 	
-	public Model5DVWDiagonalCrossSection(Source_Type source, int wOffsetFromV) {		
+	public Model5DVWDiagonalCrossSection(Source_Type source, boolean positiveSlope, int wOffsetFromV) {		
 		this.source = source;
+		this.slope = positiveSlope ? 1 : -1;
 		this.wOffsetFromV = wOffsetFromV;
 		if (!getBounds()) {
 			throw new IllegalArgumentException("Cross section is out of bounds.");
@@ -65,10 +67,10 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 	protected boolean getBounds() {
 		int v = source.getMinV();
 		int maxV = source.getMaxV();
-		int crossSectionW = v + wOffsetFromV;
+		int crossSectionW = slope*v + wOffsetFromV;
 		while (v <= maxV && (crossSectionW < source.getMinWAtV(v) || crossSectionW > source.getMaxWAtV(v))) {
 			v++;
-			crossSectionW++;
+			crossSectionW += slope;
 		}
 		if (v <= maxV) {
 			crossSectionMinV = v;
@@ -80,7 +82,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 			crossSectionMaxZ = source.getMaxZAtVW(v, crossSectionW);
 			crossSectionMinZ = source.getMinZAtVW(v, crossSectionW);
 			v++;
-			crossSectionW++;
+			crossSectionW += slope;
 			while (v <= maxV && crossSectionW >= source.getMinWAtV(v) && crossSectionW <= source.getMaxWAtV(v)) {
 				crossSectionMaxV = v;
 				int localMaxX = source.getMaxXAtVW(v, crossSectionW), localMinX = source.getMinXAtVW(v, crossSectionW);
@@ -105,7 +107,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 					crossSectionMinZ = localMinZ;
 				}
 				v++;
-				crossSectionW++;
+				crossSectionW += slope;
 			}
 			return true;
 		} else {
@@ -125,7 +127,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinWAtX(int x) {
-		for (int crossSectionV = crossSectionMinV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW++) {
+		for (int crossSectionV = crossSectionMinV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW += slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				return crossSectionV;
@@ -136,7 +138,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMaxWAtX(int x) {
-		for (int crossSectionV = crossSectionMaxV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW--) {
+		for (int crossSectionV = crossSectionMaxV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW -= slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				return crossSectionV;
@@ -147,7 +149,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinWAtY(int y) {
-		for (int crossSectionV = crossSectionMinV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW++) {
+		for (int crossSectionV = crossSectionMinV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW += slope) {
 			int localMaxY = source.getMaxYAtVW(crossSectionV, crossSectionW), localMinY = source.getMinYAtVW(crossSectionV, crossSectionW);
 			if (y >= localMinY && y <= localMaxY) {
 				return crossSectionV;
@@ -158,7 +160,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMaxWAtY(int y) {
-		for (int crossSectionV = crossSectionMaxV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW--) {
+		for (int crossSectionV = crossSectionMaxV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW -= slope) {
 			int localMaxY = source.getMaxYAtVW(crossSectionV, crossSectionW), localMinY = source.getMinYAtVW(crossSectionV, crossSectionW);
 			if (y >= localMinY && y <= localMaxY) {
 				return crossSectionV;
@@ -169,7 +171,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinWAtZ(int z) {
-		for (int crossSectionV = crossSectionMinV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW++) {
+		for (int crossSectionV = crossSectionMinV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW += slope) {
 			int localMaxZ = source.getMaxZAtVW(crossSectionV, crossSectionW), localMinZ = source.getMinZAtVW(crossSectionV, crossSectionW);
 			if (z >= localMinZ && z <= localMaxZ) {
 				return crossSectionV;
@@ -180,7 +182,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMaxWAtZ(int z) {
-		for (int crossSectionV = crossSectionMaxV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW--) {
+		for (int crossSectionV = crossSectionMaxV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW -= slope) {
 			int localMaxZ = source.getMaxZAtVW(crossSectionV, crossSectionW), localMinZ = source.getMinZAtVW(crossSectionV, crossSectionW);
 			if (z >= localMinZ && z <= localMaxZ) {
 				return crossSectionV;
@@ -191,7 +193,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinWAtXY(int x, int y) {
-		for (int crossSectionV = crossSectionMinV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW++) {
+		for (int crossSectionV = crossSectionMinV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW += slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				int localMaxY = source.getMaxYAtVWX(crossSectionV, crossSectionW, x), localMinY = source.getMinYAtVWX(crossSectionV, crossSectionW, x);
@@ -205,7 +207,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMaxWAtXY(int x, int y) {
-		for (int crossSectionV = crossSectionMaxV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW--) {
+		for (int crossSectionV = crossSectionMaxV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW -= slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				int localMaxY = source.getMaxYAtVWX(crossSectionV, crossSectionW, x), localMinY = source.getMinYAtVWX(crossSectionV, crossSectionW, x);
@@ -219,7 +221,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinWAtXZ(int x, int z) {
-		for (int crossSectionV = crossSectionMinV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW++) {
+		for (int crossSectionV = crossSectionMinV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW += slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				int localMaxZ = source.getMaxZAtVWX(crossSectionV, crossSectionW, x), localMinZ = source.getMinZAtVWX(crossSectionV, crossSectionW, x);
@@ -233,7 +235,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMaxWAtXZ(int x, int z) {
-		for (int crossSectionV = crossSectionMaxV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW--) {
+		for (int crossSectionV = crossSectionMaxV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW -= slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				int localMaxZ = source.getMaxZAtVWX(crossSectionV, crossSectionW, x), localMinZ = source.getMinZAtVWX(crossSectionV, crossSectionW, x);
@@ -247,7 +249,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinWAtYZ(int y, int z) {
-		for (int crossSectionV = crossSectionMinV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW++) {
+		for (int crossSectionV = crossSectionMinV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW += slope) {
 			int localMaxY = source.getMaxYAtVW(crossSectionV, crossSectionW), localMinY = source.getMinYAtVW(crossSectionV, crossSectionW);
 			if (y >= localMinY && y <= localMaxY) {
 				int localMaxZ = source.getMaxZAtVWY(crossSectionV, crossSectionW, y), localMinZ = source.getMinZAtVWY(crossSectionV, crossSectionW, y);
@@ -261,7 +263,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMaxWAtYZ(int y, int z) {
-		for (int crossSectionV = crossSectionMaxV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW--) {
+		for (int crossSectionV = crossSectionMaxV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW -= slope) {
 			int localMaxY = source.getMaxYAtVW(crossSectionV, crossSectionW), localMinY = source.getMinYAtVW(crossSectionV, crossSectionW);
 			if (y >= localMinY && y <= localMaxY) {
 				int localMaxZ = source.getMaxZAtVWY(crossSectionV, crossSectionW, y), localMinZ = source.getMinZAtVWY(crossSectionV, crossSectionW, y);
@@ -275,7 +277,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinW(int x, int y, int z) {
-		for (int crossSectionV = crossSectionMinV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW++) {
+		for (int crossSectionV = crossSectionMinV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV <= crossSectionMaxV; crossSectionV++, crossSectionW += slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				int localMaxY = source.getMaxYAtVWX(crossSectionV, crossSectionW, x), localMinY = source.getMinYAtVWX(crossSectionV, crossSectionW, x);
@@ -292,7 +294,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMaxW(int x, int y, int z) {
-		for (int crossSectionV = crossSectionMaxV, crossSectionW = crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW--) {
+		for (int crossSectionV = crossSectionMaxV, crossSectionW = slope*crossSectionV + wOffsetFromV; crossSectionV >= crossSectionMinV; crossSectionV--, crossSectionW -= slope) {
 			int localMaxX = source.getMaxXAtVW(crossSectionV, crossSectionW), localMinX = source.getMinXAtVW(crossSectionV, crossSectionW);
 			if (x >= localMinX && x <= localMaxX) {
 				int localMaxY = source.getMaxYAtVWX(crossSectionV, crossSectionW, x), localMinY = source.getMinYAtVWX(crossSectionV, crossSectionW, x);
@@ -319,12 +321,12 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinXAtW(int w) {
-		return source.getMinXAtVW(w, w + wOffsetFromV);
+		return source.getMinXAtVW(w, slope*w + wOffsetFromV);
 	}
 
 	@Override
 	public int getMaxXAtW(int w) {
-		return source.getMaxXAtVW(w, w + wOffsetFromV);
+		return source.getMaxXAtVW(w, slope*w + wOffsetFromV);
 	}
 
 	@Override
@@ -349,22 +351,22 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinXAtWY(int w, int y) {
-		return source.getMinXAtVWY(w, w + wOffsetFromV, y);
+		return source.getMinXAtVWY(w, slope*w + wOffsetFromV, y);
 	}
 
 	@Override
 	public int getMaxXAtWY(int w, int y) {
-		return source.getMaxXAtVWY(w, w + wOffsetFromV, y);
+		return source.getMaxXAtVWY(w, slope*w + wOffsetFromV, y);
 	}
 
 	@Override
 	public int getMinXAtWZ(int w, int z) {
-		return source.getMinXAtVWZ(w, w + wOffsetFromV, z);
+		return source.getMinXAtVWZ(w, slope*w + wOffsetFromV, z);
 	}
 
 	@Override
 	public int getMaxXAtWZ(int w, int z) {
-		return source.getMaxXAtVWZ(w, w + wOffsetFromV, z);
+		return source.getMaxXAtVWZ(w, slope*w + wOffsetFromV, z);
 	}
 
 	@Override
@@ -379,12 +381,12 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinX(int w, int y, int z) {
-		return source.getMinX(w, w + wOffsetFromV, y, z);
+		return source.getMinX(w, slope*w + wOffsetFromV, y, z);
 	}
 
 	@Override
 	public int getMaxX(int w, int y, int z) {
-		return source.getMaxX(w, w + wOffsetFromV, y, z);
+		return source.getMaxX(w, slope*w + wOffsetFromV, y, z);
 	}
 
 	@Override
@@ -399,12 +401,12 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinYAtW(int w) {
-		return source.getMinYAtVW(w, w + wOffsetFromV);
+		return source.getMinYAtVW(w, slope*w + wOffsetFromV);
 	}
 
 	@Override
 	public int getMaxYAtW(int w) {
-		return source.getMaxYAtVW(w, w + wOffsetFromV);
+		return source.getMaxYAtVW(w, slope*w + wOffsetFromV);
 	}
 
 	@Override
@@ -429,22 +431,22 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinYAtWX(int w, int x) {
-		return source.getMinYAtVWX(w, w + wOffsetFromV, x);
+		return source.getMinYAtVWX(w, slope*w + wOffsetFromV, x);
 	}
 
 	@Override
 	public int getMaxYAtWX(int w, int x) {
-		return source.getMaxYAtVWX(w, w + wOffsetFromV, x);
+		return source.getMaxYAtVWX(w, slope*w + wOffsetFromV, x);
 	}
 
 	@Override
 	public int getMinYAtWZ(int w, int z) {
-		return source.getMinYAtVWZ(w, w + wOffsetFromV, z);
+		return source.getMinYAtVWZ(w, slope*w + wOffsetFromV, z);
 	}
 
 	@Override
 	public int getMaxYAtWZ(int w, int z) {
-		return source.getMaxYAtVWZ(w, w + wOffsetFromV, z);
+		return source.getMaxYAtVWZ(w, slope*w + wOffsetFromV, z);
 	}
 
 	@Override
@@ -459,12 +461,12 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinY(int w, int x, int z) {
-		return source.getMinY(w, w + wOffsetFromV, x, z);
+		return source.getMinY(w, slope*w + wOffsetFromV, x, z);
 	}
 
 	@Override
 	public int getMaxY(int w, int x, int z) {
-		return source.getMaxY(w, w + wOffsetFromV, x, z);
+		return source.getMaxY(w, slope*w + wOffsetFromV, x, z);
 	}
 
 	@Override
@@ -479,12 +481,12 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinZAtW(int w) {
-		return source.getMinZAtVW(w, w + wOffsetFromV);
+		return source.getMinZAtVW(w, slope*w + wOffsetFromV);
 	}
 
 	@Override
 	public int getMaxZAtW(int w) {
-		return source.getMaxZAtVW(w, w + wOffsetFromV);
+		return source.getMaxZAtVW(w, slope*w + wOffsetFromV);
 	}
 
 	@Override
@@ -509,22 +511,22 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinZAtWX(int w, int x) {
-		return source.getMinZAtVWX(w, w + wOffsetFromV, x);
+		return source.getMinZAtVWX(w, slope*w + wOffsetFromV, x);
 	}
 
 	@Override
 	public int getMaxZAtWX(int w, int x) {
-		return source.getMaxZAtVWX(w, w + wOffsetFromV, x);
+		return source.getMaxZAtVWX(w, slope*w + wOffsetFromV, x);
 	}
 
 	@Override
 	public int getMinZAtWY(int w, int y) {
-		return source.getMinZAtVWY(w, w + wOffsetFromV, y);
+		return source.getMinZAtVWY(w, slope*w + wOffsetFromV, y);
 	}
 
 	@Override
 	public int getMaxZAtWY(int w, int y) {
-		return source.getMaxZAtVWY(w, w + wOffsetFromV, y);
+		return source.getMaxZAtVWY(w, slope*w + wOffsetFromV, y);
 	}
 
 	@Override
@@ -539,12 +541,12 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public int getMinZ(int w, int x, int y) {
-		return source.getMinZ(w, w + wOffsetFromV, x, y);
+		return source.getMinZ(w, slope*w + wOffsetFromV, x, y);
 	}
 
 	@Override
 	public int getMaxZ(int w, int x, int y) {
-		return source.getMaxZ(w, w + wOffsetFromV, x, y);
+		return source.getMaxZ(w, slope*w + wOffsetFromV, x, y);
 	}
 
 	@Override
@@ -568,13 +570,18 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 
 	@Override
 	public String getSubfolderPath() {
-		String path = source.getSubfolderPath() + "/" + source.getWLabel() + "=" + source.getVLabel();
-		if (wOffsetFromV < 0) {
-			path += wOffsetFromV;
-		} else if (wOffsetFromV > 0) {
-			path += "+" + wOffsetFromV;
+		StringBuilder path = new StringBuilder();
+		path.append(source.getSubfolderPath()).append("/").append(source.getWLabel()).append("=");
+		if (slope == -1) {
+			path.append("-");
 		}
-		return path;
+		path.append(source.getVLabel());
+		if (wOffsetFromV < 0) {
+			path.append(wOffsetFromV);
+		} else if (wOffsetFromV > 0) {
+			path.append("+").append(wOffsetFromV);
+		}
+		return path.toString();
 	}
 
 	@Override

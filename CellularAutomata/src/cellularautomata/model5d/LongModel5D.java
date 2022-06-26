@@ -144,8 +144,8 @@ public interface LongModel5D extends Model5D, LongModel {
 	}
 	
 	@Override
-	default LongModel4D diagonalCrossSectionOnVW(int wOffsetFromV) {
-		return new LongModel5DVWDiagonalCrossSection(this, wOffsetFromV);
+	default LongModel4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {
+		return new LongModel5DVWDiagonalCrossSection(this, positiveSlope, wOffsetFromV);
 	}
 
 	@Override

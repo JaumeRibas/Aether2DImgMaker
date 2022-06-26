@@ -20,13 +20,13 @@ import cellularautomata.model4d.LongModel4D;
 
 public class LongModel5DVWDiagonalCrossSection extends Model5DVWDiagonalCrossSection<LongModel5D> implements LongModel4D {
 
-	public LongModel5DVWDiagonalCrossSection(LongModel5D source, int xOffsetFromW) {
-		super(source, xOffsetFromW);
+	public LongModel5DVWDiagonalCrossSection(LongModel5D source, boolean positiveSlope, int xOffsetFromW) {
+		super(source, positiveSlope, xOffsetFromW);
 	}
 
 	@Override
 	public long getFromPosition(int w, int x, int y, int z) throws Exception {
-		return source.getFromPosition(w, w + wOffsetFromV, x, y, z);
+		return source.getFromPosition(w, slope*w + wOffsetFromV, x, y, z);
 	}
 
 }

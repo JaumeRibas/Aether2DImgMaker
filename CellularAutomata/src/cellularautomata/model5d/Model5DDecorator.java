@@ -572,8 +572,8 @@ public class Model5DDecorator<Source_Type extends Model5D> extends ModelDecorato
 //	}
 	
 	@Override
-	public Model4D diagonalCrossSectionOnVW(int wOffsetFromV) {
-		return source.diagonalCrossSectionOnVW(wOffsetFromV);
+	public Model4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {
+		return source.diagonalCrossSectionOnVW(positiveSlope, wOffsetFromV);
 	}
 
 }

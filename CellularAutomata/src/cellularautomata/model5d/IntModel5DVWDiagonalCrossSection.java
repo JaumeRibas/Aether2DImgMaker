@@ -20,13 +20,13 @@ import cellularautomata.model4d.IntModel4D;
 
 public class IntModel5DVWDiagonalCrossSection extends Model5DVWDiagonalCrossSection<IntModel5D> implements IntModel4D {
 
-	public IntModel5DVWDiagonalCrossSection(IntModel5D source, int xOffsetFromW) {
-		super(source, xOffsetFromW);
+	public IntModel5DVWDiagonalCrossSection(IntModel5D source, boolean positiveSlope, int xOffsetFromW) {
+		super(source, positiveSlope, xOffsetFromW);
 	}
 
 	@Override
 	public int getFromPosition(int w, int x, int y, int z) throws Exception {
-		return source.getFromPosition(w, w + wOffsetFromV, x, y, z);
+		return source.getFromPosition(w, slope*w + wOffsetFromV, x, y, z);
 	}
 
 }

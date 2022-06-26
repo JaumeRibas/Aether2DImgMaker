@@ -155,8 +155,8 @@ public interface IntModel5D extends Model5D, IntModel {
 	}
 	
 	@Override
-	default IntModel4D diagonalCrossSectionOnVW(int wOffsetFromV) {
-		return new IntModel5DVWDiagonalCrossSection(this, wOffsetFromV);
+	default IntModel4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {
+		return new IntModel5DVWDiagonalCrossSection(this, positiveSlope, wOffsetFromV);
 	}
 
 	@Override

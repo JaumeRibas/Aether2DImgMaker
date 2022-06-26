@@ -436,8 +436,8 @@ public interface Model5D extends Model {
 //		return new Model5DZCrossSection<Model5D>(this, z);
 //	}
 	
-	default Model4D diagonalCrossSectionOnVW(int wOffsetFromV) {
-		return new Model5DVWDiagonalCrossSection<Model5D>(this, wOffsetFromV);
+	default Model4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {
+		return new Model5DVWDiagonalCrossSection<Model5D>(this, positiveSlope, wOffsetFromV);
 	}
 	
 	@Override
