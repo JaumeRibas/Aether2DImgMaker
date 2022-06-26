@@ -158,13 +158,13 @@ public interface IntModel4D extends Model4D, IntModel {
 	}
 	
 	@Override
-	default IntModel3D diagonalCrossSectionOnWX(int xOffsetFromW) {
-		return new IntModel4DWXDiagonalCrossSection(this, xOffsetFromW);
+	default IntModel3D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
+		return new IntModel4DWXDiagonalCrossSection(this, positiveSlope, xOffsetFromW);
 	}
 
 	@Override
-	default IntModel3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new IntModel4DYZDiagonalCrossSection(this, zOffsetFromY);
+	default IntModel3D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
+		return new IntModel4DYZDiagonalCrossSection(this, positiveSlope, zOffsetFromY);
 	}
 
 	@Override

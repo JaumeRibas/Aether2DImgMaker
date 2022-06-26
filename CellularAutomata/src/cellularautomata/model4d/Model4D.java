@@ -369,12 +369,12 @@ public interface Model4D extends Model {
 		return new Model4DZCrossSection<Model4D>(this, z);
 	}
 	
-	default Model3D diagonalCrossSectionOnWX(int xOffsetFromW) {
-		return new Model4DWXDiagonalCrossSection<Model4D>(this, xOffsetFromW);
+	default Model3D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
+		return new Model4DWXDiagonalCrossSection<Model4D>(this, positiveSlope, xOffsetFromW);
 	}
 	
-	default Model3D diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new Model4DYZDiagonalCrossSection<Model4D>(this, zOffsetFromY);
+	default Model3D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
+		return new Model4DYZDiagonalCrossSection<Model4D>(this, positiveSlope, zOffsetFromY);
 	}
 	
 	@Override

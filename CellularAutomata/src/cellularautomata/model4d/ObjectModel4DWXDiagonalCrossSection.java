@@ -20,12 +20,12 @@ import cellularautomata.model3d.ObjectModel3D;
 
 public class ObjectModel4DWXDiagonalCrossSection<Source_Type extends ObjectModel4D<Object_Type>, Object_Type> extends Model4DWXDiagonalCrossSection<Source_Type> implements ObjectModel3D<Object_Type> {
 
-	public ObjectModel4DWXDiagonalCrossSection(Source_Type source, int w) {
-		super(source, w);
+	public ObjectModel4DWXDiagonalCrossSection(Source_Type source, boolean positiveSlope, int xOffsetFromW) {
+		super(source, positiveSlope, xOffsetFromW);
 	}
 
 	@Override
 	public Object_Type getFromPosition(int x, int y, int z) throws Exception {
-		return source.getFromPosition(x, x + xOffsetFromW, y, z);
+		return source.getFromPosition(x, slope*x + xOffsetFromW, y, z);
 	}
 }

@@ -24,6 +24,7 @@ import cellularautomata.model3d.Model3D;
 public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implements Model3D {
 
 	protected Source_Type source;
+	protected int slope;
 	protected int xOffsetFromW;
 	protected int crossSectionMinW;
 	protected int crossSectionMaxW;
@@ -32,8 +33,9 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 	protected int crossSectionMinZ;
 	protected int crossSectionMaxZ;
 	
-	public Model4DWXDiagonalCrossSection(Source_Type source, int xOffsetFromW) {		
+	public Model4DWXDiagonalCrossSection(Source_Type source, boolean positiveSlope, int xOffsetFromW) {		
 		this.source = source;
+		this.slope = positiveSlope ? 1 : -1;
 		this.xOffsetFromW = xOffsetFromW;
 		if (!getBounds()) {
 			throw new IllegalArgumentException("Cross section is out of bounds.");
@@ -58,10 +60,10 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 	protected boolean getBounds() {
 		int w = source.getMinW();
 		int maxW = source.getMaxW();
-		int crossSectionX = w + xOffsetFromW;
+		int crossSectionX = slope*w + xOffsetFromW;
 		while (w <= maxW && (crossSectionX < source.getMinXAtW(w) || crossSectionX > source.getMaxXAtW(w))) {
 			w++;
-			crossSectionX++;
+			crossSectionX += slope;
 		}
 		if (w <= maxW) {
 			crossSectionMinW = w;
@@ -71,7 +73,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 			crossSectionMaxZ = source.getMaxZAtWX(w, crossSectionX);
 			crossSectionMinZ = source.getMinZAtWX(w, crossSectionX);
 			w++;
-			crossSectionX++;
+			crossSectionX += slope;
 			while (w <= maxW && crossSectionX >= source.getMinXAtW(w) && crossSectionX <= source.getMaxXAtW(w)) {
 				crossSectionMaxW = w;
 				int localMaxY = source.getMaxYAtWX(w, crossSectionX), localMinY = source.getMinYAtWX(w, crossSectionX);
@@ -89,7 +91,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 					crossSectionMinZ = localMinZ;
 				}
 				w++;
-				crossSectionX++;
+				crossSectionX += slope;
 			}
 			return true;
 		} else {
@@ -109,7 +111,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinXAtY(int y) { 
-		for (int crossSectionW = crossSectionMinW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX++) {
+		for (int crossSectionW = crossSectionMinW, crossSectionX = slope*crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX += slope) {
 			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
 			if (y >= localMinY && y <= localMaxY) {
 				return crossSectionW;
@@ -120,7 +122,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMaxXAtY(int y) { 
-		for (int crossSectionW = crossSectionMaxW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX--) {
+		for (int crossSectionW = crossSectionMaxW, crossSectionX = slope*crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX -= slope) {
 			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
 			if (y >= localMinY && y <= localMaxY) {
 				return crossSectionW;
@@ -131,7 +133,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinXAtZ(int z) { 
-		for (int crossSectionW = crossSectionMinW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX++) {
+		for (int crossSectionW = crossSectionMinW, crossSectionX = slope*crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX += slope) {
 			int localMaxZ = source.getMaxZAtWX(crossSectionW, crossSectionX), localMinZ = source.getMinZAtWX(crossSectionW, crossSectionX);
 			if (z >= localMinZ && z <= localMaxZ) {
 				return crossSectionW;
@@ -142,7 +144,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMaxXAtZ(int z) {
-		for (int crossSectionW = crossSectionMaxW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX--) {
+		for (int crossSectionW = crossSectionMaxW, crossSectionX = slope*crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX -= slope) {
 			int localMaxZ = source.getMaxZAtWX(crossSectionW, crossSectionX), localMinZ = source.getMinZAtWX(crossSectionW, crossSectionX);
 			if (z >= localMinZ && z <= localMaxZ) {
 				return crossSectionW;
@@ -153,7 +155,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinX(int y, int z) { 
-		for (int crossSectionW = crossSectionMinW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX++) {
+		for (int crossSectionW = crossSectionMinW, crossSectionX = slope*crossSectionW + xOffsetFromW; crossSectionW <= crossSectionMaxW; crossSectionW++, crossSectionX += slope) {
 			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
 			if (y >= localMinY && y <= localMaxY) {
 				int localMaxZ = source.getMaxZ(crossSectionW, crossSectionX, y), localMinZ = source.getMinZ(crossSectionW, crossSectionX, y);
@@ -167,7 +169,7 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMaxX(int y, int z) { 
-		for (int crossSectionW = crossSectionMaxW, crossSectionX = crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX--) {
+		for (int crossSectionW = crossSectionMaxW, crossSectionX = slope*crossSectionW + xOffsetFromW; crossSectionW >= crossSectionMinW; crossSectionW--, crossSectionX -= slope) {
 			int localMaxY = source.getMaxYAtWX(crossSectionW, crossSectionX), localMinY = source.getMinYAtWX(crossSectionW, crossSectionX);
 			if (y >= localMinY && y <= localMaxY) {
 				int localMaxZ = source.getMaxZ(crossSectionW, crossSectionX, y), localMinZ = source.getMinZ(crossSectionW, crossSectionX, y);
@@ -191,12 +193,12 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinYAtX(int x) { 
-		return source.getMinYAtWX(x, x + xOffsetFromW);
+		return source.getMinYAtWX(x, slope*x + xOffsetFromW);
 	}
 
 	@Override
 	public int getMaxYAtX(int x) { 
-		return source.getMaxYAtWX(x, x + xOffsetFromW);
+		return source.getMaxYAtWX(x, slope*x + xOffsetFromW);
 	}
 
 	@Override
@@ -211,12 +213,12 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinY(int x, int z) { 
-		return source.getMinY(x, x + xOffsetFromW, z);
+		return source.getMinY(x, slope*x + xOffsetFromW, z);
 	}
 
 	@Override
 	public int getMaxY(int x, int z) {
-		return source.getMaxY(x, x + xOffsetFromW, z);
+		return source.getMaxY(x, slope*x + xOffsetFromW, z);
 	}
 
 	@Override
@@ -231,12 +233,12 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinZAtX(int x) {
-		return source.getMinZAtWX(x, x + xOffsetFromW);
+		return source.getMinZAtWX(x, slope*x + xOffsetFromW);
 	}
 
 	@Override
 	public int getMaxZAtX(int x) {
-		return source.getMaxZAtWX(x, x + xOffsetFromW);
+		return source.getMaxZAtWX(x, slope*x + xOffsetFromW);
 	}
 
 	@Override
@@ -251,12 +253,12 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinZ(int x, int y) {
-		return source.getMinZ(x, x + xOffsetFromW, y);
+		return source.getMinZ(x, slope*x + xOffsetFromW, y);
 	}
 
 	@Override
 	public int getMaxZ(int x, int y) {
-		return source.getMaxZ(x, x + xOffsetFromW, y);
+		return source.getMaxZ(x, slope*x + xOffsetFromW, y);
 	}
 
 	@Override
@@ -280,13 +282,18 @@ public class Model4DWXDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public String getSubfolderPath() {
-		String path = source.getSubfolderPath() + "/" + source.getXLabel() + "=" + source.getWLabel();
-		if (xOffsetFromW < 0) {
-			path += xOffsetFromW;
-		} else if (xOffsetFromW > 0) {
-			path += "+" + xOffsetFromW;
+		StringBuilder path = new StringBuilder();
+		path.append(source.getSubfolderPath()).append("/").append(source.getXLabel()).append("=");
+		if (slope == -1) {
+			path.append("-");
 		}
-		return path;
+		path.append(source.getWLabel());
+		if (xOffsetFromW < 0) {
+			path.append(xOffsetFromW);
+		} else if (xOffsetFromW > 0) {
+			path.append("+").append(xOffsetFromW);
+		}
+		return path.toString();
 	}
 
 	@Override

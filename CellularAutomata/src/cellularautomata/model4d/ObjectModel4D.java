@@ -67,13 +67,13 @@ public interface ObjectModel4D<Object_Type> extends Model4D, ObjectModel<Object_
 	}
 	
 	@Override
-	default ObjectModel3D<Object_Type> diagonalCrossSectionOnWX(int xOffsetFromW) {
-		return new ObjectModel4DWXDiagonalCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, xOffsetFromW);
+	default ObjectModel3D<Object_Type> diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
+		return new ObjectModel4DWXDiagonalCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, positiveSlope, xOffsetFromW);
 	}
 	
 	@Override
-	default ObjectModel3D<Object_Type> diagonalCrossSectionOnYZ(int zOffsetFromY) {
-		return new ObjectModel4DYZDiagonalCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, zOffsetFromY);
+	default ObjectModel3D<Object_Type> diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
+		return new ObjectModel4DYZDiagonalCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, positiveSlope, zOffsetFromY);
 	}
 
 	@Override
