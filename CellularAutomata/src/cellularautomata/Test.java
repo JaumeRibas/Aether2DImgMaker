@@ -1008,30 +1008,33 @@ public class Test {
 		int[][][][] resultValues;
 		RegularIntGrid5D grid;
 		IntModel4D diagonal;
-		int side = 20;
+		int side = 21;
+		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		//vw
-		for (int off = 0; off <= offset; off += offset) {
-			sourceValues = new int[side][side][side][side][side];
-			resultValues = new int[side][side][side][side];
-			for (int v = 0; v < side; v++) {
-				for (int x = 0; x < side; x++) {
-					for (int y = 0; y < side; y++) {
-						for (int z = 0; z < side; z++) {
-							int value = random.nextInt();
-							int w = v+off;
-							if (w < side) {
-								sourceValues[v][w][x][y][z] = value;
-								resultValues[v][x][y][z] = value;	
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = 0; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int x = -originIndex; x < side-originIndex; x++) {
+						for (int y = -originIndex; y < side-originIndex; y++) {
+							for (int z = -originIndex; z < side-originIndex; z++) {
+								int value = random.nextInt();
+								int w = slope*v+off;
+								if (w < side-originIndex && w >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;	
+								}
 							}
 						}
 					}
-				}
-			}			
-			grid = new RegularIntGrid5D(sourceValues, 0, 0, 0, 0, 0);
-			diagonal = grid.diagonalCrossSectionOnVW(off);
-			compare(diagonal, new RegularIntGrid4D(resultValues, 0, 0, 0, 0));
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnVW(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+			}
 		}
 	}
 	
