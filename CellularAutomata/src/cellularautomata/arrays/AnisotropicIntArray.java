@@ -56,8 +56,8 @@ public class AnisotropicIntArray extends AnisotropicArray implements Multidimens
 	public void fillEdges(int edgeWidth, int value) {
 		forEachEdgeIndex(edgeWidth, new Consumer<Coordinates>() {		
 			@Override
-			public void accept(Coordinates coordinates) {
-				set(coordinates, value);
+			public void accept(Coordinates indexes) {
+				set(indexes, value);
 			}
 		});
 	}

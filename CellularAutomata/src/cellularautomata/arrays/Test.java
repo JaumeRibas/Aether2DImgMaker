@@ -27,7 +27,7 @@ import cellularautomata.Utils;
 public class Test {	
 
 	public static void main(String[] args) {
-		testRectangularIntArray2();
+		testHyperrectangularIntArray2();
 	}
 	
 	public static void testArrayClonning() {
@@ -60,29 +60,29 @@ public class Test {
 		System.out.println(Arrays.toString(array2));
 	}
 	
-	public static void testSquareIntArray() {
+	public static void testHypercubicIntArray() {
 		int side = 3;
 		int dimension = 5;
 		HypercubicIntArray arr = new HypercubicIntArray(dimension, side);
 		System.out.println("dimension: " + arr.getDimension());
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		System.out.println("Setting values");
-		arr.forEachPosition(new Consumer<Coordinates>() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void accept(Coordinates coordinates) {
+			public void accept(Coordinates indexes) {
 				int value = Utils.getRandomInt(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
 				list.add(value);
-				arr.set(coordinates, value);		
+				arr.set(indexes, value);		
 			}
 		});
 		System.out.println("Getting values");
 		Iterator<Integer> iterator = list.iterator();
-		arr.forEachPosition(new Consumer<Coordinates>() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void accept(Coordinates coordinates) {
-				int value = arr.get(coordinates);
+			public void accept(Coordinates indexes) {
+				int value = arr.get(indexes);
 				if (value != iterator.next()) {
 					System.err.println("Wroong!");
 				}	
@@ -93,7 +93,7 @@ public class Test {
 		}
 	}
 	
-	public static void testRectangularIntArray2() {
+	public static void testHyperrectangularIntArray2() {
 		int dimension = 5;
 		int[] sizes = new int[dimension];
 		int positionCount = 1;
@@ -106,22 +106,22 @@ public class Test {
 		System.out.println("dimension: " + arr.getDimension());
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		System.out.println("Setting values");
-		arr.forEachPosition(new Consumer<Coordinates>() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void accept(Coordinates coordinates) {
+			public void accept(Coordinates indexes) {
 				int value = Utils.getRandomInt(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
 				list.add(value);
-				arr.set(coordinates, value);		
+				arr.set(indexes, value);		
 			}
 		});
 		System.out.println("Getting values");
 		Iterator<Integer> iterator = list.iterator();
-		arr.forEachPosition(new Consumer<Coordinates>() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void accept(Coordinates coordinates) {
-				int value = arr.get(coordinates);
+			public void accept(Coordinates indexes) {
+				int value = arr.get(indexes);
 				if (value != iterator.next()) {
 					System.err.println("Wroong!");
 				}	
@@ -173,11 +173,11 @@ public class Test {
 	public static void testRectangularIntArray3() {
 		HyperrectangularIntArray arr = new HyperrectangularIntArray(new int[] { 3, 3, 3 });
 		System.out.println("dimension: " + arr.getDimension());
-		arr.forEachPosition(new Consumer<Coordinates>() {
+		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
-			public void accept(Coordinates coordinates) {
-				System.out.println(coordinates);
+			public void accept(Coordinates indexes) {
+				System.out.println(indexes);
 			}
 		});
 	}

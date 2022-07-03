@@ -43,8 +43,11 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 			throw new IllegalArgumentException("Sizes array cannot be null.");
 		}
 		for (int i = 0; i < sizes.length; i++) {
-			if (sizes[i] < 0) {
+			int size = sizes[i];
+			if (size < 0) {
 				throw new NegativeArraySizeException();
+			} else if (size == 0) {
+				throw new UnsupportedOperationException("Arrays with zero positions are not supported.");
 			}
 		}
 		this.sizes = sizes;
@@ -54,7 +57,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	 * Returns the size of the array on the given axis.
 	 * The axis must be greater than or equal to zero and smaller than the array's dimension returned by {@link #getDimension()}.
 	 * 
-	 * @param axis the index of the axis on which the size is requested.
+	 * @param axis the axis on which the size is requested.
 	 * @return the size
 	 */
 	public int getSize(int axis) {
@@ -94,7 +97,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	
 	
 	@Override
-	public void forEachPosition(Consumer<Coordinates> consumer) {
+	public void forEachIndex(Consumer<Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -110,6 +113,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	
 	/**
 	 * Executes a {@link Consumer<Coordinates>} for every index of the edges of the array.
+	 * 
 	 * @param consumer
 	 */
 	public void forEachEdgeIndex(int edgeWidth, Consumer<Coordinates> consumer) {
@@ -162,27 +166,32 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	 */
 	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, Consumer<Coordinates> consumer) {
 		int dimension = upperBounds.length;
-		int[] coordinates = new int[dimension];
+		int[] indexes = new int[dimension];
 		if (dimension == 0) {
-			consumer.accept(new Coordinates(coordinates));
+			consumer.accept(new Coordinates(indexes));
 		} else {
-			System.arraycopy(lowerBounds, 0, coordinates, 0, coordinates.length);
+			System.arraycopy(lowerBounds, 0, indexes, 0, indexes.length);
 			int currentAxis = 0;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
-					consumer.accept(new Coordinates(coordinates));
+					consumer.accept(new Coordinates(indexes));
 				}
-				int currentCoordinate = coordinates[currentAxis];
-				if (currentCoordinate < upperBounds[currentAxis]) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
+				int currentIndex = indexes[currentAxis];
+				if (currentIndex < upperBounds[currentAxis]) {
+					currentIndex++;
+					indexes[currentAxis] = currentIndex;
 					currentAxis = 0;
 				} else {
-					coordinates[currentAxis] = lowerBounds[currentAxis];
+					indexes[currentAxis] = lowerBounds[currentAxis];
 					currentAxis++;
 				}
 			}
 		}
+	}
+
+	@Override
+	public int getSize(int axis, Coordinates indexes) {
+		return sizes[axis];
 	}
 	
 }

@@ -19,6 +19,7 @@ package cellularautomata.arrays;
 import java.util.function.Consumer;
 
 import cellularautomata.Coordinates;
+import cellularautomata.Utils;
 
 /**
  * An array with the shape of an asymmetric sub-region of an hypercubic shape with isotropic symmetry around a center position.
@@ -27,79 +28,73 @@ import cellularautomata.Coordinates;
  * @author Jaume
  *
  */
-public abstract class AnisotropicArray extends HypercubicArray {
+public abstract class AnisotropicArray implements MultidimensionalArray {
+
+	protected int dimension;
+	protected int side;
 
 	public AnisotropicArray(int dimension, int side) {
-		super(dimension, side);
+		if (dimension < 0) {
+			throw new IllegalArgumentException("Dimension cannot be smaller than zero.");
+		}
+		if (side < 0) {
+			throw new NegativeArraySizeException();
+		} else if (side == 0) {
+			throw new UnsupportedOperationException("Arrays with zero positions are not supported.");
+		}
+		this.dimension = dimension;
+		this.side = side;
 	}
 
-	@Override
 	protected int getInternalArrayIndex(Coordinates indexes) {
 		int internalIndex = 0;
 		int indexCount = indexes.getCount();
 		for (int i = 0, dim = dimension; i < indexCount; i++, dim--) {
-			internalIndex += getPositionCount(dim, indexes.get(i));
+			internalIndex += Utils.getAnisotropicGridPositionCount(dim, indexes.get(i));
 		}
 		return internalIndex;
 	}
 	
-	public static long getPositionCount(int dimension, int side) {
-		switch (dimension) {
-			case 0:
-				return 1;
-			case 1://this case could be omitted
-				return side;
-			default:
-				long count = 0;
-				dimension--;
-				for (int i = 1; i <= side; i++) {
-					count += getPositionCount(dimension, i);
-				}
-				return count;
-		}
-	}
-	
 	@Override
 	public long getPositionCount() {
-		return getPositionCount(dimension, side);
+		return Utils.getAnisotropicGridPositionCount(dimension, side);
 	}
 	
 	@Override
-	public void forEachPosition(Consumer<Coordinates> consumer) {
+	public void forEachIndex(Consumer<Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
-		int[] coordinates = new int[dimension];
+		int[] indexes = new int[dimension];
 		if (dimension == 0) {
-			consumer.accept(new Coordinates(coordinates));
+			consumer.accept(new Coordinates(indexes));
 		} else {
 			int sideMinusOne = side - 1;
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					consumer.accept(new Coordinates(coordinates));
+					consumer.accept(new Coordinates(indexes));
 				}
-				int currentCoordinate = coordinates[currentAxis];
+				int currentIndex = indexes[currentAxis];
 				int max;
 				if (currentAxis == 0) {
 					max = sideMinusOne;
 				} else {
-					max = coordinates[currentAxis - 1];
+					max = indexes[currentAxis - 1];
 				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
+				if (currentIndex < max) {
+					currentIndex++;
+					indexes[currentAxis] = currentIndex;
 					currentAxis = dimensionMinusOne;
 				} else {
-					coordinates[currentAxis] = 0;
+					indexes[currentAxis] = 0;
 					currentAxis--;
 				}
 			}
 		}
 	}
 
-	@Override
 	public void forEachEdgeIndex(int edgeWidth, Consumer<Coordinates> consumer) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
@@ -108,35 +103,52 @@ public abstract class AnisotropicArray extends HypercubicArray {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		if (dimension > 0 && side <= edgeWidth) {
-			forEachPosition(consumer);
+			forEachIndex(consumer);
 		} else {
-			int[] coordinates = new int[dimension];
+			int[] indexes = new int[dimension];
 			if (dimension > 0) {
-				coordinates[0] = side - edgeWidth;
+				indexes[0] = side - edgeWidth;
 			}
 			int sideMinusOne = side - 1;
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					consumer.accept(new Coordinates(coordinates));
+					consumer.accept(new Coordinates(indexes));
 				}
-				int currentCoordinate = coordinates[currentAxis];
+				int currentIndex = indexes[currentAxis];
 				int max;
 				if (currentAxis == 0) {
 					max = sideMinusOne;
 				} else {
-					max = coordinates[currentAxis - 1];
+					max = indexes[currentAxis - 1];
 				}
-				if (currentCoordinate < max) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
+				if (currentIndex < max) {
+					currentIndex++;
+					indexes[currentAxis] = currentIndex;
 					currentAxis = dimensionMinusOne;
 				} else {
-					coordinates[currentAxis] = 0;
+					indexes[currentAxis] = 0;
 					currentAxis--;
 				}
 			}
 		}
+	}
+
+	@Override
+	public int getDimension() {
+		return dimension;
+	}
+
+	@Override
+	public int getSize(int axis, Coordinates indexes) {
+		if (axis > 0) {
+			return indexes.get(axis - 1) + 1;
+		}
+		return side;
+	}
+	
+	public int getSide() {
+		return side;
 	}
 }

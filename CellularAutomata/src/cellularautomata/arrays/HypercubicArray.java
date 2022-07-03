@@ -43,6 +43,8 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 		}
 		if (side < 0) {
 			throw new NegativeArraySizeException();
+		} else if (side == 0) {
+			throw new UnsupportedOperationException("Arrays with zero positions are not supported.");
 		}
 		this.dimension = dimension;
 		this.side = side;
@@ -62,27 +64,27 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	}
 	
 	@Override
-	public void forEachPosition(Consumer<Coordinates> consumer) {
+	public void forEachIndex(Consumer<Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
-		int[] coordinates = new int[dimension];
+		int[] indexes = new int[dimension];
 		if (dimension == 0) {
-			consumer.accept(new Coordinates(coordinates));
+			consumer.accept(new Coordinates(indexes));
 		} else {
 			int sideMinusOne = side - 1;
 			int currentAxis = 0;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) { 
-					consumer.accept(new Coordinates(coordinates));
+					consumer.accept(new Coordinates(indexes));
 				}
-				int currentCoordinate = coordinates[currentAxis];
-				if (currentCoordinate < sideMinusOne) {
-					currentCoordinate++;
-					coordinates[currentAxis] = currentCoordinate;
+				int currentIndex = indexes[currentAxis];
+				if (currentIndex < sideMinusOne) {
+					currentIndex++;
+					indexes[currentAxis] = currentIndex;
 					currentAxis = 0;
 				} else {
-					coordinates[currentAxis] = 0;
+					indexes[currentAxis] = 0;
 					currentAxis++;
 				}
 			}
@@ -98,7 +100,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		if (dimension > 0 && side <= 2*edgeWidth) {
-			forEachPosition(consumer);
+			forEachIndex(consumer);
 		} else {
 			int[] upperBounds = new int[dimension];
 			int[] lowerBounds = new int[dimension];
@@ -141,5 +143,10 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	
 	public static long getPositionCount(int dimension, int side) {
 		return (long) Math.pow(side, dimension);
+	}
+
+	@Override
+	public int getSize(int axis, Coordinates indexes) {
+		return side;
 	}
 }

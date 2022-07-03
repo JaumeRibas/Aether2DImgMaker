@@ -52,8 +52,12 @@ public abstract class ArrayGrid2D implements Model2D {
 		this.localYMinima = localYMinima;				
 	}
 	
+	/**
+	 * Get absolute y bounds and validate convexity
+	 * 
+	 * @param localYMaxima
+	 */
 	protected void getYBounds(int[] localYMaxima) {
-		//get absolute y bounds and validate convexity
 		if (localYMinima.length > 2) {
 			minY = Math.min(localYMinima[0], localYMinima[1]);
 			maxY = Math.max(localYMaxima[0], localYMaxima[1]);

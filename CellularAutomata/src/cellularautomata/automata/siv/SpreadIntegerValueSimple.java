@@ -105,7 +105,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		}
 		SpreadIntegerValueConsumer sivConsumer = new SpreadIntegerValueConsumer(newGrid, indexOffset);
 		//For every position apply rules
-		grid.forEachPosition(sivConsumer);
+		grid.forEachIndex(sivConsumer);
 		//Replace the old array with the new one
 		grid = newGrid;
 		//Update the index of the origin
