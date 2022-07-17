@@ -37,10 +37,13 @@ public interface MultidimensionalArray {
 	default long getPositionCount() {
 		long positionCount = 0;
 		int dimension = getDimension();
-		int[] indexes = new int[dimension];
+		if (dimension < 0) {
+			throw new IllegalArgumentException("Dimension cannot be smaller than zero.");
+		}
 		if (dimension == 0) {
 			positionCount++;
 		} else {
+			int[] indexes = new int[dimension];
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			int sizeMinusOne = 0;
@@ -87,6 +90,9 @@ public interface MultidimensionalArray {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
 		int dimension = getDimension();
+		if (dimension < 0) {
+			throw new IllegalArgumentException("Dimension cannot be smaller than zero.");
+		}
 		int[] indexes = new int[dimension];
 		if (dimension == 0) {
 			Coordinates indexesObj = new Coordinates(indexes);
