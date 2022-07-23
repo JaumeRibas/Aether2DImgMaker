@@ -48,8 +48,8 @@ public class CodeGeneration {
 			for (; i < currentAxis; i++) {
 				otherAxes[i] = i;
 			}
-			for (int k = currentAxis + 1; i < dimensionMinusOne; i = k, k++) {
-				otherAxes[i] = k;
+			for (int j = currentAxis + 1; i < dimensionMinusOne; i = j, j++) {
+				otherAxes[i] = j;
 			}
 			int otherAxesCountMinusOne = otherAxes.length - 1;
 			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
@@ -75,8 +75,8 @@ public class CodeGeneration {
 						StringBuilder otherAxesParams = new StringBuilder();
 						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
 						otherAxesParams.append("int ").append(axisLabels[otherAxis]);
-						for (int k = 1; k < indexCount; k++) {
-							otherAxis = otherAxes[indexes[k]];
+						for (int j = 1; j < indexCount; j++) {
+							otherAxis = otherAxes[indexes[j]];
 							if (otherAxis > currentAxis) {
 								if (!isThereAGreaterAxis) {
 									isThereAGreaterAxis = true;
@@ -182,8 +182,8 @@ public class CodeGeneration {
 				for (; i < currentAxis; i++) {
 					otherAxes[i] = i;
 				}
-				for (int k = currentAxis + 1; i < dimensionMinusOne; i = k, k++) {
-					otherAxes[i] = k;
+				for (int j = currentAxis + 1; i < dimensionMinusOne; i = j, j++) {
+					otherAxes[i] = j;
 				}
 				int otherAxesCountMinusOne = otherAxes.length - 1;
 				for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
@@ -209,8 +209,8 @@ public class CodeGeneration {
 							StringBuilder otherAxesParams = new StringBuilder();
 							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
 							otherAxesParams.append("int ").append(axisLabels[otherAxis]);
-							for (int k = 1; k < indexCount; k++) {
-								otherAxis = otherAxes[indexes[k]];
+							for (int j = 1; j < indexCount; j++) {
+								otherAxis = otherAxes[indexes[j]];
 								if (otherAxis > currentAxis) {
 									if (!isThereAGreaterAxis) {
 										isThereAGreaterAxis = true;
