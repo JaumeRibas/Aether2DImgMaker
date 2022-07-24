@@ -827,7 +827,7 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue);
 					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
 					BigInt share = shareAndRemainder[0];
-					if (!share.equals(BigInt.ZERO)) {
+					if (!share.equals(BigInt.ZERO)) {//TODO test potential optimization adding else
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);// one more for the symmetric position at the other side
