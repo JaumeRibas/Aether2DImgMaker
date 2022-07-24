@@ -850,14 +850,14 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			//6 >= v < edge - 2
+			//6 <= v < edge - 2
 			int edge = maxV + 2;
 			int edgeMinusTwo = edge - 2;
 			if (toppleRangeBeyondV5(newGrid, 6, edgeMinusTwo, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 				changed = true;
 			}
-			//edge - 2 >= v < edge
+			//edge - 2 <= v < edge
 			if (toppleRangeBeyondV5(newGrid, edgeMinusTwo, edge, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 				changed = true;

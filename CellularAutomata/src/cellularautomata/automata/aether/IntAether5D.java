@@ -928,14 +928,14 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			changed = true;
 		}
 		grid[4] = null;//free old grid progressively to save memory		
-		//6 >= v < edge - 2
+		//6 <= v < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
 		if (toppleRangeBeyondV5(vSlices, newVSlices, newGrid, 6, edgeMinusTwo, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;
 		}
-		//edge - 2 >= v < edge
+		//edge - 2 <= v < edge
 		if (toppleRangeBeyondV5(vSlices, newVSlices, newGrid, edgeMinusTwo, edge, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;

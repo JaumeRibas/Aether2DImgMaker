@@ -433,14 +433,14 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}		
-			// 5 >= w < edge - 2
+			// 5 <= w < edge - 2
 			int edge = maxW + 2;
 			int edgeMinusTwo = edge - 2;
 			if (toppleRangeBeyondW4(newGrid, 5, edgeMinusTwo, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse these arrays?
 				changed = true;
 			}
-			//edge - 2 >= w < edge
+			//edge - 2 <= w < edge
 			if (toppleRangeBeyondW4(newGrid, edgeMinusTwo, edge, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 				changed = true;

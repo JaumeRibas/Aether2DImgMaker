@@ -497,14 +497,14 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4
 			changed = true;
 		}
 		grid[3] = null;// free old grid progressively to save memory		
-		// 5 >= w < edge - 2
+		// 5 <= w < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
 		if (toppleRangeBeyondW4(wSlices, newWSlices, newGrid, 5, edgeMinusTwo, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) { // is it faster to reuse these arrays?
 			changed = true;
 		}
-		//edge - 2 >= w < edge
+		//edge - 2 <= w < edge
 		if (toppleRangeBeyondW4(wSlices, newWSlices, newGrid, edgeMinusTwo, edge, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts)) {
 			changed = true;
