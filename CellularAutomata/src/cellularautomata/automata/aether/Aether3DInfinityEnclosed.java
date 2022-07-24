@@ -42,10 +42,8 @@ public class Aether3DInfinityEnclosed implements SymmetricNumericModel3D<BigFrac
 	private BigFraction[][][] grid;
 
 	private final boolean isPositive;
-	private long step;
-	
-	private int side;
-	private int halfSide;
+	private long step;	
+	private final int side;
 	
 	public Aether3DInfinityEnclosed(boolean isPositive, int side) {
 		if (side%2 == 0)
@@ -55,8 +53,7 @@ public class Aether3DInfinityEnclosed implements SymmetricNumericModel3D<BigFrac
 		}
 		this.isPositive = isPositive;
 		this.side = side;
-		this.halfSide = side/2;
-		grid = Utils.buildAnisotropic3DBigFractionArray(halfSide + 1);
+		grid = Utils.buildAnisotropic3DBigFractionArray(side/2 + 1);
 		grid[0][0][0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		step = 0;
 	}
@@ -74,7 +71,6 @@ public class Aether3DInfinityEnclosed implements SymmetricNumericModel3D<BigFrac
 		isPositive = data.isPositive;
 		grid = data.grid;
 		side = data.side;
-		halfSide = data.halfSide;
 		step = data.step;
 	}
 
