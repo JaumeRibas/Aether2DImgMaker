@@ -82,43 +82,43 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new BigInt[grid.length + 2][grid[0].length + 2];
+			newGrid = new BigInt[grid.length + 2][grid.length + 2];
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
-			newGrid = new BigInt[grid.length][grid[0].length];
+			newGrid = new BigInt[grid.length][grid.length];
 		}
 		for (int i = 0; i < newGrid.length; i++) {
 			Arrays.fill(newGrid[i], BigInt.ZERO);
 		}
 		boolean changed = false;
 		//For every position
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[0].length; y++) {
-				BigInt value = grid[x][y];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				BigInt value = grid[i][j];
 				//make list of von Neumann neighbors with value smaller than current position's value
 				List<Neighbor<BigInt>> neighbors = new ArrayList<Neighbor<BigInt>>(4);						
 				BigInt neighborValue;
-				if (x < grid.length - 1)
-					neighborValue = grid[x + 1][y];
+				if (i < grid.length - 1)
+					neighborValue = grid[i + 1][j];
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
 					neighbors.add(new Neighbor<BigInt>(RIGHT, neighborValue));
-				if (x > 0)
-					neighborValue = grid[x - 1][y];
+				if (i > 0)
+					neighborValue = grid[i - 1][j];
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
 					neighbors.add(new Neighbor<BigInt>(LEFT, neighborValue));
-				if (y < grid[x].length - 1)
-					neighborValue = grid[x][y + 1];
+				if (j < grid[i].length - 1)
+					neighborValue = grid[i][j + 1];
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
 					neighbors.add(new Neighbor<BigInt>(UP, neighborValue));
-				if (y > 0)
-					neighborValue = grid[x][y - 1];
+				if (j > 0)
+					neighborValue = grid[i][j - 1];
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
@@ -129,42 +129,42 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 					boolean sorted = false;
 					while (!sorted) {
 						sorted = true;
-						for (int i = neighbors.size() - 2; i >= 0; i--) {
-							Neighbor<BigInt> next = neighbors.get(i+1);
-							if (neighbors.get(i).getValue().compareTo(next.getValue()) > 0) {
+						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
+							Neighbor<BigInt> next = neighbors.get(neighborIndex+1);
+							if (neighbors.get(neighborIndex).getValue().compareTo(next.getValue()) > 0) {
 								sorted = false;
-								neighbors.remove(i+1);
-								neighbors.add(i, next);
+								neighbors.remove(neighborIndex+1);
+								neighbors.add(neighborIndex, next);
 							}
 						}
 					}
 					//apply algorithm rules to redistribute value
 					boolean isFirst = true;
 					BigInt previousNeighborValue = null;
-					for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
-						neighborValue = neighbors.get(i).getValue();
+					for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
+						neighborValue = neighbors.get(neighborIndex).getValue();
 						if (isFirst || !neighborValue.equals(previousNeighborValue)) {
 							int shareCount = neighbors.size() + 1;
 							BigInt toShare = value.subtract(neighborValue);
 							BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 							BigInt share = shareAndRemainder[0];
 							if (!share.equals(BigInt.ZERO)) {
-								checkBoundsReached(x + indexOffset, y + indexOffset, newGrid.length);
+								checkBoundsReached(i + indexOffset, j + indexOffset, newGrid.length);
 								changed = true;
 								value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 								for (Neighbor<BigInt> neighbor : neighbors) {
-									int[] nc = getNeighborCoordinates(x, y, neighbor.getDirection());
+									int[] nc = getNeighborCoordinates(i, j, neighbor.getDirection());
 									newGrid[nc[0] + indexOffset][nc[1] + indexOffset] = 
 											newGrid[nc[0] + indexOffset][nc[1] + indexOffset].add(share);
 								}
 							}
 							previousNeighborValue = neighborValue;
 						}
-						neighbors.remove(i);
+						neighbors.remove(neighborIndex);
 					}	
 				}					
-				newGrid[x + indexOffset][y + indexOffset] = 
-						newGrid[x + indexOffset][y + indexOffset].add(value);
+				newGrid[i + indexOffset][j + indexOffset] = 
+						newGrid[i + indexOffset][j + indexOffset].add(value);
 			}
 		}
 		//Replace the old array with the new one
@@ -177,9 +177,9 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y, int length) {
-		if (x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2) {
+	private void checkBoundsReached(int i, int j, int length) {
+		if (i == 1 || i == length - 2 || 
+			j == 1 || j == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -206,15 +206,14 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 	
 	@Override
 	public BigInt getFromPosition(int x, int y) {	
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid[0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1) {
 			//If the entered position is outside the array the value will be zero
 			return BigInt.ZERO;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayX][arrayY];
+			return grid[i][j];
 		}
 	}
 	

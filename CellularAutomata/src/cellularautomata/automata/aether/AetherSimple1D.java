@@ -45,8 +45,8 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	private long initialValue;
 	private long step;
 	
-	/** The indexes of the origin within the array */
-	private int xOriginIndex;
+	/** The index of the origin within the array */
+	private int originIndex;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -64,8 +64,8 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 		int side = 5;
 		grid = new long[side];
 		//The origin will be at the center of the array
-		xOriginIndex = (side - 1)/2;
-		grid[xOriginIndex] = initialValue;
+		originIndex = (side - 1)/2;
+		grid[originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
@@ -87,22 +87,22 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 		}
 		boolean changed = false;
 		//For every position
-		for (int x = 0; x < grid.length; x++) {
+		for (int index = 0; index < grid.length; index++) {
 			//Distribute the positon's value among its neighbors (von Neumann) using the algorithm
 			
 			//Get the position's value
-			long value = grid[x];
+			long value = grid[index];
 			//Get a list of the neighbors whose value is smaller than the one at the current position
 			List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(2);						
 			long neighborValue;
-			if (x < grid.length - 1)
-				neighborValue = grid[x + 1];
+			if (index < grid.length - 1)
+				neighborValue = grid[index + 1];
 			else
 				neighborValue = 0;
 			if (neighborValue < value)
 				neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
-			if (x > 0)
-				neighborValue = grid[x - 1];
+			if (index > 0)
+				neighborValue = grid[index - 1];
 			else
 				neighborValue = 0;
 			if (neighborValue < value)
@@ -129,12 +129,12 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 						long toShare = value - neighborValue;
 						long share = toShare/shareCount;
 						if (share != 0) {
-							checkBoundsReached(x + indexOffset, newGrid.length);
+							checkBoundsReached(index + indexOffset, newGrid.length);
 							changed = true;
 							//the center keeps the remainder and one share
 							value = value - toShare + toShare%shareCount + share;
 							for (Neighbor<Long> n : neighbors) {
-								int nc = getNeighborCoordinates(x, n.getDirection());
+								int nc = getNeighborCoordinates(index, n.getDirection());
 								newGrid[nc + indexOffset] += share;
 							}
 						}
@@ -143,20 +143,20 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 					neighbors.remove(i);
 				}	
 			}					
-			newGrid[x + indexOffset] += value;
+			newGrid[index + indexOffset] += value;
 		}
 		//Replace the old array with the new one
 		this.grid = newGrid;
 		//Update the index of the origin
-		xOriginIndex += indexOffset;
+		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int length) {
-		if (x == 1 || x == length - 2) {
+	private void checkBoundsReached(int index, int length) {
+		if (index == 1 || index == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -175,13 +175,13 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	
 	@Override
 	public long getFromPosition(int x) {	
-		int arrayX = xOriginIndex + x;
-		if (arrayX < 0 || arrayX > grid.length - 1) {
+		int index = originIndex + x;
+		if (index < 0 || index > grid.length - 1) {
 			//If the entered position is outside the array the value will be 0
 			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayX];
+			return grid[index];
 		}
 	}
 	
@@ -192,7 +192,7 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	
 	@Override
 	public int getAsymmetricMaxX() {
-		int arrayMaxX = grid.length - 1 - xOriginIndex;
+		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
 			valuesMaxX = arrayMaxX;

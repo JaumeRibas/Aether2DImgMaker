@@ -84,53 +84,53 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2];
+			newGrid = new long[grid.length + 2][grid.length + 2][grid.length + 2];
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
-			newGrid = new long[grid.length][grid[0].length][grid[0][0].length];
+			newGrid = new long[grid.length][grid.length][grid.length];
 		}
 		boolean changed = false;
 		//For every position
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[0].length; y++) {
-				for (int z = 0; z < grid[0][0].length; z++) {
-					long value = grid[x][y][z];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				for (int k = 0; k < grid.length; k++) {
+					long value = grid[i][j][k];
 					//make list of von Neumann neighbors with value smaller than current position's value
 					List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(6);						
 					long neighborValue;
-					if (x < grid.length - 1)
-						neighborValue = grid[x + 1][y][z];
+					if (i < grid.length - 1)
+						neighborValue = grid[i + 1][j][k];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
 						neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
-					if (x > 0)
-						neighborValue = grid[x - 1][y][z];
+					if (i > 0)
+						neighborValue = grid[i - 1][j][k];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
 						neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
-					if (y < grid[x].length - 1)
-						neighborValue = grid[x][y + 1][z];
+					if (j < grid.length - 1)
+						neighborValue = grid[i][j + 1][k];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
 						neighbors.add(new Neighbor<Long>(UP, neighborValue));
-					if (y > 0)
-						neighborValue = grid[x][y - 1][z];
+					if (j > 0)
+						neighborValue = grid[i][j - 1][k];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
 						neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
-					if (z < grid[x][y].length - 1)
-						neighborValue = grid[x][y][z + 1];
+					if (k < grid.length - 1)
+						neighborValue = grid[i][j][k + 1];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
 						neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
-					if (z > 0)
-						neighborValue = grid[x][y][z - 1];
+					if (k > 0)
+						neighborValue = grid[i][j][k - 1];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
@@ -141,39 +141,39 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 						boolean sorted = false;
 						while (!sorted) {
 							sorted = true;
-							for (int i = neighbors.size() - 2; i >= 0; i--) {
-								Neighbor<Long> next = neighbors.get(i+1);
-								if (neighbors.get(i).getValue() > next.getValue()) {
+							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
+								Neighbor<Long> next = neighbors.get(neighborIndex+1);
+								if (neighbors.get(neighborIndex).getValue() > next.getValue()) {
 									sorted = false;
-									neighbors.remove(i+1);
-									neighbors.add(i, next);
+									neighbors.remove(neighborIndex+1);
+									neighbors.add(neighborIndex, next);
 								}
 							}
 						}
 						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
 						long previousNeighborValue = 0;
-						for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
-							neighborValue = neighbors.get(i).getValue();
+						for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
+							neighborValue = neighbors.get(neighborIndex).getValue();
 							if (neighborValue != previousNeighborValue || isFirst) {
 								int shareCount = neighbors.size() + 1;
 								long toShare = value - neighborValue;
 								long share = toShare/shareCount;
 								if (share != 0) {
-									checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
+									checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
 									changed = true;
 									value = value - toShare + toShare%shareCount + share;
 									for (Neighbor<Long> neighbor : neighbors) {
-										int[] nc = getNeighborCoordinates(x, y, z, neighbor.getDirection());
+										int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
 										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
 									}
 								}
 								previousNeighborValue = neighborValue;
 							}
-							neighbors.remove(i);
+							neighbors.remove(neighborIndex);
 						}	
 					}					
-					newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value;
+					newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
 				}
 			}
 		}
@@ -187,10 +187,10 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y, int z, int length) {
-		if (x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2 || 
-			z == 1 || z == length - 2) {
+	private void checkBoundsReached(int i, int j, int k, int length) {
+		if (i == 1 || i == length - 2 || 
+			j == 1 || j == length - 2 || 
+			k == 1 || k == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -223,17 +223,17 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 	
 	@Override
 	public long getFromPosition(int x, int y, int z) {	
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		int arrayZ = originIndex + z;
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid[0].length - 1
-				|| arrayZ < 0 || arrayZ > grid[0][0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		int k = originIndex + z;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1
+				|| k < 0 || k > grid.length - 1) {
 			//If the entered position is outside the array the value will be zero
 			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayX][arrayY][arrayZ];
+			return grid[i][j][k];
 		}
 	}
 	

@@ -86,78 +86,78 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2][grid[0][0][0].length + 2][grid[0][0][0][0].length + 2];
+			newGrid = new long[grid.length + 2][grid.length + 2][grid.length + 2][grid.length + 2][grid.length + 2];
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
-			newGrid = new long[grid.length][grid[0].length][grid[0][0].length][grid[0][0][0].length][grid[0][0][0][0].length];
+			newGrid = new long[grid.length][grid.length][grid.length][grid.length][grid.length];
 		}
 		boolean changed = false;
 		//For every position
-		for (int v = 0; v < grid.length; v++) {
-			for (int w = 0; w < grid[0].length; w++) {
-				for (int x = 0; x < grid[0][0].length; x++) {
-					for (int y = 0; y < grid[0][0][0].length; y++) {
-						for (int z = 0; z < grid[0][0][0][0].length; z++) {
-							long value = grid[v][w][x][y][z];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				for (int k = 0; k < grid.length; k++) {
+					for (int l = 0; l < grid.length; l++) {
+						for (int m = 0; m < grid.length; m++) {
+							long value = grid[i][j][k][l][m];
 							List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(10);						
 							long neighborValue;
-							if (v < grid.length - 1)
-								neighborValue = grid[v + 1][w][x][y][z];
+							if (i < grid.length - 1)
+								neighborValue = grid[i + 1][j][k][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(V_POSITIVE, neighborValue));
-							if (v > 0)
-								neighborValue = grid[v - 1][w][x][y][z];
+							if (i > 0)
+								neighborValue = grid[i - 1][j][k][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(V_NEGATIVE, neighborValue));
-							if (w < grid[v].length - 1)
-								neighborValue = grid[v][w + 1][x][y][z];
+							if (j < grid.length - 1)
+								neighborValue = grid[i][j + 1][k][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(W_POSITIVE, neighborValue));
-							if (w > 0)
-								neighborValue = grid[v][w - 1][x][y][z];
+							if (j > 0)
+								neighborValue = grid[i][j - 1][k][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(W_NEGATIVE, neighborValue));
-							if (x < grid[v][w].length - 1)
-								neighborValue = grid[v][w][x + 1][y][z];
+							if (k < grid.length - 1)
+								neighborValue = grid[i][j][k + 1][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(X_POSITIVE, neighborValue));
-							if (x > 0)
-								neighborValue = grid[v][w][x - 1][y][z];
+							if (k > 0)
+								neighborValue = grid[i][j][k - 1][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(X_NEGATIVE, neighborValue));
-							if (y < grid[v][w][x].length - 1)
-								neighborValue = grid[v][w][x][y + 1][z];
+							if (l < grid.length - 1)
+								neighborValue = grid[i][j][k][l + 1][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Y_POSITIVE, neighborValue));
-							if (y > 0)
-								neighborValue = grid[v][w][x][y - 1][z];
+							if (l > 0)
+								neighborValue = grid[i][j][k][l - 1][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Y_NEGATIVE, neighborValue));
-							if (z < grid[v][w][x][y].length - 1)
-								neighborValue = grid[v][w][x][y][z + 1];
+							if (m < grid.length - 1)
+								neighborValue = grid[i][j][k][l][m + 1];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Z_POSITIVE, neighborValue));
-							if (z > 0)
-								neighborValue = grid[v][w][x][y][z - 1];
+							if (m > 0)
+								neighborValue = grid[i][j][k][l][m - 1];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
@@ -168,39 +168,39 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 								boolean sorted = false;
 								while (!sorted) {
 									sorted = true;
-									for (int i = neighbors.size() - 2; i >= 0; i--) {
-										Neighbor<Long> next = neighbors.get(i+1);
-										if (neighbors.get(i).getValue() > next.getValue()) {
+									for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
+										Neighbor<Long> next = neighbors.get(neighborIndex+1);
+										if (neighbors.get(neighborIndex).getValue() > next.getValue()) {
 											sorted = false;
-											neighbors.remove(i+1);
-											neighbors.add(i, next);
+											neighbors.remove(neighborIndex+1);
+											neighbors.add(neighborIndex, next);
 										}
 									}
 								}
 								//divide
 								boolean isFirst = true;
 								long previousNeighborValue = 0;
-								for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
-									neighborValue = neighbors.get(i).getValue();
+								for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
+									neighborValue = neighbors.get(neighborIndex).getValue();
 									if (neighborValue != previousNeighborValue || isFirst) {
 										int shareCount = neighbors.size() + 1;
 										long toShare = value - neighborValue;
 										long share = toShare/shareCount;
 										if (share != 0) {
-											checkBoundsReached(v + indexOffset, w + indexOffset, x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
+											checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, l + indexOffset, m + indexOffset, newGrid.length);
 											changed = true;
 											value = value - toShare + toShare%shareCount + share;
 											for (Neighbor<Long> neighbor : neighbors) {
-												int[] nc = getNeighborCoordinates(v, w, x, y, z, neighbor.getDirection());
+												int[] nc = getNeighborCoordinates(i, j, k, l, m, neighbor.getDirection());
 												newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset][nc[3] + indexOffset][nc[4] + indexOffset] += share;
 											}
 										}
 										previousNeighborValue = neighborValue;
 									}
-									neighbors.remove(i);
+									neighbors.remove(neighborIndex);
 								}	
 							}					
-							newGrid[v + indexOffset][w + indexOffset][x + indexOffset][y + indexOffset][z + indexOffset] += value;
+							newGrid[i + indexOffset][j + indexOffset][k + indexOffset][l + indexOffset][m + indexOffset] += value;
 						}
 					}
 				}
@@ -216,12 +216,12 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 		return changed;
 	}
 	
-	private void checkBoundsReached(int v, int w, int x, int y, int z, int length) {
-		if (v == 1 || v == length - 2 ||
-			w == 1 || w == length - 2 || 
-			x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2 || 
-			z == 1 || z == length - 2) {
+	private void checkBoundsReached(int i, int j, int k, int l, int m, int length) {
+		if (i == 1 || i == length - 2 ||
+			j == 1 || j == length - 2 || 
+			k == 1 || k == length - 2 || 
+			l == 1 || l == length - 2 || 
+			m == 1 || m == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -266,21 +266,21 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 	
 	@Override
 	public long getFromPosition(int v, int w, int x, int y, int z) {
-		int arrayV = originIndex + v;
-		int arrayW = originIndex + w;
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		int arrayZ = originIndex + z;
-		if (arrayV < 0 || arrayV > grid.length - 1 
-				|| arrayW < 0 || arrayW > grid.length - 1 
-				|| arrayX < 0 || arrayX > grid[0].length - 1
-				|| arrayY < 0 || arrayY > grid[0][0].length - 1
-				|| arrayZ < 0 || arrayZ > grid[0][0][0].length - 1) {
+		int i = originIndex + v;
+		int j = originIndex + w;
+		int k = originIndex + x;
+		int l = originIndex + y;
+		int m = originIndex + z;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1 
+				|| k < 0 || k > grid.length - 1
+				|| l < 0 || l > grid.length - 1
+				|| m < 0 || m > grid.length - 1) {
 			//If the entered position is outside the array the value will be the background value
 			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayV][arrayW][arrayX][arrayY][arrayZ];
+			return grid[i][j][k][l][m];
 		}
 	}
 	
