@@ -223,22 +223,10 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	@Override
 	public long getFromAsymmetricPosition(int x, int y) {
 		return getFromPosition(x, y);
-	}	
-	
-	@Override
-	public int getMinX() {
-		int arrayMinX = - xOriginIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
 	}
 	
 	@Override
-	public int getMaxX() {
+	public int getAsymmetricMaxX() {
 		int arrayMaxX = grid.length - 1 - xOriginIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -247,35 +235,6 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - yOriginIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - yOriginIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
 	}
 
 	@Override

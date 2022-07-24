@@ -248,19 +248,7 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 	}
 	
 	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-	
-	@Override
-	public int getMaxX() {
+	public int getAsymmetricMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -269,59 +257,6 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		int arrayMinZ = - originIndex;
-		int valuesMinZ;
-		if (boundsReached) {
-			valuesMinZ = arrayMinZ;
-		} else {
-			valuesMinZ = arrayMinZ + 1;
-		}
-		return valuesMinZ;
-	}
-	
-	@Override
-	public int getMaxZ() {
-		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
-		int valuesMaxZ;
-		if (boundsReached) {
-			valuesMaxZ = arrayMaxZ;
-		} else {
-			valuesMaxZ = arrayMaxZ - 1;
-		}
-		return valuesMaxZ;
 	}
 	
 	@Override

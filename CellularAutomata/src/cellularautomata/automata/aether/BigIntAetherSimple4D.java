@@ -286,21 +286,9 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 	public BigInt getFromAsymmetricPosition(int w, int x, int y, int z) {
 		return getFromPosition(w, x, y, z);
 	}
-	
-	@Override
-	public int getMinW() {
-		int arrayMinW = - originIndex;
-		int valuesMinW;
-		if (boundsReached) {
-			valuesMinW = arrayMinW;
-		} else {
-			valuesMinW = arrayMinW + 1;
-		}
-		return valuesMinW;
-	}
 
 	@Override
-	public int getMaxW() {
+	public int getAsymmetricMaxW() {
 		int arrayMaxW = grid.length - 1 - originIndex;
 		int valuesMaxW;
 		if (boundsReached) {
@@ -309,83 +297,6 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 			valuesMaxW = arrayMaxW - 1;
 		}
 		return valuesMaxW;
-	}
-
-	@Override
-	public int getAsymmetricMaxW() {
-		return getMaxW();
-	}
-
-	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-
-	@Override
-	public int getMaxX() {
-		int arrayMaxX = grid.length - 1 - originIndex;
-		int valuesMaxX;
-		if (boundsReached) {
-			valuesMaxX = arrayMaxX;
-		} else {
-			valuesMaxX = arrayMaxX - 1;
-		}
-		return valuesMaxX;
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		int arrayMinZ = - originIndex;
-		int valuesMinZ;
-		if (boundsReached) {
-			valuesMinZ = arrayMinZ;
-		} else {
-			valuesMinZ = arrayMinZ + 1;
-		}
-		return valuesMinZ;
-	}
-	
-	@Override
-	public int getMaxZ() {
-		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
-		int valuesMaxZ;
-		if (boundsReached) {
-			valuesMaxZ = arrayMaxZ;
-		} else {
-			valuesMaxZ = arrayMaxZ - 1;
-		}
-		return valuesMaxZ;
 	}
 	
 	@Override

@@ -288,21 +288,9 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {
 		return getFromPosition(v, w, x, y, z);
 	}
-	
-	@Override
-	public int getMinV() {
-		int arrayMinV = - originIndex;
-		int valuesMinV;
-		if (boundsReached) {
-			valuesMinV = arrayMinV;
-		} else {
-			valuesMinV = arrayMinV + 1;
-		}
-		return valuesMinV;
-	}
 
 	@Override
-	public int getMaxV() {
+	public int getAsymmetricMaxV() {
 		int arrayMaxV = grid.length - 1 - originIndex;
 		int valuesMaxV;
 		if (boundsReached) {
@@ -312,108 +300,7 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 		}
 		return valuesMaxV;
 	}
-
-	@Override
-	public int getAsymmetricMaxV() {
-		return getMaxV();
-	}
 	
-	@Override
-	public int getMinW() {
-		int arrayMinW = - originIndex;
-		int valuesMinW;
-		if (boundsReached) {
-			valuesMinW = arrayMinW;
-		} else {
-			valuesMinW = arrayMinW + 1;
-		}
-		return valuesMinW;
-	}
-
-	@Override
-	public int getMaxW() {
-		int arrayMaxW = grid.length - 1 - originIndex;
-		int valuesMaxW;
-		if (boundsReached) {
-			valuesMaxW = arrayMaxW;
-		} else {
-			valuesMaxW = arrayMaxW - 1;
-		}
-		return valuesMaxW;
-	}
-
-	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-
-	@Override
-	public int getMaxX() {
-		int arrayMaxX = grid.length - 1 - originIndex;
-		int valuesMaxX;
-		if (boundsReached) {
-			valuesMaxX = arrayMaxX;
-		} else {
-			valuesMaxX = arrayMaxX - 1;
-		}
-		return valuesMaxX;
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		int arrayMinZ = - originIndex;
-		int valuesMinZ;
-		if (boundsReached) {
-			valuesMinZ = arrayMinZ;
-		} else {
-			valuesMinZ = arrayMinZ + 1;
-		}
-		return valuesMinZ;
-	}
-	
-	@Override
-	public int getMaxZ() {
-		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
-		int valuesMaxZ;
-		if (boundsReached) {
-			valuesMaxZ = arrayMaxZ;
-		} else {
-			valuesMaxZ = arrayMaxZ - 1;
-		}
-		return valuesMaxZ;
-	}
-
 	@Override
 	public long getStep() {
 		return step;

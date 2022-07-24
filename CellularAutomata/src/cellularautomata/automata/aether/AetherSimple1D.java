@@ -188,22 +188,10 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	@Override
 	public long getFromAsymmetricPosition(int x) {
 		return getFromPosition(x);
-	}	
-	
-	@Override
-	public int getMinX() {
-		int arrayMinX = - xOriginIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
 	}
 	
 	@Override
-	public int getMaxX() {
+	public int getAsymmetricMaxX() {
 		int arrayMaxX = grid.length - 1 - xOriginIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -212,11 +200,6 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
 	}
 	
 	@Override
