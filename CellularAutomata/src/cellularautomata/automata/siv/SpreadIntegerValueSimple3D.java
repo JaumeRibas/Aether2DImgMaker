@@ -18,7 +18,7 @@ package cellularautomata.automata.siv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import cellularautomata.Utils;
 import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
@@ -57,13 +57,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 		grid = new long[side][side][side];
 		originIndex = (side - 1)/2;
 		if (backgroundValue != 0) {
-			for (int x = 0; x < grid.length; x++) {
-				for (int y = 0; y < grid.length; y++) {
-					for (int z = 0; z < grid.length; z++) {
-						grid[x][y][z] = backgroundValue;
-					}
-				}
-			}
+			Utils.fillArray(grid, backgroundValue);
 		}
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
@@ -90,46 +84,46 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 		}
 		boolean changed = false;
 		//For every position
-		for (int x = 0; x < this.grid.length; x++) {
-			for (int y = 0; y < this.grid.length; y++) {
-				for (int z = 0; z < this.grid.length; z++) {
-					long value = this.grid[x][y][z];
+		for (int i = 0; i < this.grid.length; i++) {
+			for (int j = 0; j < this.grid.length; j++) {
+				for (int k = 0; k < this.grid.length; k++) {
+					long value = this.grid[i][j][k];
 					if (value != 0) {
 						long greaterXNeighborValue;
 						long lowerXNeighborValue;
-						if (x < grid.length - 1) {
-							greaterXNeighborValue = grid[x + 1][y][z];
-							if (x > 0)
-								lowerXNeighborValue = grid[x - 1][y][z];
+						if (i < grid.length - 1) {
+							greaterXNeighborValue = grid[i + 1][j][k];
+							if (i > 0)
+								lowerXNeighborValue = grid[i - 1][j][k];
 							else
 								lowerXNeighborValue = backgroundValue;
 						} else {
 							greaterXNeighborValue = backgroundValue;
-							lowerXNeighborValue = grid[x - 1][y][z];
+							lowerXNeighborValue = grid[i - 1][j][k];
 						}
 						long greaterYNeighborValue;
 						long lowerYNeighborValue;
-						if (y < grid.length - 1) {
-							greaterYNeighborValue = grid[x][y + 1][z];
-							if (y > 0)
-								lowerYNeighborValue = grid[x][y - 1][z];
+						if (j < grid.length - 1) {
+							greaterYNeighborValue = grid[i][j + 1][k];
+							if (j > 0)
+								lowerYNeighborValue = grid[i][j - 1][k];
 							else
 								lowerYNeighborValue = backgroundValue;
 						} else {
 							greaterYNeighborValue = backgroundValue;
-							lowerYNeighborValue = grid[x][y - 1][z];
+							lowerYNeighborValue = grid[i][j - 1][k];
 						}						
 						long greaterZNeighborValue;
 						long lowerZNeighborValue;
-						if (z < grid.length - 1) {
-							greaterZNeighborValue = grid[x][y][z + 1];
-							if (z > 0)
-								lowerZNeighborValue = grid[x][y][z - 1];
+						if (k < grid.length - 1) {
+							greaterZNeighborValue = grid[i][j][k + 1];
+							if (k > 0)
+								lowerZNeighborValue = grid[i][j][k - 1];
 							else
 								lowerZNeighborValue = backgroundValue;
 						} else {
 							greaterZNeighborValue = backgroundValue;
-							lowerZNeighborValue = grid[x][y][z - 1];
+							lowerZNeighborValue = grid[i][j][k - 1];
 						}						
 						boolean isGreaterYNeighborEqual = value == greaterYNeighborValue, isLowerYNeighborEqual = value == lowerYNeighborValue, 
 								isGreaterXNeighborEqual = value == greaterXNeighborValue, isLowerXNeighborEqual = value == lowerXNeighborValue,
@@ -144,45 +138,45 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 								//If any share is not zero the state changes
 								changed = true;
 								//Add the share and the remainder to the corresponding position in the new array
-								newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value%7 + share;
+								newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value%7 + share;
 								//Add the share to the neighboring positions
 								//if the neighbor's value is equal to the current value, add the share to the current position instead
 								if (isGreaterXNeighborEqual)
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += share;
 								else
-									newGrid[x + indexOffset + 1][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset + 1][j + indexOffset][k + indexOffset] += share;
 								if (isLowerXNeighborEqual)
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += share;
 								else
-									newGrid[x + indexOffset - 1][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset - 1][j + indexOffset][k + indexOffset] += share;
 								if (isGreaterYNeighborEqual)
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += share;
 								else
-									newGrid[x + indexOffset][y + indexOffset + 1][z + indexOffset] += share;
+									newGrid[i + indexOffset][j + indexOffset + 1][k + indexOffset] += share;
 								if (isLowerYNeighborEqual)
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += share;
 								else
-									newGrid[x + indexOffset][y + indexOffset - 1][z + indexOffset] += share;				
+									newGrid[i + indexOffset][j + indexOffset - 1][k + indexOffset] += share;				
 								if (isGreaterZNeighborEqual)
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += share;
 								else
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset + 1] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset + 1] += share;
 								if (isLowerZNeighborEqual)
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += share;
 								else
-									newGrid[x + indexOffset][y + indexOffset][z + indexOffset - 1] += share;
+									newGrid[i + indexOffset][j + indexOffset][k + indexOffset - 1] += share;
 								//Check whether or not we reached the edge of the array
-								if (x == 1 || x == this.grid.length - 2 
-										|| y == 1 || y == this.grid.length - 2
-										|| z == 1 || z == this.grid.length - 2) {
+								if (i == 1 || i == this.grid.length - 2 
+										|| j == 1 || j == this.grid.length - 2
+										|| k == 1 || k == this.grid.length - 2) {
 									boundsReached = true;
 								}
 							} else {
 								//if the share is zero, just add the value to the corresponding position in the new array
-								newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value;
+								newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
 							}
 						} else {
-							newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value;
+							newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
 						}
 					}
 				}
@@ -200,16 +194,16 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 	
 	@Override
 	public long getFromPosition(int x, int y, int z) {	
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		int arrayZ = originIndex + z;
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid[0].length - 1
-				|| arrayZ < 0 || arrayZ > grid[0][0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		int k = originIndex + z;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1
+				|| k < 0 || k > grid.length - 1) {
 			//If the entered position is outside the array the value will be the backgroundValue
 			return backgroundValue;
 		} else {
-			return grid[arrayX][arrayY][arrayZ];
+			return grid[i][j][k];
 		}
 	}
 	
@@ -219,19 +213,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 	}
 	
 	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-	
-	@Override
-	public int getMaxX() {
+	public int getAsymmetricMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -240,59 +222,6 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		int arrayMinZ = - originIndex;
-		int valuesMinZ;
-		if (boundsReached) {
-			valuesMinZ = arrayMinZ;
-		} else {
-			valuesMinZ = arrayMinZ + 1;
-		}
-		return valuesMinZ;
-	}
-	
-	@Override
-	public int getMaxZ() {
-		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
-		int valuesMaxZ;
-		if (boundsReached) {
-			valuesMaxZ = arrayMaxZ;
-		} else {
-			valuesMaxZ = arrayMaxZ - 1;
-		}
-		return valuesMaxZ;
 	}
 	
 	@Override
@@ -314,53 +243,53 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 		throw new UnsupportedOperationException();
 	}
 	
-	public static void fillEdges(long[][][] grid, int width, long value) {
+	private static void fillEdges(long[][][] grid, int width, long value) {
 		int lengthMinusWith = grid.length - width;
 		//min X side
-		for (int x = 0; x < width && x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y++) {
-				for (int z = 0; z < grid[x][y].length; z++) {
-					grid[x][y][z] = value;
+		for (int i = 0; i < width && i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				for (int k = 0; k < grid.length; k++) {
+					grid[i][j][k] = value;
 				}
 			}
 		}
 		//max X side
-		for (int x = lengthMinusWith; x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y++) {
-				for (int z = 0; z < grid[x][y].length; z++) {
-					grid[x][y][z] = value;
+		for (int i = lengthMinusWith; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				for (int k = 0; k < grid.length; k++) {
+					grid[i][j][k] = value;
 				}
 			}
 		}
 		//min Y side
-		for (int x = width; x < lengthMinusWith; x++) {
-			for (int y = 0; y < width && y < grid[x].length; y++) {
-				for (int z = 0; z < grid[x][y].length; z++) {
-					grid[x][y][z] = value;
+		for (int i = width; i < lengthMinusWith; i++) {
+			for (int j = 0; j < width && j < grid.length; j++) {
+				for (int k = 0; k < grid.length; k++) {
+					grid[i][j][k] = value;
 				}
 			}
 		}
 		//max Y side
-		for (int x = width; x < lengthMinusWith; x++) {
-			for (int y = grid[x].length - width; y < grid[x].length; y++) {
-				for (int z = 0; z < grid[x][y].length; z++) {
-					grid[x][y][z] = value;
+		for (int i = width; i < lengthMinusWith; i++) {
+			for (int j = grid.length - width; j < grid.length; j++) {
+				for (int k = 0; k < grid.length; k++) {
+					grid[i][j][k] = value;
 				}
 			}
 		}
 		//min Z side
-		for (int x = width; x < lengthMinusWith; x++) {
-			for (int y = width; y < grid[x].length - width; y++) {
-				for (int z = 0; z < width && z < grid[x][y].length; z++) {
-					grid[x][y][z] = value;
+		for (int i = width; i < lengthMinusWith; i++) {
+			for (int j = width; j < grid.length - width; j++) {
+				for (int k = 0; k < width && k < grid.length; k++) {
+					grid[i][j][k] = value;
 				}
 			}
 		}
 		//max Z side
-		for (int x = width; x < lengthMinusWith; x++) {
-			for (int y = width; y < grid[x].length - width; y++) {
-				for (int z = grid[x][y].length - width; z < grid[x][y].length; z++) {
-					grid[x][y][z] = value;
+		for (int i = width; i < lengthMinusWith; i++) {
+			for (int j = width; j < grid.length - width; j++) {
+				for (int k = grid.length - width; k < grid.length; k++) {
+					grid[i][j][k] = value;
 				}
 			}
 		}

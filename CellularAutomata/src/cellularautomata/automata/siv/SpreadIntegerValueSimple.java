@@ -250,18 +250,8 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 	}
 
 	@Override
-	public int getMaxCoordinate(int axis) {
-		return grid.getSide() - 1 - originIndex;
-	}
-
-	@Override
 	public int getAsymmetricMaxCoordinate(int axis) {
-		return getMaxCoordinate(axis);
-	}
-
-	@Override
-	public int getMinCoordinate(int axis) {
-		return -getMaxCoordinate(axis);
+		return grid.getSide() - 1 - originIndex;
 	}
 	
 }

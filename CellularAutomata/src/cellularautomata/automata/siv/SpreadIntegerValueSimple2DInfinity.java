@@ -65,32 +65,32 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new BigFraction[grid.length + 2][grid[0].length + 2];
+			newGrid = new BigFraction[grid.length + 2][grid.length + 2];
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
-			newGrid = new BigFraction[grid.length][grid[0].length];
+			newGrid = new BigFraction[grid.length][grid.length];
 		}
 		for (int i = 0; i < newGrid.length; i++) {
 			Arrays.fill(newGrid[i], BigFraction.ZERO);
 		}
 		//For every position
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[0].length; y++) {
-				BigFraction value = grid[x][y];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				BigFraction value = grid[i][j];
 				if (!value.equals(BigFraction.ZERO)) {
 					//Divide its value by 5
 					BigFraction share = value.divide(5);
 					//Add the share to the corresponding position in the new array
-					newGrid[x + indexOffset][y + indexOffset] = newGrid[x + indexOffset][y + indexOffset].add(share);
+					newGrid[i + indexOffset][j + indexOffset] = newGrid[i + indexOffset][j + indexOffset].add(share);
 					//Add the share to the neighboring positions
-					newGrid[x + indexOffset + 1][y + indexOffset] = newGrid[x + indexOffset + 1][y + indexOffset].add(share);
-					newGrid[x + indexOffset - 1][y + indexOffset] = newGrid[x + indexOffset - 1][y + indexOffset].add(share);
-					newGrid[x + indexOffset][y + indexOffset + 1] = newGrid[x + indexOffset][y + indexOffset + 1].add(share);
-					newGrid[x + indexOffset][y + indexOffset - 1] = newGrid[x + indexOffset][y + indexOffset - 1].add(share);
+					newGrid[i + indexOffset + 1][j + indexOffset] = newGrid[i + indexOffset + 1][j + indexOffset].add(share);
+					newGrid[i + indexOffset - 1][j + indexOffset] = newGrid[i + indexOffset - 1][j + indexOffset].add(share);
+					newGrid[i + indexOffset][j + indexOffset + 1] = newGrid[i + indexOffset][j + indexOffset + 1].add(share);
+					newGrid[i + indexOffset][j + indexOffset - 1] = newGrid[i + indexOffset][j + indexOffset - 1].add(share);
 					//Check whether or not we reached the edge of the array
-					if (x == 1 || x == this.grid.length - 2 || 
-						y == 1 || y == this.grid[0].length - 2) {
+					if (i == 1 || i == this.grid.length - 2 || 
+						j == 1 || j == this.grid[0].length - 2) {
 						boundsReached = true;
 					}
 				}
@@ -108,15 +108,15 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 	
 	@Override
 	public BigFraction getFromPosition(int x, int y) {	
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid[0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1) {
 			//If the entered position is outside the array the value will be zero
 			return BigFraction.ZERO;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayX][arrayY];
+			return grid[i][j];
 		}
 	}
 	
@@ -126,19 +126,7 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 	}
 	
 	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-	
-	@Override
-	public int getMaxX() {
+	public int getAsymmetricMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -147,35 +135,6 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
 	}
 	
 	@Override

@@ -18,7 +18,7 @@ package cellularautomata.automata.siv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import cellularautomata.Utils;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricLongModel2D;
 
@@ -38,8 +38,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 	private long step;
 	
 	/** The indexes of the origin within the array */
-	private int xOriginIndex;
-	private int yOriginIndex;
+	private int originIndex;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -58,16 +57,11 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 		int side = 5;
 		grid = new long[side][side];
 		//The origin will be at the center of the array
-		xOriginIndex = (side - 1)/2;
-		yOriginIndex = xOriginIndex;
+		originIndex = (side - 1)/2;
 		if (backgroundValue != 0) {
-			for (int x = 0; x < grid.length; x++) {
-				for (int y = 0; y < grid[x].length; y++) {
-					grid[x][y] = backgroundValue;
-				}
-			}
+			Utils.fillArray(grid, backgroundValue);
 		}
-		grid[xOriginIndex][yOriginIndex] = initialValue;
+		grid[originIndex][originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
@@ -82,43 +76,43 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2];
+			newGrid = new long[grid.length + 2][grid.length + 2];
 			if (backgroundValue != 0) {
 				fillEdges(newGrid, 1, backgroundValue);
 			}
 			indexOffset = 1;
 		} else {
-			newGrid = new long[grid.length][grid[0].length];
+			newGrid = new long[grid.length][grid.length];
 		}
 		boolean changed = false;
 		//For every position
-		for (int x = 0; x < this.grid.length; x++) {
-			for (int y = 0; y < this.grid[0].length; y++) {
-				long value = this.grid[x][y];
+		for (int i = 0; i < this.grid.length; i++) {
+			for (int j = 0; j < this.grid.length; j++) {
+				long value = this.grid[i][j];
 				if (value != 0) {
 					long right;
 					long left;
-					if (x < grid.length - 1) {
-						right = grid[x + 1][y];
-						if (x > 0)
-							left = grid[x - 1][y];
+					if (i < grid.length - 1) {
+						right = grid[i + 1][j];
+						if (i > 0)
+							left = grid[i - 1][j];
 						else
 							left = backgroundValue;
 					} else {
 						right = backgroundValue;
-						left = grid[x - 1][y];
+						left = grid[i - 1][j];
 					}
 					long up;
 					long down;
-					if (y < grid[x].length - 1) {
-						up = grid[x][y + 1];
-						if (y > 0)
-							down = grid[x][y - 1];
+					if (j < grid[i].length - 1) {
+						up = grid[i][j + 1];
+						if (j > 0)
+							down = grid[i][j - 1];
 						else
 							down = backgroundValue;
 					} else {
 						up = backgroundValue;
-						down = grid[x][y - 1];
+						down = grid[i][j - 1];
 					}
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
@@ -130,36 +124,36 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 							//If any share is not zero the state changes
 							changed = true;
 							//Add the share and the remainder to the corresponding position in the new array
-							newGrid[x + indexOffset][y + indexOffset] += value%5 + share;
+							newGrid[i + indexOffset][j + indexOffset] += value%5 + share;
 							//Add the share to the neighboring positions
 							//if the neighbor's value is equal to the current value, add the share to the current position instead
 							if (isRightEqual)
-								newGrid[x + indexOffset][y + indexOffset] += share;
+								newGrid[i + indexOffset][j + indexOffset] += share;
 							else
-								newGrid[x + indexOffset + 1][y + indexOffset] += share;
+								newGrid[i + indexOffset + 1][j + indexOffset] += share;
 							if (isLeftEqual)
-								newGrid[x + indexOffset][y + indexOffset] += share;
+								newGrid[i + indexOffset][j + indexOffset] += share;
 							else
-								newGrid[x + indexOffset - 1][y + indexOffset] += share;
+								newGrid[i + indexOffset - 1][j + indexOffset] += share;
 							if (isUpEqual)
-								newGrid[x + indexOffset][y + indexOffset] += share;
+								newGrid[i + indexOffset][j + indexOffset] += share;
 							else
-								newGrid[x + indexOffset][y + indexOffset + 1] += share;
+								newGrid[i + indexOffset][j + indexOffset + 1] += share;
 							if (isDownEqual)
-								newGrid[x + indexOffset][y + indexOffset] += share;
+								newGrid[i + indexOffset][j + indexOffset] += share;
 							else
-								newGrid[x + indexOffset][y + indexOffset - 1] += share;
+								newGrid[i + indexOffset][j + indexOffset - 1] += share;
 							//Check whether or not we reached the edge of the array
-							if (x == 1 || x == this.grid.length - 2 || 
-								y == 1 || y == this.grid[0].length - 2) {
+							if (i == 1 || i == this.grid.length - 2 || 
+								j == 1 || j == this.grid[0].length - 2) {
 								boundsReached = true;
 							}
 						} else {
 							//if the share is zero, just add the value to the corresponding position in the new array
-							newGrid[x + indexOffset][y + indexOffset] += value;
+							newGrid[i + indexOffset][j + indexOffset] += value;
 						}
 					} else {
-						newGrid[x + indexOffset][y + indexOffset] += value;
+						newGrid[i + indexOffset][j + indexOffset] += value;
 					}
 				}
 			}
@@ -167,8 +161,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 		//Replace the old array with the new one
 		this.grid = newGrid;
 		//Update the index of the origin
-		xOriginIndex += indexOffset;
-		yOriginIndex += indexOffset;
+		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
@@ -177,14 +170,14 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 	
 	@Override
 	public long getFromPosition(int x, int y) {	
-		int arrayX = xOriginIndex + x;
-		int arrayY = yOriginIndex + y;
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid[0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid[0].length - 1) {
 			//If the entered position is outside the array the value will be the backgroundValue
 			return backgroundValue;
 		} else {
-			return grid[arrayX][arrayY];
+			return grid[i][j];
 		}
 	}
 	
@@ -194,20 +187,8 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 	}
 	
 	@Override
-	public int getMinX() {
-		int arrayMinX = - xOriginIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-	
-	@Override
-	public int getMaxX() {
-		int arrayMaxX = grid.length - 1 - xOriginIndex;
+	public int getAsymmetricMaxX() {
+		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
 			valuesMaxX = arrayMaxX;
@@ -215,35 +196,6 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - yOriginIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - yOriginIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
 	}
 	
 	@Override
@@ -264,29 +216,29 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 		return backgroundValue;
 	}
 	
-	public static void fillEdges(long[][] grid, int width, long value) {
+	private static void fillEdges(long[][] grid, int width, long value) {
 		//left
-		for (int x = 0; x < width && x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y++) {
-				grid[x][y] = value;
+		for (int i = 0; i < width && i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				grid[i][j] = value;
 			}
 		}
 		//right
-		for (int x = grid.length - width; x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y++) {
-				grid[x][y] = value;
+		for (int i = grid.length - width; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				grid[i][j] = value;
 			}
 		}
 		//down
-		for (int x = width; x < grid.length - width; x++) {
-			for (int y = 0; y < width && y < grid[x].length; y++) {
-				grid[x][y] = value;
+		for (int i = width; i < grid.length - width; i++) {
+			for (int j = 0; j < width && j < grid.length; j++) {
+				grid[i][j] = value;
 			}
 		}
 		//up
-		for (int x = width; x < grid.length - width; x++) {
-			for (int y = grid[x].length - width; y < grid[x].length; y++) {
-				grid[x][y] = value;
+		for (int i = width; i < grid.length - width; i++) {
+			for (int j = grid.length - width; j < grid.length; j++) {
+				grid[i][j] = value;
 			}
 		}
 	}

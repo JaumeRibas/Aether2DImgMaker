@@ -39,7 +39,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	private long step;
 	
 	/** The index of the origin within the array */
-	private int xOriginIndex;
+	private int originIndex;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -58,11 +58,11 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 		int side = 5;
 		grid = new long[side];
 		//The origin will be at the center of the array
-		xOriginIndex = (side - 1)/2;
+		originIndex = (side - 1)/2;
 		if (backgroundValue != 0) {
 			Arrays.fill(grid, backgroundValue);
 		}
-		grid[xOriginIndex] = initialValue;
+		grid[originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
@@ -89,20 +89,20 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 		}
 		boolean changed = false;
 		//For every position
-		for (int x = 0; x < this.grid.length; x++) {
-			long value = this.grid[x];
+		for (int i = 0; i < this.grid.length; i++) {
+			long value = this.grid[i];
 			if (value != 0) {
 				long right;
 				long left;
-				if (x < grid.length - 1) {
-					right = grid[x + 1];
-					if (x > 0)
-						left = grid[x - 1];
+				if (i < grid.length - 1) {
+					right = grid[i + 1];
+					if (i > 0)
+						left = grid[i - 1];
 					else
 						left = backgroundValue;
 				} else {
 					right = backgroundValue;
-					left = grid[x - 1];
+					left = grid[i - 1];
 				}
 				boolean isRightEqual = value == right, isLeftEqual = value == left;
 				//if the current position is equal to its neighbors the algorithm has no effect
@@ -113,34 +113,34 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 						//If any share is not zero the state changes
 						changed = true;
 						//Add the share and the remainder to the corresponding position in the new array
-						newGrid[x + indexOffset] += value%3 + share;
+						newGrid[i + indexOffset] += value%3 + share;
 						//Add the share to the neighboring positions
 						//if the neighbor's value is equal to the current value, add the share to the current position instead
 						if (isRightEqual)
-							newGrid[x + indexOffset] += share;
+							newGrid[i + indexOffset] += share;
 						else
-							newGrid[x + indexOffset + 1] += share;
+							newGrid[i + indexOffset + 1] += share;
 						if (isLeftEqual)
-							newGrid[x + indexOffset] += share;
+							newGrid[i + indexOffset] += share;
 						else
-							newGrid[x + indexOffset - 1] += share;
+							newGrid[i + indexOffset - 1] += share;
 						//Check whether or not we reached the edge of the array
-						if (x == 1 || x == this.grid.length - 2) {
+						if (i == 1 || i == this.grid.length - 2) {
 							boundsReached = true;
 						}
 					} else {
 						//if the share is zero, just add the value to the corresponding position in the new array
-						newGrid[x + indexOffset] += value;
+						newGrid[i + indexOffset] += value;
 					}
 				} else {
-					newGrid[x + indexOffset] += value;
+					newGrid[i + indexOffset] += value;
 				}
 			}
 		}
 		//Replace the old array with the new one
 		this.grid = newGrid;
 		//Update the index of the origin
-		xOriginIndex += indexOffset;
+		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
@@ -149,12 +149,12 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	
 	@Override
 	public long getFromPosition(int x) {	
-		int arrayX = xOriginIndex + x;
-		if (arrayX < 0 || arrayX > grid.length - 1) {
+		int index = originIndex + x;
+		if (index < 0 || index > grid.length - 1) {
 			//If the entered position is outside the array the value will be the backgroundValue
 			return backgroundValue;
 		} else {
-			return grid[arrayX];
+			return grid[index];
 		}
 	}
 	
@@ -164,25 +164,8 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	}
 	
 	@Override
-	public int getMinX() {
-		int arrayMinX = - xOriginIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-	
-	@Override
 	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-	
-	@Override
-	public int getMaxX() {
-		int arrayMaxX = grid.length - 1 - xOriginIndex;
+		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
 			valuesMaxX = arrayMaxX;
