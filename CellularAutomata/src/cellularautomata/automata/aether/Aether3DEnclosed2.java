@@ -24,7 +24,7 @@ import cellularautomata.Utils;
 import cellularautomata.model3d.LongModel3D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a finite cuboid-shaped grid and a single source initial configuration
  * 
  * @author Jaume
  *

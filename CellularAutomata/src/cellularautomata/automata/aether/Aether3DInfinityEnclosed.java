@@ -26,7 +26,7 @@ import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricNumericModel3D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration of infinity
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a finite cube-shaped grid and a single source initial configuration of infinity
  * 
  * @author Jaume
  *

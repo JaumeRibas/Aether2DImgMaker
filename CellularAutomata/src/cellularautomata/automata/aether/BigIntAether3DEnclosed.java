@@ -28,7 +28,7 @@ import cellularautomata.model3d.SymmetricNumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a finite cube-shaped grid and a single source initial configuration
  * 
  * @author Jaume
  *
