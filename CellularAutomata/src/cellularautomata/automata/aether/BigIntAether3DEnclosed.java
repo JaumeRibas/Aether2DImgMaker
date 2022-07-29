@@ -49,10 +49,9 @@ public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, 
 	private BigInt[][][] grid;
 	
 	private BigInt initialValue;
-	private long step;
-	
+	private long step;	
 	private int side;
-	private int halfSide;
+	
 	/**
 	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
 	 */
@@ -66,8 +65,7 @@ public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, 
 		}
 		this.initialValue = initialValue;
 		this.side = side;
-		this.halfSide = side/2;
-		grid = Utils.buildAnisotropic3DBigIntArray(halfSide + 1);
+		grid = Utils.buildAnisotropic3DBigIntArray(side/2 + 1);
 		grid[0][0][0] = this.initialValue;
 		step = 0;
 		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
@@ -86,7 +84,6 @@ public class BigIntAether3DEnclosed implements SymmetricNumericModel3D<BigInt>, 
 		initialValue = data.initialValue;
 		grid = data.grid;
 		side = data.side;
-		halfSide = data.halfSide;
 		step = data.step;
 		creationTimestamp = data.creationTimestamp;
 	}
