@@ -151,13 +151,10 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 	}
 	
 	private static int getNeighborCoordinates(int x, byte direction) {
-		switch(direction) {
-		case RIGHT:
+		if (direction == RIGHT) {
 			x++;
-			break;
-		case LEFT:
+		} else {
 			x--;
-			break;
 		}
 		return x;
 	}

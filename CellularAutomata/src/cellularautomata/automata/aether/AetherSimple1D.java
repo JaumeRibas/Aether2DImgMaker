@@ -162,13 +162,10 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	}
 	
 	private static int getNeighborCoordinates(int x, byte direction) {
-		switch(direction) {
-		case RIGHT:
+		if (direction == RIGHT) {
 			x++;
-			break;
-		case LEFT:
+		} else {
 			x--;
-			break;
 		}
 		return x;
 	}
