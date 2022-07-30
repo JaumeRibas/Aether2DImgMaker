@@ -163,6 +163,7 @@ public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, Is
 						for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
 							neighborValue = neighbors.get(neighborIndex).getValue();
 							if (isFirst || !neighborValue.equals(previousNeighborValue)) {
+								//add one for the center position
 								int shareCount = neighbors.size() + 1;
 								BigInt toShare = value.subtract(neighborValue);
 								BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
@@ -170,6 +171,7 @@ public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, Is
 								if (!share.equals(BigInt.ZERO)) {
 									checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
 									changed = true;
+									//the center keeps the remainder and one share
 									value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 									for (Neighbor<BigInt> neighbor : neighbors) {
 										int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
