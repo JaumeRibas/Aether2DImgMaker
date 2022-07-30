@@ -32,7 +32,7 @@ import cellularautomata.model2d.LongModel2D;
  * @author Jaume
  *
  */
-public class AetherSequential2D implements LongModel2D, Serializable {	
+public class AsynchronousAether2D implements LongModel2D, Serializable {	
 	
 	/**
 	 * 
@@ -53,15 +53,14 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 	private long initialValue;
 	private long step;
 	
-	/** The indexes of the origin within the array */
-	private int xOriginIndex;
-	private int yOriginIndex;
+	/** The index of the origin within the array */
+	private int originIndex;
 	
-	/** The indexes of the position to topple */
-	private int topplingPositionXIndex;
-	private int topplingPositionYIndex;
+	/** The indexes of the cell to topple */
+	private int topplingPositionIndex1;
+	private int topplingPositionIndex2;
 	
-	/** Whether or not the state of the grid changed after toppling all positions*/
+	/** Whether or not the state of the grid changed after toppling all cells*/
 	private boolean changed = false;
 
 	/** Whether or not the values reached the bounds of the array*/
@@ -74,7 +73,7 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public AetherSequential2D(long initialValue) {
+	public AsynchronousAether2D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
@@ -82,13 +81,12 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 		int side = 5;
 		grid = new long[side][side];
 		//The origin will be at the center of the array
-		xOriginIndex = (side - 1)/2;
-		yOriginIndex = xOriginIndex;
-		grid[xOriginIndex][yOriginIndex] = initialValue;
+		originIndex = (side - 1)/2;
+		grid[originIndex][originIndex] = initialValue;
 		boundsReached = false;
-		//the indexes of the toppling position
-		topplingPositionXIndex = 1;
-		topplingPositionYIndex = 1;
+		//the indexes of the toppling cell
+		topplingPositionIndex1 = 1;
+		topplingPositionIndex2 = 1;
 		//Set the current step to zero
 		step = 0;
 	}
@@ -101,15 +99,14 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public AetherSequential2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		AetherSequential2D data = (AetherSequential2D) Utils.deserializeFromFile(backupPath);
+	public AsynchronousAether2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		AsynchronousAether2D data = (AsynchronousAether2D) Utils.deserializeFromFile(backupPath);
 		grid = data.grid;
 		initialValue = data.initialValue;
 		step = data.step;
-		xOriginIndex = data.xOriginIndex;
-		yOriginIndex = data.yOriginIndex;
-		topplingPositionXIndex = data.topplingPositionXIndex;
-		topplingPositionYIndex = data.topplingPositionYIndex;
+		originIndex = data.originIndex;
+		topplingPositionIndex1 = data.topplingPositionIndex1;
+		topplingPositionIndex2 = data.topplingPositionIndex2;
 		changed = data.changed;
 		boundsReached = data.boundsReached;
 		resizeGrid = data.resizeGrid;
@@ -124,39 +121,38 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (resizeGrid) {
 			resizeGrid = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2];
+			newGrid = new long[grid.length + 2][grid.length + 2];
 			indexOffset = 1;
 		} else {
-			newGrid = new long[grid.length][grid[0].length];
+			newGrid = new long[grid.length][grid.length];
 		}
-		boolean hasToppled = false;
-		//Distribute the positon's value among its neighbors (von Neumann) using the algorithm
+		//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 		
-		//Get the position's value
-		long topplingValue = grid[topplingPositionXIndex][topplingPositionYIndex];
-		//Get a list of the neighbors whose value is smaller than the one at the current position
+		//Get the cell's value
+		long topplingValue = grid[topplingPositionIndex1][topplingPositionIndex2];
+		//Get a list of the neighbors whose value is smaller than the one at the current cell
 		List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(4);						
 		long neighborValue;
-		if (topplingPositionXIndex < grid.length - 1)
-			neighborValue = grid[topplingPositionXIndex + 1][topplingPositionYIndex];
+		if (topplingPositionIndex1 < grid.length - 1)
+			neighborValue = grid[topplingPositionIndex1 + 1][topplingPositionIndex2];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
 			neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
-		if (topplingPositionXIndex > 0)
-			neighborValue = grid[topplingPositionXIndex - 1][topplingPositionYIndex];
+		if (topplingPositionIndex1 > 0)
+			neighborValue = grid[topplingPositionIndex1 - 1][topplingPositionIndex2];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
 			neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
-		if (topplingPositionYIndex < grid[topplingPositionXIndex].length - 1)
-			neighborValue = grid[topplingPositionXIndex][topplingPositionYIndex + 1];
+		if (topplingPositionIndex2 < grid[topplingPositionIndex1].length - 1)
+			neighborValue = grid[topplingPositionIndex1][topplingPositionIndex2 + 1];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
 			neighbors.add(new Neighbor<Long>(UP, neighborValue));
-		if (topplingPositionYIndex > 0)
-			neighborValue = grid[topplingPositionXIndex][topplingPositionYIndex - 1];
+		if (topplingPositionIndex2 > 0)
+			neighborValue = grid[topplingPositionIndex1][topplingPositionIndex2 - 1];
 		else
 			neighborValue = 0;
 		if (neighborValue < topplingValue)
@@ -183,17 +179,17 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 			for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
 				neighborValue = neighbors.get(i).getValue();
 				if (neighborValue != previousNeighborValue || isFirst) {
-					//add one for the center position
+					//add one for the current cell
 					int shareCount = neighbors.size() + 1;
 					long toShare = topplingValue - neighborValue;
 					long share = toShare/shareCount;
 					if (share != 0) {
-						checkBoundsReached(topplingPositionXIndex + indexOffset, topplingPositionYIndex + indexOffset, newGrid.length);
-						hasToppled = true;
-						//the center keeps the remainder and one share
+						checkBoundsReached(topplingPositionIndex1 + indexOffset, topplingPositionIndex2 + indexOffset, newGrid.length);
+						changed = true;
+						//the current cell keeps the remainder and one share
 						topplingValue = topplingValue - toShare + toShare%shareCount + share;
 						for (Neighbor<Long> n : neighbors) {
-							int[] nc = getNeighborCoordinates(topplingPositionXIndex, topplingPositionYIndex, n.getDirection());
+							int[] nc = getNeighborCoordinates(topplingPositionIndex1, topplingPositionIndex2, n.getDirection());
 							newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
 						}
 					}
@@ -202,29 +198,28 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 				neighbors.remove(i);
 			}	
 		}
-		newGrid[topplingPositionXIndex + indexOffset][topplingPositionYIndex + indexOffset] += topplingValue;
-		//For every position
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[0].length; y++) {
-				if (x != topplingPositionXIndex || y != topplingPositionYIndex) {
-					long value = grid[x][y];
-					newGrid[x + indexOffset][y + indexOffset] += value;
+		newGrid[topplingPositionIndex1 + indexOffset][topplingPositionIndex2 + indexOffset] += topplingValue;
+		//For every cell
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				if (i != topplingPositionIndex1 || j != topplingPositionIndex2) {
+					long value = grid[i][j];
+					newGrid[i + indexOffset][j + indexOffset] += value;
 				}
 			}
 		}
-		this.changed = this.changed || hasToppled;
 		boolean previousChanged = true;
 		//next position to topple		
-		if (topplingPositionXIndex < grid.length - 2) {
-			topplingPositionXIndex++;
+		if (topplingPositionIndex1 < grid.length - 2) {
+			topplingPositionIndex1++;
 		} else {
-			topplingPositionXIndex = 1;
-			if (topplingPositionYIndex < grid[0].length - 2) {
-				topplingPositionYIndex++;
+			topplingPositionIndex1 = 1;
+			if (topplingPositionIndex2 < grid.length - 2) {
+				topplingPositionIndex2++;
 			} else {
-				topplingPositionYIndex = 1;
-				previousChanged = this.changed;
-				this.changed = false;
+				topplingPositionIndex2 = 1;
+				previousChanged = changed;
+				changed = false;
 				resizeGrid = boundsReached;
 				boundsReached = false;
 			}
@@ -232,17 +227,16 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 		//Replace the old array with the new one
 		this.grid = newGrid;
 		//Update the index of the origin
-		xOriginIndex += indexOffset;
-		yOriginIndex += indexOffset;
+		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
 		return previousChanged;
 	}
 	
-	private void checkBoundsReached(int x, int y, int length) {
-		if (x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2) {
+	private void checkBoundsReached(int i, int j, int length) {
+		if (i == 1 || i == length - 2 || 
+			j == 1 || j == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -269,44 +263,40 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 	
 	@Override
 	public long getFromPosition(int x, int y) {	
-		int arrayX = xOriginIndex + x;
-		int arrayY = yOriginIndex + y;
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid[0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1) {
 			//If the entered position is outside the array the value will be the backgroundValue
 			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayX][arrayY];
+			return grid[i][j];
 		}
 	}
 	
 	@Override
 	public int getMinX() {
-		int arrayMinX = - xOriginIndex;
+		int arrayMinX = - originIndex;
 		int valuesMinX = arrayMinX;
 		return valuesMinX;
 	}
 	
 	@Override
 	public int getMaxX() {
-		int arrayMaxX = grid.length - 1 - xOriginIndex;
+		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX = arrayMaxX;
 		return valuesMaxX;
 	}
 	
 	@Override
 	public int getMinY() {
-		int arrayMinY = - yOriginIndex;
-		int valuesMinY = arrayMinY;
-		return valuesMinY;
+		return getMinX();
 	}
 	
 	@Override
 	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - yOriginIndex;
-		int valuesMaxY = arrayMaxY;
-		return valuesMaxY;
+		return getMaxX();
 	}
 	
 	@Override
@@ -325,7 +315,7 @@ public class AetherSequential2D implements LongModel2D, Serializable {
 
 	@Override
 	public String getName() {
-		return "AetherSequential";
+		return "AsynchronousAether";
 	}
 	
 	@Override
