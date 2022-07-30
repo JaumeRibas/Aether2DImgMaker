@@ -208,19 +208,18 @@ public class FileBackedAether2D extends FileBackedModel implements SymmetricLong
 					addToPosition(newGrid, 1, 0, share + share);
 					addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%3);
 				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gx < current <= sy
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/3;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%3);
-					addToPosition(newGrid, 2, 1, share);
-				} else {
-					addToPosition(newGrid, 1, 1, currentValue);
+			} else if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sy
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					changed = true;
 				}
+				addToPosition(newGrid, 1, 1, currentValue - toShare + share + toShare%3);
+				addToPosition(newGrid, 2, 1, share);
+			} else {
+				// gx >= current <= sy
+				addToPosition(newGrid, 1, 1, currentValue);
 			}
 			// x = 2, y = 0
 			relevantAsymmetricNeighborCount = 0;
@@ -368,19 +367,18 @@ public class FileBackedAether2D extends FileBackedModel implements SymmetricLong
 					addToPosition(newGrid, 2, 1, share);
 					addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%3);
 				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gx < current <= sy
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/3;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%3);
-					addToPosition(newGrid, 3, 2, share);
-				} else {
-					addToPosition(newGrid, 2, 2, currentValue);
+			} else if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sy
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					changed = true;
 				}
+				addToPosition(newGrid, 2, 2, currentValue - toShare + share + toShare%3);
+				addToPosition(newGrid, 3, 2, share);
+			} else {
+				// gx >= current <= sy
+				addToPosition(newGrid, 2, 2, currentValue);
 			}
 			// 3 <= x < edge - 2
 			int edge = maxX + 2;
@@ -654,19 +652,18 @@ public class FileBackedAether2D extends FileBackedModel implements SymmetricLong
 					addToPosition(newGrid, x, yMinusOne, share);
 					addToPosition(newGrid, x, y, currentValue - toShare + share + toShare%3);
 				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gx < current <= sy
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/3;
-					if (share != 0) {
-						anyToppled = true;
-					}
-					addToPosition(newGrid, x, y, currentValue - toShare + share + toShare%3);
-					addToPosition(newGrid, xPlusOne, y, share);
-				} else {
-					addToPosition(newGrid, x, y, currentValue);
+			} else if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sy
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					anyToppled = true;
 				}
+				addToPosition(newGrid, x, y, currentValue - toShare + share + toShare%3);
+				addToPosition(newGrid, xPlusOne, y, share);
+			} else {
+				// gx >= current <= sy
+				addToPosition(newGrid, x, y, currentValue);
 			}
 		}
 		return anyToppled;

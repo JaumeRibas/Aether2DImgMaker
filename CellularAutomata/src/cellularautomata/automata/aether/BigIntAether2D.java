@@ -240,20 +240,19 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 				newCurrentXSlice[0] = newCurrentXSlice[0].add(share.add(share));
 				newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 			}
-		} else {
-			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				// gx < current <= sy
-				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
-				BigInt share = shareAndRemainder[0];
-				if (!share.equals(BigInt.ZERO)) {
-					changed = true;
-				}
-				newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
-				newGreaterXSlice[1] = newGreaterXSlice[1].add(share);
-			} else {
-				newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue);
+		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+			// gx < current <= sy
+			BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+			BigInt share = shareAndRemainder[0];
+			if (!share.equals(BigInt.ZERO)) {
+				changed = true;
 			}
+			newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
+			newGreaterXSlice[1] = newGreaterXSlice[1].add(share);
+		} else {
+			// gx >= current <= sy
+			newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue);
 		}
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0
@@ -419,20 +418,19 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 				newCurrentXSlice[1] = newCurrentXSlice[1].add(share);
 				newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 			}
-		} else {
-			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				// gx < current <= sy
-				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
-				BigInt share = shareAndRemainder[0];
-				if (!share.equals(BigInt.ZERO)) {
-					changed = true;
-				}
-				newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
-				newGreaterXSlice[2] = newGreaterXSlice[2].add(share);
-			} else {
-				newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue);
+		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+			// gx < current <= sy
+			BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+			BigInt share = shareAndRemainder[0];
+			if (!share.equals(BigInt.ZERO)) {
+				changed = true;
 			}
+			newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
+			newGreaterXSlice[2] = newGreaterXSlice[2].add(share);
+		} else {
+			// gx >= current <= sy
+			newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue);
 		}
 		grid[1] = null;
 		// 3 <= x < edge - 2
@@ -721,20 +719,19 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 					newCurrentXSlice[yMinusOne] = newCurrentXSlice[yMinusOne].add(share);
 					newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 				}
-			} else {
-				if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-					// gx < current <= sy
-					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
-					BigInt share = shareAndRemainder[0];
-					if (!share.equals(BigInt.ZERO)) {
-						anyToppled = true;
-					}
-					newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
-					newGreaterXSlice[y] = newGreaterXSlice[y].add(share);
-				} else {
-					newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue);
+			} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+				// gx < current <= sy
+				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+				BigInt share = shareAndRemainder[0];
+				if (!share.equals(BigInt.ZERO)) {
+					anyToppled = true;
 				}
+				newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
+				newGreaterXSlice[y] = newGreaterXSlice[y].add(share);
+			} else {
+				// gx >= current <= sy
+				newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue);
 			}
 			grid[xMinusOne] = null;
 		}

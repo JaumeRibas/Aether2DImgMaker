@@ -156,19 +156,18 @@ public class FileBackedAether1D extends FileBackedModel implements SymmetricLong
 					addToPosition(newGrid, 0, share + share);//one more for the symmetric position at the other side
 					addToPosition(newGrid, 1, currentValue - toShare + share + toShare%2);
 				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gn < current <= sn
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/2;
-					if (share != 0) {
-						changed = true;
-					}
-					addToPosition(newGrid, 1, currentValue - toShare + share + toShare%2);
-					addToPosition(newGrid, 2, share);
-				} else {
-					addToPosition(newGrid, 1, currentValue);
+			} else if (greaterXNeighborValue < currentValue) {
+				// gn < current <= sn
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/2;
+				if (share != 0) {
+					changed = true;
 				}
+				addToPosition(newGrid, 1, currentValue - toShare + share + toShare%2);
+				addToPosition(newGrid, 2, share);
+			} else {
+				// gn >= current <= sn
+				addToPosition(newGrid, 1, currentValue);
 			}
 			//2 <= x < edge - 2
 			int edge = maxX + 2;
@@ -265,19 +264,18 @@ public class FileBackedAether1D extends FileBackedModel implements SymmetricLong
 					addToPosition(newGrid, xMinusOne, share);
 					addToPosition(newGrid, x, oldCurrentValue - toShare + share + toShare%2);
 				}
-			} else {
-				if (oldGreaterXValue < oldCurrentValue) {
-					// gn < current <= sn
-					long toShare = oldCurrentValue - oldGreaterXValue; 
-					long share = toShare/2;
-					if (share != 0) {
-						anyToppled = true;
-					}
-					addToPosition(newGrid, x, oldCurrentValue - toShare + share + toShare%2);
-					addToPosition(newGrid, xPlusOne, share);
-				} else {
-					addToPosition(newGrid, x, oldCurrentValue);
+			} else if (oldGreaterXValue < oldCurrentValue) {
+				// gn < current <= sn
+				long toShare = oldCurrentValue - oldGreaterXValue; 
+				long share = toShare/2;
+				if (share != 0) {
+					anyToppled = true;
 				}
+				addToPosition(newGrid, x, oldCurrentValue - toShare + share + toShare%2);
+				addToPosition(newGrid, xPlusOne, share);
+			} else {
+				// gn >= current <= sn
+				addToPosition(newGrid, x, oldCurrentValue);
 			}
 		}
 		return anyToppled;

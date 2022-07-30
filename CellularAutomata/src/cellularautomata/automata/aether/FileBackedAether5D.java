@@ -5408,19 +5408,18 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 				addToPosition(newGrid, 1, 1, 1, 1, 0, share + share);
 				addToPosition(newGrid, 1, 1, 1, 1, 1, currentValue - toShare + share + toShare%6);
 			}
-		} else {
-			if (gVValue < currentValue) {
-				//gv < current <= sz
-				long toShare = currentValue - gVValue; 
-				long share = toShare/6;
-				if (share != 0) {
-					toppled = true;
-				}
-				addToPosition(newGrid, 1, 1, 1, 1, 1, currentValue - toShare + share + toShare%6);
-				addToPosition(newGrid, 2, 1, 1, 1, 1, share);
-			} else {
-				addToPosition(newGrid, 1, 1, 1, 1, 1, currentValue);
+		} else if (gVValue < currentValue) {
+			//gv < current <= sz
+			long toShare = currentValue - gVValue; 
+			long share = toShare/6;
+			if (share != 0) {
+				toppled = true;
 			}
+			addToPosition(newGrid, 1, 1, 1, 1, 1, currentValue - toShare + share + toShare%6);
+			addToPosition(newGrid, 2, 1, 1, 1, 1, share);
+		} else {
+			//gv >= current <= sz
+			addToPosition(newGrid, 1, 1, 1, 1, 1, currentValue);
 		}
 		return toppled;
 	}
@@ -6312,19 +6311,18 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 				addToPosition(newGrid, coord, coord, coord, coord, coord - 1, share);
 				addToPosition(newGrid, coord, coord, coord, coord, coord, currentValue - toShare + share + toShare%6);
 			}
-		} else {
-			if (gVValue < currentValue) {
-				//gv < current <= sz
-				long toShare = currentValue - gVValue; 
-				long share = toShare/6;
-				if (share != 0) {
-					toppled = true;
-				}
-				addToPosition(newGrid, coord, coord, coord, coord, coord, currentValue - toShare + share + toShare%6);
-				addToPosition(newGrid, coord + 1, coord, coord, coord, coord, share);
-			} else {
-				addToPosition(newGrid, coord, coord, coord, coord, coord, currentValue);
+		} else if (gVValue < currentValue) {
+			//gv < current <= sz
+			long toShare = currentValue - gVValue; 
+			long share = toShare/6;
+			if (share != 0) {
+				toppled = true;
 			}
+			addToPosition(newGrid, coord, coord, coord, coord, coord, currentValue - toShare + share + toShare%6);
+			addToPosition(newGrid, coord + 1, coord, coord, coord, coord, share);
+		} else {
+			//gv >= current <= sz
+			addToPosition(newGrid, coord, coord, coord, coord, coord, currentValue);
 		}
 		return toppled;
 	}

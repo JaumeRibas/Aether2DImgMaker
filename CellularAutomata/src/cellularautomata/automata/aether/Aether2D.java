@@ -222,19 +222,18 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 				newCurrentXSlice[0] += share + share;
 				newCurrentXSlice[1] += currentValue - toShare + share + toShare%3;
 			}
-		} else {
-			if (greaterXNeighborValue < currentValue) {
-				// gx < current <= sy
-				long toShare = currentValue - greaterXNeighborValue; 
-				long share = toShare/3;
-				if (share != 0) {
-					changed = true;
-				}
-				newCurrentXSlice[1] += currentValue - toShare + share + toShare%3;
-				newGreaterXSlice[1] += share;
-			} else {
-				newCurrentXSlice[1] += currentValue;
+		} else if (greaterXNeighborValue < currentValue) {
+			// gx < current <= sy
+			long toShare = currentValue - greaterXNeighborValue; 
+			long share = toShare/3;
+			if (share != 0) {
+				changed = true;
 			}
+			newCurrentXSlice[1] += currentValue - toShare + share + toShare%3;
+			newGreaterXSlice[1] += share;
+		} else {
+			// gx >= current <= sy
+			newCurrentXSlice[1] += currentValue;
 		}
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0
@@ -393,19 +392,18 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 				newCurrentXSlice[1] += share;
 				newCurrentXSlice[2] += currentValue - toShare + share + toShare%3;
 			}
-		} else {
-			if (greaterXNeighborValue < currentValue) {
-				// gx < current <= sy
-				long toShare = currentValue - greaterXNeighborValue; 
-				long share = toShare/3;
-				if (share != 0) {
-					changed = true;
-				}
-				newCurrentXSlice[2] += currentValue - toShare + share + toShare%3;
-				newGreaterXSlice[2] += share;
-			} else {
-				newCurrentXSlice[2] += currentValue;
+		} else if (greaterXNeighborValue < currentValue) {
+			// gx < current <= sy
+			long toShare = currentValue - greaterXNeighborValue; 
+			long share = toShare/3;
+			if (share != 0) {
+				changed = true;
 			}
+			newCurrentXSlice[2] += currentValue - toShare + share + toShare%3;
+			newGreaterXSlice[2] += share;
+		} else {
+			// gx >= current <= sy
+			newCurrentXSlice[2] += currentValue;
 		}
 		grid[1] = null;
 		// 3 <= x < edge - 2
@@ -685,19 +683,18 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 					newCurrentXSlice[yMinusOne] += share;
 					newCurrentXSlice[y] += currentValue - toShare + share + toShare%3;
 				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gx < current <= sy
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/3;
-					if (share != 0) {
-						anyToppled = true;
-					}
-					newCurrentXSlice[y] += currentValue - toShare + share + toShare%3;
-					newGreaterXSlice[y] += share;
-				} else {
-					newCurrentXSlice[y] += currentValue;
+			} else if (greaterXNeighborValue < currentValue) {
+				// gx < current <= sy
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/3;
+				if (share != 0) {
+					anyToppled = true;
 				}
+				newCurrentXSlice[y] += currentValue - toShare + share + toShare%3;
+				newGreaterXSlice[y] += share;
+			} else {
+				// gx >= current <= sy
+				newCurrentXSlice[y] += currentValue;
 			}
 			grid[xMinusOne] = null;
 		}

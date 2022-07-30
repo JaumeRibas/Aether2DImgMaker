@@ -1950,19 +1950,18 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4
 				newCurrentWSlice[1][1][0] += share + share;
 				newCurrentWSlice[1][1][1] += currentValue - toShare + share + toShare%5;
 			}
-		} else {
-			if (gWValue < currentValue) {
-				// gw < current <= sz
-				long toShare = currentValue - gWValue; 
-				long share = toShare/5;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentWSlice[1][1][1] += currentValue - toShare + share + toShare%5;
-				newGreaterWSlice[1][1][1] += share;
-			} else {
-				newCurrentWSlice[1][1][1] += currentValue;
+		} else if (gWValue < currentValue) {
+			// gw < current <= sz
+			long toShare = currentValue - gWValue; 
+			long share = toShare/5;
+			if (share != 0) {
+				toppled = true;
 			}
+			newCurrentWSlice[1][1][1] += currentValue - toShare + share + toShare%5;
+			newGreaterWSlice[1][1][1] += share;
+		} else {
+			// gw >= current <= sz
+			newCurrentWSlice[1][1][1] += currentValue;
 		}
 		return toppled;
 	}
@@ -2505,19 +2504,18 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4
 				newCurrentWSlice[coord][coord][coord - 1] += share;
 				newCurrentWSlice[coord][coord][coord] += currentValue - toShare + share + toShare%5;
 			}
-		} else {
-			if (gWValue < currentValue) {
-				// gw < current <= sz
-				long toShare = currentValue - gWValue; 
-				long share = toShare/5;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentWSlice[coord][coord][coord] += currentValue - toShare + share + toShare%5;
-				newGreaterWSlice[coord][coord][coord] += share;
-			} else {
-				newCurrentWSlice[coord][coord][coord] += currentValue;
+		} else if (gWValue < currentValue) {
+			// gw < current <= sz
+			long toShare = currentValue - gWValue; 
+			long share = toShare/5;
+			if (share != 0) {
+				toppled = true;
 			}
+			newCurrentWSlice[coord][coord][coord] += currentValue - toShare + share + toShare%5;
+			newGreaterWSlice[coord][coord][coord] += share;
+		} else {
+			// gw >= current <= sz
+			newCurrentWSlice[coord][coord][coord] += currentValue;
 		}
 		return toppled;
 	}

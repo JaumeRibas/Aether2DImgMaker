@@ -867,19 +867,18 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, S
 				newCurrentXSlice[1][0] += share + share;
 				newCurrentXSlice[1][1] += currentValue - toShare + share + toShare%4;
 			}
-		} else {
-			if (greaterXNeighborValue < currentValue) {
-				// gx < current <= sz
-				int toShare = currentValue - greaterXNeighborValue; 
-				int share = toShare/4;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentXSlice[1][1] += currentValue - toShare + share + toShare%4;
-				newGreaterXSlice[1][1] += share;
-			} else {
-				newCurrentXSlice[1][1] += currentValue;
+		} else if (greaterXNeighborValue < currentValue) {
+			// gx < current <= sz
+			int toShare = currentValue - greaterXNeighborValue; 
+			int share = toShare/4;
+			if (share != 0) {
+				toppled = true;
 			}
+			newCurrentXSlice[1][1] += currentValue - toShare + share + toShare%4;
+			newGreaterXSlice[1][1] += share;
+		} else {
+			// gx >= current <= sz
+			newCurrentXSlice[1][1] += currentValue;
 		}
 		return toppled;
 	}
@@ -1200,19 +1199,18 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, S
 				newCurrentXSlice[coord][coord - 1] += share;
 				newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%4;
 			}
-		} else {
-			if (greaterXNeighborValue < currentValue) {
-				// gx < current <= sz
-				int toShare = currentValue - greaterXNeighborValue; 
-				int share = toShare/4;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%4;
-				newGreaterXSlice[coord][coord] += share;
-			} else {
-				newCurrentXSlice[coord][coord] += currentValue;
+		} else if (greaterXNeighborValue < currentValue) {
+			// gx < current <= sz
+			int toShare = currentValue - greaterXNeighborValue; 
+			int share = toShare/4;
+			if (share != 0) {
+				toppled = true;
 			}
+			newCurrentXSlice[coord][coord] += currentValue - toShare + share + toShare%4;
+			newGreaterXSlice[coord][coord] += share;
+		} else {
+			// gx >= current <= sz
+			newCurrentXSlice[coord][coord] += currentValue;
 		}
 		return toppled;
 	}

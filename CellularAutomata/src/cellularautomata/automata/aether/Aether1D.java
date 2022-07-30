@@ -162,19 +162,18 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicModel1DA, Serial
 				newGrid[0] += share + share;//one more for the symmetric position at the other side
 				newGrid[1] += currentValue - toShare + share + toShare%2;
 			}
-		} else {
-			if (greaterXNeighborValue < currentValue) {
-				// gn < current <= sn
-				long toShare = currentValue - greaterXNeighborValue; 
-				long share = toShare/2;
-				if (share != 0) {
-					changed = true;
-				}
-				newGrid[1] += currentValue - toShare + share + toShare%2;
-				newGrid[2] += share;
-			} else {
-				newGrid[1] += currentValue;
+		} else if (greaterXNeighborValue < currentValue) {
+			// gn < current <= sn
+			long toShare = currentValue - greaterXNeighborValue; 
+			long share = toShare/2;
+			if (share != 0) {
+				changed = true;
 			}
+			newGrid[1] += currentValue - toShare + share + toShare%2;
+			newGrid[2] += share;
+		} else {
+			// gn >= current <= sn
+			newGrid[1] += currentValue;
 		}
 		//2 <= x < edge - 2
 		int edge = grid.length - 1;
@@ -258,19 +257,18 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicModel1DA, Serial
 					newGrid[xMinusOne] += share;
 					newGrid[x] += currentValue - toShare + share + toShare%2;
 				}
-			} else {
-				if (greaterXNeighborValue < currentValue) {
-					// gn < current <= sn
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/2;
-					if (share != 0) {
-						anyToppled = true;
-					}
-					newGrid[x] += currentValue - toShare + share + toShare%2;
-					newGrid[xPlusOne] += share;
-				} else {
-					newGrid[x] += currentValue;
+			} else if (greaterXNeighborValue < currentValue) {
+				// gn < current <= sn
+				long toShare = currentValue - greaterXNeighborValue; 
+				long share = toShare/2;
+				if (share != 0) {
+					anyToppled = true;
 				}
+				newGrid[x] += currentValue - toShare + share + toShare%2;
+				newGrid[xPlusOne] += share;
+			} else {
+				// gn >= current <= sn
+				newGrid[x] += currentValue;
 			}
 		}
 		return anyToppled;

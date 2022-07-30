@@ -1961,19 +1961,18 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				newCurrentWSlice[1][1][0] = newCurrentWSlice[1][1][0].add(share.add(share));
 				newCurrentWSlice[1][1][1] = newCurrentWSlice[1][1][1].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 			}
-		} else {
-			if (gWValue.compareTo(currentValue) < 0) {
-				// gw < current <= sz
-				BigInt toShare = currentValue.subtract(gWValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
-				if (!share.equals(BigInt.ZERO)) {
-					toppled = true;
-				}
-				newCurrentWSlice[1][1][1] = newCurrentWSlice[1][1][1].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
-				newGreaterWSlice[1][1][1] = newGreaterWSlice[1][1][1].add(share);
-			} else {
-				newCurrentWSlice[1][1][1] = newCurrentWSlice[1][1][1].add(currentValue);
+		} else if (gWValue.compareTo(currentValue) < 0) {
+			// gw < current <= sz
+			BigInt toShare = currentValue.subtract(gWValue); 
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
+			if (!share.equals(BigInt.ZERO)) {
+				toppled = true;
 			}
+			newCurrentWSlice[1][1][1] = newCurrentWSlice[1][1][1].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
+			newGreaterWSlice[1][1][1] = newGreaterWSlice[1][1][1].add(share);
+		} else {
+			// gw >= current <= sz
+			newCurrentWSlice[1][1][1] = newCurrentWSlice[1][1][1].add(currentValue);
 		}
 		return toppled;
 	}
@@ -2519,19 +2518,18 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				newCurrentWSlice[coord][coord][coordMinusOne] = newCurrentWSlice[coord][coord][coordMinusOne].add(share);
 				newCurrentWSlice[coord][coord][coord] = newCurrentWSlice[coord][coord][coord].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
 			}
-		} else {
-			if (gWValue.compareTo(currentValue) < 0) {
-				// gw < current <= sz
-				BigInt toShare = currentValue.subtract(gWValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
-				if (!share.equals(BigInt.ZERO)) {
-					toppled = true;
-				}
-				newCurrentWSlice[coord][coord][coord] = newCurrentWSlice[coord][coord][coord].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
-				newGreaterWSlice[coord][coord][coord] = newGreaterWSlice[coord][coord][coord].add(share);
-			} else {
-				newCurrentWSlice[coord][coord][coord] = newCurrentWSlice[coord][coord][coord].add(currentValue);
+		} else if (gWValue.compareTo(currentValue) < 0) {
+			// gw < current <= sz
+			BigInt toShare = currentValue.subtract(gWValue); 
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
+			if (!share.equals(BigInt.ZERO)) {
+				toppled = true;
 			}
+			newCurrentWSlice[coord][coord][coord] = newCurrentWSlice[coord][coord][coord].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
+			newGreaterWSlice[coord][coord][coord] = newGreaterWSlice[coord][coord][coord].add(share);
+		} else {
+			// gw >= current <= sz
+			newCurrentWSlice[coord][coord][coord] = newCurrentWSlice[coord][coord][coord].add(currentValue);
 		}
 		return toppled;
 	}

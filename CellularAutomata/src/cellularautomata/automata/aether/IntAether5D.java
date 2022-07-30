@@ -5519,19 +5519,18 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				newCurrentVSlice[1][1][1][0] += share + share;
 				newCurrentVSlice[1][1][1][1] += currentValue - toShare + share + toShare%6;
 			}
-		} else {
-			if (gVValue < currentValue) {
-				//gv < current <= sz
-				int toShare = currentValue - gVValue; 
-				int share = toShare/6;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentVSlice[1][1][1][1] += currentValue - toShare + share + toShare%6;
-				newGreaterVSlice[1][1][1][1] += share;
-			} else {
-				newCurrentVSlice[1][1][1][1] += currentValue;
+		} else if (gVValue < currentValue) {
+			//gv < current <= sz
+			int toShare = currentValue - gVValue; 
+			int share = toShare/6;
+			if (share != 0) {
+				toppled = true;
 			}
+			newCurrentVSlice[1][1][1][1] += currentValue - toShare + share + toShare%6;
+			newGreaterVSlice[1][1][1][1] += share;
+		} else {
+			//gv >= current <= sz
+			newCurrentVSlice[1][1][1][1] += currentValue;
 		}
 		return toppled;
 	}
@@ -6422,19 +6421,18 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				newCurrentVSlice[coord][coord][coord][coord - 1] += share;
 				newCurrentVSlice[coord][coord][coord][coord] += currentValue - toShare + share + toShare%6;
 			}
-		} else {
-			if (gVValue < currentValue) {
-				//gv < current <= sz
-				int toShare = currentValue - gVValue; 
-				int share = toShare/6;
-				if (share != 0) {
-					toppled = true;
-				}
-				newCurrentVSlice[coord][coord][coord][coord] += currentValue - toShare + share + toShare%6;
-				newGreaterVSlice[coord][coord][coord][coord] += share;
-			} else {
-				newCurrentVSlice[coord][coord][coord][coord] += currentValue;
+		} else if (gVValue < currentValue) {
+			//gv < current <= sz
+			int toShare = currentValue - gVValue; 
+			int share = toShare/6;
+			if (share != 0) {
+				toppled = true;
 			}
+			newCurrentVSlice[coord][coord][coord][coord] += currentValue - toShare + share + toShare%6;
+			newGreaterVSlice[coord][coord][coord][coord] += share;
+		} else {
+			//gv >= current <= sz
+			newCurrentVSlice[coord][coord][coord][coord] += currentValue;
 		}
 		return toppled;
 	}
