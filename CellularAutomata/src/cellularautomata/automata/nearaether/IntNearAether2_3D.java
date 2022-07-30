@@ -308,9 +308,7 @@ public class IntNearAether2_3D implements SymmetricIntModel3D, IsotropicCubicMod
 				x = swp;
 			}
 		} while (!sorted);
-		if (x < grid.length 
-				&& y < grid[x].length 
-				&& z < grid[x][y].length) {
+		if (x < grid.length) {
 			return grid[x][y][z];
 		} else {
 			return 0;

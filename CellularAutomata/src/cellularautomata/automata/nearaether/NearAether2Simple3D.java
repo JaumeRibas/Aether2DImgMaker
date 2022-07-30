@@ -83,24 +83,24 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newGrid = new long[grid.length + 2][grid[0].length + 2][grid[0][0].length + 2];
+			newGrid = new long[grid.length + 2][grid.length + 2][grid.length + 2];
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
 		} else {
-			newGrid = new long[grid.length][grid[0].length][grid[0][0].length];
+			newGrid = new long[grid.length][grid.length][grid.length];
 		}
 		boolean changed = false;
 		//For every cell
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[0].length; y++) {
-				for (int z = 0; z < grid[0][0].length; z++) {
-					long value = grid[x][y][z];
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[0].length; j++) {
+				for (int k = 0; k < grid[0][0].length; k++) {
+					long value = grid[i][j][k];
 					//make list of von Neumann neighbors with value smaller than current cell's value
 					List<Byte> relevantNeighborDirections = new ArrayList<Byte>(6);						
 					long neighborValue;
 					long biggestSmallerNeighborValue = Long.MIN_VALUE;
-					if (x < grid.length - 1) {
-						neighborValue = grid[x + 1][y][z];
+					if (i < grid.length - 1) {
+						neighborValue = grid[i + 1][j][k];
 					} else {
 						neighborValue = 0;
 					}
@@ -110,8 +110,8 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 						}
 						relevantNeighborDirections.add(RIGHT);
 					}
-					if (x > 0) {
-						neighborValue = grid[x - 1][y][z];
+					if (i > 0) {
+						neighborValue = grid[i - 1][j][k];
 					} else {
 						neighborValue = 0;
 					}
@@ -121,8 +121,8 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 						}
 						relevantNeighborDirections.add(LEFT);
 					}
-					if (y < grid[x].length - 1) {
-						neighborValue = grid[x][y + 1][z];
+					if (j < grid[i].length - 1) {
+						neighborValue = grid[i][j + 1][k];
 					} else {
 						neighborValue = 0;
 					}
@@ -132,8 +132,8 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 						}
 						relevantNeighborDirections.add(UP);
 					}
-					if (y > 0) {
-						neighborValue = grid[x][y - 1][z];
+					if (j > 0) {
+						neighborValue = grid[i][j - 1][k];
 					} else {
 						neighborValue = 0;
 					}
@@ -143,8 +143,8 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 						}
 						relevantNeighborDirections.add(DOWN);
 					}
-					if (z < grid[x][y].length - 1) {
-						neighborValue = grid[x][y][z + 1];
+					if (k < grid[i][j].length - 1) {
+						neighborValue = grid[i][j][k + 1];
 					} else {
 						neighborValue = 0;
 					}
@@ -154,8 +154,8 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 						}
 						relevantNeighborDirections.add(FRONT);
 					}
-					if (z > 0) {
-						neighborValue = grid[x][y][z - 1];
+					if (k > 0) {
+						neighborValue = grid[i][j][k - 1];
 					} else {
 						neighborValue = 0;
 					}
@@ -172,16 +172,16 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 						long toShare = value - biggestSmallerNeighborValue;
 						long share = toShare/shareCount;
 						if (share != 0) {
-							checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
+							checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
 							changed = true;
 							value = value - toShare + toShare%shareCount + share;
 							for (Byte neighborDirection : relevantNeighborDirections) {
-								int[] nc = getNeighborCoordinates(x, y, z, neighborDirection);
+								int[] nc = getNeighborCoordinates(i, j, k, neighborDirection);
 								newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
 							}
 						}	
 					}					
-					newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value;
+					newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
 				}
 			}
 		}
@@ -195,10 +195,10 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y, int z, int length) {
-		if (x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2 || 
-			z == 1 || z == length - 2) {
+	private void checkBoundsReached(int i, int j, int k, int length) {
+		if (i == 1 || i == length - 2 || 
+			j == 1 || j == length - 2 || 
+			k == 1 || k == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -231,17 +231,17 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 	
 	@Override
 	public long getFromPosition(int x, int y, int z) {	
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		int arrayZ = originIndex + z;
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid[0].length - 1
-				|| arrayZ < 0 || arrayZ > grid[0][0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		int k = originIndex + z;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1
+				|| k < 0 || k > grid.length - 1) {
 			//If the passed coordinates are outside the array, the value will be zero
 			return 0;
 		} else {
 			//Note that the indexes whose value hasn't been defined have value zero by default
-			return grid[arrayX][arrayY][arrayZ];
+			return grid[i][j][k];
 		}
 	}
 	
@@ -251,19 +251,7 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 	}
 	
 	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX;
-		if (boundsReached) {
-			valuesMinX = arrayMinX;
-		} else {
-			valuesMinX = arrayMinX + 1;
-		}
-		return valuesMinX;
-	}
-	
-	@Override
-	public int getMaxX() {
+	public int getAsymmetricMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -272,59 +260,6 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 			valuesMaxX = arrayMaxX - 1;
 		}
 		return valuesMaxX;
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
-		return getMaxX();
-	}
-	
-	@Override
-	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
-	}
-	
-	@Override
-	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
-	}
-	
-	@Override
-	public int getMinZ() {
-		int arrayMinZ = - originIndex;
-		int valuesMinZ;
-		if (boundsReached) {
-			valuesMinZ = arrayMinZ;
-		} else {
-			valuesMinZ = arrayMinZ + 1;
-		}
-		return valuesMinZ;
-	}
-	
-	@Override
-	public int getMaxZ() {
-		int arrayMaxZ = grid[0][0].length - 1 - originIndex;
-		int valuesMaxZ;
-		if (boundsReached) {
-			valuesMaxZ = arrayMaxZ;
-		} else {
-			valuesMaxZ = arrayMaxZ - 1;
-		}
-		return valuesMaxZ;
 	}
 	
 	@Override
