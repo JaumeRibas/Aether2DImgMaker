@@ -104,10 +104,10 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		originIndex = (grid.length - 1)/2;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		int bufferMarginPlusSide = bufferMargin + initialSide;
-		for (int x = bufferMargin; x < bufferMarginPlusSide; x++) {
-			for (int y = bufferMargin; y < bufferMarginPlusSide; y++) {
-				for (int z = bufferMargin; z < bufferMarginPlusSide; z++) {
-					grid[x][y][z] = random.nextInt(minValue, maxValue + 1);
+		for (int i = bufferMargin; i < bufferMarginPlusSide; i++) {
+			for (int j = bufferMargin; j < bufferMarginPlusSide; j++) {
+				for (int k = bufferMargin; k < bufferMarginPlusSide; k++) {
+					grid[i][j][k] = random.nextInt(minValue, maxValue + 1);
 				}
 			}
 		}
@@ -162,46 +162,46 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		int[] sortedNeighborsIndexes = new int[6];
 		byte[] neighborDirections = new byte[6];
 		//For every position
-		for (int x = 0, nextX = x + 1 + indexOffset; x < grid.length; x++, nextX++) {
-			if (nextX < newGrid.length) {
-				newGrid[nextX] = new int[newSide][newSide];
+		for (int i = 0, nextI = i + 1 + indexOffset; i < grid.length; i++, nextI++) {
+			if (nextI < newGrid.length) {
+				newGrid[nextI] = new int[newSide][newSide];
 			}
-			for (int y = 0; y < grid.length; y++) {
-				for (int z = 0; z < grid.length; z++) {
-					int value = grid[x][y][z];
+			for (int j = 0; j < grid.length; j++) {
+				for (int k = 0; k < grid.length; k++) {
+					int value = grid[i][j][k];
 					int relevantNeighborCount = 0;
 					int neighborValue;
-					neighborValue = getFromIndex(x + 1, y, z);
+					neighborValue = getFromIndex(i + 1, j, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = RIGHT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(x - 1, y, z);
+					neighborValue = getFromIndex(i - 1, j, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = LEFT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(x, y + 1, z);
+					neighborValue = getFromIndex(i, j + 1, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = UP;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(x, y - 1, z);
+					neighborValue = getFromIndex(i, j - 1, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = DOWN;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(x, y, z + 1);
+					neighborValue = getFromIndex(i, j, k + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = FRONT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(x, y, z - 1);
+					neighborValue = getFromIndex(i, j, k - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = BACK;
@@ -214,18 +214,18 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 						//divide
 						boolean isFirstNeighbor = true;
 						int previousNeighborValue = 0;
-						for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-							neighborValue = neighborValues[i];
+						for (int neighborIndex = 0; neighborIndex < relevantNeighborCount; neighborIndex++,isFirstNeighbor = false) {
+							neighborValue = neighborValues[neighborIndex];
 							if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-								int shareCount = relevantNeighborCount - i + 1;
+								int shareCount = relevantNeighborCount - neighborIndex + 1;
 								int toShare = value - neighborValue;
 								int share = toShare/shareCount;
 								if (share != 0) {
-									checkBoundsReached(x + indexOffset, y + indexOffset, z + indexOffset, newGrid.length);
+									checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
 									changed = true;
 									value = value - toShare + toShare%shareCount + share;
-									for (int j = i; j < relevantNeighborCount; j++) {
-										int[] nc = getNeighborCoordinates(x, y, z, neighborDirections[sortedNeighborsIndexes[j]]);
+									for (int remainingNeighborIndex = neighborIndex; remainingNeighborIndex < relevantNeighborCount; remainingNeighborIndex++) {
+										int[] nc = getNeighborCoordinates(i, j, k, neighborDirections[sortedNeighborsIndexes[remainingNeighborIndex]]);
 										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
 									}
 								}
@@ -233,11 +233,11 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 							}
 						}	
 					}					
-					newGrid[x + indexOffset][y + indexOffset][z + indexOffset] += value;
+					newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
 				}
 			}
 			if (!first) {
-				grid[x-1] = null;
+				grid[i-1] = null;
 			} else {
 				first = false;
 			}
@@ -252,10 +252,10 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y, int z, int length) {
-		if (x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2 || 
-			z == 1 || z == length - 2) {
+	private void checkBoundsReached(int i, int j, int k, int length) {
+		if (i == 1 || i == length - 2 || 
+			j == 1 || j == length - 2 || 
+			k == 1 || k == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -288,21 +288,21 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 	
 	@Override
 	public int getFromPosition(int x, int y, int z) {	
-		int arrayX = originIndex + x;
-		int arrayY = originIndex + y;
-		int arrayZ = originIndex + z;
-		return getFromIndex(arrayX, arrayY, arrayZ);
+		int i = originIndex + x;
+		int j = originIndex + y;
+		int k = originIndex + z;
+		return getFromIndex(i, j, k);
 	}
 	
-	private int getFromIndex(int arrayX, int arrayY, int arrayZ) {
-		if (arrayX < 0 || arrayX > grid.length - 1 
-				|| arrayY < 0 || arrayY > grid.length - 1
-				|| arrayZ < 0 || arrayZ > grid.length - 1) {
+	private int getFromIndex(int i, int j, int k) {
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1
+				|| k < 0 || k > grid.length - 1) {
 			//If the entered position is outside the array the value will be zero
 			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[arrayX][arrayY][arrayZ];
+			return grid[i][j][k];
 		}
 	}
 	
@@ -332,50 +332,22 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 	
 	@Override
 	public int getMinY() {
-		int arrayMinY = - originIndex;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
+		return getMinX();
 	}
 	
 	@Override
 	public int getMaxY() {
-		int arrayMaxY = grid.length - 1 - originIndex;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
+		return getMaxX();
 	}
 	
 	@Override
 	public int getMinZ() {
-		int arrayMinZ = - originIndex;
-		int valuesMinZ;
-		if (boundsReached) {
-			valuesMinZ = arrayMinZ;
-		} else {
-			valuesMinZ = arrayMinZ + 1;
-		}
-		return valuesMinZ;
+		return getMinX();
 	}
 	
 	@Override
 	public int getMaxZ() {
-		int arrayMaxZ = grid.length - 1 - originIndex;
-		int valuesMaxZ;
-		if (boundsReached) {
-			valuesMaxZ = arrayMaxZ;
-		} else {
-			valuesMaxZ = arrayMaxZ - 1;
-		}
-		return valuesMaxZ;
+		return getMaxX();
 	}
 	
 	@Override
