@@ -95,7 +95,6 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 				Arrays.fill(newGrid[i][j], BigFraction.ZERO);
 			}
 		}
-		boolean changed = false;
 		//For every position
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
@@ -161,11 +160,12 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 						for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
 							neighborValue = neighbors.get(neighborIndex).getValue();
 							if (isFirst || !neighborValue.equals(previousNeighborValue)) {
+								//add one for the center position
 								int shareCount = neighbors.size() + 1;
 								BigFraction toShare = value.subtract(neighborValue);
 								BigFraction share = toShare.divide(shareCount);
 								checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
-								changed = true;
+								//the center keeps one share
 								value = value.subtract(toShare).add(share);
 								for (Neighbor<BigFraction> neighbor : neighbors) {
 									int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
@@ -189,7 +189,7 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
-		return changed;
+		return true;
 	}
 	
 	private void checkBoundsReached(int i, int j, int k, int length) {

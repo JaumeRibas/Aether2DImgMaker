@@ -114,7 +114,7 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 						int shareCount = neighbors.size() + 1;
 						BigFraction toShare = value.subtract(neighborValue);
 						BigFraction share = toShare.divide(shareCount);
-						//the center keeps the remainder and one share
+						//the center keeps one share
 						value = value.subtract(toShare).add(share);
 						for (Neighbor<BigFraction> n : neighbors) {
 							int nc = getNeighborCoordinates(index, n.getDirection()) + indexOffset;
