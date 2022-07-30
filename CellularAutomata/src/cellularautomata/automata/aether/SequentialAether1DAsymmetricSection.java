@@ -206,19 +206,18 @@ public class SequentialAether1DAsymmetricSection implements LongModel1D {
 					smallerXNewValue += share + share;//one more for the symmetric position at the other side
 					currentNewValue += currentOldValue - toShare + share + toShare%2;
 				}
-			} else {
-				if (greaterXOldValue < currentOldValue) {
-					// gn < current <= sn
-					long toShare = currentOldValue - greaterXOldValue; 
-					long share = toShare/2;
-					if (share != 0) {
-						firstTwoSlicesChanged = true;
-					}
-					currentNewValue += currentOldValue - toShare + share + toShare%2;
-					greaterXNewValue += share;
-				} else {
-					currentNewValue += currentOldValue;
+			} else if (greaterXOldValue < currentOldValue) {
+				// gn < current <= sn
+				long toShare = currentOldValue - greaterXOldValue; 
+				long share = toShare/2;
+				if (share != 0) {
+					firstTwoSlicesChanged = true;
 				}
+				currentNewValue += currentOldValue - toShare + share + toShare%2;
+				greaterXNewValue += share;
+			} else {
+				// gn >= current <= sn
+				currentNewValue += currentOldValue;
 			}
 			newGridWriter.writeLong(smallerXNewValue);
 			consumer.accept(smallerXNewValue);
@@ -320,19 +319,18 @@ public class SequentialAether1DAsymmetricSection implements LongModel1D {
 						smallerXNewValue += share;
 						currentNewValue += currentOldValue - toShare + share + toShare%2;
 					}
-				} else {
-					if (greaterXOldValue < currentOldValue) {
-						// gn < current <= sn
-						long toShare = currentOldValue - greaterXOldValue; 
-						long share = toShare/2;
-						if (share != 0) {
-							currentSliceToppled = true;
-						}
-						currentNewValue += currentOldValue - toShare + share + toShare%2;
-						greaterXNewValue += share;
-					} else {
-						currentNewValue += currentOldValue;
+				} else if (greaterXOldValue < currentOldValue) {
+					// gn < current <= sn
+					long toShare = currentOldValue - greaterXOldValue; 
+					long share = toShare/2;
+					if (share != 0) {
+						currentSliceToppled = true;
 					}
+					currentNewValue += currentOldValue - toShare + share + toShare%2;
+					greaterXNewValue += share;
+				} else {
+					// gn >= current <= sn
+					currentNewValue += currentOldValue;
 				}
 				anySliceToppled = anySliceToppled || currentSliceToppled;
 			}
