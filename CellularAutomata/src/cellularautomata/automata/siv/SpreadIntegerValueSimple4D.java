@@ -82,7 +82,7 @@ public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, Isotrop
 			newGrid = new long[grid.length][grid.length][grid.length][grid.length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
@@ -141,7 +141,7 @@ public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, Isotrop
 									isGreaterXNeighborEqual = value == greaterXNeighborValue, isLowerXNeighborEqual = value == lowerXNeighborValue,
 									isGreaterYNeighborEqual = value == greaterYNeighborValue, isLowerYNeighborEqual = value == lowerYNeighborValue, 
 									isGreaterZNeighborEqual = value == greaterZNeighborValue, isLowerZNeighborEqual = value == lowerZNeighborValue;
-							//if the current position is equal to its neighbors the algorithm has no effect
+							//If the current cell is equal to its neighbors, the algorithm has no effect
 							if (!(isGreaterWNeighborEqual && isLowerWNeighborEqual 
 									&& isGreaterXNeighborEqual && isLowerXNeighborEqual 
 									&& isGreaterYNeighborEqual && isLowerYNeighborEqual 
@@ -151,10 +151,10 @@ public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, Isotrop
 								if (share != 0) {
 									//If any share is not zero the state changes
 									changed = true;
-									//Add the share and the remainder to the corresponding position in the new array
+									//Add the share and the remainder to the corresponding cell in the new array
 									newGrid[i + indexOffset][j + indexOffset][k + indexOffset][l + indexOffset] += value%9 + share;
-									//Add the share to the neighboring positions
-									//if the neighbor's value is equal to the current value, add the share to the current position instead
+									//Add the share to the neighboring cells
+									//If the neighbor's value is equal to the current value, add the share to the current cell instead
 									if (isGreaterWNeighborEqual)
 										newGrid[i + indexOffset][j + indexOffset][k + indexOffset][l + indexOffset] += share;
 									else
@@ -195,7 +195,7 @@ public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, Isotrop
 										boundsReached = true;
 									}
 								} else {
-									//if the share is zero, just add the value to the corresponding position in the new array
+									//If the share is zero, just add the value to the corresponding cell in the new array
 									newGrid[i + indexOffset][j + indexOffset][k + indexOffset][l + indexOffset] += value;
 								}
 							} else {
@@ -229,7 +229,7 @@ public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, Isotrop
 			//If the entered position is outside the array the value will be the background value
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j][k][l];
 		}
 	}

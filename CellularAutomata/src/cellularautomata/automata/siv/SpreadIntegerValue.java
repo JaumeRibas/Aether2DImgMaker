@@ -167,21 +167,21 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 							&& isCurrentUpperNeighborValueEqual 
 							&& isCurrentLowerNeighborValueEqual;
 				}
-				//if the current position is equal to its neighbors the algorithm has no effect
+				//If the current cell is equal to its neighbors, the algorithm has no effect
 				if (!areAllNeighborValuesEqual) {
-					//Divide its value between the neighbors and center (using integer division)
+					//Divide its value between the neighbors and itself (using integer division)
 					int share = value/shareCount;
 					if (share != 0) {
 						//I assume that if any share is not zero the state changes (doesn't work for background value != 0 :( )
 						changed = true;
 						if (indexes[0] == gridSide - 2)
 							boundsReached = true;
-						//Add the share and the remainder to the corresponding position in the new array
+						//Add the share and the remainder to the corresponding cell in the new array
 						if (isCurrentPositionInsideGrid) {
 							newGrid.addAndGet(new Coordinates(indexes), value%shareCount + share);
 						}
-						//Add the share to the neighboring positions
-						//if the neighbor's value is equal to the current value, add the share to the current position instead
+						//Add the share to the neighboring cells
+						//If the neighbor's value is equal to the current value, add the share to the current cell instead
 						for (int axis = 0; axis < gridDimension; axis++) {
 							int indexOnAxis = indexes[axis];
 							if (isUpperNeighborValueEqual[axis]) {
@@ -208,13 +208,13 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 							}
 						}
 					} else {
-						//if the share is zero, just add the value to the corresponding position in the new array
+						//If the share is zero, just add the value to the corresponding cell in the new array
 						if (isCurrentPositionInsideGrid) {
 							newGrid.addAndGet(new Coordinates(indexes), value);
 						}
 					}
 				} else {
-					//if all neighbor values are equal the current value won't change (it will get from them the same value it gives them)
+					//If all neighbor values are equal the current cell won't change (it will get from them the same value it gives them)
 					if (isCurrentPositionInsideGrid) {
 						newGrid.addAndGet(new Coordinates(indexes), value);
 					}

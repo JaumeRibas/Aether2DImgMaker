@@ -161,7 +161,7 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		int[] neighborValues = new int[6];
 		int[] sortedNeighborsIndexes = new int[6];
 		byte[] neighborDirections = new byte[6];
-		//For every position
+		//For every cell
 		for (int i = 0, nextI = i + 1 + indexOffset; i < grid.length; i++, nextI++) {
 			if (nextI < newGrid.length) {
 				newGrid[nextI] = new int[newSide][newSide];
@@ -298,10 +298,10 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1
 				|| k < 0 || k > grid.length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the passed coordinates are outside the array, the value will be zero
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j][k];
 		}
 	}

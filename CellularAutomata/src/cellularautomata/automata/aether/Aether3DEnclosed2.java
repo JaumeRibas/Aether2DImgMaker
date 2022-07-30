@@ -108,7 +108,7 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 		//Use new array to store the values of the next step
 		long[][][] newGrid = new long[xSide][ySide][zSide];
 		boolean changed = false;
-		//For every position
+		//For every cell
 		long[] neighborValues = new long[6];
 		int[] sortedNeighborsIndexes = new int[6];
 		int[][] neighborCoordinates = new int[6][3];

@@ -89,7 +89,7 @@ public class NearAether3Simple3D implements SymmetricLongModel3D, IsotropicCubic
 			newGrid = new long[grid.length][grid[0].length][grid[0][0].length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int x = 0; x < grid.length; x++) {
 			for (int y = 0; y < grid[0].length; y++) {
 				for (int z = 0; z < grid[0][0].length; z++) {
@@ -244,10 +244,10 @@ public class NearAether3Simple3D implements SymmetricLongModel3D, IsotropicCubic
 		if (arrayX < 0 || arrayX > grid.length - 1 
 				|| arrayY < 0 || arrayY > grid[0].length - 1
 				|| arrayZ < 0 || arrayZ > grid[0][0].length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the passed coordinates are outside the array, the value will be zero
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[arrayX][arrayY][arrayZ];
 		}
 	}

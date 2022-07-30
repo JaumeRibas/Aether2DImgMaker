@@ -53,7 +53,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//Create a 2D array to represent the grid. With the initial value at the origin.
-		//Make the array of size 5x5 so as to leave a margin of one position on each side
+		//Make the array of size 5x5 so as to leave a margin of one cell on each side
 		int side = 5;
 		grid = new long[side][side];
 		//The origin will be at the center of the array
@@ -85,7 +85,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 			newGrid = new long[grid.length][grid.length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < this.grid.length; i++) {
 			for (int j = 0; j < this.grid.length; j++) {
 				long value = this.grid[i][j];
@@ -116,17 +116,17 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 					}
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
-					//if the current position is equal to its neighbors the algorithm has no effect
+					//If the current cell is equal to its neighbors, the algorithm has no effect
 					if (!(isUpEqual && isDownEqual && isRightEqual && isLeftEqual)) {
 						//Divide its value by 5 (using integer division)
 						long share = value/5;
 						if (share != 0) {
 							//If any share is not zero the state changes
 							changed = true;
-							//Add the share and the remainder to the corresponding position in the new array
+							//Add the share and the remainder to the corresponding cell in the new array
 							newGrid[i + indexOffset][j + indexOffset] += value%5 + share;
-							//Add the share to the neighboring positions
-							//if the neighbor's value is equal to the current value, add the share to the current position instead
+							//Add the share to the neighboring cells
+							//If the neighbor's value is equal to the current value, add the share to the current cell instead
 							if (isRightEqual)
 								newGrid[i + indexOffset][j + indexOffset] += share;
 							else
@@ -149,7 +149,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 								boundsReached = true;
 							}
 						} else {
-							//if the share is zero, just add the value to the corresponding position in the new array
+							//If the share is zero, just add the value to the corresponding cell in the new array
 							newGrid[i + indexOffset][j + indexOffset] += value;
 						}
 					} else {
@@ -174,7 +174,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 		int j = originIndex + y;
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid[0].length - 1) {
-			//If the entered position is outside the array the value will be the backgroundValue
+			//If the passed coordinates are outside the array, the value will be the backgroundValue
 			return backgroundValue;
 		} else {
 			return grid[i][j];

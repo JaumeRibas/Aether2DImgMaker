@@ -84,7 +84,7 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = initialValue;
 		boundsReached = false;
-		//the indexes of the toppling cell
+		//The indexes of the toppling cell
 		topplingPositionIndex1 = 1;
 		topplingPositionIndex2 = 1;
 		//Set the current step to zero
@@ -179,14 +179,14 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 			for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
 				neighborValue = neighbors.get(i).getValue();
 				if (neighborValue != previousNeighborValue || isFirst) {
-					//add one for the current cell
+					//Add one for the current cell
 					int shareCount = neighbors.size() + 1;
 					long toShare = topplingValue - neighborValue;
 					long share = toShare/shareCount;
 					if (share != 0) {
 						checkBoundsReached(topplingPositionIndex1 + indexOffset, topplingPositionIndex2 + indexOffset, newGrid.length);
 						changed = true;
-						//the current cell keeps the remainder and one share
+						//The current cell keeps the remainder and one share
 						topplingValue = topplingValue - toShare + toShare%shareCount + share;
 						for (Neighbor<Long> n : neighbors) {
 							int[] nc = getNeighborCoordinates(topplingPositionIndex1, topplingPositionIndex2, n.getDirection());
@@ -267,10 +267,10 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		int j = originIndex + y;
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1) {
-			//If the entered position is outside the array the value will be the backgroundValue
+			//If the passed coordinates are outside the array, the value will be the zero
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j];
 		}
 	}

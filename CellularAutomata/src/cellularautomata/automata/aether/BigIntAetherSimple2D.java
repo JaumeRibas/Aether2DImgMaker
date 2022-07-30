@@ -92,11 +92,11 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 			Arrays.fill(newGrid[i], BigInt.ZERO);
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				BigInt value = grid[i][j];
-				//make list of von Neumann neighbors with value smaller than current position's value
+				//make list of von Neumann neighbors with value smaller than current cell's value
 				List<Neighbor<BigInt>> neighbors = new ArrayList<Neighbor<BigInt>>(4);						
 				BigInt neighborValue;
 				if (i < grid.length - 1)
@@ -144,7 +144,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 					for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
 						neighborValue = neighbors.get(neighborIndex).getValue();
 						if (isFirst || !neighborValue.equals(previousNeighborValue)) {
-							//add one for the center position
+							//Add one for the current cell
 							int shareCount = neighbors.size() + 1;
 							BigInt toShare = value.subtract(neighborValue);
 							BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
@@ -152,7 +152,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 							if (!share.equals(BigInt.ZERO)) {
 								checkBoundsReached(i + indexOffset, j + indexOffset, newGrid.length);
 								changed = true;
-								//the center keeps the remainder and one share
+								//The current cell keeps the remainder and one share
 								value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 								for (Neighbor<BigInt> neighbor : neighbors) {
 									int[] nc = getNeighborCoordinates(i, j, neighbor.getDirection());
@@ -212,7 +212,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 		int j = originIndex + y;
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the passed coordinates are outside the array, the value will be zero
 			return BigInt.ZERO;
 		} else {
 			return grid[i][j];

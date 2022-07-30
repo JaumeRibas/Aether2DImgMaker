@@ -54,7 +54,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//Create a 1D array to represent the grid. With the initial value at the origin.
-		//Make the array of size 5 so as to leave a margin of two positions on each side
+		//Make the array of size 5 so as to leave a margin of two cells on each side
 		int side = 5;
 		grid = new long[side];
 		//The origin will be at the center of the array
@@ -88,7 +88,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 			newGrid = new long[grid.length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < this.grid.length; i++) {
 			long value = this.grid[i];
 			if (value != 0) {
@@ -105,17 +105,17 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 					left = grid[i - 1];
 				}
 				boolean isRightEqual = value == right, isLeftEqual = value == left;
-				//if the current position is equal to its neighbors the algorithm has no effect
+				//If the current cell is equal to its neighbors, the algorithm has no effect
 				if (!(isRightEqual && isLeftEqual)) {
 					//Divide its value by 3 (using integer division)
 					long share = value/3;
 					if (share != 0) {
 						//If any share is not zero the state changes
 						changed = true;
-						//Add the share and the remainder to the corresponding position in the new array
+						//Add the share and the remainder to the corresponding cell in the new array
 						newGrid[i + indexOffset] += value%3 + share;
-						//Add the share to the neighboring positions
-						//if the neighbor's value is equal to the current value, add the share to the current position instead
+						//Add the share to the neighboring cells
+						//If the neighbor's value is equal to the current value, add the share to the current cell instead
 						if (isRightEqual)
 							newGrid[i + indexOffset] += share;
 						else
@@ -129,7 +129,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 							boundsReached = true;
 						}
 					} else {
-						//if the share is zero, just add the value to the corresponding position in the new array
+						//If the share is zero, just add the value to the corresponding cell in the new array
 						newGrid[i + indexOffset] += value;
 					}
 				} else {
@@ -151,7 +151,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	public long getFromPosition(int x) {	
 		int index = originIndex + x;
 		if (index < 0 || index > grid.length - 1) {
-			//If the entered position is outside the array the value will be the backgroundValue
+			//If the passed coordinates are outside the array, the value will be the backgroundValue
 			return backgroundValue;
 		} else {
 			return grid[index];

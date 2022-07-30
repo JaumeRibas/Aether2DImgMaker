@@ -86,13 +86,13 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 			newGrid = new long[grid.length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int index = 0; index < grid.length; index++) {
-			//Distribute the positon's value among its neighbors (von Neumann) using the algorithm
+			//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 			
-			//Get the position's value
+			//Get the cell's value
 			long value = grid[index];
-			//Get a list of the neighbors whose value is smaller than the one at the current position
+			//Get a list of the neighbors whose value is smaller than the one at the current cell
 			List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(2);						
 			long neighborValue;
 			if (index < grid.length - 1)
@@ -124,14 +124,14 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 				for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
 					neighborValue = neighbors.get(i).getValue();
 					if (neighborValue != previousNeighborValue || isFirst) {
-						//add one for the center position
+						//Add one for the current cell
 						int shareCount = neighbors.size() + 1;
 						long toShare = value - neighborValue;
 						long share = toShare/shareCount;
 						if (share != 0) {
 							checkBoundsReached(index + indexOffset, newGrid.length);
 							changed = true;
-							//the center keeps the remainder and one share
+							//The current cell keeps the remainder and one share
 							value = value - toShare + toShare%shareCount + share;
 							for (Neighbor<Long> n : neighbors) {
 								int nc = getNeighborCoordinates(index, n.getDirection());
@@ -174,10 +174,10 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	public long getFromPosition(int x) {	
 		int index = originIndex + x;
 		if (index < 0 || index > grid.length - 1) {
-			//If the entered position is outside the array the value will be 0
+			//If the coordinates are outside the array, the value will be 0
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[index];
 		}
 	}

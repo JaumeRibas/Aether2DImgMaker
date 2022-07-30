@@ -83,7 +83,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 			newGrid = new long[grid.length][grid.length][grid.length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < this.grid.length; i++) {
 			for (int j = 0; j < this.grid.length; j++) {
 				for (int k = 0; k < this.grid.length; k++) {
@@ -128,7 +128,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 						boolean isGreaterYNeighborEqual = value == greaterYNeighborValue, isLowerYNeighborEqual = value == lowerYNeighborValue, 
 								isGreaterXNeighborEqual = value == greaterXNeighborValue, isLowerXNeighborEqual = value == lowerXNeighborValue,
 								isGreaterZNeighborEqual = value == greaterZNeighborValue, isLowerZNeighborEqual = value == lowerZNeighborValue;
-						//if the current position is equal to its neighbors the algorithm has no effect
+						//If the current cell is equal to its neighbors, the algorithm has no effect
 						if (!(isGreaterYNeighborEqual && isLowerYNeighborEqual 
 								&& isGreaterXNeighborEqual && isLowerXNeighborEqual 
 								&& isGreaterZNeighborEqual && isLowerZNeighborEqual)) {
@@ -137,10 +137,10 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 							if (share != 0) {
 								//If any share is not zero the state changes
 								changed = true;
-								//Add the share and the remainder to the corresponding position in the new array
+								//Add the share and the remainder to the corresponding cell in the new array
 								newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value%7 + share;
-								//Add the share to the neighboring positions
-								//if the neighbor's value is equal to the current value, add the share to the current position instead
+								//Add the share to the neighboring cells
+								//If the neighbor's value is equal to the current value, add the share to the current cell instead
 								if (isGreaterXNeighborEqual)
 									newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += share;
 								else
@@ -172,7 +172,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 									boundsReached = true;
 								}
 							} else {
-								//if the share is zero, just add the value to the corresponding position in the new array
+								//If the share is zero, just add the value to the corresponding cell in the new array
 								newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
 							}
 						} else {
@@ -200,7 +200,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1
 				|| k < 0 || k > grid.length - 1) {
-			//If the entered position is outside the array the value will be the backgroundValue
+			//If the passed coordinates are outside the array, the value will be the backgroundValue
 			return backgroundValue;
 		} else {
 			return grid[i][j][k];

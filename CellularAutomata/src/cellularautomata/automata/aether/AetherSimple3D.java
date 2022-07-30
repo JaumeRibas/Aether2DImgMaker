@@ -91,12 +91,12 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 			newGrid = new long[grid.length][grid.length][grid.length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
 					long value = grid[i][j][k];
-					//make list of von Neumann neighbors with value smaller than current position's value
+					//make list of von Neumann neighbors with value smaller than current cell's value
 					List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(6);						
 					long neighborValue;
 					if (i < grid.length - 1)
@@ -229,10 +229,10 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1
 				|| k < 0 || k > grid.length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the passed coordinates are outside the array, the value will be zero
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j][k];
 		}
 	}

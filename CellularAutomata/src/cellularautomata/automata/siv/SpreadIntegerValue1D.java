@@ -97,15 +97,15 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 				long left = getFromPosition(x - 1);
 				long right = getFromPosition(x + 1);
 				boolean isRightEqual = value == right, isLeftEqual = value == left;
-				//if the current position is equal to its neighbors the algorithm has no effect
+				//If the current cell is equal to its neighbors, the algorithm has no effect
 				if (!(isRightEqual && isLeftEqual)) {
 					//Divide its value by 3 (using integer division)
 					long share = value/3;
 					if (share != 0) {
 						//If any share is not zero the state changes
 						changed = true;
-						//Add the share to the neighboring positions
-						//if the neighbor's value is equal to the current value, add the share to the current position instead
+						//Add the share to the neighboring cells
+						//If the neighbor's value is equal to the current value, add the share to the current cell instead
 						//x+
 						if (isRightEqual)
 							newGrid[x] += share;

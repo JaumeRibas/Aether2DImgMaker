@@ -93,7 +93,7 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 			newGrid = new long[grid.length][grid.length][grid.length][grid.length][grid.length];
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
@@ -276,10 +276,10 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 				|| k < 0 || k > grid.length - 1
 				|| l < 0 || l > grid.length - 1
 				|| m < 0 || m > grid.length - 1) {
-			//If the entered position is outside the array the value will be the background value
+			//If the passed coordinates are outside the array, the value will be the zero
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j][k][l][m];
 		}
 	}

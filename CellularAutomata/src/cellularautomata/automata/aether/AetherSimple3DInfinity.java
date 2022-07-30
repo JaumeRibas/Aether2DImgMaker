@@ -95,12 +95,12 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 				Arrays.fill(newGrid[i][j], BigFraction.ZERO);
 			}
 		}
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
 					BigFraction value = grid[i][j][k];
-					//make list of von Neumann neighbors with value smaller than current position's value
+					//make list of von Neumann neighbors with value smaller than current cell's value
 					List<Neighbor<BigFraction>> neighbors = new ArrayList<Neighbor<BigFraction>>(6);						
 					BigFraction neighborValue;
 					if (i < grid.length - 1)
@@ -160,12 +160,12 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 						for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
 							neighborValue = neighbors.get(neighborIndex).getValue();
 							if (isFirst || !neighborValue.equals(previousNeighborValue)) {
-								//add one for the center position
+								//Add one for the current cell
 								int shareCount = neighbors.size() + 1;
 								BigFraction toShare = value.subtract(neighborValue);
 								BigFraction share = toShare.divide(shareCount);
 								checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
-								//the center keeps one share
+								//The current cell keeps one share
 								value = value.subtract(toShare).add(share);
 								for (Neighbor<BigFraction> neighbor : neighbors) {
 									int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
@@ -234,10 +234,10 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1
 				|| k < 0 || k > grid.length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the passed coordinates are outside the array, the value will be zero
 			return BigFraction.ZERO;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j][k];
 		}
 	}

@@ -75,13 +75,13 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 		newGrid = new BigFraction[grid.length];
 		Arrays.fill(newGrid, BigFraction.ZERO);
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++) {
-			//Distribute the positon's value among its neighbors (von Neumann) using the algorithm
+			//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 			
-			//Get the position's value
+			//Get the cell's value
 			BigFraction value = grid[index];
-			//Get a list of the neighbors whose value is smaller than the one at the current position
+			//Get a list of the neighbors whose value is smaller than the one at the current cell
 			List<Neighbor<BigFraction>> neighbors = new ArrayList<Neighbor<BigFraction>>(2);						
 			BigFraction neighborValue;
 			if (index < grid.length - 1) {
@@ -112,11 +112,11 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 				for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
 					neighborValue = neighbors.get(i).getValue();
 					if (!neighborValue.equals(previousNeighborValue) || isFirst) {
-						//add one for the center position
+						//Add one for the current cell
 						int shareCount = neighbors.size() + 1;
 						BigFraction toShare = value.subtract(neighborValue);
 						BigFraction share = toShare.divide(shareCount);
-						//the center keeps one share
+						//The current cell keeps one share
 						value = value.subtract(toShare).add(share);
 						for (Neighbor<BigFraction> n : neighbors) {
 							int nc = getNeighborCoordinates(index, n.getDirection()) + indexOffset;

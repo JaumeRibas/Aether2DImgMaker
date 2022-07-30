@@ -87,7 +87,7 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 		}
 		boolean changed = false;
 		int lenghtMinusOne = grid.length - 1;
-		//For every position inside the asymmetric section and those just outside its edge
+		//For every cell inside the asymmetric section and those just outside its edge
 		for (int v = -1, vPlusOne = v + 1; v <= lenghtMinusOne; v = vPlusOne, vPlusOne++) {
 			for (int w = -1, wPlusOne = w + 1; w <= vPlusOne; w = wPlusOne, wPlusOne++) {
 				for (int x = -1, xPlusOne = x + 1; x <= wPlusOne; x = xPlusOne, xPlusOne++) {

@@ -108,7 +108,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 			}
 		}
 		boolean changed = false;
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
@@ -185,7 +185,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 							for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
 								neighborValue = neighbors.get(neighborIndex).getValue();
 								if (!neighborValue.equals(previousNeighborValue) || isFirst) {
-									//add one for the center position
+									//Add one for the current cell
 									int shareCount = neighbors.size() + 1;
 									BigInt toShare = value.subtract(neighborValue);
 									BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
@@ -193,7 +193,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 									if (!share.equals(BigInt.ZERO)) {
 										checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, l + indexOffset, newGrid.length);
 										changed = true;
-										//the center keeps the remainder and one share
+										//The current cell keeps the remainder and one share
 										value = value.subtract(toShare).add(shareAndRemainder[1]).add(share);
 										for (Neighbor<BigInt> neighbor : neighbors) {
 											int[] nc = getNeighborCoordinates(i, j, k, l, neighbor.getDirection());
@@ -276,7 +276,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 				|| j < 0 || j > grid.length - 1 
 				|| k < 0 || k > grid.length - 1
 				|| l < 0 || l > grid.length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the passed coordinates are outside the array, the value will be zero
 			return BigInt.ZERO;
 		} else {
 			return grid[i][j][k][l];

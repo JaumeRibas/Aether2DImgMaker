@@ -74,7 +74,7 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 		for (int i = 0; i < newGrid.length; i++) {
 			Arrays.fill(newGrid[i], BigFraction.ZERO);
 		}
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				BigFraction value = grid[i][j];
@@ -83,7 +83,7 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 					BigFraction share = value.divide(5);
 					//Add the share to the corresponding position in the new array
 					newGrid[i + indexOffset][j + indexOffset] = newGrid[i + indexOffset][j + indexOffset].add(share);
-					//Add the share to the neighboring positions
+					//Add the share to the neighboring cells
 					newGrid[i + indexOffset + 1][j + indexOffset] = newGrid[i + indexOffset + 1][j + indexOffset].add(share);
 					newGrid[i + indexOffset - 1][j + indexOffset] = newGrid[i + indexOffset - 1][j + indexOffset].add(share);
 					newGrid[i + indexOffset][j + indexOffset + 1] = newGrid[i + indexOffset][j + indexOffset + 1].add(share);
@@ -112,10 +112,10 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 		int j = originIndex + y;
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1) {
-			//If the entered position is outside the array the value will be zero
+			//If the passed coordinates are outside the array, the value will be zero
 			return BigFraction.ZERO;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j];
 		}
 	}

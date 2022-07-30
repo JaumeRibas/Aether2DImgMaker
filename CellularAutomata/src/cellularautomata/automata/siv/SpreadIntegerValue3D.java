@@ -101,7 +101,7 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 						if (share != 0) {
 							//If any share is not zero the state changes
 							changed = true;
-							//Add the share to the neighboring positions
+							//Add the share to the neighboring cells
 							boolean yEqualsXMinusOne = y == x - 1;
 							boolean zEqualsYMinusOne = z == y - 1;
 							//x+

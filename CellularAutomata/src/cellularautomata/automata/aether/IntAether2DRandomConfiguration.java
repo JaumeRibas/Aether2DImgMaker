@@ -151,14 +151,14 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		int[] neighborValues = new int[4];
 		int[] sortedNeighborsIndexes = new int[4];
 		byte[] neighborDirections = new byte[4];
-		//For every position
+		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
-				//Distribute the positon's value among its neighbors (von Neumann) using the algorithm
+				//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 				
-				//Get the position's value
+				//Get the cell's value
 				int value = grid[i][j];
-				//Get a list of the neighbors whose value is smaller than the one at the current position
+				//Get a list of the neighbors whose value is smaller than the one at the current cell
 				int relevantNeighborCount = 0;
 				int neighborValue;
 				if (i < grid.length - 1)
@@ -270,10 +270,10 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		int j = originIndex + y;
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1) {
-			//If the entered position is outside the array the value will be 0
+			//If the coordinates are outside the array, the value will be 0
 			return 0;
 		} else {
-			//Note that the positions whose value hasn't been defined have value zero by default
+			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j];
 		}
 	}

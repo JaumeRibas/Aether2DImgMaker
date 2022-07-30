@@ -107,7 +107,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 							if (share != 0) {
 								//If any share is not zero the state changes
 								changed = true;
-								//Add the share to the neighboring positions
+								//Add the share to the neighboring cells
 								addToWPositive(newGrid, w, x, y, z, share);
 								addToWNegative(newGrid, w, x, y, z, share);
 								addToXPositive(newGrid, w, x, y, z, share);

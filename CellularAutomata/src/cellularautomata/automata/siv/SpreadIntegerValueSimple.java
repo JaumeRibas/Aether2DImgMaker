@@ -54,7 +54,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		this.backgroundValue = backgroundValue;
 		int[] indexes = new int[gridDimension];
 		//Create an hypercubic array to represent the grid. With the initial value at the origin.
-		//Make the array of side 5 so as to leave a margin of two positions around the center.
+		//Make the array of side 5 so as to leave a margin of two cells around the center.
 		int side = 5;
 		grid = new HypercubicIntArray(gridDimension, side);
 		grid.fill(backgroundValue);
@@ -104,7 +104,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 			newGrid = new HypercubicIntArray(gridDimension, grid.getSide());
 		}
 		SpreadIntegerValueConsumer sivConsumer = new SpreadIntegerValueConsumer(newGrid, indexOffset);
-		//For every position apply rules
+		//For every cell apply rules
 		grid.forEachIndex(sivConsumer);
 		//Replace the old array with the new one
 		grid = newGrid;
@@ -177,19 +177,19 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 					int[] newIndexes = new int[gridDimension];
 					System.arraycopy(indexes, 0, newIndexes, 0, newIndexes.length);
 					Utils.addToArray(newIndexes, indexOffset);
-					//if the current position is equal to its neighbors the algorithm has no effect
+					//If the current cell is equal to its neighbors, the algorithm has no effect
 					if (!areAllNeighborValuesEqual) {
-						//Divide its value between the neighbors and center (using integer division)
+						//Divide its value between the neighbors and itself (using integer division)
 						int share = value/shareCount;
 						if (share != 0) {
 							//I assume that if any share is not zero the state changes (doesn't work for background value != 0 :( )
 							changed = true;
 							if (isPositionCloseToEdge)
 								boundsReached = true;
-							//Add the share and the remainder to the corresponding position in the new array
+							//Add the share and the remainder to the corresponding cell in the new array
 							newGrid.addAndGet(new Coordinates(newIndexes), value%shareCount + share);
-							//Add the share to the neighboring positions
-							//if the neighbor's value is equal to the current value, add the share to the current position instead
+							//Add the share to the neighboring cells
+							//If the neighbor's value is equal to the current value, add the share to the current cell instead
 							for (int axis = 0; axis < gridDimension; axis++) {
 								int newIndexOnAxis = newIndexes[axis];
 								if (isUpperNeighborValueEqual[axis]) {
@@ -208,15 +208,15 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 								}
 							}
 						} else {
-							//if the share is zero, just add the value to the corresponding position in the new array
+							//If the share is zero, just add the value to the corresponding cell in the new array
 							newGrid.addAndGet(new Coordinates(newIndexes), value);
 						}
 					} else {
-						//if all neighbor values are equal the current value won't change (it will get from them the same value it gives them)
+						//If all neighbor values are equal the current cell won't change (it will get from them the same value it gives them)
 						newGrid.addAndGet(new Coordinates(newIndexes), value);
 					}
 				} else {
-					//if the abs value is smaller than the divisor just copy the value to the new grid
+					//If the abs value is smaller than the divisor just copy the value to the new grid
 					Utils.addToArray(indexes, indexOffset);
 					newGrid.addAndGet(new Coordinates(indexes), value);
 				}					
