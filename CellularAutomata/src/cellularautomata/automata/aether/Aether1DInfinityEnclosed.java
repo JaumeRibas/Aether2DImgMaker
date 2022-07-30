@@ -137,16 +137,15 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 				newGrid[0] = newGrid[0].add(share.add(share));//one more for the symmetric position at the other side
 				newGrid[1] = newGrid[1].add(currentValue.subtract(toShare).add(share));
 			}
+		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+			// gn < current <= sn
+			BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+			BigFraction share = toShare.divide(2);
+			newGrid[1] = newGrid[1].add(currentValue.subtract(toShare).add(share));
+			newGrid[2] = newGrid[2].add(share);
 		} else {
-			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				// gn < current <= sn
-				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigFraction share = toShare.divide(2);
-				newGrid[1] = newGrid[1].add(currentValue.subtract(toShare).add(share));
-				newGrid[2] = newGrid[2].add(share);
-			} else {
-				newGrid[1] = newGrid[1].add(currentValue);
-			}
+			// gn >= current <= sn
+			newGrid[1] = newGrid[1].add(currentValue);
 		}
 		//2 <= x < edge - 1
 		int edge = grid.length - 1;
@@ -215,16 +214,15 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 					newGrid[xMinusOne] = newGrid[xMinusOne].add(share);
 					newGrid[x] = newGrid[x].add(currentValue.subtract(toShare).add(share));
 				}
+			} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+				// gn < current <= sn
+				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+				BigFraction share = toShare.divide(2);
+				newGrid[x] = newGrid[x].add(currentValue.subtract(toShare).add(share));
+				newGrid[xPlusOne] = newGrid[xPlusOne].add(share);
 			} else {
-				if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-					// gn < current <= sn
-					BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigFraction share = toShare.divide(2);
-					newGrid[x] = newGrid[x].add(currentValue.subtract(toShare).add(share));
-					newGrid[xPlusOne] = newGrid[xPlusOne].add(share);
-				} else {
-					newGrid[x] = newGrid[x].add(currentValue);
-				}
+				// gn >= current <= sn
+				newGrid[x] = newGrid[x].add(currentValue);
 			}
 		}
 	}

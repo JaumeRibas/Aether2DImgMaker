@@ -856,7 +856,7 @@ public class Aether3DInfinityEnclosed implements SymmetricNumericModel3D<BigFrac
 			BigFraction toShare = currentValue.subtract(greaterXNeighborValue);
 			BigFraction share = toShare.divide(7);
 			newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue).subtract(toShare).add(share);
-				newGreaterXSlice[0][0] = newGreaterXSlice[0][0].add(share);			
+			newGreaterXSlice[0][0] = newGreaterXSlice[0][0].add(share);			
 		} else {
 			newCurrentXSlice[0][0] = newCurrentXSlice[0][0].add(currentValue);
 		}
@@ -987,16 +987,15 @@ public class Aether3DInfinityEnclosed implements SymmetricNumericModel3D<BigFrac
 				newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
 				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share);
 			}
+		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+			// gx < current <= sz
+			BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+			BigFraction share = toShare.divide(4);
+			newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share);
+			newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
 		} else {
-			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				// gx < current <= sz
-				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigFraction share = toShare.divide(4);
-				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue).subtract(toShare).add(share);
-				newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
-			} else {
-				newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue);
-			}
+			// gx >= current <= sz
+			newCurrentXSlice[1][1] = newCurrentXSlice[1][1].add(currentValue);
 		}
 	}
 
@@ -1497,16 +1496,15 @@ public class Aether3DInfinityEnclosed implements SymmetricNumericModel3D<BigFrac
 				newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
 				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share);
 			}
+		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
+			// gx < current <= sz
+			BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
+			BigFraction share = toShare.divide(4);
+			newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share);
+			newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
 		} else {
-			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				// gx < current <= sz
-				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigFraction share = toShare.divide(4);
-				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share);
-				newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
-			} else {
-				newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue);
-			}
+			// gx >= current <= sz
+			newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue);
 		}
 	}
 	
@@ -1514,12 +1512,13 @@ public class Aether3DInfinityEnclosed implements SymmetricNumericModel3D<BigFrac
 			BigFraction smallerZNeighborValue, BigFraction[][] newCurrentXSlice) {
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			int coordMinusOne = coord - 1;
-			// sz < current <= gx
+			// sz < current
 			BigFraction toShare = currentValue.subtract(smallerZNeighborValue); 
 			BigFraction share = toShare.divide(4);
 			newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
 			newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue).subtract(toShare).add(share);
 		} else {
+			// sz >= current
 			newCurrentXSlice[coord][coord] = newCurrentXSlice[coord][coord].add(currentValue);
 		}
 	}
