@@ -51,6 +51,9 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 	private int minValue;
 	private int maxValue;
 	private long step;
+	
+	/** The index of the origin within the array */
+	private int originIndex;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -96,11 +99,13 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		int bufferMargin = 2;
 		int doubleBufferMargin = 2*bufferMargin;
 		grid = new int[initialSide + doubleBufferMargin][initialSide + doubleBufferMargin];
+		//The origin will be at the center of the array
+		originIndex = (grid.length - 1)/2;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		int bufferMarginPlusSide = bufferMargin + initialSide;
-		for (int x = bufferMargin; x < bufferMarginPlusSide; x++) {
-			for (int y = bufferMargin; y < bufferMarginPlusSide; y++) {
-				grid[x][y] = random.nextInt(minValue, maxValue + 1);
+		for (int i = bufferMargin; i < bufferMarginPlusSide; i++) {
+			for (int j = bufferMargin; j < bufferMarginPlusSide; j++) {
+				grid[i][j] = random.nextInt(minValue, maxValue + 1);
 			}
 		}
 		boundsReached = false;
@@ -124,6 +129,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		minValue = data.minValue;
 		maxValue = data.maxValue;
 		step = data.step;
+		originIndex = data.originIndex;
 		boundsReached = data.boundsReached;
 	}
 	
@@ -146,34 +152,46 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		int[] sortedNeighborsIndexes = new int[4];
 		byte[] neighborDirections = new byte[4];
 		//For every position
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid.length; y++) {
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
 				//Distribute the positon's value among its neighbors (von Neumann) using the algorithm
 				
 				//Get the position's value
-				int value = grid[x][y];
+				int value = grid[i][j];
 				//Get a list of the neighbors whose value is smaller than the one at the current position
 				int relevantNeighborCount = 0;
 				int neighborValue;
-				neighborValue = getFromPosition(x + 1, y);
+				if (i < grid.length - 1)
+					neighborValue = grid[i + 1][j];
+				else
+					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = RIGHT;
 					relevantNeighborCount++;
 				}
-				neighborValue = getFromPosition(x - 1, y);
+				if (i > 0)
+					neighborValue = grid[i - 1][j];
+				else
+					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = LEFT;
 					relevantNeighborCount++;
 				}
-				neighborValue = getFromPosition(x, y + 1);
+				if (j < grid.length - 1)
+					neighborValue = grid[i][j + 1];
+				else
+					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = UP;
 					relevantNeighborCount++;
 				}
-				neighborValue = getFromPosition(x, y - 1);
+				if (j > 0)
+					neighborValue = grid[i][j - 1];
+				else
+					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
 					neighborDirections[relevantNeighborCount] = DOWN;
@@ -187,18 +205,18 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 					//divide
 					boolean isFirstNeighbor = true;
 					int previousNeighborValue = 0;
-					for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
-						neighborValue = neighborValues[i];
+					for (int neighborIndex = 0; neighborIndex < relevantNeighborCount; neighborIndex++,isFirstNeighbor = false) {
+						neighborValue = neighborValues[neighborIndex];
 						if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-							int shareCount = relevantNeighborCount - i + 1;
+							int shareCount = relevantNeighborCount - neighborIndex + 1;
 							int toShare = value - neighborValue;
 							int share = toShare/shareCount;
 							if (share != 0) {
-								checkBoundsReached(x + indexOffset, y + indexOffset, newGrid.length);
+								checkBoundsReached(i + indexOffset, j + indexOffset, newGrid.length);
 								changed = true;
 								value = value - toShare + toShare%shareCount + share;
-								for (int j = i; j < relevantNeighborCount; j++) {
-									int[] nc = getNeighborCoordinates(x, y, neighborDirections[sortedNeighborsIndexes[j]]);
+								for (int remainingNeighborIndex = neighborIndex; remainingNeighborIndex < relevantNeighborCount; remainingNeighborIndex++) {
+									int[] nc = getNeighborCoordinates(i, j, neighborDirections[sortedNeighborsIndexes[remainingNeighborIndex]]);
 									newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
 								}
 							}
@@ -206,20 +224,22 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 						}
 					}	
 				}
-				newGrid[x + indexOffset][y + indexOffset] += value;
+				newGrid[i + indexOffset][j + indexOffset] += value;
 			}
 		}
 		//Replace the old array with the new one
 		this.grid = newGrid;
+		//Update the index of the origin
+		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
 	
-	private void checkBoundsReached(int x, int y, int length) {
-		if (x == 1 || x == length - 2 || 
-			y == 1 || y == length - 2) {
+	private void checkBoundsReached(int i, int j, int length) {
+		if (i == 1 || i == length - 2 || 
+			j == 1 || j == length - 2) {
 			boundsReached = true;
 		}
 	}
@@ -246,19 +266,21 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 	
 	@Override
 	public int getFromPosition(int x, int y) {
-		if (x < 0 || x > grid.length - 1 
-				|| y < 0 || y > grid[0].length - 1) {
+		int i = originIndex + x;
+		int j = originIndex + y;
+		if (i < 0 || i > grid.length - 1 
+				|| j < 0 || j > grid.length - 1) {
 			//If the entered position is outside the array the value will be 0
 			return 0;
 		} else {
 			//Note that the positions whose value hasn't been defined have value zero by default
-			return grid[x][y];
+			return grid[i][j];
 		}
 	}
 	
 	@Override
 	public int getMinX() {
-		int arrayMinX = 0;
+		int arrayMinX = -originIndex;
 		int valuesMinX;
 		if (boundsReached) {
 			valuesMinX = arrayMinX;
@@ -270,7 +292,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 	
 	@Override
 	public int getMaxX() {
-		int arrayMaxX = grid.length - 1;
+		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
 			valuesMaxX = arrayMaxX;
@@ -282,26 +304,12 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 	
 	@Override
 	public int getMinY() {
-		int arrayMinY = 0;
-		int valuesMinY;
-		if (boundsReached) {
-			valuesMinY = arrayMinY;
-		} else {
-			valuesMinY = arrayMinY + 1;
-		}
-		return valuesMinY;
+		return getMinX();
 	}
 	
 	@Override
 	public int getMaxY() {
-		int arrayMaxY = grid[0].length - 1;
-		int valuesMaxY;
-		if (boundsReached) {
-			valuesMaxY = arrayMaxY;
-		} else {
-			valuesMaxY = arrayMaxY - 1;
-		}
-		return valuesMaxY;
+		return getMaxX();
 	}
 	
 	@Override
