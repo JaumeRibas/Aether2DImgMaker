@@ -74,6 +74,7 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 		//If at the previous step the values reached the edge, make the new array bigger
 		newGrid = new BigFraction[grid.length];
 		Arrays.fill(newGrid, BigFraction.ZERO);
+		boolean changed = false;
 		//For every position
 		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++) {
 			//Distribute the positon's value among its neighbors (von Neumann) using the algorithm
@@ -96,6 +97,7 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 
 			//If there are any
 			if (neighbors.size() > 0) {
+				changed = true;
 				if (neighbors.size() > 1) {
 					//Sort them by value in ascending order
 					Neighbor<BigFraction> next = neighbors.get(1);
@@ -134,7 +136,7 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
-		return true;
+		return changed;
 	}
 	
 	private static int getNeighborCoordinates(int x, byte direction) {
