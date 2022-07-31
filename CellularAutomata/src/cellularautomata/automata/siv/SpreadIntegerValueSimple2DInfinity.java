@@ -115,7 +115,6 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 			//If the passed coordinates are outside the array, the value will be zero
 			return BigFraction.ZERO;
 		} else {
-			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j];
 		}
 	}
