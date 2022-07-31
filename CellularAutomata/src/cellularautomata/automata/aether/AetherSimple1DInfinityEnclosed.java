@@ -69,14 +69,12 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 	public boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigFraction[] newGrid = null;
-		//The offset between the indexes of the new and old array
-		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
 		newGrid = new BigFraction[grid.length];
 		Arrays.fill(newGrid, BigFraction.ZERO);
 		boolean changed = false;
 		//For every cell
-		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++) {
+		for (int index = 0; index < grid.length; index++) {
 			//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 			
 			//Get the cell's value
@@ -119,7 +117,7 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 						//The current cell keeps one share
 						value = value.subtract(toShare).add(share);
 						for (Neighbor<BigFraction> n : neighbors) {
-							int nc = getNeighborCoordinates(index, n.getDirection()) + indexOffset;
+							int nc = getNeighborCoordinates(index, n.getDirection());
 							newGrid[nc] = newGrid[nc].add(share);
 						}
 						previousNeighborValue = neighborValue;
@@ -127,12 +125,10 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 					neighbors.remove(i);
 				}	
 			}					
-			newGrid[newIndex] = newGrid[newIndex].add(value);
+			newGrid[index] = newGrid[index].add(value);
 		}
 		//Replace the old array with the new one
 		this.grid = newGrid;
-		//Update the index of the origin
-		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
 		//Return whether or not the state of the grid changed
