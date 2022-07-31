@@ -323,6 +323,24 @@ public class Utils {
 		}
 	}
 	
+	public static <Object_Type> void fillArray(Object_Type[][] array, Object_Type value) {
+		for (int i = 0; i < array.length; i++) {
+			Arrays.fill(array[i], value);
+		}
+	}
+	
+	public static <Object_Type> void fillArray(Object_Type[][][] array, Object_Type value) {
+		for (int i = 0; i < array.length; i++) {
+			fillArray(array[i], value);
+		}
+	}
+	
+	public static <Object_Type> void fillArray(Object_Type[][][][] array, Object_Type value) {
+		for (int i = 0; i < array.length; i++) {
+			fillArray(array[i], value);
+		}
+	}
+	
 	public static long roundUpToEightMultiple(long value) {
 		long remainder = value % 8;
 		if (remainder > 0) {
@@ -375,8 +393,8 @@ public class Utils {
 		for (int i = 0; i != length; i++) {
 			sortedIndexes[i] = i;
 		}
-		int neighborCountMinusOne = length - 1;
-		for (int i = 0; i < neighborCountMinusOne; i++) {
+		int lengthMinusOne = length - 1;
+		for (int i = 0; i < lengthMinusOne; i++) {
 			Object_Type max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < length; j++) {
@@ -395,22 +413,22 @@ public class Utils {
 		}
 	}
 
-	public static void sortDescendingLength4(BigInt[] array, int[] sortedIndexes) {
+	public static <Object_Type extends Comparable<Object_Type>> void sortDescendingLength4(Object_Type[] array, int[] sortedIndexes) {
 		sortedIndexes[0] = 0;
 		sortedIndexes[1] = 1;
 		sortedIndexes[2] = 2;
 		sortedIndexes[3] = 3;
 		for (int i = 0; i < 3; i++) {
-			BigInt max = array[i];
+			Object_Type max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < 4; j++) {
-				BigInt value = array[j];
+				Object_Type value = array[j];
 				if (value.compareTo(max) > 0) {
 					max = value;
 					swapPosition = j;
 				}
 			}
-			BigInt valSwap = array[i];
+			Object_Type valSwap = array[i];
 			array[i] = array[swapPosition];
 			array[swapPosition] = valSwap;
 			int indexSwap = sortedIndexes[i];
@@ -476,8 +494,8 @@ public class Utils {
 		for (int i = 0; i != length; i++) {
 			sortedIndexes[i] = i;
 		}
-		int neighborCountMinusOne = length - 1;
-		for (int i = 0; i < neighborCountMinusOne; i++) {
+		int lengthMinusOne = length - 1;
+		for (int i = 0; i < lengthMinusOne; i++) {
 			long max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < length; j++) {
@@ -495,49 +513,25 @@ public class Utils {
 			sortedIndexes[swapPosition] = indexSwap;
 		}
 	}
-	
-	public static void sortDescending(int length, BigInt[] array, int[] sortedIndexes) {
-		for (int i = 0; i != length; i++) {
-			sortedIndexes[i] = i;
-		}
-		int neighborCountMinusOne = length - 1;
-		for (int i = 0; i < neighborCountMinusOne; i++) {
-			BigInt max = array[i];
-			int swapPosition = i;
-			for (int j = i + 1; j < length; j++) {
-				BigInt value = array[j];
-				if (value.compareTo(max) > 0) {
-					max = value;
-					swapPosition = j;
-				}
-			}
-			BigInt valSwap = array[i];
-			array[i] = array[swapPosition];
-			array[swapPosition] = valSwap;
-			int indexSwap = sortedIndexes[i];
-			sortedIndexes[i] = sortedIndexes[swapPosition];
-			sortedIndexes[swapPosition] = indexSwap;
-		}
-	}
 
-	public static void sortDescendingLength4(long[] neighborValues, int[] sortedIndexes) {
+	public static void sortDescendingLength4(long[] array, int[] sortedIndexes) {
 		sortedIndexes[0] = 0;
 		sortedIndexes[1] = 1;
 		sortedIndexes[2] = 2;
 		sortedIndexes[3] = 3;
 		for (int i = 0; i < 3; i++) {
-			long max = neighborValues[i];
+			long max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < 4; j++) {
-				long value = neighborValues[j];
+				long value = array[j];
 				if (value > max) {
 					max = value;
 					swapPosition = j;
 				}
 			}
-			long valSwap = neighborValues[i];
-			neighborValues[i] = neighborValues[swapPosition];
-			neighborValues[swapPosition] = valSwap;
+			long valSwap = array[i];
+			array[i] = array[swapPosition];
+			array[swapPosition] = valSwap;
 			int indexSwap = sortedIndexes[i];
 			sortedIndexes[i] = sortedIndexes[swapPosition];
 			sortedIndexes[swapPosition] = indexSwap;
@@ -601,8 +595,8 @@ public class Utils {
 		for (int i = 0; i != length; i++) {
 			sortedIndexes[i] = i;
 		}
-		int neighborCountMinusOne = length - 1;
-		for (int i = 0; i < neighborCountMinusOne; i++) {
+		int lengthMinusOne = length - 1;
+		for (int i = 0; i < lengthMinusOne; i++) {
 			double max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < length; j++) {
@@ -702,8 +696,8 @@ public class Utils {
 		for (int i = 0; i != length; i++) {
 			sortedIndexes[i] = i;
 		}
-		int neighborCountMinusOne = length - 1;
-		for (int i = 0; i < neighborCountMinusOne; i++) {
+		int lengthMinusOne = length - 1;
+		for (int i = 0; i < lengthMinusOne; i++) {
 			int max = array[i];
 			int swapPosition = i;
 			for (int j = i + 1; j < length; j++) {
