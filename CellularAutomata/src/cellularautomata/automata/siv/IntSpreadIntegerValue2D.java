@@ -108,7 +108,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 						//Divide its value by 5 (using integer division)
 						int share = value/5;
 						if (share != 0) {
-							//If any share is not zero the state changes
+							//If any share is not zero, the state changes
 							changed = true;
 							//Add the share to the neighboring cells
 							//If the neighbor's value is equal to the current value, add the share to the current cell instead
