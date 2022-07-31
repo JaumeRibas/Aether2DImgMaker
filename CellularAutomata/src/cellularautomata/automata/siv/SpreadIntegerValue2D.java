@@ -114,7 +114,7 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 						//Divide its value by 5 (using integer division)
 						long share = value/5;
 						if (share != 0) {
-							//If any share is not zero the state changes
+							//If any share is not zero, the state changes
 							changed = true;
 							//Add the share to the neighboring cells
 							//If the neighbor's value is equal to the current value, add the share to the current cell instead

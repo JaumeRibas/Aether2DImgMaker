@@ -135,7 +135,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 							//Divide its value by 7 (using integer division)
 							long share = value/7;
 							if (share != 0) {
-								//If any share is not zero the state changes
+								//If any share is not zero, the state changes
 								changed = true;
 								//Add the share and the remainder to the corresponding cell in the new array
 								newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value%7 + share;

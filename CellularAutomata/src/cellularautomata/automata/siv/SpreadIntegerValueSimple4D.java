@@ -149,7 +149,7 @@ public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, Isotrop
 								//Divide its value by 9 (using integer division)
 								long share = value/9;
 								if (share != 0) {
-									//If any share is not zero the state changes
+									//If any share is not zero, the state changes
 									changed = true;
 									//Add the share and the remainder to the corresponding cell in the new array
 									newGrid[i + indexOffset][j + indexOffset][k + indexOffset][l + indexOffset] += value%9 + share;
