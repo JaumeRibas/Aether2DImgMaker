@@ -42,7 +42,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 	
 	private long initialValue;
 	private long step;
-	private int maxX;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
@@ -58,7 +57,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic4DLongArray(3);
 		grid[0][0][0][0] = this.initialValue;
-		maxX = 0;
 		boundsReached = false;
 		step = 0;
 	}
@@ -75,7 +73,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 		SpreadIntegerValue4D data = (SpreadIntegerValue4D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
-		maxX = data.maxX;
 		maxWMinusOne = data.maxWMinusOne;
 		boundsReached = data.boundsReached;
 		step = data.step;
@@ -105,7 +102,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 							//Divide its value by 9 (using integer division)
 							long share = value/9;
 							if (share != 0) {
-								//If any share is not zero the state changes
+								//If any share is not zero, the state changes
 								changed = true;
 								//Add the share to the neighboring cells
 								addToWPositive(newGrid, w, x, y, z, share);
@@ -168,8 +165,6 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 			}
 			int xx = x+1;
 			grid[w][xx][y][z] += valueToAdd;
-			if (xx > maxX)
-				maxX = xx;
 		}
 	}
 
@@ -272,10 +267,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 				w = swp;
 			}
 		} while (!sorted);
-		if (w < grid.length 
-				&& x < grid[w].length 
-				&& y < grid[w][x].length 
-				&& z < grid[w][x][y].length) {
+		if (w < grid.length) {
 			return grid[w][x][y][z];
 		} else {
 			return 0;
@@ -283,25 +275,13 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z) {	
-		if (w < grid.length 
-				&& x < grid[w].length 
-				&& y < grid[w][x].length 
-				&& z < grid[w][x][y].length) {
-			return grid[w][x][y][z];
-		} else {
-			return 0;
-		}
+	public long getFromAsymmetricPosition(int w, int x, int y, int z) {
+		return grid[w][x][y][z];
 	}
 	
 	@Override
 	public int getAsymmetricMaxW() {
 		return grid.length - 1;
-	}
-
-	@Override
-	public int getAsymmetricMaxX() {
-		return maxX;
 	}
 
 	@Override

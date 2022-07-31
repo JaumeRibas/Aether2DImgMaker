@@ -99,7 +99,7 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 						//Divide its value by 7 (using integer division)
 						long share = value/7;
 						if (share != 0) {
-							//If any share is not zero the state changes
+							//If any share is not zero, the state changes
 							changed = true;
 							//Add the share to the neighboring cells
 							boolean yEqualsXMinusOne = y == x - 1;
@@ -198,9 +198,7 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 				x = swp;
 			}
 		} while (!sorted);
-		if (x < grid.length 
-				&& y < grid[x].length 
-				&& z < grid[x][y].length) {
+		if (x < grid.length) {
 			return grid[x][y][z];
 		} else {
 			return 0;
