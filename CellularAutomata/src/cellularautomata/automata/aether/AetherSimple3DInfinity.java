@@ -19,11 +19,11 @@ package cellularautomata.automata.aether;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricNumericModel3D;
@@ -64,11 +64,7 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigFraction[side][side][side];
-		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid.length; j++) {
-				Arrays.fill(grid[i][j], BigFraction.ZERO);
-			}
-		}
+		Utils.fillArray(grid, BigFraction.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex][originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		boundsReached = false;
@@ -90,11 +86,7 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 		} else {
 			newGrid = new BigFraction[grid.length][grid.length][grid.length];
 		}
-		for (int i = 0; i < newGrid.length; i++) {
-			for (int j = 0; j < newGrid.length; j++) {
-				Arrays.fill(newGrid[i][j], BigFraction.ZERO);
-			}
-		}
+		Utils.fillArray(newGrid, BigFraction.ZERO);
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
