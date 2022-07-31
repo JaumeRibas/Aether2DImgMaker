@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cellularautomata.Constants;
@@ -72,11 +71,7 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigInt[side][side][side];
-		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid[i].length; j++) {
-				Arrays.fill(grid[i][j], BigInt.ZERO);
-			}
-		}
+		Utils.fillArray(grid, BigInt.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
@@ -117,11 +112,7 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 		} else {
 			newGrid = new BigInt[grid.length][grid.length][grid.length];
 		}
-		for (int i = 0; i < newGrid.length; i++) {
-			for (int j = 0; j < newGrid.length; j++) {
-				Arrays.fill(newGrid[i][j], BigInt.ZERO);
-			}
-		}
+		Utils.fillArray(newGrid, BigInt.ZERO);
 		boolean changed = false;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {

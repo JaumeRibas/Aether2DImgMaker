@@ -18,9 +18,9 @@ package cellularautomata.automata.siv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.Utils;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricNumericModel2D;
 
@@ -47,9 +47,7 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigFraction[side][side];
-		for (int i = 0; i < grid.length; i++) {
-			Arrays.fill(grid[i], BigFraction.ZERO);
-		}
+		Utils.fillArray(grid, BigFraction.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = BigFraction.ONE;
 		boundsReached = false;
@@ -71,9 +69,7 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 		} else {
 			newGrid = new BigFraction[grid.length][grid.length];
 		}
-		for (int i = 0; i < newGrid.length; i++) {
-			Arrays.fill(newGrid[i], BigFraction.ZERO);
-		}
+		Utils.fillArray(newGrid, BigFraction.ZERO);
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {

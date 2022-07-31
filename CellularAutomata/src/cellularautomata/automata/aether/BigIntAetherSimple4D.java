@@ -20,10 +20,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cellularautomata.Constants;
+import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model4d.IsotropicHypercubicModel4DA;
 import cellularautomata.model4d.SymmetricNumericModel4D;
@@ -71,13 +71,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 		this.initialValue = initialValue;
 		int side = 5;
 		grid = new BigInt[side][side][side][side];
-		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid.length; j++) {
-				for (int k = 0; k < grid.length; k++) {
-					Arrays.fill(grid[i][j][k], BigInt.ZERO);
-				}
-			}
-		}
+		Utils.fillArray(grid, BigInt.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex][originIndex][originIndex] = this.initialValue;
 		boundsReached = false;
@@ -100,13 +94,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 		} else {
 			newGrid = new BigInt[grid.length][grid.length][grid.length][grid.length];
 		}
-		for (int i = 0; i < newGrid.length; i++) {
-			for (int j = 0; j < newGrid.length; j++) {
-				for (int k = 0; k < newGrid.length; k++) {
-					Arrays.fill(newGrid[i][j][k], BigInt.ZERO);
-				}
-			}
-		}
+		Utils.fillArray(newGrid, BigInt.ZERO);
 		boolean changed = false;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
