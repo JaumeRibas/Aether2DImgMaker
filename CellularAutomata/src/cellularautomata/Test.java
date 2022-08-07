@@ -29,8 +29,6 @@ import java.util.function.Consumer;
 
 import org.apache.commons.math3.FieldElement;
 import cellularautomata.automata.aether.Aether2D;
-import cellularautomata.automata.aether.Aether3DEnclosed;
-import cellularautomata.automata.aether.Aether3DEnclosed2;
 import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.AetherSimple2D;
@@ -1204,17 +1202,7 @@ public class Test {
 		}
 	}
 	
-	public static void testAether3DEnclosed2() {
-		int side = 31;
-		int initialValue = -10000;
-		Aether3DEnclosed2 ae1 = new Aether3DEnclosed2(side, side, side, initialValue, side/2, side/2, side/2);
-		Aether3DEnclosed ae2 = new Aether3DEnclosed(initialValue, side);
-//		checkTotalValueConservation(ae1);
-//		stepByStep(ae2);
-		compareWithOffset(ae1, ae2, side/2 + 1, side/2 + 1, side/2 + 1);
-	}
-	
-	public static void compareWithOffset(LongModel3D ca1, LongModel3D ca2, int xOffset, int yOffset, int zOffset) {
+	public static void compareAllStepsWithOffset(LongModel3D ca1, LongModel3D ca2, int xOffset, int yOffset, int zOffset) {
 		try {
 			System.out.println("Comparing...");
 			boolean finished1 = false;
@@ -1227,9 +1215,9 @@ public class Test {
 						for (int x = ca1.getMinX(y,z), x2 = x + xOffset; x <= ca1.getMaxX(y,z); x++, x2++) {
 							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x2, y2, z2)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
-										+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z) 
-										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x2, y2, z2));
+								System.out.println("Different value at step " + ca1.getStep() + ": " 
+										+ ca1.getClass().getSimpleName() + "(" + x + ", " + y + ", " + z + "):" + ca1.getFromPosition(x, y, z) 
+										+ " != " + ca2.getClass().getSimpleName() + "(" + x2 + ", " + y2 + ", " + z2 + "):" + ca2.getFromPosition(x2, y2, z2));
 								return;
 							}
 						}	
@@ -1399,6 +1387,39 @@ public class Test {
 		}
 	}
 	
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel1D<Number_Type> ca1, NumericModel1D<Number_Type> ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("Comparing step " + ca1.getStep());
+				for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+					if (!ca1.getFromPosition(x).equals(ca2.getFromPosition(x))) {
+						equal = false;
+						System.out.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
+								+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x) 
+								+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x));
+					}
+				}	
+				finished1 = !ca1.nextStep();
+				finished2 = !ca2.nextStep();
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+				if (!equal)
+					return;
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void compareAllSteps(IntModel2D ca1, LongModel2D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -1550,7 +1571,7 @@ public class Test {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int y = ca1.getMinY(); y <= ca1.getMaxY(); y++) {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
-						if (ca1.getFromPosition(x, y).compareTo(ca2.getFromPosition(x, y)) != 0) {
+						if (!ca1.getFromPosition(x, y).equals(ca2.getFromPosition(x, y))) {
 							equal = false;
 							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y) 
@@ -1842,6 +1863,10 @@ public class Test {
 			e.printStackTrace();
 		}
 	}
+
+	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(LongModel3D ca1, NumericModel3D<Number_Type> ca2) {
+		compareAllSteps(ca2, ca1);
+	}
 	
 	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(NumericModel3D<Number_Type> ca1, LongModel3D ca2) {
 		try {
@@ -1999,8 +2024,8 @@ public class Test {
 				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(); z <= ca1.getMaxZ(); z++) {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
-						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
-							if (ca1.getFromPosition(x, y, z).compareTo(ca2.getFromPosition(x, y, z)) != 0) {
+						for (int x = ca1.getMinX(y,z); x <= ca1.getMaxX(y,z); x++) {
+							if (!ca1.getFromPosition(x, y, z).equals(ca2.getFromPosition(x, y, z))) {
 								equal = false;
 								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
@@ -2038,7 +2063,7 @@ public class Test {
 					for (int y = ca1.getMinYAtZ(z); y <= ca1.getMaxYAtZ(z); y++) {
 						for (int x = ca2.getMinXAtYZ(y,z); x <= ca2.getMaxXAtYZ(y,z); x++) {
 							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(w,y,z); w++) {
-								if (ca1.getFromPosition(w, x, y, z).compareTo(ca2.getFromPosition(w, x, y, z)) != 0) {
+								if (!ca1.getFromPosition(w, x, y, z).equals(ca2.getFromPosition(w, x, y, z))) {
 									equal = false;
 									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z) 

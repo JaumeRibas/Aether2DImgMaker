@@ -25,16 +25,15 @@ import java.util.List;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricNumericModel1D;
+import cellularautomata.model1d.NumericModel1D;
 
 /**
- * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a finite grid and a single source initial configuration of infinity, for review and testing purposes
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a bounded grid and a single source initial configuration of infinity, for review and testing purposes
  * 
  * @author Jaume
  *
  */
-public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<BigFraction>, IsotropicModel1DA {
+public class AetherSimple1DInfinityBoundedGrid implements NumericModel1D<BigFraction> {
 	
 	private static final byte RIGHT = 2;
 	private static final byte LEFT = 3;
@@ -44,24 +43,22 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 	
 	private long step;
 	private final boolean isPositive;
-	private final int side;
+	private final int size;
+	private final int singleSourceX;
 	
-	/** The index of the origin within the array */
-	private int originIndex;
-	
-	public AetherSimple1DInfinityEnclosed(boolean isPositive, int side) {
-		if (side%2 == 0)
-			throw new IllegalArgumentException("Only uneven grid sides are supported.");
-		if (side < 1) {
-			throw new IllegalArgumentException("Grid side cannot be smaller than one.");
+	public AetherSimple1DInfinityBoundedGrid(int size, boolean isPositive, int singleSourceX) {
+		if (size < 1) {
+			throw new IllegalArgumentException("Grid size cannot be smaller than one.");
+		}
+		this.singleSourceX = singleSourceX;
+		if (singleSourceX < 0 || singleSourceX > size - 1) {
+			throw new IllegalArgumentException("Single source x-coordinate out of bounds.");
 		}
 		this.isPositive = isPositive;
-		this.side = side;
-		grid = new BigFraction[side];
-		//The origin will be at the center of the array
-		originIndex = (side - 1)/2;
+		this.size = size;
+		grid = new BigFraction[size];
 		Arrays.fill(grid, BigFraction.ZERO);
-		grid[originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
+		grid[singleSourceX] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		step = 0;
 	}
 	
@@ -145,19 +142,18 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 	}
 	
 	@Override
-	public BigFraction getFromPosition(int x) {	
-		int index = originIndex + x;
-		return grid[index];
+	public BigFraction getFromPosition(int x) {
+		return grid[x];
 	}
 	
 	@Override
-	public BigFraction getFromAsymmetricPosition(int x) {
-		return getFromPosition(x);
+	public int getMinX() {
+		return 0;
 	}
 	
 	@Override
-	public int getAsymmetricMaxX() {
-		return grid.length - 1 - originIndex;
+	public int getMaxX() {
+		return grid.length - 1;
 	}
 	
 	@Override
@@ -169,10 +165,10 @@ public class AetherSimple1DInfinityEnclosed implements SymmetricNumericModel1D<B
 	public String getName() {
 		return "Aether";
 	}
-	
+
 	@Override
 	public String getSubfolderPath() {
-		String path = getName() + "/1D/enclosed/" + side + "/";
+		String path = getName() + "/1D/bounded_grid/" + size + "/(" + singleSourceX + ")=";
 		if (!isPositive) path += "-";
 		path += "infinity";
 		return path;

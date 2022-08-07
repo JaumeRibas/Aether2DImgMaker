@@ -24,16 +24,15 @@ import java.util.Arrays;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
-import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricNumericModel1D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a finite grid and a single source initial configuration of infinity
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a bounded grid of uneven side and a single source initial configuration of infinity at its center
  * 
  * @author Jaume
  *
  */
-public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFraction>, IsotropicModel1DA, Serializable {
+public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumericModel1D<BigFraction>, Serializable {
 
 	/**
 	 * 
@@ -45,9 +44,10 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 
 	private final boolean isPositive;
 	private long step;
-	private int size;
+	private final int size;
+	private final int originCoord;
 	
-	public Aether1DInfinityEnclosed(boolean isPositive, int size) {
+	public Aether1DInfinityBoundedGridCenterSource(int size, boolean isPositive) {
 		if (size%2 == 0)
 			throw new IllegalArgumentException("Only uneven grid sizes are supported.");
 		if (size < 5) {
@@ -55,7 +55,8 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 		}
 		this.isPositive = isPositive;
 		this.size = size;
-		grid = new BigFraction[size/2 + 1];
+		this.originCoord = size/2;
+		grid = new BigFraction[originCoord + 1];
 		Arrays.fill(grid, BigFraction.ZERO);
 		grid[0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		step = 0;
@@ -69,11 +70,12 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether1DInfinityEnclosed(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Aether1DInfinityEnclosed data = (Aether1DInfinityEnclosed) Utils.deserializeFromFile(backupPath);
+	public Aether1DInfinityBoundedGridCenterSource(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Aether1DInfinityBoundedGridCenterSource data = (Aether1DInfinityBoundedGridCenterSource) Utils.deserializeFromFile(backupPath);
 		isPositive = data.isPositive;
 		grid = data.grid;
 		size = data.size;
+		originCoord = data.originCoord;
 		step = data.step;
 	}
 	
@@ -82,7 +84,7 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 		BigFraction[] newGrid = new BigFraction[grid.length];
 		Arrays.fill(newGrid, BigFraction.ZERO);
 		BigFraction currentValue, greaterXNeighborValue, smallerXNeighborValue;
-		//x = 0
+		//i = 0
 		currentValue = grid[0];
 		greaterXNeighborValue = grid[1];
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -93,7 +95,7 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 		} else {
 			newGrid[0] = newGrid[0].add(currentValue);
 		}
-		//x = 1
+		//i = 1
 		//reuse values obtained previously
 		smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -147,10 +149,10 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 			// gn >= current <= sn
 			newGrid[1] = newGrid[1].add(currentValue);
 		}
-		//2 <= x < edge - 1
+		//2 <= i < edge - 1
 		int edge = grid.length - 1;
-		toppleRangeBeyondX1(newGrid, 2, edge);
-		//x = edge
+		toppleRangeBeyondI1(newGrid, 2, edge);
+		//i = edge
 		int edgeMinusOne = edge - 1;
 		currentValue = grid[edge];
 		smallerXNeighborValue = grid[edgeMinusOne];
@@ -167,84 +169,98 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 		return true;
 	}
 	
-	private void toppleRangeBeyondX1(BigFraction[] newGrid, int minX, int maxX) {
-		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
-		BigFraction smallerXNeighborValue, currentValue = grid[xMinusOne], greaterXNeighborValue = grid[x];
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
+	private void toppleRangeBeyondI1(BigFraction[] newGrid, int minI, int maxI) {
+		int i = minI, iMinusOne = i - 1, iPlusOne = i + 1;
+		BigFraction smallerXNeighborValue, currentValue = grid[iMinusOne], greaterXNeighborValue = grid[i];
+		for (; i < maxI; iMinusOne = i, i = iPlusOne, iPlusOne++) {
 			//reuse values obtained previously
 			smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;
-			greaterXNeighborValue = grid[xPlusOne];
+			greaterXNeighborValue = grid[iPlusOne];
 			if (smallerXNeighborValue.compareTo(currentValue) < 0) {
 				if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 					if (smallerXNeighborValue.equals(greaterXNeighborValue)) {
 						// gn == sn < current
 						BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 						BigFraction share = toShare.divide(3);
-						newGrid[xMinusOne] = newGrid[xMinusOne].add(share);
-						newGrid[x] = newGrid[x].add(currentValue.subtract(toShare).add(share));
-						newGrid[xPlusOne] = newGrid[xPlusOne].add(share);
+						newGrid[iMinusOne] = newGrid[iMinusOne].add(share);
+						newGrid[i] = newGrid[i].add(currentValue.subtract(toShare).add(share));
+						newGrid[iPlusOne] = newGrid[iPlusOne].add(share);
 					} else if (smallerXNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 						// sn < gn < current
 						BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 						BigFraction share = toShare.divide(3);
-						newGrid[xMinusOne] = newGrid[xMinusOne].add(share);
-						newGrid[xPlusOne] = newGrid[xPlusOne].add(share);
+						newGrid[iMinusOne] = newGrid[iMinusOne].add(share);
+						newGrid[iPlusOne] = newGrid[iPlusOne].add(share);
 						BigFraction currentRemainingValue = currentValue.subtract(share).subtract(share);
 						toShare = currentRemainingValue.subtract(smallerXNeighborValue); 
 						share = toShare.divide(2);
-						newGrid[xMinusOne] = newGrid[xMinusOne].add(share);
-						newGrid[x] = newGrid[x].add(currentRemainingValue.subtract(toShare).add(share));
+						newGrid[iMinusOne] = newGrid[iMinusOne].add(share);
+						newGrid[i] = newGrid[i].add(currentRemainingValue.subtract(toShare).add(share));
 					} else {
 						// gn < sn < current
 						BigFraction toShare = currentValue.subtract(smallerXNeighborValue); 
 						BigFraction share = toShare.divide(3);
-						newGrid[xMinusOne] = newGrid[xMinusOne].add(share);
-						newGrid[xPlusOne] = newGrid[xPlusOne].add(share);
+						newGrid[iMinusOne] = newGrid[iMinusOne].add(share);
+						newGrid[iPlusOne] = newGrid[iPlusOne].add(share);
 						BigFraction currentRemainingValue = currentValue.subtract(share).subtract(share);
 						toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
 						share = toShare.divide(2);
-						newGrid[x] = newGrid[x].add(currentRemainingValue.subtract(toShare).add(share));
-						newGrid[xPlusOne] = newGrid[xPlusOne].add(share);
+						newGrid[i] = newGrid[i].add(currentRemainingValue.subtract(toShare).add(share));
+						newGrid[iPlusOne] = newGrid[iPlusOne].add(share);
 					}
 				} else {
 					// sn < current <= gn
 					BigFraction toShare = currentValue.subtract(smallerXNeighborValue); 
 					BigFraction share = toShare.divide(2);
-					newGrid[xMinusOne] = newGrid[xMinusOne].add(share);
-					newGrid[x] = newGrid[x].add(currentValue.subtract(toShare).add(share));
+					newGrid[iMinusOne] = newGrid[iMinusOne].add(share);
+					newGrid[i] = newGrid[i].add(currentValue.subtract(toShare).add(share));
 				}
 			} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gn < current <= sn
 				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 				BigFraction share = toShare.divide(2);
-				newGrid[x] = newGrid[x].add(currentValue.subtract(toShare).add(share));
-				newGrid[xPlusOne] = newGrid[xPlusOne].add(share);
+				newGrid[i] = newGrid[i].add(currentValue.subtract(toShare).add(share));
+				newGrid[iPlusOne] = newGrid[iPlusOne].add(share);
 			} else {
 				// gn >= current <= sn
-				newGrid[x] = newGrid[x].add(currentValue);
+				newGrid[i] = newGrid[i].add(currentValue);
 			}
 		}
 	}
 	
 	@Override
 	public BigFraction getFromPosition(int x) {	
-		if (x < 0) x = -x;
-		if (x < grid.length) {
-			return grid[x];
+		int i = x - originCoord;
+		if (i < 0) i = -i;
+		if (i < grid.length) {
+			return grid[i];
 		} else {
-			return BigFraction.ZERO;
+			throw new IllegalArgumentException("Coordinate out of bounds.");
 		}
 	}
 
 	@Override
 	public BigFraction getFromAsymmetricPosition(int x) {
-		return grid[x];
+		return grid[x - originCoord];
 	}
+
+	@Override
+	public int getAsymmetricMinX() { return originCoord; }
 
 	@Override
 	public int getAsymmetricMaxX() {
 		return grid.length - 1;
+	}
+
+	@Override
+	public int getMinX() {
+		return 0;
+	}
+
+	@Override
+	public int getMaxX() {
+		return getAsymmetricMaxX();
 	}
 
 	@Override
@@ -256,10 +272,10 @@ public class Aether1DInfinityEnclosed implements SymmetricNumericModel1D<BigFrac
 	public String getName() {
 		return "Aether";
 	}
-	
+
 	@Override
 	public String getSubfolderPath() {
-		String path = getName() + "/1D/enclosed/" + size + "/";
+		String path = getName() + "/1D/bounded_grid/" + size + "/(" + originCoord + ")=";
 		if (!isPositive) path += "-";
 		path += "infinity";
 		return path;

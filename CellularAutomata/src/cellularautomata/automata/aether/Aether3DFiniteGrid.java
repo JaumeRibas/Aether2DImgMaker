@@ -29,12 +29,12 @@ import cellularautomata.model3d.LongModel3D;
  * @author Jaume
  *
  */
-public class Aether3DEnclosed2 implements LongModel3D, Serializable {
+public class Aether3DFiniteGrid implements LongModel3D, Serializable {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7567346581581646585L;
+	private static final long serialVersionUID = 357391523086633368L;
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -50,21 +50,17 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 	private int xSideMinusOne;
 	private int ySideMinusOne;
 	private int zSideMinusOne;
-	private int singleSourceX;
-	private int singleSourceY;
-	private int singleSourceZ;
 	
-	public Aether3DEnclosed2(int xSide, int ySide, int zSide, 
-			long singleSourceValue, int singleSourceX, int singleSourceY, int singleSourceZ) {
-		if (xSide < 2 || ySide < 2 || zSide < 2) {
-			throw new IllegalArgumentException("Sides cannot be smaller than 2.");
+	public Aether3DFiniteGrid(int xSide, int ySide, int zSide, long singleSourceValue) {
+		if (xSide < 1 || ySide < 1 || zSide < 1) {
+			throw new IllegalArgumentException("Sides cannot be smaller than one.");
 		}
 		//safety check to prevent exceeding the data type's max value
 		if (singleSourceValue < MIN_INITIAL_VALUE) {
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		grid = new long[xSide][ySide][zSide];
-		grid[singleSourceX][singleSourceY][singleSourceZ] = singleSourceValue;
+		grid[0][0][0] = singleSourceValue;
 		this.xSide = xSide;
 		this.ySide = ySide;
 		this.zSide = zSide;
@@ -72,9 +68,6 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 		this.ySideMinusOne = ySide - 1;
 		this.zSideMinusOne = zSide - 1;
 		this.singleSourceValue = singleSourceValue;
-		this.singleSourceX = singleSourceX;
-		this.singleSourceY = singleSourceY;
-		this.singleSourceZ = singleSourceZ;
 		//Set the current step to zero
 		step = 0;
 	}
@@ -87,8 +80,8 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether3DEnclosed2(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Aether3DEnclosed2 data = (Aether3DEnclosed2) Utils.deserializeFromFile(backupPath);
+	public Aether3DFiniteGrid(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Aether3DFiniteGrid data = (Aether3DFiniteGrid) Utils.deserializeFromFile(backupPath);
 		grid = data.grid;
 		singleSourceValue = data.singleSourceValue;
 		step = data.step;
@@ -98,9 +91,6 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 		xSideMinusOne = data.xSideMinusOne;
 		ySideMinusOne = data.ySideMinusOne;
 		zSideMinusOne = data.zSideMinusOne;
-		singleSourceX = data.singleSourceX;
-		singleSourceY = data.singleSourceY;
-		singleSourceZ = data.singleSourceZ;
 	}
 	
 	@Override
@@ -122,14 +112,13 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 					//x
 					if (x == xSideMinusOne) {
 						positiveNeighborCoord = 0;
-						negativeNeighborCoord = x - 1;
 					} else {
 						positiveNeighborCoord = x + 1;
-						if (x == 0) {
-							negativeNeighborCoord = xSideMinusOne;
-						} else {
-							negativeNeighborCoord = x - 1;
-						}
+					}
+					if (x == 0) {
+						negativeNeighborCoord = xSideMinusOne;
+					} else {
+						negativeNeighborCoord = x - 1;
 					}
 					positiveNeighborValue = grid[positiveNeighborCoord][y][z];
 					if (positiveNeighborValue < value) {
@@ -152,14 +141,13 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 					//y
 					if (y == ySideMinusOne) {
 						positiveNeighborCoord = 0;
-						negativeNeighborCoord = y - 1;
 					} else {
 						positiveNeighborCoord = y + 1;
-						if (y == 0) {
-							negativeNeighborCoord = ySideMinusOne;
-						} else {
-							negativeNeighborCoord = y - 1;
-						}
+					}
+					if (y == 0) {
+						negativeNeighborCoord = ySideMinusOne;
+					} else {
+						negativeNeighborCoord = y - 1;
 					}
 					positiveNeighborValue = grid[x][positiveNeighborCoord][z];
 					if (positiveNeighborValue < value) {
@@ -182,14 +170,13 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 					//z
 					if (z == zSideMinusOne) {
 						positiveNeighborCoord = 0;
-						negativeNeighborCoord = z - 1;
 					} else {
 						positiveNeighborCoord = z + 1;
-						if (z == 0) {
-							negativeNeighborCoord = zSideMinusOne;
-						} else {
-							negativeNeighborCoord = z - 1;
-						}
+					}
+					if (z == 0) {
+						negativeNeighborCoord = zSideMinusOne;
+					} else {
+						negativeNeighborCoord = z - 1;
 					}
 					positiveNeighborValue = grid[x][y][positiveNeighborCoord];
 					if (positiveNeighborValue < value) {
@@ -247,6 +234,10 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 	
 	@Override
 	public long getFromPosition(int x, int y, int z) {
+		//Transform passed coordinates to grid coordinates
+		x = x < 0 ? xSideMinusOne + x%xSide : x%xSide;
+		y = y < 0 ? ySideMinusOne + y%ySide : y%ySide;
+		z = z < 0 ? zSideMinusOne + z%zSide : z%zSide;
 		return grid[x][y][z];
 	}
 	
@@ -301,8 +292,8 @@ public class Aether3DEnclosed2 implements LongModel3D, Serializable {
 
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/3D/enclosed/" + xSide + "x" + ySide + "x" + zSide 
-				+ "/(" + singleSourceX + "," + singleSourceY + "," + singleSourceZ + ")=" + singleSourceValue;
+		return getName() + "/3D/finite_grid/" + xSide + "x" + ySide + "x" + zSide 
+				+ "/" + singleSourceValue;
 	}
 
 	@Override
