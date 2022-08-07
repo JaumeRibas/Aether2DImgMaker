@@ -45,7 +45,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 	private static final BigInt SEVEN = BigInt.valueOf(7);
 
 	private final int side;
-	private final int originCoord;
+	private final int singleSourceCoord;
 	private final BigInt initialValue;
 	private long step;
 	/** A 3D array representing the grid */
@@ -64,8 +64,8 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		}
 		this.initialValue = initialValue;
 		this.side = side;
-		this.originCoord = side/2;
-		grid = Utils.buildAnisotropic3DBigIntArray(originCoord + 1);
+		this.singleSourceCoord = side/2;
+		grid = Utils.buildAnisotropic3DBigIntArray(singleSourceCoord + 1);
 		grid[0][0][0] = this.initialValue;
 		step = 0;
 		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
@@ -84,7 +84,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		initialValue = data.initialValue;
 		grid = data.grid;
 		side = data.side;
-		originCoord = data.originCoord;
+		singleSourceCoord = data.singleSourceCoord;
 		step = data.step;
 		creationTimestamp = data.creationTimestamp;
 	}
@@ -2779,9 +2779,9 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 	
 	@Override
 	public BigInt getFromPosition(int x, int y, int z) {	
-		int i = x - originCoord;
-		int j = y - originCoord;
-		int k = z - originCoord;
+		int i = x - singleSourceCoord;
+		int j = y - singleSourceCoord;
+		int k = z - singleSourceCoord;
 		if (i < 0) i = -i;
 		if (j < 0) j = -j;
 		if (k < 0) k = -k;
@@ -2823,9 +2823,9 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 	
 	@Override
 	public BigInt getFromAsymmetricPosition(int x, int y, int z) {	
-		int i = x - originCoord;
-		int j = y - originCoord;
-		int k = z - originCoord;
+		int i = x - singleSourceCoord;
+		int j = y - singleSourceCoord;
+		int k = z - singleSourceCoord;
 		return grid[i][j][k];
 	}
 	
@@ -2836,7 +2836,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 	public int getMaxX() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinX() { return originCoord; }
+	public int getAsymmetricMinX() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxX() { return side - 1; }
@@ -2866,13 +2866,13 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 	public int getMaxY() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinY() { return originCoord; }
+	public int getAsymmetricMinY() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxY() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinYAtX(int x) { return originCoord; }
+	public int getAsymmetricMinYAtX(int x) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxYAtX(int x) { return x; }
@@ -2896,25 +2896,25 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 	public int getMaxZ() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinZ() { return originCoord; }
+	public int getAsymmetricMinZ() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZ() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinZAtX(int x) { return originCoord; }
+	public int getAsymmetricMinZAtX(int x) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZAtX(int x) { return x; }
 
 	@Override
-	public int getAsymmetricMinZAtY(int y) { return originCoord; }
+	public int getAsymmetricMinZAtY(int y) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZAtY(int y) { return y; }
 
 	@Override
-	public int getAsymmetricMinZ(int x, int y) { return originCoord; }
+	public int getAsymmetricMinZ(int x, int y) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZ(int x, int y) { return y; }
@@ -2927,7 +2927,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 	/**
 	 * Returns the initial value
 	 * 
-	 * @return the value at the origin at step 0
+	 * @return the single source value
 	 */
 	public BigInt getInitialValue() {
 		return initialValue;
@@ -2945,7 +2945,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 
 	@Override
 	public String getSubfolderPath() {
-		String strInitialValue = "(" + originCoord + "," + originCoord + "," + originCoord + ")=" + initialValue.toString();
+		String strInitialValue = "(" + singleSourceCoord + "," + singleSourceCoord + "," + singleSourceCoord + ")=" + initialValue.toString();
 		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
 			strInitialValue = creationTimestamp;
 		return getName() + "/3D/bounded_grid/" + side + "x" + side + "x" + side + "/" + strInitialValue;

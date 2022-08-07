@@ -294,7 +294,7 @@ public class Aether3DBoundedGrid implements LongModel3D, Serializable {
 	/**
 	 * Returns the initial value
 	 * 
-	 * @return the value at the origin at step 0
+	 * @return the single source value
 	 */
 	public long getInitialValue() {
 		return singleSourceValue;

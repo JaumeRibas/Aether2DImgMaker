@@ -43,7 +43,7 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	private final boolean isPositive;
 	private long step;	
 	private final int side;
-	private final int originCoord;
+	private final int singleSourceCoord;
 	
 	public Aether3DInfinityCubicGrid(boolean isPositive, int side) {
 		if (side%2 == 0)
@@ -53,7 +53,7 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 		}
 		this.isPositive = isPositive;
 		this.side = side;
-		this.originCoord = side/2;
+		this.singleSourceCoord = side/2;
 		grid = Utils.buildAnisotropic3DBigFractionArray(side/2 + 1);
 		grid[0][0][0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		step = 0;
@@ -72,7 +72,7 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 		isPositive = data.isPositive;
 		grid = data.grid;
 		side = data.side;
-		originCoord = data.originCoord;
+		singleSourceCoord = data.singleSourceCoord;
 		step = data.step;
 	}
 
@@ -2415,9 +2415,9 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	
 	@Override
 	public BigFraction getFromPosition(int x, int y, int z) {	
-		int i = x - originCoord;
-		int j = y - originCoord;
-		int k = z - originCoord;
+		int i = x - singleSourceCoord;
+		int j = y - singleSourceCoord;
+		int k = z - singleSourceCoord;
 		if (i < 0) i = -i;
 		if (j < 0) j = -j;
 		if (k < 0) k = -k;
@@ -2459,9 +2459,9 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	
 	@Override
 	public BigFraction getFromAsymmetricPosition(int x, int y, int z) {	
-		int i = x - originCoord;
-		int j = y - originCoord;
-		int k = z - originCoord;
+		int i = x - singleSourceCoord;
+		int j = y - singleSourceCoord;
+		int k = z - singleSourceCoord;
 		return grid[i][j][k];
 	}
 	
@@ -2472,7 +2472,7 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	public int getMaxX() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinX() { return originCoord; }
+	public int getAsymmetricMinX() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxX() { return side - 1; }
@@ -2502,13 +2502,13 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	public int getMaxY() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinY() { return originCoord; }
+	public int getAsymmetricMinY() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxY() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinYAtX(int x) { return originCoord; }
+	public int getAsymmetricMinYAtX(int x) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxYAtX(int x) { return x; }
@@ -2532,25 +2532,25 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	public int getMaxZ() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinZ() { return originCoord; }
+	public int getAsymmetricMinZ() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZ() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinZAtX(int x) { return originCoord; }
+	public int getAsymmetricMinZAtX(int x) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZAtX(int x) { return x; }
 
 	@Override
-	public int getAsymmetricMinZAtY(int y) { return originCoord; }
+	public int getAsymmetricMinZAtY(int y) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZAtY(int y) { return y; }
 
 	@Override
-	public int getAsymmetricMinZ(int x, int y) { return originCoord; }
+	public int getAsymmetricMinZ(int x, int y) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZ(int x, int y) { return y; }
@@ -2573,7 +2573,7 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	@Override
 	public String getSubfolderPath() {
 		String path = getName() + "/3D/bounded_grid/" + side + "x" + side + "x" + side 
-				+ "/(" + originCoord + "," + originCoord + "," + originCoord + ")=";
+				+ "/(" + singleSourceCoord + "," + singleSourceCoord + "," + singleSourceCoord + ")=";
 		if (!isPositive) path += "-";
 		path += "infinity";
 		return path;

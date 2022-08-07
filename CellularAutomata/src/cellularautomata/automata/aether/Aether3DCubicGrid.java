@@ -40,7 +40,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
 
 	private final int side;
-	private final int originCoord;
+	private final int singleSourceCoord;
 	private final long initialValue;
 	private long step;
 	/** A 3D array representing the grid */
@@ -61,9 +61,9 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.side = side;
-		this.originCoord = side/2;
+		this.singleSourceCoord = side/2;
 		this.initialValue = initialValue;
-		grid = Utils.buildAnisotropic3DLongArray(originCoord + 1);
+		grid = Utils.buildAnisotropic3DLongArray(singleSourceCoord + 1);
 		grid[0][0][0] = this.initialValue;
 		step = 0;
 	}
@@ -82,7 +82,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 		initialValue = data.initialValue;
 		step = data.step;		
 		side = data.side;
-		originCoord = data.originCoord;
+		singleSourceCoord = data.singleSourceCoord;
 	}
 	
 	@Override
@@ -2726,9 +2726,9 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	
 	@Override
 	public long getFromPosition(int x, int y, int z) {	
-		int i = x - originCoord;
-		int j = y - originCoord;
-		int k = z - originCoord;
+		int i = x - singleSourceCoord;
+		int j = y - singleSourceCoord;
+		int k = z - singleSourceCoord;
 		if (i < 0) i = -i;
 		if (j < 0) j = -j;
 		if (k < 0) k = -k;
@@ -2770,9 +2770,9 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	
 	@Override
 	public long getFromAsymmetricPosition(int x, int y, int z) {	
-		int i = x - originCoord;
-		int j = y - originCoord;
-		int k = z - originCoord;
+		int i = x - singleSourceCoord;
+		int j = y - singleSourceCoord;
+		int k = z - singleSourceCoord;
 		return grid[i][j][k];
 	}
 	
@@ -2783,7 +2783,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	public int getMaxX() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinX() { return originCoord; }
+	public int getAsymmetricMinX() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxX() { return side - 1; }
@@ -2813,13 +2813,13 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	public int getMaxY() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinY() { return originCoord; }
+	public int getAsymmetricMinY() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxY() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinYAtX(int x) { return originCoord; }
+	public int getAsymmetricMinYAtX(int x) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxYAtX(int x) { return x; }
@@ -2843,25 +2843,25 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	public int getMaxZ() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinZ() { return originCoord; }
+	public int getAsymmetricMinZ() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZ() { return getAsymmetricMaxX(); }
 
 	@Override
-	public int getAsymmetricMinZAtX(int x) { return originCoord; }
+	public int getAsymmetricMinZAtX(int x) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZAtX(int x) { return x; }
 
 	@Override
-	public int getAsymmetricMinZAtY(int y) { return originCoord; }
+	public int getAsymmetricMinZAtY(int y) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZAtY(int y) { return y; }
 
 	@Override
-	public int getAsymmetricMinZ(int x, int y) { return originCoord; }
+	public int getAsymmetricMinZ(int x, int y) { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxZ(int x, int y) { return y; }
@@ -2874,7 +2874,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	/**
 	 * Returns the initial value
 	 * 
-	 * @return the value at the origin at step 0
+	 * @return the single source value
 	 */
 	public long getInitialValue() {
 		return initialValue;
@@ -2888,7 +2888,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	@Override
 	public String getSubfolderPath() {
 		return getName() + "/3D/bounded_grid/" + side + "x" + side + "x" + side 
-				+ "/(" + originCoord + "," + originCoord + "," + originCoord + ")=" + initialValue;
+				+ "/(" + singleSourceCoord + "," + singleSourceCoord + "," + singleSourceCoord + ")=" + initialValue;
 	}
 
 	@Override

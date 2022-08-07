@@ -45,7 +45,7 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 	private final boolean isPositive;
 	private long step;
 	private final int size;
-	private final int originCoord;
+	private final int singleSourceCoord;
 	
 	public Aether1DInfinityBoundedGridCenterSource(int size, boolean isPositive) {
 		if (size%2 == 0)
@@ -55,8 +55,8 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 		}
 		this.isPositive = isPositive;
 		this.size = size;
-		this.originCoord = size/2;
-		grid = new BigFraction[originCoord + 1];
+		this.singleSourceCoord = size/2;
+		grid = new BigFraction[singleSourceCoord + 1];
 		Arrays.fill(grid, BigFraction.ZERO);
 		grid[0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		step = 0;
@@ -75,7 +75,7 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 		isPositive = data.isPositive;
 		grid = data.grid;
 		size = data.size;
-		originCoord = data.originCoord;
+		singleSourceCoord = data.singleSourceCoord;
 		step = data.step;
 	}
 	
@@ -231,7 +231,7 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 	
 	@Override
 	public BigFraction getFromPosition(int x) {	
-		int i = x - originCoord;
+		int i = x - singleSourceCoord;
 		if (i < 0) i = -i;
 		if (i < grid.length) {
 			return grid[i];
@@ -242,11 +242,11 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 
 	@Override
 	public BigFraction getFromAsymmetricPosition(int x) {
-		return grid[x - originCoord];
+		return grid[x - singleSourceCoord];
 	}
 
 	@Override
-	public int getAsymmetricMinX() { return originCoord; }
+	public int getAsymmetricMinX() { return singleSourceCoord; }
 
 	@Override
 	public int getAsymmetricMaxX() {
@@ -275,7 +275,7 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 
 	@Override
 	public String getSubfolderPath() {
-		String path = getName() + "/1D/bounded_grid/" + size + "/(" + originCoord + ")=";
+		String path = getName() + "/1D/bounded_grid/" + size + "/(" + singleSourceCoord + ")=";
 		if (!isPositive) path += "-";
 		path += "infinity";
 		return path;
