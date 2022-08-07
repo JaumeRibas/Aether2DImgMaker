@@ -35,12 +35,12 @@ import cellularautomata.automata.aether.Aether1D;
 import cellularautomata.automata.aether.Aether2D;
 import cellularautomata.automata.aether.IntAether2DRandomConfiguration;
 import cellularautomata.automata.aether.Aether3D;
-import cellularautomata.automata.aether.Aether3DEnclosed;
+import cellularautomata.automata.aether.Aether3DCubicGrid;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.Aether5D;
 import cellularautomata.automata.aether.BigIntAether2D;
 import cellularautomata.automata.aether.BigIntAether3D;
-import cellularautomata.automata.aether.BigIntAether3DEnclosed;
+import cellularautomata.automata.aether.BigIntAether3DCubicGrid;
 import cellularautomata.automata.aether.BigIntAether4D;
 import cellularautomata.automata.aether.FileBackedAether1D;
 import cellularautomata.automata.aether.FileBackedAether2D;
@@ -830,20 +830,20 @@ public class AetherImgMaker {
 					} else {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) { 
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3DEnclosed.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3DEnclosed.MIN_INITIAL_VALUE)) >= 0) {
-									model = new Aether3DEnclosed(args.initialConfiguration.singleSource.longValue(), args.grid.side);
+								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3DCubicGrid.MAX_INITIAL_VALUE)) <= 0
+										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3DCubicGrid.MIN_INITIAL_VALUE)) >= 0) {
+									model = new Aether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource.longValue());
 								} else {
-									model = new BigIntAether3DEnclosed(args.initialConfiguration.singleSource, args.grid.side);
+									model = new BigIntAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource);
 								}
 							} else {
 								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
 							}
 						} else {
 							try {
-								model = new Aether3DEnclosed(args.backupToRestorePath);							
+								model = new Aether3DCubicGrid(args.backupToRestorePath);							
 							} catch (Exception ex1) {
-								model = new BigIntAether3DEnclosed(args.backupToRestorePath);			
+								model = new BigIntAether3DCubicGrid(args.backupToRestorePath);			
 							}
 						}
 					}
