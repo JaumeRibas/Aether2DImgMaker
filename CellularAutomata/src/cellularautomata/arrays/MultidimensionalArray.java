@@ -38,7 +38,7 @@ public interface MultidimensionalArray {
 		long positionCount = 0;
 		int dimension = getDimension();
 		if (dimension < 0) {
-			throw new IllegalArgumentException("Dimension cannot be smaller than zero.");
+			throw new UnsupportedOperationException("Dimension cannot be smaller than zero.");
 		}
 		if (dimension == 0) {
 			positionCount++;
