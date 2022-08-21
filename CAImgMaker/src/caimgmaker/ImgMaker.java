@@ -1544,10 +1544,10 @@ public class ImgMaker {
 		for (int y = framedModelMaxY; y >= framedModelMinY; y--) {
 			int gridMinXAtY = grid.getMinX(y);
 			int gridMaxXAtY = grid.getMaxX(y);
-			int gridLeftMargin = 0, gridRightMargin = 0;
+			int dataLeftMargin = 0, gridRightMargin = 0;
 			int framedModelMinXAtY, framedModelMaxXAtY;
 			if (minX < gridMinXAtY) {
-				gridLeftMargin = (gridMinXAtY - minX) * gridPositionSize;
+				dataLeftMargin = (gridMinXAtY - minX) * gridPositionSize * 3;
 				framedModelMinXAtY = gridMinXAtY;
 			} else {
 				framedModelMinXAtY = minX;
@@ -1558,18 +1558,30 @@ public class ImgMaker {
 			} else {
 				framedModelMaxXAtY = maxX;
 			}
-			for (int i = 0; i < gridPositionSize; i++) {
-				dataIndex += gridLeftMargin * 3;
+			int dataRightMargin = (canvasRightMargin + gridRightMargin) * 3;
+			dataIndex += dataLeftMargin;
+			int firstDataIndexToCopyFrom = dataIndex;
+			for (int x = framedModelMinXAtY; x <= framedModelMaxXAtY; x++) {
+				java.awt.Color c = grid.getFromPosition(x, y);
+				byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = r;
+					pixelData[dataIndex++] = g;
+					pixelData[dataIndex++] = b;
+				}				
+			}
+			dataIndex += dataRightMargin;
+			for (int i = 1; i < gridPositionSize; i++) {
+				dataIndex += dataLeftMargin;
+				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
 				for (int x = framedModelMinXAtY; x <= framedModelMaxXAtY; x++) {
-					java.awt.Color c = grid.getFromPosition(x, y);
-					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = r;
-						pixelData[dataIndex++] = g;
-						pixelData[dataIndex++] = b;
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 					}				
 				}
-				dataIndex += (canvasRightMargin + gridRightMargin) * 3;
+				dataIndex += dataRightMargin;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
@@ -1628,19 +1640,30 @@ public class ImgMaker {
 		for (int y = maxY; y >= minY; y--) {
 			int localMinX = grid.getMinX(y);
 			int localMaxX = grid.getMaxX(y);
-			int localLeftMargin = (localMinX - minX)  * gridPositionSize;
-			int localRightMargin = rightMargin + ((maxX - localMaxX) * gridPositionSize);
-			for (int i = 0; i < gridPositionSize; i++) {
-				dataIndex += 3 * localLeftMargin;
+			int localLeftMargin = (localMinX - minX)  * gridPositionSize * 3;
+			int localRightMargin = (rightMargin + ((maxX - localMaxX) * gridPositionSize)) * 3;
+			dataIndex += localLeftMargin;
+			int firstDataIndexToCopyFrom = dataIndex;
+			for (int x = localMinX; x <= localMaxX; x++) {
+				java.awt.Color c = grid.getFromPosition(x,y);
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = (byte) c.getRed();
+					pixelData[dataIndex++] = (byte) c.getGreen();
+					pixelData[dataIndex++] = (byte) c.getBlue();
+				}
+			}
+			dataIndex += localRightMargin;
+			for (int i = 1; i < gridPositionSize; i++) {
+				dataIndex += localLeftMargin;
+				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
 				for (int x = localMinX; x <= localMaxX; x++) {
-					java.awt.Color c = grid.getFromPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = (byte) c.getRed();
-						pixelData[dataIndex++] = (byte) c.getGreen();
-						pixelData[dataIndex++] = (byte) c.getBlue();
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 					}
 				}
-				dataIndex += 3 * localRightMargin;
+				dataIndex += localRightMargin;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
@@ -1665,7 +1688,8 @@ public class ImgMaker {
 		byte[] pixelData = new byte[byteCount];
 		int topMargin = height - dataHeight;
 		int rightMargin = width - dataWidth;
-		int dataIndex = topMargin * width * 3;		
+		int dataIndex = topMargin * width * 3;
+		int gridPositionSizeTimes3 = gridPositionSize * 3;
 		for (int y = maxY; y >= minY; y--) {
 			int localMinX = grid.getMinX(y);
 			int localMaxX = grid.getMaxX(y);
@@ -1673,29 +1697,50 @@ public class ImgMaker {
 			if (isEven != isPositionEven) { 
 				localMinX++;
 			}
-			int localLeftMargin = (localMinX - minX)  * gridPositionSize;
-			int localRightMargin = rightMargin + ((maxX - localMaxX) * gridPositionSize);
-			for (int i = 0; i < gridPositionSize; i++) {
-				dataIndex += 3 * localLeftMargin;
-				int x = localMinX;
+			int localLeftMargin = (localMinX - minX)  * gridPositionSizeTimes3;
+			int localRightMargin = (rightMargin + ((maxX - localMaxX) * gridPositionSize)) * 3;
+			dataIndex += localLeftMargin;
+			int firstDataIndexToCopyFrom = dataIndex;
+			int x = localMinX;
+			for (; x < localMaxX; x+=2) {
+				java.awt.Color c = grid.getFromPosition(x,y);
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = (byte) c.getRed();
+					pixelData[dataIndex++] = (byte) c.getGreen();
+					pixelData[dataIndex++] = (byte) c.getBlue();
+				}
+				dataIndex += gridPositionSizeTimes3;
+			}
+			if (x == localMaxX) {
+				java.awt.Color c = grid.getFromPosition(x,y);
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = (byte) c.getRed();
+					pixelData[dataIndex++] = (byte) c.getGreen();
+					pixelData[dataIndex++] = (byte) c.getBlue();
+				}
+			}
+			dataIndex += localRightMargin;
+			for (int i = 1; i < gridPositionSize; i++) {
+				dataIndex += localLeftMargin;
+				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
+				x = localMinX;
 				for (; x < localMaxX; x+=2) {
-					java.awt.Color c = grid.getFromPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = (byte) c.getRed();
-						pixelData[dataIndex++] = (byte) c.getGreen();
-						pixelData[dataIndex++] = (byte) c.getBlue();
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 					}
-					dataIndex += 3 * gridPositionSize;
+					dataIndex += gridPositionSizeTimes3;
+					dataIndexToCopyFrom += gridPositionSizeTimes3;
 				}
 				if (x == localMaxX) {
-					java.awt.Color c = grid.getFromPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = (byte) c.getRed();
-						pixelData[dataIndex++] = (byte) c.getGreen();
-						pixelData[dataIndex++] = (byte) c.getBlue();
+						pixelData[dataIndex++] =  pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] =  pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] =  pixelData[dataIndexToCopyFrom++];
 					}
 				}
-				dataIndex += 3 * localRightMargin;
+				dataIndex += localRightMargin;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
@@ -1742,6 +1787,7 @@ public class ImgMaker {
 			framedModelMinY = minY;
 		}
 		int dataIndex = (canvasTopMargin + gridTopMargin) * width * 3;
+		int gridPositionSizeTimes3 = gridPositionSize * 3;
 		for (int y = framedModelMaxY; y >= framedModelMinY; y--) {
 			int gridMinXAtY = grid.getMinX(y);
 			int gridMaxXAtY = grid.getMaxX(y);
@@ -1759,32 +1805,55 @@ public class ImgMaker {
 			} else {
 				framedModelMaxXAtY = maxX;
 			}
+			int dataRightMargin = (canvasRightMargin + gridRightMargin) * 3;
 			boolean isPositionEven = (framedModelMinXAtY+y)%2 == 0;
 			if (isEven != isPositionEven) { 
 				framedModelMinXAtY++;
 				gridLeftMargin += gridPositionSize;
 			}
-			for (int i = 0; i < gridPositionSize; i++) {
-				dataIndex += gridLeftMargin * 3;
-				int x = framedModelMinXAtY;
+			int dataLeftMargin = gridLeftMargin * 3;
+			dataIndex += dataLeftMargin;
+			int firstDataIndexToCopyFrom = dataIndex;
+			int x = framedModelMinXAtY;
+			for (; x < framedModelMaxXAtY; x+=2) {
+				java.awt.Color c = grid.getFromPosition(x,y);
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = (byte) c.getRed();
+					pixelData[dataIndex++] = (byte) c.getGreen();
+					pixelData[dataIndex++] = (byte) c.getBlue();
+				}
+				dataIndex += gridPositionSizeTimes3;
+			}
+			if (x == framedModelMaxXAtY) {
+				java.awt.Color c = grid.getFromPosition(x,y);
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = (byte) c.getRed();
+					pixelData[dataIndex++] = (byte) c.getGreen();
+					pixelData[dataIndex++] = (byte) c.getBlue();
+				}
+			}
+			dataIndex += dataRightMargin;
+			for (int i = 1; i < gridPositionSize; i++) {
+				dataIndex += dataLeftMargin;
+				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
+				x = framedModelMinXAtY;
 				for (; x < framedModelMaxXAtY; x+=2) {
-					java.awt.Color c = grid.getFromPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = (byte) c.getRed();
-						pixelData[dataIndex++] = (byte) c.getGreen();
-						pixelData[dataIndex++] = (byte) c.getBlue();
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 					}
-					dataIndex += 3 * gridPositionSize;
+					dataIndex += gridPositionSizeTimes3;
+					dataIndexToCopyFrom += gridPositionSizeTimes3;
 				}
 				if (x == framedModelMaxXAtY) {
-					java.awt.Color c = grid.getFromPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = (byte) c.getRed();
-						pixelData[dataIndex++] = (byte) c.getGreen();
-						pixelData[dataIndex++] = (byte) c.getBlue();
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 					}
 				}
-				dataIndex += (canvasRightMargin + gridRightMargin) * 3;
+				dataIndex += dataRightMargin;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
@@ -1824,6 +1893,7 @@ public class ImgMaker {
 			framedModelMinY = minY;
 		}
 		int dataIndex = (canvasTopMargin + gridTopMargin) * width * 3;
+		int gridPositionSizeTimes3 = gridPositionSize * 3;
 		for (int y = framedModelMaxY; y >= framedModelMinY; y--) {
 			int gridMinXAtY = grid.getMinX(y);
 			int gridMaxXAtY = grid.getMaxX(y);
@@ -1841,32 +1911,55 @@ public class ImgMaker {
 			} else {
 				framedModelMaxXAtY = maxX;
 			}
+			int dataRightMargin = (canvasRightMargin + gridRightMargin) * 3;
 			boolean isXEven = framedModelMinXAtY%2 == 0;
 			if (isEven != isXEven) { 
 				framedModelMinXAtY++;
 				gridLeftMargin += gridPositionSize;
 			}
-			for (int i = 0; i < gridPositionSize; i++) {
-				dataIndex += gridLeftMargin * 3;
-				int x = framedModelMinXAtY;
+			int dataLeftMargin = gridLeftMargin * 3;
+			dataIndex += dataLeftMargin;
+			int firstDataIndexToCopyFrom = dataIndex;
+			int x = framedModelMinXAtY;
+			for (; x < framedModelMaxXAtY; x+=2) {
+				java.awt.Color c = grid.getFromPosition(x,y);
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = (byte) c.getRed();
+					pixelData[dataIndex++] = (byte) c.getGreen();
+					pixelData[dataIndex++] = (byte) c.getBlue();
+				}
+				dataIndex += gridPositionSizeTimes3;
+			}
+			if (x == framedModelMaxXAtY) {
+				java.awt.Color c = grid.getFromPosition(x,y);
+				for (int j = 0; j < gridPositionSize; j++) {
+					pixelData[dataIndex++] = (byte) c.getRed();
+					pixelData[dataIndex++] = (byte) c.getGreen();
+					pixelData[dataIndex++] = (byte) c.getBlue();
+				}
+			}
+			dataIndex += dataRightMargin;
+			for (int i = 1; i < gridPositionSize; i++) {
+				dataIndex += dataLeftMargin;
+				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
+				x = framedModelMinXAtY;
 				for (; x < framedModelMaxXAtY; x+=2) {
-					java.awt.Color c = grid.getFromPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = (byte) c.getRed();
-						pixelData[dataIndex++] = (byte) c.getGreen();
-						pixelData[dataIndex++] = (byte) c.getBlue();
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 					}
-					dataIndex += 3 * gridPositionSize;
+					dataIndex += gridPositionSizeTimes3;
+					dataIndexToCopyFrom += gridPositionSizeTimes3;
 				}
 				if (x == framedModelMaxXAtY) {
-					java.awt.Color c = grid.getFromPosition(x,y);
 					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = (byte) c.getRed();
-						pixelData[dataIndex++] = (byte) c.getGreen();
-						pixelData[dataIndex++] = (byte) c.getBlue();
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 					}
 				}
-				dataIndex += (canvasRightMargin + gridRightMargin) * 3;
+				dataIndex += dataRightMargin;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
@@ -1910,10 +2003,10 @@ public class ImgMaker {
 		for (int y = framedModelMaxY; y >= framedModelMinY; y--, isYEven = !isYEven) {
 			int gridMinXAtY = grid.getMinX(y);
 			int gridMaxXAtY = grid.getMaxX(y);
-			int gridLeftMargin = 0, gridRightMargin = 0;
+			int dataLeftMargin = 0, gridRightMargin = 0;
 			int framedModelMinXAtY, framedModelMaxXAtY;
 			if (minX < gridMinXAtY) {
-				gridLeftMargin = (gridMinXAtY - minX) * gridPositionSize;
+				dataLeftMargin = (gridMinXAtY - minX) * gridPositionSize * 3;
 				framedModelMinXAtY = gridMinXAtY;
 			} else {
 				framedModelMinXAtY = minX;
@@ -1924,22 +2017,34 @@ public class ImgMaker {
 			} else {
 				framedModelMaxXAtY = maxX;
 			}
+			int dataRightMargin = (canvasRightMargin + gridRightMargin) * 3;
 			if (isEven == isYEven) {
-				for (int i = 0; i < gridPositionSize; i++) {
-					dataIndex += gridLeftMargin * 3;
+				dataIndex += dataLeftMargin;
+				int firstDataIndexToCopyFrom = dataIndex;
+				for (int x = framedModelMinXAtY; x <= framedModelMaxXAtY; x++) {
+					java.awt.Color c = grid.getFromPosition(x, y);
+					byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
+					for (int j = 0; j < gridPositionSize; j++) {
+						pixelData[dataIndex++] = r;
+						pixelData[dataIndex++] = g;
+						pixelData[dataIndex++] = b;
+					}				
+				}
+				dataIndex += dataRightMargin;
+				for (int i = 1; i < gridPositionSize; i++) {
+					dataIndex += dataLeftMargin;
+					int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
 					for (int x = framedModelMinXAtY; x <= framedModelMaxXAtY; x++) {
-						java.awt.Color c = grid.getFromPosition(x, y);
-						byte r = (byte) c.getRed(), g = (byte) c.getGreen(), b = (byte) c.getBlue();
 						for (int j = 0; j < gridPositionSize; j++) {
-							pixelData[dataIndex++] = r;
-							pixelData[dataIndex++] = g;
-							pixelData[dataIndex++] = b;
+							pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+							pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
+							pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 						}				
 					}
-					dataIndex += (canvasRightMargin + gridRightMargin) * 3;
+					dataIndex += dataRightMargin;
 				}
 			} else {
-				dataIndex += ((gridLeftMargin * 3) + ((framedModelMaxXAtY - framedModelMinXAtY + 1) * gridPositionSize * 3) + ((canvasRightMargin + gridRightMargin) * 3)) * gridPositionSize;
+				dataIndex += (dataLeftMargin + ((framedModelMaxXAtY - framedModelMinXAtY + 1) * gridPositionSize * 3) + dataRightMargin) * gridPositionSize;
 			}
 		}
 		saveAsPngImage(pixelData, width, height, path, name);
