@@ -267,13 +267,7 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 	
 	@Override
 	public int getAsymmetricMaxCoordinate(int axis) {
-		//side >= c1 >= c2... >= cN >= 0
 		return grid.getSide() - 1;
-	}
-
-	@Override
-	public int getAsymmetricMinCoordinate(int axis) {
-		return 0;
 	}
 
 	@Override
