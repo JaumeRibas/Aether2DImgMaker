@@ -39,7 +39,7 @@ public class Args {
 	@Parameter(names = { "-asymmetric" }, description = "Generate images only of an asymmetric section of a symmetric model.")
 	public boolean asymmetric = false;
 	
-	//TODO coordinate-filters option. c1[0,max],c2=10,c3=c1+5,c4=-c5
+	//TODO coordinate-filters option. x1[0,max],x2=10,x3=x1+5,x4=-x5
 	
 	@Parameter(names = { "-v" }, validateWith = CoordinateValidator.class, converter = CoordianteConverter.class, description = "The app generates images from this v-coordinate. It can be either an integer (e.g. '0'), an integer range (e.g. '[0,100]'), another coordinate (e.g. 'x') or another coordinate plus/minus an integer (e.g. 'x+2'). Only applies to models with dimension greater than four.")
 	public CoordinateOptionValue v = null;
@@ -68,10 +68,10 @@ public class Args {
 	@Parameter(names = { "-restore" }, description = "The path of the backup to restore. Mandatory when no initial configuration is passed and the selected -model requires one.")
     public String backupToRestorePath = null;
 	
-	@Parameter(names = { "-first-step" }, validateWith = PositiveIntegerValidator.class, description = "The app skips ahead to this step without generating images.")
+	@Parameter(names = { "-first-step" }, validateWith = NonNegativeIntegerValidator.class, description = "The app skips ahead to this step without generating images.")
 	public long initialStep = 0;
 
-	@Parameter(names = { "-backup-every" }, validateWith = PositiveIntegerValidator.class, description = "The preferred number of millisencods between automatic backups.")
+	@Parameter(names = { "-backup-every" }, validateWith = GreaterThanZeroIntegerValidator.class, description = "The preferred number of millisencods between automatic backups.")
 	public Long millisBetweenBackups;
 	
 	@Parameter(names = { "-scan1-start" }, description = "The scan1 will start at this coordinate. Only applies to models with dimension greater than two.")
