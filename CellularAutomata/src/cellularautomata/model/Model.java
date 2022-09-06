@@ -301,6 +301,28 @@ public interface Model {
 			partialCoordinates[axis] = coord;
 		}
 		return true;
+	}	
+	
+	/**
+	 * Checks whether or not a set of partial coordinates are within the grid bounds.
+	 * 
+	 * @param coordinates
+	 * @return
+	 */
+	default boolean isWithinBounds(PartialCoordinates coordinates) {
+		int coordCount = coordinates.getCount();
+		Integer[] partialCoordinates = new Integer[coordCount];
+		for (int axis = 0; axis < coordCount; axis++) {
+			Integer coord = coordinates.get(axis);
+			if (coord != null) {
+				PartialCoordinates pc = new PartialCoordinates(partialCoordinates);
+				if (coord < getMinCoordinate(axis, pc) || coord > getMaxCoordinate(axis, pc)) {
+					return false;
+				}
+				partialCoordinates[axis] = coord;
+			}
+		}
+		return true;
 	}
 	
 	/**
