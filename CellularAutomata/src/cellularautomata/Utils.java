@@ -32,6 +32,7 @@ import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.ObjectModel1D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.ObjectModel2D;
 import cellularautomata.numbers.BigInt;
 
@@ -965,6 +966,34 @@ public class Utils {
 			}
 			for (; x <= maxX; x++) {
 				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(Model2D grid) throws Exception {
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += "-+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("| ");
+			}
+			for (; x <= localMaxX; x++) {
+				System.out.print("|#");
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("| ");
 			}
 			System.out.println("|");
 		}
