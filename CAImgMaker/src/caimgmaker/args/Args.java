@@ -70,6 +70,9 @@ public class Args {
 	
 	@Parameter(names = { "-first-step" }, validateWith = NonNegativeIntegerValidator.class, description = "The app skips ahead to this step without generating images.")
 	public long initialStep = 0;
+	
+	@Parameter(names = { "-step-leap" }, validateWith = GreaterThanZeroIntegerValidator.class, description = "The app will generate images every this number of steps.")
+	public int steapLeap = 1;
 
 	@Parameter(names = { "-backup-every" }, validateWith = GreaterThanZeroIntegerValidator.class, description = "The preferred number of millisencods between automatic backups.")
 	public Long millisBetweenBackups;
