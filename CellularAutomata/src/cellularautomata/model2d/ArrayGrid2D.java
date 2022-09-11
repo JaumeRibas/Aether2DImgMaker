@@ -75,12 +75,12 @@ public abstract class ArrayGrid2D implements Model2D {
 				int localMinY = localYMinima[i];
 				if (minimaAscending) {
 					if (localMinY < previousLocalMinY) {
-						//cross sections could break
+						//bounds would break
 						throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
 					} else if (minimaHasLeapGreaterThanOneOnAscendingSide) {
 						if (localMinY == previousLocalMinY) {
 							//diagonal cross sections could break
-							throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+							throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
 						}
 					} else if (localMinY - previousLocalMinY > 1) {
 						minimaHasLeapGreaterThanOneOnAscendingSide = true;
@@ -106,7 +106,7 @@ public abstract class ArrayGrid2D implements Model2D {
 				int localMaxY = localYMaxima[i];
 				if (maximaDescending) {
 					if (localMaxY > previousLocalMaxY) {
-						//cross sections could break
+						//bounds would break
 						throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
 					} else if (maximaHasLeapGreaterThanOnDescendingSide) {
 						if (localMaxY == previousLocalMaxY) {
