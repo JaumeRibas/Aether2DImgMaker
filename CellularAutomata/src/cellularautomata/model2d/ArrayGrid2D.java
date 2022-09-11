@@ -17,7 +17,8 @@
 package cellularautomata.model2d;
 
 /**
- * Represents a fixed size convex 2D region of a grid backed by a 2D array.
+ * Represents a finite 2D region of a grid backed by a 2D array.
+ * The shape of the region is such that no line parallel to an axis, or at a 45° angle of an axis, overlaps with it along more than one segment.
  * 
  * @author Jaume
  *
@@ -30,7 +31,7 @@ public abstract class ArrayGrid2D implements Model2D {
 	protected int minY;
 	protected int maxY;
 	
-	private static final String UNSUPPORTED_SHAPE_ERROR = "The region must be convex.";
+	private static final String UNSUPPORTED_SHAPE_ERROR = "The shape of the region must be such that no line parallel to an axis, or at a 45° angle of an axis, overlaps with it along more than one segment.";
 	
 	/**
 	 * Constructs an {@code ArrayGrid2D} with the specified bounds
@@ -53,34 +54,84 @@ public abstract class ArrayGrid2D implements Model2D {
 	}
 	
 	/**
-	 * Get absolute y bounds and validate convexity
+	 * Get absolute y bounds and validate shape
 	 * 
 	 * @param localYMaxima
 	 */
 	protected void getYBounds(int[] localYMaxima) {
 		if (localYMinima.length > 2) {
-			minY = Math.min(localYMinima[0], localYMinima[1]);
-			maxY = Math.max(localYMaxima[0], localYMaxima[1]);
-			long previousLocalMinimaSlope = localYMinima[1] - localYMinima[0];
-			long previousLocalMaximaSlope = localYMaxima[1] - localYMaxima[0];		
-			int previousLocalMinY = localYMinima[1];
-			int previousLocalMaxY = localYMaxima[1];
-			for (int i = 2; i < localYMinima.length; i++) {
+			boolean minimaAscending = false;
+			boolean minimaHasFlatIntervalOnDescendingSide = false;
+			boolean minimaHasLeapGreaterThanOneOnAscendingSide = false;
+			boolean maximaDescending = false;
+			boolean maximaHasFlatIntervalOnAscendingSide = false;
+			boolean maximaHasLeapGreaterThanOnDescendingSide = false;
+			minY = localYMinima[0];
+			maxY = localYMaxima[0];
+			int previousLocalMinY = minY;
+			int previousLocalMaxY = maxY;
+			for (int i = 1; i < localYMinima.length; i++) {
+				//minima
 				int localMinY = localYMinima[i];
-				int localMaxY = localYMaxima[i];
-				minY = Math.min(minY, localMinY);
-				maxY = Math.max(maxY, localMaxY);
-				long localMinimaSlope = localMinY - previousLocalMinY;
-				long localMaximaSlope = localMaxY - previousLocalMaxY;
-				if (localMinimaSlope < previousLocalMinimaSlope) {
-					throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
+				if (minimaAscending) {
+					if (localMinY < previousLocalMinY) {
+						//cross sections could break
+						throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
+					} else if (minimaHasLeapGreaterThanOneOnAscendingSide) {
+						if (localMinY == previousLocalMinY) {
+							//diagonal cross sections could break
+							throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+						}
+					} else if (localMinY - previousLocalMinY > 1) {
+						minimaHasLeapGreaterThanOneOnAscendingSide = true;
+					}
+				} else if (localMinY > previousLocalMinY) {
+					minimaAscending = true;
+					if (localMinY - previousLocalMinY > 1) {
+						minimaHasLeapGreaterThanOneOnAscendingSide = true;
+					}
+				} else {
+					if (minimaHasFlatIntervalOnDescendingSide) {
+						if (localMinY - previousLocalMinY < -1) {
+							//diagonal cross sections could break
+							throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
+						}
+					} else if (localMinY == previousLocalMinY) {
+						minimaHasFlatIntervalOnDescendingSide = true;
+					}
+					minY = localMinY;
 				}
-				if (localMaximaSlope > previousLocalMaximaSlope) {
-					throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
-				}
-				previousLocalMinimaSlope = localMinimaSlope;
-				previousLocalMaximaSlope = localMaximaSlope;		
 				previousLocalMinY = localMinY;
+				//maxima
+				int localMaxY = localYMaxima[i];
+				if (maximaDescending) {
+					if (localMaxY > previousLocalMaxY) {
+						//cross sections could break
+						throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+					} else if (maximaHasLeapGreaterThanOnDescendingSide) {
+						if (localMaxY == previousLocalMaxY) {
+							//diagonal cross sections could break
+							throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+						}
+					} else if (localMaxY - previousLocalMaxY < -1) {
+						maximaHasLeapGreaterThanOnDescendingSide = true;
+					}
+				} else if (localMaxY < previousLocalMaxY) {
+					maximaDescending = true;
+					if (localMaxY - previousLocalMaxY < -1) {
+						maximaHasLeapGreaterThanOnDescendingSide = true;
+					}
+				} else {
+					if (maximaHasFlatIntervalOnAscendingSide) {
+						if (localMaxY - previousLocalMaxY > 1) {
+							//diagonal cross sections could break
+							throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+						}
+					} else if (localMaxY == previousLocalMaxY) {
+						maximaHasFlatIntervalOnAscendingSide = true;
+					}
+					maxY = localMaxY;
+				}
 				previousLocalMaxY = localMaxY;
 			}
 		} else {

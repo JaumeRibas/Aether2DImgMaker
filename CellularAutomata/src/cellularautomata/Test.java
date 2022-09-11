@@ -770,7 +770,7 @@ public class Test {
 			grid = new ArrayIntGrid2D(Integer.MAX_VALUE, new int[99999], new int[99999][1]);
 		} catch(Exception ex) { 
 			ex.printStackTrace(System.out);}
-		System.out.println("not convex");
+		System.out.println("unsupported shapes");
 		try {
 			grid = new ArrayIntGrid2D(0, new int[] {0, 0, -2, 0, 0}, new int[][] { {1}, {1}, {1, 1, 1, 1, 1}, {1}, {1} });
 		} catch(Exception ex) { 
@@ -788,13 +788,16 @@ public class Test {
 			System.out.println("single dot");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[1], new int[][] {{1}});
 			Utils.printAsGrid(grid);
-			System.out.println("single line, horiz, vert, diagonal");
+			System.out.println("single line horiz");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[5], new int[][] { {1}, {1}, {1}, {1}, {1} });
 			Utils.printAsGrid(grid);
+			System.out.println("single line vert");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[1], new int[][] { {1, 1, 1, 1, 1 } });
 			Utils.printAsGrid(grid);
+			System.out.println("single line diagonal");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {-2, -1, 0, 1, 2 }, new int[][] { {1}, {1}, {1}, {1}, {1} });
 			Utils.printAsGrid(grid);
+			System.out.println("single line diagonal inverted");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {2, 1, 0, -1, -2 }, new int[][] { {1}, {1}, {1}, {1}, {1} });
 			Utils.printAsGrid(grid);
 			System.out.println("tilted square");
@@ -963,6 +966,10 @@ public class Test {
 				compare(diagonal, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
 			}
 		}
+	}
+	
+	public static void testDiagonals(int dimension) throws Exception {
+		//TODO
 	}
 	
 	public static void compare(IntModel2D grid, int[][] array, int xOffset, int yOffset) throws Exception {

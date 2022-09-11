@@ -25,7 +25,8 @@ import cellularautomata.PartialCoordinates;
 import cellularautomata.Utils;
 
 /**
- * A model consisting of a finite convex region of an n-dimensional grid whose shape, size and configuration evolve in discrete time steps.
+ * A model consisting of a finite region of an n-dimensional grid whose shape, size and configuration evolve in discrete time steps.
+ * The shape of the region always meets the condition that no line parallel to an axis, or at a 45° angle of an axis, overlaps with it along more than one segment.
  *  
  * @author Jaume
  *

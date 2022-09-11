@@ -857,7 +857,7 @@ public class AetherImgMaker {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								//TODO use swap implementations depending on asymmetric and single source options and available heap space?
+								//TODO use memory safe implementations depending on asymmetric and single source options and available heap space?
 								//long heapFreeSize = Runtime.getRuntime().freeMemory();
 								if (args.memorySafe) {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether4D.MAX_INITIAL_VALUE)) <= 0
@@ -899,7 +899,7 @@ public class AetherImgMaker {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								//TODO use swap implementations depending on asymmetric and single source options and available heap space?
+								//TODO use memory safe implementations depending on asymmetric and single source options and available heap space?
 								//long heapFreeSize = Runtime.getRuntime().freeMemory();
 								if (args.memorySafe) {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether5D.MAX_INITIAL_VALUE)) <= 0
