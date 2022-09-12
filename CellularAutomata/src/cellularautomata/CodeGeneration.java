@@ -30,11 +30,9 @@ public class CodeGeneration {
 	}
 	
 	public static void printBoundsMethodsForAnisotropicGrid(int dimension) {
-		int[] axes = new int[dimension];
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
 		for (int axis = 0; axis < dimension; axis++) {
-			axes[axis] = axis;
 			axisLabels[axis] = Utils.getAxisLabel(dimension, axis);
 			axisUpperCaseLabels[axis] = Utils.getUpperCaseAxisLabel(dimension, axis);
 		}
@@ -155,11 +153,9 @@ public class CodeGeneration {
 	
 	public static void printBoundsMethodsForIsotropicHypercubicGrid(int dimension) {
 		if (dimension > 0) {
-			int[] axes = new int[dimension];
 			String[] axisLabels = new String[dimension];
 			String[] axisUpperCaseLabels = new String[dimension];
 			for (int axis = 0; axis < dimension; axis++) {
-				axes[axis] = axis;
 				axisLabels[axis] = Utils.getAxisLabel(dimension, axis);
 				axisUpperCaseLabels[axis] = Utils.getUpperCaseAxisLabel(dimension, axis);
 			}
@@ -289,11 +285,9 @@ public class CodeGeneration {
 	}
 	
 	public static void printBoundsMethodsForAsymmetricSection(int dimension) {
-		int[] axes = new int[dimension];
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < axes.length; i++) {
-			axes[i] = i;
+		for (int i = 0; i < dimension; i++) {
 			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
@@ -376,11 +370,9 @@ public class CodeGeneration {
 	}
 	
 	public static void printBoundsMethodsForDecorator(int dimension) {
-		int[] axes = new int[dimension];
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < axes.length; i++) {
-			axes[i] = i;
+		for (int i = 0; i < dimension; i++) {
 			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
@@ -463,11 +455,9 @@ public class CodeGeneration {
 	}
 	
 	public static void printBoundsMethodsToOverride(int dimension) {
-		int[] axes = new int[dimension];
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < axes.length; i++) {
-			axes[i] = i;
+		for (int i = 0; i < dimension; i++) {
 			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
@@ -497,14 +487,11 @@ public class CodeGeneration {
 					if (j == indexCountMinusOne) {
 						StringBuilder otherAxesInMethodName = new StringBuilder();
 						StringBuilder otherAxesParams = new StringBuilder();
-						StringBuilder otherAxesCsv = new StringBuilder();
 						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
 						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
-						otherAxesCsv.append(axisLabels[otherAxes[indexes[0]]]);
 						for (int k = 1; k < indexCount; k++) {
 							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
 							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
-							otherAxesCsv.append(", ").append(axisLabels[otherAxes[indexes[k]]]);
 						}
 						System.out.println("@Override" + System.lineSeparator() 
 						+ "public int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
@@ -532,12 +519,9 @@ public class CodeGeneration {
 			}
 			if (otherAxes.length > 0) {
 				StringBuilder otherAxesParams = new StringBuilder();
-				StringBuilder otherAxesCsv = new StringBuilder();
 				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
-				otherAxesCsv.append(axisLabels[otherAxes[0]]);
 				for (j = 1; j < otherAxes.length; j++) {
 					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
-					otherAxesCsv.append(", ").append(axisLabels[otherAxes[j]]);
 				}
 				System.out.println("@Override" + System.lineSeparator() 
 				+ "public int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
@@ -550,11 +534,9 @@ public class CodeGeneration {
 	}
 	
 	public static void printBoundsMethodsForSubsection(int dimension) {
-		int[] axes = new int[dimension];
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < axes.length; i++) {
-			axes[i] = i;
+		for (int i = 0; i < dimension; i++) {
 			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
@@ -636,12 +618,111 @@ public class CodeGeneration {
 		}
 	}
 	
-	public static void printAsymmetricBoundsMethodsForInterface(int dimension) {
-		int[] axes = new int[dimension];
+	public static void printBoundsMethodsForModelAsND(int dimension) {
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < axes.length; i++) {
-			axes[i] = i;
+		String[] partialCoordinatesTemplate = new String[dimension];
+		for (int i = 0; i < dimension; i++) {
+			axisLabels[i] = Utils.getAxisLabel(dimension, i);
+			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
+			partialCoordinatesTemplate[i] = "null";
+		}
+		int dimensionMinusOne = dimension - 1;
+		for (int i = 0; i < dimension; i++) {
+			String currentAxisUppercaseLabel = axisUpperCaseLabels[i];
+			System.out.println("@Override" + System.lineSeparator() + "public int getMin" + currentAxisUppercaseLabel 
+					+ "() {" + getNL(1) + "return source.getMinCoordinate(" + i + ");" + System.lineSeparator() + "}" + System.lineSeparator());
+			System.out.println("@Override" + System.lineSeparator() + "public int getMax" + currentAxisUppercaseLabel 
+					+ "() {" + getNL(1) + "return source.getMaxCoordinate(" + i + ");" + System.lineSeparator() + "}" + System.lineSeparator());
+			int[] otherAxes = new int[dimensionMinusOne];
+			int j = 0;
+			for (; j < i; j++) {
+				otherAxes[j] = j;
+			}
+			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
+				otherAxes[j] = k;
+			}
+			int otherAxesCountMinusOne = otherAxes.length - 1;
+			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+				int[] indexes = new int[indexCount];
+				for (j = 1; j < indexes.length; j++) {
+					indexes[j] = j;
+				}
+				j = indexCountMinusOne;
+				while (j > -1) {
+					if (j == indexCountMinusOne) {
+						StringBuilder otherAxesInMethodName = new StringBuilder();
+						StringBuilder otherAxesParams = new StringBuilder();
+						String[] partialCoordinates = partialCoordinatesTemplate.clone();
+						int otherAxis = otherAxes[indexes[0]];
+						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+						String otherAxisLabel = axisLabels[otherAxis];
+						otherAxesParams.append("int ").append(otherAxisLabel);
+						partialCoordinates[otherAxis] = otherAxisLabel;
+						for (int k = 1; k < indexCount; k++) {
+							otherAxis = otherAxes[indexes[k]];
+							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+							otherAxisLabel = axisLabels[otherAxis];
+							otherAxesParams.append(", int ").append(otherAxisLabel);
+							partialCoordinates[otherAxis] = otherAxisLabel;
+						}
+						String partialCoordinatesCsv = String.join(", ", partialCoordinates);
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMin" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") {" + getNL(1) + "return source.getMinCoordinate(" + i + ", new PartialCoordinates(" + partialCoordinatesCsv + "));" 
+						+ System.lineSeparator() + "}" + System.lineSeparator());
+						System.out.println("@Override" + System.lineSeparator() 
+						+ "public int getMax" + currentAxisUppercaseLabel + "At" + otherAxesInMethodName + "(" + otherAxesParams 
+						+ ") {" + getNL(1) + "return source.getMaxCoordinate(" + i + ", new PartialCoordinates(" + partialCoordinatesCsv + "));" 
+						+ System.lineSeparator() + "}" + System.lineSeparator());
+					}
+					int index = indexes[j];
+					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
+					if (index < max) {
+						index++;
+						indexes[j] = index;
+						j = indexCountMinusOne;
+					} else {
+						if (j > 0) {
+							int newIndex = indexes[j - 1] + 2;
+							if (newIndex < max) {
+								indexes[j] = newIndex;
+							}
+						}
+						j--;
+					}
+				}
+			}
+			if (otherAxes.length > 0) {
+				StringBuilder otherAxesParams = new StringBuilder();
+				String[] partialCoordinates = partialCoordinatesTemplate.clone();
+				int otherAxis = otherAxes[0];
+				String otherAxisLabel = axisLabels[otherAxis];
+				otherAxesParams.append("int ").append(otherAxisLabel);
+				partialCoordinates[otherAxis] = otherAxisLabel;
+				for (j = 1; j < otherAxes.length; j++) {
+					otherAxis = otherAxes[j];
+					otherAxisLabel = axisLabels[otherAxis];
+					otherAxesParams.append(", int ").append(otherAxisLabel);
+					partialCoordinates[otherAxis] = otherAxisLabel;
+				}
+				String partialCoordinatesCsv = String.join(", ", partialCoordinates);
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMin" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+				+ ") {" + getNL(1) + "return source.getMinCoordinate(" + i + ", new PartialCoordinates(" + partialCoordinatesCsv + "));" 
+				+ System.lineSeparator() + "}" + System.lineSeparator());
+				System.out.println("@Override" + System.lineSeparator() 
+				+ "public int getMax" + currentAxisUppercaseLabel + "(" + otherAxesParams 
+				+ ") {" + getNL(1) + "return source.getMaxCoordinate(" + i + ", new PartialCoordinates(" + partialCoordinatesCsv + "));" 
+				+ System.lineSeparator() + "}" + System.lineSeparator());	
+			}
+		}
+	}
+	
+	public static void printAsymmetricBoundsMethodsForInterface(int dimension) {
+		String[] axisLabels = new String[dimension];
+		String[] axisUpperCaseLabels = new String[dimension];
+		for (int i = 0; i < dimension; i++) {
 			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
@@ -708,11 +789,9 @@ public class CodeGeneration {
 	}
 	
 	public static void printBoundsMethodsForInterface(int dimension) {
-		int[] axes = new int[dimension];
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < axes.length; i++) {
-			axes[i] = i;
+		for (int i = 0; i < dimension; i++) {
 			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
@@ -779,11 +858,9 @@ public class CodeGeneration {
 	}
 	
 	public static void printBoundsMethodsForInterfaceWithDefault(int dimension) {
-		int[] axes = new int[dimension];
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < axes.length; i++) {
-			axes[i] = i;
+		for (int i = 0; i < dimension; i++) {
 			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
