@@ -25,7 +25,7 @@ import cellularautomata.PartialCoordinates;
  * @author Jaume
  *
  */
-public class HypercubePyramidalGrid implements Model {
+public class HypercubePyramidGrid implements Model {
 	
 	protected final Coordinates baseCenterCoordinates;
 	protected final int baseSide;
@@ -36,7 +36,7 @@ public class HypercubePyramidalGrid implements Model {
 	protected final int baseCenterHeightAxisCoord;
 	protected final int dimension;
 
-	public HypercubePyramidalGrid(Coordinates baseCenterCoordinates, int baseSide, int height, int heightAxis) {
+	public HypercubePyramidGrid(Coordinates baseCenterCoordinates, int baseSide, int height, int heightAxis) {
 		if (baseCenterCoordinates == null) {
 			throw new IllegalArgumentException("The coordinates cannot be null.");
 		}
