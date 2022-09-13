@@ -72,7 +72,7 @@ public class HypercubePyramidGrid implements Model {
 
 	@Override
 	public int getMaxCoordinate(int axis) {
-		if (heightAxis == 0) {
+		if (axis == heightAxis) {
 			return baseCenterHeightAxisCoord + heightMinusOne;
 		} else {
 			return baseCenterCoordinates.get(axis) + halfBaseSide; 
