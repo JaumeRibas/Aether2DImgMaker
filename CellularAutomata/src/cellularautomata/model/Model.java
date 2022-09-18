@@ -124,6 +124,7 @@ public interface Model {
 	
 	/**
 	 * Feeds the coordinates of every position of the region to the consumer.
+	 * 
 	 * @param consumer
 	 */
 	default void forEachPosition(Consumer<Coordinates> consumer) {
@@ -175,7 +176,76 @@ public interface Model {
 	}
 	
 	/**
+	 * Feeds the coordinates of every position of the region to the consumer.
+	 * The axes are traversed in the supplied order.
+	 * 
+	 * @param consumer
+	 * @param axesOrder
+	 */
+	default void forEachPosition(Consumer<Coordinates> consumer, int[] axesOrder) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		if (axesOrder == null) {
+			throw new IllegalArgumentException("The axes order cannot be null.");
+		}
+		int dimension = getGridDimension();
+		if (axesOrder.length != dimension) {
+			throw new IllegalArgumentException("The axes order array's length must be equal to the grid's dimension.");
+		}
+		for (int axis = 0; axis != dimension; axis++) {
+			int i = 0;
+			while (i != dimension && axesOrder[i] != axis) { i++; }
+			if (i == dimension) {
+				throw new IllegalArgumentException("The axes order array must contain all axes.");
+			}
+		}
+		int[] coordinates = new int[dimension];
+		if (dimension == 0) {
+			consumer.accept(new Coordinates(coordinates));
+		} else {
+			Integer[] partialCoordinates = new Integer[dimension];
+			int[] maxCoords = new int[dimension];
+			int i = dimension - 1;
+			boolean isBeginningOfLoop = true;
+			while (i < dimension) {
+				if (i == 0) {
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
+					int minCoord = getMinCoordinate(axesOrder[0], partialCoordinatesObj);
+					int maxCoord = getMaxCoordinate(axesOrder[0], partialCoordinatesObj);
+					for (int currentCoordinate = minCoord; currentCoordinate <= maxCoord; currentCoordinate++) {
+						coordinates[axesOrder[0]] = currentCoordinate;
+						consumer.accept(new Coordinates(coordinates));
+					}
+					isBeginningOfLoop = false;
+					i++;
+				} else if (isBeginningOfLoop) {
+					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
+					int localMinCoord = getMinCoordinate(axesOrder[i], partialCoordinatesObj);
+					maxCoords[i] = getMaxCoordinate(axesOrder[i], partialCoordinatesObj);
+					coordinates[axesOrder[i]] = localMinCoord;
+					partialCoordinates[axesOrder[i]] = localMinCoord;
+					i--;
+				} else {
+					int currentCoordinate = coordinates[axesOrder[i]];
+					if (currentCoordinate < maxCoords[i]) {
+						isBeginningOfLoop = true;
+						currentCoordinate++;
+						coordinates[axesOrder[i]] = currentCoordinate;
+						partialCoordinates[axesOrder[i]] = currentCoordinate;
+						i--;
+					} else {
+						partialCoordinates[axesOrder[i]] = null;
+						i++;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Feeds the coordinates of every even position of the region to the consumer.
+	 * 
 	 * @param consumer
 	 */
 	default void forEachEvenPosition(Consumer<Coordinates> consumer) {
@@ -233,6 +303,7 @@ public interface Model {
 	
 	/**
 	 * Feeds the coordinates of every odd position of the region to the consumer.
+	 * 
 	 * @param consumer
 	 */
 	default void forEachOddPosition(Consumer<Coordinates> consumer) {
