@@ -111,12 +111,30 @@ public class Model4DYZDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinXAtY(int y) {
-		return source.getMinWAtX(y);
+		int crossSectionY = crossSectionMinY;
+		int crossSectionZ = slope*crossSectionY + zOffsetFromY;
+		int crossSectionMinWAtX = source.getMinW(y, crossSectionY, crossSectionZ);
+		int localMinW;
+		for (crossSectionY++, crossSectionZ += slope; 
+				crossSectionY <= crossSectionMaxY && (localMinW = source.getMinW(y, crossSectionY, crossSectionZ)) <= crossSectionMinWAtX; 
+				crossSectionY++, crossSectionZ += slope) {
+			crossSectionMinWAtX = localMinW;
+		}
+		return crossSectionMinWAtX;
 	}
 
 	@Override
 	public int getMaxXAtY(int y) {
-		return source.getMaxWAtX(y);
+		int crossSectionY = crossSectionMinY;
+		int crossSectionZ = slope*crossSectionY + zOffsetFromY;
+		int crossSectionMaxWAtX = source.getMaxW(y, crossSectionY, crossSectionZ);
+		int localMaxW;
+		for (crossSectionY++, crossSectionZ += slope; 
+				crossSectionY <= crossSectionMaxY && (localMaxW = source.getMaxW(y, crossSectionY, crossSectionZ)) >= crossSectionMaxWAtX; 
+				crossSectionY++, crossSectionZ += slope) {
+			crossSectionMaxWAtX = localMaxW;
+		}
+		return crossSectionMaxWAtX;
 	}
 
 	@Override
@@ -151,12 +169,30 @@ public class Model4DYZDiagonalCrossSection<Source_Type extends Model4D> implemen
 
 	@Override
 	public int getMinYAtX(int x) { 
-		return source.getMinXAtW(x);
+		int crossSectionY = crossSectionMinY;
+		int crossSectionZ = slope*crossSectionY + zOffsetFromY;
+		int crossSectionMinXAtW = source.getMinX(x, crossSectionY, crossSectionZ);
+		int localMinX;
+		for (crossSectionY++, crossSectionZ += slope; 
+				crossSectionY <= crossSectionMaxY && (localMinX = source.getMinX(x, crossSectionY, crossSectionZ)) <= crossSectionMinXAtW; 
+				crossSectionY++, crossSectionZ += slope) {
+			crossSectionMinXAtW = localMinX;
+		}
+		return crossSectionMinXAtW;
 	}
 
 	@Override
 	public int getMaxYAtX(int x) { 
-		return source.getMaxXAtW(x);
+		int crossSectionY = crossSectionMinY;
+		int crossSectionZ = slope*crossSectionY + zOffsetFromY;
+		int crossSectionMaxXAtW = source.getMaxX(x, crossSectionY, crossSectionZ);
+		int localMaxX;
+		for (crossSectionY++, crossSectionZ += slope; 
+				crossSectionY <= crossSectionMaxY && (localMaxX = source.getMaxX(x, crossSectionY, crossSectionZ)) >= crossSectionMaxXAtW; 
+				crossSectionY++, crossSectionZ += slope) {
+			crossSectionMaxXAtW = localMaxX;
+		}
+		return crossSectionMaxXAtW;
 	}
 
 	@Override
