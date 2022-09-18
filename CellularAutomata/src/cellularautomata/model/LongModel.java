@@ -111,7 +111,7 @@ public interface LongModel extends Model, Iterable<Long> {
 	default long getTotal() throws Exception {
 		TotalLongConsumer consumer = new TotalLongConsumer();
 		forEach(consumer);
-		return consumer.total;
+		return consumer.getTotal();
 	}
 	
 	default long[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {

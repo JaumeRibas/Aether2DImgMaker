@@ -33,7 +33,7 @@ public interface NumericModel<Number_Type extends FieldElement<Number_Type> & Co
 	default Number_Type getTotal() throws Exception {
 		TotalConsumer<Number_Type> consumer = new TotalConsumer<Number_Type>();
 		forEach(consumer);
-		return consumer.total;
+		return consumer.getTotal();
 	}
 	
 	default MinAndMax<Number_Type> getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {

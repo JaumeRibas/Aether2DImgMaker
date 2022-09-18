@@ -111,7 +111,7 @@ public interface IntModel extends Model, Iterable<Integer> {
 	default int getTotal() throws Exception {
 		TotalIntConsumer consumer = new TotalIntConsumer();
 		forEach(consumer);
-		return consumer.total;
+		return consumer.getTotal();
 	}
 	
 	default int[] getEvenOddPositionsMinAndMax(boolean isEven) throws Exception {
