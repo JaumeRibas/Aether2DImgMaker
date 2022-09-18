@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -41,6 +42,7 @@ import cellularautomata.model.Model;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
 import cellularautomata.model.NumericModel;
+import cellularautomata.model.HypercubePyramidGrid;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.NumericModel1D;
 import cellularautomata.model2d.ArrayIntGrid2D;
@@ -51,16 +53,21 @@ import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
 import cellularautomata.model3d.Model3D;
+import cellularautomata.model3d.ModelAs3D;
 import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model3d.LongModel3D;
 import cellularautomata.model3d.NumericModel3D;
 import cellularautomata.model3d.RegularIntGrid3D;
 import cellularautomata.model4d.IntModel4D;
 import cellularautomata.model4d.LongModel4D;
+import cellularautomata.model4d.Model4D;
+import cellularautomata.model4d.ModelAs4D;
 import cellularautomata.model4d.NumericModel4D;
 import cellularautomata.model4d.RegularIntGrid4D;
 import cellularautomata.model5d.IntModel5D;
 import cellularautomata.model5d.LongModel5D;
+import cellularautomata.model5d.Model5D;
+import cellularautomata.model5d.ModelAs5D;
 import cellularautomata.model5d.RegularIntGrid5D;
 import cellularautomata.numbers.BigInt;
 
@@ -149,7 +156,7 @@ public class Test {
 		intMinAndMax[6] = intGrid.getMinAndMaxAtEvenOddY(false);
 		for (int i = 0; i < intMinAndMaxToCompare.length; i++) {
 			if (intMinAndMax[i][0] != intMinAndMaxToCompare[i][0] || intMinAndMax[i][1] != intMinAndMaxToCompare[i][1]) {
-				System.out.println(names[i] + " min and max don't match [" + intMinAndMax[i][0] + ", " + intMinAndMax[i][1] + "] != [" + intMinAndMaxToCompare[i][0] + ", " + intMinAndMaxToCompare[i][1] + "]");
+				System.err.println(names[i] + " min and max don't match [" + intMinAndMax[i][0] + ", " + intMinAndMax[i][1] + "] != [" + intMinAndMaxToCompare[i][0] + ", " + intMinAndMaxToCompare[i][1] + "]");
 				return;
 			}
 		}
@@ -226,7 +233,7 @@ public class Test {
 		longMinAndMax[6] = longGrid.getMinAndMaxAtEvenOddY(false);
 		for (int i = 0; i < longMinAndMaxToCompare.length; i++) {
 			if (longMinAndMax[i][0] != longMinAndMaxToCompare[i][0] || longMinAndMax[i][1] != longMinAndMaxToCompare[i][1]) {
-				System.out.println(names[i] + " min and max don't match [" + longMinAndMax[i][0] + ", " + longMinAndMax[i][1] + "] != [" + longMinAndMaxToCompare[i][0] + ", " + longMinAndMaxToCompare[i][1] + "]");
+				System.err.println(names[i] + " min and max don't match [" + longMinAndMax[i][0] + ", " + longMinAndMax[i][1] + "] != [" + longMinAndMaxToCompare[i][0] + ", " + longMinAndMaxToCompare[i][1] + "]");
 				return;
 			}
 		}
@@ -304,440 +311,267 @@ public class Test {
 		bigIntMinAndMax[6] = bigIntGrid.getMinAndMaxAtEvenOddY(false);
 		for (int i = 0; i < bigIntMinAndMaxToCompare.length; i++) {
 			if (!bigIntMinAndMax[i].getMin().equals(bigIntMinAndMaxToCompare[i][0]) || !bigIntMinAndMax[i].getMax().equals(bigIntMinAndMaxToCompare[i][1])) {
-				System.out.println(names[i] + " min and max don't match [" + bigIntMinAndMax[i].getMin() + ", " + bigIntMinAndMax[i].getMax() + "] != [" + bigIntMinAndMaxToCompare[i][0] + ", " + bigIntMinAndMaxToCompare[i][1] + "]");
+				System.err.println(names[i] + " min and max don't match [" + bigIntMinAndMax[i].getMin() + ", " + bigIntMinAndMax[i].getMax() + "] != [" + bigIntMinAndMaxToCompare[i][0] + ", " + bigIntMinAndMaxToCompare[i][1] + "]");
 				return;
 			}
 		}
 		System.out.println("Min and max values match!");
-	}
+	}	
+
+	private static final String BOUNDS_CONSISTENCY_ERROR_FORMAT = "Inconsistency found in bounds in %s traversal%n";
 	
 	public static void testBoundsConsistency(Model2D grid) {
-		List<String> edgePositions = new ArrayList<String>();
+		boolean consistentBounds = true;
+		HashMap<Integer, int[]> positions = new HashMap<Integer, int[]>();
+		int[] minMaxY;
 		//xy
-		int x = grid.getMinX();
+		int firstPositionCount = 0;
 		int maxX = grid.getMaxX();
-		int localMaxY = grid.getMaxY(x);
-		for (int y = grid.getMinY(x); y <= localMaxY; y++) {
-			edgePositions.add(x + "," + y);
-		}
-		for (x++; x < maxX; x++) {
+		for (int x = grid.getMinX(); x <= maxX; x++) {
+			minMaxY = new int[2];
+			positions.put(x, minMaxY);
 			int localMinY = grid.getMinY(x);
-			localMaxY = grid.getMaxY(x);
-			edgePositions.add(x + "," + localMinY);
-			if (localMinY != localMaxY) {
-				edgePositions.add(x + "," + localMaxY);
-			}
-		}
-		if (x == maxX) {
-			localMaxY = grid.getMaxY(x);
-			for (int y = grid.getMinY(x); y <= localMaxY; y++) {
-				edgePositions.add(x + "," + y);
-			}
+			int localMaxY = grid.getMaxY(x);
+			minMaxY[0] = localMinY;
+			minMaxY[1] = localMaxY;
+			firstPositionCount += localMaxY - localMinY + 1;
 		}
 		//yx
-		String errorMessage = "Inconsistency found in bounds in yx traversal";
+		String traversal = "yx";
 		int positionCount = 0;
-		int y = grid.getMinY();
 		int maxY = grid.getMaxY();
-		int localMaxX = grid.getMaxX(y);
-		for (x = grid.getMinX(y); x <= localMaxX; x++) {
-			positionCount++;
-			if (!edgePositions.contains(x + "," + y)) {
-				System.out.println(errorMessage);
-			}
-		}
-		for (y++; y < maxY; y++) {
-			int localMinX = grid.getMinX(y);
-			localMaxX = grid.getMaxX(y);
-			positionCount++;
-			if (!edgePositions.contains(localMinX + "," + y)) {
-				System.out.println(errorMessage);
-			}
-			if (localMinX != localMaxX) {
+		for (int y = grid.getMinY(); y <= maxY; y++) {
+			int localMaxX = grid.getMaxX(y);
+			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
 				positionCount++;
-				if (!edgePositions.contains(localMaxX + "," + y)) {
-					System.out.println(errorMessage);
+				if ((minMaxY = positions.get(x)) == null || y < minMaxY[0] || y > minMaxY[1]) {
+					System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+					consistentBounds = false;
 				}
 			}
 		}
-		if (y == maxY) {
-			localMaxX = grid.getMaxX(y);
-			for (x = grid.getMinX(y); x <= localMaxX; x++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y)) {
-					System.out.println(errorMessage);
-				}
-			}
+		if (firstPositionCount != positionCount) {
+			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			consistentBounds = false;
 		}
-		if (edgePositions.size() != positionCount) {
-			System.out.println(errorMessage);
+		if (consistentBounds) {
+			System.out.println("Bounds are consistent!");
 		}
 	}
-	
+
 	public static void testBoundsConsistency(Model3D grid) {
-		List<String> edgePositions = new ArrayList<String>();
+		boolean consistentBounds = true;
+		HashMap<Integer, HashMap<Integer, int[]>> positions = new HashMap<Integer, HashMap<Integer, int[]>>();
+		HashMap<Integer, int[]> yzs;
+		int[] minMaxZ;
 		//xyz
-		int x = grid.getMinX();
+		int firstPositionCount = 0;
 		int maxX = grid.getMaxX();
-		int localMaxY = grid.getMaxYAtX(x);
-		for (int y = grid.getMinYAtX(x); y <= localMaxY; y++) {
-			int localMaxZ = grid.getMaxZ(x, y);
-			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
-				edgePositions.add(x + "," + y + "," + z);
-			}
-		}
-		for (x++; x < maxX; x++) {
-			int y = grid.getMinYAtX(x);
-			int maxY = grid.getMaxYAtX(x);
-			int localMaxZ = grid.getMaxZ(x, y);
-			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
-				edgePositions.add(x + "," + y + "," + z);
-			}
-			for (y++; y < maxY; y++) {
-				int localMinZ = grid.getMinZ(x, y);
-				localMaxZ = grid.getMaxZ(x, y);
-				edgePositions.add(x + "," + y + "," + localMinZ);
-				if (localMinZ != localMaxZ) {
-					edgePositions.add(x + "," + y + "," + localMaxZ);
-				}
-			}
-			if (y == maxY) {
-				localMaxZ = grid.getMaxZ(x, y);
-				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
-					edgePositions.add(x + "," + y + "," + z);
-				}
-			}
-		}
-		if (x == maxX) {
-			localMaxY = grid.getMaxYAtX(x);
+		for (int x = grid.getMinX(); x <= maxX; x++) {
+			yzs = new HashMap<Integer, int[]>();
+			positions.put(x, yzs);
+			int localMaxY = grid.getMaxYAtX(x);
 			for (int y = grid.getMinYAtX(x); y <= localMaxY; y++) {
+				minMaxZ = new int[2];
+				yzs.put(y, minMaxZ);
+				int localMinZ = grid.getMinZ(x, y);
 				int localMaxZ = grid.getMaxZ(x, y);
-				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
-					edgePositions.add(x + "," + y + "," + z);
-				}
+				minMaxZ[0] = localMinZ;
+				minMaxZ[1] = localMaxZ;
+				firstPositionCount += localMaxZ - localMinZ + 1;
 			}
 		}
 		//xzy
-		String errorMessage = "Inconsistency found in bounds in xzy traversal";
+		String traversal = "xzy";
 		int positionCount = 0;
-		x = grid.getMinX();
 		maxX = grid.getMaxX();
-		int localMaxZ = grid.getMaxZAtX(x);
-		for (int z = grid.getMinZAtX(x); z <= localMaxZ; z++) {
-			localMaxY = grid.getMaxY(x, z);
-			for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-		}
-		for (x++; x < maxX; x++) {
-			int z = grid.getMinZAtX(x);
-			int maxZ = grid.getMaxZAtX(x);
-			localMaxY = grid.getMaxY(x, z);
-			for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-			for (z++; z < maxZ; z++) {
-				int localMinY = grid.getMinY(x, z);
-				localMaxY = grid.getMaxY(x, z);
-				positionCount++;
-				if (!edgePositions.contains(x + "," + localMinY + "," + z)) {
-					System.out.println(errorMessage);
-				}
-				if (localMinY != localMaxY) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + localMaxY + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-			if (z == maxZ) {
-				localMaxY = grid.getMaxY(x, z);
-				for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-		}
-		if (x == maxX) {
-			localMaxZ = grid.getMaxZAtX(x);
+		for (int x = grid.getMinX(); x <= maxX; x++) {
+			int localMaxZ = grid.getMaxZAtX(x);
 			for (int z = grid.getMinZAtX(x); z <= localMaxZ; z++) {
-				localMaxY = grid.getMaxY(x, z);
+				int localMaxY = grid.getMaxY(x, z);
 				for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
 					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
+					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
+						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						consistentBounds = false;
 					}
 				}
 			}
 		}
-		if (edgePositions.size() != positionCount) {
-			System.out.println(errorMessage);
+		if (firstPositionCount != positionCount) {
+			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			consistentBounds = false;
 		}
 		//yxz
-		errorMessage = "Inconsistency found in bounds in yxz traversal";
+		traversal = "yxz";
 		positionCount = 0;
-		int y = grid.getMinY();
 		int maxY = grid.getMaxY();
-		int localMaxX = grid.getMaxXAtY(y);
-		for (x = grid.getMinXAtY(y); x <= localMaxX; x++) {
-			localMaxZ = grid.getMaxZ(x, y);
-			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-		}
-		for (y++; y < maxY; y++) {
-			x = grid.getMinXAtY(y);
-			maxX = grid.getMaxXAtY(y);
-			localMaxZ = grid.getMaxZ(x, y);
-			for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-			for (x++; x < maxX; x++) {
-				int localMinZ = grid.getMinZ(x, y);
-				localMaxZ = grid.getMaxZ(x, y);
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + localMinZ)) {
-					System.out.println(errorMessage);
-				}
-				if (localMinZ != localMaxZ) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + localMaxZ)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-			if (x == maxX) {
-				localMaxZ = grid.getMaxZ(x, y);
+		for (int y = grid.getMinY(); y <= maxY; y++) {
+			int localMaxX = grid.getMaxXAtY(y);
+			for (int x = grid.getMinXAtY(y); x <= localMaxX; x++) {
+				int localMaxZ = grid.getMaxZ(x, y);
 				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
 					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
+					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
+						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						consistentBounds = false;
 					}
 				}
 			}
 		}
-		if (y == maxY) {
-			localMaxX = grid.getMaxXAtY(y);
-			for (x = grid.getMinXAtY(y); x <= localMaxX; x++) {
-				localMaxZ = grid.getMaxZ(x, y);
-				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-		}
-		if (edgePositions.size() != positionCount) {
-			System.out.println(errorMessage);
+		if (firstPositionCount != positionCount) {
+			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			consistentBounds = false;
 		}
 		//yzx
-		errorMessage = "Inconsistency found in bounds in yzx traversal";
+		traversal = "yzx";
 		positionCount = 0;
-		y = grid.getMinY();
 		maxY = grid.getMaxY();
-		localMaxZ = grid.getMaxZAtY(y);
-		for (int z = grid.getMinZAtY(y); z <= localMaxZ; z++) {
-			localMaxX = grid.getMaxX(y, z);
-			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-		}
-		for (y++; y < maxY; y++) {
-			int z = grid.getMinZAtY(y);
-			int maxZ = grid.getMaxZAtY(y);
-			localMaxX = grid.getMaxX(y, z);
-			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-			for (z++; z < maxZ; z++) {
-				int localMinX = grid.getMinX(y, z);
-				localMaxX = grid.getMaxX(y, z);
-				positionCount++;
-				if (!edgePositions.contains(localMinX + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-				if (localMinX != localMaxX) {
-					positionCount++;
-					if (!edgePositions.contains(localMaxX + "," + y + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-			if (z == maxZ) {
-				localMaxX = grid.getMaxX(y, z);
-				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-		}
-		if (y == maxY) {
-			localMaxZ = grid.getMaxZAtY(y);
+		for (int y = grid.getMinY(); y <= maxY; y++) {
+			int localMaxZ = grid.getMaxZAtY(y);
 			for (int z = grid.getMinZAtY(y); z <= localMaxZ; z++) {
-				localMaxX = grid.getMaxX(y, z);
-				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
+				int localMaxX = grid.getMaxX(y, z);
+				for (int x = grid.getMinX(y, z); x <= localMaxX; x++) {
 					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
+					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
+						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						consistentBounds = false;
 					}
 				}
 			}
 		}
-		if (edgePositions.size() != positionCount) {
-			System.out.println(errorMessage);
+		if (firstPositionCount != positionCount) {
+			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			consistentBounds = false;
 		}
 		//zxy
-		errorMessage = "Inconsistency found in bounds in zxy traversal";
+		traversal = "zxy";
 		positionCount = 0;
-		int z = grid.getMinZ();
 		int maxZ = grid.getMaxZ();
-		localMaxX = grid.getMaxXAtZ(z);
-		for (x = grid.getMinXAtZ(z); x <= localMaxX; x++) {
-			localMaxY = grid.getMaxY(x, z);
-			for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-		}
-		for (z++; z < maxZ; z++) {
-			x = grid.getMinXAtZ(z);
-			maxX = grid.getMaxXAtZ(z);
-			localMaxY = grid.getMaxY(x, z);
-			for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-			for (x++; x < maxX; x++) {
-				int localMinY = grid.getMinY(x, z);
-				localMaxY = grid.getMaxY(x, z);
-				positionCount++;
-				if (!edgePositions.contains(x + "," + localMinY + "," + z)) {
-					System.out.println(errorMessage);
-				}
-				if (localMinY != localMaxY) {
+		for (int z = grid.getMinZ(); z <= maxZ; z++) {
+			int localMaxX = grid.getMaxXAtZ(z);
+			for (int x = grid.getMinXAtZ(z); x <= localMaxX; x++) {
+				int localMaxY = grid.getMaxY(x, z);
+				for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
 					positionCount++;
-					if (!edgePositions.contains(x + "," + localMaxY + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-			if (x == maxX) {
-				localMaxY = grid.getMaxY(x, z);
-				for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
+					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
+						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						consistentBounds = false;
 					}
 				}
 			}
 		}
-		if (z == maxZ) {
-			localMaxX = grid.getMaxXAtZ(z);
-			for (x = grid.getMinXAtZ(z); x <= localMaxX; x++) {
-				localMaxY = grid.getMaxY(x, z);
-				for (y = grid.getMinY(x, z); y <= localMaxY; y++) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-		}
-		if (edgePositions.size() != positionCount) {
-			System.out.println(errorMessage);
+		if (firstPositionCount != positionCount) {
+			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			consistentBounds = false;
 		}
 		//zyx
-		errorMessage = "Inconsistency found in bounds in zyx traversal";
+		traversal = "zyx";
 		positionCount = 0;
-		z = grid.getMinZ();
 		maxZ = grid.getMaxZ();
-		localMaxY = grid.getMaxYAtZ(z);
-		for (y = grid.getMinYAtZ(z); y <= localMaxY; y++) {
-			localMaxX = grid.getMaxX(y, z);
-			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-		}
-		for (z++; z < maxZ; z++) {
-			y = grid.getMinYAtZ(z);
-			maxY = grid.getMaxYAtZ(z);
-			localMaxX = grid.getMaxX(y, z);
-			for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
-				positionCount++;
-				if (!edgePositions.contains(x + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-			}
-			for (y++; y < maxY; y++) {
-				int localMinX = grid.getMinX(y, z);
-				localMaxX = grid.getMaxX(y, z);
-				positionCount++;
-				if (!edgePositions.contains(localMinX + "," + y + "," + z)) {
-					System.out.println(errorMessage);
-				}
-				if (localMinX != localMaxX) {
+		for (int z = grid.getMinZ(); z <= maxZ; z++) {
+			int localMaxY = grid.getMaxYAtZ(z);
+			for (int y = grid.getMinYAtZ(z); y <= localMaxY; y++) {
+				int localMaxX = grid.getMaxX(y, z);
+				for (int x = grid.getMinX(y, z); x <= localMaxX; x++) {
 					positionCount++;
-					if (!edgePositions.contains(localMaxX + "," + y + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
-			if (y == maxY) {
-				localMaxX = grid.getMaxX(y, z);
-				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
+					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
+						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						consistentBounds = false;
 					}
 				}
 			}
 		}
-		if (z == maxZ) {
-			localMaxY = grid.getMaxYAtZ(z);
-			for (y = grid.getMinYAtZ(z); y <= localMaxY; y++) {
-				localMaxX = grid.getMaxX(y, z);
-				for (x = grid.getMinX(y, z); x <= localMaxX; x++) {
-					positionCount++;
-					if (!edgePositions.contains(x + "," + y + "," + z)) {
-						System.out.println(errorMessage);
-					}
-				}
-			}
+		if (firstPositionCount != positionCount) {
+			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			consistentBounds = false;
 		}
-		if (edgePositions.size() != positionCount) {
-			System.out.println(errorMessage);
+		if (consistentBounds) {
+			System.out.println("Bounds are consistent!");
 		}
 	}
+
+	public static void testBoundsConsistency(Model grid) {
+		boolean consistentBounds = true;
+		int dimension = grid.getGridDimension();
+		if (dimension > 0) {
+			CounterConsumer<Coordinates> counter;
+			WithinBoundsCoordinatesConsumer withinBounds;
+			int[] axes = new int[dimension];
+			for (int axis = 0; axis != dimension; axis++) {
+				axes[axis] = axis;
+			}
+			List<int[]> axesPermutations = getPermutations(axes);
+			int[] axesOrder = axesPermutations.get(0);
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i != dimension; i++) {
+				sb.append(Utils.getAxisLabel(dimension, axesOrder[i]));
+			}
+			String traversal = sb.toString();
+			grid.forEachPosition((counter = new CounterConsumer<Coordinates>())
+					.andThen((withinBounds = new WithinBoundsCoordinatesConsumer(grid))), axesOrder);
+			if (!withinBounds.isWithinBounds()) {
+				System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+				consistentBounds = false;
+			}
+			BigInt firstPositionCount = counter.getCount();
+			for (int i = 1; i < axesPermutations.size(); i++) {
+				axesOrder = axesPermutations.get(i);
+				sb = new StringBuilder();
+				for (int j = 0; j != dimension; j++) {
+					sb.append(Utils.getAxisLabel(dimension, axesOrder[j]));
+				}
+				traversal = sb.toString();
+				grid.forEachPosition((counter = new CounterConsumer<Coordinates>())
+						.andThen((withinBounds = new WithinBoundsCoordinatesConsumer(grid))), axesOrder);
+				if (!withinBounds.isWithinBounds()) {
+					System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+					consistentBounds = false;
+				}
+				if (!firstPositionCount.equals(counter.getCount())) {
+					System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+					consistentBounds = false;
+				}
+			}
+		}
+		if (consistentBounds) {
+			System.out.println("Bounds are consistent!");
+		}
+	}
+	
+	private static List<int[]> getPermutations(int[] array) {
+		List<int[]> permutations = new ArrayList<int[]>();
+		heapPermutations(array, array.length, permutations);
+		return permutations;
+	}
+	
+	// Get permutations using Heap's Algorithm
+    private static void heapPermutations(int array[], int size, List<int[]> permutations)
+    {
+        if (size == 1) {
+        	permutations.add(array.clone());
+        }
+ 
+        for (int i = 0; i < size; i++) {
+            heapPermutations(array, size - 1, permutations);
+ 
+            // if size is odd, swap 0th i.e (first) and
+            // (size-1)th i.e (last) element
+            if (size % 2 == 1) {
+                int temp = array[0];
+                array[0] = array[size - 1];
+                array[size - 1] = temp;
+            }
+ 
+            // If size is even, swap ith
+            // and (size-1)th i.e last element
+            else {
+                int temp = array[i];
+                array[i] = array[size - 1];
+                array[size - 1] = temp;
+            }
+        }
+    }
 	
 	public static void testArrayGrid() {
 		System.out.println("Test ArrayGrid2D");
@@ -838,6 +672,9 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
+		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 51, 70, 0));
+		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 51, 70, 1));
+		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 51, 70, 2));
 		//xy 
 		for (int slope = 1; slope != -3; slope -= 2) {
 			for (int off = 0; off <= offset; off += offset) {
@@ -857,6 +694,9 @@ public class Test {
 				diagonal = grid.diagonalCrossSectionOnXY(slope == 1, off);
 				compare(diagonal, resultValues, originIndex, originIndex);
 				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnXY(slope == 1, off));
 			}
 		}
 		//xz
@@ -878,6 +718,9 @@ public class Test {
 				diagonal = grid.diagonalCrossSectionOnXZ(slope == 1, off);
 				compare(diagonal, resultValues, originIndex, originIndex);
 				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnXZ(slope == 1, off));
 			}
 		}
 		//yz
@@ -899,6 +742,9 @@ public class Test {
 				diagonal = grid.diagonalCrossSectionOnYZ(slope == 1, off);
 				compare(diagonal, resultValues, originIndex, originIndex);
 				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnYZ(slope == 1, off));
 			}
 		}
 	}
@@ -920,6 +766,10 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
+		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 0));
+		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 1));
+		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 2));
+		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 3));
 		//wx 
 		for (int slope = 1; slope != -3; slope -= 2) {
 			for (int off = 0; off <= offset; off += offset) {
@@ -939,8 +789,12 @@ public class Test {
 				}			
 				grid = new RegularIntGrid4D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex);
 				diagonal = grid.diagonalCrossSectionOnWX(slope == 1, off);
-				testBoundsConsistency(diagonal);
 				compare(diagonal, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnWX(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnWX(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnWX(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnWX(slope == 1, off));
 			}
 		}
 		//yz 
@@ -962,15 +816,19 @@ public class Test {
 				}			
 				grid = new RegularIntGrid4D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex);
 				diagonal = grid.diagonalCrossSectionOnYZ(slope == 1, off);
-				testBoundsConsistency(diagonal);
 				compare(diagonal, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnYZ(slope == 1, off));
 			}
 		}
 	}
 	
-	public static void testDiagonals(int dimension) throws Exception {
-		//TODO
-	}
+//	public static void testDiagonals(int dimension) throws Exception {
+//		//TODO
+//	}
 	
 	public static void compare(IntModel2D grid, int[][] array, int xOffset, int yOffset) throws Exception {
 		int maxX = grid.getMaxX();
@@ -978,7 +836,7 @@ public class Test {
 			int localMaxY = grid.getMaxY(x);
 			for (int y = grid.getMinY(x); y <= localMaxY; y++) {
 				if (grid.getFromPosition(x, y) != array[x + xOffset][y + yOffset]) {
-					System.out.println("Different value at (" + x + ", " + y + "): " + grid.getFromPosition(x, y) + " != " + array[x + xOffset][y + yOffset]);
+					System.err.println("Different value at (" + x + ", " + y + "): " + grid.getFromPosition(x, y) + " != " + array[x + xOffset][y + yOffset]);
 					return;
 				}
 			}
@@ -994,7 +852,7 @@ public class Test {
 					for (int x = grid1.getMinX(y,z); x <= grid1.getMaxX(y,z); x++) {
 						if (grid1.getFromPosition(x, y, z) != grid2.getFromPosition(x, y, z)) {
 							equal = false;
-							System.out.println("Different value at (" + x + ", " + y + ", " + z + "): " 
+							System.err.println("Different value at (" + x + ", " + y + ", " + z + "): " 
 									+ grid1.getClass().getSimpleName() + ":" + grid1.getFromPosition(x, y, z) 
 									+ " != " + grid2.getClass().getSimpleName() + ":" + grid2.getFromPosition(x, y, z));
 						}
@@ -1017,6 +875,11 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
+		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 0));
+		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 1));
+		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 2));
+		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 3));
+		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 4));
 		//vw
 		for (int slope = 1; slope != -3; slope -= 2) {
 			for (int off = 0; off <= offset; off += offset) {
@@ -1039,6 +902,12 @@ public class Test {
 				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
 				diagonal = grid.diagonalCrossSectionOnVW(slope == 1, off);
 				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnVW(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnVW(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnVW(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnVW(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnVW(slope == 1, off));
 			}
 		}
 	}
@@ -1052,7 +921,7 @@ public class Test {
 						for (int w = grid1.getMinW(x,y,z); w <= grid1.getMaxW(x,y,z); w++) {
 							if (grid1.getFromPosition(w, x, y, z) != grid2.getFromPosition(w, x, y, z)) {
 								equal = false;
-								System.out.println("Different value at (" + w + ", " + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at (" + w + ", " + x + ", " + y + ", " + z + "): " 
 										+ grid1.getClass().getSimpleName() + ":" + grid1.getFromPosition(w, x, y, z) 
 										+ " != " + grid2.getClass().getSimpleName() + ":" + grid2.getFromPosition(w, x, y, z));
 							}
@@ -1222,7 +1091,7 @@ public class Test {
 						for (int x = ca1.getMinX(y,z), x2 = x + xOffset; x <= ca1.getMaxX(y,z); x++, x2++) {
 							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x2, y2, z2)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + ": " 
+								System.err.println("Different value at step " + ca1.getStep() + ": " 
 										+ ca1.getClass().getSimpleName() + "(" + x + ", " + y + ", " + z + "):" + ca1.getFromPosition(x, y, z) 
 										+ " != " + ca2.getClass().getSimpleName() + "(" + x2 + ", " + y2 + ", " + z2 + "):" + ca2.getFromPosition(x2, y2, z2));
 								return;
@@ -1235,7 +1104,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1258,7 +1127,7 @@ public class Test {
 							for (int z = 0; z <= y; z++) {
 //								System.out.println("Comparing value at (" + w + ", " + x + ", " + y + ", " + z + ")");
 								if (ae.getFromAsymmetricPosition(w, x, y, z) != ns.getFromPosition(w, x, y, z)) {
-									System.out.println("Different value");
+									System.err.println("Different value");
 									return;
 								}
 							}
@@ -1282,39 +1151,39 @@ public class Test {
 				System.out.println("Comparing step " + ae.getStep());
 				int maxW = ae.getAsymmetricMaxWAtZ(z);
 				if (maxW != cs.getMaxX()) {
-					System.out.println("Different max w!");
+					System.err.println("Different max w!");
 					return;
 				}
 				int minW = ae.getAsymmetricMinWAtZ(z);
 				if (minW != cs.getMinX()) {
-					System.out.println("Different min w!");
+					System.err.println("Different min w!");
 					return;
 				}
 				for (int w = minW; w <= maxW; w++) {
 					int maxX = ae.getAsymmetricMaxXAtWZ(w, z);
 					if (maxX != cs.getMaxYAtX(w)) {
-						System.out.println("Different max x!");
+						System.err.println("Different max x!");
 						return;
 					}
 					int minX = ae.getAsymmetricMinXAtWZ(w, z);
 					if (minX != cs.getMinYAtX(w)) {
-						System.out.println("Different min x!");
+						System.err.println("Different min x!");
 						return;
 					}
 					for (int x = minX; x <= maxX; x++) {
 						int maxY = ae.getAsymmetricMaxY(w, x, z);
 						if (maxY != cs.getMaxZ(w, x)) {
-							System.out.println("Different max y!");
+							System.err.println("Different max y!");
 							return;
 						}
 						int minY = ae.getAsymmetricMinY(w, x, z);
 						if (minY != cs.getMinZ(w, x)) {
-							System.out.println("Different min y!");
+							System.err.println("Different min y!");
 							return;
 						}
 						for (int y = minY; y <= maxY; y++) {
 							if (ae.getFromAsymmetricPosition(w, x, y, z) != cs.getFromPosition(w, x, y)) {
-								System.out.println("Different value");
+								System.err.println("Different value");
 								return;
 							}
 						}
@@ -1373,7 +1242,7 @@ public class Test {
 					long b = ca2.getFromPosition(x);
 					if (a != b) {
 						equal = false;
-						System.out.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
+						System.err.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
 								+ ca1.getClass().getSimpleName() + ":" + a 
 								+ " != " + ca2.getClass().getSimpleName() + ":" + b);
 						//return;
@@ -1384,7 +1253,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1405,7 +1274,7 @@ public class Test {
 				for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
 					if (!ca1.getFromPosition(x).equals(ca2.getFromPosition(x))) {
 						equal = false;
-						System.out.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
+						System.err.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
 								+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x) 
 								+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x));
 					}
@@ -1415,7 +1284,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1438,7 +1307,7 @@ public class Test {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getFromPosition(x, y) != ca2.getFromPosition(x, y)) {
 							equal = false;
-							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+							System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y) 
 									+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y));
 						}
@@ -1449,7 +1318,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1470,7 +1339,7 @@ public class Test {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getFromPosition(x, y) != ca2.getFromPosition(x, y)) {
 							equal = false;
-							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+							System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y) 
 									+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y));
 						}
@@ -1481,7 +1350,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1504,7 +1373,7 @@ public class Test {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getFromPosition(x, y) != ca2.getFromPosition(x, y)) {
 							equal = false;
-							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+							System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y) 
 									+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y));
 							//return;
@@ -1516,7 +1385,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal) {
 					return;
@@ -1545,7 +1414,7 @@ public class Test {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (ca1.getFromPosition(x, y).longValue() != ca2.getFromPosition(x, y)) {
 							equal = false;
-							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+							System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y) 
 									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y));
 						}
@@ -1556,7 +1425,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1580,7 +1449,7 @@ public class Test {
 					for (int x = ca2.getMinX(y); x <= ca2.getMaxX(y); x++) {
 						if (!ca1.getFromPosition(x, y).equals(ca2.getFromPosition(x, y))) {
 							equal = false;
-							System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
+							System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + "): " 
 									+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y) 
 									+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y));
 						}
@@ -1591,7 +1460,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1615,7 +1484,7 @@ public class Test {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z) 
 										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z));
 							}
@@ -1627,7 +1496,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1651,7 +1520,7 @@ public class Test {
 							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
 								if (ca1.getFromPosition(w, x, y, z) != ca2.getFromPosition(w, x, y, z)) {
 									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+									System.err.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(w, x, y, z) 
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
 								}
@@ -1664,7 +1533,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					break;
@@ -1694,7 +1563,7 @@ public class Test {
 							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
 								if (ca1.getFromPosition(w, x, y, z) != ca2.getFromPosition(w, x, y, z)) {
 									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+									System.err.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(w, x, y, z) 
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
 									return;
@@ -1708,7 +1577,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1732,7 +1601,7 @@ public class Test {
 							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
 								if (ca1.getFromPosition(w, x, y, z) != ca2.getFromPosition(w, x, y, z)) {
 									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+									System.err.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(w, x, y, z) 
 											+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z));
 									return;
@@ -1746,7 +1615,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1774,7 +1643,7 @@ public class Test {
 //							System.out.println("Comparing position (" + x + ", " + y + ", " + z + ")");
 							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
 								return;
@@ -1787,7 +1656,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 			if (equal)
@@ -1810,7 +1679,7 @@ public class Test {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getFromPosition(x, y, z) != ca2.getFromPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
 							}
@@ -1822,7 +1691,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1847,7 +1716,7 @@ public class Test {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getFromPosition(x, y, z) != -ca2.getFromPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
 										+ " != - " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
 							}
@@ -1859,7 +1728,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1888,7 +1757,7 @@ public class Test {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getFromPosition(x, y, z).longValue() != ca2.getFromPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
 							}
@@ -1900,7 +1769,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1926,7 +1795,7 @@ public class Test {
 							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(x,y,z); w++) {
 								if (ca1.getFromPosition(w, x, y, z).longValue() != ca2.getFromPosition(w, x, y, z)) {
 									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+									System.err.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z) 
 											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(w, x, y, z));
 								}
@@ -1939,7 +1808,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1962,7 +1831,7 @@ public class Test {
 				for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
 					if (ca1.getFromPosition(x).longValue() != ca2.getFromPosition(x)) {
 						equal = false;
-						System.out.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
+						System.err.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
 								+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x) 
 								+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x));
 					}
@@ -1972,7 +1841,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -1997,7 +1866,7 @@ public class Test {
 						for (int x = ca2.getMinX(y,z); x <= ca2.getMaxX(y,z); x++) {
 							if (ca1.getFromPosition(x, y, z).intValue() != ca2.getFromPosition(x, y, z)) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
 							}
@@ -2009,7 +1878,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -2034,7 +1903,7 @@ public class Test {
 						for (int x = ca1.getMinX(y,z); x <= ca1.getMaxX(y,z); x++) {
 							if (!ca1.getFromPosition(x, y, z).equals(ca2.getFromPosition(x, y, z))) {
 								equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
+								System.err.println("Different value at step " + ca1.getStep() + " (" + x + ", " + y + ", " + z + "): " 
 										+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(x, y, z) 
 										+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x, y, z));
 							}
@@ -2046,7 +1915,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -2072,7 +1941,7 @@ public class Test {
 							for (int w = ca2.getMinW(x,y,z); w <= ca2.getMaxW(w,y,z); w++) {
 								if (!ca1.getFromPosition(w, x, y, z).equals(ca2.getFromPosition(w, x, y, z))) {
 									equal = false;
-									System.out.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
+									System.err.println("Different value at step " + ca1.getStep() + " (" + w + ", " + x + ", " + y + ", " + z + "): " 
 											+ ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(w, x, y, z) 
 											+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(w, x, y, z));
 								}
@@ -2085,7 +1954,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					return;
@@ -2112,7 +1981,7 @@ public class Test {
 								for (int v = ca1.getMinV(w,x,y,z); v <= ca1.getMaxV(w,x,y,z); v++) {
 									if (ca1.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
 										equal = false;
-										System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
+										System.err.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
 												+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(v, w, x, y, z) 
 												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
 									}
@@ -2126,7 +1995,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					break;
@@ -2157,7 +2026,7 @@ public class Test {
 								for (int v = ca1.getMinV(w,x,y,z); v <= ca1.getMaxV(w,x,y,z); v++) {
 									if (ca1.getFromPosition(v, w, x, y, z) != ca2.getFromPosition(v, w, x, y, z)) {
 										equal = false;
-										System.out.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
+										System.err.println("Different value at step " + ca1.getStep() + " (" + v + ", " + w + ", " + x + ", " + y + ", " + z + "): " 
 												+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(v, w, x, y, z) 
 												+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(v, w, x, y, z));
 									}
@@ -2171,7 +2040,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal)
 					break;
@@ -2198,7 +2067,7 @@ public class Test {
 					long value2 = iterator2.next();
 					if (value1 != value2) {
 						equal = false;
-						System.out.println("Different value at step " + ca1.getStep() + ": " 
+						System.err.println("Different value at step " + ca1.getStep() + ": " 
 								+ ca1.getClass().getSimpleName() + ":" + value1 
 								+ " != " + ca2.getClass().getSimpleName() + ":" + value2);
 						//return;
@@ -2209,7 +2078,7 @@ public class Test {
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 				if (!equal) {
 					return;
@@ -2233,7 +2102,7 @@ public class Test {
 		}
 	}
 	
-	public static void checkTotalValueConservation(LongModel ca) {
+	public static void testTotalValueConservation(LongModel ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			long value = ca.getTotal(), newValue = value;
@@ -2243,7 +2112,7 @@ public class Test {
 				newValue = ca.getTotal();
 			}
 			if (!finished) {
-				System.out.println("Total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
+				System.err.println("The total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
 			} else {
 				System.out.println("The total value remained constant!");
 			}
@@ -2252,7 +2121,7 @@ public class Test {
 		}
 	}
 	
-	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void checkTotalValueConservation(NumericModel<Number_Type> ca) {
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void testTotalValueConservation(NumericModel<Number_Type> ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			Number_Type value = ca.getTotal(), newValue = value;
@@ -2262,7 +2131,7 @@ public class Test {
 				newValue = ca.getTotal();
 			}
 			if (!finished) {
-				System.out.println("Total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
+				System.err.println("The total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
 			} else {
 				System.out.println("The total value remained constant!");
 			}
@@ -2282,7 +2151,7 @@ public class Test {
 		}
 	}
 	
-	public static void checkTotalValueConservation(IntModel ca) {
+	public static void testTotalValueConservation(IntModel ca) {
 		System.out.println("Checking total value conservation...");
 		try {
 			int value = ca.getTotal(), newValue = value;
@@ -2292,7 +2161,7 @@ public class Test {
 				newValue = ca.getTotal();
 			}
 			if (!finished) {
-				System.out.println("Total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
+				System.err.println("The total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
 			} else {
 				System.out.println("The total value remained constant!");
 			}
@@ -2444,7 +2313,7 @@ public class Test {
 						try {
 							if (ca1.getFromPosition(coordinates) != ca2.getFromPosition(coordinates)) {
 //							equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
+								System.err.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
 										+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(coordinates) 
 										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(coordinates));
 							}
@@ -2459,7 +2328,7 @@ public class Test {
 				if (finished1 != finished2) {
 //					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 //			if (equal)
@@ -2484,7 +2353,7 @@ public class Test {
 						try {
 							if (ca1.getFromPosition(coordinates) != ca2.getFromPosition(coordinates)) {
 //							equal = false;
-								System.out.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
+								System.err.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
 										+ ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(coordinates) 
 										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(coordinates));
 							}
@@ -2499,7 +2368,7 @@ public class Test {
 				if (finished1 != finished2) {
 //					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
-					System.out.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
 			}
 //			if (equal)
