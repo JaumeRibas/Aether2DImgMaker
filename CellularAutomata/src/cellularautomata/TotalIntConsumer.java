@@ -20,8 +20,12 @@ import java.util.function.IntConsumer;
 
 public class TotalIntConsumer implements IntConsumer {
 	
-	public int total = 0;
+	private int total = 0;
 	
+	public int getTotal() {
+		return total;
+	}
+
 	@Override
 	public void accept(int value) {
 		total += value;

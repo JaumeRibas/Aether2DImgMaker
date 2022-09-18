@@ -22,8 +22,12 @@ import org.apache.commons.math3.FieldElement;
 
 public class TotalConsumer<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> implements Consumer<Number_Type> {
 	
-	public Number_Type total;
+	private Number_Type total;
 	
+	public Number_Type getTotal() {
+		return total;
+	}
+
 	@Override
 	public void accept(Number_Type value) {
 		if (total == null) {

@@ -20,8 +20,12 @@ import java.util.function.LongConsumer;
 
 public class TotalLongConsumer implements LongConsumer {
 	
-	public long total = 0;
+	private long total = 0;
 	
+	public long getTotal() {
+		return total;
+	}
+
 	@Override
 	public void accept(long value) {
 		total += value;
