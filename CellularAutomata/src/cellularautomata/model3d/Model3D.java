@@ -22,6 +22,11 @@ import cellularautomata.model2d.Model2D;
 
 public interface Model3D extends Model {
 	
+	@Override
+	default int getGridDimension() {
+		return 3;
+	}
+	
 	default String getXLabel() {
 		return "x";
 	}
@@ -35,8 +40,17 @@ public interface Model3D extends Model {
 	}
 	
 	@Override
-	default int getGridDimension() {
-		return 3;
+	default String getAxisLabel(int axis) {
+		switch (axis) {
+		case 0: 
+			return getXLabel();
+		case 1: 
+			return getYLabel();
+		case 2: 
+			return getZLabel();
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
+		}
 	}
 	
 	/**
@@ -49,7 +63,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the smallest x-coordinate of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
-	 * or bigger than {@link #getMaxY()}
+	 * or greater than {@link #getMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest x
@@ -61,7 +75,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the smallest x-coordinate of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
-	 * or bigger than {@link #getMaxZ()}
+	 * or greater than {@link #getMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the smallest x
@@ -93,7 +107,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the largest x-coordinate of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
-	 * or bigger than {@link #getMaxY()}
+	 * or greater than {@link #getMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest x
@@ -105,7 +119,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the largest x-coordinate of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
-	 * or bigger than {@link #getMaxZ()}
+	 * or greater than {@link #getMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the largest x
@@ -137,7 +151,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the smallest y-coordinate of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
-	 * or bigger than {@link #getMaxX()}
+	 * or greater than {@link #getMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest y
@@ -149,7 +163,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the smallest y-coordinate of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
-	 * or bigger than {@link #getMaxZ()}
+	 * or greater than {@link #getMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the smallest y
@@ -181,7 +195,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the largest y-coordinate of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
-	 * or bigger than {@link #getMaxX()}
+	 * or greater than {@link #getMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest y
@@ -193,7 +207,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the largest y-coordinate of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getMinZ()} 
-	 * or bigger than {@link #getMaxZ()}
+	 * or greater than {@link #getMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the largest y
@@ -225,7 +239,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the smallest z-coordinate of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
-	 * or bigger than {@link #getMaxX()}
+	 * or greater than {@link #getMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest z
@@ -237,7 +251,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the smallest z-coordinate of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
-	 * or bigger than {@link #getMaxY()}
+	 * or greater than {@link #getMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest z
@@ -269,7 +283,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the largest z-coordinate of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()} 
-	 * or bigger than {@link #getMaxX()}
+	 * or greater than {@link #getMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest z
@@ -281,7 +295,7 @@ public interface Model3D extends Model {
 	/**
 	 * Returns the largest z-coordinate of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
-	 * or bigger than {@link #getMaxY()}
+	 * or greater than {@link #getMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest z
@@ -322,7 +336,7 @@ public interface Model3D extends Model {
 	 * @param maxZ
 	 * @return a {@link Model2D} decorating the current grid 
 	 */
-	default Model3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default Model3D subsection(Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new SubModel3D<Model3D>(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -335,7 +349,8 @@ public interface Model3D extends Model {
 			return crossSectionAtY(coordinate);
 		case 2: 
 			return crossSectionAtZ(coordinate);
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 	
@@ -349,6 +364,47 @@ public interface Model3D extends Model {
 	
 	default Model2D crossSectionAtZ(int z) {
 		return new Model3DZCrossSection<Model3D>(this, z);
+	}
+	
+	@Override
+	default Model2D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		switch (firstAxis) {
+		case 0: 
+			switch (secondAxis) {
+			case 0:
+				throw new IllegalArgumentException("The axes cannot be equal.");				
+			case 1:
+				return diagonalCrossSectionOnXY(positiveSlope, offset);
+			case 2:
+				return diagonalCrossSectionOnXZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 3. Got " + secondAxis + ".");
+			}
+		case 1: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnXY(positiveSlope, positiveSlope ? -offset : offset);				
+			case 1:
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			case 2: 
+				return diagonalCrossSectionOnYZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 3. Got " + secondAxis + ".");
+			}			
+		case 2: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnXZ(positiveSlope, positiveSlope ? -offset : offset);				
+			case 1: 
+				return diagonalCrossSectionOnYZ(positiveSlope, positiveSlope ? -offset : offset);
+			case 2:
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 3. Got " + secondAxis + ".");
+			}
+		default:
+			throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 3. Got " + firstAxis + ".");
+		}
 	}
 	
 	default Model2D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
@@ -366,13 +422,14 @@ public interface Model3D extends Model {
 	@Override
 	default int getMaxCoordinate(int axis) {
 		switch (axis) {
-		case 0: 
+		case 0:
 			return getMaxX();
-		case 1: 
+		case 1:
 			return getMaxY();
-		case 2: 
+		case 2:
 			return getMaxZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 
@@ -422,7 +479,8 @@ public interface Model3D extends Model {
 			} else {
 				return getMaxZ(x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 	
@@ -435,7 +493,8 @@ public interface Model3D extends Model {
 			return getMinY();
 		case 2: 
 			return getMinZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 
@@ -485,7 +544,8 @@ public interface Model3D extends Model {
 			} else {
 				return getMinZ(x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 

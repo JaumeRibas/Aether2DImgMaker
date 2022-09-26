@@ -20,6 +20,7 @@ import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.MinAndMax;
 import cellularautomata.MinAndMaxConsumer;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.TotalConsumer;
 
 public interface NumericModel<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel<Number_Type> {
@@ -54,6 +55,21 @@ public interface NumericModel<Number_Type extends FieldElement<Number_Type> & Co
 		MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
 		forEachAtOddPosition(consumer);
 		return consumer.getMinAndMaxValue();
+	}
+	
+	@Override
+	default NumericModel<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return new NumericSubModel<Number_Type>(this, minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default NumericModel<Number_Type> crossSection(int axis, int coordinate) {
+		return new NumericModelCrossSection<Number_Type>(this, axis, coordinate);
+	}
+	
+	@Override
+	default NumericModel<Number_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return new NumericModelDiagonalCrossSection<Number_Type>(this, firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 }

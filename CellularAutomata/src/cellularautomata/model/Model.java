@@ -26,7 +26,7 @@ import cellularautomata.Utils;
 
 /**
  * A model consisting of a finite region of an n-dimensional grid whose shape, size and configuration evolve in discrete time steps.
- * The shape of the region always meets the condition that no line parallel to an axis, or at a 45° angle of an axis, overlaps with it along more than one segment.
+ * The shape of the region always meets the condition that no line overlaps with it along more than one segment.
  *  
  * @author Jaume
  *
@@ -47,7 +47,7 @@ public interface Model {
 	 * @return the label
 	 */
 	default String getAxisLabel(int axis) {
-		return "" + Utils.getAxisLabel(getGridDimension(), axis);
+		return Utils.getAxisLabel(getGridDimension(), axis);
 	}
 	
 	/**
@@ -145,10 +145,13 @@ public interface Model {
 					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int minCoord = getMinCoordinate(0, partialCoordinatesObj);
 					int maxCoord = getMaxCoordinate(0, partialCoordinatesObj);
-					for (int currentCoordinate = minCoord; currentCoordinate <= maxCoord; currentCoordinate++) {
+					for (int currentCoordinate = minCoord; currentCoordinate != maxCoord; currentCoordinate++) {
 						coordinates[0] = currentCoordinate;
 						consumer.accept(new Coordinates(coordinates));
 					}
+					//to prevent infinite loop if maxCoord is equal to Integer.MAX_VALUE
+					coordinates[0] = maxCoord;
+					consumer.accept(new Coordinates(coordinates));
 					isBeginningOfLoop = false;
 					currentAxis++;
 				} else if (isBeginningOfLoop) {
@@ -213,10 +216,13 @@ public interface Model {
 					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int minCoord = getMinCoordinate(axesOrder[0], partialCoordinatesObj);
 					int maxCoord = getMaxCoordinate(axesOrder[0], partialCoordinatesObj);
-					for (int currentCoordinate = minCoord; currentCoordinate <= maxCoord; currentCoordinate++) {
+					for (int currentCoordinate = minCoord; currentCoordinate != maxCoord; currentCoordinate++) {
 						coordinates[axesOrder[0]] = currentCoordinate;
 						consumer.accept(new Coordinates(coordinates));
 					}
+					//to prevent infinite loop if maxCoord is equal to Integer.MAX_VALUE
+					coordinates[axesOrder[0]] = maxCoord;
+					consumer.accept(new Coordinates(coordinates));
 					isBeginningOfLoop = false;
 					i++;
 				} else if (isBeginningOfLoop) {
@@ -271,7 +277,7 @@ public interface Model {
 					if (!Utils.isEvenPosition(coordinates)) {
 						currentCoordinate++;
 					}
-					for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
+					for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {//TODO fix infinite loop if maxCoord >= Integer.MAX_VALUE - 1
 						coordinates[0] = currentCoordinate;
 						consumer.accept(new Coordinates(coordinates));
 					}
@@ -326,7 +332,7 @@ public interface Model {
 				if (Utils.isEvenPosition(coordinates)) {
 					currentCoordinate++;
 				}
-				for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {
+				for (; currentCoordinate <= maxCoord; currentCoordinate += 2) {//TODO fix infinite loop if maxCoord >= Integer.MAX_VALUE - 1
 					coordinates[0] = currentCoordinate;
 					consumer.accept(new Coordinates(coordinates));
 				}
@@ -410,6 +416,10 @@ public interface Model {
 	
 	default Model crossSection(int axis, int coordinate) {
 		return new ModelCrossSection<Model>(this, axis, coordinate);
+	}
+	
+	default Model diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return new ModelDiagonalCrossSection<Model>(this, firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	/**

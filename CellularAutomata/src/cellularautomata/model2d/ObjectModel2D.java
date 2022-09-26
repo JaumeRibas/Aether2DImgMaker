@@ -19,6 +19,7 @@ package cellularautomata.model2d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.ObjectModel;
 
 public interface ObjectModel2D<Object_Type> extends Model2D, ObjectModel<Object_Type> {
@@ -38,8 +39,14 @@ public interface ObjectModel2D<Object_Type> extends Model2D, ObjectModel<Object_
 		return getFromPosition(coordinates.get(0), coordinates.get(1));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	default ObjectModel2D<Object_Type> subsection(int minX, int maxX, int minY, int maxY) {
+	default ObjectModel2D<Object_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (ObjectModel2D<Object_Type>) Model2D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default ObjectModel2D<Object_Type> subsection(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		return new ObjectSubModel2D<ObjectModel2D<Object_Type>, Object_Type>(this, minX, maxX, minY, maxY);
 	}
 

@@ -515,5 +515,10 @@ public class AsymmetricModelSection5D<Source_Type extends SymmetricModel5D> exte
 	public Model4D crossSection(int axis, int coordinate) {
 		return Model5D.super.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public Model4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return Model5D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 }

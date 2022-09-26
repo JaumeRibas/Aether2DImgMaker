@@ -65,7 +65,7 @@ public class Model2DDecorator<Source_Type extends Model2D> extends ModelDecorato
 	}
 	
 	@Override
-	public Model2D subsection(int minX, int maxX, int minY, int maxY) {
+	public Model2D subsection(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		return source.subsection(minX, maxX, minY, maxY);
 	}
 

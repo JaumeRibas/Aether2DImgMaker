@@ -28,23 +28,23 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 	protected int maxY;
 	protected int minZ;
 	protected int maxZ;
-	protected int absoluteMinX;
-	protected int absoluteMaxX;
-	protected int absoluteMinY;
-	protected int absoluteMaxY;
-	protected int absoluteMinZ;
-	protected int absoluteMaxZ;
+	protected Integer absoluteMinX;
+	protected Integer absoluteMaxX;
+	protected Integer absoluteMinY;
+	protected Integer absoluteMaxY;
+	protected Integer absoluteMinZ;
+	protected Integer absoluteMaxZ;
 	
-	public SubModel3D(Source_Type source, int minX, int maxX, int minY, 
-			int maxY, int minZ, int maxZ) {
-		if (minX > maxX) {
-			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+	public SubModel3D(Source_Type source, Integer minX, Integer maxX, Integer minY, 
+			Integer maxY, Integer minZ, Integer maxZ) {
+		if (minX != null && maxX != null && minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be greater than max x.");
 		}
-		if (minY > maxY) {
-			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
+		if (minY != null && maxY != null && minY > maxY) {
+			throw new IllegalArgumentException("Min y cannot be greater than max y.");
 		}
-		if (minZ > maxZ) {
-			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
+		if (minZ != null && maxZ != null && minZ > maxZ) {
+			throw new IllegalArgumentException("Min z cannot be greater than max z.");
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX, minY, maxY, minZ, maxZ))
@@ -57,28 +57,64 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 		this.absoluteMinZ = minZ;
 	}
 	
-	protected boolean getActualBounds(int minX, int maxX, int minY, 
-			int maxY, int minZ, int maxZ) {
+	protected boolean getActualBounds(Integer minX, Integer maxX, Integer minY, 
+			Integer maxY, Integer minZ, Integer maxZ) {
 		int sourceMinX = source.getMinX();
 		int sourceMaxX = source.getMaxX();
 		int sourceMinY = source.getMinY();
 		int sourceMaxY = source.getMaxY();
 		int sourceMinZ = source.getMinZ();
 		int sourceMaxZ = source.getMaxZ();
-		if (minX > sourceMaxX || maxX < sourceMinX
-				|| minY > sourceMaxY || maxY < sourceMinY
-				|| minZ > sourceMaxZ || maxZ < sourceMinZ) {
-			return false;
+		//TODO validate that passed bounds are within local bounds
+		if (minX == null) {
+			this.minX = sourceMinX;
 		} else {
-			//TODO validate that passed bounds are within local bounds
-			this.minX = Math.max(minX, sourceMinX);
-			this.maxX = Math.min(maxX, sourceMaxX);
-			this.minY = Math.max(minY, sourceMinY);
-			this.maxY = Math.min(maxY, sourceMaxY);
-			this.minZ = Math.max(minZ, sourceMinZ);
-			this.maxZ = Math.min(maxZ, sourceMaxZ);
-			return true;
+			int intMinX = minX;
+			if (intMinX > sourceMaxX) 
+				return false;
+			this.minX = Math.max(intMinX, sourceMinX);
 		}
+		if (maxX == null) {
+			this.maxX = sourceMaxX;
+		} else {
+			int intMaxX = maxX;
+			if (intMaxX < sourceMinX) 
+				return false;
+			this.maxX = Math.min(intMaxX, sourceMaxX);
+		}
+		if (minY == null) {
+			this.minY = sourceMinY;
+		} else {
+			int intMinY = minY;
+			if (intMinY > sourceMaxY) 
+				return false;
+			this.minY = Math.max(intMinY, sourceMinY);
+		}
+		if (maxY == null) {
+			this.maxY = sourceMaxY;
+		} else {
+			int intMaxY = maxY;
+			if (intMaxY < sourceMinY) 
+				return false;
+			this.maxY = Math.min(intMaxY, sourceMaxY);
+		}
+		if (minZ == null) {
+			this.minZ = sourceMinZ;
+		} else {
+			int intMinZ = minZ;
+			if (intMinZ > sourceMaxZ) 
+				return false;
+			this.minZ = Math.max(intMinZ, sourceMinZ);
+		}
+		if (maxZ == null) {
+			this.maxZ = sourceMaxZ;
+		} else {
+			int intMaxZ = maxZ;
+			if (intMaxZ < sourceMinZ) 
+				return false;
+			this.maxZ = Math.min(intMaxZ, sourceMaxZ);
+		}
+		return true;
 	}
 
 	@Override
@@ -174,10 +210,63 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" 
-				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
-				+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]_"
-				+ source.getZLabel() + "[" + absoluteMinZ + "," + absoluteMaxZ + "]";
+		StringBuilder strCoordinateBounds = new StringBuilder();
+		boolean anyNotNull = false;
+		strCoordinateBounds.append("/");
+		Integer minCoord = absoluteMinX;
+		Integer maxCoord = absoluteMaxX;
+		if (minCoord != null || maxCoord != null) {
+			anyNotNull = true;
+			strCoordinateBounds.append(getXLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinY;
+		maxCoord = absoluteMaxY;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getYLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinZ;
+		maxCoord = absoluteMaxZ;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getZLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		return anyNotNull ? source.getSubfolderPath() + strCoordinateBounds.toString() : source.getSubfolderPath();
 	}
 
 	@Override

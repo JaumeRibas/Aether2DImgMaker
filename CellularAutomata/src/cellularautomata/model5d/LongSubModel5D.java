@@ -18,8 +18,8 @@ package cellularautomata.model5d;
 
 public class LongSubModel5D extends SubModel5D<LongModel5D> implements LongModel5D {
 	
-	public LongSubModel5D(LongModel5D source, int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ,
-			int maxZ) {
+	public LongSubModel5D(LongModel5D source, Integer minV, Integer maxV, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ,
+			Integer maxZ) {
 		super(source, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 

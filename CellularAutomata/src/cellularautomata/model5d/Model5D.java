@@ -60,7 +60,8 @@ public interface Model5D extends Model {
 			return getYLabel();
 		case 4: 
 			return getZLabel();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
 		}
 	}
 	
@@ -394,7 +395,7 @@ public interface Model5D extends Model {
 				minCoordinates.get(4), maxCoordinates.get(4));
 	}
 
-	default Model5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default Model5D subsection(Integer minV, Integer maxV, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new SubModel5D<Model5D>(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -404,40 +405,172 @@ public interface Model5D extends Model {
 		case 0:
 			return crossSectionAtV(coordinate);
 		case 1:
-			//return crossSectionAtW(coordinate);
+			return crossSectionAtW(coordinate);
 		case 2:
-//			return crossSectionAtX(coordinate);
+			return crossSectionAtX(coordinate);
 		case 3:
-//			return crossSectionAtY(coordinate);
+			return crossSectionAtY(coordinate);
 		case 4:
-			throw new UnsupportedOperationException("Not implemented yet.");
-//			return crossSectionAtZ(coordinate);
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+			return crossSectionAtZ(coordinate);
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
 		}
 	}
 
 	default Model4D crossSectionAtV(int v) {
 		return new Model5DVCrossSection<Model5D>(this, v);
 	}
-//	
-//	default Model4D crossSectionAtW(int w) {
+	
+	default Model4D crossSectionAtW(int w) {
+		throw new UnsupportedOperationException("Not implemented yet.");
 //		return new Model5DWCrossSection<Model5D>(this, w);
-//	}
-//	
-//	default Model4D crossSectionAtX(int x) {
+	}
+	
+	default Model4D crossSectionAtX(int x) {
+		throw new UnsupportedOperationException("Not implemented yet.");
 //		return new Model5DXCrossSection<Model5D>(this, x);
-//	}
-//	
-//	default Model4D crossSectionAtY(int y) {
+	}
+	
+	default Model4D crossSectionAtY(int y) {
+		throw new UnsupportedOperationException("Not implemented yet.");
 //		return new Model5DYCrossSection<Model5D>(this, y);
-//	}
-//	
-//	default Model4D crossSectionAtZ(int z) {
+	}
+	
+	default Model4D crossSectionAtZ(int z) {
+		throw new UnsupportedOperationException("Not implemented yet.");
 //		return new Model5DZCrossSection<Model5D>(this, z);
-//	}
+	}
+	
+	@Override
+	default Model4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		switch (firstAxis) {
+		case 0: 
+			switch (secondAxis) {
+			case 0:
+				throw new IllegalArgumentException("The axes cannot be equal.");		
+			case 1: 
+				return diagonalCrossSectionOnVW(positiveSlope, offset);				
+			case 2: 
+				return diagonalCrossSectionOnVX(positiveSlope, offset);
+			case 3: 
+				return diagonalCrossSectionOnVY(positiveSlope, offset);
+			case 4: 
+				return diagonalCrossSectionOnVZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 5. Got " + secondAxis + ".");
+			}
+		case 1: 
+			switch (secondAxis) {			
+			case 0: 
+				return diagonalCrossSectionOnVW(positiveSlope, positiveSlope ? -offset : offset);
+			case 1:
+				throw new IllegalArgumentException("The axes cannot be equal.");				
+			case 2: 
+				return diagonalCrossSectionOnWX(positiveSlope, offset);
+			case 3: 
+				return diagonalCrossSectionOnWY(positiveSlope, offset);
+			case 4: 
+				return diagonalCrossSectionOnWZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 5. Got " + secondAxis + ".");
+			}
+		case 2: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnVX(positiveSlope, positiveSlope ? -offset : offset);
+			case 1: 
+				return diagonalCrossSectionOnWX(positiveSlope, positiveSlope ? -offset : offset);				
+			case 2:
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			case 3: 
+				return diagonalCrossSectionOnXY(positiveSlope, offset);
+			case 4: 
+				return diagonalCrossSectionOnXZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 5. Got " + secondAxis + ".");
+			}			
+		case 3: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnVY(positiveSlope, positiveSlope ? -offset : offset);		
+			case 1: 
+				return diagonalCrossSectionOnWY(positiveSlope, positiveSlope ? -offset : offset);				
+			case 2: 
+				return diagonalCrossSectionOnXY(positiveSlope, positiveSlope ? -offset : offset);
+			case 3:
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			case 4: 
+				return diagonalCrossSectionOnYZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 5. Got " + secondAxis + ".");
+			}			
+		case 4: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnVZ(positiveSlope, positiveSlope ? -offset : offset);	
+			case 1: 
+				return diagonalCrossSectionOnWZ(positiveSlope, positiveSlope ? -offset : offset);				
+			case 2: 
+				return diagonalCrossSectionOnXZ(positiveSlope, positiveSlope ? -offset : offset);
+			case 3:
+				return diagonalCrossSectionOnYZ(positiveSlope, positiveSlope ? -offset : offset);
+			case 4: 
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 5. Got " + secondAxis + ".");
+			}
+		default:
+			throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 5. Got " + firstAxis + ".");
+		}
+	}
 	
 	default Model4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {
 		return new Model5DVWDiagonalCrossSection<Model5D>(this, positiveSlope, wOffsetFromV);
+	}
+	
+	default Model4D diagonalCrossSectionOnVX(boolean positiveSlope, int xOffsetFromV) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DVXDiagonalCrossSection<Model5D>(this, positiveSlope, xOffsetFromV);
+	}
+	
+	default Model4D diagonalCrossSectionOnVY(boolean positiveSlope, int yOffsetFromV) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DVYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromV);
+	}
+	
+	default Model4D diagonalCrossSectionOnVZ(boolean positiveSlope, int zOffsetFromV) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DVZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromV);
+	}
+	
+	default Model4D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DWXDiagonalCrossSection<Model5D>(this, positiveSlope, xOffsetFromW);
+	}
+	
+	default Model4D diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DWYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromW);
+	}
+	
+	default Model4D diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DWZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromW);
+	}
+	
+	default Model4D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DXYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromX);
+	}
+	
+	default Model4D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DXZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromX);
+	}
+	
+	default Model4D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model5DYZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromY);
 	}
 	
 	@Override
@@ -453,7 +586,8 @@ public interface Model5D extends Model {
 			return getMaxY();
 		case 4: 
 			return getMaxZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
 		}
 	}
 
@@ -706,7 +840,8 @@ public interface Model5D extends Model {
 			} else {
 				return getMaxZ(v, w, x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
 		}
 	}
 	
@@ -723,7 +858,8 @@ public interface Model5D extends Model {
 			return getMinY();
 		case 4: 
 			return getMinZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
 		}
 	}
 
@@ -976,7 +1112,8 @@ public interface Model5D extends Model {
 			} else {
 				return getMinZ(v, w, x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
 		}
 	}
 	

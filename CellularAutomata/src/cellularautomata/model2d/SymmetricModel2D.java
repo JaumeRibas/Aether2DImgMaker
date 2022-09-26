@@ -31,7 +31,7 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 	/**
 	 * Returns the smallest x-coordinate of the asymmetric section of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()} 
-	 * or bigger than {@link #getAsymmetricMaxY()}
+	 * or greater than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest x
@@ -48,7 +48,7 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 	/**
 	 * Returns the largest x-coordinate of the asymmetric section of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()}
-	 * or bigger than {@link #getAsymmetricMaxY()}
+	 * or greater than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest x
@@ -65,7 +65,7 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 	/**
 	 * Returns the smallest y-coordinate of the asymmetric section of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()}
-	 * or bigger than {@link #getAsymmetricMaxX()}
+	 * or greater than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest y
@@ -82,7 +82,7 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 	/**
 	 * Returns the largest y-coordinate of the asymmetric section of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()}
-	 * or bigger than {@link #getAsymmetricMaxX()}
+	 * or greater than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest y
@@ -96,7 +96,8 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 			return getAsymmetricMaxX();
 		case 1: 
 			return getAsymmetricMaxY();
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 
@@ -117,7 +118,8 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 			} else {
 				return getAsymmetricMaxY(x);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 	
@@ -128,7 +130,8 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 			return getAsymmetricMinX();
 		case 1: 
 			return getAsymmetricMinY();
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 
@@ -149,7 +152,8 @@ public interface SymmetricModel2D extends Model2D, SymmetricModel {
 			} else {
 				return getAsymmetricMinY(x);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 	

@@ -19,6 +19,7 @@ package cellularautomata.model5d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.LongModel;
 import cellularautomata.model4d.LongModel4D;
 
@@ -134,13 +135,28 @@ public interface LongModel5D extends Model5D, LongModel {
 	}
 	
 	@Override
-	default LongModel5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default LongModel5D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (LongModel5D) Model5D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default LongModel5D subsection(Integer minV, Integer maxV, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new LongSubModel5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default LongModel4D crossSection(int axis, int coordinate) {
+		return (LongModel4D) Model5D.super.crossSection(axis, coordinate);
 	}
 
 	@Override
 	default LongModel4D crossSectionAtV(int v) {
 		return new LongModel5DVCrossSection(this, v);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (LongModel4D) Model5D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

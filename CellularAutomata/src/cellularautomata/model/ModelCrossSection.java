@@ -16,15 +16,11 @@
  */
 package cellularautomata.model;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 
-public class ModelCrossSection<Source_Type extends Model> implements Model {
+public class ModelCrossSection<Source_Type extends Model> extends ModelDecorator<Source_Type> {
 
-	protected Source_Type source;
 	protected int crossSectionAxis;
 	protected int crossSectionCoordinate;
 	protected PartialCoordinates crossSectionCoordinates;
@@ -32,6 +28,7 @@ public class ModelCrossSection<Source_Type extends Model> implements Model {
 	protected int dimension;
 	
 	public ModelCrossSection(Source_Type source, int axis, int coordinate) {
+		super(source);
 		if (axis < 0) {
 			throw new IllegalArgumentException("The axis cannot be negative.");
 		}
@@ -129,23 +126,8 @@ public class ModelCrossSection<Source_Type extends Model> implements Model {
 	}
 
 	@Override
-	public long getStep() {
-		return source.getStep();
-	}
-
-	@Override
-	public String getName() {
-		return source.getName();
-	}
-
-	@Override
 	public String getSubfolderPath() {
 		return source.getSubfolderPath() + "/" + source.getAxisLabel(crossSectionAxis) + "=" + crossSectionCoordinate;
-	}
-
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
 	}
 
 }

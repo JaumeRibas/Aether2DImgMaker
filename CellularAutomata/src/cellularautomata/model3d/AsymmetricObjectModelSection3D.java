@@ -16,6 +16,9 @@
  */
 package cellularautomata.model3d;
 
+import cellularautomata.PartialCoordinates;
+import cellularautomata.model2d.ObjectModel2D;
+
 public class AsymmetricObjectModelSection3D<Source_Type extends SymmetricObjectModel3D<Object_Type>, Object_Type> extends AsymmetricModelSection3D<Source_Type> implements ObjectModel3D<Object_Type> {
 	
 	public AsymmetricObjectModelSection3D(Source_Type grid) {
@@ -25,6 +28,21 @@ public class AsymmetricObjectModelSection3D<Source_Type extends SymmetricObjectM
 	@Override
 	public Object_Type getFromPosition(int x, int y, int z) throws Exception {
 		return source.getFromAsymmetricPosition(x, y, z);
+	}
+	
+	@Override
+	public ObjectModel3D<Object_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return ObjectModel3D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	public ObjectModel2D<Object_Type> crossSection(int axis, int coordinate) {
+		return ObjectModel3D.super.crossSection(axis, coordinate);
+	}
+	
+	@Override
+	public ObjectModel2D<Object_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return ObjectModel3D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

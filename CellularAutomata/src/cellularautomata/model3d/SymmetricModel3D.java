@@ -31,7 +31,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the smallest x-coordinate of the asymmetric section of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()} 
-	 * or bigger than {@link #getAsymmetricMaxY()}
+	 * or greater than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest x
@@ -41,7 +41,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the smallest x-coordinate of the asymmetric section of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getAsymmetricMinZ()} 
-	 * or bigger than {@link #getAsymmetricMaxZ()}
+	 * or greater than {@link #getAsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the smallest x
@@ -69,7 +69,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the largest x-coordinate of the asymmetric section of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()} 
-	 * or bigger than {@link #getAsymmetricMaxY()}
+	 * or greater than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest x
@@ -79,7 +79,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the largest x-coordinate of the asymmetric section of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getAsymmetricMinZ()} 
-	 * or bigger than {@link #getAsymmetricMaxZ()}
+	 * or greater than {@link #getAsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the largest x
@@ -107,7 +107,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the smallest y-coordinate of the asymmetric section of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()} 
-	 * or bigger than {@link #getAsymmetricMaxX()}
+	 * or greater than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest y
@@ -117,7 +117,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the smallest y-coordinate of the asymmetric section of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getAsymmetricMinZ()} 
-	 * or bigger than {@link #getAsymmetricMaxZ()}
+	 * or greater than {@link #getAsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the smallest y
@@ -145,7 +145,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the largest y-coordinate of the asymmetric section of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()} 
-	 * or bigger than {@link #getAsymmetricMaxX()}
+	 * or greater than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest y
@@ -155,7 +155,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the largest y-coordinate of the asymmetric section of the grid at z.<br/>
 	 * It's not defined to call this method on a z-coordinate smaller than {@link #getAsymmetricMinZ()} 
-	 * or bigger than {@link #getAsymmetricMaxZ()}
+	 * or greater than {@link #getAsymmetricMaxZ()}
 	 * 
 	 * @param z the z-coordinate
 	 * @return the largest y
@@ -183,7 +183,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the smallest z-coordinate of the asymmetric section of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()} 
-	 * or bigger than {@link #getAsymmetricMaxX()}
+	 * or greater than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest z
@@ -193,7 +193,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the smallest z-coordinate of the asymmetric section of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()} 
-	 * or bigger than {@link #getAsymmetricMaxY()}
+	 * or greater than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest z
@@ -221,7 +221,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the largest z-coordinate of the asymmetric section of the grid at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getAsymmetricMinX()} 
-	 * or bigger than {@link #getAsymmetricMaxX()}
+	 * or greater than {@link #getAsymmetricMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest z
@@ -231,7 +231,7 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 	/**
 	 * Returns the largest z-coordinate of the asymmetric section of the grid at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getAsymmetricMinY()} 
-	 * or bigger than {@link #getAsymmetricMaxY()}
+	 * or greater than {@link #getAsymmetricMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest z
@@ -258,7 +258,8 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 			return getAsymmetricMaxY();
 		case 2: 
 			return getAsymmetricMaxZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 
@@ -308,7 +309,8 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 			} else {
 				return getAsymmetricMaxZ(x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 	
@@ -321,7 +323,8 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 			return getAsymmetricMinY();
 		case 2: 
 			return getAsymmetricMinZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 
@@ -371,7 +374,8 @@ public interface SymmetricModel3D extends Model3D, SymmetricModel {
 			} else {
 				return getAsymmetricMinZ(x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1 or 2. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1 or 2. Got " + axis + ".");
 		}
 	}
 	

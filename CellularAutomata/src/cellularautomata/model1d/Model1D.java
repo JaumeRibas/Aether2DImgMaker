@@ -21,13 +21,18 @@ import cellularautomata.PartialCoordinates;
 
 public interface Model1D extends Model {
 	
+	@Override
+	default int getGridDimension() {
+		return 1;
+	}
+	
 	default String getXLabel() {
 		return "x";
 	}
 	
 	@Override
-	default int getGridDimension() {
-		return 1;
+	default String getAxisLabel(int axis) {
+		return getXLabel();
 	}
 	
 	/**
@@ -43,17 +48,6 @@ public interface Model1D extends Model {
 	 * @return the largest x
 	 */
 	int getMaxX();
-	
-	/**
-	 * Returns a decorated {@link Model1D} with the passed bounds.
-	 * 
-	 * @param minX
-	 * @param maxX
-	 * @return a {@link Model1D} decorating the current grid 
-	 */
-	default Model1D subsection(int minX, int maxX) {
-		return new SubModel1D<Model1D>(this, minX, maxX);
-	}
 
 	@Override
 	default int getMaxCoordinate(int axis) {
@@ -73,5 +67,21 @@ public interface Model1D extends Model {
 	@Override
 	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
 		return getMinX();
+	}
+	
+	@Override
+	default Model1D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return subsection(minCoordinates.get(0), maxCoordinates.get(0));
+	}
+	
+	/**
+	 * Returns a decorated {@link Model1D} with the passed bounds.
+	 * 
+	 * @param minX
+	 * @param maxX
+	 * @return a {@link Model1D} decorating the current grid 
+	 */
+	default Model1D subsection(Integer minX, Integer maxX) {
+		return new SubModel1D<Model1D>(this, minX, maxX);
 	}
 }

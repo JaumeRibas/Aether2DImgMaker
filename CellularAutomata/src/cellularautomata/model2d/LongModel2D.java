@@ -19,6 +19,7 @@ package cellularautomata.model2d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.LongModel;
 
 public interface LongModel2D extends Model2D, LongModel {
@@ -142,7 +143,12 @@ public interface LongModel2D extends Model2D, LongModel {
 	}
 	
 	@Override
-	default LongModel2D subsection(int minX, int maxX, int minY, int maxY) {
+	default LongModel2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (LongModel2D) Model2D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default LongModel2D subsection(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		return new LongSubModel2D(this, minX, maxX, minY, maxY);
 	}
 

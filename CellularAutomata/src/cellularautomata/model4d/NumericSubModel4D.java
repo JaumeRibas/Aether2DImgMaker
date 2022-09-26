@@ -21,8 +21,8 @@ import org.apache.commons.math3.FieldElement;
 public class NumericSubModel4D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
 	extends ObjectSubModel4D<NumericModel4D<Number_Type>, Number_Type> implements NumericModel4D<Number_Type> {
 	
-	public NumericSubModel4D(NumericModel4D<Number_Type> source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ,
-			int maxZ) {
+	public NumericSubModel4D(NumericModel4D<Number_Type> source, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ,
+			Integer maxZ) {
 		super(source, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	

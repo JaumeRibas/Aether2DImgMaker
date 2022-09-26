@@ -18,7 +18,7 @@ package cellularautomata.model2d;
 
 public class ObjectSubModel2D<Source_Type extends ObjectModel2D<Object_Type>, Object_Type> extends SubModel2D<Source_Type> implements ObjectModel2D<Object_Type> {
 	
-	public ObjectSubModel2D(Source_Type source, int minX, int maxX, int minY, int maxY) {
+	public ObjectSubModel2D(Source_Type source, Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		super(source, minX, maxX, minY, maxY);
 	}
 

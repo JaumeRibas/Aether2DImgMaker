@@ -148,7 +148,7 @@ public interface IntModel2D extends Model2D, IntModel {
 	}
 	
 	@Override
-	default IntModel2D subsection(int minX, int maxX, int minY, int maxY) {
+	default IntModel2D subsection(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		return new IntSubModel2D(this, minX, maxX, minY, maxY);
 	}
 

@@ -155,5 +155,10 @@ public class AsymmetricModelSection3D<Source_Type extends SymmetricModel3D> exte
 	public Model2D crossSection(int axis, int coordinate) {
 		return Model3D.super.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public Model2D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return Model3D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 }

@@ -381,4 +381,9 @@ public class ModelAs4D<Source_Type extends Model> extends ModelDecorator<Source_
 		return Model4D.super.crossSection(axis, coordinate);
 	}
 	
+	@Override
+	public Model3D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return Model4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
+	
 }

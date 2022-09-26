@@ -28,41 +28,33 @@ import cellularautomata.PartialCoordinates;
 public class HypercubePyramidGrid implements Model {
 	
 	protected final Coordinates baseCenterCoordinates;
-	protected final int baseSide;
-	protected final int height;
-	protected final int heightAxis;
 	protected final int halfBaseSide;
-	protected final int heightMinusOne;
+	protected final int heightAxis;
 	protected final int baseCenterHeightAxisCoord;
 	protected final int dimension;
 
-	public HypercubePyramidGrid(Coordinates baseCenterCoordinates, int baseSide, int height, int heightAxis) {
+	public HypercubePyramidGrid(Coordinates baseCenterCoordinates, int baseSide, int heightAxis) {
 		if (baseCenterCoordinates == null) {
 			throw new IllegalArgumentException("The coordinates cannot be null.");
 		}
-		if (baseSide < 3) {
-			throw new IllegalArgumentException("The base's side must be greater than two.");
+		if (baseSide < 1) {
+			throw new IllegalArgumentException("The base's side must be greater than zero.");
 		}
 		if (baseSide%2 == 0) {
 			throw new IllegalArgumentException("The base's side must be odd.");
 		}
-		if (height < 2) {
-			throw new IllegalArgumentException("The height must be greater than one.");
-		}
-		this.baseCenterCoordinates = baseCenterCoordinates;
-		dimension = baseCenterCoordinates.getCount();
 		if (heightAxis < 0) {
 			throw new IllegalArgumentException("The height's axis cannot be smaller than zero.");
 		}
+		dimension = baseCenterCoordinates.getCount();
 		if (heightAxis >= dimension) {
 			throw new IllegalArgumentException("The height's axis must be smaller than the dimension.");
 		}
-		this.baseSide = baseSide;
 		halfBaseSide = baseSide/2;
-		this.height = height;
-		heightMinusOne = height - 1;
+		this.baseCenterCoordinates = baseCenterCoordinates;
 		this.heightAxis = heightAxis;
 		baseCenterHeightAxisCoord = baseCenterCoordinates.get(heightAxis);
+		//TODO check that resulting bounds don't overflow int type
 	}
 
 	@Override
@@ -72,11 +64,7 @@ public class HypercubePyramidGrid implements Model {
 
 	@Override
 	public int getMaxCoordinate(int axis) {
-		if (axis == heightAxis) {
-			return baseCenterHeightAxisCoord + heightMinusOne;
-		} else {
-			return baseCenterCoordinates.get(axis) + halfBaseSide; 
-		}
+		return baseCenterCoordinates.get(axis) + halfBaseSide;
 	}
 
 	@Override
@@ -105,14 +93,14 @@ public class HypercubePyramidGrid implements Model {
 					}
 				}
 			}
-			return baseCenterHeightAxisCoord + heightMinusOne - (int)Math.ceil(greaterRelativeAbsoluteCoord*(float)heightMinusOne/halfBaseSide);
+			return baseCenterHeightAxisCoord + halfBaseSide - greaterRelativeAbsoluteCoord;
 		} else {
 			int relativeHeightCoord = 0;
 			Integer heightCoord = coordinates.get(heightAxis);
 			if (heightCoord != null) {
 				relativeHeightCoord = heightCoord - baseCenterHeightAxisCoord;
 			}
-			return baseCenterCoordinates.get(axis) + (int)Math.floor((heightMinusOne - relativeHeightCoord)*(float)halfBaseSide/heightMinusOne);
+			return baseCenterCoordinates.get(axis) + halfBaseSide - relativeHeightCoord;
 		}
 	}
 
@@ -138,7 +126,7 @@ public class HypercubePyramidGrid implements Model {
 			if (heightCoord != null) {
 				relativeHeightCoord = heightCoord - baseCenterHeightAxisCoord;
 			}
-			return baseCenterCoordinates.get(axis) - (int)Math.floor((heightMinusOne - relativeHeightCoord)*(float)halfBaseSide/heightMinusOne);
+			return baseCenterCoordinates.get(axis) - halfBaseSide + relativeHeightCoord;
 		}
 	}
 

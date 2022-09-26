@@ -18,7 +18,7 @@ package cellularautomata.model1d;
 
 public class ObjectSubModel1D<Source_Type extends ObjectModel1D<Object_Type>, Object_Type> extends SubModel1D<Source_Type> implements ObjectModel1D<Object_Type> {
 
-	public ObjectSubModel1D(Source_Type source, int minX, int maxX) {
+	public ObjectSubModel1D(Source_Type source, Integer minX, Integer maxX) {
 		super(source, minX, maxX);
 	}
 

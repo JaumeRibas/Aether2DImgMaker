@@ -19,6 +19,7 @@ package cellularautomata.model1d;
 import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.MinAndMax;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.NumericModel;
 
 public interface NumericModel1D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel1D<Number_Type>, NumericModel<Number_Type> {
@@ -73,7 +74,12 @@ public interface NumericModel1D<Number_Type extends FieldElement<Number_Type> & 
 	}
 	
 	@Override
-	default NumericModel1D<Number_Type> subsection(int minX, int maxX) {
+	default NumericModel1D<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (NumericModel1D<Number_Type>) ObjectModel1D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default NumericModel1D<Number_Type> subsection(Integer minX, Integer maxX) {
 		return new NumericSubModel1D<Number_Type>(this, minX, maxX);
 	}
 }

@@ -19,6 +19,7 @@ package cellularautomata.model4d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.ObjectModel;
 import cellularautomata.model3d.ObjectModel3D;
 
@@ -40,10 +41,22 @@ public interface ObjectModel4D<Object_Type> extends Model4D, ObjectModel<Object_
 	default Object_Type getFromPosition(Coordinates coordinates) throws Exception {
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2), coordinates.get(3));
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	default ObjectModel4D<Object_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (ObjectModel4D<Object_Type>) Model4D.super.subsection(minCoordinates, maxCoordinates);
+	}
 	
 	@Override
-	default ObjectModel4D<Object_Type> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default ObjectModel4D<Object_Type> subsection(Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new ObjectSubModel4D<ObjectModel4D<Object_Type>, Object_Type>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	default ObjectModel3D<Object_Type> crossSection(int axis, int coordinate) {
+		return (ObjectModel3D<Object_Type>) Model4D.super.crossSection(axis, coordinate);
 	}
 	
 	@Override
@@ -64,6 +77,12 @@ public interface ObjectModel4D<Object_Type> extends Model4D, ObjectModel<Object_
 	@Override
 	default ObjectModel3D<Object_Type> crossSectionAtZ(int z) {
 		return new ObjectModel4DZCrossSection<ObjectModel4D<Object_Type>, Object_Type>(this, z);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	default ObjectModel3D<Object_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (ObjectModel3D<Object_Type>) Model4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

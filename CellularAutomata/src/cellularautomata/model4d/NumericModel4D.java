@@ -19,6 +19,7 @@ package cellularautomata.model4d;
 import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.MinAndMax;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.NumericModel;
 import cellularautomata.model3d.NumericModel3D;
 
@@ -162,8 +163,18 @@ public interface NumericModel4D<Number_Type extends FieldElement<Number_Type> & 
 	}
 	
 	@Override
-	default NumericModel4D<Number_Type> subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default NumericModel4D<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (NumericModel4D<Number_Type>) ObjectModel4D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default NumericModel4D<Number_Type> subsection(Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new NumericSubModel4D<Number_Type>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default NumericModel3D<Number_Type> crossSection(int axis, int coordinate) {
+		return (NumericModel3D<Number_Type>) ObjectModel4D.super.crossSection(axis, coordinate);
 	}
 	
 	@Override
@@ -184,6 +195,11 @@ public interface NumericModel4D<Number_Type extends FieldElement<Number_Type> & 
 	@Override
 	default NumericModel3D<Number_Type> crossSectionAtZ(int z) {
 		return new NumericModel4DZCrossSection<Number_Type>(this, z);
+	}
+
+	@Override
+	default NumericModel3D<Number_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (NumericModel3D<Number_Type>) ObjectModel4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

@@ -21,6 +21,11 @@ import cellularautomata.PartialCoordinates;
 
 public interface Model2D extends Model {
 	
+	@Override
+	default int getGridDimension() {
+		return 2;
+	}
+	
 	default String getXLabel() {
 		return "x";
 	}
@@ -30,8 +35,15 @@ public interface Model2D extends Model {
 	}
 	
 	@Override
-	default int getGridDimension() {
-		return 2;
+	default String getAxisLabel(int axis) {
+		switch (axis) {
+		case 0: 
+			return getXLabel();
+		case 1: 
+			return getYLabel();
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
+		}
 	}
 	
 	/**
@@ -44,7 +56,7 @@ public interface Model2D extends Model {
 	/**
 	 * Returns the smallest x-coordinate at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()} 
-	 * or bigger than {@link #getMaxY()}
+	 * or greater than {@link #getMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the smallest x
@@ -63,7 +75,7 @@ public interface Model2D extends Model {
 	/**
 	 * Returns the largest x-coordinate at y.<br/>
 	 * It's not defined to call this method on a y-coordinate smaller than {@link #getMinY()}
-	 * or bigger than {@link #getMaxY()}
+	 * or greater than {@link #getMaxY()}
 	 * 
 	 * @param y the y-coordinate
 	 * @return the largest x
@@ -82,7 +94,7 @@ public interface Model2D extends Model {
 	/**
 	 * Returns the smallest y-coordinate at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()}
-	 * or bigger than {@link #getMaxX()}
+	 * or greater than {@link #getMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the smallest y
@@ -101,7 +113,7 @@ public interface Model2D extends Model {
 	/**
 	 * Returns the largest y-coordinate at x.<br/>
 	 * It's not defined to call this method on a x-coordinate smaller than {@link #getMinX()}
-	 * or bigger than {@link #getMaxX()}
+	 * or greater than {@link #getMaxX()}
 	 * 
 	 * @param x the x-coordinate
 	 * @return the largest y
@@ -126,7 +138,7 @@ public interface Model2D extends Model {
 	 * @param maxY
 	 * @return a {@link Model2D} decorating the current grid
 	 */
-	default Model2D subsection(int minX, int maxX, int minY, int maxY) {
+	default Model2D subsection(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		return new SubModel2D<Model2D>(this, minX, maxX, minY, maxY);
 	}
 	
@@ -137,7 +149,8 @@ public interface Model2D extends Model {
 //			return crossSectionAtX(coordinate);
 //		case 1: 
 //			return crossSectionAtY(coordinate);
-//		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+//		default:
+//	        throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 //		}
 //	}
 	
@@ -148,7 +161,8 @@ public interface Model2D extends Model {
 			return getMaxX();
 		case 1: 
 			return getMaxY();
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 
@@ -169,7 +183,8 @@ public interface Model2D extends Model {
 			} else {
 				return getMaxY(x);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 	
@@ -180,7 +195,8 @@ public interface Model2D extends Model {
 			return getMinX();
 		case 1: 
 			return getMinY();
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 
@@ -201,7 +217,8 @@ public interface Model2D extends Model {
 			} else {
 				return getMinY(x);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0 or 1. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0 or 1. Got " + axis + ".");
 		}
 	}
 	

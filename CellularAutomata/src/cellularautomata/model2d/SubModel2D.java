@@ -26,17 +26,17 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 	protected int maxX;
 	protected int minY;
 	protected int maxY;
-	protected int absoluteMinX;
-	protected int absoluteMaxX;
-	protected int absoluteMinY;
-	protected int absoluteMaxY;
+	protected Integer absoluteMinX;
+	protected Integer absoluteMaxX;
+	protected Integer absoluteMinY;
+	protected Integer absoluteMaxY;
 	
-	public SubModel2D(Source_Type source, int minX, int maxX, int minY, int maxY) {
-		if (minX > maxX) {
-			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+	public SubModel2D(Source_Type source, Integer minX, Integer maxX, Integer minY, Integer maxY) {
+		if (minX != null && maxX != null && minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be greater than max x.");
 		}
-		if (minY > maxY) {
-			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
+		if (minY != null && maxY != null && minY > maxY) {
+			throw new IllegalArgumentException("Min y cannot be greater than max y.");
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX, minY, maxY)) {
@@ -48,15 +48,15 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 		this.absoluteMinY = minY;
 	}
 	
-	protected boolean getActualBounds(int minX, int maxX, int minY, int maxY) {
+	protected boolean getActualBounds(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		boolean outOfBounds = false;
 		int sourceMinX = source.getMinX();
 		int sourceMaxX = source.getMaxX();
-		if (minX > sourceMaxX || maxX < sourceMinX) {
+		if (minX != null && minX > sourceMaxX || maxX != null && maxX < sourceMinX) {
 			outOfBounds = true;
 		} else {
-			this.minX = Math.max(minX, sourceMinX);
-			this.maxX = Math.min(maxX, sourceMaxX);
+			this.minX = minX == null ? sourceMinX : Math.max(minX, sourceMinX);
+			this.maxX = maxX == null ? sourceMaxX : Math.min(maxX, sourceMaxX);
 			int minYWithinBounds = source.getMinY(this.minX);
 			int maxYWithinBounds = source.getMaxY(this.minX);
 			for (int x = this.minX + 1; x <= this.maxX; x++) {
@@ -69,11 +69,11 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 					maxYWithinBounds = localMaxY;
 				}
 			}
-			if (minY > maxYWithinBounds || maxY < minYWithinBounds) {
+			if (minY != null && minY > maxYWithinBounds || maxY != null && maxY < minYWithinBounds) {
 				outOfBounds = true;
 			} else {
-				this.minY = Math.max(minY, minYWithinBounds);
-				this.maxY = Math.min(maxY, maxYWithinBounds);
+				this.minY = minY == null ? minYWithinBounds : Math.max(minY, minYWithinBounds);
+				this.maxY = maxY == null ? maxYWithinBounds : Math.min(maxY, maxYWithinBounds);
 				int minXWithinBounds = source.getMinX(this.minY);
 				int maxXWithinBounds = source.getMaxX(this.minY);
 				for (int y = this.minY + 1; y <= this.maxY; y++) {
@@ -154,9 +154,45 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" 
-			+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
-			+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]";
+		StringBuilder strCoordinateBounds = new StringBuilder();
+		boolean anyNotNull = false;
+		strCoordinateBounds.append("/");
+		Integer minCoord = absoluteMinX;
+		Integer maxCoord = absoluteMaxX;
+		if (minCoord != null || maxCoord != null) {
+			anyNotNull = true;
+			strCoordinateBounds.append(getXLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinY;
+		maxCoord = absoluteMaxY;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getYLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		return anyNotNull ? source.getSubfolderPath() + strCoordinateBounds.toString() : source.getSubfolderPath();
 	}
 
 	@Override

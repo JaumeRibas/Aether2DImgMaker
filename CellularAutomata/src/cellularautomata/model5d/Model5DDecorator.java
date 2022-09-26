@@ -537,7 +537,7 @@ public class Model5DDecorator<Source_Type extends Model5D> extends ModelDecorato
 	}
 
 	@Override
-	public Model5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public Model5D subsection(Integer minV, Integer maxV, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return source.subsection(minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -570,6 +570,11 @@ public class Model5DDecorator<Source_Type extends Model5D> extends ModelDecorato
 //	public Model4D crossSectionAtZ(int z) {
 //		return source.crossSectionAtZ(z);
 //	}
+	
+	@Override
+	public Model4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return source.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 	
 	@Override
 	public Model4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {

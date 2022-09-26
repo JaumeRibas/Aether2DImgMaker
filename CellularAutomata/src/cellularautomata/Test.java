@@ -614,6 +614,14 @@ public class Test {
 		} catch(Exception ex) { 
 			ex.printStackTrace(System.out);}
 		try {
+			grid = new ArrayIntGrid2D(0, new int[] {0, 0, 0, 0, 0}, new int[][] { {1}, {1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1}, {1} });
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		try {
+			grid = new ArrayIntGrid2D(0, new int[] {0, 0, 0, 0, 0, 0}, new int[][] { {1}, {1}, {1, 1}, {1, 1}, {1}, {1} });
+		} catch(Exception ex) { 
+			ex.printStackTrace(System.out);}
+		try {
 			grid = new ArrayIntGrid2D(0, new int[] {-3, -3, -2, -3, -3 }, 
 					new int[][] { {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1} });
 		} catch(Exception ex) { 
@@ -641,6 +649,26 @@ public class Test {
 			System.out.println("aligned square");
 			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {-3, -3, -3, -3, -3 }, 
 					new int[][] { {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1} });
+			Utils.printAsGrid(grid);
+			System.out.println("triangle 1");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {0, 0, 0, 0, 0, 0, 0 }, 
+					new int[][] { {1}, {1, 1}, {1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1}, {1, 1}, {1} });
+			Utils.printAsGrid(grid);
+			System.out.println("triangle 2");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {0, -1, -2, -3, -2, -1, 0 }, 
+					new int[][] { {1}, {1, 1}, {1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1}, {1, 1}, {1} });
+			Utils.printAsGrid(grid);
+			System.out.println("triangle 3");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {-3, -2, -1, 0}, 
+					new int[][] { {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1}, {1} });
+			Utils.printAsGrid(grid);
+			System.out.println("triangle 4");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {0, -1, -2, -3}, 
+					new int[][] { {1}, {1, 1, 1}, {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1} });
+			Utils.printAsGrid(grid);
+			System.out.println("beveled square");
+			grid = new ArrayIntGrid2D(Integer.MIN_VALUE, new int[] {1, 0, 0, 0, 0, 0, 1}, 
+					new int[][] { {1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1} });
 			Utils.printAsGrid(grid);
 			System.out.println("object grid");
 			BigInt[][] array = testGenericArrayBySample(BigInt.ZERO, 1, 1);
@@ -672,12 +700,12 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
-		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 51, 70, 0));
-		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 51, 70, 1));
-		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 51, 70, 2));
+		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 13, 0));
+		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 13, 1));
+		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 13, 2));
 		//xy 
 		for (int slope = 1; slope != -3; slope -= 2) {
-			for (int off = 0; off <= offset; off += offset) {
+			for (int off = -offset; off <= offset; off += offset) {
 				sourceValues = new int[side][side][side];
 				resultValues = new int[side][side];
 				for (int x = -originIndex; x < side-originIndex; x++) {
@@ -701,7 +729,7 @@ public class Test {
 		}
 		//xz
 		for (int slope = 1; slope != -3; slope -= 2) {
-			for (int off = 0; off <= offset; off += offset) {
+			for (int off = -offset; off <= offset; off += offset) {
 				sourceValues = new int[side][side][side];
 				resultValues = new int[side][side];
 				for (int x = -originIndex; x < side-originIndex; x++) {
@@ -725,7 +753,7 @@ public class Test {
 		}
 		//yz
 		for (int slope = 1; slope != -3; slope -= 2) {
-			for (int off = 0; off <= offset; off += offset) {
+			for (int off = -offset; off <= offset; off += offset) {
 				sourceValues = new int[side][side][side];
 				resultValues = new int[side][side];
 				for (int x = -originIndex; x < side-originIndex; x++) {
@@ -766,13 +794,13 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
-		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 0));
-		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 1));
-		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 2));
-		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 51, 70, 3));
+		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 0));
+		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 1));
+		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 2));
+		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 3));
 		//wx 
 		for (int slope = 1; slope != -3; slope -= 2) {
-			for (int off = 0; off <= offset; off += offset) {
+			for (int off = -offset; off <= offset; off += offset) {
 				sourceValues = new int[side][side][side][side];
 				resultValues = new int[side][side][side];
 				for (int w = -originIndex; w < side-originIndex; w++) {
@@ -799,7 +827,7 @@ public class Test {
 		}
 		//yz 
 		for (int slope = 1; slope != -3; slope -= 2) {
-			for (int off = 0; off <= offset; off += offset) {
+			for (int off = -offset; off <= offset; off += offset) {
 				sourceValues = new int[side][side][side][side];
 				resultValues = new int[side][side][side];
 				for (int w = -originIndex; w < side-originIndex; w++) {
@@ -826,9 +854,37 @@ public class Test {
 		}
 	}
 	
-//	public static void testDiagonals(int dimension) throws Exception {
-//		//TODO
-//	}
+	public static void testDiagonals(int dimension) throws Exception {
+		if (dimension > 1) {
+			int offset = 5;
+			Model[] pyramids = new Model[dimension];
+			Coordinates originCoords = new Coordinates(new int[dimension]);
+			for (int i = 0; i < dimension; i++) {
+				pyramids[i] = new HypercubePyramidGrid(originCoords, 13, i);
+			}
+			for (int firstAxis = 0; firstAxis < dimension; firstAxis++) {
+				int secondAxis = 0;
+				for (; secondAxis != firstAxis; secondAxis++) {
+					for (int slope = 1; slope != -3; slope -= 2) {
+						for (int off = -offset; off <= offset; off += offset) {
+							for (int i = 0; i < dimension; i++) {
+								testBoundsConsistency(pyramids[i].diagonalCrossSection(firstAxis, secondAxis, slope == 1, off));
+							}
+						}
+					}
+				}
+				for (secondAxis++; secondAxis < dimension; secondAxis++) {
+					for (int slope = 1; slope != -3; slope -= 2) {
+						for (int off = -offset; off <= offset; off += offset) {
+							for (int i = 0; i < dimension; i++) {
+								testBoundsConsistency(pyramids[i].diagonalCrossSection(firstAxis, secondAxis, slope == 1, off));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	public static void compare(IntModel2D grid, int[][] array, int xOffset, int yOffset) throws Exception {
 		int maxX = grid.getMaxX();
@@ -875,14 +931,14 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
-		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 0));
-		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 1));
-		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 2));
-		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 3));
-		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 51, 70, 4));
+		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 0));
+		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 1));
+		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 2));
+		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 3));
+		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 4));
 		//vw
 		for (int slope = 1; slope != -3; slope -= 2) {
-			for (int off = 0; off <= offset; off += offset) {
+			for (int off = -offset; off <= offset; off += offset) {
 				sourceValues = new int[side][side][side][side][side];
 				resultValues = new int[side][side][side][side];
 				for (int v = -originIndex; v < side-originIndex; v++) {

@@ -24,12 +24,12 @@ public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 	protected Source_Type source;
 	protected int minX;
 	protected int maxX;
-	protected int absoluteMinX;
-	protected int absoluteMaxX;
+	protected Integer absoluteMinX;
+	protected Integer absoluteMaxX;
 	
-	public SubModel1D(Source_Type source, int minX, int maxX) {
-		if (minX > maxX) {
-			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+	public SubModel1D(Source_Type source, Integer minX, Integer maxX) {
+		if (minX != null && maxX != null && minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be greater than max x.");
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX)) {
@@ -39,16 +39,26 @@ public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 		this.absoluteMinX = minX;
 	}
 	
-	protected boolean getActualBounds(int minX, int maxX) {
+	protected boolean getActualBounds(Integer minX, Integer maxX) {
 		int sourceMinX = source.getMinX();
 		int sourceMaxX = source.getMaxX();
-		if (minX > sourceMaxX || maxX < sourceMinX) {
-			return false;
+		if (minX == null) {
+			this.minX = sourceMinX;
 		} else {
-			this.minX = Math.max(minX, sourceMinX);
-			this.maxX = Math.min(maxX, sourceMaxX);
-			return true;
+			int intMinX = minX;
+			if (intMinX > sourceMaxX) 
+				return false;
+			this.minX = Math.max(intMinX, sourceMinX);
 		}
+		if (maxX == null) {
+			this.maxX = sourceMaxX;
+		} else {
+			int intMaxX = maxX;
+			if (intMaxX < sourceMinX) 
+				return false;
+			this.maxX = Math.min(intMaxX, sourceMaxX);
+		}
+		return true;
 	}
 
 	@Override
@@ -82,8 +92,24 @@ public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" 
-				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]";
+		if (absoluteMinX != null || absoluteMaxX != null) {
+			StringBuilder strCoordinateBounds = new StringBuilder();
+			strCoordinateBounds.append("/");
+			strCoordinateBounds.append(getXLabel());
+			if (absoluteMinX == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(absoluteMinX);
+			}
+			strCoordinateBounds.append(",");
+			if (absoluteMaxX == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(absoluteMaxX).append("]");
+			}
+			return source.getSubfolderPath() + strCoordinateBounds.toString();
+		}
+		return source.getSubfolderPath();		
 	}
 
 	@Override

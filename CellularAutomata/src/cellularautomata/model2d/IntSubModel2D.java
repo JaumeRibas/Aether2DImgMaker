@@ -18,7 +18,7 @@ package cellularautomata.model2d;
 
 public class IntSubModel2D extends SubModel2D<IntModel2D> implements IntModel2D {
 
-	public IntSubModel2D(IntModel2D source, int minX, int maxX, int minY, int maxY) {
+	public IntSubModel2D(IntModel2D source, Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		super(source, minX, maxX, minY, maxY);
 	}
 

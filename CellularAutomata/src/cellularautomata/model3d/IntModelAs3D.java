@@ -41,5 +41,10 @@ public class IntModelAs3D extends ModelAs3D<IntModel> implements IntModel3D {
 	public IntModel2D crossSection(int axis, int coordinate) {
 		return IntModel3D.super.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public IntModel2D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return IntModel3D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 }

@@ -140,7 +140,7 @@ public interface IntModel5D extends Model5D, IntModel {
 	}
 	
 	@Override
-	default IntModel5D subsection(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default IntModel5D subsection(Integer minV, Integer maxV, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new IntSubModel5D(this, minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -152,6 +152,11 @@ public interface IntModel5D extends Model5D, IntModel {
 	@Override
 	default IntModel4D crossSectionAtV(int v) {
 		return new IntModel5DVCrossSection(this, v);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (IntModel4D) Model5D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

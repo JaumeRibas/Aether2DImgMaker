@@ -18,7 +18,7 @@ package cellularautomata.model1d;
 
 public class LongSubModel1D<Source_Type extends LongModel1D> extends SubModel1D<Source_Type> implements LongModel1D {
 
-	public LongSubModel1D(Source_Type source, int minX, int maxX) {
+	public LongSubModel1D(Source_Type source, Integer minX, Integer maxX) {
 		super(source, minX, maxX);
 	}
 

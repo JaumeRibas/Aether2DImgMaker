@@ -16,6 +16,9 @@
  */
 package cellularautomata.model5d;
 
+import cellularautomata.PartialCoordinates;
+import cellularautomata.model4d.LongModel4D;
+
 public class AsymmetricLongModelSection5D extends AsymmetricModelSection5D<SymmetricLongModel5D> implements LongModel5D {
 	
 	public AsymmetricLongModelSection5D(SymmetricLongModel5D grid) {
@@ -25,6 +28,21 @@ public class AsymmetricLongModelSection5D extends AsymmetricModelSection5D<Symme
 	@Override
 	public long getFromPosition(int v, int w, int x, int y, int z) throws Exception {
 		return source.getFromAsymmetricPosition(v, w, x, y, z);
+	}
+	
+	@Override
+	public LongModel5D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return LongModel5D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	public LongModel4D crossSection(int axis, int coordinate) {
+		return LongModel5D.super.crossSection(axis, coordinate);
+	}
+	
+	@Override
+	public LongModel4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return LongModel5D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

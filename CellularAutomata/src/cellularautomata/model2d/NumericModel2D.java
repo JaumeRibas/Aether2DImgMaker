@@ -19,6 +19,7 @@ package cellularautomata.model2d;
 import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.MinAndMax;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.NumericModel;
 
 public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> extends ObjectModel2D<Number_Type>, NumericModel<Number_Type> {
@@ -188,7 +189,12 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 	}
 	
 	@Override
-	default NumericModel2D<Number_Type> subsection(int minX, int maxX, int minY, int maxY) {
+	default NumericModel2D<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (NumericModel2D<Number_Type>) ObjectModel2D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default NumericModel2D<Number_Type> subsection(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		return new NumericSubModel2D<Number_Type>(this, minX, maxX, minY, maxY);
 	}
 

@@ -30,28 +30,28 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 	protected int maxY;
 	protected int minZ;
 	protected int maxZ;
-	protected int absoluteMinW;
-	protected int absoluteMaxW;
-	protected int absoluteMinX;
-	protected int absoluteMaxX;
-	protected int absoluteMinY;
-	protected int absoluteMaxY;
-	protected int absoluteMinZ;
-	protected int absoluteMaxZ;
+	protected Integer absoluteMinW;
+	protected Integer absoluteMaxW;
+	protected Integer absoluteMinX;
+	protected Integer absoluteMaxX;
+	protected Integer absoluteMinY;
+	protected Integer absoluteMaxY;
+	protected Integer absoluteMinZ;
+	protected Integer absoluteMaxZ;
 
-	public SubModel4D(Source_Type source, int minW, int maxW, int minX, 
-			int maxX, int minY, int maxY, int minZ, int maxZ) {
-		if (minW > maxW) {
-			throw new IllegalArgumentException("Min w cannot be bigger than max w.");
+	public SubModel4D(Source_Type source, Integer minW, Integer maxW, Integer minX, 
+			Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
+		if (minW != null && maxW != null && minW > maxW) {
+			throw new IllegalArgumentException("Min w cannot be greater than max w.");
 		}
-		if (minX > maxX) {
-			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		if (minX != null && maxX != null && minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be greater than max x.");
 		}
-		if (minY > maxY) {
-			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
+		if (minY != null && maxY != null && minY > maxY) {
+			throw new IllegalArgumentException("Min y cannot be greater than max y.");
 		}
-		if (minZ > maxZ) {
-			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
+		if (minZ != null && maxZ != null && minZ > maxZ) {
+			throw new IllegalArgumentException("Min z cannot be greater than max z.");
 		}
 		this.source = source;
 		if (!getActualBounds(minW, maxW, minX, maxX, minY, maxY, minZ, maxZ))
@@ -66,8 +66,8 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 		this.absoluteMinZ = minZ;
 	}
 	
-	protected boolean getActualBounds(int minW, int maxW, int minX, int maxX, int minY, 
-			int maxY, int minZ, int maxZ) {
+	protected boolean getActualBounds(Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, 
+			Integer maxY, Integer minZ, Integer maxZ) {
 		int sourceMinW = source.getMinW();
 		int sourceMaxW = source.getMaxW();
 		int sourceMinX = source.getMinX();
@@ -76,23 +76,72 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 		int sourceMaxY = source.getMaxY();
 		int sourceMinZ = source.getMinZ();
 		int sourceMaxZ = source.getMaxZ();
-		if (minW > sourceMaxW || maxW < sourceMinW 
-				|| minX > sourceMaxX || maxX < sourceMinX
-				|| minY > sourceMaxY || maxY < sourceMinY
-				|| minZ > sourceMaxZ || maxZ < sourceMinZ) {
-			return false;
+		//TODO validate that passed bounds are within local bounds
+		if (minW == null) {
+			this.minW = sourceMinW;
 		} else {
-			//TODO validate that passed bounds are within local bounds
-			this.minW = Math.max(minW, sourceMinW);
-			this.maxW = Math.min(maxW, sourceMaxW);
-			this.minX = Math.max(minX, sourceMinX);
-			this.maxX = Math.min(maxX, sourceMaxX);
-			this.minY = Math.max(minY, sourceMinY);
-			this.maxY = Math.min(maxY, sourceMaxY);
-			this.minZ = Math.max(minZ, sourceMinZ);
-			this.maxZ = Math.min(maxZ, sourceMaxZ);
-			return true;
+			int intMinW = minW;
+			if (intMinW > sourceMaxW) 
+				return false;
+			this.minW = Math.max(intMinW, sourceMinW);
 		}
+		if (maxW == null) {
+			this.maxW = sourceMaxW;
+		} else {
+			int intMaxW = maxW;
+			if (intMaxW < sourceMinW) 
+				return false;
+			this.maxW = Math.min(intMaxW, sourceMaxW);
+		}
+		if (minX == null) {
+			this.minX = sourceMinX;
+		} else {
+			int intMinX = minX;
+			if (intMinX > sourceMaxX) 
+				return false;
+			this.minX = Math.max(intMinX, sourceMinX);
+		}
+		if (maxX == null) {
+			this.maxX = sourceMaxX;
+		} else {
+			int intMaxX = maxX;
+			if (intMaxX < sourceMinX) 
+				return false;
+			this.maxX = Math.min(intMaxX, sourceMaxX);
+		}
+		if (minY == null) {
+			this.minY = sourceMinY;
+		} else {
+			int intMinY = minY;
+			if (intMinY > sourceMaxY) 
+				return false;
+			this.minY = Math.max(intMinY, sourceMinY);
+		}
+		if (maxY == null) {
+			this.maxY = sourceMaxY;
+		} else {
+			int intMaxY = maxY;
+			if (intMaxY < sourceMinY) 
+				return false;
+			this.maxY = Math.min(intMaxY, sourceMaxY);
+		}
+		if (minZ == null) {
+			this.minZ = sourceMinZ;
+		} else {
+			int intMinZ = minZ;
+			if (intMinZ > sourceMaxZ) 
+				return false;
+			this.minZ = Math.max(intMinZ, sourceMinZ);
+		}
+		if (maxZ == null) {
+			this.maxZ = sourceMaxZ;
+		} else {
+			int intMaxZ = maxZ;
+			if (intMaxZ < sourceMinZ) 
+				return false;
+			this.maxZ = Math.min(intMaxZ, sourceMaxZ);
+		}
+		return true;
 	}
 
 	@Override
@@ -308,11 +357,81 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" 
-				+ source.getWLabel() + "[" + absoluteMinW + "," + absoluteMaxW + "]_"
-				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
-				+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]_"
-				+ source.getZLabel() + "[" + absoluteMinZ + "," + absoluteMaxZ + "]";
+		StringBuilder strCoordinateBounds = new StringBuilder();
+		boolean anyNotNull = false;
+		strCoordinateBounds.append("/");
+		Integer minCoord = absoluteMinW;
+		Integer maxCoord = absoluteMaxW;
+		if (minCoord != null || maxCoord != null) {
+			anyNotNull = true;
+			strCoordinateBounds.append(getWLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinX;
+		maxCoord = absoluteMaxX;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getXLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinY;
+		maxCoord = absoluteMaxY;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getYLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinZ;
+		maxCoord = absoluteMaxZ;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getZLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		return anyNotNull ? source.getSubfolderPath() + strCoordinateBounds.toString() : source.getSubfolderPath();
 	}
 
 	@Override

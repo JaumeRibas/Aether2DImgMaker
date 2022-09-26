@@ -19,6 +19,7 @@ package cellularautomata.model3d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.ObjectModel;
 import cellularautomata.model2d.ObjectModel2D;
 
@@ -40,9 +41,21 @@ public interface ObjectModel3D<Object_Type> extends Model3D, ObjectModel<Object_
 		return getFromPosition(coordinates.get(0), coordinates.get(1), coordinates.get(2));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	default ObjectModel3D<Object_Type> subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default ObjectModel3D<Object_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (ObjectModel3D<Object_Type>) Model3D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default ObjectModel3D<Object_Type> subsection(Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new ObjectSubModel3D<ObjectModel3D<Object_Type>, Object_Type>(this, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	default ObjectModel2D<Object_Type> crossSection(int axis, int coordinate) {
+		return (ObjectModel2D<Object_Type>) Model3D.super.crossSection(axis, coordinate);
 	}
 	
 	@Override
@@ -58,6 +71,12 @@ public interface ObjectModel3D<Object_Type> extends Model3D, ObjectModel<Object_
 	@Override
 	default ObjectModel2D<Object_Type> crossSectionAtZ(int z) {
 		return new ObjectModel3DZCrossSection<ObjectModel3D<Object_Type>, Object_Type>(this, z);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	default ObjectModel2D<Object_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (ObjectModel2D<Object_Type>) Model3D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

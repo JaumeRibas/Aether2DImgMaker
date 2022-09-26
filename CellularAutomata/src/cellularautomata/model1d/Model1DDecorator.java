@@ -16,6 +16,7 @@
  */
 package cellularautomata.model1d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.ModelDecorator;
 
 public class Model1DDecorator<Source_Type extends Model1D> extends ModelDecorator<Source_Type> implements Model1D {
@@ -43,9 +44,14 @@ public class Model1DDecorator<Source_Type extends Model1D> extends ModelDecorato
 	public int getMaxX() {
 		return source.getMaxX();
 	}
+	
+	@Override
+	public Model1D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return source.subsection(minCoordinates, maxCoordinates);
+	}
 
 	@Override
-	public Model1D subsection(int minX, int maxX) {
+	public Model1D subsection(Integer minX, Integer maxX) {
 		return source.subsection(minX, maxX);
 	}
 

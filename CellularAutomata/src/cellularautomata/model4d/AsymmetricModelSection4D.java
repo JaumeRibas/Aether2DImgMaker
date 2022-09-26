@@ -227,5 +227,10 @@ public class AsymmetricModelSection4D<Source_Type extends SymmetricModel4D> exte
 	public Model3D crossSection(int axis, int coordinate) {
 		return Model4D.super.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public Model3D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return Model4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 }

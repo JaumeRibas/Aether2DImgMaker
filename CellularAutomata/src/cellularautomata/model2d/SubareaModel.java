@@ -120,7 +120,7 @@ public class SubareaModel<Source_Type extends Model2D> implements Model2D {
 	}
 
 	@Override
-	public Source_Type subsection(int minX, int maxX, int minY, int maxY) {
+	public Source_Type subsection(Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		throw new UnsupportedOperationException();
 	}
 

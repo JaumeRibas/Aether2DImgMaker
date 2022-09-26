@@ -244,7 +244,7 @@ public class Model4DDecorator<Source_Type extends Model4D> extends ModelDecorato
 	}
 
 	@Override
-	public Model4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public Model4D subsection(Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return source.subsection(minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -271,6 +271,11 @@ public class Model4DDecorator<Source_Type extends Model4D> extends ModelDecorato
 	@Override
 	public Model3D crossSectionAtZ(int z) {
 		return source.crossSectionAtZ(z);
+	}
+	
+	@Override
+	public Model3D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return source.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ package cellularautomata.model4d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.LongModel;
 import cellularautomata.model3d.LongModel3D;
 
@@ -122,8 +123,18 @@ public interface LongModel4D extends Model4D, LongModel {
 	}
 	
 	@Override
-	default LongModel4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default LongModel4D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (LongModel4D) Model4D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default LongModel4D subsection(Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new LongSubModel4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
+	}
+	
+	@Override
+	default LongModel3D crossSection(int axis, int coordinate) {
+		return (LongModel3D) Model4D.super.crossSection(axis, coordinate);
 	}
 	
 	@Override
@@ -144,6 +155,11 @@ public interface LongModel4D extends Model4D, LongModel {
 	@Override
 	default LongModel3D crossSectionAtZ(int z) {
 		return new LongModel4DZCrossSection(this, z);
+	}
+	
+	@Override
+	default LongModel3D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (LongModel3D) Model4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

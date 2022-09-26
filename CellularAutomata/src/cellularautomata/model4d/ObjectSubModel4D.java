@@ -18,8 +18,8 @@ package cellularautomata.model4d;
 
 public class ObjectSubModel4D<Source_Type extends ObjectModel4D<Object_Type>, Object_Type> extends SubModel4D<Source_Type> implements ObjectModel4D<Object_Type> {
 	
-	public ObjectSubModel4D(Source_Type source, int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ,
-			int maxZ) {
+	public ObjectSubModel4D(Source_Type source, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ,
+			Integer maxZ) {
 		super(source, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 

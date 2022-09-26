@@ -54,7 +54,8 @@ public interface Model4D extends Model {
 			return getYLabel();
 		case 3: 
 			return getZLabel();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 	
@@ -323,7 +324,7 @@ public interface Model4D extends Model {
 				minCoordinates.get(3), maxCoordinates.get(3));
 	}
 
-	default Model4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default Model4D subsection(Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new SubModel4D<Model4D>(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -338,7 +339,8 @@ public interface Model4D extends Model {
 			return crossSectionAtY(coordinate);
 		case 3:
 			return crossSectionAtZ(coordinate);
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 	
@@ -369,8 +371,88 @@ public interface Model4D extends Model {
 		return new Model4DZCrossSection<Model4D>(this, z);
 	}
 	
+	@Override
+	default Model3D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		switch (firstAxis) {
+		case 0: 
+			switch (secondAxis) {
+			case 0:
+				throw new IllegalArgumentException("The axes cannot be equal.");				
+			case 1: 
+				return diagonalCrossSectionOnWX(positiveSlope, offset);
+			case 2: 
+				return diagonalCrossSectionOnWY(positiveSlope, offset);
+			case 3: 
+				return diagonalCrossSectionOnWZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 4. Got " + secondAxis + ".");
+			}
+		case 1: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnWX(positiveSlope, positiveSlope ? -offset : offset);				
+			case 1:
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			case 2: 
+				return diagonalCrossSectionOnXY(positiveSlope, offset);
+			case 3: 
+				return diagonalCrossSectionOnXZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 4. Got " + secondAxis + ".");
+			}			
+		case 2: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnWY(positiveSlope, positiveSlope ? -offset : offset);				
+			case 1: 
+				return diagonalCrossSectionOnXY(positiveSlope, positiveSlope ? -offset : offset);
+			case 2:
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			case 3: 
+				return diagonalCrossSectionOnYZ(positiveSlope, offset);
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 4. Got " + secondAxis + ".");
+			}			
+		case 3: 
+			switch (secondAxis) {
+			case 0: 
+				return diagonalCrossSectionOnWZ(positiveSlope, positiveSlope ? -offset : offset);				
+			case 1: 
+				return diagonalCrossSectionOnXZ(positiveSlope, positiveSlope ? -offset : offset);
+			case 2:
+				return diagonalCrossSectionOnYZ(positiveSlope, positiveSlope ? -offset : offset);
+			case 3: 
+				throw new IllegalArgumentException("The axes cannot be equal.");
+			default:
+				throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 4. Got " + secondAxis + ".");
+			}
+		default:
+			throw new IllegalArgumentException("The axes must be greater than -1 and smaller than 4. Got " + firstAxis + ".");
+		}
+	}
+	
 	default Model3D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
 		return new Model4DWXDiagonalCrossSection<Model4D>(this, positiveSlope, xOffsetFromW);
+	}
+	
+	default Model3D diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model4DWYDiagonalCrossSection<Model4D>(this, positiveSlope, yOffsetFromW);
+	}
+	
+	default Model3D diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model4DWZDiagonalCrossSection<Model4D>(this, positiveSlope, zOffsetFromW);
+	}
+	
+	default Model3D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model4DXYDiagonalCrossSection<Model4D>(this, positiveSlope, yOffsetFromX);
+	}
+	
+	default Model3D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+//		return new Model4DXZDiagonalCrossSection<Model4D>(this, positiveSlope, zOffsetFromX);
 	}
 	
 	default Model3D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
@@ -388,7 +470,7 @@ public interface Model4D extends Model {
 			return getMaxY();
 		case 3: 
 			return getMaxZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 
@@ -496,7 +578,7 @@ public interface Model4D extends Model {
 			} else {
 				return getMaxZ(w, x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 	
@@ -511,7 +593,7 @@ public interface Model4D extends Model {
 			return getMinY();
 		case 3: 
 			return getMinZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 
@@ -619,7 +701,7 @@ public interface Model4D extends Model {
 			} else {
 				return getMinZ(w, x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 }

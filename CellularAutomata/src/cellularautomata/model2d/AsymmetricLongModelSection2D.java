@@ -16,6 +16,9 @@
  */
 package cellularautomata.model2d;
 
+import cellularautomata.PartialCoordinates;
+import cellularautomata.model.LongModel;
+
 public class AsymmetricLongModelSection2D extends AsymmetricModelSection2D<SymmetricLongModel2D> implements LongModel2D {
 	
 	public AsymmetricLongModelSection2D(SymmetricLongModel2D source) {
@@ -25,6 +28,21 @@ public class AsymmetricLongModelSection2D extends AsymmetricModelSection2D<Symme
 	@Override
 	public long getFromPosition(int x, int y) throws Exception {
 		return source.getFromAsymmetricPosition(x, y);
+	}
+	
+	@Override
+	public LongModel2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return LongModel2D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	public LongModel/*1D*/ crossSection(int axis, int coordinate) {
+		return LongModel2D.super.crossSection(axis, coordinate);
+	}
+	
+	@Override
+	public LongModel/*1D*/ diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return LongModel2D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

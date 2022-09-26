@@ -39,5 +39,10 @@ public class AsymmetricIntModelSection2D extends AsymmetricModelSection2D<Symmet
 	public IntModel/*1D*/ crossSection(int axis, int coordinate) {
 		return IntModel2D.super.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public IntModel/*1D*/ diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return IntModel2D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 }

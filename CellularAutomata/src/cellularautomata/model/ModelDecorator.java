@@ -85,6 +85,11 @@ public class ModelDecorator<Source_Type extends Model> implements Model {
 	public Model crossSection(int axis, int coordinate) {
 		return source.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public Model diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return source.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 	@Override
 	public boolean nextStep() throws Exception {

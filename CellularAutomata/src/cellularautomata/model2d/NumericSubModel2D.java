@@ -21,7 +21,7 @@ import org.apache.commons.math3.FieldElement;
 public class NumericSubModel2D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
 	extends ObjectSubModel2D<NumericModel2D<Number_Type>, Number_Type> implements NumericModel2D<Number_Type> {
 	
-	public NumericSubModel2D(NumericModel2D<Number_Type> source, int minX, int maxX, int minY, int maxY) {
+	public NumericSubModel2D(NumericModel2D<Number_Type> source, Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		super(source, minX, maxX, minY, maxY);
 	}
 

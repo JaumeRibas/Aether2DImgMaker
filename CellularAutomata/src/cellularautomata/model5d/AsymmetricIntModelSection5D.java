@@ -39,5 +39,10 @@ public class AsymmetricIntModelSection5D extends AsymmetricModelSection5D<Symmet
 	public IntModel4D crossSection(int axis, int coordinate) {
 		return IntModel5D.super.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public IntModel4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return IntModel5D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 }

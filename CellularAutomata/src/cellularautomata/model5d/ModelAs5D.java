@@ -866,4 +866,9 @@ public class ModelAs5D<Source_Type extends Model> extends ModelDecorator<Source_
 		return Model5D.super.crossSection(axis, coordinate);
 	}
 	
+	@Override
+	public Model4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return Model5D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
+	
 }

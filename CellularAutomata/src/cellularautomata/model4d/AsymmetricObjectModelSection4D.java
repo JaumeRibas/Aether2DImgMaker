@@ -16,6 +16,9 @@
  */
 package cellularautomata.model4d;
 
+import cellularautomata.PartialCoordinates;
+import cellularautomata.model3d.ObjectModel3D;
+
 public class AsymmetricObjectModelSection4D<Source_Type extends SymmetricObjectModel4D<Object_Type>, Object_Type> 
 	extends AsymmetricModelSection4D<Source_Type> implements ObjectModel4D<Object_Type> {
 	
@@ -26,6 +29,21 @@ public class AsymmetricObjectModelSection4D<Source_Type extends SymmetricObjectM
 	@Override
 	public Object_Type getFromPosition(int w, int x, int y, int z) throws Exception {
 		return source.getFromAsymmetricPosition(w, x, y, z);
+	}
+	
+	@Override
+	public ObjectModel4D<Object_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return ObjectModel4D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	public ObjectModel3D<Object_Type> crossSection(int axis, int coordinate) {
+		return ObjectModel4D.super.crossSection(axis, coordinate);
+	}
+	
+	@Override
+	public ObjectModel3D<Object_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return ObjectModel4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

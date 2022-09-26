@@ -19,6 +19,7 @@ package cellularautomata.model1d;
 import java.util.Iterator;
 
 import cellularautomata.Coordinates;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.ObjectModel;
 
 public interface ObjectModel1D<Object_Type> extends Model1D, ObjectModel<Object_Type> {
@@ -37,8 +38,14 @@ public interface ObjectModel1D<Object_Type> extends Model1D, ObjectModel<Object_
 		return getFromPosition(coordinates.get(0));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	default ObjectModel1D<Object_Type> subsection(int minX, int maxX) {
+	default ObjectModel1D<Object_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return (ObjectModel1D<Object_Type>) Model1D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default ObjectModel1D<Object_Type> subsection(Integer minX, Integer maxX) {
 		return new ObjectSubModel1D<ObjectModel1D<Object_Type>, Object_Type>(this, minX, maxX);
 	}
 

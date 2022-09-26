@@ -23,6 +23,7 @@ import java.util.function.LongConsumer;
 
 import cellularautomata.Coordinates;
 import cellularautomata.MinAndMaxLongConsumer;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.TotalLongConsumer;
 
 public interface LongModel extends Model, Iterable<Long> {
@@ -137,6 +138,21 @@ public interface LongModel extends Model, Iterable<Long> {
 	@Override
 	default Iterator<Long> iterator() {
 		return new LongModelIterator(this);
+	}
+	
+	@Override
+	default LongModel subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return new LongSubModel(this, minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	default LongModel crossSection(int axis, int coordinate) {
+		return new LongModelCrossSection(this, axis, coordinate);
+	}
+	
+	@Override
+	default LongModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return new LongModelDiagonalCrossSection(this, firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 }

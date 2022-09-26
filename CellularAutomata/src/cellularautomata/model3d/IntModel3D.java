@@ -115,7 +115,7 @@ public interface IntModel3D extends Model3D, IntModel {
 	}
 	
 	@Override
-	default IntModel3D subsection(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default IntModel3D subsection(Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new IntSubModel3D(this, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -137,6 +137,11 @@ public interface IntModel3D extends Model3D, IntModel {
 	@Override
 	default IntModel2D crossSectionAtZ(int z) {
 		return new IntModel3DZCrossSection(this, z);
+	}
+	
+	@Override
+	default IntModel2D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (IntModel2D) Model3D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

@@ -34,21 +34,12 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 		if (maxCoordinates.getCount() != dimension) {
 			throw new IllegalArgumentException("The number of max coordinates must be equal to the grid dimension (" + dimension + ").");
 		}
-		boolean allNull = true;
 		for (int axis = 0; axis < dimension; axis++) {
 			Integer minCoord = minCoordinates.get(axis);
 			Integer maxCoord = maxCoordinates.get(axis);
-			if (minCoord != null) {
-				allNull = false;
-				if (maxCoord != null && minCoord > maxCoord) {
-					throw new IllegalArgumentException("Min coordinates cannot be bigger than max coordinates.");
-				}
-			} else if (maxCoord != null) {
-				allNull = false;
+			if (minCoord != null && maxCoord != null && minCoord > maxCoord) {
+				throw new IllegalArgumentException("Min coordinates cannot be greater than max coordinates.");
 			}
-		}
-		if (allNull) {
-			throw new IllegalArgumentException("All min and max coordinates are null.");
 		}
 		this.minCoordinates = new int[dimension];
 		this.maxCoordinates = new int[dimension];
@@ -121,21 +112,23 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 	@Override
 	public String getSubfolderPath() {
 		StringBuilder strCoordinateBounds = new StringBuilder();
+		boolean anyNotNull = false;
 		if (minCoordinates.length > 0) {
 			strCoordinateBounds.append("/");
 			int axis = 0;
 			Integer minCoord = absoluteMinCoordinates.get(axis);
 			Integer maxCoord = absoluteMaxCoordinates.get(axis);
 			if (minCoord != null || maxCoord != null) {
+				anyNotNull = true;
 				strCoordinateBounds.append(getAxisLabel(axis));
 				if (minCoord == null) {
-					strCoordinateBounds.append("(∞");
+					strCoordinateBounds.append("(-inf");
 				} else {
 					strCoordinateBounds.append("[").append(minCoord);
 				}
 				strCoordinateBounds.append(",");
 				if (maxCoord == null) {
-					strCoordinateBounds.append("∞)");
+					strCoordinateBounds.append("inf)");
 				} else {
 					strCoordinateBounds.append(maxCoord).append("]");
 				}
@@ -144,22 +137,24 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 				minCoord = absoluteMinCoordinates.get(axis);
 				maxCoord = absoluteMaxCoordinates.get(axis);
 				if (minCoord != null || maxCoord != null) {
-					strCoordinateBounds.append("_").append(getAxisLabel(axis));
+					if (anyNotNull) strCoordinateBounds.append("_");
+					anyNotNull = true;
+					strCoordinateBounds.append(getAxisLabel(axis));
 					if (minCoord == null) {
-						strCoordinateBounds.append("(∞");
+						strCoordinateBounds.append("(-inf");
 					} else {
 						strCoordinateBounds.append("[").append(minCoord);
 					}
 					strCoordinateBounds.append(",");
 					if (maxCoord == null) {
-						strCoordinateBounds.append("∞)");
+						strCoordinateBounds.append("inf)");
 					} else {
 						strCoordinateBounds.append(maxCoord).append("]");
 					}
 				}
 			}
 		}
-		return source.getSubfolderPath() + strCoordinateBounds.toString();
+		return anyNotNull ? source.getSubfolderPath() + strCoordinateBounds.toString() : source.getSubfolderPath();
 	}
 
 }

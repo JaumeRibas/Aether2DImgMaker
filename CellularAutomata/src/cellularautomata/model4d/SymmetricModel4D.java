@@ -220,7 +220,7 @@ public interface SymmetricModel4D extends Model4D, SymmetricModel {
 			return getAsymmetricMaxY();
 		case 3: 
 			return getAsymmetricMaxZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 
@@ -328,7 +328,8 @@ public interface SymmetricModel4D extends Model4D, SymmetricModel {
 			} else {
 				return getAsymmetricMaxZ(w, x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 	
@@ -343,7 +344,8 @@ public interface SymmetricModel4D extends Model4D, SymmetricModel {
 			return getAsymmetricMinY();
 		case 3: 
 			return getAsymmetricMinZ();
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 
@@ -451,7 +453,8 @@ public interface SymmetricModel4D extends Model4D, SymmetricModel {
 			} else {
 				return getAsymmetricMinZ(w, x, y);
 			}
-		default: throw new IllegalArgumentException("Axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 	

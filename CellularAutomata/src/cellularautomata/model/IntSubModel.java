@@ -39,5 +39,10 @@ public class IntSubModel extends SubModel<IntModel> implements IntModel {
 	public IntModel crossSection(int axis, int coordinate) {
 		return IntModel.super.crossSection(axis, coordinate);
 	}
+	
+	@Override
+	public IntModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return IntModel.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	}
 
 }

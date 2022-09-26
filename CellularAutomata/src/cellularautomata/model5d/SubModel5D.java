@@ -32,33 +32,33 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 	protected int maxY;
 	protected int minZ;
 	protected int maxZ;
-	protected int absoluteMinV;
-	protected int absoluteMaxV;
-	protected int absoluteMinW;
-	protected int absoluteMaxW;
-	protected int absoluteMinX;
-	protected int absoluteMaxX;
-	protected int absoluteMinY;
-	protected int absoluteMaxY;
-	protected int absoluteMinZ;
-	protected int absoluteMaxZ;
+	protected Integer absoluteMinV;
+	protected Integer absoluteMaxV;
+	protected Integer absoluteMinW;
+	protected Integer absoluteMaxW;
+	protected Integer absoluteMinX;
+	protected Integer absoluteMaxX;
+	protected Integer absoluteMinY;
+	protected Integer absoluteMaxY;
+	protected Integer absoluteMinZ;
+	protected Integer absoluteMaxZ;
 
-	public SubModel5D(Source_Type source, int minV, int maxV, int minW, int maxW, 
-			int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-		if (minV > maxV) {
-			throw new IllegalArgumentException("Min v cannot be bigger than max v.");
+	public SubModel5D(Source_Type source, Integer minV, Integer maxV, Integer minW, Integer maxW, 
+			Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
+		if (minV != null && maxV != null && minV > maxV) {
+			throw new IllegalArgumentException("Min v cannot be greater than max v.");
 		}
-		if (minW > maxW) {
-			throw new IllegalArgumentException("Min w cannot be bigger than max w.");
+		if (minW != null && maxW != null && minW > maxW) {
+			throw new IllegalArgumentException("Min w cannot be greater than max w.");
 		}
-		if (minX > maxX) {
-			throw new IllegalArgumentException("Min x cannot be bigger than max x.");
+		if (minX != null && maxX != null && minX > maxX) {
+			throw new IllegalArgumentException("Min x cannot be greater than max x.");
 		}
-		if (minY > maxY) {
-			throw new IllegalArgumentException("Min y cannot be bigger than max y.");
+		if (minY != null && maxY != null && minY > maxY) {
+			throw new IllegalArgumentException("Min y cannot be greater than max y.");
 		}
-		if (minZ > maxZ) {
-			throw new IllegalArgumentException("Min z cannot be bigger than max z.");
+		if (minZ != null && maxZ != null && minZ > maxZ) {
+			throw new IllegalArgumentException("Min z cannot be greater than max z.");
 		}
 		this.source = source;
 		if (!getActualBounds(minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ))
@@ -75,8 +75,8 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 		this.absoluteMinZ = minZ;
 	}
 	
-	protected boolean getActualBounds(int minV, int maxV, int minW, int maxW, int minX, int maxX, int minY, 
-			int maxY, int minZ, int maxZ) {
+	protected boolean getActualBounds(Integer minV, Integer maxV, Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, 
+			Integer maxY, Integer minZ, Integer maxZ) {
 		int sourceMinV = source.getMinV();
 		int sourceMaxV = source.getMaxV();
 		int sourceMinW = source.getMinW();
@@ -87,26 +87,88 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 		int sourceMaxY = source.getMaxY();
 		int sourceMinZ = source.getMinZ();
 		int sourceMaxZ = source.getMaxZ();
-		if (minV > sourceMaxV || maxV < sourceMinV 
-				|| minW > sourceMaxW || maxW < sourceMinW 
-				|| minX > sourceMaxX || maxX < sourceMinX
-				|| minY > sourceMaxY || maxY < sourceMinY
-				|| minZ > sourceMaxZ || maxZ < sourceMinZ) {
-			return false;
+		//TODO validate that passed bounds are within local bounds
+		if (minV == null) {
+			this.minV = sourceMinV;
 		} else {
-			//TODO validate that passed bounds are within local bounds
-			this.minV = Math.max(minV, sourceMinV);
-			this.maxV = Math.min(maxV, sourceMaxV);
-			this.minW = Math.max(minW, sourceMinW);
-			this.maxW = Math.min(maxW, sourceMaxW);
-			this.minX = Math.max(minX, sourceMinX);
-			this.maxX = Math.min(maxX, sourceMaxX);
-			this.minY = Math.max(minY, sourceMinY);
-			this.maxY = Math.min(maxY, sourceMaxY);
-			this.minZ = Math.max(minZ, sourceMinZ);
-			this.maxZ = Math.min(maxZ, sourceMaxZ);
-			return true;
+			int intMinV = minV;
+			if (intMinV > sourceMaxV) 
+				return false;
+			this.minW = Math.max(intMinV, sourceMinV);
 		}
+		if (maxV == null) {
+			this.maxV = sourceMaxV;
+		} else {
+			int intMaxV = maxV;
+			if (intMaxV < sourceMinV) 
+				return false;
+			this.maxV = Math.min(intMaxV, sourceMaxV);
+		}
+		if (minW == null) {
+			this.minW = sourceMinW;
+		} else {
+			int intMinW = minW;
+			if (intMinW > sourceMaxW) 
+				return false;
+			this.minW = Math.max(intMinW, sourceMinW);
+		}
+		if (maxW == null) {
+			this.maxW = sourceMaxW;
+		} else {
+			int intMaxW = maxW;
+			if (intMaxW < sourceMinW) 
+				return false;
+			this.maxW = Math.min(intMaxW, sourceMaxW);
+		}
+		if (minX == null) {
+			this.minX = sourceMinX;
+		} else {
+			int intMinX = minX;
+			if (intMinX > sourceMaxX) 
+				return false;
+			this.minX = Math.max(intMinX, sourceMinX);
+		}
+		if (maxX == null) {
+			this.maxX = sourceMaxX;
+		} else {
+			int intMaxX = maxX;
+			if (intMaxX < sourceMinX) 
+				return false;
+			this.maxX = Math.min(intMaxX, sourceMaxX);
+		}
+		if (minY == null) {
+			this.minY = sourceMinY;
+		} else {
+			int intMinY = minY;
+			if (intMinY > sourceMaxY) 
+				return false;
+			this.minY = Math.max(intMinY, sourceMinY);
+		}
+		if (maxY == null) {
+			this.maxY = sourceMaxY;
+		} else {
+			int intMaxY = maxY;
+			if (intMaxY < sourceMinY) 
+				return false;
+			this.maxY = Math.min(intMaxY, sourceMaxY);
+		}
+		if (minZ == null) {
+			this.minZ = sourceMinZ;
+		} else {
+			int intMinZ = minZ;
+			if (intMinZ > sourceMaxZ) 
+				return false;
+			this.minZ = Math.max(intMinZ, sourceMinZ);
+		}
+		if (maxZ == null) {
+			this.maxZ = sourceMaxZ;
+		} else {
+			int intMaxZ = maxZ;
+			if (intMaxZ < sourceMinZ) 
+				return false;
+			this.maxZ = Math.min(intMaxZ, sourceMaxZ);
+		}
+		return true;
 	}
 
 	@Override
@@ -610,12 +672,99 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath() + "/" 
-				+ source.getVLabel() + "[" + absoluteMinV + "," + absoluteMaxV + "]_"
-				+ source.getWLabel() + "[" + absoluteMinW + "," + absoluteMaxW + "]_"
-				+ source.getXLabel() + "[" + absoluteMinX + "," + absoluteMaxX + "]_"
-				+ source.getYLabel() + "[" + absoluteMinY + "," + absoluteMaxY + "]_"
-				+ source.getZLabel() + "[" + absoluteMinZ + "," + absoluteMaxZ + "]";
+		StringBuilder strCoordinateBounds = new StringBuilder();
+		boolean anyNotNull = false;
+		strCoordinateBounds.append("/");
+		Integer minCoord = absoluteMinV;
+		Integer maxCoord = absoluteMaxV;
+		if (minCoord != null || maxCoord != null) {
+			anyNotNull = true;
+			strCoordinateBounds.append(getVLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinW;
+		maxCoord = absoluteMaxW;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getWLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinX;
+		maxCoord = absoluteMaxX;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getXLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinY;
+		maxCoord = absoluteMaxY;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getYLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		minCoord = absoluteMinZ;
+		maxCoord = absoluteMaxZ;
+		if (minCoord != null || maxCoord != null) {
+			if (anyNotNull) strCoordinateBounds.append("_");
+			anyNotNull = true;
+			strCoordinateBounds.append(getZLabel());
+			if (minCoord == null) {
+				strCoordinateBounds.append("(-inf");
+			} else {
+				strCoordinateBounds.append("[").append(minCoord);
+			}
+			strCoordinateBounds.append(",");
+			if (maxCoord == null) {
+				strCoordinateBounds.append("inf)");
+			} else {
+				strCoordinateBounds.append(maxCoord).append("]");
+			}
+		}
+		return anyNotNull ? source.getSubfolderPath() + strCoordinateBounds.toString() : source.getSubfolderPath();
 	}
 
 	@Override

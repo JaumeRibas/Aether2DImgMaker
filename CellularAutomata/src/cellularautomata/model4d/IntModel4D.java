@@ -128,7 +128,7 @@ public interface IntModel4D extends Model4D, IntModel {
 	}
 	
 	@Override
-	default IntModel4D subsection(int minW, int maxW, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	default IntModel4D subsection(Integer minW, Integer maxW, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		return new IntSubModel4D(this, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 	
@@ -155,6 +155,11 @@ public interface IntModel4D extends Model4D, IntModel {
 	@Override
 	default IntModel3D crossSectionAtZ(int z) {
 		return new IntModel4DZCrossSection(this, z);
+	}
+	
+	@Override
+	default IntModel3D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return (IntModel3D) Model4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 	
 	@Override

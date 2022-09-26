@@ -16,6 +16,7 @@
  */
 package cellularautomata.model1d;
 
+import cellularautomata.PartialCoordinates;
 import cellularautomata.model.AsymmetricModelSection;
 
 public class AsymmetricModelSection1D<Source_Type extends SymmetricModel1D> extends AsymmetricModelSection<Source_Type> implements Model1D {
@@ -32,6 +33,11 @@ public class AsymmetricModelSection1D<Source_Type extends SymmetricModel1D> exte
 	@Override
 	public int getMaxX() {
 		return source.getAsymmetricMaxX();
+	}
+	
+	@Override
+	public Model1D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return Model1D.super.subsection(minCoordinates, maxCoordinates);
 	}
 
 }

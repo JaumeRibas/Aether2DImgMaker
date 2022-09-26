@@ -18,11 +18,29 @@ package cellularautomata.model4d;
 
 import org.apache.commons.math3.FieldElement;
 
+import cellularautomata.PartialCoordinates;
+import cellularautomata.model3d.NumericModel3D;
+
 public class AsymmetricNumericModelSection4D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
 	extends AsymmetricObjectModelSection4D<SymmetricNumericModel4D<Number_Type>, Number_Type> implements NumericModel4D<Number_Type> {
 	
 	public AsymmetricNumericModelSection4D(SymmetricNumericModel4D<Number_Type> grid) {
 		super(grid);
+	}
+	
+	@Override
+	public NumericModel4D<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		return NumericModel4D.super.subsection(minCoordinates, maxCoordinates);
+	}
+	
+	@Override
+	public NumericModel3D<Number_Type> crossSection(int axis, int coordinate) {
+		return NumericModel4D.super.crossSection(axis, coordinate);
+	}
+	
+	@Override
+	public NumericModel3D<Number_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		return NumericModel4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

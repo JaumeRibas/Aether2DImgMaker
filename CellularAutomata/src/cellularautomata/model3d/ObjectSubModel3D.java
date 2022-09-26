@@ -18,7 +18,7 @@ package cellularautomata.model3d;
 
 public class ObjectSubModel3D<Source_Type extends ObjectModel3D<Object_Type>, Object_Type> extends SubModel3D<Source_Type> implements ObjectModel3D<Object_Type> {
 
-	public ObjectSubModel3D(Source_Type source, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+	public ObjectSubModel3D(Source_Type source, Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {
 		super(source, minX, maxX, minY, maxY, minZ, maxZ);
 	}
 
