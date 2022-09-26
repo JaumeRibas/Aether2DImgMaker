@@ -220,7 +220,8 @@ public interface SymmetricModel4D extends Model4D, SymmetricModel {
 			return getAsymmetricMaxY();
 		case 3: 
 			return getAsymmetricMaxZ();
-		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 

@@ -354,7 +354,8 @@ public interface SymmetricModel5D extends Model5D, SymmetricModel {
 			return getAsymmetricMaxY();
 		case 4: 
 			return getAsymmetricMaxZ();
-		default: throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2, 3 or 4. Got " + axis + ".");
 		}
 	}
 

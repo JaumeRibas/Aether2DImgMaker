@@ -470,7 +470,8 @@ public interface Model4D extends Model {
 			return getMaxY();
 		case 3: 
 			return getMaxZ();
-		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 
@@ -578,7 +579,8 @@ public interface Model4D extends Model {
 			} else {
 				return getMaxZ(w, x, y);
 			}
-		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 	
@@ -593,7 +595,8 @@ public interface Model4D extends Model {
 			return getMinY();
 		case 3: 
 			return getMinZ();
-		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 
@@ -701,7 +704,8 @@ public interface Model4D extends Model {
 			} else {
 				return getMinZ(w, x, y);
 			}
-		default: throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
+		default:
+			throw new IllegalArgumentException("The axis must be 0, 1, 2 or 3. Got " + axis + ".");
 		}
 	}
 }
