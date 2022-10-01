@@ -2435,15 +2435,27 @@ public class Test {
 	}
 	
 	public static void stepByStep(IntModel ca) {
+		int dimension = ca.getGridDimension();
+		if (dimension != 1 && dimension != 2) {
+			throw new IllegalArgumentException("Grid's dimension must be 1 o two.");
+		}
 		try {
 			Scanner s = new Scanner(System.in);
-			Coordinates crossSectionCoordinates = new Coordinates(new int[ca.getGridDimension()]);
-			do {
-				System.out.println("step " + ca.getStep());
-				System.out.println(ca.toString2DCrossSection(0, 1, crossSectionCoordinates));
-				System.out.println("total value " + ca.getTotal());
-				s.nextLine();
-			} while (ca.nextStep());
+			if (dimension == 1) {
+				do {
+					System.out.println("step " + ca.getStep());
+					Utils.printAsGrid1D(ca);
+					System.out.println("total value " + ca.getTotal());
+					s.nextLine();
+				} while (ca.nextStep());
+			} else {
+				do {
+					System.out.println("step " + ca.getStep());
+					Utils.printAsGrid2D(ca);
+					System.out.println("total value " + ca.getTotal());
+					s.nextLine();
+				} while (ca.nextStep());
+			}
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
