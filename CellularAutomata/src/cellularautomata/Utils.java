@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.model.IntModel;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.ObjectModel1D;
 import cellularautomata.model2d.IntModel2D;
@@ -795,7 +796,7 @@ public class Utils {
 	}
 	
 	public static <Object_Type> void printAsGrid(ObjectModel2D<Object_Type> grid) throws Exception {		
-		int maxDigits = 3;
+		int maxLength = 3;
 		int maxY = grid.getMaxY();
 		int minY = grid.getMinY();
 		int maxX = grid.getMaxX();
@@ -803,13 +804,13 @@ public class Utils {
 		for (int y = maxY; y >= minY; y--) {
 			int localMaxX = grid.getMaxX(y);
 			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
-				int digits = grid.getFromPosition(x, y).toString().length();
-				if (digits > maxDigits)
-					maxDigits = digits;
+				int length = grid.getFromPosition(x, y).toString().length();
+				if (length > maxLength)
+					maxLength = length;
 			}
 		}
 		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
+		for (int i = 0; i < maxLength; i++) {
 			headFootGap += "-";
 		}
 		String headFoot = "+";
@@ -822,14 +823,14 @@ public class Utils {
 			int localMinX = grid.getMinX(y);
 			int x = minX;
 			for (; x < localMinX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
 			}
 			for (; x <= localMaxX; x++) {
 				String strVal = grid.getFromPosition(x, y) + "";
-				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+				System.out.print("|" + padLeft(strVal, ' ', maxLength));
 			}
 			for (; x <= maxX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
 			}
 			System.out.println("|");
 		}
@@ -837,16 +838,16 @@ public class Utils {
 	}
 	
 	public static <Object_Type> void printAsGrid(ObjectModel1D<Object_Type> grid) throws Exception {
-		int maxDigits = 3;
+		int maxLength = 3;
 		int maxX = grid.getMaxX();
 		int minX = grid.getMinX();
 		for (int x = minX; x <= maxX; x++) {
-			int digits = grid.getFromPosition(x).toString().length();
-			if (digits > maxDigits)
-				maxDigits = digits;
+			int length = grid.getFromPosition(x).toString().length();
+			if (length > maxLength)
+				maxLength = length;
 		}
 		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
+		for (int i = 0; i < maxLength; i++) {
 			headFootGap += "-";
 		}
 		String headFoot = "+";
@@ -856,14 +857,14 @@ public class Utils {
 		System.out.println(headFoot);
 		for (int x = minX; x <= maxX; x++) {
 			String strVal = grid.getFromPosition(x) + "";
-			System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			System.out.print("|" + padLeft(strVal, ' ', maxLength));
 		}
 		System.out.println("|");
 		System.out.println(headFoot);
 	}
 	
 	public static void printAsGrid(LongModel2D grid) throws Exception {
-		int maxDigits = 3;
+		int maxLength = 3;
 		int maxY = grid.getMaxY();
 		int minY = grid.getMinY();
 		int maxX = grid.getMaxX();
@@ -871,13 +872,13 @@ public class Utils {
 		for (int y = maxY; y >= minY; y--) {
 			int localMaxX = grid.getMaxX(y);
 			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
-				int digits = Long.toString(grid.getFromPosition(x, y)).length();
-				if (digits > maxDigits)
-					maxDigits = digits;
+				int length = Long.toString(grid.getFromPosition(x, y)).length();
+				if (length > maxLength)
+					maxLength = length;
 			}
 		}
 		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
+		for (int i = 0; i < maxLength; i++) {
 			headFootGap += "-";
 		}
 		String headFoot = "+";
@@ -890,14 +891,14 @@ public class Utils {
 			int localMinX = grid.getMinX(y);
 			int x = minX;
 			for (; x < localMinX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
 			}
 			for (; x <= localMaxX; x++) {
 				String strVal = grid.getFromPosition(x, y) + "";
-				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+				System.out.print("|" + padLeft(strVal, ' ', maxLength));
 			}
 			for (; x <= maxX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
 			}
 			System.out.println("|");
 		}
@@ -905,16 +906,16 @@ public class Utils {
 	}
 	
 	public static void printAsGrid(LongModel1D grid) throws Exception {
-		int maxDigits = 3;
+		int maxLength = 3;
 		int maxX = grid.getMaxX();
 		int minX = grid.getMinX();
 		for (int x = minX; x <= maxX; x++) {
-			int digits = Long.toString(grid.getFromPosition(x)).length();
-			if (digits > maxDigits)
-				maxDigits = digits;
+			int length = Long.toString(grid.getFromPosition(x)).length();
+			if (length > maxLength)
+				maxLength = length;
 		}
 		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
+		for (int i = 0; i < maxLength; i++) {
 			headFootGap += "-";
 		}
 		String headFoot = "+";
@@ -924,14 +925,14 @@ public class Utils {
 		System.out.println(headFoot);
 		for (int x = minX; x <= maxX; x++) {
 			String strVal = grid.getFromPosition(x) + "";
-			System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+			System.out.print("|" + padLeft(strVal, ' ', maxLength));
 		}
 		System.out.println("|");
 		System.out.println(headFoot);
 	}
 	
 	public static void printAsGrid(IntModel2D grid) throws Exception {
-		int maxDigits = 3;
+		int maxLength = 3;
 		int maxY = grid.getMaxY();
 		int minY = grid.getMinY();
 		int maxX = grid.getMaxX();
@@ -939,13 +940,13 @@ public class Utils {
 		for (int y = maxY; y >= minY; y--) {
 			int localMaxX = grid.getMaxX(y);
 			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
-				int digits = Long.toString(grid.getFromPosition(x, y)).length();
-				if (digits > maxDigits)
-					maxDigits = digits;
+				int length = Long.toString(grid.getFromPosition(x, y)).length();
+				if (length > maxLength)
+					maxLength = length;
 			}
 		}
 		String headFootGap = "";
-		for (int i = 0; i < maxDigits; i++) {
+		for (int i = 0; i < maxLength; i++) {
 			headFootGap += "-";
 		}
 		String headFoot = "+";
@@ -958,14 +959,14 @@ public class Utils {
 			int localMinX = grid.getMinX(y);
 			int x = minX;
 			for (; x < localMinX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
 			}
 			for (; x <= localMaxX; x++) {
 				String strVal = grid.getFromPosition(x, y) + "";
-				System.out.print("|" + padLeft(strVal, ' ', maxDigits));
+				System.out.print("|" + padLeft(strVal, ' ', maxLength));
 			}
 			for (; x <= maxX; x++) {
-				System.out.print("|" + padLeft(" ", ' ', maxDigits));
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
 			}
 			System.out.println("|");
 		}
@@ -997,6 +998,76 @@ public class Utils {
 			}
 			System.out.println("|");
 		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid2D(IntModel grid) throws Exception {
+		int maxLength = 3;
+		int maxY = grid.getMaxCoordinate(1);
+		int minY = grid.getMinCoordinate(1);
+		int maxX = grid.getMaxCoordinate(0);
+		int minX = grid.getMinCoordinate(0);
+		for (int y = maxY; y >= minY; y--) {
+			PartialCoordinates coords = new PartialCoordinates(null, y);
+			int localMaxX = grid.getMaxCoordinate(0, coords);
+			for (int x = grid.getMinCoordinate(0, coords); x <= localMaxX; x++) {
+				int length = Long.toString(grid.getFromPosition(new Coordinates(x, y))).length();
+				if (length > maxLength)
+					maxLength = length;
+			}
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxLength; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			PartialCoordinates coords = new PartialCoordinates(null, y);
+			int localMaxX = grid.getMaxCoordinate(0, coords);
+			int localMinX = grid.getMinCoordinate(0, coords);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
+			}
+			for (; x <= localMaxX; x++) {
+				String strVal = grid.getFromPosition(new Coordinates(x, y)) + "";
+				System.out.print("|" + padLeft(strVal, ' ', maxLength));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid1D(IntModel grid) throws Exception {
+		int maxLength = 3;
+		int maxX = grid.getMaxCoordinate(0);
+		int minX = grid.getMinCoordinate(0);
+		for (int x = minX; x <= maxX; x++) {
+			int length = Long.toString(grid.getFromPosition(new Coordinates(x))).length();
+			if (length > maxLength)
+				maxLength = length;
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxLength; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		System.out.println(headFoot);
+		for (int x = minX; x <= maxX; x++) {
+			String strVal = grid.getFromPosition(new Coordinates(x)) + "";
+			System.out.print("|" + padLeft(strVal, ' ', maxLength));
+		}
+		System.out.println("|");
 		System.out.println(headFoot);
 	}
 	
