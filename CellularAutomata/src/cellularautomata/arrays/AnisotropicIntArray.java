@@ -44,8 +44,8 @@ public class AnisotropicIntArray extends AnisotropicArray implements Multidimens
 	@Override
 	public int addAndGet(Coordinates indexes, int value) {
 		int index = getInternalArrayIndex(indexes);
-		values[index] += value;
-		return values[index];
+		int newValue = values[index] += value;
+		return newValue;
 	}
 
 	@Override

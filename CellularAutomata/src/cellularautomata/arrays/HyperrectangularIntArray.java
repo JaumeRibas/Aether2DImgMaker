@@ -49,8 +49,8 @@ public class HyperrectangularIntArray extends HyperrectangularArray implements M
 	@Override
 	public int addAndGet(Coordinates indexes, int value) {
 		int index = getInternalArrayIndex(indexes);
-		values[index] += value;
-		return values[index];
+		int newValue = values[index] += value;
+		return newValue;
 	}
 	
 	public void fillEdges(int edgeWidth, int value) {
