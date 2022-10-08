@@ -28,6 +28,12 @@ import cellularautomata.Coordinates;
 import cellularautomata.model.IsotropicHypercubicModelA;
 import cellularautomata.model.SymmetricIntModel;
 
+/**
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton, with a single source initial configuration, for review and testing purposes
+ * 
+ * @author Jaume
+ *
+ */
 public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHypercubicModelA {
 
 	private int gridDimension;
