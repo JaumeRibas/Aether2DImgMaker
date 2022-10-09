@@ -61,7 +61,6 @@ import cellularautomata.automata.siv.SpreadIntegerValue3D;
 import cellularautomata.automata.siv.SpreadIntegerValue4D;
 import cellularautomata.model.Model;
 import cellularautomata.model.SymmetricModel;
-import cellularautomata.model1d.Model1D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.Model2D;
@@ -145,7 +144,10 @@ public class AetherImgMaker {
 	
 	private static boolean generateImages(Model model, Args args, String backupsPath) throws Exception {
 		boolean error = false;
-		final String path = args.path + "/" + model.getSubfolderPath();
+		String path = args.path + "/" + model.getSubfolderPath();
+		if (args.steapLeap > 1) {
+			path += "/step-leap=" + args.steapLeap;
+		}
 		final String imagesPath = path + "/img";
 		ColorMapper colorMapper = getColorMapper(args);
 		if (colorMapper == null)
@@ -156,19 +158,17 @@ public class AetherImgMaker {
 		} else {
 			imgMaker = new ImgMaker(args.millisBetweenBackups);
 		}
-		if (model instanceof Model1D) {
-			System.out.println(unsupportedDimensionCount);
-		} else if (model instanceof Model2D) {
+		if (model instanceof Model2D) {
 			if (model instanceof IntModel2D) {
 				IntModel2D castedModel = (IntModel2D)model;
 				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath);
+					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
 						break;
-					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, false);
+					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
 						break;
-					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, true);
+					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
 						break;
-					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, true, false);
+					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
 						System.out.println(unknownImgGenMode);
@@ -177,13 +177,13 @@ public class AetherImgMaker {
 			} else if (model instanceof LongModel2D) {
 				LongModel2D castedModel = (LongModel2D)model;
 				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath);
+					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
 						break;
-					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, false);
+					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
 						break;
-					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, true);
+					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
 						break;
-					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, true, false);
+					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
 						System.out.println(unknownImgGenMode);
@@ -193,13 +193,13 @@ public class AetherImgMaker {
 				@SuppressWarnings("unchecked")
 				NumericModel2D<BigInt> castedModel = (NumericModel2D<BigInt>)model;
 				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath);
+					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
 						break;
-					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, false);
+					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
 						break;
-					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, true);
+					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
 						break;
-					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, true, false);
+					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
 						System.out.println(unknownImgGenMode);
@@ -230,13 +230,13 @@ public class AetherImgMaker {
 			if (model instanceof IntModel3D) {
 				IntModel3D castedModel = (IntModel3D)model;
 				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath);
+					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
 						break;
-					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, false);
+					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
 						break;
-					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, true);
+					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
 						break;
-					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, true, false);
+					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
 						System.out.println(unknownImgGenMode);
@@ -245,13 +245,13 @@ public class AetherImgMaker {
 			} else if (model instanceof LongModel3D) {
 				LongModel3D castedModel = (LongModel3D)model;
 					switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath);
+					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
 						break;
-					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, false);
+					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
 						break;
-					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, true);
+					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
 						break;
-					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, true, false);
+					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
 						System.out.println(unknownImgGenMode);
@@ -261,13 +261,13 @@ public class AetherImgMaker {
 				@SuppressWarnings("unchecked")
 				NumericModel3D<BigInt> castedModel = (NumericModel3D<BigInt>)model;
 				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath);
+					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
 						break;
-					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, false);
+					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
 						break;
-					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, false, true);
+					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
 						break;
-					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, true, false);
+					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
 						System.out.println(unknownImgGenMode);
@@ -285,26 +285,31 @@ public class AetherImgMaker {
 	}
 
 	private static void evolveModelToInitialStep(Model model, Args args, String backupsPath) throws Exception {
-		if (args.initialStep > model.getStep()) {
+		long step = model.getStep();
+		if (args.initialStep > step) {
 			System.out.println("Evolving model to step " + args.initialStep + ".");
 			if (args.millisBetweenBackups != null) {
 				long millis = System.currentTimeMillis();
+				boolean changed;
 				do {
-					model.nextStep();
-					System.out.println("Step: " + model.getStep());
+					System.out.println("Step: " + step);
+					changed = model.nextStep();
+					step++;
 					if (System.currentTimeMillis() - millis >= args.millisBetweenBackups) {
-						String backupName = model.getClass().getSimpleName() + "_" + model.getStep();
+						String backupName = model.getClass().getSimpleName() + "_" + step;
 						System.out.println("Backing up instance at '" + backupsPath + "/" + backupName + "'.");
 						model.backUp(backupsPath, backupName);		
 						System.out.println("Backing up finished.");
 						millis = System.currentTimeMillis();
 					}
-				} while (model.getStep() < args.initialStep);
+				} while (changed && step < args.initialStep);
 			} else {
+				boolean changed;
 				do {
-					model.nextStep();
-					System.out.println("Step: " + model.getStep());
-				} while (model.getStep() < args.initialStep);
+					System.out.println("Step: " + step);
+					changed = model.nextStep();
+					step++;
+				} while (changed && step < args.initialStep);
 			}
 		}		
 	}

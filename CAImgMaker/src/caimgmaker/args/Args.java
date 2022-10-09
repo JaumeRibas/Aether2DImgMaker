@@ -68,10 +68,10 @@ public class Args {
 	@Parameter(names = { "-restore" }, description = "The path of the backup to restore. Mandatory when no initial configuration is passed and the selected -model requires one.")
     public String backupToRestorePath = null;
 	
-	@Parameter(names = { "-first-step" }, validateWith = NonNegativeIntegerValidator.class, description = "The app skips ahead to this step without generating images.")
+	@Parameter(names = { "-first-step" }, validateWith = NonNegativeIntegerValidator.class, description = "The app skips ahead to this step, or the model's last step in case it is smaller, without generating images.")
 	public long initialStep = 0;
 	
-	@Parameter(names = { "-step-leap" }, validateWith = GreaterThanZeroIntegerValidator.class, description = "The app will generate images every this number of steps.")
+	@Parameter(names = { "-step-leap" }, validateWith = GreaterThanZeroIntegerValidator.class, description = "The app will generate images at the steps multiple of this number. If this number is greater than one, the app will also generate and image at the last step plus one of the model.")
 	public int steapLeap = 1;
 
 	@Parameter(names = { "-backup-every" }, validateWith = GreaterThanZeroIntegerValidator.class, description = "The preferred number of millisencods between automatic backups.")
