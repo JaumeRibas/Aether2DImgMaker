@@ -33,10 +33,10 @@ public class Args {
 	@Parameter(names = { "-grid" }, validateWith = GridValidator.class, converter = GridConverter.class, description = "The type of grid to use. Currently, the only available type is: '{dimension}d_{side}', where {dimension} is a positive integer and {side} is either 'infinite' (for an infinite grid) or a positive integer (for a finite grid shaped as a hypercube of this side) (e.g. '2d_infinite').")
     public GridOptionValue grid = null;
 
-	@Parameter(names = { "-initial-config" }, validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class, description = "The initial configuration. The currently available configurations are: 'single-source_{value}', for a single source initial configuration (e.g. 'single-source_-1000'), and 'random-region_{side}_{min}_{max}', for an initial configuration consisting of an hypercubic region of side {side} filled with random values ranging form {min} to {max} (e.g. 'random-region_250_-45_60'). Note that outside this region the value will be zero.")
+	@Parameter(names = { "-initial-configuration", "-initial-config", "-init-configuration", "-init-config" }, validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class, description = "The initial configuration. The currently available configurations are: 'single-source_{value}', for a single source initial configuration (e.g. 'single-source_-1000'), and 'random-region_{side}_{min}_{max}', for an initial configuration consisting of an hypercubic region of side {side} filled with random values ranging form {min} to {max} (e.g. 'random-region_250_-45_60'). Note that outside this region the value will be zero.")
     public InitialConfigOptionValue initialConfiguration = null;
 
-	@Parameter(names = { "-asymmetric" }, description = "Generate images only of an asymmetric section of a symmetric model.")
+	@Parameter(names = { "-asymmetric", "-asymm", "-asym" }, description = "Generate images only of an asymmetric section of a symmetric model.")
 	public boolean asymmetric = false;
 	
 	//TODO coordinate-filters option. x1[0,max],x2=10,x3=x1+5,x4=-x5
@@ -59,7 +59,7 @@ public class Args {
 	@Parameter(names = { "-colormap" }, description = "The colormap to use for the images. The currently available colormaps are: 'Grayscale' and 'Hue'.")
     public String colormap = "Grayscale";
 	
-	@Parameter(names = { "-min-img-size" }, validateWith = ImgSizeValidator.class, converter = ImgSizeConverter.class, description = "The minimum size of the generated images in pixels. With the format '{width}x{height}' (e.g. '1920x1080'). The images can be bigger if the model is too big to fit using 1:1 pixel to position scale. The aspect ratio is always mantained, if the scaled data is smaller than the image, it is aligned to the bottom left corner. The background is colored in black.")
+	@Parameter(names = { "-minimum-image-size", "-min-image-size", "-minimum-img-size", "-min-img-size" }, validateWith = ImgSizeValidator.class, converter = ImgSizeConverter.class, description = "The minimum size of the generated images in pixels. With the format '{width}x{height}' (e.g. '1920x1080'). The images can be bigger if the model is too big to fit using 1:1 pixel to position scale. The aspect ratio is always mantained, if the scaled data is smaller than the image, it is aligned to the bottom left corner. The background is colored in black.")
     public ImgSizeOptionValue minimumImageSize = new ImgSizeOptionValue(ImgMakerConstants.HD_HEIGHT/4, ImgMakerConstants.HD_HEIGHT/4);
 	
 	@Parameter(names = { "-path" }, description = "The path of the parent folder where the images are created. A subfolder structure is created at this location for organizational purposes.")
@@ -86,7 +86,7 @@ public class Args {
 	@Parameter(names = { "-scan3-start" }, description = "The scan3 will start at this coordinate. Only applies to models with dimension greater than two.")
     public Integer zScanInitialIndex = null;
     
-    @Parameter(names = { "-img-generation-mode" }, description = "Option to affect image generation. The currently available modes are: '" + NORMAL + "', '" + SPLIT_PARITY + "', '" + EVEN_ONLY + "' and '" + ODD_ONLY + "'.")
+    @Parameter(names = { "-image-generation-mode", "-img-generation-mode", "-image-gen-mode", "-img-gen-mode" }, description = "Option to affect image generation. The currently available modes are: '" + NORMAL + "', '" + SPLIT_PARITY + "', '" + EVEN_ONLY + "' and '" + ODD_ONLY + "'.")
     public String imgGenerationMode = NORMAL;
     
     @Parameter(names = { "-memory-safe" }, description = "Use temporary files, within the -path folder, to store the grid so as to avoid running out of memory. In exchange, processing speed and storage space are sacrificed.")
