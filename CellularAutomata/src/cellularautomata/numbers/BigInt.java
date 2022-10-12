@@ -70,8 +70,8 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 	}
 
 	@Override
-	public BigInt multiply(int arg0) {
-		return new BigInt(value.multiply(BigInteger.valueOf(arg0)));
+	public BigInt multiply(int val) {
+		return new BigInt(value.multiply(BigInteger.valueOf(val)));
 	}
 
 	@Override
@@ -80,23 +80,23 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 	}
 
 	@Override
-	public int compareTo(BigInt o) {
-		return value.compareTo(o.value);
+	public int compareTo(BigInt val) {
+		return value.compareTo(val.value);
 	}
 
 	@Override
-	public BigInt add(BigInt arg0) throws NullArgumentException {
-		return new BigInt(value.add(arg0.value));
+	public BigInt add(BigInt val) throws NullArgumentException {
+		return new BigInt(value.add(val.value));
 	}
 
 	@Override
-	public BigInt divide(BigInt arg0) throws NullArgumentException, MathArithmeticException {
-		return new BigInt(value.divide(arg0.value));
+	public BigInt divide(BigInt val) throws NullArgumentException, MathArithmeticException {
+		return new BigInt(value.divide(val.value));
 	}
 
 	@Override
-	public BigInt multiply(BigInt arg0) throws NullArgumentException {
-		return new BigInt(value.multiply(arg0.value));
+	public BigInt multiply(BigInt val) throws NullArgumentException {
+		return new BigInt(value.multiply(val.value));
 	}
 
 	@Override
@@ -105,29 +105,29 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 	}
 
 	@Override
-	public BigInt subtract(BigInt arg0) throws NullArgumentException {
-		return new BigInt(value.subtract(arg0.value));
+	public BigInt subtract(BigInt val) throws NullArgumentException {
+		return new BigInt(value.subtract(val.value));
 	}
 
-	public BigInt[] divideAndRemainder(BigInt arg0) {
-		BigInteger[] result = value.divideAndRemainder(arg0.value);
+	public BigInt[] divideAndRemainder(BigInt val) {
+		BigInteger[] result = value.divideAndRemainder(val.value);
 		return new BigInt[] { new BigInt(result[0]), new BigInt(result[1]) };
 	}
 
-	public BigInt power(int arg0) {
-		return new BigInt(value.pow(arg0));
+	public BigInt power(int exponent) {
+		return new BigInt(value.pow(exponent));
 	}
 
 	public BigInt abs() {
 		return new BigInt(value.abs());
 	}
 
-	public static BigInt valueOf(int arg0) {
-		return new BigInt(BigInteger.valueOf(arg0));
+	public static BigInt valueOf(int val) {
+		return new BigInt(BigInteger.valueOf(val));
 	}
 
-	public static BigInt valueOf(long arg0) {
-		return new BigInt(BigInteger.valueOf(arg0));
+	public static BigInt valueOf(long val) {
+		return new BigInt(BigInteger.valueOf(val));
 	}
 
 	@Override
@@ -159,24 +159,24 @@ public class BigInt extends Number implements FieldElement<BigInt>, Comparable<B
 		return value.toString();
 	}
 	
-	public String toString(int arg0) {
-		return value.toString(arg0);
+	public String toString(int radix) {
+		return value.toString(radix);
 	}
 	
-	public boolean equals(BigInt arg0) {
-		if (arg0 == null)
+	public boolean equals(BigInt x) {
+		if (x == null)
 			return false;
-		return value.equals(arg0.value);
+		return value.equals(x.value);
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object x) {
+		if (this == x)
 			return true;
-		if (obj == null || obj.getClass() != this.getClass()) {
+		if (x == null || x.getClass() != this.getClass()) {
 			return false;
 		}
-		return value.equals(((BigInt)obj).value);
+		return value.equals(((BigInt)x).value);
 	}
 
 }
