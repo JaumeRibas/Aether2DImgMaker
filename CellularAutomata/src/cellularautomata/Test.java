@@ -34,7 +34,6 @@ import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.AetherSimple2D;
 import cellularautomata.automata.aether.AetherSimple5D;
-import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether4D;
 import cellularautomata.automata.siv.SpreadIntegerValue2D;
 import cellularautomata.automata.siv.SpreadIntegerValueSimple2D;
@@ -1052,13 +1051,6 @@ public class Test {
 		printVonNeumannNeighborhood(ae, w, x, y, z);
 	}
 	
-	public static void timeIntAether3D(int singleSource) {
-		IntAether3D ae1 = new IntAether3D(singleSource);
-		long millis = System.currentTimeMillis();
-		while(ae1.nextStep());
-		System.out.println(System.currentTimeMillis() - millis);
-	}
-	
 	public static void printVonNeumannNeighborhood(LongModel3D grid, int x, int y, int z) {
 		try {
 			//center
@@ -1155,8 +1147,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1174,6 +1167,7 @@ public class Test {
 		IntAether4D ae = new IntAether4D(-10000);
 		IntModel4D ns = ae.asymmetricSection();
 		try {
+			Boolean changed;
 			do {
 				System.out.println("Comparing step " + ae.getStep());
 				int maxW = ae.getAsymmetricMaxW();
@@ -1190,7 +1184,7 @@ public class Test {
 						}
 					}
 				}
-			} while(ae.nextStep());
+			} while ((changed = ae.nextStep()) == null || changed);
 			System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1203,6 +1197,7 @@ public class Test {
 		int z = 0;
 		IntModel3D cs = ae.asymmetricSection().crossSectionAtZ(z);
 		try {
+			Boolean changed;
 			do {
 				System.out.println("Comparing step " + ae.getStep());
 				int maxW = ae.getAsymmetricMaxWAtZ(z);
@@ -1245,7 +1240,7 @@ public class Test {
 						}
 					}
 				}
-			} while(ae.nextStep());
+			} while ((changed = ae.nextStep()) != null && changed);
 			System.out.println("Equal!");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1304,8 +1299,9 @@ public class Test {
 						//return;
 					}
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1335,8 +1331,9 @@ public class Test {
 								+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x));
 					}
 				}	
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1369,8 +1366,9 @@ public class Test {
 						}
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1401,8 +1399,9 @@ public class Test {
 						}
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1436,8 +1435,9 @@ public class Test {
 						}
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1476,8 +1476,9 @@ public class Test {
 						}
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1511,8 +1512,9 @@ public class Test {
 						}
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1547,8 +1549,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1584,8 +1587,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1628,8 +1632,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1666,8 +1671,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1707,8 +1713,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1742,8 +1749,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1779,8 +1787,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1820,8 +1829,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1859,8 +1869,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1892,8 +1903,9 @@ public class Test {
 								+ " != " + ca1.getClass().getSimpleName() + ":" + ca1.getFromPosition(x));
 					}
 				}	
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1929,8 +1941,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -1966,8 +1979,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -2005,8 +2019,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -2046,8 +2061,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -2091,8 +2107,9 @@ public class Test {
 						}	
 					}	
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -2129,8 +2146,9 @@ public class Test {
 						//return;
 					}
 				}
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -2149,10 +2167,11 @@ public class Test {
 	
 	public static void printMinAndMaxValues(LongModel ca) {
 		try {
+			Boolean changed;
 			do {
 				long[] minAndMax = ca.getMinAndMax();
 				System.out.println("min: " + minAndMax[0] + "\t\tmax: " + minAndMax[1]);
-			} while(ca.nextStep());
+			} while((changed = ca.nextStep()) == null || changed);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2164,7 +2183,8 @@ public class Test {
 			long value = ca.getTotal(), newValue = value;
 			boolean finished = false;
 			while (value == newValue && !finished) {
-				finished = !ca.nextStep();
+				Boolean changed;
+				finished = (changed = ca.nextStep()) != null && !changed;
 				newValue = ca.getTotal();
 			}
 			if (!finished) {
@@ -2183,7 +2203,8 @@ public class Test {
 			Number_Type value = ca.getTotal(), newValue = value;
 			boolean finished = false;
 			while (value.equals(newValue) && !finished) {
-				finished = !ca.nextStep();
+				Boolean changed;
+				finished = (changed = ca.nextStep()) != null && !changed;
 				newValue = ca.getTotal();
 			}
 			if (!finished) {
@@ -2198,10 +2219,10 @@ public class Test {
 	
 	public static void printTotalValueEvolution(LongModel ca) {
 		try {
+			Boolean changed;
 			do {
 				System.out.println("step " + ca.getStep() + ": " + ca.getTotal());
-			}
-			while (ca.nextStep());
+			} while((changed = ca.nextStep()) == null || changed);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2213,7 +2234,8 @@ public class Test {
 			int value = ca.getTotal(), newValue = value;
 			boolean finished = false;
 			while (value == newValue && !finished) {
-				finished = !ca.nextStep();
+				Boolean changed;
+				finished = (changed = ca.nextStep()) != null && !changed;
 				newValue = ca.getTotal();
 			}
 			if (!finished) {
@@ -2229,12 +2251,13 @@ public class Test {
 	public static void stepByStep(IntModel2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			do {
 				System.out.println("step " + ca.getStep());
 				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
-			} while (ca.nextStep());
+			} while ((changed = ca.nextStep()) == null || changed);
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2244,12 +2267,13 @@ public class Test {
 	public static void stepByStep(LongModel1D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			do {
 				System.out.println("step " + ca.getStep());
 				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
-			} while (ca.nextStep());
+			} while ((changed = ca.nextStep()) == null || changed);
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2259,12 +2283,13 @@ public class Test {
 	public static void stepByStep(LongModel2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			do {
 				System.out.println("step " + ca.getStep());
 				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
-			} while (ca.nextStep());
+			} while ((changed = ca.nextStep()) == null || changed);
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2274,12 +2299,13 @@ public class Test {
 	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void stepByStep(NumericModel1D<Number_Type> ca) {
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			do {
 				System.out.println("step " + ca.getStep());
 				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
-			} while (ca.nextStep());
+			} while ((changed = ca.nextStep()) == null || changed);
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2289,12 +2315,13 @@ public class Test {
 	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void stepByStep(NumericModel2D<Number_Type> ca) {
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			do {
 				System.out.println("step " + ca.getStep());
 				Utils.printAsGrid(ca);
 				System.out.println("total value " + ca.getTotal());
 				s.nextLine();
-			} while (ca.nextStep());
+			} while ((changed = ca.nextStep()) == null || changed);
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2305,9 +2332,13 @@ public class Test {
 		try {
 			long millis;
 			for (Model ca : cas) {
+				Boolean changed;
 				millis = System.currentTimeMillis();
-				while (ca.nextStep());
+				while ((changed = ca.nextStep()) != null && changed);
 				System.out.println(ca.getClass().getSimpleName() + ": " + (System.currentTimeMillis() - millis));
+				if (changed == null) {
+					System.out.println("Only one step computed.");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2379,8 +2410,9 @@ public class Test {
 						}
 					}
 				});
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 //					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -2419,8 +2451,9 @@ public class Test {
 						}
 					}
 				});
-				finished1 = !ca1.nextStep();
-				finished2 = !ca2.nextStep();
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
 				if (finished1 != finished2) {
 //					equal = false;
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
@@ -2441,20 +2474,21 @@ public class Test {
 		}
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			if (dimension == 1) {
 				do {
 					System.out.println("step " + ca.getStep());
 					Utils.printAsGrid1D(ca);
 					System.out.println("total value " + ca.getTotal());
 					s.nextLine();
-				} while (ca.nextStep());
+				} while ((changed = ca.nextStep()) == null || changed);
 			} else {
 				do {
 					System.out.println("step " + ca.getStep());
 					Utils.printAsGrid2D(ca);
 					System.out.println("total value " + ca.getTotal());
 					s.nextLine();
-				} while (ca.nextStep());
+				} while ((changed = ca.nextStep()) == null || changed);
 			}
 			s.close();
 		} catch (Exception e) {

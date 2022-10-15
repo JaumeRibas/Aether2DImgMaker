@@ -24,11 +24,11 @@ import java.util.NoSuchElementException;
 
 public class LongInputStreamIterator implements Iterator<Long> {
 
-	private DataInputStream inputStream;
+	private final DataInputStream inputStream;
 	private long nextValue;
 	private boolean hasNext;
 	private boolean invalidated = false;
-	private List<LongInputStreamIterator> iteratorList;
+	private final List<LongInputStreamIterator> iteratorList;
 	private static final String INVALIDATED_EXCEPTION_MESSAGE = "This iterator has been invalidated.";
 	
 	public LongInputStreamIterator(DataInputStream inputStream, List<LongInputStreamIterator> iteratorList) {

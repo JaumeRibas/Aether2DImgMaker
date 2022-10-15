@@ -29,7 +29,7 @@ public class Model5DVCrossSection<Source_Type extends Model5D> implements Model4
 	
 	public Model5DVCrossSection(Source_Type source, int v) {
 		if (v > source.getMaxV() || v < source.getMinV()) {
-			throw new IllegalArgumentException("V coordinate is out of bounds.");
+			throw new IllegalArgumentException("The cross section is out of bounds.");
 		}
 		this.source = source;
 		this.v = v;
@@ -248,12 +248,17 @@ public class Model5DVCrossSection<Source_Type extends Model5D> implements Model4
 	public int getMaxZ(int w, int x, int y) { return source.getMaxZ(v, w, x, y); }
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (v > source.getMaxV() || v < source.getMinV()) {
-			throw new UnsupportedOperationException("V coordinate is out of bounds.");
+			throw new UnsupportedOperationException("The cross section is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

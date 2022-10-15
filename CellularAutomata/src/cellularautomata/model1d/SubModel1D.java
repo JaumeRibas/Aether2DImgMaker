@@ -33,7 +33,7 @@ public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX)) {
-			throw new IllegalArgumentException("Subsection is out of bounds.");
+			throw new IllegalArgumentException("The subsection is out of bounds.");
 		}
 		this.absoluteMaxX = maxX;
 		this.absoluteMinX = minX;
@@ -72,12 +72,17 @@ public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getActualBounds(absoluteMinX, absoluteMaxX)) {
-			throw new UnsupportedOperationException("Subsection is out of bounds.");
+			throw new UnsupportedOperationException("The subsection is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

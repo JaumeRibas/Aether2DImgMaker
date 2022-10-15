@@ -80,7 +80,7 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		BigFraction[] newGrid = new BigFraction[grid.length];
 		Arrays.fill(newGrid, BigFraction.ZERO);
 		BigFraction currentValue, greaterXNeighborValue, smallerXNeighborValue;
@@ -167,6 +167,11 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 		grid = newGrid;
 		step++;
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	private void toppleRangeBeyondI1(BigFraction[] newGrid, int minI, int maxI) {

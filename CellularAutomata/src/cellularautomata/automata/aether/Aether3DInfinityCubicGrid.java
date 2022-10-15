@@ -77,7 +77,7 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 	}
 
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		BigFraction[][][] newGrid = new BigFraction[grid.length][][];
 		BigFraction[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
 		BigFraction[][] newSmallerXSlice = null, 
@@ -324,6 +324,11 @@ public class Aether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigFra
 		grid = newGrid;
 		step++;
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	private void toppleRangeBeyondI3(BigFraction[][][] xSlices, BigFraction[][][] newXSlices, BigFraction[][][] newGrid, int minI, int maxI, 

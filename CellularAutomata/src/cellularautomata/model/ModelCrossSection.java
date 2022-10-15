@@ -38,7 +38,7 @@ public class ModelCrossSection<Source_Type extends Model> extends ModelDecorator
 			throw new IllegalArgumentException("The axis cannot be greater than " + dimension + ".");
 		}
 		if (coordinate > source.getMaxCoordinate(axis) || coordinate < source.getMinCoordinate(axis)) {
-			throw new IllegalArgumentException("The coordinate is out of bounds.");
+			throw new IllegalArgumentException("The cross section is out of bounds.");
 		}
 		this.source = source;
 		this.crossSectionAxis = axis;
@@ -117,10 +117,10 @@ public class ModelCrossSection<Source_Type extends Model> extends ModelDecorator
 	}
 	
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (crossSectionCoordinate > source.getMaxCoordinate(crossSectionAxis) || crossSectionCoordinate < source.getMinCoordinate(crossSectionAxis)) {
-			throw new UnsupportedOperationException("The coordinate is out of bounds.");
+			throw new UnsupportedOperationException("The cross section is out of bounds.");
 		}
 		return changed;
 	}

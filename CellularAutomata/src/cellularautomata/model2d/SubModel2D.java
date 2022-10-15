@@ -40,7 +40,7 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX, minY, maxY)) {
-			throw new IllegalArgumentException("Subsection is out of bounds.");
+			throw new IllegalArgumentException("The subsection is out of bounds.");
 		}
 		this.absoluteMaxX = maxX;
 		this.absoluteMinX = minX;
@@ -134,12 +134,17 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getActualBounds(absoluteMinX, absoluteMaxX, absoluteMinY, absoluteMaxY)) {
-			throw new UnsupportedOperationException("Subsection is out of bounds.");
+			throw new UnsupportedOperationException("The subsection is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

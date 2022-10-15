@@ -44,7 +44,7 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 		this.minCoordinates = new int[dimension];
 		this.maxCoordinates = new int[dimension];
 		if (!getActualBounds(minCoordinates, maxCoordinates)) {
-			throw new IllegalArgumentException("Subsection is out of bounds.");
+			throw new IllegalArgumentException("The subsection is out of bounds.");
 		}
 		absoluteMinCoordinates = minCoordinates;
 		absoluteMaxCoordinates = maxCoordinates;
@@ -101,10 +101,10 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getActualBounds(absoluteMinCoordinates, absoluteMaxCoordinates)) {
-			throw new UnsupportedOperationException("Subsection is out of bounds.");
+			throw new UnsupportedOperationException("The subsection is out of bounds.");
 		}
 		return changed;
 	}

@@ -73,7 +73,7 @@ public class Aether1DInfinity implements SymmetricNumericModel1D<BigFraction>, I
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		BigFraction[] newGrid = new BigFraction[maxX + 3];
 		Arrays.fill(newGrid, BigFraction.ZERO);
 		BigFraction currentValue, greaterXNeighborValue, smallerXNeighborValue;
@@ -153,6 +153,11 @@ public class Aether1DInfinity implements SymmetricNumericModel1D<BigFraction>, I
 		maxX++;
 		step++;
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	private void toppleRangeBeyondX1(BigFraction[] newGrid, int minX, int maxX) {

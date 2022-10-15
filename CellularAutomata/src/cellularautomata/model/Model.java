@@ -424,12 +424,21 @@ public interface Model {
 	
 	/**
 	 * Computes the next step of the model and returns whether
-	 * or not the state changed. 
+	 * or not the state changed. Some implementations may choose not to check for state changes and return {@link null} instead.
 	 *  
-	 * @return true if the state changed or false otherwise
+	 * @return {@link Boolean#TRUE} if the state changed, {@link Boolean#FALSE} if it didn't or {@link null} in case it is unknown
 	 * @throws Exception 
 	 */
-	default boolean nextStep() throws Exception {
+	default Boolean nextStep() throws Exception {
+		throw new UnsupportedOperationException("The method is not implemented by this class.");
+	}
+	
+	/**
+	 * Returns whether or not the state changed between the current and previous step of the model, or {@link null} if it is unknown or the current step is the first one. 
+	 *  
+	 * @return {@link Boolean#TRUE} if the state changed, {@link Boolean#FALSE} if it didn't or {@link null} in case it is unknown or it is the first step
+	 */
+	default Boolean isChanged() {
 		throw new UnsupportedOperationException("The method is not implemented by this class.");
 	}
 	

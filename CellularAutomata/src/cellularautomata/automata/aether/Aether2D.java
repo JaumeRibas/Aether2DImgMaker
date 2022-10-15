@@ -43,9 +43,10 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	/** A 2D array representing the grid */
 	private long[][] grid;
 	
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 	private int maxX;
+	private Boolean changed = null;
 
 	/**
 	 * Creates an instance with the given initial value.
@@ -80,7 +81,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][] newGrid = new long[maxX + 3][];
 		boolean changed = false;
 		long currentValue, greaterXNeighborValue;
@@ -429,6 +430,12 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

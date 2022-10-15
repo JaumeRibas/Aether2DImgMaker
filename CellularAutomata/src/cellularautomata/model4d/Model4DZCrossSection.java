@@ -29,7 +29,7 @@ public class Model4DZCrossSection<Source_Type extends Model4D> implements Model3
 	
 	public Model4DZCrossSection(Source_Type source, int z) {
 		if (z > source.getMaxZ() || z < source.getMinZ()) {
-			throw new IllegalArgumentException("Z coordinate is out of bounds.");
+			throw new IllegalArgumentException("The cross section is out of bounds.");
 		}
 		this.source = source;
 		this.z = z;
@@ -171,12 +171,17 @@ public class Model4DZCrossSection<Source_Type extends Model4D> implements Model3
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (z > source.getMaxZ() || z < source.getMinZ()) {
-			throw new UnsupportedOperationException("Z coordinate is out of bounds.");
+			throw new UnsupportedOperationException("The cross section is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

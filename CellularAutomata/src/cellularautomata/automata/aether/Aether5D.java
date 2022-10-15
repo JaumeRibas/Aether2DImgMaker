@@ -43,9 +43,10 @@ public class Aether5D implements SymmetricLongModel5D, IsotropicHypercubicModel5
 	/** A 5D array representing the grid */
 	private long[][][][][] grid;
 
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 	private int maxV;
+	private Boolean changed = null;
 
 	/**
 	 * Creates an instance with the given initial value
@@ -80,7 +81,7 @@ public class Aether5D implements SymmetricLongModel5D, IsotropicHypercubicModel5
 	}
 
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][][][][] newGrid = new long[maxV + 3][][][][];
 		boolean changed = false;
 		long[][][][] smallerVSlice = null, currentVSlice = grid[0], greaterVSlice = grid[1];
@@ -947,6 +948,12 @@ public class Aether5D implements SymmetricLongModel5D, IsotropicHypercubicModel5
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 

@@ -46,9 +46,9 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicModelA, Ser
 	/** A 3D array representing the grid */
 	private long[][][] grid;
 	
-	private long initialValue;
+	private final long initialValue;
 	private long step;
-	
+	private Boolean changed = null;
 	private int maxX;
 	
 	/**
@@ -84,7 +84,7 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicModelA, Ser
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][][] newGrid = new long[maxX + 3][][];
 		boolean changed = false;
 		long[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -380,6 +380,12 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicModelA, Ser
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

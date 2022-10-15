@@ -63,7 +63,7 @@ public class ModelDiagonalCrossSection<Source_Type extends Model> extends ModelD
 			throw new IllegalArgumentException("The axes cannot be greater than " + dimension + ".");
 		}
 		if (!getBounds()) {
-			throw new IllegalArgumentException("Cross section is out of bounds.");
+			throw new IllegalArgumentException("The cross section is out of bounds.");
 		}
 	}
 	
@@ -289,10 +289,10 @@ public class ModelDiagonalCrossSection<Source_Type extends Model> extends ModelD
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getBounds()) {
-			throw new UnsupportedOperationException("Cross section is out of bounds.");
+			throw new UnsupportedOperationException("The cross section is out of bounds.");
 		}
 		return changed;
 	}

@@ -43,9 +43,9 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, S
 	/** A 3D array representing the grid */
 	private int[][][] grid;
 	
-	private int initialValue;
+	private final int initialValue;
 	private long step;
-	
+	private Boolean changed = null;
 	private int maxX;
 	
 	/**
@@ -81,7 +81,7 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, S
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		int[][][] newGrid = new int[maxX + 3][][];
 		boolean changed = false;
 		int[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -377,6 +377,12 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, S
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

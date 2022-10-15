@@ -34,12 +34,14 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 
 	private int[][] grid;
 	
-	private int initialValue;
-	private int backgroundValue;
+	private final int initialValue;
+	private final int backgroundValue;
 	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean xBoundReached;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -75,7 +77,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		int[][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
@@ -168,6 +170,12 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

@@ -62,7 +62,7 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 		}
 		this.source = source;
 		if (!getActualBounds(minV, maxV, minW, maxW, minX, maxX, minY, maxY, minZ, maxZ))
-			throw new IllegalArgumentException("Subsection is out of bounds.");
+			throw new IllegalArgumentException("The subsection is out of bounds.");
 		this.absoluteMaxV = maxV;
 		this.absoluteMinV = minV;
 		this.absoluteMaxW = maxW;
@@ -652,12 +652,17 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 	public int getMaxZ(int v, int w, int x, int y) { return Math.min(maxZ, source.getMaxZ(v, w, x, y)); }
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getActualBounds(absoluteMinV, absoluteMaxV, absoluteMinW, absoluteMaxW, absoluteMinX, absoluteMaxX, absoluteMinY, absoluteMaxY, absoluteMinZ, absoluteMaxZ)) {
-			throw new UnsupportedOperationException("Subsection is out of bounds.");
+			throw new UnsupportedOperationException("The subsection is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

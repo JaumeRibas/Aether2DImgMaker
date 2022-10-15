@@ -42,6 +42,7 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 	private long initialValue;
 	private long step;
 	private int maxW;
+	private Boolean changed = null;
 
 	public FileBackedAether4D(long initialValue, String folderPath) throws IOException {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
@@ -71,7 +72,7 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 	}
 
 	@Override
-	public boolean nextStep() throws IOException {
+	public Boolean nextStep() throws IOException {
 		RandomAccessFile newGrid = null;
 		try {
 			boolean changed = false;
@@ -455,6 +456,7 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 			currentFile = newFile;
 			grid = newGrid;
 			step++;
+			this.changed = changed;
 			return changed;
 		} catch (Exception ex) {
 			if (newGrid != null)
@@ -462,6 +464,11 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 			close();
 			throw ex;
 		}
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return changed;
 	}
 
 	private boolean toppleRangeBeyondW4(RandomAccessFile newGrid, int minW,

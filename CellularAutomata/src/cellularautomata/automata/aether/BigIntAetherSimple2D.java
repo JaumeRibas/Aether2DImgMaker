@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 	private BigInt[][] grid;
 	
 	private long step;
-	private BigInt initialValue;
+	private final BigInt initialValue;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -54,9 +53,10 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	/**
-	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 * Used in {@link #getSubfolderPath()}.
 	 */
-	private String creationTimestamp;
+	private final String folderName;
+	private Boolean changed = null;
 	
 	public BigIntAetherSimple2D(BigInt initialValue) {
 		this.initialValue = initialValue;
@@ -69,11 +69,16 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
-		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
+		String strInitialValue = Utils.numberToPlainTextMaxLength(initialValue, Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH);
+		if (strInitialValue == null) {
+			folderName = Utils.getTimeStampFolderName();
+		} else {
+			folderName = strInitialValue;
+		}
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigInt[][] newGrid = null;
 		int indexOffset = 0;
@@ -171,7 +176,13 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	
@@ -258,9 +269,6 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 	
 	@Override
 	public String getSubfolderPath() {
-		String strInitialValue = initialValue.toString();
-		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
-			strInitialValue = creationTimestamp;
-		return getName() + "/2D/" + strInitialValue;
+		return getName() + "/2D/" + folderName;
 	}
 }

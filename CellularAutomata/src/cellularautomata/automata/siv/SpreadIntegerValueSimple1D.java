@@ -34,8 +34,8 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	/** A 1D array representing the grid */
 	private long[] grid;
 	
-	private long initialValue;
-	private long backgroundValue;
+	private final long initialValue;
+	private final long backgroundValue;
 	private long step;
 	
 	/** The index of the origin within the array */
@@ -43,6 +43,8 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -69,7 +71,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -143,7 +145,13 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

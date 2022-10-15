@@ -19,7 +19,6 @@ package cellularautomata.automata.aether;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
 
 import cellularautomata.Utils;
@@ -57,6 +56,8 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with an initial configuration consisting of a square area of side {@code initialSide} full 
@@ -88,14 +89,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		this.initialSide = initialSide;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
-		Calendar currentDate = Calendar.getInstance();
-		timeStamp = currentDate.get(Calendar.YEAR) 
-				+ "-" + (currentDate.get(Calendar.MONTH) + 1)
-				+ "-" + currentDate.get(Calendar.DATE)
-				+ "_" + currentDate.get(Calendar.HOUR_OF_DAY)
-				+ "" + currentDate.get(Calendar.MINUTE)
-				+ "" + currentDate.get(Calendar.SECOND)
-				+ "." + currentDate.get(Calendar.MILLISECOND);
+		timeStamp = Utils.getTimeStampFolderName();
 		int bufferMargin = 2;
 		int doubleBufferMargin = 2*bufferMargin;
 		grid = new int[initialSide + doubleBufferMargin][initialSide + doubleBufferMargin];
@@ -134,7 +128,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		int[][] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -233,7 +227,13 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

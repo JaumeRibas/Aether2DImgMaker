@@ -40,13 +40,15 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 	/** A 4D array representing the grid */
 	private long[][][][] grid;
 	
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 
 	private int maxWMinusOne;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -79,7 +81,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][][][] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
@@ -125,6 +127,12 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

@@ -19,7 +19,6 @@ package cellularautomata.automata.nearaether;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 	private BigInt[][][] grid;
 	
 	private long step;
-	private BigInt initialValue;
+	private final BigInt initialValue;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -62,9 +61,11 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	/**
-	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 * Used in {@link #getSubfolderPath()}.
 	 */
-	private String creationTimestamp;
+	private final String folderName;
+	
+	private Boolean changed = null;
 	
 	public BigIntNearAether3Simple3D(BigInt initialValue) {
 		this.initialValue = initialValue;
@@ -77,7 +78,12 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
-		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
+		String strInitialValue = Utils.numberToPlainTextMaxLength(initialValue, Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH);
+		if (strInitialValue == null) {
+			folderName = Utils.getTimeStampFolderName();
+		} else {
+			folderName = strInitialValue;
+		}
 	}
 	
 	/**
@@ -95,11 +101,11 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 		initialValue = data.initialValue;
 		originIndex = data.originIndex;
 		boundsReached = data.boundsReached;
-		creationTimestamp = data.creationTimestamp;
+		folderName = data.folderName;
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigInt[][][] newGrid = null;
 		int indexOffset = 0;
@@ -201,7 +207,13 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	
@@ -294,7 +306,7 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 	public String getSubfolderPath() {
 		String strInitialValue = initialValue.toString();
 		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
-			strInitialValue = creationTimestamp;
+			strInitialValue = folderName;
 		return getName() + "/3D/" + strInitialValue;
 	}
 	

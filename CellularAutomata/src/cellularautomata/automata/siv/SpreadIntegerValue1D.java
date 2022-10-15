@@ -39,12 +39,14 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 
 	private long[] grid;
 	
-	private long initialValue;
-	private long backgroundValue;
+	private final long initialValue;
+	private final long backgroundValue;
 	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundReached;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -80,7 +82,7 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[] newGrid = null;
 		if (boundReached) {
 			boundReached = false;
@@ -134,6 +136,12 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

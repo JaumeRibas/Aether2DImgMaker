@@ -43,9 +43,10 @@ public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicMode
 	/** A 4D array representing the grid */
 	private int[][][][] grid;
 	
-	private int initialValue;
+	private final int initialValue;
 	private long step;
 	private int maxW;
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -80,7 +81,7 @@ public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicMode
 	}
 
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		int[][][][] newGrid = new int[maxW + 3][][][];
 		boolean changed = false;
 		int[][][] smallerWSlice = null, currentWSlice = grid[0], greaterWSlice = grid[1];
@@ -518,6 +519,12 @@ public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicMode
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 

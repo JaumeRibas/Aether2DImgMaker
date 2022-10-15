@@ -20,8 +20,8 @@ import org.apache.commons.math3.FieldElement;
 
 public class MinAndMax<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> {
 
-	private Number_Type min;
-	private Number_Type max;
+	private final Number_Type min;
+	private final Number_Type max;
 	
 	public MinAndMax(Number_Type min, Number_Type max) {
 		this.min = min;

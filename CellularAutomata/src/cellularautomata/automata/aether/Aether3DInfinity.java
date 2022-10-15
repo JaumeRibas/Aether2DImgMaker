@@ -44,7 +44,6 @@ public class Aether3DInfinity implements SymmetricNumericModel3D<BigFraction>, I
 	
 	private long step;
 	private final boolean isPositive;
-	
 	private int maxX;
 	
 	public Aether3DInfinity(boolean isPositive) {
@@ -72,7 +71,7 @@ public class Aether3DInfinity implements SymmetricNumericModel3D<BigFraction>, I
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		BigFraction[][][] newGrid = new BigFraction[maxX + 3][][];
 		BigFraction[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
 		BigFraction[][] newSmallerXSlice = null, 
@@ -326,6 +325,11 @@ public class Aether3DInfinity implements SymmetricNumericModel3D<BigFraction>, I
 		maxX++;
 		step++;
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	private boolean toppleRangeBeyondX3(BigFraction[][][] xSlices, BigFraction[][][] newXSlices, BigFraction[][][] newGrid, int minX, int maxX, 

@@ -55,7 +55,7 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 		}
 		this.source = source;
 		if (!getActualBounds(minW, maxW, minX, maxX, minY, maxY, minZ, maxZ))
-			throw new IllegalArgumentException("Subsection is out of bounds.");
+			throw new IllegalArgumentException("The subsection is out of bounds.");
 		this.absoluteMaxW = maxW;
 		this.absoluteMinW = minW;
 		this.absoluteMaxX = maxX;
@@ -337,12 +337,17 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 	public int getMaxZ(int w, int x, int y) { return Math.min(maxZ, source.getMaxZ(w, x, y)); }
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getActualBounds(absoluteMinW, absoluteMaxW, absoluteMinX, absoluteMaxX, absoluteMinY, absoluteMaxY, absoluteMinZ, absoluteMaxZ)) {
-			throw new UnsupportedOperationException("Subsection is out of bounds.");
+			throw new UnsupportedOperationException("The subsection is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

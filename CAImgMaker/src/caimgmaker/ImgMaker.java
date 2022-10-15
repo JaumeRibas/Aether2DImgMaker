@@ -75,13 +75,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -117,7 +117,7 @@ public class ImgMaker {
 				}		
 				step++;
 				currentStepLeap++;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -140,13 +140,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -182,7 +182,7 @@ public class ImgMaker {
 				}
 				step++;
 				currentStepLeap++;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -206,13 +206,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -248,7 +248,7 @@ public class ImgMaker {
 				}
 				step++;
 				currentStepLeap++;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -273,13 +273,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -336,7 +336,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -361,13 +361,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -424,7 +424,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -449,13 +449,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -512,7 +512,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -537,13 +537,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -600,7 +600,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -630,13 +630,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -711,7 +711,7 @@ public class ImgMaker {
 				}
 				step++;
 				currentStepLeap++;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -741,13 +741,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -822,7 +822,7 @@ public class ImgMaker {
 				}
 				step++;
 				currentStepLeap++;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -852,13 +852,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -933,7 +933,7 @@ public class ImgMaker {
 				}
 				step++;
 				currentStepLeap++;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -965,13 +965,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -1120,7 +1120,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -1152,13 +1152,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -1307,7 +1307,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -1339,13 +1339,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;	
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;	
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -1494,7 +1494,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -1525,13 +1525,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;	
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;	
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -1664,7 +1664,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
@@ -1695,13 +1695,13 @@ public class ImgMaker {
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
 			}
-			boolean changed = true, createLastImage = stepLeap > 1;	
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;	
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
 				System.out.println("Step: " + step);
-				if (currentStepLeap == stepLeap || !changed && createLastImage) {
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
-					if (!changed) {
+					if (changed != null && !changed) {
 						createLastImage = false;
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
@@ -1839,7 +1839,7 @@ public class ImgMaker {
 				step++;
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
-			} while ((changed = ca.nextStep()) || createLastImage);
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();

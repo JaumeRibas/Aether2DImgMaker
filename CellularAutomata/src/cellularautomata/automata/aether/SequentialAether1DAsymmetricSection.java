@@ -51,9 +51,10 @@ public class SequentialAether1DAsymmetricSection implements LongModel1D {
 	private String gridFolderPath;
 	private File currentFile;
 	private long step;
-	private long initialValue;
+	private final long initialValue;
 	private int maxX;
 	private List<LongInputStreamIterator> iterators = new ArrayList<LongInputStreamIterator>();
+	private Boolean changed = null;
 	
 	public SequentialAether1DAsymmetricSection(long initialValue, String folderPath) throws IOException {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
@@ -97,7 +98,7 @@ public class SequentialAether1DAsymmetricSection implements LongModel1D {
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
+	public Boolean nextStep() throws Exception {
 		return nextStep(new LongConsumer() {
 			
 			@Override
@@ -114,7 +115,7 @@ public class SequentialAether1DAsymmetricSection implements LongModel1D {
 	 * @return true if the state changed or false otherwise
 	 * @throws IOException
 	 */
-	public boolean nextStep(LongConsumer consumer) throws IOException {
+	public Boolean nextStep(LongConsumer consumer) throws IOException {
 		invalidateIterators();//to release the current file so it can be deleted
 		DataInputStream oldGridReader = null;
 		DataOutputStream newGridWriter = null;
@@ -229,7 +230,8 @@ public class SequentialAether1DAsymmetricSection implements LongModel1D {
 			currentFile.delete();
 			currentFile = newFile;
 			step++;
-			return firstTwoSlicesChanged || anyOtherChanged;
+			changed = firstTwoSlicesChanged || anyOtherChanged;
+			return changed;
 		} finally {
 			if (oldGridReader != null) {
 				oldGridReader.close();
@@ -238,6 +240,11 @@ public class SequentialAether1DAsymmetricSection implements LongModel1D {
 				newGridWriter.close();
 			}
 		}		
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return changed;
 	}
 	
 	private boolean toppleRangeBeyondX1(DataInputStream oldGridInput, DataOutputStream newGridOutput, long currentOldValue, long greaterXOldValue, long smallerXOldValue, 

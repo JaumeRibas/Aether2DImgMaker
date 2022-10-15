@@ -42,6 +42,7 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 	private long initialValue;
 	private long step;
 	private int maxV;
+	private Boolean changed = null;
 
 	public FileBackedAether5D(long initialValue, String folderPath) throws IOException {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
@@ -71,7 +72,7 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 	}
 
 	@Override
-	public boolean nextStep() throws IOException {
+	public Boolean nextStep() throws IOException {
 		RandomAccessFile newGrid = null;
 		try {
 			boolean changed = false;
@@ -2050,6 +2051,12 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 				changed = true;
 			}
 		}
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 

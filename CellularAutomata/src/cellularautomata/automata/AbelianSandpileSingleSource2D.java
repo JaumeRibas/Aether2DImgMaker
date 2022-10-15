@@ -39,8 +39,9 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 
 	private int[][] grid;
 	
-	private int initialValue;
+	private final int initialValue;
 	private long step;
+	private Boolean changed = null;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean xBoundReached;
@@ -77,7 +78,7 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		int[][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
@@ -144,6 +145,12 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	
@@ -202,4 +209,5 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		Utils.serializeToFile(this, backupPath, backupName);
 	}
+	
 }

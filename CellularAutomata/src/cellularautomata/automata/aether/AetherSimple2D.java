@@ -44,7 +44,7 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	/** A 2D array representing the grid */
 	private long[][] grid;
 	
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 	
 	/** The index of the origin within the array */
@@ -52,6 +52,8 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
+	
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -74,7 +76,7 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -172,7 +174,13 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

@@ -56,7 +56,7 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigFraction[][] newGrid = null;
 		int indexOffset = 0;
@@ -100,6 +100,11 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 		step++;
 		//Return whether or not the state of the grid changed (always changes)
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	@Override

@@ -51,11 +51,13 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 	/** 5D array representing the grid **/
 	private long[][][][][] grid;
 	
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 	
 	/** Whether or not the values reached the bounds of the array */
-	private boolean boundsReached;
+	private boolean boundsReached;	
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -75,7 +77,7 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][][][] newGrid = null;
 		//If at the previous step the values reached the edge, make the new array bigger
@@ -174,7 +176,13 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 		grid = newGrid;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

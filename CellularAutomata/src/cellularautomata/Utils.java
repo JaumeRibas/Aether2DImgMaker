@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -1077,6 +1078,39 @@ public class Utils {
 			source = c + source;
 		}
 		return source;
+	}
+	
+	/**
+	 * <p>Returns a plain text {@link String} representing the number, or {@link null} if no {@link String} shorter o equal to {@link maxLength} can be obtained</p>
+	 * <p>The way this {@link String} is obtained is by initially representing the number in base 10. If the length is greater than {@link maxLength}, 
+	 * then base equal to {@link Character#MAX_RADIX} is tested, appending a suffix to denote the base.</p>
+	 * <p>The format of this suffix is that of a plain text representation of a subscript: "_{base}".</p>
+	 * 
+	 * @param number the number to be converted to {@link String}
+	 * @param maxLength the length the resulting {@link String} cannot exceed
+	 * @return a {@link String} representing the number or {@link null}
+	 */
+	public static String numberToPlainTextMaxLength(BigInt number, int maxLength) {
+		String result = number.toString();
+		if (result.length() > maxLength) {
+			result = number.toString(Character.MAX_RADIX) + "_{" + Character.MAX_RADIX + "}";
+			if (result.length() > maxLength) {
+				result = null;
+			}
+		}
+		return result;
+	}
+	
+	public static String getTimeStampFolderName() {
+		Calendar currentDate = Calendar.getInstance();
+		return currentDate.get(Calendar.YEAR) 
+				+ "-" + (currentDate.get(Calendar.MONTH) + 1)
+				+ "-" + currentDate.get(Calendar.DATE)
+				+ "_" + currentDate.get(Calendar.HOUR_OF_DAY)
+				+ "" + currentDate.get(Calendar.MINUTE)
+				+ "" + currentDate.get(Calendar.SECOND)
+				+ "." + currentDate.get(Calendar.MILLISECOND)
+				+ "_" + ThreadLocalRandom.current().nextInt(0, 100);
 	}
 
 }

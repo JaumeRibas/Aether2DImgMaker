@@ -40,11 +40,13 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 	/** A 3D array representing the grid */
 	private long[][][] grid;
 	
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean xBoundReached;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -76,7 +78,7 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
@@ -173,6 +175,12 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

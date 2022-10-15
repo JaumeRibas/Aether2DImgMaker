@@ -19,8 +19,6 @@ package cellularautomata.automata.aether;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Timestamp;
-
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model4d.IsotropicHypercubicModel4DA;
@@ -49,13 +47,14 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 	/** A 4D array representing the grid */
 	private BigInt[][][][] grid;
 
-	private BigInt initialValue;
+	private final BigInt initialValue;
 	private long step;
 	private int maxW;
+	private Boolean changed = null;
 	/**
-	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 * Used in {@link #getSubfolderPath()}.
 	 */
-	private String creationTimestamp;
+	private final String folderName;
 
 	/**
 	 * Creates an instance with the given initial value
@@ -68,7 +67,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		grid[0][0][0][0] = this.initialValue;
 		maxW = 5;
 		step = 0;
-		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
+		String strInitialValue = Utils.numberToPlainTextMaxLength(initialValue, Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH);
+		if (strInitialValue == null) {
+			folderName = Utils.getTimeStampFolderName();
+		} else {
+			folderName = strInitialValue;
+		}
 	}
 
 	/**
@@ -85,11 +89,11 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		grid = data.grid;
 		maxW = data.maxW;
 		step = data.step;
-		creationTimestamp = data.creationTimestamp;
+		folderName = data.folderName;
 	}
 
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		BigInt[][][][] newGrid = new BigInt[maxW + 3][][][];
 		boolean changed = false;
 		BigInt[][][] smallerWSlice = null, currentWSlice = grid[0], greaterWSlice = grid[1];
@@ -527,6 +531,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 
@@ -4211,10 +4221,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 	
 	@Override
 	public String getSubfolderPath() {
-		String strInitialValue = initialValue.toString();
-		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
-			strInitialValue = creationTimestamp;
-		return getName() + "/4D/" + strInitialValue;
+		return getName() + "/4D/" + folderName;
 	}
 
 }

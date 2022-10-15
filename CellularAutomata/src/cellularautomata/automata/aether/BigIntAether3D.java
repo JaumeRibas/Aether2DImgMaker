@@ -19,8 +19,6 @@ package cellularautomata.automata.aether;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Timestamp;
-
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model3d.IsotropicCubicModelA;
@@ -49,14 +47,14 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 	/** A 3D array representing the grid */
 	private BigInt[][][] grid;
 	
-	private BigInt initialValue;
+	private final BigInt initialValue;
 	private long step;
-	
+	private Boolean changed = null;
 	private int maxX;
 	/**
-	 * Used in {@link #getSubfolderPath()} in case the initial value is too big.
+	 * Used in {@link #getSubfolderPath()}.
 	 */
-	private String creationTimestamp;
+	private final String folderName;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -69,7 +67,12 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 		grid[0][0][0] = this.initialValue;
 		maxX = 4;
 		step = 0;
-		creationTimestamp = new Timestamp(System.currentTimeMillis()).toString().replace(":", "");
+		String strInitialValue = Utils.numberToPlainTextMaxLength(initialValue, Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH);
+		if (strInitialValue == null) {
+			folderName = Utils.getTimeStampFolderName();
+		} else {
+			folderName = strInitialValue;
+		}
 	}
 	
 	/**
@@ -86,11 +89,11 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 		grid = data.grid;
 		maxX = data.maxX;
 		step = data.step;
-		creationTimestamp = data.creationTimestamp;
+		folderName = data.folderName;
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		BigInt[][][] newGrid = new BigInt[maxX + 3][][];
 		boolean changed = false;
 		BigInt[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -386,6 +389,12 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	
@@ -2107,10 +2116,7 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 	
 	@Override
 	public String getSubfolderPath() {
-		String strInitialValue = initialValue.toString();
-		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
-			strInitialValue = creationTimestamp;
-		return getName() + "/3D/" + strInitialValue;
+		return getName() + "/3D/" + folderName;
 	}
 	
 	@Override

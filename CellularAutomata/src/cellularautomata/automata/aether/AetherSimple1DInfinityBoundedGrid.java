@@ -45,6 +45,7 @@ public class AetherSimple1DInfinityBoundedGrid implements NumericModel1D<BigFrac
 	private final boolean isPositive;
 	private final int size;
 	private final int singleSourceX;
+	private Boolean changed = null;
 	
 	public AetherSimple1DInfinityBoundedGrid(int size, boolean isPositive, int singleSourceX) {
 		if (size < 1) {
@@ -63,7 +64,7 @@ public class AetherSimple1DInfinityBoundedGrid implements NumericModel1D<BigFrac
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigFraction[] newGrid = null;
 		//If at the previous step the values reached the edge, make the new array bigger
@@ -127,8 +128,14 @@ public class AetherSimple1DInfinityBoundedGrid implements NumericModel1D<BigFrac
 		//Replace the old array with the new one
 		this.grid = newGrid;
 		//Increase the current step by one
-		step++;
+		step++;		
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

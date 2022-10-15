@@ -40,7 +40,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 		this.slope = positiveSlope ? 1 : -1;
 		this.wOffsetFromV = wOffsetFromV;
 		if (!getBounds()) {
-			throw new IllegalArgumentException("Cross section is out of bounds.");
+			throw new IllegalArgumentException("The cross section is out of bounds.");
 		}
 	}
 	
@@ -133,7 +133,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 				return crossSectionV;
 			}
 		}
-		throw new IllegalArgumentException("X coordinate out of bounds.");
+		throw new IllegalArgumentException("The coordinate is out of bounds.");
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 				return crossSectionV;
 			}
 		}
-		throw new IllegalArgumentException("X coordinate out of bounds.");
+		throw new IllegalArgumentException("The coordinate is out of bounds.");
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 				return crossSectionV;
 			}
 		}
-		throw new IllegalArgumentException("Y coordinate out of bounds.");
+		throw new IllegalArgumentException("The coordinate is out of bounds.");
 	}
 
 	@Override
@@ -166,7 +166,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 				return crossSectionV;
 			}
 		}
-		throw new IllegalArgumentException("Y coordinate out of bounds.");
+		throw new IllegalArgumentException("The coordinate is out of bounds.");
 	}
 
 	@Override
@@ -177,7 +177,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 				return crossSectionV;
 			}
 		}
-		throw new IllegalArgumentException("Z coordinate out of bounds.");
+		throw new IllegalArgumentException("The coordinate is out of bounds.");
 	}
 
 	@Override
@@ -188,7 +188,7 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 				return crossSectionV;
 			}
 		}
-		throw new IllegalArgumentException("Z coordinate out of bounds.");
+		throw new IllegalArgumentException("The coordinate is out of bounds.");
 	}
 
 	@Override
@@ -702,12 +702,17 @@ public class Model5DVWDiagonalCrossSection<Source_Type extends Model5D> implemen
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getBounds()) {
-			throw new UnsupportedOperationException("Cross section is out of bounds.");
+			throw new UnsupportedOperationException("The cross section is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

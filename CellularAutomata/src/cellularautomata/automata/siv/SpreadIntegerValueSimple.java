@@ -38,8 +38,8 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 
 	private int gridDimension;
 	private long step;
-	private int initialValue;
-	private int backgroundValue;
+	private final int initialValue;
+	private final int backgroundValue;
 	
 	/** An hypercubic array representing the grid */
 	private HypercubicIntArray grid;
@@ -50,7 +50,9 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	private int shareCount;
+	private final int shareCount;
+
+	private Boolean changed = null;
 	
 	public SpreadIntegerValueSimple(int gridDimension, int initialValue, int backgroundValue) {
 		this.gridDimension = gridDimension;
@@ -67,8 +69,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		//The origin will be at the center of the array
 		originIndex = side/2;
 		Arrays.fill(indexes, originIndex);
-		grid.set(new Coordinates(indexes), initialValue); 
-		this.initialValue = initialValue;
+		grid.set(new Coordinates(indexes), initialValue);
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
@@ -93,7 +94,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
+	public Boolean nextStep() throws Exception {
 		//Use new array to store the values of the next step
 		HypercubicIntArray newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -118,8 +119,14 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		this.changed = sivConsumer.changed;
 		//Return whether or not the state of the grid changed
 		return sivConsumer.changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return changed;
 	}
 	
 	class SpreadIntegerValueConsumer implements Consumer<Coordinates> {

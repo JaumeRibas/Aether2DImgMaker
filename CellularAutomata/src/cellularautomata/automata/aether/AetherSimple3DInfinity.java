@@ -47,7 +47,7 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 	private BigFraction[][][] grid;
 	
 	private long step;
-	private boolean isPositive;
+	private final boolean isPositive;
 	
 	/** The indexes of the origin within the array */
 	private int originIndex;
@@ -73,7 +73,7 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigFraction[][][] newGrid = null;
 		int indexOffset = 0;
@@ -182,6 +182,11 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 		step++;
 		//Return whether or not the state of the grid changed
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	private void checkBoundsReached(int i, int j, int k, int length) {

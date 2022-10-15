@@ -53,7 +53,7 @@ public class ArrayIntGrid2D extends ArrayGrid2D implements IntModel2D, Serializa
 	
 	@Override
 	public int getMinX(int y) {
-		if (y < minY || y > maxY) throw new IllegalArgumentException("Y coordinate out of bounds.");
+		if (y < minY || y > maxY) throw new IllegalArgumentException("The coordinate is out of bounds.");
 		int localMinX = minX;
 		int edgeMinY = localYMinima[0];
 		int edgeMaxY = values[0].length + edgeMinY - 1;
@@ -77,7 +77,7 @@ public class ArrayIntGrid2D extends ArrayGrid2D implements IntModel2D, Serializa
 	
 	@Override
 	public int getMaxX(int y) {
-		if (y < minY || y > maxY) throw new IllegalArgumentException("Y coordinate out of bounds.");
+		if (y < minY || y > maxY) throw new IllegalArgumentException("The coordinate is out of bounds.");
 		int localMaxX = maxX;
 		int i = values.length - 1;
 		int edgeMinY = localYMinima[i];

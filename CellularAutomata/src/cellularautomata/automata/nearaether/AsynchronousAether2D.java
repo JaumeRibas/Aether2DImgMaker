@@ -50,7 +50,7 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 	/** A 2D array representing the grid */
 	private long[][] grid;
 	
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 	
 	/** The index of the origin within the array */
@@ -61,12 +61,14 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 	private int topplingPositionIndex2;
 	
 	/** Whether or not the state of the grid changed after toppling all cells*/
-	private boolean changed = false;
+	private boolean changed = false;//TODO change nextStep's implementation to remove this prop. Loop through all positions until one topples or all positions have been checked 
 
 	/** Whether or not the values reached the bounds of the array*/
 	private boolean boundsReached;
 	
 	private boolean resizeGrid = false;
+
+	private Boolean changedFromPreviousStep = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -113,7 +115,7 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -230,8 +232,14 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		changedFromPreviousStep = previousChanged;
 		//Return whether or not the state of the grid changed
 		return previousChanged;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return changedFromPreviousStep;
 	}
 	
 	private void checkBoundsReached(int i, int j, int length) {

@@ -64,7 +64,7 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigFraction[] newGrid = null;
 		//The offset between the indexes of the new and old array
@@ -142,6 +142,11 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 		step++;
 		//Return whether or not the state of the grid changed
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	private void checkBoundsReached(int index, int length) {

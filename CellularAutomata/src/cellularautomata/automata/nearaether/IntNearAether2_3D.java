@@ -50,13 +50,15 @@ public class IntNearAether2_3D implements SymmetricIntModel3D, IsotropicCubicMod
 	/** A 3D array representing the grid */
 	private int[][][] grid;
 	
-	private int initialValue;
+	private final int initialValue;
 	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 
 	private int maxXMinusOne;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -92,7 +94,7 @@ public class IntNearAether2_3D implements SymmetricIntModel3D, IsotropicCubicMod
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		int[][][] newGrid = null;
 		if (boundsReached) {
 			boundsReached = false;
@@ -186,6 +188,12 @@ public class IntNearAether2_3D implements SymmetricIntModel3D, IsotropicCubicMod
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

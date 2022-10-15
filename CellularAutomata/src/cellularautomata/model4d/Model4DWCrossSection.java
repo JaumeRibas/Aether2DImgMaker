@@ -29,7 +29,7 @@ public class Model4DWCrossSection<Source_Type extends Model4D> implements Model3
 	
 	public Model4DWCrossSection(Source_Type source, int w) {
 		if (w > source.getMaxW() || w < source.getMinW()) {
-			throw new IllegalArgumentException("W coordinate is out of bounds.");
+			throw new IllegalArgumentException("The cross section is out of bounds.");
 		}
 		this.source = source;
 		this.w = w;
@@ -171,12 +171,17 @@ public class Model4DWCrossSection<Source_Type extends Model4D> implements Model3
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (w > source.getMaxW() || w < source.getMinW()) {
-			throw new UnsupportedOperationException("W coordinate is out of bounds.");
+			throw new UnsupportedOperationException("The cross section is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

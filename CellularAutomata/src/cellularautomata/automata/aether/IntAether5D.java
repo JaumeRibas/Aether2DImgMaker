@@ -42,9 +42,10 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 	/** A 5D array representing the grid */
 	private int[][][][][] grid;
 
-	private int initialValue;
+	private final int initialValue;
 	private long step;
 	private int maxV;
+	private Boolean changed = null;
 
 	/**
 	 * Creates an instance with the given initial value
@@ -79,7 +80,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 	}
 
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		int[][][][][] newGrid = new int[maxV + 3][][][][];
 		boolean changed = false;
 		int[][][][] smallerVSlice = null, currentVSlice = grid[0], greaterVSlice = grid[1];
@@ -946,6 +947,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 

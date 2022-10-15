@@ -45,6 +45,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	private long step;
 	/** A 3D array representing the grid */
 	private long[][][] grid;	
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value and grid side
@@ -86,7 +87,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][][] newGrid = new long[grid.length][][];
 		boolean changed = false;
 		long[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -377,6 +378,12 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

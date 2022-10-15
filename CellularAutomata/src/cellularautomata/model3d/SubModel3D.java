@@ -48,7 +48,7 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 		}
 		this.source = source;
 		if (!getActualBounds(minX, maxX, minY, maxY, minZ, maxZ))
-			throw new IllegalArgumentException("Subsection is out of bounds.");
+			throw new IllegalArgumentException("The subsection is out of bounds.");
 		this.absoluteMaxX = maxX;
 		this.absoluteMinX = minX;
 		this.absoluteMaxY = maxY;
@@ -190,12 +190,17 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 	public int getMaxZ(int x, int y) { return Math.min(maxZ, source.getMaxZ(x, y)); }
 
 	@Override
-	public boolean nextStep() throws Exception {
-		boolean changed = source.nextStep();
+	public Boolean nextStep() throws Exception {
+		Boolean changed = source.nextStep();
 		if (!getActualBounds(absoluteMinX, absoluteMaxX, absoluteMinY, absoluteMaxY, absoluteMinZ, absoluteMaxZ)) {
-			throw new UnsupportedOperationException("Subsection is out of bounds.");
+			throw new UnsupportedOperationException("The subsection is out of bounds.");
 		}
 		return changed;
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

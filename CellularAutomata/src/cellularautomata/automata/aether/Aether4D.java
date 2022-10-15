@@ -43,9 +43,10 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4
 	/** A 4D array representing the grid */
 	private long[][][][] grid;
 
-	private long initialValue;
+	private final long initialValue;
 	private long step;
 	private int maxW;
+	private Boolean changed = null;
 
 	/**
 	 * Creates an instance with the given initial value
@@ -80,7 +81,7 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4
 	}
 
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][][][] newGrid = new long[maxW + 3][][][];
 		boolean changed = false;
 		long[][][] smallerWSlice = null, currentWSlice = grid[0], greaterWSlice = grid[1];
@@ -515,6 +516,12 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 

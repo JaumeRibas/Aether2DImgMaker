@@ -25,7 +25,7 @@ import java.util.Arrays;
  */
 public class Coordinates {
 	
-	private int[] coordinates;
+	private final int[] coordinates;
 	
 	public Coordinates(int... coordinates) {
 		this.coordinates = coordinates.clone();

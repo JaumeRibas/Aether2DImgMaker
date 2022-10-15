@@ -42,14 +42,15 @@ public class Aether3DFiniteGrid implements LongModel3D, Serializable {
 	/** 3D array representing the grid **/
 	private long[][][] grid;
 	
-	private long singleSourceValue;
+	private final long singleSourceValue;
 	private long step;
-	private int xSide;
-	private int ySide;
-	private int zSide;
-	private int xSideMinusOne;
-	private int ySideMinusOne;
-	private int zSideMinusOne;
+	private final int xSide;
+	private final int ySide;
+	private final int zSide;
+	private final int xSideMinusOne;
+	private final int ySideMinusOne;
+	private final int zSideMinusOne;
+	private Boolean changed = null;
 	
 	public Aether3DFiniteGrid(int xSide, int ySide, int zSide, long singleSourceValue) {
 		if (xSide < 1 || ySide < 1 || zSide < 1) {
@@ -94,7 +95,7 @@ public class Aether3DFiniteGrid implements LongModel3D, Serializable {
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		long[][][] newGrid = new long[xSide][ySide][zSide];
 		boolean changed = false;
@@ -228,7 +229,13 @@ public class Aether3DFiniteGrid implements LongModel3D, Serializable {
 		grid = newGrid;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	

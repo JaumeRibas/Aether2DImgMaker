@@ -92,8 +92,13 @@ public class ModelDecorator<Source_Type extends Model> implements Model {
 	}
 
 	@Override
-	public boolean nextStep() throws Exception {
+	public Boolean nextStep() throws Exception {
 		return source.nextStep();
+	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
 
 	@Override

@@ -72,7 +72,7 @@ public class Aether2DInfinity implements SymmetricNumericModel2D<BigFraction>, I
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		BigFraction[][] newGrid = new BigFraction[maxX + 3][];
 		BigFraction currentValue, greaterXNeighborValue;
 		BigFraction[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -370,6 +370,11 @@ public class Aether2DInfinity implements SymmetricNumericModel2D<BigFraction>, I
 		maxX++;
 		step++;
 		return true;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return step == 0 ? null : true;
 	}
 	
 	private void toppleRangeBeyondX2(BigFraction[][] xSlices, BigFraction[][] newXSlices, BigFraction[][] newGrid, int minX, int maxX, 

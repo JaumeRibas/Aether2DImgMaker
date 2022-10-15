@@ -40,12 +40,14 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 
 	private long[][] grid;
 	
-	private long initialValue;
-	private long backgroundValue;
+	private final long initialValue;
+	private final long backgroundValue;
 	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
 	private boolean xBoundReached;
+
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -81,7 +83,7 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 	}
 	
 	@Override
-	public boolean nextStep() {
+	public Boolean nextStep() {
 		long[][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
@@ -174,6 +176,12 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 		}
 		grid = newGrid;
 		step++;
+		this.changed = changed;
+		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
 		return changed;
 	}
 	
