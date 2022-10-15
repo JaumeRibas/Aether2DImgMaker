@@ -39,9 +39,6 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 	 */
 	private static final long serialVersionUID = -531595590796258827L;
 	
-	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
-	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
 	private static final byte RIGHT = 2;
@@ -55,20 +52,12 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 	
 	/** The index of the origin within the array */
 	private int originIndex;
-	
-	/** The indexes of the cell to topple */
-	private int topplingPositionIndex1;
-	private int topplingPositionIndex2;
-	
-	/** Whether or not the state of the grid changed after toppling all cells*/
-	private boolean changed = false;//TODO change nextStep's implementation to remove this prop. Loop through all positions until one topples or all positions have been checked 
 
-	/** Whether or not the values reached the bounds of the array*/
+	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	private boolean resizeGrid = false;
-
-	private Boolean changedFromPreviousStep = null;
+	/** Whether or not the state of the model changed between the current and the previous step **/
+	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -76,9 +65,6 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 	 * @param initialValue the value at the origin at step 0
 	 */
 	public AsynchronousAether2D(long initialValue) {
-		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
-			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
-	    }
 		this.initialValue = initialValue;
 		int side = 5;
 		grid = new long[side][side];
@@ -86,9 +72,6 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = initialValue;
 		boundsReached = false;
-		//The indexes of the toppling cell
-		topplingPositionIndex1 = 1;
-		topplingPositionIndex2 = 1;
 		//Set the current step to zero
 		step = 0;
 	}
@@ -107,11 +90,8 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		initialValue = data.initialValue;
 		step = data.step;
 		originIndex = data.originIndex;
-		topplingPositionIndex1 = data.topplingPositionIndex1;
-		topplingPositionIndex2 = data.topplingPositionIndex2;
 		changed = data.changed;
 		boundsReached = data.boundsReached;
-		resizeGrid = data.resizeGrid;
 	}
 	
 	@Override
@@ -121,109 +101,103 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		//The offset between the indexes of the new and old array
 		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
-		if (resizeGrid) {
-			resizeGrid = false;
+		if (boundsReached) {
+			//For simplicity expand the region in all directions
+			boundsReached = false;
 			newGrid = new long[grid.length + 2][grid.length + 2];
 			indexOffset = 1;
 		} else {
 			newGrid = new long[grid.length][grid.length];
 		}
-		//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
-		
-		//Get the cell's value
-		long topplingValue = grid[topplingPositionIndex1][topplingPositionIndex2];
-		//Get a list of the neighbors whose value is smaller than the one at the current cell
-		List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(4);						
-		long neighborValue;
-		if (topplingPositionIndex1 < grid.length - 1)
-			neighborValue = grid[topplingPositionIndex1 + 1][topplingPositionIndex2];
-		else
-			neighborValue = 0;
-		if (neighborValue < topplingValue)
-			neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
-		if (topplingPositionIndex1 > 0)
-			neighborValue = grid[topplingPositionIndex1 - 1][topplingPositionIndex2];
-		else
-			neighborValue = 0;
-		if (neighborValue < topplingValue)
-			neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
-		if (topplingPositionIndex2 < grid[topplingPositionIndex1].length - 1)
-			neighborValue = grid[topplingPositionIndex1][topplingPositionIndex2 + 1];
-		else
-			neighborValue = 0;
-		if (neighborValue < topplingValue)
-			neighbors.add(new Neighbor<Long>(UP, neighborValue));
-		if (topplingPositionIndex2 > 0)
-			neighborValue = grid[topplingPositionIndex1][topplingPositionIndex2 - 1];
-		else
-			neighborValue = 0;
-		if (neighborValue < topplingValue)
-			neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
+		boolean changed = false;
+		//For every cell
+		int i = 0;
+		for (; i < grid.length && !changed; i++) {
+			int j = 0;
+			for (; j < grid.length && !changed; j++) {
+				//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
+				
+				//Get the cell's value
+				long value = grid[i][j];
+				//Get a list of the neighbors whose value is smaller than the one at the current cell
+				List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(4);						
+				long neighborValue;
+				if (i < grid.length - 1)
+					neighborValue = grid[i + 1][j];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+				if (i > 0)
+					neighborValue = grid[i - 1][j];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+				if (j < grid.length - 1)
+					neighborValue = grid[i][j + 1];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new Neighbor<Long>(UP, neighborValue));
+				if (j > 0)
+					neighborValue = grid[i][j - 1];
+				else
+					neighborValue = 0;
+				if (neighborValue < value)
+					neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
 
-		//If there are any
-		if (neighbors.size() > 0) {
-			//Sort them by value in ascending order
-			boolean sorted = false;
-			while (!sorted) {
-				sorted = true;
-				for (int i = neighbors.size() - 2; i >= 0; i--) {
-					Neighbor<Long> next = neighbors.get(i+1);
-					if (neighbors.get(i).getValue() > next.getValue()) {
-						sorted = false;
-						neighbors.remove(i+1);
-						neighbors.add(i, next);
-					}
-				}
-			}
-			boolean isFirst = true;
-			long previousNeighborValue = 0;
-			//Apply the algorithm
-			for (int i = neighbors.size() - 1; i >= 0; i--,isFirst = false) {
-				neighborValue = neighbors.get(i).getValue();
-				if (neighborValue != previousNeighborValue || isFirst) {
-					//Add one for the current cell
-					int shareCount = neighbors.size() + 1;
-					long toShare = topplingValue - neighborValue;
-					long share = toShare/shareCount;
-					if (share != 0) {
-						checkBoundsReached(topplingPositionIndex1 + indexOffset, topplingPositionIndex2 + indexOffset, newGrid.length);
-						changed = true;
-						//The current cell keeps the remainder and one share
-						topplingValue = topplingValue - toShare + toShare%shareCount + share;
-						for (Neighbor<Long> n : neighbors) {
-							int[] nc = getNeighborCoordinates(topplingPositionIndex1, topplingPositionIndex2, n.getDirection());
-							newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
+				//If there are any
+				if (neighbors.size() > 0) {
+					//Sort them by value in ascending order
+					boolean sorted = false;
+					while (!sorted) {
+						sorted = true;
+						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
+							Neighbor<Long> next = neighbors.get(neighborIndex+1);
+							if (neighbors.get(neighborIndex).getValue() > next.getValue()) {
+								sorted = false;
+								neighbors.remove(neighborIndex+1);
+								neighbors.add(neighborIndex, next);
+							}
 						}
 					}
-					previousNeighborValue = neighborValue;
-				}
-				neighbors.remove(i);
-			}	
-		}
-		newGrid[topplingPositionIndex1 + indexOffset][topplingPositionIndex2 + indexOffset] += topplingValue;
-		//For every cell
-		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid.length; j++) {
-				if (i != topplingPositionIndex1 || j != topplingPositionIndex2) {
-					long value = grid[i][j];
-					newGrid[i + indexOffset][j + indexOffset] += value;
-				}
+					boolean isFirst = true;
+					long previousNeighborValue = 0;
+					//Apply the algorithm
+					for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
+						neighborValue = neighbors.get(neighborIndex).getValue();
+						if (neighborValue != previousNeighborValue || isFirst) {
+							//Add one for the current cell
+							int shareCount = neighbors.size() + 1;
+							long toShare = value - neighborValue;
+							long share = toShare/shareCount;
+							if (share != 0) {
+								checkBoundsReached(i + indexOffset, j + indexOffset, newGrid.length);
+								changed = true;
+								//The current cell keeps the remainder and one share
+								value = value - toShare + toShare%shareCount + share;
+								for (Neighbor<Long> n : neighbors) {
+									int[] nc = getNeighborCoordinates(i, j, n.getDirection());
+									newGrid[nc[0] + indexOffset][nc[1] + indexOffset] += share;
+								}
+							}
+							previousNeighborValue = neighborValue;
+						}
+						neighbors.remove(neighborIndex);
+					}	
+				}					
+				newGrid[i + indexOffset][j + indexOffset] += value;
+			}
+			//if a cell already toppled just move the value from the old array into the new one for the remaining cells
+			for (; j < grid.length; j++) {
+				newGrid[i + indexOffset][j + indexOffset] += grid[i][j];
 			}
 		}
-		boolean previousChanged = true;
-		//next position to topple		
-		if (topplingPositionIndex1 < grid.length - 2) {
-			topplingPositionIndex1++;
-		} else {
-			topplingPositionIndex1 = 1;
-			if (topplingPositionIndex2 < grid.length - 2) {
-				topplingPositionIndex2++;
-			} else {
-				topplingPositionIndex2 = 1;
-				previousChanged = changed;
-				changed = false;
-				resizeGrid = boundsReached;
-				boundsReached = false;
+		//if a cell already toppled just move the value from the old array into the new one for the remaining cells
+		for (; i < grid.length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				newGrid[i + indexOffset][j + indexOffset] += grid[i][j];
 			}
 		}
 		//Replace the old array with the new one
@@ -232,14 +206,14 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		changedFromPreviousStep = previousChanged;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
-		return previousChanged;
+		return changed;
 	}
 
 	@Override
 	public Boolean isChanged() {
-		return changedFromPreviousStep;
+		return changed;
 	}
 	
 	private void checkBoundsReached(int i, int j, int length) {
@@ -275,7 +249,7 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		int j = originIndex + y;
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be the zero
+			//If the coordinates are outside the array, the value will be 0
 			return 0;
 		} else {
 			//Note that the indexes whose value hasn't been defined have value zero by default
@@ -284,22 +258,20 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 	}
 	
 	@Override
-	public int getMinX() {
-		int arrayMinX = - originIndex;
-		int valuesMinX = arrayMinX;
-		return valuesMinX;
-	}
-	
-	@Override
 	public int getMaxX() {
 		int arrayMaxX = grid.length - 1 - originIndex;
-		int valuesMaxX = arrayMaxX;
+		int valuesMaxX;
+		if (boundsReached) {
+			valuesMaxX = arrayMaxX;
+		} else {
+			valuesMaxX = arrayMaxX - 1;
+		}
 		return valuesMaxX;
 	}
 	
 	@Override
-	public int getMinY() {
-		return getMinX();
+	public int getMinX() {
+		return -getMaxX();
 	}
 	
 	@Override
@@ -307,6 +279,11 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		return getMaxX();
 	}
 	
+	@Override
+	public int getMinY() {
+		return -getMaxY();
+	}
+
 	@Override
 	public long getStep() {
 		return step;
@@ -333,7 +310,7 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		throw new UnsupportedOperationException();
 	}
 	
 }
