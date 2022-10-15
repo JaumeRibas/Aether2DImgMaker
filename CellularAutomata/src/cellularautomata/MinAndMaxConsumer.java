@@ -26,8 +26,8 @@ public class MinAndMaxConsumer<Number_Type extends FieldElement<Number_Type> & C
 	
 	@Override
 	public void accept(Number_Type value) {
-		if (min != null && value.compareTo(min) < 0) min = value;
-		if (max != null && value.compareTo(max) > 0) max = value;
+		if (value != null && (min == null || value.compareTo(min) < 0)) min = value;
+		if (value != null && (max == null || value.compareTo(max) > 0)) max = value;
 	}
 	
 	public MinAndMax<Number_Type> getMinAndMaxValue() {
