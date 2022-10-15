@@ -65,6 +65,7 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 	 */
 	private final String folderName;
 	
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	public BigIntNearAether3Simple3D(BigInt initialValue) {

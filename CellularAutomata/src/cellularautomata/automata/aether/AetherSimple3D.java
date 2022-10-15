@@ -55,6 +55,7 @@ public class AetherSimple3D implements SymmetricLongModel3D, IsotropicCubicModel
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	/**

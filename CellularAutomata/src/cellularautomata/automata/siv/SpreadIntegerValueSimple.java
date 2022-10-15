@@ -52,6 +52,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 	
 	private final int shareCount;
 
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	public SpreadIntegerValueSimple(int gridDimension, int initialValue, int backgroundValue) {

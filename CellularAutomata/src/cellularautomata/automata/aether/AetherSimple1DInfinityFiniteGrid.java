@@ -44,6 +44,7 @@ public class AetherSimple1DInfinityFiniteGrid implements NumericModel1D<BigFract
 	private long step;
 	private final boolean isPositive;
 	private final int side;
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	public AetherSimple1DInfinityFiniteGrid(boolean isPositive, int side) {

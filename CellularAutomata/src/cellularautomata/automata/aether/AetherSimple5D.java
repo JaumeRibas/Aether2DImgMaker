@@ -59,6 +59,7 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;	
 
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	/**

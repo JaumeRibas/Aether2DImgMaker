@@ -53,6 +53,7 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	/**

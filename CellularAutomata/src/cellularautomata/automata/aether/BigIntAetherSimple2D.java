@@ -56,6 +56,8 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 	 * Used in {@link #getSubfolderPath()}.
 	 */
 	private final String folderName;
+	
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	public BigIntAetherSimple2D(BigInt initialValue) {

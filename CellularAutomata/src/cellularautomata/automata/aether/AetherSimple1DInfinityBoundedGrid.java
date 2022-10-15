@@ -45,6 +45,7 @@ public class AetherSimple1DInfinityBoundedGrid implements NumericModel1D<BigFrac
 	private final boolean isPositive;
 	private final int size;
 	private final int singleSourceX;
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	public AetherSimple1DInfinityBoundedGrid(int size, boolean isPositive, int singleSourceX) {

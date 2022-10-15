@@ -61,6 +61,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 	 */
 	private final String folderName;
 
+	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
 	/**
