@@ -288,9 +288,9 @@ public class AetherImgMaker {
 		long step = model.getStep();
 		if (args.initialStep > step) {
 			System.out.println("Evolving model to step " + args.initialStep + ".");
+			Boolean changed;
 			if (args.millisBetweenBackups != null) {
 				long millis = System.currentTimeMillis();
-				boolean changed;
 				do {
 					System.out.println("Step: " + step);
 					changed = model.nextStep();
@@ -302,14 +302,13 @@ public class AetherImgMaker {
 						System.out.println("Backing up finished.");
 						millis = System.currentTimeMillis();
 					}
-				} while (changed && step < args.initialStep);
+				} while ((changed == null || changed) && step < args.initialStep);
 			} else {
-				boolean changed;
 				do {
 					System.out.println("Step: " + step);
 					changed = model.nextStep();
 					step++;
-				} while (changed && step < args.initialStep);
+				} while ((changed == null || changed) && step < args.initialStep);
 			}
 		}		
 	}
