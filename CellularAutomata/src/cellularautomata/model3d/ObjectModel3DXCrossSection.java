@@ -26,7 +26,7 @@ public class ObjectModel3DXCrossSection<Source_Type extends ObjectModel3D<Object
 
 	@Override
 	public Object_Type getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(this.x, y, x);
+		return source.getFromPosition(this.x, x, y);
 	}
 
 }

@@ -36,52 +36,52 @@ public class Model3DXCrossSection<Source_Type extends Model3D> implements Model2
 	
 	@Override
 	public String getXLabel() {
-		return source.getYLabel();
+	    return source.getYLabel();
 	}
-	
+
 	@Override
 	public String getYLabel() {
-		return source.getZLabel();
+	    return source.getZLabel();
 	}
 
 	@Override
 	public int getMinX() {
-		return source.getMinZAtX(x);
+	    return source.getMinYAtX(this.x);
 	}
-	
-	@Override
-	public int getMinX(int y) {
-		return source.getMinZ(x, y);
-	}
-	
+
 	@Override
 	public int getMaxX() {
-		return source.getMaxZAtX(x);
+	    return source.getMaxYAtX(this.x);
 	}
-	
+
+	@Override
+	public int getMinX(int y) {
+	    return source.getMinY(this.x, y);
+	}
+
 	@Override
 	public int getMaxX(int y) {
-		return source.getMaxZ(x, y);
+	    return source.getMaxY(this.x, y);
 	}
-	
+
 	@Override
 	public int getMinY() {
-		return source.getMinYAtX(x);
+	    return source.getMinZAtX(this.x);
 	}
-	
-	@Override
-	public int getMinY(int x) {
-		return source.getMinY(this.x, x);
-	}
-	
+
 	@Override
 	public int getMaxY() {
-		return source.getMaxYAtX(x);
+	    return source.getMaxZAtX(this.x);
 	}
-	
+
+	@Override
+	public int getMinY(int x) {
+	    return source.getMinZ(this.x, x);
+	}
+
 	@Override
 	public int getMaxY(int x) {
-		return source.getMaxY(this.x, x);
+	    return source.getMaxZ(this.x, x);
 	}
 
 	@Override
