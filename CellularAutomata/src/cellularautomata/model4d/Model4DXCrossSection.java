@@ -37,137 +37,137 @@ public class Model4DXCrossSection<Source_Type extends Model4D> implements Model3
 	
 	@Override
 	public String getXLabel() {
-		return source.getWLabel();
+	    return source.getWLabel();
 	}
-	
+
 	@Override
 	public String getYLabel() {
-		return source.getYLabel();
+	    return source.getYLabel();
 	}
-	
+
 	@Override
 	public String getZLabel() {
-		return source.getZLabel();
+	    return source.getZLabel();
 	}
-	
+
 	@Override
 	public int getMinX() {
-		return source.getMinWAtX(x);
-	}
-	
-	@Override
-	public int getMinXAtY(int y) {
-		return source.getMinWAtXY(this.x, y);
-	}
-	
-	@Override
-	public int getMinXAtZ(int z) {
-		return source.getMinWAtXZ(this.x, z);
-	}
-	
-	@Override
-	public int getMinX(int y, int z) {
-		return source.getMinW(this.x, y, z);
+	    return source.getMinWAtX(this.x);
 	}
 
 	@Override
 	public int getMaxX() {
-		return source.getMaxWAtX(this.x);
+	    return source.getMaxWAtX(this.x);
 	}
-	
+
+	@Override
+	public int getMinXAtY(int y) {
+	    return source.getMinWAtXY(this.x, y);
+	}
+
 	@Override
 	public int getMaxXAtY(int y) {
-		return source.getMaxWAtXY(this.x, y);
+	    return source.getMaxWAtXY(this.x, y);
 	}
-	
+
+	@Override
+	public int getMinXAtZ(int z) {
+	    return source.getMinWAtXZ(this.x, z);
+	}
+
 	@Override
 	public int getMaxXAtZ(int z) {
-		return source.getMaxWAtXZ(this.x, z);
+	    return source.getMaxWAtXZ(this.x, z);
 	}
-	
+
+	@Override
+	public int getMinX(int y, int z) {
+	    return source.getMinW(this.x, y, z);
+	}
+
 	@Override
 	public int getMaxX(int y, int z) {
-		return source.getMaxW(this.x, y, z);
+	    return source.getMaxW(this.x, y, z);
 	}
 
 	@Override
 	public int getMinY() {
-		return source.getMinYAtX(this.x);
+	    return source.getMinYAtX(this.x);
 	}
-	
-	@Override
-	public int getMinYAtX(int x) {
-		return source.getMinYAtWX(x, this.x);
-	}
-	
-	@Override
-	public int getMinYAtZ(int z) {
-		return source.getMinYAtXZ(this.x, z);
-	}
-	
-	@Override
-	public int getMinY(int x, int z) {
-		return source.getMinY(x, this.x, z);
-	}
-	
+
 	@Override
 	public int getMaxY() {
-		return source.getMaxYAtX(this.x);
+	    return source.getMaxYAtX(this.x);
 	}
-	
+
+	@Override
+	public int getMinYAtX(int x) {
+	    return source.getMinYAtWX(x, this.x);
+	}
+
 	@Override
 	public int getMaxYAtX(int x) {
-		return source.getMaxYAtWX(x, this.x);
+	    return source.getMaxYAtWX(x, this.x);
 	}
-	
+
+	@Override
+	public int getMinYAtZ(int z) {
+	    return source.getMinYAtXZ(this.x, z);
+	}
+
 	@Override
 	public int getMaxYAtZ(int z) {
-		return source.getMaxYAtXZ(this.x, z);
+	    return source.getMaxYAtXZ(this.x, z);
 	}
-	
+
+	@Override
+	public int getMinY(int x, int z) {
+	    return source.getMinY(x, this.x, z);
+	}
+
 	@Override
 	public int getMaxY(int x, int z) {
-		return source.getMaxY(x, this.x, z);
+	    return source.getMaxY(x, this.x, z);
 	}
-	
+
 	@Override
 	public int getMinZ() {
-		return source.getMinZAtX(this.x);
+	    return source.getMinZAtX(this.x);
 	}
-	
-	@Override
-	public int getMinZAtX(int x) {
-		return source.getMinZAtWX(x, this.x);
-	}
-	
-	@Override
-	public int getMinZAtY(int y) {
-		return source.getMinZAtXY(this.x, y);
-	}
-	
-	@Override
-	public int getMinZ(int x, int y) {
-		return source.getMinZ(x, this.x, y);
-	}
-	
+
 	@Override
 	public int getMaxZ() {
-		return source.getMaxZAtX(this.x);
+	    return source.getMaxZAtX(this.x);
 	}
-	
+
+	@Override
+	public int getMinZAtX(int x) {
+	    return source.getMinZAtWX(x, this.x);
+	}
+
 	@Override
 	public int getMaxZAtX(int x) {
-		return source.getMaxZAtWX(x, this.x);
+	    return source.getMaxZAtWX(x, this.x);
 	}
-	
+
+	@Override
+	public int getMinZAtY(int y) {
+	    return source.getMinZAtXY(this.x, y);
+	}
+
 	@Override
 	public int getMaxZAtY(int y) {
-		return source.getMaxZAtXY(this.x, y);
+	    return source.getMaxZAtXY(this.x, y);
 	}
-	
+
+	@Override
+	public int getMinZ(int x, int y) {
+	    return source.getMinZ(x, this.x, y);
+	}
+
 	@Override
 	public int getMaxZ(int x, int y) {
-		return source.getMaxZ(x, this.x, y);
+	    return source.getMaxZ(x, this.x, y);
 	}
 
 	@Override
