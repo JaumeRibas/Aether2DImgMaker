@@ -26,7 +26,7 @@ public class LongModel3DXCrossSection extends Model3DXCrossSection<LongModel3D> 
 
 	@Override
 	public long getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(this.x, y, x);
+		return source.getFromPosition(this.x, x, y);
 	}
 
 }

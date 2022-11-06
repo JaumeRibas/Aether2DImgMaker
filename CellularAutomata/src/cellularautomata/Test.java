@@ -30,7 +30,6 @@ import java.util.function.Consumer;
 
 import org.apache.commons.math3.FieldElement;
 import cellularautomata.automata.aether.Aether2D;
-import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.AetherSimple2D;
 import cellularautomata.automata.aether.AetherSimple5D;
@@ -776,6 +775,258 @@ public class Test {
 		}
 	}
 	
+	public static void test2DCrossSections() throws Exception {
+		int side = 21;
+		int originIndex = side/2;
+		int crossSectionCoord = 2;
+		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(-crossSectionCoord,0,0), 15, 0));
+		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,-crossSectionCoord,0), 15, 1));
+		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,-crossSectionCoord), 15, 2));
+		int[][][] sourceValues = new int[side][side][side];		
+		int[][] resultValues = new int[side][side];
+		Utils.fillWithRandomValues(sourceValues, ThreadLocalRandom.current());
+		RegularIntGrid3D grid = new RegularIntGrid3D(sourceValues, -originIndex, -originIndex, -originIndex);
+		//x
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int y = -originIndex; y < side-originIndex; y++) {
+				for (int z = -originIndex; z < side-originIndex; z++) {
+					resultValues[y+originIndex][z+originIndex] = sourceValues[coord+originIndex][y+originIndex][z+originIndex];	
+				}
+			}			
+			IntModel2D crossSection = grid.crossSectionAtX(coord);
+			compare(crossSection, resultValues, originIndex, originIndex);
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtX(coord));
+		}
+		//y
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int x = -originIndex; x < side-originIndex; x++) {
+				for (int z = -originIndex; z < side-originIndex; z++) {
+					resultValues[x+originIndex][z+originIndex] = sourceValues[x+originIndex][coord+originIndex][z+originIndex];	
+				}
+			}			
+			IntModel2D crossSection = grid.crossSectionAtY(coord);
+			compare(crossSection, resultValues, originIndex, originIndex);
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtY(coord));
+		}
+		//z
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int x = -originIndex; x < side-originIndex; x++) {
+				for (int y = -originIndex; y < side-originIndex; y++) {
+					resultValues[x+originIndex][y+originIndex] = sourceValues[x+originIndex][y+originIndex][coord+originIndex];	
+				}
+			}			
+			IntModel2D crossSection = grid.crossSectionAtZ(coord);
+			compare(crossSection, resultValues, originIndex, originIndex);
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtZ(coord));
+		}
+	}
+	
+	public static void test3DCrossSections() throws Exception {
+		int side = 21;
+		int originIndex = side/2;
+		int crossSectionCoord = 2;
+		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(-crossSectionCoord,0,0,0), 15, 0));
+		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,-crossSectionCoord,0,0), 15, 1));
+		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,-crossSectionCoord,0), 15, 2));
+		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,-crossSectionCoord), 15, 3));
+		int[][][][] sourceValues = new int[side][side][side][side];		
+		int[][][] resultValues = new int[side][side][side];
+		Utils.fillWithRandomValues(sourceValues, ThreadLocalRandom.current());
+		RegularIntGrid4D grid = new RegularIntGrid4D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex);
+		//w
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int x = -originIndex; x < side-originIndex; x++) {
+				for (int y = -originIndex; y < side-originIndex; y++) {
+					for (int z = -originIndex; z < side-originIndex; z++) {
+						resultValues[x+originIndex][y+originIndex][z+originIndex] = sourceValues[coord+originIndex][x+originIndex][y+originIndex][z+originIndex];	
+					}
+				}
+			}			
+			IntModel3D crossSection = grid.crossSectionAtW(coord);
+			compare(crossSection, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtW(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtW(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtW(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtW(coord));
+		}
+		//x
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int w = -originIndex; w < side-originIndex; w++) {
+				for (int y = -originIndex; y < side-originIndex; y++) {
+					for (int z = -originIndex; z < side-originIndex; z++) {
+						resultValues[w+originIndex][y+originIndex][z+originIndex] = sourceValues[w+originIndex][coord+originIndex][y+originIndex][z+originIndex];	
+					}
+				}
+			}			
+			IntModel3D crossSection = grid.crossSectionAtX(coord);
+			compare(crossSection, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtX(coord));
+		}
+		//y
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int w = -originIndex; w < side-originIndex; w++) {
+				for (int x = -originIndex; x < side-originIndex; x++) {
+					for (int z = -originIndex; z < side-originIndex; z++) {
+						resultValues[w+originIndex][x+originIndex][z+originIndex] = sourceValues[w+originIndex][x+originIndex][coord+originIndex][z+originIndex];	
+					}
+				}
+			}			
+			IntModel3D crossSection = grid.crossSectionAtY(coord);
+			compare(crossSection, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtY(coord));
+		}
+		//z
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int w = -originIndex; w < side-originIndex; w++) {
+				for (int x = -originIndex; x < side-originIndex; x++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						resultValues[w+originIndex][x+originIndex][y+originIndex] = sourceValues[w+originIndex][x+originIndex][y+originIndex][coord+originIndex];	
+					}
+				}
+			}			
+			IntModel3D crossSection = grid.crossSectionAtZ(coord);
+			compare(crossSection, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtZ(coord));
+		}
+	}
+	
+	public static void test4DCrossSections() throws Exception {
+		int side = 21;
+		int originIndex = side/2;
+		int crossSectionCoord = 2;
+		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(-crossSectionCoord,0,0,0,0), 15, 0));
+		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,-crossSectionCoord,0,0,0), 15, 1));
+		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,-crossSectionCoord,0,0), 15, 2));
+		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,-crossSectionCoord,0), 15, 3));
+		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,-crossSectionCoord), 15, 4));
+		int[][][][][] sourceValues = new int[side][side][side][side][side];		
+		int[][][][] resultValues = new int[side][side][side][side];
+		Utils.fillWithRandomValues(sourceValues, ThreadLocalRandom.current());
+		RegularIntGrid5D grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+		//v
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int w = -originIndex; w < side-originIndex; w++) {
+				for (int x = -originIndex; x < side-originIndex; x++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						for (int z = -originIndex; z < side-originIndex; z++) {
+							resultValues[w+originIndex][x+originIndex][y+originIndex][z+originIndex] = sourceValues[coord+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex];	
+						}
+					}
+				}
+			}			
+			IntModel4D crossSection = grid.crossSectionAtV(coord);
+			compare(crossSection, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtV(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtV(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtV(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtV(coord));
+			testBoundsConsistency(pyramid5.crossSectionAtV(coord));
+		}
+		//w
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int v = -originIndex; v < side-originIndex; v++) {
+				for (int x = -originIndex; x < side-originIndex; x++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						for (int z = -originIndex; z < side-originIndex; z++) {
+							resultValues[v+originIndex][x+originIndex][y+originIndex][z+originIndex] = sourceValues[v+originIndex][coord+originIndex][x+originIndex][y+originIndex][z+originIndex];	
+						}
+					}
+				}
+			}			
+			IntModel4D crossSection = grid.crossSectionAtW(coord);
+			compare(crossSection, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtW(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtW(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtW(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtW(coord));
+			testBoundsConsistency(pyramid5.crossSectionAtW(coord));
+		}
+		//x
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int v = -originIndex; v < side-originIndex; v++) {
+				for (int w = -originIndex; w < side-originIndex; w++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						for (int z = -originIndex; z < side-originIndex; z++) {
+							resultValues[v+originIndex][w+originIndex][y+originIndex][z+originIndex] = sourceValues[v+originIndex][w+originIndex][coord+originIndex][y+originIndex][z+originIndex];	
+						}
+					}
+				}
+			}			
+			IntModel4D crossSection = grid.crossSectionAtX(coord);
+			compare(crossSection, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtX(coord));
+			testBoundsConsistency(pyramid5.crossSectionAtX(coord));
+		}
+		//y
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int v = -originIndex; v < side-originIndex; v++) {
+				for (int w = -originIndex; w < side-originIndex; w++) {
+					for (int x = -originIndex; x < side-originIndex; x++) {
+						for (int z = -originIndex; z < side-originIndex; z++) {
+							resultValues[v+originIndex][w+originIndex][x+originIndex][z+originIndex] = sourceValues[v+originIndex][w+originIndex][x+originIndex][coord+originIndex][z+originIndex];	
+						}
+					}
+				}
+			}			
+			IntModel4D crossSection = grid.crossSectionAtY(coord);
+			compare(crossSection, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtY(coord));
+			testBoundsConsistency(pyramid5.crossSectionAtY(coord));
+		}
+		//z
+		for (int coord = -crossSectionCoord; coord <= crossSectionCoord; coord += crossSectionCoord) {
+			for (int v = -originIndex; v < side-originIndex; v++) {
+				for (int w = -originIndex; w < side-originIndex; w++) {
+					for (int x = -originIndex; x < side-originIndex; x++) {
+						for (int y = -originIndex; y < side-originIndex; y++) {
+							resultValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex] = sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][coord+originIndex];	
+						}
+					}
+				}
+			}			
+			IntModel4D crossSection = grid.crossSectionAtZ(coord);
+			compare(crossSection, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+			testBoundsConsistency(crossSection);
+			testBoundsConsistency(pyramid1.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid2.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid3.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid4.crossSectionAtZ(coord));
+			testBoundsConsistency(pyramid5.crossSectionAtZ(coord));
+		}
+	}
+	
 	public static void printRegionBounds(Model region) {
 		int dimension = region.getGridDimension();
 		for (int axis = 0; axis < dimension; axis++) {
@@ -1191,92 +1442,11 @@ public class Test {
 		}
 	}
 	
-	public static void test4DZCrossSection() {
-		IntAether4D ae = new IntAether4D(-200);
-		
-		int z = 0;
-		IntModel3D cs = ae.asymmetricSection().crossSectionAtZ(z);
-		try {
-			Boolean changed;
-			do {
-				System.out.println("Comparing step " + ae.getStep());
-				int maxW = ae.getAsymmetricMaxWAtZ(z);
-				if (maxW != cs.getMaxX()) {
-					System.err.println("Different max w!");
-					return;
-				}
-				int minW = ae.getAsymmetricMinWAtZ(z);
-				if (minW != cs.getMinX()) {
-					System.err.println("Different min w!");
-					return;
-				}
-				for (int w = minW; w <= maxW; w++) {
-					int maxX = ae.getAsymmetricMaxXAtWZ(w, z);
-					if (maxX != cs.getMaxYAtX(w)) {
-						System.err.println("Different max x!");
-						return;
-					}
-					int minX = ae.getAsymmetricMinXAtWZ(w, z);
-					if (minX != cs.getMinYAtX(w)) {
-						System.err.println("Different min x!");
-						return;
-					}
-					for (int x = minX; x <= maxX; x++) {
-						int maxY = ae.getAsymmetricMaxY(w, x, z);
-						if (maxY != cs.getMaxZ(w, x)) {
-							System.err.println("Different max y!");
-							return;
-						}
-						int minY = ae.getAsymmetricMinY(w, x, z);
-						if (minY != cs.getMinZ(w, x)) {
-							System.err.println("Different min y!");
-							return;
-						}
-						for (int y = minY; y <= maxY; y++) {
-							if (ae.getFromAsymmetricPosition(w, x, y, z) != cs.getFromPosition(w, x, y)) {
-								System.err.println("Different value");
-								return;
-							}
-						}
-					}
-				}
-			} while ((changed = ae.nextStep()) != null && changed);
-			System.out.println("Equal!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static void sivTesting() {
 		long initialValue = 100000;
 		SpreadIntegerValue2D ae1 = new SpreadIntegerValue2D(initialValue, 0);
 		SpreadIntegerValueSimple2D ae2 = new SpreadIntegerValueSimple2D(initialValue, 0);
 		compareAllSteps(ae1, ae2);
-	}
-	
-	public static void testAetherRandomConfig() {
-		IntAether3DRandomConfiguration ae1 = new IntAether3DRandomConfiguration(3, -10, 10);
-		stepByStep(ae1.crossSectionAtZ(0));
-	}
-	
-	public static int findAetherMaxSafeIntValue(int dimension, int minValue) {	
-		long maxValue = (long)Integer.MAX_VALUE + 1;
-		long maxResultingValue;
-		do {
-			maxValue--;
-			maxResultingValue = minValue + (((maxValue-minValue)/2)*dimension*2);
-		} while(maxResultingValue > Integer.MAX_VALUE);
-		return (int)maxValue;
-	}
-	
-	public static int findAetherMinSafeIntValue(int dimension, int maxValue) {	
-		long minValue = (long)Integer.MAX_VALUE -1;
-		long maxResultingValue;
-		do {
-			minValue++;
-			maxResultingValue = minValue + (((maxValue-minValue)/2)*dimension*2);
-		} while(maxResultingValue > Integer.MAX_VALUE);
-		return (int)minValue;
 	}
 	
 	public static void compareAllSteps(LongModel1D ca1, LongModel1D ca2) {

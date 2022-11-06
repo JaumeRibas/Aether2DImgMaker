@@ -20,8 +20,8 @@ import cellularautomata.model3d.IntModel3D;
 
 public class IntModel4DXCrossSection extends Model4DXCrossSection<IntModel4D> implements IntModel3D {
 
-	public IntModel4DXCrossSection(IntModel4D source, int w) {
-		super(source, w);
+	public IntModel4DXCrossSection(IntModel4D source, int x) {
+		super(source, x);
 	}
 
 	@Override

@@ -422,23 +422,19 @@ public interface Model5D extends Model {
 	}
 	
 	default Model4D crossSectionAtW(int w) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DWCrossSection<Model5D>(this, w);
+		return new Model5DWCrossSection<Model5D>(this, w);
 	}
 	
 	default Model4D crossSectionAtX(int x) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DXCrossSection<Model5D>(this, x);
+		return new Model5DXCrossSection<Model5D>(this, x);
 	}
 	
 	default Model4D crossSectionAtY(int y) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DYCrossSection<Model5D>(this, y);
+		return new Model5DYCrossSection<Model5D>(this, y);
 	}
 	
 	default Model4D crossSectionAtZ(int z) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DZCrossSection<Model5D>(this, z);
+		return new Model5DZCrossSection<Model5D>(this, z);
 	}
 	
 	@Override

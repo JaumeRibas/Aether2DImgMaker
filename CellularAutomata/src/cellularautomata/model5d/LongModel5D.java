@@ -153,6 +153,26 @@ public interface LongModel5D extends Model5D, LongModel {
 	default LongModel4D crossSectionAtV(int v) {
 		return new LongModel5DVCrossSection(this, v);
 	}
+
+	@Override
+	default LongModel4D crossSectionAtW(int w) {
+		return new LongModel5DWCrossSection(this, w);
+	}
+
+	@Override
+	default LongModel4D crossSectionAtX(int x) {
+		return new LongModel5DXCrossSection(this, x);
+	}
+
+	@Override
+	default LongModel4D crossSectionAtY(int y) {
+		return new LongModel5DYCrossSection(this, y);
+	}
+
+	@Override
+	default LongModel4D crossSectionAtZ(int z) {
+		return new LongModel5DZCrossSection(this, z);
+	}
 	
 	@Override
 	default LongModel4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {

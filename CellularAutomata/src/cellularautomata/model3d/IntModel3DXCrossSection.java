@@ -26,7 +26,7 @@ public class IntModel3DXCrossSection extends Model3DXCrossSection<IntModel3D> im
 
 	@Override
 	public int getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(this.x, y, x);
+		return source.getFromPosition(this.x, x, y);
 	}
 
 }
