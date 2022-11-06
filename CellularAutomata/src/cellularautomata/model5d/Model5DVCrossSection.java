@@ -37,215 +37,343 @@ public class Model5DVCrossSection<Source_Type extends Model5D> implements Model4
 	
 	@Override
 	public String getWLabel() {
-		return source.getWLabel();
+	    return source.getWLabel();
 	}
-	
+
 	@Override
 	public String getXLabel() {
-		return source.getXLabel();
+	    return source.getXLabel();
 	}
-	
+
 	@Override
 	public String getYLabel() {
-		return source.getYLabel();
+	    return source.getYLabel();
 	}
-	
+
 	@Override
 	public String getZLabel() {
-		return source.getZLabel();
+	    return source.getZLabel();
 	}
 
 	@Override
-	public int getMinW() { return source.getMinWAtV(v); }
+	public int getMinW() {
+	    return source.getMinWAtV(this.v);
+	}
 
 	@Override
-	public int getMaxW() { return source.getMaxWAtV(v); }
+	public int getMaxW() {
+	    return source.getMaxWAtV(this.v);
+	}
 
 	@Override
-	public int getMinWAtX(int x) { return source.getMinWAtVX(v, x); }
+	public int getMinWAtX(int x) {
+	    return source.getMinWAtVX(this.v, x);
+	}
 
 	@Override
-	public int getMaxWAtX(int x) { return source.getMaxWAtVX(v, x); }
+	public int getMaxWAtX(int x) {
+	    return source.getMaxWAtVX(this.v, x);
+	}
 
 	@Override
-	public int getMinWAtY(int y) { return source.getMinWAtVY(v, y); }
+	public int getMinWAtY(int y) {
+	    return source.getMinWAtVY(this.v, y);
+	}
 
 	@Override
-	public int getMaxWAtY(int y) { return source.getMaxWAtVY(v, y); }
+	public int getMaxWAtY(int y) {
+	    return source.getMaxWAtVY(this.v, y);
+	}
 
 	@Override
-	public int getMinWAtZ(int z) { return source.getMinWAtVZ(v, z); }
+	public int getMinWAtZ(int z) {
+	    return source.getMinWAtVZ(this.v, z);
+	}
 
 	@Override
-	public int getMaxWAtZ(int z) { return source.getMaxWAtVZ(v, z); }
+	public int getMaxWAtZ(int z) {
+	    return source.getMaxWAtVZ(this.v, z);
+	}
 
 	@Override
-	public int getMinWAtXY(int x, int y) { return source.getMinWAtVXY(v, x, y); }
+	public int getMinWAtXY(int x, int y) {
+	    return source.getMinWAtVXY(this.v, x, y);
+	}
 
 	@Override
-	public int getMaxWAtXY(int x, int y) { return source.getMaxWAtVXY(v, x, y); }
+	public int getMaxWAtXY(int x, int y) {
+	    return source.getMaxWAtVXY(this.v, x, y);
+	}
 
 	@Override
-	public int getMinWAtXZ(int x, int z) { return source.getMinWAtVXZ(v, x, z); }
+	public int getMinWAtXZ(int x, int z) {
+	    return source.getMinWAtVXZ(this.v, x, z);
+	}
 
 	@Override
-	public int getMaxWAtXZ(int x, int z) { return source.getMaxWAtVXZ(v, x, z); }
+	public int getMaxWAtXZ(int x, int z) {
+	    return source.getMaxWAtVXZ(this.v, x, z);
+	}
 
 	@Override
-	public int getMinWAtYZ(int y, int z) { return source.getMinWAtVYZ(v, y, z); }
+	public int getMinWAtYZ(int y, int z) {
+	    return source.getMinWAtVYZ(this.v, y, z);
+	}
 
 	@Override
-	public int getMaxWAtYZ(int y, int z) { return source.getMaxWAtVYZ(v, y, z); }
+	public int getMaxWAtYZ(int y, int z) {
+	    return source.getMaxWAtVYZ(this.v, y, z);
+	}
 
 	@Override
-	public int getMinW(int x, int y, int z) { return source.getMinW(v, x, y, z); }
+	public int getMinW(int x, int y, int z) {
+	    return source.getMinW(this.v, x, y, z);
+	}
 
 	@Override
-	public int getMaxW(int x, int y, int z) { return source.getMaxW(v, x, y, z); }
+	public int getMaxW(int x, int y, int z) {
+	    return source.getMaxW(this.v, x, y, z);
+	}
 
 	@Override
-	public int getMinX() { return source.getMinXAtV(v); }
+	public int getMinX() {
+	    return source.getMinXAtV(this.v);
+	}
 
 	@Override
-	public int getMaxX() { return source.getMaxXAtV(v); }
+	public int getMaxX() {
+	    return source.getMaxXAtV(this.v);
+	}
 
 	@Override
-	public int getMinXAtW(int w) { return source.getMinXAtVW(v, w); }
+	public int getMinXAtW(int w) {
+	    return source.getMinXAtVW(this.v, w);
+	}
 
 	@Override
-	public int getMaxXAtW(int w) { return source.getMaxXAtVW(v, w); }
+	public int getMaxXAtW(int w) {
+	    return source.getMaxXAtVW(this.v, w);
+	}
 
 	@Override
-	public int getMinXAtY(int y) { return source.getMinXAtVY(v, y); }
+	public int getMinXAtY(int y) {
+	    return source.getMinXAtVY(this.v, y);
+	}
 
 	@Override
-	public int getMaxXAtY(int y) { return source.getMaxXAtVY(v, y); }
+	public int getMaxXAtY(int y) {
+	    return source.getMaxXAtVY(this.v, y);
+	}
 
 	@Override
-	public int getMinXAtZ(int z) { return source.getMinXAtVZ(v, z); }
+	public int getMinXAtZ(int z) {
+	    return source.getMinXAtVZ(this.v, z);
+	}
 
 	@Override
-	public int getMaxXAtZ(int z) { return source.getMaxXAtVZ(v, z); }
+	public int getMaxXAtZ(int z) {
+	    return source.getMaxXAtVZ(this.v, z);
+	}
 
 	@Override
-	public int getMinXAtWY(int w, int y) { return source.getMinXAtVWY(v, w, y); }
+	public int getMinXAtWY(int w, int y) {
+	    return source.getMinXAtVWY(this.v, w, y);
+	}
 
 	@Override
-	public int getMaxXAtWY(int w, int y) { return source.getMaxXAtVWY(v, w, y); }
+	public int getMaxXAtWY(int w, int y) {
+	    return source.getMaxXAtVWY(this.v, w, y);
+	}
 
 	@Override
-	public int getMinXAtWZ(int w, int z) { return source.getMinXAtVWZ(v, w, z); }
+	public int getMinXAtWZ(int w, int z) {
+	    return source.getMinXAtVWZ(this.v, w, z);
+	}
 
 	@Override
-	public int getMaxXAtWZ(int w, int z) { return source.getMaxXAtVWZ(v, w, z); }
+	public int getMaxXAtWZ(int w, int z) {
+	    return source.getMaxXAtVWZ(this.v, w, z);
+	}
 
 	@Override
-	public int getMinXAtYZ(int y, int z) { return source.getMinXAtVYZ(v, y, z); }
+	public int getMinXAtYZ(int y, int z) {
+	    return source.getMinXAtVYZ(this.v, y, z);
+	}
 
 	@Override
-	public int getMaxXAtYZ(int y, int z) { return source.getMaxXAtVYZ(v, y, z); }
+	public int getMaxXAtYZ(int y, int z) {
+	    return source.getMaxXAtVYZ(this.v, y, z);
+	}
 
 	@Override
-	public int getMinX(int w, int y, int z) { return source.getMinX(v, w, y, z); }
+	public int getMinX(int w, int y, int z) {
+	    return source.getMinX(this.v, w, y, z);
+	}
 
 	@Override
-	public int getMaxX(int w, int y, int z) { return source.getMaxX(v, w, y, z); }
+	public int getMaxX(int w, int y, int z) {
+	    return source.getMaxX(this.v, w, y, z);
+	}
 
 	@Override
-	public int getMinY() { return source.getMinYAtV(v); }
+	public int getMinY() {
+	    return source.getMinYAtV(this.v);
+	}
 
 	@Override
-	public int getMaxY() { return source.getMaxYAtV(v); }
+	public int getMaxY() {
+	    return source.getMaxYAtV(this.v);
+	}
 
 	@Override
-	public int getMinYAtW(int w) { return source.getMinYAtVW(v, w); }
+	public int getMinYAtW(int w) {
+	    return source.getMinYAtVW(this.v, w);
+	}
 
 	@Override
-	public int getMaxYAtW(int w) { return source.getMaxYAtVW(v, w); }
+	public int getMaxYAtW(int w) {
+	    return source.getMaxYAtVW(this.v, w);
+	}
 
 	@Override
-	public int getMinYAtX(int x) { return source.getMinYAtVX(v, x); }
+	public int getMinYAtX(int x) {
+	    return source.getMinYAtVX(this.v, x);
+	}
 
 	@Override
-	public int getMaxYAtX(int x) { return source.getMaxYAtVX(v, x); }
+	public int getMaxYAtX(int x) {
+	    return source.getMaxYAtVX(this.v, x);
+	}
 
 	@Override
-	public int getMinYAtZ(int z) { return source.getMinYAtVZ(v, z); }
+	public int getMinYAtZ(int z) {
+	    return source.getMinYAtVZ(this.v, z);
+	}
 
 	@Override
-	public int getMaxYAtZ(int z) { return source.getMaxYAtVZ(v, z); }
+	public int getMaxYAtZ(int z) {
+	    return source.getMaxYAtVZ(this.v, z);
+	}
 
 	@Override
-	public int getMinYAtWX(int w, int x) { return source.getMinYAtVWX(v, w, x); }
+	public int getMinYAtWX(int w, int x) {
+	    return source.getMinYAtVWX(this.v, w, x);
+	}
 
 	@Override
-	public int getMaxYAtWX(int w, int x) { return source.getMaxYAtVWX(v, w, x); }
+	public int getMaxYAtWX(int w, int x) {
+	    return source.getMaxYAtVWX(this.v, w, x);
+	}
 
 	@Override
-	public int getMinYAtWZ(int w, int z) { return source.getMinYAtVWZ(v, w, z); }
+	public int getMinYAtWZ(int w, int z) {
+	    return source.getMinYAtVWZ(this.v, w, z);
+	}
 
 	@Override
-	public int getMaxYAtWZ(int w, int z) { return source.getMaxYAtVWZ(v, w, z); }
+	public int getMaxYAtWZ(int w, int z) {
+	    return source.getMaxYAtVWZ(this.v, w, z);
+	}
 
 	@Override
-	public int getMinYAtXZ(int x, int z) { return source.getMinYAtVXZ(v, x, z); }
+	public int getMinYAtXZ(int x, int z) {
+	    return source.getMinYAtVXZ(this.v, x, z);
+	}
 
 	@Override
-	public int getMaxYAtXZ(int x, int z) { return source.getMaxYAtVXZ(v, x, z); }
+	public int getMaxYAtXZ(int x, int z) {
+	    return source.getMaxYAtVXZ(this.v, x, z);
+	}
 
 	@Override
-	public int getMinY(int w, int x, int z) { return source.getMinY(v, w, x, z); }
+	public int getMinY(int w, int x, int z) {
+	    return source.getMinY(this.v, w, x, z);
+	}
 
 	@Override
-	public int getMaxY(int w, int x, int z) { return source.getMaxY(v, w, x, z); }
+	public int getMaxY(int w, int x, int z) {
+	    return source.getMaxY(this.v, w, x, z);
+	}
 
 	@Override
-	public int getMinZ() { return source.getMinZAtV(v); }
+	public int getMinZ() {
+	    return source.getMinZAtV(this.v);
+	}
 
 	@Override
-	public int getMaxZ() { return source.getMaxZAtV(v); }
+	public int getMaxZ() {
+	    return source.getMaxZAtV(this.v);
+	}
 
 	@Override
-	public int getMinZAtW(int w) { return source.getMinZAtVW(v, w); }
+	public int getMinZAtW(int w) {
+	    return source.getMinZAtVW(this.v, w);
+	}
 
 	@Override
-	public int getMaxZAtW(int w) { return source.getMaxZAtVW(v, w); }
+	public int getMaxZAtW(int w) {
+	    return source.getMaxZAtVW(this.v, w);
+	}
 
 	@Override
-	public int getMinZAtX(int x) { return source.getMinZAtVX(v, x); }
+	public int getMinZAtX(int x) {
+	    return source.getMinZAtVX(this.v, x);
+	}
 
 	@Override
-	public int getMaxZAtX(int x) { return source.getMaxZAtVX(v, x); }
+	public int getMaxZAtX(int x) {
+	    return source.getMaxZAtVX(this.v, x);
+	}
 
 	@Override
-	public int getMinZAtY(int y) { return source.getMinZAtVY(v, y); }
+	public int getMinZAtY(int y) {
+	    return source.getMinZAtVY(this.v, y);
+	}
 
 	@Override
-	public int getMaxZAtY(int y) { return source.getMaxZAtVY(v, y); }
+	public int getMaxZAtY(int y) {
+	    return source.getMaxZAtVY(this.v, y);
+	}
 
 	@Override
-	public int getMinZAtWX(int w, int x) { return source.getMinZAtVWX(v, w, x); }
+	public int getMinZAtWX(int w, int x) {
+	    return source.getMinZAtVWX(this.v, w, x);
+	}
 
 	@Override
-	public int getMaxZAtWX(int w, int x) { return source.getMaxZAtVWX(v, w, x); }
+	public int getMaxZAtWX(int w, int x) {
+	    return source.getMaxZAtVWX(this.v, w, x);
+	}
 
 	@Override
-	public int getMinZAtWY(int w, int y) { return source.getMinZAtVWY(v, w, y); }
+	public int getMinZAtWY(int w, int y) {
+	    return source.getMinZAtVWY(this.v, w, y);
+	}
 
 	@Override
-	public int getMaxZAtWY(int w, int y) { return source.getMaxZAtVWY(v, w, y); }
+	public int getMaxZAtWY(int w, int y) {
+	    return source.getMaxZAtVWY(this.v, w, y);
+	}
 
 	@Override
-	public int getMinZAtXY(int x, int y) { return source.getMinZAtVXY(v, x, y); }
+	public int getMinZAtXY(int x, int y) {
+	    return source.getMinZAtVXY(this.v, x, y);
+	}
 
 	@Override
-	public int getMaxZAtXY(int x, int y) { return source.getMaxZAtVXY(v, x, y); }
+	public int getMaxZAtXY(int x, int y) {
+	    return source.getMaxZAtVXY(this.v, x, y);
+	}
 
 	@Override
-	public int getMinZ(int w, int x, int y) { return source.getMinZ(v, w, x, y); }
+	public int getMinZ(int w, int x, int y) {
+	    return source.getMinZ(this.v, w, x, y);
+	}
 
 	@Override
-	public int getMaxZ(int w, int x, int y) { return source.getMaxZ(v, w, x, y); }
+	public int getMaxZ(int w, int x, int y) {
+	    return source.getMaxZ(this.v, w, x, y);
+	}
 
 	@Override
 	public Boolean nextStep() throws Exception {

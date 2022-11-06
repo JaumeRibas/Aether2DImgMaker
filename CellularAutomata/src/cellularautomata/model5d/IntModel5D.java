@@ -153,6 +153,26 @@ public interface IntModel5D extends Model5D, IntModel {
 	default IntModel4D crossSectionAtV(int v) {
 		return new IntModel5DVCrossSection(this, v);
 	}
+
+	@Override
+	default IntModel4D crossSectionAtW(int w) {
+		return new IntModel5DWCrossSection(this, w);
+	}
+
+	@Override
+	default IntModel4D crossSectionAtX(int x) {
+		return new IntModel5DXCrossSection(this, x);
+	}
+
+	@Override
+	default IntModel4D crossSectionAtY(int y) {
+		return new IntModel5DYCrossSection(this, y);
+	}
+
+	@Override
+	default IntModel4D crossSectionAtZ(int z) {
+		return new IntModel5DZCrossSection(this, z);
+	}
 	
 	@Override
 	default IntModel4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
