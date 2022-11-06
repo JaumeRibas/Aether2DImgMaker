@@ -1112,5 +1112,42 @@ public class Utils {
 				+ "." + currentDate.get(Calendar.MILLISECOND)
 				+ "_" + ThreadLocalRandom.current().nextInt(0, 100);
 	}
+	
+	public static boolean ifNull(Boolean value, boolean nullReplacement) {
+		if (value == null) {
+			return nullReplacement;
+		}
+		return value;
+	}
+	
+	public static void fillWithRandomValues(int[] array, ThreadLocalRandom generator) {
+		for (int i = array.length - 1; i != -1; i--) {
+			array[i] = generator.nextInt();
+		}
+	}
+	
+	public static void fillWithRandomValues(int[][] array, ThreadLocalRandom generator) {
+		for (int i = array.length - 1; i != -1; i--) {
+			fillWithRandomValues(array[i], generator);
+		}
+	}
+	
+	public static void fillWithRandomValues(int[][][] array, ThreadLocalRandom generator) {
+		for (int i = array.length - 1; i != -1; i--) {
+			fillWithRandomValues(array[i], generator);
+		}
+	}
+	
+	public static void fillWithRandomValues(int[][][][] array, ThreadLocalRandom generator) {
+		for (int i = array.length - 1; i != -1; i--) {
+			fillWithRandomValues(array[i], generator);
+		}
+	}
+	
+	public static void fillWithRandomValues(int[][][][][] array, ThreadLocalRandom generator) {
+		for (int i = array.length - 1; i != -1; i--) {
+			fillWithRandomValues(array[i], generator);
+		}
+	}
 
 }
