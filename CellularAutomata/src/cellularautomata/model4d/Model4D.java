@@ -436,23 +436,19 @@ public interface Model4D extends Model {
 	}
 	
 	default Model3D diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model4DWYDiagonalCrossSection<Model4D>(this, positiveSlope, yOffsetFromW);
+		return new Model4DWYDiagonalCrossSection<Model4D>(this, positiveSlope, yOffsetFromW);
 	}
 	
 	default Model3D diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model4DWZDiagonalCrossSection<Model4D>(this, positiveSlope, zOffsetFromW);
+		return new Model4DWZDiagonalCrossSection<Model4D>(this, positiveSlope, zOffsetFromW);
 	}
 	
 	default Model3D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model4DXYDiagonalCrossSection<Model4D>(this, positiveSlope, yOffsetFromX);
+		return new Model4DXYDiagonalCrossSection<Model4D>(this, positiveSlope, yOffsetFromX);
 	}
 	
 	default Model3D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model4DXZDiagonalCrossSection<Model4D>(this, positiveSlope, zOffsetFromX);
+		return new Model4DXZDiagonalCrossSection<Model4D>(this, positiveSlope, zOffsetFromX);
 	}
 	
 	default Model3D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {

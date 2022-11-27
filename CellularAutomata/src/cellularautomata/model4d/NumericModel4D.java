@@ -208,6 +208,26 @@ public interface NumericModel4D<Number_Type extends FieldElement<Number_Type> & 
 	}
 	
 	@Override
+	default NumericModel3D<Number_Type> diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
+		return new NumericModel4DWYDiagonalCrossSection<Number_Type>(this, positiveSlope, yOffsetFromW);
+	}
+	
+	@Override
+	default NumericModel3D<Number_Type> diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
+		return new NumericModel4DWZDiagonalCrossSection<Number_Type>(this, positiveSlope, zOffsetFromW);
+	}
+	
+	@Override
+	default NumericModel3D<Number_Type> diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new NumericModel4DXYDiagonalCrossSection<Number_Type>(this, positiveSlope, yOffsetFromX);
+	}
+	
+	@Override
+	default NumericModel3D<Number_Type> diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
+		return new NumericModel4DXZDiagonalCrossSection<Number_Type>(this, positiveSlope, zOffsetFromX);
+	}
+	
+	@Override
 	default NumericModel3D<Number_Type> diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
 		return new NumericModel4DYZDiagonalCrossSection<Number_Type>(this, positiveSlope, zOffsetFromY);
 	}

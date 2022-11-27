@@ -525,48 +525,39 @@ public interface Model5D extends Model {
 	}
 	
 	default Model4D diagonalCrossSectionOnVX(boolean positiveSlope, int xOffsetFromV) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DVXDiagonalCrossSection<Model5D>(this, positiveSlope, xOffsetFromV);
+		return new Model5DVXDiagonalCrossSection<Model5D>(this, positiveSlope, xOffsetFromV);
 	}
 	
 	default Model4D diagonalCrossSectionOnVY(boolean positiveSlope, int yOffsetFromV) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DVYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromV);
+		return new Model5DVYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromV);
 	}
 	
 	default Model4D diagonalCrossSectionOnVZ(boolean positiveSlope, int zOffsetFromV) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DVZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromV);
+		return new Model5DVZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromV);
 	}
 	
 	default Model4D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DWXDiagonalCrossSection<Model5D>(this, positiveSlope, xOffsetFromW);
+		return new Model5DWXDiagonalCrossSection<Model5D>(this, positiveSlope, xOffsetFromW);
 	}
 	
 	default Model4D diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DWYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromW);
+		return new Model5DWYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromW);
 	}
 	
 	default Model4D diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DWZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromW);
+		return new Model5DWZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromW);
 	}
 	
 	default Model4D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DXYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromX);
+		return new Model5DXYDiagonalCrossSection<Model5D>(this, positiveSlope, yOffsetFromX);
 	}
 	
 	default Model4D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DXZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromX);
+		return new Model5DXZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromX);
 	}
 	
 	default Model4D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-//		return new Model5DYZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromY);
+		return new Model5DYZDiagonalCrossSection<Model5D>(this, positiveSlope, zOffsetFromY);
 	}
 	
 	@Override

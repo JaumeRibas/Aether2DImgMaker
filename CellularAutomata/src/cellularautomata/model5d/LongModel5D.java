@@ -183,6 +183,51 @@ public interface LongModel5D extends Model5D, LongModel {
 	default LongModel4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {
 		return new LongModel5DVWDiagonalCrossSection(this, positiveSlope, wOffsetFromV);
 	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnVX(boolean positiveSlope, int xOffsetFromV) {
+		return new LongModel5DVXDiagonalCrossSection(this, positiveSlope, xOffsetFromV);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnVY(boolean positiveSlope, int yOffsetFromV) {
+		return new LongModel5DVYDiagonalCrossSection(this, positiveSlope, yOffsetFromV);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnVZ(boolean positiveSlope, int zOffsetFromV) {
+		return new LongModel5DVZDiagonalCrossSection(this, positiveSlope, zOffsetFromV);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
+		return new LongModel5DWXDiagonalCrossSection(this, positiveSlope, xOffsetFromW);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
+		return new LongModel5DWYDiagonalCrossSection(this, positiveSlope, yOffsetFromW);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
+		return new LongModel5DWZDiagonalCrossSection(this, positiveSlope, zOffsetFromW);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new LongModel5DXYDiagonalCrossSection(this, positiveSlope, yOffsetFromX);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
+		return new LongModel5DXZDiagonalCrossSection(this, positiveSlope, zOffsetFromX);
+	}
+	
+	@Override
+	default LongModel4D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
+		return new LongModel5DYZDiagonalCrossSection(this, positiveSlope, zOffsetFromY);
+	}
 
 	@Override
 	default Iterator<Long> iterator() {

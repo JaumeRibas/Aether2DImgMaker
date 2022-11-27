@@ -166,6 +166,26 @@ public interface LongModel4D extends Model4D, LongModel {
 	default LongModel3D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
 		return new LongModel4DWXDiagonalCrossSection(this, positiveSlope, xOffsetFromW);
 	}
+	
+	@Override
+	default LongModel3D diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
+		return new LongModel4DWYDiagonalCrossSection(this, positiveSlope, yOffsetFromW);
+	}
+	
+	@Override
+	default LongModel3D diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
+		return new LongModel4DWZDiagonalCrossSection(this, positiveSlope, zOffsetFromW);
+	}
+	
+	@Override
+	default LongModel3D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new LongModel4DXYDiagonalCrossSection(this, positiveSlope, yOffsetFromX);
+	}
+	
+	@Override
+	default LongModel3D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
+		return new LongModel4DXZDiagonalCrossSection(this, positiveSlope, zOffsetFromX);
+	}
 
 	@Override
 	default LongModel3D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {

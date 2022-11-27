@@ -1149,5 +1149,14 @@ public class Utils {
 			fillWithRandomValues(array[i], generator);
 		}
 	}
+	
+	public static boolean contains(int[] array, int element) {
+		for (int i = 0; i != array.length; i++) {
+			if (array[i] == element) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

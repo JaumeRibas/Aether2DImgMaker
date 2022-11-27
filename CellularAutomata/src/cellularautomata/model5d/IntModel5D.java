@@ -183,6 +183,51 @@ public interface IntModel5D extends Model5D, IntModel {
 	default IntModel4D diagonalCrossSectionOnVW(boolean positiveSlope, int wOffsetFromV) {
 		return new IntModel5DVWDiagonalCrossSection(this, positiveSlope, wOffsetFromV);
 	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnVX(boolean positiveSlope, int xOffsetFromV) {
+		return new IntModel5DVXDiagonalCrossSection(this, positiveSlope, xOffsetFromV);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnVY(boolean positiveSlope, int yOffsetFromV) {
+		return new IntModel5DVYDiagonalCrossSection(this, positiveSlope, yOffsetFromV);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnVZ(boolean positiveSlope, int zOffsetFromV) {
+		return new IntModel5DVZDiagonalCrossSection(this, positiveSlope, zOffsetFromV);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnWX(boolean positiveSlope, int xOffsetFromW) {
+		return new IntModel5DWXDiagonalCrossSection(this, positiveSlope, xOffsetFromW);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnWY(boolean positiveSlope, int yOffsetFromW) {
+		return new IntModel5DWYDiagonalCrossSection(this, positiveSlope, yOffsetFromW);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnWZ(boolean positiveSlope, int zOffsetFromW) {
+		return new IntModel5DWZDiagonalCrossSection(this, positiveSlope, zOffsetFromW);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnXY(boolean positiveSlope, int yOffsetFromX) {
+		return new IntModel5DXYDiagonalCrossSection(this, positiveSlope, yOffsetFromX);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnXZ(boolean positiveSlope, int zOffsetFromX) {
+		return new IntModel5DXZDiagonalCrossSection(this, positiveSlope, zOffsetFromX);
+	}
+	
+	@Override
+	default IntModel4D diagonalCrossSectionOnYZ(boolean positiveSlope, int zOffsetFromY) {
+		return new IntModel5DYZDiagonalCrossSection(this, positiveSlope, zOffsetFromY);
+	}
 
 	@Override
 	default Iterator<Integer> iterator() {
