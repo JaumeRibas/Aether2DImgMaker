@@ -30,154 +30,154 @@ public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implemen
 	protected int crossSectionMaxX;
 	protected int crossSectionMinY;
 	protected int crossSectionMaxY;
-	
-	public Model3DXZDiagonalCrossSection(Source_Type source, boolean positiveSlope, int zOffsetFromX) {		
-		this.source = source;
-		this.slope = positiveSlope ? 1 : -1;
-		this.zOffsetFromX = zOffsetFromX;
-		if (!getBounds()) {
-			throw new IllegalArgumentException("The cross section is out of bounds.");
-		}
+
+	public Model3DXZDiagonalCrossSection(Source_Type source, boolean positiveSlope, int zOffsetFromX) {
+	    this.source = source;
+	    this.slope = positiveSlope ? 1 : -1;
+	    this.zOffsetFromX = zOffsetFromX;
+	    if (!getBounds()) {
+	        throw new IllegalArgumentException("The cross section is out of bounds.");
+	    }
 	}
-	
+
 	@Override
 	public String getXLabel() {
-		return source.getXLabel();
+	    return source.getXLabel();
 	}
-	
+
 	@Override
 	public String getYLabel() {
-		return source.getYLabel();
+	    return source.getYLabel();
 	}
-	
+
 	protected boolean getBounds() {
-		int x = source.getMinX();
-		int maxX = source.getMaxX();
-		int crossSectionZ = slope*x + zOffsetFromX;
-		while (x <= maxX && (crossSectionZ < source.getMinZAtX(x) || crossSectionZ > source.getMaxZAtX(x))) {
-			x++;
-			crossSectionZ += slope;
-		}
-		if (x <= maxX) {
-			crossSectionMinX = x;
-			crossSectionMaxX = x;
-			crossSectionMaxY = source.getMaxY(x, crossSectionZ);
-			crossSectionMinY = source.getMinY(x, crossSectionZ);
-			x++;
-			crossSectionZ += slope;
-			while (x <= maxX && crossSectionZ >= source.getMinZAtX(x) && crossSectionZ <= source.getMaxZAtX(x)) {
-				crossSectionMaxX = x;
-				int localMaxY = source.getMaxY(x, crossSectionZ), localMinY = source.getMinY(x, crossSectionZ);
-				if (localMaxY > crossSectionMaxY) {
-					crossSectionMaxY = localMaxY;
-				}
-				if (localMinY < crossSectionMinY) {
-					crossSectionMinY = localMinY;
-				}
-				x++;
-				crossSectionZ += slope;
-			}
-			return true;
-		} else {
-			return false;
-		}
+	    int x = source.getMinX();
+	    int maxX = source.getMaxX();
+	    int crossSectionZ = slope*x + zOffsetFromX;
+	    while (x <= maxX && (crossSectionZ < source.getMinZAtX(x) || crossSectionZ > source.getMaxZAtX(x))) {
+	        x++;
+	        crossSectionZ += slope;
+	    }
+	    if (x <= maxX) {
+	        crossSectionMinX = x;
+	        crossSectionMaxX = x;
+	        crossSectionMinY = source.getMinY(x, crossSectionZ);
+	        crossSectionMaxY = source.getMaxY(x, crossSectionZ);
+	        x++;
+	        crossSectionZ += slope;
+	        while (x <= maxX && crossSectionZ >= source.getMinZAtX(x) && crossSectionZ <= source.getMaxZAtX(x)) {
+	            crossSectionMaxX = x;
+	            int localMinY = source.getMinY(x, crossSectionZ);
+	            if (localMinY < crossSectionMinY) {
+	                crossSectionMinY = localMinY;
+	            }
+	            int localMaxY = source.getMaxY(x, crossSectionZ);
+	            if (localMaxY > crossSectionMaxY) {
+	                crossSectionMaxY = localMaxY;
+	            }
+	            x++;
+	            crossSectionZ += slope;
+	        }
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
-	
+
 	@Override
 	public int getMinX() {
-		return crossSectionMinX;
+	    return crossSectionMinX;
 	}
-	
-	@Override
-	public int getMinX(int y) {
-		for (int crossSectionX = crossSectionMinX, crossSectionZ = slope*crossSectionX + zOffsetFromX; crossSectionX <= crossSectionMaxX; crossSectionX++, crossSectionZ+=slope) {
-			int localMaxY = source.getMaxY(crossSectionX, crossSectionZ), localMinY = source.getMinY(crossSectionX, crossSectionZ);
-			if (y >= localMinY && y <= localMaxY) {
-				return crossSectionX;
-			}
-		}
-		throw new IllegalArgumentException("The coordinate is out of bounds.");
-	}
-	
+
 	@Override
 	public int getMaxX() {
-		return crossSectionMaxX;
+	    return crossSectionMaxX;
 	}
-	
+
+	@Override
+	public int getMinX(int y) {
+	    for (int crossSectionX = crossSectionMinX, crossSectionZ = slope*crossSectionX + zOffsetFromX; crossSectionX <= crossSectionMaxX; crossSectionX++, crossSectionZ += slope) {
+	        if (y >= source.getMinY(crossSectionX, crossSectionZ)
+	                && y <= source.getMaxY(crossSectionX, crossSectionZ)) {
+	            return crossSectionX;
+	        }
+	    }
+	    throw new IllegalArgumentException("The coordinate is out of bounds.");
+	}
+
 	@Override
 	public int getMaxX(int y) {
-		for (int crossSectionX = crossSectionMaxX, crossSectionZ = slope*crossSectionX + zOffsetFromX; crossSectionX >= crossSectionMinX; crossSectionX--, crossSectionZ-=slope) {
-			int localMaxY = source.getMaxY(crossSectionX, crossSectionZ), localMinY = source.getMinY(crossSectionX, crossSectionZ);
-			if (y >= localMinY && y <= localMaxY) {
-				return crossSectionX;
-			}
-		}
-		throw new IllegalArgumentException("The coordinate is out of bounds.");
+	    for (int crossSectionX = crossSectionMaxX, crossSectionZ = slope*crossSectionX + zOffsetFromX; crossSectionX >= crossSectionMinX; crossSectionX--, crossSectionZ -= slope) {
+	        if (y >= source.getMinY(crossSectionX, crossSectionZ)
+	                && y <= source.getMaxY(crossSectionX, crossSectionZ)) {
+	            return crossSectionX;
+	        }
+	    }
+	    throw new IllegalArgumentException("The coordinate is out of bounds.");
 	}
-	
+
 	@Override
 	public int getMinY() {
-		return crossSectionMinY;
+	    return crossSectionMinY;
 	}
-	
-	@Override
-	public int getMinY(int x) {
-		return source.getMinY(x, slope*x + zOffsetFromX);
-	}
-	
+
 	@Override
 	public int getMaxY() {
-		return crossSectionMaxY;
+	    return crossSectionMaxY;
 	}
-	
+
+	@Override
+	public int getMinY(int x) {
+	    return source.getMinY(x, slope*x + zOffsetFromX);
+	}
+
 	@Override
 	public int getMaxY(int x) {
-		return source.getMaxY(x, slope*x + zOffsetFromX);
+	    return source.getMaxY(x, slope*x + zOffsetFromX);
 	}
 
 	@Override
 	public Boolean nextStep() throws Exception {
-		Boolean changed = source.nextStep();
-		if (!getBounds()) {
-			throw new UnsupportedOperationException("The cross section is out of bounds.");
-		}
-		return changed;
+	    Boolean changed = source.nextStep();
+	    if (!getBounds()) {
+	        throw new UnsupportedOperationException("The cross section is out of bounds.");
+	    }
+	    return changed;
 	}
-	
+
 	@Override
 	public Boolean isChanged() {
-		return source.isChanged();
+	    return source.isChanged();
 	}
 
 	@Override
 	public long getStep() {
-		return source.getStep();
+	    return source.getStep();
 	}
 
 	@Override
 	public String getName() {
-		return source.getName();
+	    return source.getName();
 	}
 
 	@Override
 	public String getSubfolderPath() {
-		StringBuilder path = new StringBuilder();
-		path.append(source.getSubfolderPath()).append("/").append(source.getZLabel()).append("=");
-		if (slope == -1) {
-			path.append("-");
-		}
-		path.append(source.getXLabel());
-		if (zOffsetFromX < 0) {
-			path.append(zOffsetFromX);
-		} else if (zOffsetFromX > 0) {
-			path.append("+").append(zOffsetFromX);
-		}
-		return path.toString();
+	    StringBuilder path = new StringBuilder(source.getSubfolderPath()).append("/").append(source.getZLabel()).append("=");
+	    if (slope == -1) {
+	        path.append("-");
+	    }
+	    path.append(source.getXLabel());
+	    if (zOffsetFromX < 0) {
+	        path.append(zOffsetFromX);
+	    } else if (zOffsetFromX > 0) {
+	        path.append("+").append(zOffsetFromX);
+	    }
+	    return path.toString();
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		source.backUp(backupPath, backupName);
+	    source.backUp(backupPath, backupName);
 	}
 
 }
