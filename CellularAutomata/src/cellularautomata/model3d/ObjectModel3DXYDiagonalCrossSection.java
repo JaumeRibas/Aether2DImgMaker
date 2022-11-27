@@ -26,7 +26,7 @@ public class ObjectModel3DXYDiagonalCrossSection<Source_Type extends ObjectModel
 
 	@Override
 	public Object_Type getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(y, slope*y + yOffsetFromX, x);
+		return source.getFromPosition(x, slope*x + yOffsetFromX, y);
 	}
 
 }

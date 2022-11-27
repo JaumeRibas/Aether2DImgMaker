@@ -26,7 +26,7 @@ public class IntModel3DXYDiagonalCrossSection extends Model3DXYDiagonalCrossSect
 
 	@Override
 	public int getFromPosition(int x, int y) throws Exception {
-		return source.getFromPosition(y, slope*y + yOffsetFromX, x);
+		return source.getFromPosition(x, slope*x + yOffsetFromX, y);
 	}
 
 }

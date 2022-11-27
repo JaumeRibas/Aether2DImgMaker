@@ -20,12 +20,12 @@ import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 
 /**
- * Hypercube pyramid shaped region of a grid
+ * Hypercubic pyramid shaped region of a grid
  * 
  * @author Jaume
  *
  */
-public class HypercubePyramidGrid implements Model {
+public class HypercubicPyramidGrid implements Model {
 	
 	protected final Coordinates baseCenterCoordinates;
 	protected final int halfBaseSide;
@@ -33,7 +33,7 @@ public class HypercubePyramidGrid implements Model {
 	protected final int baseCenterHeightAxisCoord;
 	protected final int dimension;
 
-	public HypercubePyramidGrid(Coordinates baseCenterCoordinates, int baseSide, int heightAxis) {
+	public HypercubicPyramidGrid(Coordinates baseCenterCoordinates, int baseSide, int heightAxis) {
 		if (baseCenterCoordinates == null) {
 			throw new IllegalArgumentException("The coordinates cannot be null.");
 		}

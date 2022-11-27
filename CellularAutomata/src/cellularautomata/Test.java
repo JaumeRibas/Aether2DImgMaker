@@ -40,7 +40,7 @@ import cellularautomata.model.Model;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
 import cellularautomata.model.NumericModel;
-import cellularautomata.model.HypercubePyramidGrid;
+import cellularautomata.model.HypercubicPyramidGrid;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.NumericModel1D;
 import cellularautomata.model2d.ArrayIntGrid2D;
@@ -698,9 +698,9 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
-		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 13, 0));
-		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 13, 1));
-		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0), 13, 2));
+		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0), 13, 0));
+		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0), 13, 1));
+		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0), 13, 2));
 		//xy 
 		for (int slope = 1; slope != -3; slope -= 2) {
 			for (int off = -offset; off <= offset; off += offset) {
@@ -712,7 +712,7 @@ public class Test {
 						int y = slope*x+off;
 						if (y < side-originIndex && y >= -originIndex) {
 							sourceValues[x+originIndex][y+originIndex][z+originIndex] = value;
-							resultValues[z+originIndex][x+originIndex] = value;	
+							resultValues[x+originIndex][z+originIndex] = value;	
 						}
 					}
 				}			
@@ -779,9 +779,9 @@ public class Test {
 		int side = 21;
 		int originIndex = side/2;
 		int crossSectionCoord = 2;
-		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(-crossSectionCoord,0,0), 15, 0));
-		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,-crossSectionCoord,0), 15, 1));
-		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,-crossSectionCoord), 15, 2));
+		Model3D pyramid1 = new ModelAs3D<Model>(new HypercubicPyramidGrid(new Coordinates(-crossSectionCoord,0,0), 15, 0));
+		Model3D pyramid2 = new ModelAs3D<Model>(new HypercubicPyramidGrid(new Coordinates(0,-crossSectionCoord,0), 15, 1));
+		Model3D pyramid3 = new ModelAs3D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,-crossSectionCoord), 15, 2));
 		int[][][] sourceValues = new int[side][side][side];		
 		int[][] resultValues = new int[side][side];
 		Utils.fillWithRandomValues(sourceValues, ThreadLocalRandom.current());
@@ -834,10 +834,10 @@ public class Test {
 		int side = 21;
 		int originIndex = side/2;
 		int crossSectionCoord = 2;
-		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(-crossSectionCoord,0,0,0), 15, 0));
-		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,-crossSectionCoord,0,0), 15, 1));
-		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,-crossSectionCoord,0), 15, 2));
-		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,-crossSectionCoord), 15, 3));
+		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(-crossSectionCoord,0,0,0), 15, 0));
+		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(0,-crossSectionCoord,0,0), 15, 1));
+		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,-crossSectionCoord,0), 15, 2));
+		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,-crossSectionCoord), 15, 3));
 		int[][][][] sourceValues = new int[side][side][side][side];		
 		int[][][] resultValues = new int[side][side][side];
 		Utils.fillWithRandomValues(sourceValues, ThreadLocalRandom.current());
@@ -916,11 +916,11 @@ public class Test {
 		int side = 21;
 		int originIndex = side/2;
 		int crossSectionCoord = 2;
-		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(-crossSectionCoord,0,0,0,0), 15, 0));
-		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,-crossSectionCoord,0,0,0), 15, 1));
-		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,-crossSectionCoord,0,0), 15, 2));
-		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,-crossSectionCoord,0), 15, 3));
-		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,-crossSectionCoord), 15, 4));
+		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(-crossSectionCoord,0,0,0,0), 15, 0));
+		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,-crossSectionCoord,0,0,0), 15, 1));
+		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,-crossSectionCoord,0,0), 15, 2));
+		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,-crossSectionCoord,0), 15, 3));
+		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0,-crossSectionCoord), 15, 4));
 		int[][][][][] sourceValues = new int[side][side][side][side][side];		
 		int[][][][] resultValues = new int[side][side][side][side];
 		Utils.fillWithRandomValues(sourceValues, ThreadLocalRandom.current());
@@ -1044,10 +1044,10 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
-		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 0));
-		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 1));
-		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 2));
-		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0), 13, 3));
+		Model4D pyramid1 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0), 13, 0));
+		Model4D pyramid2 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0), 13, 1));
+		Model4D pyramid3 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0), 13, 2));
+		Model4D pyramid4 = new ModelAs4D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0), 13, 3));
 		//wx 
 		for (int slope = 1; slope != -3; slope -= 2) {
 			for (int off = -offset; off <= offset; off += offset) {
@@ -1073,6 +1073,114 @@ public class Test {
 				testBoundsConsistency(pyramid2.diagonalCrossSectionOnWX(slope == 1, off));
 				testBoundsConsistency(pyramid3.diagonalCrossSectionOnWX(slope == 1, off));
 				testBoundsConsistency(pyramid4.diagonalCrossSectionOnWX(slope == 1, off));
+			}
+		}
+		//wy 
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side];
+				resultValues = new int[side][side][side];
+				for (int w = -originIndex; w < side-originIndex; w++) {
+					for (int x = -originIndex; x < side-originIndex; x++) {
+						for (int z = -originIndex; z < side-originIndex; z++) {
+							int value = random.nextInt();
+							int y = slope*w+off;
+							if (y < side-originIndex && y >= -originIndex) {
+								sourceValues[w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+								resultValues[w+originIndex][x+originIndex][z+originIndex] = value;	
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid4D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnWY(slope == 1, off);
+				compare(diagonal, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnWY(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnWY(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnWY(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnWY(slope == 1, off));
+			}
+		}
+		//wz 
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side];
+				resultValues = new int[side][side][side];
+				for (int w = -originIndex; w < side-originIndex; w++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							int value = random.nextInt();
+							int z = slope*w+off;
+							if (z < side-originIndex && z >= -originIndex) {
+								sourceValues[w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+								resultValues[w+originIndex][x+originIndex][y+originIndex] = value;	
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid4D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnWZ(slope == 1, off);
+				compare(diagonal, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnWZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnWZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnWZ(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnWZ(slope == 1, off));
+			}
+		}
+		//xy 
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side];
+				resultValues = new int[side][side][side];
+				for (int w = -originIndex; w < side-originIndex; w++) {
+					for (int x = -originIndex; x < side-originIndex; x++) {
+						for (int z = -originIndex; z < side-originIndex; z++) {
+							int value = random.nextInt();
+							int y = slope*x+off;
+							if (y < side-originIndex && y >= -originIndex) {
+								sourceValues[w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+								resultValues[w+originIndex][x+originIndex][z+originIndex] = value;	
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid4D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnXY(slope == 1, off);
+				compare(diagonal, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnXY(slope == 1, off));
+			}
+		}
+		//xz 
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side];
+				resultValues = new int[side][side][side];
+				for (int w = -originIndex; w < side-originIndex; w++) {
+					for (int y = -originIndex; y < side-originIndex; y++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							int value = random.nextInt();
+							int z = slope*x+off;
+							if (z < side-originIndex && z >= -originIndex) {
+								sourceValues[w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+								resultValues[w+originIndex][x+originIndex][y+originIndex] = value;	
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid4D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnXZ(slope == 1, off);
+				compare(diagonal, new RegularIntGrid3D(resultValues, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnXZ(slope == 1, off));
 			}
 		}
 		//yz 
@@ -1110,7 +1218,7 @@ public class Test {
 			Model[] pyramids = new Model[dimension];
 			Coordinates originCoords = new Coordinates(new int[dimension]);
 			for (int i = 0; i < dimension; i++) {
-				pyramids[i] = new HypercubePyramidGrid(originCoords, 13, i);
+				pyramids[i] = new HypercubicPyramidGrid(originCoords, 13, i);
 			}
 			for (int firstAxis = 0; firstAxis < dimension; firstAxis++) {
 				int secondAxis = 0;
@@ -1181,11 +1289,11 @@ public class Test {
 		int originIndex = side/2;
 		int offset = 5;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
-		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 0));
-		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 1));
-		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 2));
-		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 3));
-		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubePyramidGrid(new Coordinates(0,0,0,0,0), 13, 4));
+		Model5D pyramid1 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0,0), 13, 0));
+		Model5D pyramid2 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0,0), 13, 1));
+		Model5D pyramid3 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0,0), 13, 2));
+		Model5D pyramid4 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0,0), 13, 3));
+		Model5D pyramid5 = new ModelAs5D<Model>(new HypercubicPyramidGrid(new Coordinates(0,0,0,0,0), 13, 4));
 		//vw
 		for (int slope = 1; slope != -3; slope -= 2) {
 			for (int off = -offset; off <= offset; off += offset) {
@@ -1214,6 +1322,276 @@ public class Test {
 				testBoundsConsistency(pyramid3.diagonalCrossSectionOnVW(slope == 1, off));
 				testBoundsConsistency(pyramid4.diagonalCrossSectionOnVW(slope == 1, off));
 				testBoundsConsistency(pyramid5.diagonalCrossSectionOnVW(slope == 1, off));
+			}
+		}
+		//vx
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int y = -originIndex; y < side-originIndex; y++) {
+							for (int z = -originIndex; z < side-originIndex; z++) {
+								int value = random.nextInt();
+								int x = slope*v+off;
+								if (x < side-originIndex && x >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][y+originIndex][z+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnVX(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnVX(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnVX(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnVX(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnVX(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnVX(slope == 1, off));
+			}
+		}
+		//vy
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							for (int z = -originIndex; z < side-originIndex; z++) {
+								int value = random.nextInt();
+								int y = slope*v+off;
+								if (y < side-originIndex && y >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][x+originIndex][z+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnVY(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnVY(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnVY(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnVY(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnVY(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnVY(slope == 1, off));
+			}
+		}
+		//vz
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							for (int y = -originIndex; y < side-originIndex; y++) {
+								int value = random.nextInt();
+								int z = slope*v+off;
+								if (z < side-originIndex && z >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnVZ(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnVZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnVZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnVZ(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnVZ(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnVZ(slope == 1, off));
+			}
+		}
+		//wx
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int y = -originIndex; y < side-originIndex; y++) {
+							for (int z = -originIndex; z < side-originIndex; z++) {
+								int value = random.nextInt();
+								int x = slope*w+off;
+								if (x < side-originIndex && x >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][y+originIndex][z+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnWX(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnWX(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnWX(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnWX(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnWX(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnWX(slope == 1, off));
+			}
+		}
+		//wy
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							for (int z = -originIndex; z < side-originIndex; z++) {
+								int value = random.nextInt();
+								int y = slope*w+off;
+								if (y < side-originIndex && y >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][x+originIndex][z+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnWY(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnWY(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnWY(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnWY(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnWY(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnWY(slope == 1, off));
+			}
+		}
+		//wz
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							for (int y = -originIndex; y < side-originIndex; y++) {
+								int value = random.nextInt();
+								int z = slope*w+off;
+								if (z < side-originIndex && z >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnWZ(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnWZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnWZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnWZ(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnWZ(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnWZ(slope == 1, off));
+			}
+		}
+		//xy
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							for (int z = -originIndex; z < side-originIndex; z++) {
+								int value = random.nextInt();
+								int y = slope*x+off;
+								if (y < side-originIndex && y >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][x+originIndex][z+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnXY(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnXY(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnXY(slope == 1, off));
+			}
+		}
+		//xz
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							for (int y = -originIndex; y < side-originIndex; y++) {
+								int value = random.nextInt();
+								int z = slope*x+off;
+								if (z < side-originIndex && z >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnXZ(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnXZ(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnXZ(slope == 1, off));
+			}
+		}
+		//yz
+		for (int slope = 1; slope != -3; slope -= 2) {
+			for (int off = -offset; off <= offset; off += offset) {
+				sourceValues = new int[side][side][side][side][side];
+				resultValues = new int[side][side][side][side];
+				for (int v = -originIndex; v < side-originIndex; v++) {
+					for (int w = -originIndex; w < side-originIndex; w++) {
+						for (int x = -originIndex; x < side-originIndex; x++) {
+							for (int y = -originIndex; y < side-originIndex; y++) {
+								int value = random.nextInt();
+								int z = slope*y+off;
+								if (z < side-originIndex && z >= -originIndex) {
+									sourceValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex][z+originIndex] = value;
+									resultValues[v+originIndex][w+originIndex][x+originIndex][y+originIndex] = value;	
+								}
+							}
+						}
+					}
+				}			
+				grid = new RegularIntGrid5D(sourceValues, -originIndex, -originIndex, -originIndex, -originIndex, -originIndex);
+				diagonal = grid.diagonalCrossSectionOnYZ(slope == 1, off);
+				compare(diagonal, new RegularIntGrid4D(resultValues, -originIndex, -originIndex, -originIndex, -originIndex));
+				testBoundsConsistency(diagonal);
+				testBoundsConsistency(pyramid1.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid2.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid3.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid4.diagonalCrossSectionOnYZ(slope == 1, off));
+				testBoundsConsistency(pyramid5.diagonalCrossSectionOnYZ(slope == 1, off));
 			}
 		}
 	}
