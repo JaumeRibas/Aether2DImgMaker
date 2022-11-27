@@ -20,8 +20,8 @@ import cellularautomata.model4d.IntModel4D;
 
 public class IntModel5DVWDiagonalCrossSection extends Model5DVWDiagonalCrossSection<IntModel5D> implements IntModel4D {
 
-	public IntModel5DVWDiagonalCrossSection(IntModel5D source, boolean positiveSlope, int xOffsetFromW) {
-		super(source, positiveSlope, xOffsetFromW);
+	public IntModel5DVWDiagonalCrossSection(IntModel5D source, boolean positiveSlope, int wOffsetFromV) {
+		super(source, positiveSlope, wOffsetFromV);
 	}
 
 	@Override
