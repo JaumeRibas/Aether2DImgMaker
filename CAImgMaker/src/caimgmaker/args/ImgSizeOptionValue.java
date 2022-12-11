@@ -31,5 +31,4 @@ public class ImgSizeOptionValue {
 		return width + "x" + height;
 	}
 	
-	
 }

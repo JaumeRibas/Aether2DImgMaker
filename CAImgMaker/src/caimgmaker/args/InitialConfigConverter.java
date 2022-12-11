@@ -21,6 +21,7 @@ import com.beust.jcommander.IStringConverter;
 import cellularautomata.numbers.BigInt;
 
 public class InitialConfigConverter implements IStringConverter<InitialConfigOptionValue> {
+	
 	@Override
 	public InitialConfigOptionValue convert(String strValue) {
 		InitialConfigOptionValue value = null;
@@ -34,4 +35,5 @@ public class InitialConfigConverter implements IStringConverter<InitialConfigOpt
 		}
 		return value;
 	}
+	
 }

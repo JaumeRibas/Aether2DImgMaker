@@ -19,6 +19,7 @@ package caimgmaker.args;
 import com.beust.jcommander.IStringConverter;
 
 public class GridConverter implements IStringConverter<GridOptionValue> {
+	
 	@Override
 	public GridOptionValue convert(String strValue) {
 		GridOptionValue value = null;
@@ -32,4 +33,5 @@ public class GridConverter implements IStringConverter<GridOptionValue> {
 		}
 		return value;
 	}
+	
 }

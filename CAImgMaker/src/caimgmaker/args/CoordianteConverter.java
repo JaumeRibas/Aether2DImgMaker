@@ -19,6 +19,7 @@ package caimgmaker.args;
 import com.beust.jcommander.IStringConverter;
 
 public class CoordianteConverter implements IStringConverter<CoordinateOptionValue> {
+	
 	@Override
 	public CoordinateOptionValue convert(String strValue) {
 		CoordinateOptionValue value = null;
@@ -37,4 +38,5 @@ public class CoordianteConverter implements IStringConverter<CoordinateOptionVal
 		}
 		return value;
 	}
+	
 }

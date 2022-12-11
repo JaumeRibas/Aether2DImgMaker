@@ -21,8 +21,10 @@ import com.beust.jcommander.IStringConverter;
 import cellularautomata.numbers.BigInt;
 
 public class BigIntConverter implements IStringConverter<BigInt> {
+	
 	@Override
 	public BigInt convert(String value) {
 		return new BigInt(value);
 	}
+	
 }
