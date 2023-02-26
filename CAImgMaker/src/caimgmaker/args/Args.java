@@ -56,7 +56,7 @@ public class Args {
 	@Parameter(names = "-restore", description = "The path of the backup to restore. Mandatory when no initial configuration is passed and the selected -model requires one.")
     public String backupToRestorePath = null;
 	
-	@Parameter(names = "-first-step", validateWith = NonNegativeIntegerValidator.class, description = "The app skips ahead to this step or the model's last step plus one, in case it is smaller, without generating images.")
+	@Parameter(names = "-first-step", validateWith = NonNegativeIntegerValidator.class, description = "The app skips ahead to this step (or the model's last step plus one, in case the last step is smaller than the first step provided) without generating images.")
 	public long firstStep = 0;
 	
 	@Parameter(names = "-step-leap", validateWith = GreaterThanZeroIntegerValidator.class, description = "The app will generate images at the steps multiple of this number. If this number is greater than one, the app will also generate an image at the last step plus one of the model.")
@@ -65,13 +65,13 @@ public class Args {
 	@Parameter(names = "-backup-every", validateWith = GreaterThanZeroIntegerValidator.class, description = "The preferred number of millisencods between automatic backups.")
 	public Long millisBetweenBackups;
 	
-	@Parameter(names = "-scan1-start", description = "The scan1 will start at this coordinate. Only applies to models with dimension greater than two.")
+	@Parameter(names = "-scan1-start", description = "The scan1 will start at this coordinate. Only applies to model sections with dimension three (see -grid and -coordinate-filters options).")
     public Integer xScanInitialIndex = null;
     
-	@Parameter(names = "-scan2-start", description = "The scan2 will start at this coordinate. Only applies to models with dimension greater than two.")
+	@Parameter(names = "-scan2-start", description = "The scan2 will start at this coordinate. Only applies to model sections with dimension three (see -grid and -coordinate-filters options).")
     public Integer yScanInitialIndex = null;
     
-	@Parameter(names = "-scan3-start", description = "The scan3 will start at this coordinate. Only applies to models with dimension greater than two.")
+	@Parameter(names = "-scan3-start", description = "The scan3 will start at this coordinate. Only applies to model sections with dimension three (see -grid and -coordinate-filters options).")
     public Integer zScanInitialIndex = null;
     
     @Parameter(names = { "-image-generation-mode", "-img-generation-mode", "-image-gen-mode", "-img-gen-mode" }, description = "Option to affect image generation. The currently available modes are: '" + NORMAL + "', '" + SPLIT_PARITY + "', '" + EVEN_ONLY + "' and '" + ODD_ONLY + "'.")
