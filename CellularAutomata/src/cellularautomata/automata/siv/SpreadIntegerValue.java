@@ -58,6 +58,24 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 		step = 0;
 	}
 	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public SpreadIntegerValue(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		SpreadIntegerValue data = (SpreadIntegerValue) Utils.deserializeFromFile(backupPath);
+		initialValue = data.initialValue;
+		backgroundValue = data.backgroundValue;
+		grid = data.grid;
+		boundsReached = data.boundsReached;
+		step = data.step;
+		changed = data.changed;
+	}
+	
 	@Override
 	public int getGridDimension() {
 		return grid.getDimension();
@@ -252,7 +270,7 @@ public class SpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubi
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 	
 	@Override
