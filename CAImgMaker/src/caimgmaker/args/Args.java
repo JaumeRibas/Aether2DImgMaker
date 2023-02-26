@@ -80,7 +80,7 @@ public class Args {
     @Parameter(names = "-memory-safe", description = "Use temporary files, within the -path folder, to store the grid so as to avoid running out of memory. In exchange, processing speed and storage space are sacrificed.")
 	public boolean memorySafe = false;
     
-    @Parameter(names = "-version", description = "Print the version of the app.")
+    @Parameter(names = { "-version", "-v" }, description = "Print the version of the app.")
 	public boolean outputVersion;
 	
 	@Parameter(names = "-help", help = true, description = "Print the list of options.")
