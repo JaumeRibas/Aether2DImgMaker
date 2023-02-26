@@ -24,7 +24,7 @@ public class GridValidator implements IParameterValidator {
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
-		if (!value.matches("^\\d+d_(\\d+|infinite)$")) {
+		if (!value.matches("^\\d+d(_(\\d+|infinite))?$")) {
 			throw new ParameterException("The value of " + name + " has an incorrect format.");
 		}
 	}

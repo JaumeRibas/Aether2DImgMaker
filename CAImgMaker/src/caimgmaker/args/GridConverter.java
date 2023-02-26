@@ -24,11 +24,12 @@ public class GridConverter implements IStringConverter<GridOptionValue> {
 	public GridOptionValue convert(String strValue) {
 		GridOptionValue value = null;
 		if (strValue != null) {
-			String[] parts = strValue.split("d_");
-			if (parts[1].equals("infinite")) {
-				value = new GridOptionValue(Integer.parseInt(parts[0]));
+			String[] parts = strValue.split("_");
+			int dimension = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1));
+			if (parts.length == 1 || parts[1].equals("infinite")) {
+				value = new GridOptionValue(dimension);
 			} else {
-				value = new GridOptionValue(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+				value = new GridOptionValue(dimension, Integer.parseInt(parts[1]));
 			}
 		}
 		return value;
