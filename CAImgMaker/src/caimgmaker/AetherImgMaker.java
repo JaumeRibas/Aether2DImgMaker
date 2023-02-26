@@ -1,5 +1,5 @@
 /* Aether2DImgMaker -- console app to generate images of the Aether cellular automaton in 2D
-    Copyright (C) 2017-2022 Jaume Ribas
+    Copyright (C) 2017-2023 Jaume Ribas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,15 +21,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
 import org.apache.commons.io.FileUtils;
 
 import com.beust.jcommander.JCommander;
 import caimgmaker.args.Args;
+import caimgmaker.args.CoordinateFilters;
 import caimgmaker.args.GridOptionValue;
 import caimgmaker.args.InitialConfigOptionValue.InitialConfigType;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import caimgmaker.colormap.HueMapper;
+import cellularautomata.PartialCoordinates;
 import cellularautomata.automata.AbelianSandpileSingleSource2D;
 import cellularautomata.automata.aether.Aether1D;
 import cellularautomata.automata.aether.Aether2D;
@@ -55,47 +60,51 @@ import cellularautomata.automata.nearaether.BigIntNearAether3Simple3D;
 import cellularautomata.automata.nearaether.IntNearAether1_3D;
 import cellularautomata.automata.nearaether.IntNearAether2_3D;
 import cellularautomata.automata.siv.IntSpreadIntegerValue2D;
+import cellularautomata.automata.siv.SpreadIntegerValue;
 import cellularautomata.automata.siv.SpreadIntegerValue1D;
 import cellularautomata.automata.siv.SpreadIntegerValue2D;
 import cellularautomata.automata.siv.SpreadIntegerValue3D;
 import cellularautomata.automata.siv.SpreadIntegerValue4D;
+import cellularautomata.model.IntModel;
 import cellularautomata.model.Model;
 import cellularautomata.model.SymmetricModel;
 import cellularautomata.model2d.IntModel2D;
+import cellularautomata.model2d.IntModelAs2D;
 import cellularautomata.model2d.LongModel2D;
-import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.NumericModel2D;
 import cellularautomata.model3d.IntModel3D;
+import cellularautomata.model3d.IntModelAs3D;
 import cellularautomata.model3d.LongModel3D;
 import cellularautomata.model3d.Model3D;
+import cellularautomata.model3d.ModelAs3D;
 import cellularautomata.model3d.NumericModel3D;
-import cellularautomata.model4d.Model4D;
 import cellularautomata.numbers.BigInt;
 
 public class AetherImgMaker {
 	
-	private static final String gridNotSupportedMessageFormat = "The %s model is currently not supported with this type of grid.%n";
-	private static final String gridTypeNeededToRestoreMessageFormat = "You need to specify the grid type of the backup you are trying to restore.%n";
-	private static final String initialConfigNotSupportedMessageFormat = "The %s model is currently not supported with the selected initial configuration.%n";
-	private static final String singleSourceOutOfRangeMessageFormat = "The single source value is out of the currently supported range for this model: [%d, %d].%n";
-	private static final String minAndMaxOutOfRangeMessageFormat = "The min/max values are out of the currently supported range for this model: [%d, %d].%n";
-	private static final String initialConfigNeededMessageFormat = "The %s model needs and initial configuration.%n";
-	private static final String unsupportedDimensionCount = "Currently it is only supported to generate images from a model section with dimension two or three. Use any of the coordinate options (-v -w -x -y -z) or a -grid with two or three dimensions.";
-	private static final String unknownImgGenMode = "Unrecognized image generation mode.";
-	private static final String unsupportedModelSectionMessageFormat = "It is currently not supported to generate images form a model section of type %s.%n";
-	private static final String memorySafeNotSupportedForThisModelMessageFormat = "The %s model is currently not supported with the -memory-safe option.%n";
-	private static final String memorySafeNotSupportedForThisInitialConfigMessageFormat = "The %s model is currently not supported with the -memory-safe option and the selected initial configuration.%n";
+	private static final String USE_HELP_MESSAGE = "Use -help to view the list of available options and their accepted values.";
+	private static final String GRID_NOT_SUPPORTED_MESSAGE_FORMAT = "The %s model is currently not supported with this type of grid.%n";
+	private static final String GRID_TYPE_NEEDED_IN_ORDER_TO_RESTORE_MESSAGE_FORMAT = "You need to specify the grid type of the backup you are trying to restore.%n";
+	private static final String INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT = "The %s model is currently not supported with the selected initial configuration.%n";
+	private static final String SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT = "The single source value is out of the currently supported range for this model: [%d, %d].%n";
+	private static final String MIN_MAX_OUT_OF_RANGE_MESSAGE_FORMAT = "The min/max values are out of the currently supported range for this model: [%d, %d].%n";
+	private static final String INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT = "The %s model needs and initial configuration.%n";
+	private static final String UNSUPPORTED_DIMENSION_MESSAGE_FORMAT = "Currently it is only supported to generate images from a model section with dimension two or three (found %d). Use the -coordinate-filters option or a -grid with two or three dimensions.%n";
+	private static final String UNKNOWN_IMG_GEN_MODE_MESSAGE = "Unrecognized image generation mode.";
+	private static final String UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT = "It is currently not supported to generate images form a model section of type %s.%n";
+	private static final String MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT = "The %s model is currently not supported with the -memory-safe option.%n";
+	private static final String MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_INITIAL_CONFIG_MESSAGE_FORMAT = "The %s model is currently not supported with the -memory-safe option and the selected initial configuration.%n";
 
 	public static void main(String[] rawArgs) throws Exception {
 //		String debugArgs = "-initial-config single-source_92233720368547758079999 -path D:/data/test";//debug
 //		debugArgs = "-help";//debug
 //		rawArgs = debugArgs.split(" ");//debug
-		final String useHelpMessage = "Use -help to view the list of available options and their accepted values.";
 		try {
 			Args args = new Args();
 			JCommander jcommander = JCommander.newBuilder()
-			.addObject(args)
-			.build();
+					.programName("java -jar AetherImgMaker.jar")
+					.addObject(args)
+					.build();
 			jcommander.parse(rawArgs);
 			if (args.help) {
 				jcommander.usage();
@@ -107,15 +116,15 @@ public class AetherImgMaker {
 			}
 			Model model = getModel(args);
 			if (model == null) {
-				System.out.println(useHelpMessage);
+				System.out.println(USE_HELP_MESSAGE);
 				return;
 			}
 			String path = args.path + "/" + model.getSubfolderPath();
 			String backupsPath = path + "/backups";
-			evolveModelToInitialStep(model, args, backupsPath);
+			evolveModelToFirstStep(model, args, backupsPath);
 			Model modelSection = getModelSection(model, args);
 			if (modelSection == null) {
-				System.out.println(useHelpMessage);
+				System.out.println(USE_HELP_MESSAGE);
 				return;
 			}
 			if (args.backupToRestorePath == null)
@@ -126,7 +135,7 @@ public class AetherImgMaker {
 						true);
 			boolean success = generateImages(modelSection, args, backupsPath);
 			if(!success) {
-				System.out.println(useHelpMessage);
+				System.out.println(USE_HELP_MESSAGE);
 			}
 		} catch (Exception ex) {
 			String message = ex.getMessage();
@@ -138,7 +147,8 @@ public class AetherImgMaker {
 			} else {
 				System.out.println(message);
 			}
-			System.out.println(useHelpMessage);
+			System.out.println(USE_HELP_MESSAGE);
+			//throw ex;//debug
 		}
 	}
 	
@@ -158,136 +168,170 @@ public class AetherImgMaker {
 		} else {
 			imgMaker = new ImgMaker(args.millisBetweenBackups);
 		}
-		if (model instanceof Model2D) {
-			if (model instanceof IntModel2D) {
-				IntModel2D castedModel = (IntModel2D)model;
-				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
-						break;
-					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
-						break;
-					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
-						break;
-					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
-						break;
-					default: 
-						System.out.println(unknownImgGenMode);
-						error = true;
-				}				
-			} else if (model instanceof LongModel2D) {
-				LongModel2D castedModel = (LongModel2D)model;
-				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
-						break;
-					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
-						break;
-					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
-						break;
-					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
-						break;
-					default: 
-						System.out.println(unknownImgGenMode);
-						error = true;
-				}	
-			} else if (model instanceof NumericModel2D) {
-				@SuppressWarnings("unchecked")
-				NumericModel2D<BigInt> castedModel = (NumericModel2D<BigInt>)model;
-				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
-						break;
-					case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
-						break;
-					case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
-						break;
-					case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
-						break;
-					default: 
-						System.out.println(unknownImgGenMode);
-						error = true;
-				}
-			} else {
-				System.out.printf(unsupportedModelSectionMessageFormat, model.getClass().getName());
-				error = true;
-			}
-		} else if (model instanceof Model3D) {
-			Model3D model3d = (Model3D) model;
-			if (args.xScanInitialIndex == null) {
-				args.xScanInitialIndex = model3d.getMaxX();
-			}
-			if (args.yScanInitialIndex == null) {
-				args.yScanInitialIndex = model3d.getMaxY();
-			}
-			int maxZ = model3d.getMaxZ();
-			int minZ = model3d.getMinZ();
-			if (args.zScanInitialIndex == null) {
-				args.zScanInitialIndex = maxZ;
-			}
-			int crossSectionZ = 0;
-			if (crossSectionZ > maxZ || crossSectionZ < minZ) {
-				crossSectionZ = minZ + (maxZ - minZ + 1)/2;
-			}
-			int[] scanCoords = new int[] { args.xScanInitialIndex, args.yScanInitialIndex, args.zScanInitialIndex};
-			if (model instanceof IntModel3D) {
-				IntModel3D castedModel = (IntModel3D)model;
-				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
-						break;
-					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
-						break;
-					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
-						break;
-					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
-						break;
-					default: 
-						System.out.println(unknownImgGenMode);
-						error = true;
-				}			
-			} else if (model instanceof LongModel3D) {
-				LongModel3D castedModel = (LongModel3D)model;
+		int dimension = model.getGridDimension();
+		switch (dimension) {
+			case 2:
+				if (model instanceof IntModel2D) {
+					IntModel2D castedModel = (IntModel2D)model;
 					switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
-						break;
-					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
-						break;
-					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
-						break;
-					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
-						break;
-					default: 
-						System.out.println(unknownImgGenMode);
-						error = true;
+						case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}				
+				} else if (model instanceof LongModel2D) {
+					LongModel2D castedModel = (LongModel2D)model;
+					switch (args.imgGenerationMode) {
+						case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}	
+				} else if (model instanceof NumericModel2D) {
+					@SuppressWarnings("unchecked")
+					NumericModel2D<BigInt> castedModel = (NumericModel2D<BigInt>)model;
+					switch (args.imgGenerationMode) {
+						case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}
+				} else if (model instanceof IntModel) {
+					IntModel2D castedModel = new IntModelAs2D((IntModel)model);
+					switch (args.imgGenerationMode) {
+						case Args.NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}
+				} else {
+					System.out.printf(UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
+					error = true;
 				}
-			} else if (model instanceof NumericModel3D) {
-				@SuppressWarnings("unchecked")
-				NumericModel3D<BigInt> castedModel = (NumericModel3D<BigInt>)model;
-				switch (args.imgGenerationMode) {
-					case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
-						break;
-					case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
-						break;
-					case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
-						break;
-					case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
-						break;
-					default: 
-						System.out.println(unknownImgGenMode);
-						error = true;
+				break;
+			case 3:
+				Model3D model3d = model instanceof Model3D ? (Model3D) model : new ModelAs3D<Model>(model);
+				if (args.xScanInitialIndex == null) {
+					args.xScanInitialIndex = model3d.getMaxX();
 				}
-			} else {
-				System.out.printf(unsupportedModelSectionMessageFormat, model.getClass().getName());
-				error = true;
-			}
-		} else {
-			System.out.println(unsupportedDimensionCount);
-			error = true;
+				if (args.yScanInitialIndex == null) {
+					args.yScanInitialIndex = model3d.getMaxY();
+				}
+				int maxZ = model3d.getMaxZ();
+				int minZ = model3d.getMinZ();
+				if (args.zScanInitialIndex == null) {
+					args.zScanInitialIndex = maxZ;
+				}
+				int crossSectionZ = 0;
+				if (crossSectionZ > maxZ || crossSectionZ < minZ) {
+					crossSectionZ = minZ + (maxZ - minZ + 1)/2;
+				}
+				int[] scanCoords = new int[] { args.xScanInitialIndex, args.yScanInitialIndex, args.zScanInitialIndex};
+				if (model instanceof IntModel3D) {
+					IntModel3D castedModel = (IntModel3D)model;
+					switch (args.imgGenerationMode) {
+						case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}			
+				} else if (model instanceof LongModel3D) {
+					LongModel3D castedModel = (LongModel3D)model;
+						switch (args.imgGenerationMode) {
+						case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}
+				} else if (model instanceof NumericModel3D) {
+					@SuppressWarnings("unchecked")
+					NumericModel3D<BigInt> castedModel = (NumericModel3D<BigInt>)model;
+					switch (args.imgGenerationMode) {
+						case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}
+				} else if (model instanceof IntModel) {
+					IntModel3D castedModel = new IntModelAs3D((IntModel)model);
+					switch (args.imgGenerationMode) {
+						case Args.NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+							break;
+						case Args.SPLIT_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+							break;
+						case Args.EVEN_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+							break;
+						case Args.ODD_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+							break;
+						default: 
+							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							error = true;
+					}
+				} else {
+					System.out.printf(UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
+					error = true;
+				}
+				break;
+			default:
+				System.out.printf(UNSUPPORTED_DIMENSION_MESSAGE_FORMAT, dimension);
+				error = true;						
 		}
 		return !error;
 	}
 
-	private static void evolveModelToInitialStep(Model model, Args args, String backupsPath) throws Exception {
+	private static void evolveModelToFirstStep(Model model, Args args, String backupsPath) throws Exception {
 		long step = model.getStep();
-		if (args.initialStep > step) {
-			System.out.println("Evolving model to step " + args.initialStep + ".");
+		if (args.firstStep > step) {
+			System.out.println("Evolving model to step " + args.firstStep + ".");
 			Boolean changed;
 			if (args.millisBetweenBackups != null) {
 				long millis = System.currentTimeMillis();
@@ -302,201 +346,116 @@ public class AetherImgMaker {
 						System.out.println("Backing up finished.");
 						millis = System.currentTimeMillis();
 					}
-				} while ((changed == null || changed) && step < args.initialStep);
+				} while ((changed == null || changed) && step < args.firstStep);
 			} else {
 				do {
 					System.out.println("Step: " + step);
 					changed = model.nextStep();
 					step++;
-				} while ((changed == null || changed) && step < args.initialStep);
+				} while ((changed == null || changed) && step < args.firstStep);
 			}
 		}		
 	}
 	
-	private static Integer getCoordIndex(String coord) {
-		Integer index = null;
-		if (coord != null) {
-			switch (coord) {
-			case "v":
-				index = 4;
-				break;
-			case "w":
-				index = 3;
-				break;
-			case "x":
-				index = 2;
-				break;
-			case "y":
-				index = 1;
-				break;
-			case "z":
-				index = 0;
-				break;
-			}
-		}
-		return index;
-	}
-	
+	private static final String INVALID_COORD_INDEX_MESSAGE_FORMAT = "Invalid coordinate in filter. The coordinate index must be between one and the dimension (%d), both included.%n";
+
 	private static Model getModelSection(Model model, Args args) {
+		//asymmetric section
 		if (args.asymmetric && model instanceof SymmetricModel) {
 			model = ((SymmetricModel)model).asymmetricSection();
-		}	
-		final String onlyRangesOnAllCoordsAreSupported = "Currently it is only supported to use coordinate ranges if they are used in all coordinates. Try passing ranges in all coordinates";
-		final String coordRelativeToItselfError = "A coordinate cannot be set relative to itself.";
-		Integer vCoord = null, wCoord = null, xCoord = null, yCoord = null, zCoord = null;
-		int[] vRange = null, wRange = null, xRange = null, yRange = null, zRange = null;
-		Integer vRefCoord = null, wRefCoord = null, xRefCoord = null, yRefCoord = null, zRefCoord = null;
-		Integer vOffset = null, wOffset = null, xOffset = null, yOffset = null, zOffset = null;
-		if (args.v != null) {
-			vCoord = args.v.coordinate;
-			vRange = args.v.range;
-			vRefCoord = getCoordIndex(args.v.referenceCoordinate);
-			vOffset = args.v.offset;
-			if (vRefCoord != null && vRefCoord == 4) {
-				if (vOffset == 0) {
-					vRefCoord = null;
-					vOffset = null;
-				} else {
-					System.out.println(coordRelativeToItselfError);
+		}
+		CoordinateFilters filters = args.coordinateFilters;
+		if (filters != null) {
+			List<Integer> absoluteFilterCoords = new ArrayList<Integer>(filters.absoluteFilters.keySet());
+			int absoluteFilterCount = filters.absoluteFilters.size();
+			List<Integer> minMaxFilterCoords = new ArrayList<Integer>(filters.minMaxFilters.keySet());
+			int minMaxFilterCount = filters.minMaxFilters.size();
+			//validate the filters against the model's dimension
+			int dimension = model.getGridDimension();
+			if (absoluteFilterCount != 0 && absoluteFilterCoords.get(absoluteFilterCount - 1) >= dimension 
+					|| minMaxFilterCount != 0 && minMaxFilterCoords.get(minMaxFilterCount - 1) >= dimension) {
+				System.out.printf(INVALID_COORD_INDEX_MESSAGE_FORMAT, dimension);
+				return null;
+			}
+			int relativeFilterGroupCount = filters.relativeFilterGroups.size();
+			List<List<Integer>> relativeFilterGroupsCoords = new ArrayList<List<Integer>>(relativeFilterGroupCount);
+			for (int i = 0; i != relativeFilterGroupCount; i++) {
+				SortedMap<Integer, int[]> group = filters.relativeFilterGroups.get(i);
+				List<Integer> groupCoords = new ArrayList<Integer>(group.keySet());
+				if (groupCoords.get(group.size() - 1) >= dimension) {
+					System.out.printf(INVALID_COORD_INDEX_MESSAGE_FORMAT, dimension);
+					return null;
+				}
+				relativeFilterGroupsCoords.add(groupCoords);
+			}
+			//orthogonal cross sections
+			for (int i = absoluteFilterCount - 1; i != -1; i--) {
+				int coord = absoluteFilterCoords.get(i);
+				int value = filters.absoluteFilters.get(coord);
+				model = model.crossSection(coord, value);
+				removeCoordinateFromFilters(coord, minMaxFilterCoords, filters.minMaxFilters);
+				for (int j = 0; j != relativeFilterGroupCount; j++) {
+					SortedMap<Integer, int[]> group = filters.relativeFilterGroups.get(j);
+					List<Integer> groupCoords = relativeFilterGroupsCoords.get(j);
+					removeCoordinateFromFilters(coord, groupCoords, group);
+				}
+			}		
+			//diagonal cross sections
+			for (int i = relativeFilterGroupCount - 1; i != -1; i--) {
+				SortedMap<Integer, int[]> group = filters.relativeFilterGroups.get(i);
+				List<Integer> groupCoords = relativeFilterGroupsCoords.get(i);
+				int referenceCoord = groupCoords.get(0);
+				for (int j = group.size() - 1; j != 0; j--) {
+					int coord = groupCoords.get(j);
+					int[] filter = group.get(coord);
+					model = model.diagonalCrossSection(referenceCoord, coord, filter[0] == 1, filter[1]);
+					removeCoordinateFromFilters(coord, minMaxFilterCoords, filters.minMaxFilters);
+					for (int k = 0; k != i; k++) {
+						SortedMap<Integer, int[]> otherGroup = filters.relativeFilterGroups.get(k);
+						List<Integer> otherGroupCoords = relativeFilterGroupsCoords.get(k);
+						removeCoordinateFromFilters(coord, otherGroupCoords, otherGroup);
+					}
 				}
 			}
-		}
-		if (args.w != null) {
-			wCoord = args.w.coordinate;
-			wRange = args.w.range;
-			wRefCoord = getCoordIndex(args.w.referenceCoordinate);
-			wOffset = args.w.offset;
-			if (wRefCoord != null && wRefCoord == 3) {
-				if (wOffset == 0) {
-					wRefCoord = null;
-					wOffset = null;
-				} else {
-					System.out.println(coordRelativeToItselfError);
+			//subsection
+			if (minMaxFilterCount != 0) {
+				int newDimension = model.getGridDimension();
+				Integer[] minCoordinates = new Integer[newDimension];
+				Integer[] maxCoordinates = new Integer[newDimension];
+				for (int i = 0; i != minMaxFilterCount; i++) {
+					int coord = minMaxFilterCoords.get(i);
+					Integer[] minAndMax = filters.minMaxFilters.get(coord);
+					minCoordinates[coord] = minAndMax[0];
+					maxCoordinates[coord] = minAndMax[1];
 				}
-			}
-		}
-		if (args.x != null) {
-			xCoord = args.x.coordinate;
-			xRange = args.x.range;
-			xRefCoord = getCoordIndex(args.x.referenceCoordinate);
-			xOffset = args.x.offset;
-			if (xRefCoord != null && xRefCoord == 2) {
-				if (xOffset == 0) {
-					xRefCoord = null;
-					xOffset = null;
-				} else {
-					System.out.println(coordRelativeToItselfError);
-				}
-			}
-		}
-		if (args.y != null) {
-			yCoord = args.y.coordinate;
-			yRange = args.y.range;
-			yRefCoord = getCoordIndex(args.y.referenceCoordinate);
-			yOffset = args.y.offset;
-			if (yRefCoord != null && yRefCoord == 1) {
-				if (yOffset == 0) {
-					yRefCoord = null;
-					yOffset = null;
-				} else {
-					System.out.println(coordRelativeToItselfError);
-				}
-			}
-		}
-		if (args.z != null) {
-			zCoord = args.z.coordinate;
-			zRange = args.z.range;
-			zRefCoord = getCoordIndex(args.z.referenceCoordinate);
-			zOffset = args.z.offset;
-			if (zRefCoord != null && zRefCoord == 0) {
-				if (zOffset == 0) {
-					zRefCoord = null;
-					zOffset = null;
-				} else {
-					System.out.println(coordRelativeToItselfError);
-				}
-			}
-		}
-		//TODO diagonal cross sections (refCoords and offsets)
-//		if (model instanceof Model5D) {
-//			
-//		}
-		if (model instanceof Model4D) {
-			Model4D model4d = (Model4D)model;
-			if (wCoord != null) {
-				model = model4d.crossSectionAtW(wCoord);
-			} else if (xCoord != null) {
-				model = model4d.crossSectionAtX(xCoord);
-				//relocate args for cascading
-				xCoord = wCoord; xRange = wRange; //xRefCoord = wRefCoord; xOffset = wOffset; //not possible with refcoord? review
-			} else if (yCoord != null) {
-				model = model4d.crossSectionAtY(yCoord);
-				//relocate args for cascading
-				yCoord = xCoord; yRange = xRange;
-				xCoord = wCoord; xRange = wRange;
-			} else if (zCoord != null) {
-				model = model4d.crossSectionAtZ(zCoord);
-				//relocate args for cascading
-				zCoord = yCoord; zRange = yRange;
-				yCoord = xCoord; yRange = xRange;
-				xCoord = wCoord; xRange = wRange;
-			} /*else if (xRefCoord != null) {
-				switch (xRefCoord) {
-				case "y":
-					break;
-				case "z":
-					break;
-				default:
-					
-				}
-			}*/ else if (wRange != null && xRange != null && yRange != null && zRange != null) {
-				model = model4d.subsection(wRange[0], wRange[1], xRange[0], xRange[1], yRange[0], yRange[1], zRange[0], zRange[1]);
-			} else if (wRange != null || xRange != null || yRange != null || zRange != null) {
-				System.out.println(onlyRangesOnAllCoordsAreSupported);
-				model = null;
-			}
-		}
-		if (model instanceof Model3D) {
-			Model3D model3d = (Model3D)model;
-			if (xCoord != null) {
-				model = model3d.crossSectionAtX(xCoord);
-				//relocate args for cascading
-				xCoord = yCoord; xRange = yRange; //xRefCoord = yRefCoord; xOffset = yOffset; //not possible with refcoord. review
-				yCoord = zCoord; yRange = zRange; //yRefCoord = zRefCoord; yOffset = zOffset;
-			} else if (yCoord != null) {
-				model = model3d.crossSectionAtY(yCoord);
-				//relocate args for cascading
-				yCoord = zCoord; yRange = zRange; //yRefCoord = zRefCoord; yOffset = zOffset;
-			} else if (zCoord != null) {
-				model = model3d.crossSectionAtZ(zCoord);
-			} /*else if (xRefCoord != null) {
-				switch (xRefCoord) {
-				case "y":
-					break;
-				case "z":
-					break;
-				default:
-					
-				}
-			}*/ else if (xRange != null && yRange != null && zRange != null) {
-				model = model3d.subsection(xRange[0], xRange[1], yRange[0], yRange[1], zRange[0], zRange[1]);
-			} else if (xRange != null || yRange != null || zRange != null) {
-				System.out.println(onlyRangesOnAllCoordsAreSupported);
-				model = null;
-			}
-		}
-		if (model instanceof Model2D) {			
-			if (xRange != null && yRange != null) {
-				model = ((Model2D)model).subsection(xRange[0], xRange[1], yRange[0], yRange[1]);
-			} else if (xRange != null || yRange != null) {
-				System.out.println(onlyRangesOnAllCoordsAreSupported);
-				model = null;
-			} else if (xCoord != null || yCoord != null || xRefCoord != null || yRefCoord != null) {
-				System.out.println(unsupportedDimensionCount);
-				model = null;
+				model = model.subsection(new PartialCoordinates(minCoordinates), new PartialCoordinates(maxCoordinates));
 			}
 		}
 		return model;
+	}
+	
+	private static <Filter_Type> void removeCoordinateFromFilters(int removedCoordinate, List<Integer> coordinates, SortedMap<Integer, Filter_Type> filters) {
+		int coordinateCount = coordinates.size();
+		int i = 0;
+		int coordinate = -1;
+		while (i != coordinateCount && (coordinate = coordinates.get(i)) < removedCoordinate) {
+			i++;
+		}
+		if (i != coordinateCount) {
+			Filter_Type filter = filters.get(coordinate);
+			int newCoordinate = coordinate - 1;
+			filters.put(newCoordinate, filter);
+			filters.remove(coordinate);
+			coordinates.set(i, newCoordinate);
+			for (i++; i != coordinateCount; i++) {
+				coordinate = coordinates.get(i);
+				filter = filters.get(coordinate);
+				newCoordinate = coordinate - 1;
+				filters.put(newCoordinate, filter);
+				filters.remove(coordinate);
+				coordinates.set(i, newCoordinate);
+			}
+		}
 	}
 
 	private static ColorMapper getColorMapper(Args args) {
@@ -552,11 +511,11 @@ public class AetherImgMaker {
 	private static Model getSIVModel(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(memorySafeNotSupportedForThisModelMessageFormat, args.model);
+			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(initialConfigNeededMessageFormat, args.model);
+			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
 		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(gridTypeNeededToRestoreMessageFormat);
+			System.out.printf(GRID_TYPE_NEEDED_IN_ORDER_TO_RESTORE_MESSAGE_FORMAT);
 		} else {
 			if (args.grid == null) {
 				args.grid = new GridOptionValue(2);//default to 2D
@@ -570,16 +529,16 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 									model = new SpreadIntegerValue1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, Long.MIN_VALUE, Long.MAX_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}								
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							model = new SpreadIntegerValue1D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				case 2:
@@ -593,10 +552,10 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 									model = new SpreadIntegerValue2D(args.initialConfiguration.singleSource.longValue(), 0);
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, Long.MIN_VALUE, Long.MAX_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							try {
@@ -606,7 +565,7 @@ public class AetherImgMaker {
 							}
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				case 3:
@@ -617,16 +576,16 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 									model = new SpreadIntegerValue3D(args.initialConfiguration.singleSource.longValue());
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, Long.MIN_VALUE, Long.MAX_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							model = new SpreadIntegerValue3D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				case 4:
@@ -637,20 +596,38 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 									model = new SpreadIntegerValue4D(args.initialConfiguration.singleSource.longValue());
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, Long.MIN_VALUE, Long.MAX_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							model = new SpreadIntegerValue4D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				default:
-					System.out.printf(gridNotSupportedMessageFormat, args.model);
+					if (args.grid.side == null) {
+						if (args.backupToRestorePath == null) {
+							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
+								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
+										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
+									model = new SpreadIntegerValue(args.grid.dimension, args.initialConfiguration.singleSource.intValue(), 0);
+								} else {
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
+								}
+							} else {
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+							}
+						} else {
+							model = new SpreadIntegerValue(args.backupToRestorePath);
+						}
+					} else {
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+					}
+					break;
 			}
 		}
 		return model;
@@ -659,9 +636,9 @@ public class AetherImgMaker {
 	private static Model getAbelianSandpileModel(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(memorySafeNotSupportedForThisModelMessageFormat, args.model);
+			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(initialConfigNeededMessageFormat, args.model);
+			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
 //		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
 //			System.out.printf(gridTypeNeededToRestoreMessageFormat);
 		} else {
@@ -677,20 +654,20 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.ZERO) >= 0) {
 									model = new AbelianSandpileSingleSource2D(args.initialConfiguration.singleSource.intValue());
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, 0, Integer.MAX_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, 0, Integer.MAX_VALUE);
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							model = new AbelianSandpileSingleSource2D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				default:
-					System.out.printf(gridNotSupportedMessageFormat, args.model);
+					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 			}
 		}
 		return model;
@@ -699,11 +676,11 @@ public class AetherImgMaker {
 	private static Model getAetherModel(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(initialConfigNeededMessageFormat, args.model);
+			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
 		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(gridTypeNeededToRestoreMessageFormat);
+			System.out.printf(GRID_TYPE_NEEDED_IN_ORDER_TO_RESTORE_MESSAGE_FORMAT);
 		} else if (args.memorySafe && args.initialConfiguration.type != InitialConfigType.SINGLE_SOURCE) {
-			System.out.printf(memorySafeNotSupportedForThisInitialConfigMessageFormat, args.model);
+			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_INITIAL_CONFIG_MESSAGE_FORMAT, args.model);
 		} else {
 			if (args.grid == null) {
 				args.grid = new GridOptionValue(2);//default to 2D
@@ -721,10 +698,10 @@ public class AetherImgMaker {
 										model = new Aether1D(args.initialConfiguration.singleSource.longValue());
 									}
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, Aether1D.MIN_INITIAL_VALUE, Aether1D.MAX_INITIAL_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Aether1D.MIN_INITIAL_VALUE, Aether1D.MAX_INITIAL_VALUE);
 								}								
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							if (args.memorySafe) {
@@ -734,7 +711,7 @@ public class AetherImgMaker {
 							}
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				case 2:
@@ -746,7 +723,7 @@ public class AetherImgMaker {
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether2D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new FileBackedAether2D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(singleSourceOutOfRangeMessageFormat, Aether2D.MIN_INITIAL_VALUE, Aether2D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Aether2D.MIN_INITIAL_VALUE, Aether2D.MAX_INITIAL_VALUE);
 									}	
 								} else {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MAX_INITIAL_VALUE)) <= 0
@@ -763,7 +740,7 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
 									model = new IntAether2DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
 								} else {
-									System.out.printf(minAndMaxOutOfRangeMessageFormat, Integer.MIN_VALUE, Integer.MAX_VALUE);
+									System.out.printf(MIN_MAX_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
 								}
 							}
 						} else {
@@ -782,7 +759,7 @@ public class AetherImgMaker {
 							}
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				case 3:
@@ -794,7 +771,7 @@ public class AetherImgMaker {
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether3D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new FileBackedAether3D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(singleSourceOutOfRangeMessageFormat, FileBackedAether3D.MIN_INITIAL_VALUE, FileBackedAether3D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether3D.MIN_INITIAL_VALUE, FileBackedAether3D.MAX_INITIAL_VALUE);
 									}
 								} else {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MAX_INITIAL_VALUE)) <= 0
@@ -814,7 +791,7 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
 									model = new IntAether3DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
 								} else {
-									System.out.printf(minAndMaxOutOfRangeMessageFormat, Integer.MIN_VALUE, Integer.MAX_VALUE);
+									System.out.printf(MIN_MAX_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
 								}
 							}
 						} else {
@@ -846,7 +823,7 @@ public class AetherImgMaker {
 									model = new BigIntAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource);
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							try {
@@ -868,7 +845,7 @@ public class AetherImgMaker {
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether4D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new FileBackedAether4D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(singleSourceOutOfRangeMessageFormat, FileBackedAether4D.MIN_INITIAL_VALUE, FileBackedAether4D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether4D.MIN_INITIAL_VALUE, FileBackedAether4D.MAX_INITIAL_VALUE);
 									}
 								} else {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MAX_INITIAL_VALUE)) <= 0
@@ -882,7 +859,7 @@ public class AetherImgMaker {
 									}		
 								}						
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							if (args.memorySafe) {
@@ -896,7 +873,7 @@ public class AetherImgMaker {
 							}
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				case 5:
@@ -910,7 +887,7 @@ public class AetherImgMaker {
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether5D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new FileBackedAether5D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(singleSourceOutOfRangeMessageFormat, FileBackedAether5D.MIN_INITIAL_VALUE, FileBackedAether5D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether5D.MIN_INITIAL_VALUE, FileBackedAether5D.MAX_INITIAL_VALUE);
 									}
 								} else {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5D.MAX_INITIAL_VALUE)) <= 0
@@ -920,11 +897,11 @@ public class AetherImgMaker {
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether5D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new Aether5D(args.initialConfiguration.singleSource.longValue());
 									} else {
-										System.out.printf(singleSourceOutOfRangeMessageFormat, Aether5D.MIN_INITIAL_VALUE, Aether5D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Aether5D.MIN_INITIAL_VALUE, Aether5D.MAX_INITIAL_VALUE);
 									}
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							if (args.memorySafe) {
@@ -938,11 +915,11 @@ public class AetherImgMaker {
 							}
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				default:
-					System.out.printf(gridNotSupportedMessageFormat, args.model);
+					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 			}
 		}
 		return model;
@@ -951,9 +928,9 @@ public class AetherImgMaker {
 	private static Model getNearAether1Model(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(memorySafeNotSupportedForThisModelMessageFormat, args.model);
+			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(initialConfigNeededMessageFormat, args.model);
+			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
 //		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
 //			System.out.printf(gridTypeNeededToRestoreMessageFormat);
 		} else {
@@ -969,20 +946,20 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether1_3D.MIN_INITIAL_VALUE)) >= 0) {
 									model = new IntNearAether1_3D(args.initialConfiguration.singleSource.intValue());
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, IntNearAether1_3D.MIN_INITIAL_VALUE, IntNearAether1_3D.MAX_INITIAL_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, IntNearAether1_3D.MIN_INITIAL_VALUE, IntNearAether1_3D.MAX_INITIAL_VALUE);
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							model = new IntNearAether1_3D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				default:
-					System.out.printf(gridNotSupportedMessageFormat, args.model);
+					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 			}
 		}
 		return model;
@@ -991,11 +968,11 @@ public class AetherImgMaker {
 	private static Model getNearAether2Model(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(memorySafeNotSupportedForThisModelMessageFormat, args.model);
+			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
 		} else if (args.memorySafe) {
-			System.out.printf(memorySafeNotSupportedForThisModelMessageFormat, args.model);
+			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(initialConfigNeededMessageFormat, args.model);
+			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
 //		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
 //			System.out.printf(gridTypeNeededToRestoreMessageFormat);
 		} else {
@@ -1011,20 +988,20 @@ public class AetherImgMaker {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether2_3D.MIN_INITIAL_VALUE)) >= 0) {
 									model = new IntNearAether2_3D(args.initialConfiguration.singleSource.intValue());
 								} else {
-									System.out.printf(singleSourceOutOfRangeMessageFormat, IntNearAether1_3D.MIN_INITIAL_VALUE, IntNearAether1_3D.MAX_INITIAL_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, IntNearAether1_3D.MIN_INITIAL_VALUE, IntNearAether1_3D.MAX_INITIAL_VALUE);
 								}
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							model = new IntNearAether2_3D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				default:
-					System.out.printf(gridNotSupportedMessageFormat, args.model);
+					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 			}
 		}
 		return model;
@@ -1033,9 +1010,9 @@ public class AetherImgMaker {
 	private static Model getNearAether3Model(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(memorySafeNotSupportedForThisModelMessageFormat, args.model);
+			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(initialConfigNeededMessageFormat, args.model);
+			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
 //		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
 //			System.out.printf(gridTypeNeededToRestoreMessageFormat);
 		} else {
@@ -1049,17 +1026,17 @@ public class AetherImgMaker {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								model = new BigIntNearAether3Simple3D(args.initialConfiguration.singleSource);
 							} else {
-								System.out.printf(initialConfigNotSupportedMessageFormat, args.model);
+								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
 							model = new BigIntNearAether3Simple3D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(gridNotSupportedMessageFormat, args.model);
+						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 					}
 					break;
 				default:
-					System.out.printf(gridNotSupportedMessageFormat, args.model);
+					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 			}
 		}
 		return model;
