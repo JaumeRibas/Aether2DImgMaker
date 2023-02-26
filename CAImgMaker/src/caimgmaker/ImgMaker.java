@@ -86,7 +86,7 @@ public class ImgMaker {
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 							minY = ca.getMinY(), maxY = ca.getMaxY();
-					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);
+					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);//TODO improve. e.g. x: [min, max] ...
 					int[] minAndMaxValue = ca.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue[0], minAndMaxValue[1]);
@@ -1502,6 +1502,7 @@ public class ImgMaker {
 		}
 	}
 	
+	//TODO review after changing cross section coordinate mapping
 	public void createScanningAndZCrossSectionImagesFromEvenOddY(LongModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
@@ -1672,6 +1673,7 @@ public class ImgMaker {
 		}
 	}
 	
+	//TODO review after changing cross section coordinate mapping
 	public void createScanningAndZCrossSectionImagesFromEvenOddY(IntModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
 			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
@@ -1846,6 +1848,8 @@ public class ImgMaker {
 			inputThread.join();
 		}
 	}
+	
+	//TODO missing methods? EvenOddY(Model2D), EvenOddX(Model3D), EvenOddZ(Model3D)...
 	
 	public static int getModelPositionSize(int minX, int maxX, int minY, int maxY, int preferredMaxWidth, int preferredMaxHeight) {
 		int ySize = 1;
