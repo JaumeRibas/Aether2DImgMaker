@@ -347,6 +347,7 @@ public class FileBackedAether1D extends FileBackedModel implements SymmetricLong
 		properties.put("initialValue", initialValue);
 		properties.put("step", step);
 		properties.put("maxX", maxX);
+		properties.put("changed", changed);
 		return properties;
 	}
 	
@@ -355,6 +356,7 @@ public class FileBackedAether1D extends FileBackedModel implements SymmetricLong
 		initialValue = (long) properties.get("initialValue");
 		step = (long) properties.get("step");
 		maxX = (int) properties.get("maxX");
+		changed = (boolean) properties.get("changed");
 	}
 	
 }

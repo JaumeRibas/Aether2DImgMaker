@@ -4137,6 +4137,7 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 		properties.put("initialValue", initialValue);
 		properties.put("step", step);
 		properties.put("maxW", maxW);
+		properties.put("changed", changed);
 		return properties;
 	}
 	
@@ -4145,6 +4146,7 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 		initialValue = (long) properties.get("initialValue");
 		step = (long) properties.get("step");
 		maxW = (int) properties.get("maxW");
+		changed = (boolean) properties.get("changed");
 	}
 
 }

@@ -10553,6 +10553,7 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 		properties.put("initialValue", initialValue);
 		properties.put("step", step);
 		properties.put("maxV", maxV);
+		properties.put("changed", changed);
 		return properties;
 	}
 	
@@ -10561,6 +10562,7 @@ public class FileBackedAether5D extends FileBackedModel implements SymmetricLong
 		initialValue = (long) properties.get("initialValue");
 		step = (long) properties.get("step");
 		maxV = (int) properties.get("maxV");
+		changed = (boolean) properties.get("changed");
 	}
 
 }
