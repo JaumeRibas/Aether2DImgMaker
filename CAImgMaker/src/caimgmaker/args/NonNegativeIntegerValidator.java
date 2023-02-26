@@ -10,7 +10,7 @@ public class NonNegativeIntegerValidator implements IParameterValidator {
 			throws ParameterException {
 		int n = Integer.parseInt(value);
 		if (n < 0) {
-			throw new ParameterException("Parameter " + name + " cannot be negative (found " + value +")");
+			throw new ParameterException("The value of " + name + " cannot be negative (found " + value +").");
 		}
 	}
 	

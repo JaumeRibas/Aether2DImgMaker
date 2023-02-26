@@ -10,7 +10,7 @@ public class GreaterThanZeroIntegerValidator implements IParameterValidator {
 			throws ParameterException {
 		int n = Integer.parseInt(value);
 		if (n < 1) {
-			throw new ParameterException("Parameter " + name + " must be greater than zero (found " + value +")");
+			throw new ParameterException("The value of " + name + " must be greater than zero (found " + value +").");
 		}
 	}
 	
