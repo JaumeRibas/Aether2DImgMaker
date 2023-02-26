@@ -74,7 +74,9 @@ public class AbelianSandpileSingleSource2D implements SymmetricIntModel2D, Isotr
 		AbelianSandpileSingleSource2D data = (AbelianSandpileSingleSource2D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
+		xBoundReached = data.xBoundReached;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override
