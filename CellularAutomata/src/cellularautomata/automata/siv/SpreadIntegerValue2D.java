@@ -80,6 +80,7 @@ public class SpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSqua
 		backgroundValue = data.backgroundValue;
 		step = data.step;
 		xBoundReached = data.xBoundReached;
+		changed = data.changed;
 	}
 	
 	@Override

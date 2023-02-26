@@ -125,6 +125,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		step = data.step;
 		originIndex = data.originIndex;
 		boundsReached = data.boundsReached;
+		changed = data.changed;
 	}
 	
 	@Override

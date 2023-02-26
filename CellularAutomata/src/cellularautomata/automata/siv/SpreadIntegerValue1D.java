@@ -79,6 +79,7 @@ public class SpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicMode
 		backgroundValue = data.backgroundValue;
 		grid = data.grid;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override

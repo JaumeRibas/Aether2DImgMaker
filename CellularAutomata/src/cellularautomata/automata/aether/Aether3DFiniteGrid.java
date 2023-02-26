@@ -92,6 +92,7 @@ public class Aether3DFiniteGrid implements LongModel3D, Serializable {
 		xSideMinusOne = data.xSideMinusOne;
 		ySideMinusOne = data.ySideMinusOne;
 		zSideMinusOne = data.zSideMinusOne;
+		changed = data.changed;
 	}
 	
 	@Override

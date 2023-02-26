@@ -92,6 +92,7 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 		originIndex = data.originIndex;
 		changed = data.changed;
 		boundsReached = data.boundsReached;
+		changed = data.changed;
 	}
 	
 	@Override

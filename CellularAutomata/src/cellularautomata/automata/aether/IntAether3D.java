@@ -78,6 +78,7 @@ public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, S
 		grid = data.grid;
 		maxX = data.maxX;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override

@@ -123,6 +123,7 @@ public class Aether3DBoundedGrid implements LongModel3D, Serializable {
 		singleSourceX = data.singleSourceX;
 		singleSourceY = data.singleSourceY;
 		singleSourceZ = data.singleSourceZ;
+		changed = data.changed;
 	}
 	
 	@Override

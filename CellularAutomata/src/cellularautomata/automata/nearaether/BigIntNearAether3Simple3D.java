@@ -103,6 +103,7 @@ public class BigIntNearAether3Simple3D implements SymmetricNumericModel3D<BigInt
 		originIndex = data.originIndex;
 		boundsReached = data.boundsReached;
 		folderName = data.folderName;
+		changed = data.changed;
 	}
 	
 	@Override

@@ -78,6 +78,7 @@ public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicMode
 		grid = data.grid;
 		maxW = data.maxW;
 		step = data.step;
+		changed = data.changed;
 	}
 
 	@Override

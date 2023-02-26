@@ -78,6 +78,7 @@ public class Aether5D implements SymmetricLongModel5D, IsotropicHypercubicModel5
 		grid = data.grid;
 		maxV = data.maxV;
 		step = data.step;
+		changed = data.changed;
 	}
 
 	@Override

@@ -78,6 +78,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 		grid = data.grid;
 		maxX = data.maxX;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override

@@ -91,6 +91,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		singleSourceCoord = data.singleSourceCoord;
 		step = data.step;
 		folderName = data.folderName;
+		changed = data.changed;
 	}
 
 	@Override

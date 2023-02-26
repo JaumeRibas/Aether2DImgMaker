@@ -78,6 +78,7 @@ public class Aether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4
 		grid = data.grid;
 		maxW = data.maxW;
 		step = data.step;
+		changed = data.changed;
 	}
 
 	@Override

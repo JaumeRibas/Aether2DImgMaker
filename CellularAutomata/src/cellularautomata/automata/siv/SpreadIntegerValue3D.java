@@ -75,6 +75,7 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 		grid = data.grid;
 		xBoundReached = data.xBoundReached;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override

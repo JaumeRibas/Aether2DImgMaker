@@ -77,6 +77,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		grid = data.grid;
 		maxV = data.maxV;
 		step = data.step;
+		changed = data.changed;
 	}
 
 	@Override

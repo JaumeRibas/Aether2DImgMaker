@@ -81,6 +81,7 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicModelA, Ser
 		grid = data.grid;
 		maxX = data.maxX;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override

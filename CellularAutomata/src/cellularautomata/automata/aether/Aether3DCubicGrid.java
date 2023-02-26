@@ -84,6 +84,7 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 		step = data.step;		
 		side = data.side;
 		singleSourceCoord = data.singleSourceCoord;
+		changed = data.changed;
 	}
 	
 	@Override

@@ -90,6 +90,7 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 		maxX = data.maxX;
 		step = data.step;
 		folderName = data.folderName;
+		changed = data.changed;
 	}
 	
 	@Override

@@ -90,6 +90,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		maxW = data.maxW;
 		step = data.step;
 		folderName = data.folderName;
+		changed = data.changed;
 	}
 
 	@Override

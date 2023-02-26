@@ -128,6 +128,7 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		step = data.step;
 		originIndex = data.originIndex;
 		boundsReached = data.boundsReached;
+		changed = data.changed;
 	}
 	
 	@Override

@@ -91,6 +91,7 @@ public class IntNearAether2_3D implements SymmetricIntModel3D, IsotropicCubicMod
 		maxXMinusOne = data.maxXMinusOne;
 		boundsReached = data.boundsReached;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override

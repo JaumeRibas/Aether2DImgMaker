@@ -74,6 +74,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 		backgroundValue = data.backgroundValue;
 		step = data.step;
 		xBoundReached = data.xBoundReached;
+		changed = data.changed;
 	}
 	
 	@Override

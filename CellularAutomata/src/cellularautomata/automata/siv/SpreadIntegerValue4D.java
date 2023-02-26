@@ -78,6 +78,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 		maxWMinusOne = data.maxWMinusOne;
 		boundsReached = data.boundsReached;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override

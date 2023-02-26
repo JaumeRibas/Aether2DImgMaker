@@ -78,6 +78,7 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicModel1DA, Serial
 		grid = data.grid;
 		maxX = data.maxX;
 		step = data.step;
+		changed = data.changed;
 	}
 	
 	@Override
