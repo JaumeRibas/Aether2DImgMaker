@@ -94,6 +94,16 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 	}
 
 	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+
+	@Override
 	public int getMinX() {
 		return minX;
 	}

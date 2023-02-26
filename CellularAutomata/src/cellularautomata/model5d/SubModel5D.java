@@ -170,6 +170,31 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 		}
 		return true;
 	}
+	
+	@Override
+	public String getVLabel() {
+		return source.getVLabel();
+	}
+	
+	@Override
+	public String getWLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
+	}
 
 	@Override
 	public int getMinV() { return minV; }

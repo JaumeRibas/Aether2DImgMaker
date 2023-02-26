@@ -143,6 +143,26 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 		}
 		return true;
 	}
+	
+	@Override
+	public String getWLabel() {
+		return source.getWLabel();
+	}
+	
+	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getZLabel();
+	}
 
 	@Override
 	public int getMinW() { return minW; }

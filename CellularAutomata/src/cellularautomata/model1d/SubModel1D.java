@@ -62,6 +62,11 @@ public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 	}
 
 	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+
+	@Override
 	public int getMinX() {
 		return minX;
 	}

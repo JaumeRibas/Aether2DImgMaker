@@ -118,6 +118,21 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 	}
 
 	@Override
+	public String getXLabel() {
+		return source.getXLabel();
+	}
+	
+	@Override
+	public String getYLabel() {
+		return source.getYLabel();
+	}
+	
+	@Override
+	public String getZLabel() {
+		return source.getYLabel();
+	}
+
+	@Override
 	public int getMinX() { return minX; }
 
 	@Override
