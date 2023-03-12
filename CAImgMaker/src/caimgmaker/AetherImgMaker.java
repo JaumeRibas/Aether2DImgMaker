@@ -111,7 +111,7 @@ public class AetherImgMaker {
 				return;
 			}
 			if (args.outputVersion) {
-				System.out.println("0.6.0");
+				System.out.println("0.6.1");
 				return;
 			}
 			Model model = getModel(args);
