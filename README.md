@@ -41,4 +41,4 @@ The `Ctrl`+`C` command can be used to halt the execution.
 
 * Generate images from the asymmetric section of the Aether model on a 3D grid with a single source of -1,925 and splitting the even and odd positions into sepate images:
 
-`java -jar AetherImgMaker.jar -grid 3d_infinite -initial-config single-source_-1925 -img-generation-mode split-parity -colormap hue -asymmetric`
+`java -jar AetherImgMaker.jar -grid 3d -initial-config single-source_-1925 -img-generation-mode split-parity -colormap hue -asymmetric`
