@@ -70,7 +70,7 @@ public class ImgMaker {
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
-			String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+			String imgPath = path + "/";
 			int currentStepLeap = (int) (step%stepLeap);
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
@@ -135,7 +135,7 @@ public class ImgMaker {
 			long step = ca.getStep();
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
-			String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+			String imgPath = path + "/";
 			int currentStepLeap = (int) (step%stepLeap);
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
@@ -201,7 +201,7 @@ public class ImgMaker {
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
-			String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+			String imgPath = path + "/";
 			int currentStepLeap = (int) (step%stepLeap);
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
@@ -268,7 +268,7 @@ public class ImgMaker {
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
-			String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+			String imgPath = path + "/";
 			int currentStepLeap = (int) (step%stepLeap);
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
@@ -356,7 +356,7 @@ public class ImgMaker {
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
-			String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+			String imgPath = path + "/";
 			int currentStepLeap = (int) (step%stepLeap);
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
@@ -444,7 +444,7 @@ public class ImgMaker {
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
-			String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+			String imgPath = path + "/";
 			int currentStepLeap = (int) (step%stepLeap);
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
@@ -532,7 +532,7 @@ public class ImgMaker {
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
-			String imgPath = path + "/" + colorMapper.getColormapName() + "/";
+			String imgPath = path + "/";
 			int currentStepLeap = (int) (step%stepLeap);
 			if (currentStepLeap == 0) {
 				currentStepLeap = stepLeap;
@@ -620,7 +620,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",
@@ -731,7 +731,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",
@@ -842,7 +842,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",
@@ -955,7 +955,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;		
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",
@@ -1142,7 +1142,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;		
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",
@@ -1329,7 +1329,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;		
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",
@@ -1516,7 +1516,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",
@@ -1687,7 +1687,7 @@ public class ImgMaker {
 			int[] scanCoords = scanInitialCoords;
 			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
-			path += "/" + colorMapper.getColormapName() + "/";
+			path += "/";
 			String[] scanImgPaths = new String[] { 
 					path + xLabel + "_scan/",
 					path + yLabel + "_scan/",

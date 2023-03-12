@@ -34,6 +34,7 @@ public class Args {
 	@Parameter(names = "-grid", validateWith = GridValidator.class, converter = GridConverter.class, description = "The type of grid to use. Currently, the only available types are: '{dimension}d', a infinite flat grid of dimension {dimension} (e.g. '3d'); and'{dimension}d_{side}', a finite flat grid shaped as a hypercube of dimension {dimension} and side {side} (e.g. '2d_101').")
     public GridOptionValue grid = null;
 
+	//TODO make single source the default
 	@Parameter(names = { "-initial-configuration", "-initial-config", "-init-configuration", "-init-config" }, validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class, description = "The initial configuration. The currently available configurations are: 'single-source_{value}', for a single source initial configuration (e.g. 'single-source_-1000'), and 'random-region_{side}_{min}_{max}', for an initial configuration consisting of an hypercubic region of side {side} filled with random values ranging form {min} to {max} (e.g. 'random-region_250_-45_60'). Note that outside this region the value will be zero.")
     public InitialConfigOptionValue initialConfiguration = null;
 
@@ -49,7 +50,7 @@ public class Args {
 	@Parameter(names = { "-minimum-image-size", "-min-image-size", "-minimum-img-size", "-min-img-size" }, validateWith = ImgSizeValidator.class, converter = ImgSizeConverter.class, description = "The minimum size of the generated images in pixels. With the format '{width}x{height}' (e.g. '1920x1080'). The images can be bigger if the model is too big to fit using 1:1 pixel to position scale. The aspect ratio is always mantained, if the scaled data is smaller than the image, it is aligned to the bottom left corner. The background is colored in black.")
     public ImgSizeOptionValue minimumImageSize = new ImgSizeOptionValue(ImgMakerConstants.HD_HEIGHT/4, ImgMakerConstants.HD_HEIGHT/4);
 	
-	@Parameter(names = "-path", description = "The path of the parent folder where the images are created. A subfolder structure is created at this location for organizational purposes.")
+	@Parameter(names = "-path", description = "The path of the parent folder where the images are created. By default, a subfolder structure is created at this location for organizational purposes. This can be prevented using the -no-folders option.")
     public String path = "./";
 
 	@Parameter(names = "-restore", description = "The path of the backup to restore. Mandatory when no initial configuration is passed and the selected -model requires one.")
@@ -81,6 +82,9 @@ public class Args {
     
     @Parameter(names = { "-version", "-v" }, description = "Print the version of the app.")
 	public boolean outputVersion;
+	
+	@Parameter(names = "-no-folders", description = "Do not create a subfolder structure at the provided -path.")
+	public boolean noFolders;
 	
 	@Parameter(names = "-help", help = true, description = "Print the list of options.")
 	public boolean help;

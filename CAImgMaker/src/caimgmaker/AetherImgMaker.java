@@ -119,7 +119,10 @@ public class AetherImgMaker {
 				System.out.println(USE_HELP_MESSAGE);
 				return;
 			}
-			String path = args.path + "/" + model.getSubfolderPath();
+			String path = args.path;
+			if (!args.noFolders) {
+				path += "/" + model.getSubfolderPath();
+			}
 			String backupsPath = path + "/backups";
 			evolveModelToFirstStep(model, args, backupsPath);
 			Model modelSection = getModelSection(model, args);
@@ -153,21 +156,24 @@ public class AetherImgMaker {
 	}
 	
 	private static boolean generateImages(Model model, Args args, String backupsPath) throws Exception {
-		boolean error = false;
-		String path = args.path + "/" + model.getSubfolderPath();
-		if (args.steapLeap > 1) {
-			path += "/step-leap=" + args.steapLeap;
-		}
-		final String imagesPath = path + "/img";
 		ColorMapper colorMapper = getColorMapper(args);
 		if (colorMapper == null)
 			return false;
+		String imagesPath = args.path;
+		if (!args.noFolders) {
+			imagesPath += "/" + model.getSubfolderPath();
+			if (args.steapLeap > 1) {
+				imagesPath += "/step-leap=" + args.steapLeap;
+			}
+			imagesPath += "/img/" + colorMapper.getColormapName();
+		}
 		ImgMaker imgMaker = null;
 		if (args.millisBetweenBackups == null) {
 			imgMaker = new ImgMaker();
 		} else {
 			imgMaker = new ImgMaker(args.millisBetweenBackups);
 		}
+		boolean error = false;
 		int dimension = model.getGridDimension();
 		switch (dimension) {
 			case 2:
