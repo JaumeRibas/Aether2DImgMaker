@@ -131,8 +131,8 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 	}
 	
 	class SpreadIntegerValueConsumer implements Consumer<Coordinates> {
+		
 		public boolean changed = false;
-		private int gridSideMinusOne;
 		private int gridSide;
 		private HypercubicIntArray newGrid;
 		private int indexOffset;
@@ -141,7 +141,6 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 			this.newGrid = newGrid;
 			this.indexOffset = indexOffset;
 			gridSide = grid.getSide();
-			gridSideMinusOne = gridSide - 1;
 		}
 		
 		@Override
@@ -163,7 +162,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 						if (indexOnAxis == 1 || indexOnAxis == gridSide - 2) {
 							isPositionCloseToEdge = true;
 						}
-						if (indexOnAxis < gridSideMinusOne) {
+						if (indexOnAxis < gridSide - 1) {
 							indexes[axis] = indexOnAxis + 1;
 							upperNeighborValues[axis] = grid.get(new Coordinates(indexes));
 							if (indexOnAxis > 0) {
