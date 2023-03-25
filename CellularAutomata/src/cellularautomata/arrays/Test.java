@@ -30,36 +30,6 @@ public class Test {
 		testHyperrectangularIntArray2();
 	}
 	
-	public static void testArrayClonning() {
-		int[] array1 = new int[] {1, 2, 3, 4};
-		System.out.println("a:" + Arrays.toString(array1));
-		int[] array2 = array1.clone();
-		System.out.println("b:" + Arrays.toString(array2));
-		array2[0] = 9;
-		System.out.println("a:" + Arrays.toString(array1));
-		System.out.println("b:" + Arrays.toString(array2));
-	}
-	
-	public static void testVarargs() {
-		int[] myArray = new int[] { 12 };
-		testVarargs2(myArray);
-		System.out.println(myArray[0]);
-	}
-	
-	public static void testVarargs2(int... args) {
-		if (args.length > 0) {
-			args[0] = 75;
-		}		
-	}
-	
-	public static void testArrayCopy() {
-		int[] array1 = new int[] {1, 2, 3, 4};
-		System.out.println(Arrays.toString(array1));
-		int[] array2 = new int[array1.length];
-		System.arraycopy(array1, 0, array2, 0, array2.length);
-		System.out.println(Arrays.toString(array2));
-	}
-	
 	public static void testHypercubicIntArray() {
 		int side = 3;
 		int dimension = 5;
