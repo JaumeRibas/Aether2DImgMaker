@@ -120,9 +120,9 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		this.changed = sivConsumer.changed;
+		changed = sivConsumer.changed;
 		//Return whether or not the state of the grid changed
-		return sivConsumer.changed;
+		return changed;
 	}
 
 	@Override
