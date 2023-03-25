@@ -188,8 +188,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 								&& isCurrentUpperNeighborValueEqual 
 								&& isCurrentLowerNeighborValueEqual;
 					}
-					int[] newIndexes = new int[gridDimension];
-					System.arraycopy(indexes, 0, newIndexes, 0, newIndexes.length);
+					int[] newIndexes = indexes.clone();
 					Utils.addToArray(newIndexes, indexOffset);
 					//If the current cell is equal to its neighbors, the algorithm has no effect
 					if (!areAllNeighborValuesEqual) {

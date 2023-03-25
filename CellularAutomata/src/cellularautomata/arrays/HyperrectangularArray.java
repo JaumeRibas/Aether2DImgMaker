@@ -166,11 +166,10 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	 */
 	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, Consumer<Coordinates> consumer) {
 		int dimension = upperBounds.length;
-		int[] indexes = new int[dimension];
+		int[] indexes = lowerBounds.clone();
 		if (dimension == 0) {
 			consumer.accept(new Coordinates(indexes));
 		} else {
-			System.arraycopy(lowerBounds, 0, indexes, 0, indexes.length);
 			int currentAxis = 0;
 			while (currentAxis < dimension) {
 				if (currentAxis == 0) {
