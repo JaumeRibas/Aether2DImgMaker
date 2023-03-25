@@ -174,7 +174,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 						} else {
 							upperNeighborValues[axis] = backgroundValue;
 							indexes[axis] = indexOnAxis - 1;
-							//if the grid side where one, this would be out of bounds.
+							//if the grid side were one, this would be out of bounds.
 							//but since it starts at 5 and only gets bigger it's fine
 							lowerNeighborValues[axis] = grid.get(new Coordinates(indexes));
 						}
