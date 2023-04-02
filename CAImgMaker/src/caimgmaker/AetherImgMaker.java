@@ -52,6 +52,7 @@ import cellularautomata.automata.aether.FileBackedAether2D;
 import cellularautomata.automata.aether.FileBackedAether3D;
 import cellularautomata.automata.aether.FileBackedAether4D;
 import cellularautomata.automata.aether.FileBackedAether5D;
+import cellularautomata.automata.aether.IntAether2D;
 import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
 import cellularautomata.automata.aether.IntAether4D;
@@ -729,16 +730,19 @@ public class AetherImgMaker {
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether2D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new FileBackedAether2D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Aether2D.MIN_INITIAL_VALUE, Aether2D.MAX_INITIAL_VALUE);
-									}	
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether2D.MIN_INITIAL_VALUE, FileBackedAether2D.MAX_INITIAL_VALUE);
+									}
 								} else {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MAX_INITIAL_VALUE)) <= 0
+									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new IntAether2D(args.initialConfiguration.singleSource.intValue());
+									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MAX_INITIAL_VALUE)) <= 0
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new Aether2D(args.initialConfiguration.singleSource.longValue());
 									} else {
 										model = new BigIntAether2D(args.initialConfiguration.singleSource);
 									}
-								}								
+								}
 							} else {
 								if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 										&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
@@ -753,15 +757,19 @@ public class AetherImgMaker {
 							if (args.memorySafe) {
 								model = new FileBackedAether2D(args.backupToRestorePath, args.path);
 							} else {	
-								try {		
-									model = new Aether2D(args.backupToRestorePath);			
-								} catch (Exception ex) {
+								try {
+									model = new IntAether2D(args.backupToRestorePath);							
+								} catch (Exception ex1) {
 									try {
-										model = new BigIntAether2D(args.backupToRestorePath);							
-									} catch (Exception ex3) {
-										model = new IntAether2DRandomConfiguration(args.backupToRestorePath);								
+										model = new Aether2D(args.backupToRestorePath);							
+									} catch (Exception ex2) {
+										try {
+											model = new BigIntAether2D(args.backupToRestorePath);							
+										} catch (Exception ex3) {
+											model = new IntAether2DRandomConfiguration(args.backupToRestorePath);							
+										}						
 									}						
-								}	
+								}
 							}
 						}
 					} else {
