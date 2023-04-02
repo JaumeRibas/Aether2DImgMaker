@@ -29,20 +29,5 @@ public class LongSubModel extends SubModel<LongModel> implements LongModel {
 	public long getFromPosition(Coordinates coordinates) throws Exception {
 		return source.getFromPosition(coordinates);
 	}
-	
-	@Override
-	public LongModel subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return LongModel.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public LongModel crossSection(int axis, int coordinate) {
-		return LongModel.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public LongModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return LongModel.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
-	}
 
 }

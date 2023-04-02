@@ -130,4 +130,34 @@ public class HypercubicPyramidGrid implements Model {
 		}
 	}
 
+	@Override
+	public Boolean nextStep() throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Boolean isChanged() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public long getStep() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getName() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getSubfolderPath() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
 }

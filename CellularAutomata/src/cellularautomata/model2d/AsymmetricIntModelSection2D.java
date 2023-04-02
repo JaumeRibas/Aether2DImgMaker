@@ -16,9 +16,6 @@
  */
 package cellularautomata.model2d;
 
-import cellularautomata.PartialCoordinates;
-import cellularautomata.model.IntModel;
-
 public class AsymmetricIntModelSection2D extends AsymmetricModelSection2D<SymmetricIntModel2D> implements IntModel2D {
 	
 	public AsymmetricIntModelSection2D(SymmetricIntModel2D source) {
@@ -28,21 +25,6 @@ public class AsymmetricIntModelSection2D extends AsymmetricModelSection2D<Symmet
 	@Override
 	public int getFromPosition(int x, int y) throws Exception {
 		return source.getFromAsymmetricPosition(x, y);
-	}
-	
-	@Override
-	public IntModel2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel2D.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public IntModel/*1D*/ crossSection(int axis, int coordinate) {
-		return IntModel2D.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public IntModel/*1D*/ diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return IntModel2D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

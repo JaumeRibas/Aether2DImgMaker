@@ -17,7 +17,6 @@
 package cellularautomata.model;
 
 import cellularautomata.Coordinates;
-import cellularautomata.PartialCoordinates;
 
 public class AsymmetricIntModelSection<Source_Type extends SymmetricIntModel> extends AsymmetricModelSection<Source_Type> implements IntModel {
 	
@@ -28,21 +27,6 @@ public class AsymmetricIntModelSection<Source_Type extends SymmetricIntModel> ex
 	@Override
 	public int getFromPosition(Coordinates coordinates) throws Exception {
 		return source.getFromAsymmetricPosition(coordinates);
-	}
-	
-	@Override
-	public IntModel subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public IntModel crossSection(int axis, int coordinate) {
-		return IntModel.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public IntModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return IntModel.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

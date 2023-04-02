@@ -18,26 +18,20 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-import cellularautomata.model2d.ObjectModel2D;
+import cellularautomata.model2d.IntModel2D;
 
-public class ColorMappedModel2DWithBackground<Object_Type> extends ColorMappedModel2D<Object_Type> {
+public class ColorMappedIntGrid2D extends ColorMappedGrid2D<IntModel2D> {
 
-	protected Object_Type backgroundValue;
-	protected Color backgroundColor;
+	protected IntColorMap colorMap;
 	
-	public ColorMappedModel2DWithBackground(ObjectModel2D<Object_Type> grid, ColorMap<Object_Type> colorMap, 
-			Object_Type backgroundValue, Color backgroundColor) {
-		super(grid, colorMap);
-		this.backgroundColor = backgroundColor;
-		this.backgroundValue = backgroundValue;
+	public ColorMappedIntGrid2D(IntModel2D source, IntColorMap colorMap) {
+		super(source);
+		this.colorMap = colorMap;
 	}
 
 	@Override
 	public Color getFromPosition(int x, int y) throws Exception {
-		Object_Type value = source.getFromPosition(x, y);
-		if (value.equals(backgroundValue)) {
-			return backgroundColor;
-		}
-		return colorMap.getColor(value);
+		return colorMap.getColor(source.getFromPosition(x, y));
 	}
+
 }

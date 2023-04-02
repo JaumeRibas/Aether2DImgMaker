@@ -14,101 +14,99 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.model2d;
+package caimgmaker.colormap;
 
-import cellularautomata.PartialCoordinates;
-import cellularautomata.model.Model;
+import java.awt.Color;
 
-public class ModelAs2D<Source_Type extends Model> implements Model2D {
+import cellularautomata.model2d.Model2D;
+import cellularautomata.model2d.ObjectModel2D;
 
-	protected Source_Type source;
+public abstract class ColorMappedGrid2D<Model_Type extends Model2D> implements ObjectModel2D<Color> {
+
+	protected Model_Type source;
 	
-	public ModelAs2D(Source_Type source) {
+	public ColorMappedGrid2D(Model_Type source) {
 		this.source = source;
-		int dimension = source.getGridDimension();
-		if (dimension != 2) {
-			throw new IllegalArgumentException("Model's grid dimension (" + dimension + ") must be 2.");
-		}
 	}
-
+	
 	@Override
 	public String getXLabel() {
-		return source.getAxisLabel(0);
+		return source.getXLabel();
 	}
-
+	
 	@Override
 	public String getYLabel() {
-		return source.getAxisLabel(1);
+		return source.getYLabel();
 	}
 
 	@Override
 	public int getMinX() {
-	    return source.getMinCoordinate(0);
+		return source.getMinX();
 	}
 
 	@Override
 	public int getMaxX() {
-	    return source.getMaxCoordinate(0);
+		return source.getMaxX();
 	}
-
+	
 	@Override
 	public int getMinX(int y) {
-	    return source.getMinCoordinate(0, new PartialCoordinates(null, y));
+		return source.getMinX(y);
 	}
 
 	@Override
 	public int getMaxX(int y) {
-	    return source.getMaxCoordinate(0, new PartialCoordinates(null, y));
+		return source.getMaxX(y);
 	}
 
 	@Override
 	public int getMinY() {
-	    return source.getMinCoordinate(1);
+		return source.getMinY();
 	}
 
 	@Override
 	public int getMaxY() {
-	    return source.getMaxCoordinate(1);
+		return source.getMaxY();
 	}
-
+	
 	@Override
 	public int getMinY(int x) {
-	    return source.getMinCoordinate(1, new PartialCoordinates(x, null));
+		return source.getMinY(x);
 	}
 
 	@Override
 	public int getMaxY(int x) {
-	    return source.getMaxCoordinate(1, new PartialCoordinates(x, null));
+		return source.getMaxY(x);
 	}
 
 	@Override
 	public Boolean nextStep() throws Exception {
-		return source.nextStep();
+		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public Boolean isChanged() {
-		return source.isChanged();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public long getStep() {
-		return source.getStep();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getName() {
-		return source.getName();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getSubfolderPath() {
-		return source.getSubfolderPath();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws Exception {
-		source.backUp(backupPath, backupName);
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -56,7 +56,7 @@ public class GrayscaleWithBackgroundMapper implements ColorMapper {
 								+ GrayscaleWithBackgroundMapper.class.getSimpleName());
 			} 
 		}
-		return new ColorMappedModel2DWithBackground<Number_Type>(grid, colorMap, (Number_Type) backgroundValue, backgroundColor);
+		return new ColorMappedObjectGrid2DWithBackground<Number_Type>(grid, colorMap, (Number_Type) backgroundValue, backgroundColor);
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class GrayscaleWithBackgroundMapper implements ColorMapper {
 		} else {
 			colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		}
-		return new ColorMappedLongModel2DWithBackground(grid, colorMap, (Long)backgroundValue, backgroundColor);
+		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, (Long)backgroundValue, backgroundColor);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class GrayscaleWithBackgroundMapper implements ColorMapper {
 		} else {
 			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
 		}
-		return new ColorMappedIntModel2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
+		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
 	}
 
 	@Override

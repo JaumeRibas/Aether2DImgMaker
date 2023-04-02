@@ -16,9 +16,6 @@
  */
 package cellularautomata.model4d;
 
-import cellularautomata.PartialCoordinates;
-import cellularautomata.model3d.IntModel3D;
-
 public class AsymmetricIntModelSection4D extends AsymmetricModelSection4D<SymmetricIntModel4D> implements IntModel4D {
 	
 	public AsymmetricIntModelSection4D(SymmetricIntModel4D source) {
@@ -28,21 +25,6 @@ public class AsymmetricIntModelSection4D extends AsymmetricModelSection4D<Symmet
 	@Override
 	public int getFromPosition(int w, int x, int y, int z) throws Exception {
 		return source.getFromAsymmetricPosition(w, x, y, z);
-	}
-	
-	@Override
-	public IntModel4D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel4D.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public IntModel3D crossSection(int axis, int coordinate) {
-		return IntModel4D.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public IntModel3D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return IntModel4D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

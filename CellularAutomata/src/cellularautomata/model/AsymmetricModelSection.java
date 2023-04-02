@@ -21,10 +21,22 @@ import java.util.function.Consumer;
 import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 
-public class AsymmetricModelSection<Source_Type extends SymmetricModel> extends ModelDecorator<Source_Type> {
+public class AsymmetricModelSection<Source_Type extends SymmetricModel> implements Model {
+	
+	protected Source_Type source;
 	
 	public AsymmetricModelSection(Source_Type source) {
-		super(source);
+		this.source = source;
+	}
+
+	@Override
+	public int getGridDimension() {
+		return source.getGridDimension();
+	}
+
+	@Override
+	public String getAxisLabel(int axis) {
+		return source.getAxisLabel(axis);
 	}
 
 	@Override
@@ -65,5 +77,30 @@ public class AsymmetricModelSection<Source_Type extends SymmetricModel> extends 
 	@Override
 	public String getSubfolderPath() {
 		return source.getSubfolderPath() + "/asymmetric_section";
+	}
+
+	@Override
+	public Boolean nextStep() throws Exception {
+		return source.nextStep();
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
+	}
+
+	@Override
+	public long getStep() {
+		return source.getStep();
+	}
+
+	@Override
+	public String getName() {
+		return source.getName();
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		source.backUp(backupPath, backupName);
 	}
 }

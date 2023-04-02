@@ -17,14 +17,14 @@
 package cellularautomata.model5d;
 
 import cellularautomata.model.Model;
-import cellularautomata.model.ModelDecorator;
 import cellularautomata.PartialCoordinates;
-import cellularautomata.model4d.Model4D;
 
-public class ModelAs5D<Source_Type extends Model> extends ModelDecorator<Source_Type> implements Model5D {
+public class ModelAs5D<Source_Type extends Model> implements Model5D {
 
+	protected Source_Type source;
+	
 	public ModelAs5D(Source_Type source) {
-		super(source);
+		this.source = source;
 		int dimension = source.getGridDimension();
 		if (dimension != 5) {
 			throw new IllegalArgumentException("Model's grid dimension (" + dimension + ") must be 5.");
@@ -855,20 +855,35 @@ public class ModelAs5D<Source_Type extends Model> extends ModelDecorator<Source_
 	public int getMaxZ(int v, int w, int x, int y) {
 	    return source.getMaxCoordinate(4, new PartialCoordinates(v, w, x, y, null));
 	}
-	
+
 	@Override
-	public Model5D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return Model5D.super.subsection(minCoordinates, maxCoordinates);
+	public Boolean nextStep() throws Exception {
+		return source.nextStep();
 	}
 	
 	@Override
-	public Model4D crossSection(int axis, int coordinate) {
-		return Model5D.super.crossSection(axis, coordinate);
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
-	
+
 	@Override
-	public Model4D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return Model5D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	public long getStep() {
+		return source.getStep();
+	}
+
+	@Override
+	public String getName() {
+		return source.getName();
+	}
+
+	@Override
+	public String getSubfolderPath() {
+		return source.getSubfolderPath();
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		source.backUp(backupPath, backupName);
 	}
 	
 }

@@ -18,15 +18,15 @@ package caimgmaker.colormap;
 
 import java.awt.Color;
 
-import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.IntModel2D;
 
-public class ColorMappedLongModel2DWithBackground extends ColorMappedLongModel2D {
+public class ColorMappedIntGrid2DWithBackground extends ColorMappedIntGrid2D {
 
-	protected long backgroundValue;
+	protected int backgroundValue;
 	protected Color backgroundColor;
 	
-	public ColorMappedLongModel2DWithBackground(LongModel2D grid, LongColorMap colorMap, 
-			long backgroundValue, Color backgroundColor) {
+	public ColorMappedIntGrid2DWithBackground(IntModel2D grid, IntColorMap colorMap, 
+			int backgroundValue, Color backgroundColor) {
 		super(grid, colorMap);
 		this.backgroundColor = backgroundColor;
 		this.backgroundValue = backgroundValue;
@@ -34,7 +34,7 @@ public class ColorMappedLongModel2DWithBackground extends ColorMappedLongModel2D
 
 	@Override
 	public Color getFromPosition(int x, int y) throws Exception {
-		long value = source.getFromPosition(x, y);
+		int value = source.getFromPosition(x, y);
 		if (value == backgroundValue) {
 			return backgroundColor;
 		}

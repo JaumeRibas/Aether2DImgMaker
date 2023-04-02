@@ -16,9 +16,6 @@
  */
 package cellularautomata.model3d;
 
-import cellularautomata.PartialCoordinates;
-import cellularautomata.model2d.IntModel2D;
-
 public class AsymmetricIntModelSection3D extends AsymmetricModelSection3D<SymmetricIntModel3D> implements IntModel3D {
 	
 	public AsymmetricIntModelSection3D(SymmetricIntModel3D source) {
@@ -28,21 +25,6 @@ public class AsymmetricIntModelSection3D extends AsymmetricModelSection3D<Symmet
 	@Override
 	public int getFromPosition(int x, int y, int z) throws Exception {
 		return source.getFromAsymmetricPosition(x, y, z);
-	}
-	
-	@Override
-	public IntModel3D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel3D.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public IntModel2D crossSection(int axis, int coordinate) {
-		return IntModel3D.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public IntModel2D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return IntModel3D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

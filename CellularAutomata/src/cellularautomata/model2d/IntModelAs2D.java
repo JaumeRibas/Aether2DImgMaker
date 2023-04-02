@@ -17,7 +17,6 @@
 package cellularautomata.model2d;
 
 import cellularautomata.Coordinates;
-import cellularautomata.PartialCoordinates;
 import cellularautomata.model.IntModel;
 
 public class IntModelAs2D extends ModelAs2D<IntModel> implements IntModel2D {
@@ -29,21 +28,6 @@ public class IntModelAs2D extends ModelAs2D<IntModel> implements IntModel2D {
 	@Override
 	public int getFromPosition(int x, int y) throws Exception {
 		return source.getFromPosition(new Coordinates(x, y));
-	}
-	
-	@Override
-	public IntModel2D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel2D.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public IntModel crossSection(int axis, int coordinate) {
-		return IntModel2D.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public IntModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return IntModel2D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

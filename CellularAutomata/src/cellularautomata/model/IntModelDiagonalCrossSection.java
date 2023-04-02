@@ -17,7 +17,6 @@
 package cellularautomata.model;
 
 import cellularautomata.Coordinates;
-import cellularautomata.PartialCoordinates;
 
 public class IntModelDiagonalCrossSection extends ModelDiagonalCrossSection<IntModel> implements IntModel {
 	
@@ -28,21 +27,6 @@ public class IntModelDiagonalCrossSection extends ModelDiagonalCrossSection<IntM
 	@Override
 	public int getFromPosition(Coordinates coordinates) throws Exception {
 		return source.getFromPosition(getSourceCoordinates(coordinates));
-	}
-	
-	@Override
-	public IntModel subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return IntModel.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public IntModel crossSection(int axis, int coordinate) {
-		return IntModel.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public IntModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return IntModel.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

@@ -16,9 +16,6 @@
  */
 package cellularautomata.model2d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 	
 	protected Source_Type source;
@@ -211,7 +208,7 @@ public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 	}
 
 	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+	public void backUp(String backupPath, String backupName) throws Exception {
 		source.backUp(backupPath, backupName);
 	}
 	

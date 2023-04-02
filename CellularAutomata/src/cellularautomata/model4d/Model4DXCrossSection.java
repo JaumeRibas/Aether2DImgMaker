@@ -16,9 +16,6 @@
  */
 package cellularautomata.model4d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import cellularautomata.model3d.Model3D;
 
 
@@ -200,7 +197,7 @@ public class Model4DXCrossSection<Source_Type extends Model4D> implements Model3
 	}
 
 	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+	public void backUp(String backupPath, String backupName) throws Exception {
 		source.backUp(backupPath, backupName);
 	}
 }

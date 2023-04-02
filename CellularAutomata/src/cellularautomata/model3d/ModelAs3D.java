@@ -18,13 +18,13 @@ package cellularautomata.model3d;
 
 import cellularautomata.PartialCoordinates;
 import cellularautomata.model.Model;
-import cellularautomata.model.ModelDecorator;
-import cellularautomata.model2d.Model2D;
 
-public class ModelAs3D<Source_Type extends Model> extends ModelDecorator<Source_Type> implements Model3D {
+public class ModelAs3D<Source_Type extends Model> implements Model3D {
 
+	protected Source_Type source;
+	
 	public ModelAs3D(Source_Type source) {
-		super(source);
+		this.source = source;
 		int dimension = source.getGridDimension();
 		if (dimension != 3) {
 			throw new IllegalArgumentException("Model's grid dimension (" + dimension + ") must be 3.");
@@ -165,20 +165,35 @@ public class ModelAs3D<Source_Type extends Model> extends ModelDecorator<Source_
 	public int getMaxZ(int x, int y) {
 		return source.getMaxCoordinate(2, new PartialCoordinates(x, y, null));
 	}
-	
+
 	@Override
-	public Model3D subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return Model3D.super.subsection(minCoordinates, maxCoordinates);
+	public Boolean nextStep() throws Exception {
+		return source.nextStep();
 	}
 	
 	@Override
-	public Model2D crossSection(int axis, int coordinate) {
-		return Model3D.super.crossSection(axis, coordinate);
+	public Boolean isChanged() {
+		return source.isChanged();
 	}
-	
+
 	@Override
-	public Model2D diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return Model3D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
+	public long getStep() {
+		return source.getStep();
+	}
+
+	@Override
+	public String getName() {
+		return source.getName();
+	}
+
+	@Override
+	public String getSubfolderPath() {
+		return source.getSubfolderPath();
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		source.backUp(backupPath, backupName);
 	}
 
 }

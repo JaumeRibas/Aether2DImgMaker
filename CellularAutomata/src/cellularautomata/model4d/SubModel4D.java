@@ -16,9 +16,6 @@
  */
 package cellularautomata.model4d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 
 	protected Source_Type source;
@@ -460,7 +457,7 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 	}
 
 	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+	public void backUp(String backupPath, String backupName) throws Exception {
 		source.backUp(backupPath, backupName);
 	}
 

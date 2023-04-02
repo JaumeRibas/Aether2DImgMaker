@@ -16,8 +16,6 @@
  */
 package cellularautomata.model;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.function.Consumer;
 
 import cellularautomata.Coordinates;
@@ -429,45 +427,35 @@ public interface Model {
 	 * @return {@link Boolean#TRUE} if the state changed, {@link Boolean#FALSE} if it didn't or {@link null} in case it is unknown
 	 * @throws Exception 
 	 */
-	default Boolean nextStep() throws Exception {
-		throw new UnsupportedOperationException("The method is not implemented by this class.");
-	}
+	Boolean nextStep() throws Exception;
 	
 	/**
 	 * Returns whether or not the state changed between the current and previous step of the model, or {@link null} if it is unknown or the current step is the first one. 
 	 *  
 	 * @return {@link Boolean#TRUE} if the state changed, {@link Boolean#FALSE} if it didn't or {@link null} in case it is unknown or it is the first step
 	 */
-	default Boolean isChanged() {
-		throw new UnsupportedOperationException("The method is not implemented by this class.");
-	}
+	Boolean isChanged();
 	
 	/**
 	 * Returns the current step
 	 * 
 	 * @return the current step
 	 */
-	default long getStep() {
-		throw new UnsupportedOperationException("The method is not implemented by this class.");
-	}
+	long getStep();
 	
 	/**
 	 * Return the model's name in a format that can be used in file names
 	 * 
 	 * @return the name
 	 */
-	default String getName() {
-		throw new UnsupportedOperationException("The method is not implemented by this class.");
-	}
+	String getName();
 	
 	/**
 	 * Return the model's name and configuration as a folder and subfolder(s) path.
 	 * 
 	 * @return the path
 	 */
-	default String getSubfolderPath() {
-		throw new UnsupportedOperationException("The method is not implemented by this class.");
-	}
+	String getSubfolderPath();
 	
 	/**
 	 * Backs up the state of the model to a file or folder for future restoration.<br/>
@@ -475,11 +463,8 @@ public interface Model {
 	 * 
 	 * @param backupPath the storage location where the backup will be stored
 	 * @param backupName the name of the backup
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	 * @throws Exception
 	 */
-	default void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException("The method is not implemented by this class.");
-	}
+	void backUp(String backupPath, String backupName) throws Exception;
 	
 }

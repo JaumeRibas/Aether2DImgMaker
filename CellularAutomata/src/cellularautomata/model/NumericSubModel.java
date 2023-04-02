@@ -26,20 +26,5 @@ public class NumericSubModel<Number_Type extends FieldElement<Number_Type> & Com
 	public NumericSubModel(NumericModel<Number_Type> grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
 		super(grid, minCoordinates, maxCoordinates);
 	}
-	
-	@Override
-	public NumericModel<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return NumericModel.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public NumericModel<Number_Type> crossSection(int axis, int coordinate) {
-		return NumericModel.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public NumericModel<Number_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return NumericModel.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
-	}
 
 }

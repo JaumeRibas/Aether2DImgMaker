@@ -19,8 +19,9 @@ package cellularautomata.model;
 import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 
-public class ModelCrossSection<Source_Type extends Model> extends ModelDecorator<Source_Type> {
-
+public class ModelCrossSection<Source_Type extends Model> implements Model {
+	
+	protected Source_Type source;
 	protected int crossSectionAxis;
 	protected int crossSectionCoordinate;
 	protected PartialCoordinates crossSectionCoordinates;
@@ -28,7 +29,6 @@ public class ModelCrossSection<Source_Type extends Model> extends ModelDecorator
 	protected int dimension;
 	
 	public ModelCrossSection(Source_Type source, int axis, int coordinate) {
-		super(source);
 		if (axis < 0) {
 			throw new IllegalArgumentException("The axis cannot be negative.");
 		}
@@ -124,10 +124,30 @@ public class ModelCrossSection<Source_Type extends Model> extends ModelDecorator
 		}
 		return changed;
 	}
+	
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
+	}
+
+	@Override
+	public long getStep() {
+		return source.getStep();
+	}
+
+	@Override
+	public String getName() {
+		return source.getName();
+	}
 
 	@Override
 	public String getSubfolderPath() {
 		return source.getSubfolderPath() + "/" + source.getAxisLabel(crossSectionAxis) + "=" + crossSectionCoordinate;
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		source.backUp(backupPath, backupName);
 	}
 
 }

@@ -54,7 +54,7 @@ public class HueWithBackgroundMapper implements ColorMapper {
 								+ HueWithBackgroundMapper.class.getSimpleName());
 			} 
 		}
-		return new ColorMappedModel2DWithBackground<Number_Type>(grid, colorMap, (Number_Type) backgroundValue, backgroundColor);
+		return new ColorMappedObjectGrid2DWithBackground<Number_Type>(grid, colorMap, (Number_Type) backgroundValue, backgroundColor);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class HueWithBackgroundMapper implements ColorMapper {
 		} else {
 			colorMap = new LongHueMap(minValue, maxValue);
 		}
-		return new ColorMappedLongModel2DWithBackground(grid, colorMap, (Long)backgroundValue, backgroundColor);
+		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, (Long)backgroundValue, backgroundColor);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class HueWithBackgroundMapper implements ColorMapper {
 		} else {
 			colorMap = new IntHueMap(minValue, maxValue);
 		}
-		return new ColorMappedIntModel2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
+		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
 	}
 	
 	private Color getEmptyColor() {

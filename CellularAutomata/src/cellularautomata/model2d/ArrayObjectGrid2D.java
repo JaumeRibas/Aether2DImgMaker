@@ -112,4 +112,34 @@ public class ArrayObjectGrid2D<Object_Type> extends ArrayGrid2D implements Objec
 		int j = y - localYMinima[i];
 		return values[i][j];
 	}
+
+	@Override
+	public Boolean nextStep() throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Boolean isChanged() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public long getStep() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getName() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getSubfolderPath() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		throw new UnsupportedOperationException();
+	}
 }

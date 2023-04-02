@@ -18,15 +18,16 @@ package cellularautomata.model;
 
 import cellularautomata.PartialCoordinates;
 
-public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_Type> {
+public class SubModel<Source_Type extends Model> implements Model {
 	
+	protected Source_Type source;	
 	protected int[] minCoordinates;
 	protected int[] maxCoordinates;
 	protected PartialCoordinates absoluteMinCoordinates;
 	protected PartialCoordinates absoluteMaxCoordinates;
 	
 	public SubModel(Source_Type source, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		super(source);
+		this.source = source;
 		int dimension = getGridDimension();
 		if (minCoordinates.getCount() != dimension) {
 			throw new IllegalArgumentException("The number of min coordinates must be equal to the grid dimension (" + dimension + ").");
@@ -81,6 +82,16 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 	}
 
 	@Override
+	public int getGridDimension() {
+		return source.getGridDimension();
+	}
+
+	@Override
+	public String getAxisLabel(int axis) {
+		return source.getAxisLabel(axis);
+	}
+
+	@Override
 	public int getMinCoordinate(int axis) {
 		return minCoordinates[axis];
 	}
@@ -107,6 +118,21 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 			throw new UnsupportedOperationException("The subsection is out of bounds.");
 		}
 		return changed;
+	}
+
+	@Override
+	public Boolean isChanged() {
+		return source.isChanged();
+	}
+
+	@Override
+	public long getStep() {
+		return source.getStep();
+	}
+
+	@Override
+	public String getName() {
+		return source.getName();
 	}
 
 	@Override
@@ -155,6 +181,11 @@ public class SubModel<Source_Type extends Model> extends ModelDecorator<Source_T
 			}
 		}
 		return anyNotNull ? source.getSubfolderPath() + strCoordinateBounds.toString() : source.getSubfolderPath();
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		source.backUp(backupPath, backupName);
 	}
 
 }

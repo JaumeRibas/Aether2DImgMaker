@@ -14,20 +14,30 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.model;
+package caimgmaker.colormap;
 
-import cellularautomata.Coordinates;
-import cellularautomata.PartialCoordinates;
+import java.awt.Color;
 
-public class IntSubModel extends SubModel<IntModel> implements IntModel {
+import cellularautomata.model2d.ObjectModel2D;
+
+public class ColorMappedObjectGrid2DWithBackground<Object_Type> extends ColorMappedObjectGrid2D<Object_Type> {
+
+	protected Object_Type backgroundValue;
+	protected Color backgroundColor;
 	
-	public IntSubModel(IntModel grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		super(grid, minCoordinates, maxCoordinates);
+	public ColorMappedObjectGrid2DWithBackground(ObjectModel2D<Object_Type> grid, ColorMap<Object_Type> colorMap, 
+			Object_Type backgroundValue, Color backgroundColor) {
+		super(grid, colorMap);
+		this.backgroundColor = backgroundColor;
+		this.backgroundValue = backgroundValue;
 	}
 
 	@Override
-	public int getFromPosition(Coordinates coordinates) throws Exception {
-		return source.getFromPosition(coordinates);
+	public Color getFromPosition(int x, int y) throws Exception {
+		Object_Type value = source.getFromPosition(x, y);
+		if (value.equals(backgroundValue)) {
+			return backgroundColor;
+		}
+		return colorMap.getColor(value);
 	}
-
 }

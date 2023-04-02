@@ -1137,7 +1137,7 @@ public class CodeGeneration {
 				+ "    }" + NL + "    path.append(source.get" + Utils.getUpperCaseAxisLabel(dimension, firstAxis) + "Label());" + NL + "    if (" + offsetName + " < 0) {" + NL 
 				+ "        path.append(" + offsetName + ");" + NL + "    } else if (" + offsetName + " > 0) {" + NL + "        path.append(\"+\").append(" + offsetName 
 				+ ");" + NL + "    }" + NL + "    return path.toString();" + NL + "}" + NL + NL + "@Override" + NL 
-				+ "public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {" + NL + "    source.backUp(backupPath, backupName);" 
+				+ "public void backUp(String backupPath, String backupName) throws Exception {" + NL + "    source.backUp(backupPath, backupName);" 
 				+ NL + "}" + NL);
 	}
 	

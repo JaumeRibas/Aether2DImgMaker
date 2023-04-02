@@ -73,7 +73,7 @@ public class GrayscaleMapper implements ColorMapper {
 		if (outOfLowerBoundColor != null) {
 			colorMap = new UnboundedColorMap<Number_Type>(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedModel2D<Number_Type>(grid, colorMap);
+		return new ColorMappedObjectGrid2D<Number_Type>(grid, colorMap);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class GrayscaleMapper implements ColorMapper {
 		if (outOfLowerBoundColor != null) {
 			colorMap = new LongUnboundedColorMap(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedLongModel2D(grid, colorMap);
+		return new ColorMappedLongGrid2D(grid, colorMap);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class GrayscaleMapper implements ColorMapper {
 		if (outOfLowerBoundColor != null) {
 			colorMap = new IntUnboundedColorMap(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
-		return new ColorMappedIntModel2D(grid, colorMap);
+		return new ColorMappedIntGrid2D(grid, colorMap);
 	}
 
 	@Override

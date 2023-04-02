@@ -18,29 +18,11 @@ package cellularautomata.model2d;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.PartialCoordinates;
-import cellularautomata.model.NumericModel;
-
 public class AsymmetricNumericModelSection2D<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> 
 	extends AsymmetricObjectModelSection2D<SymmetricNumericModel2D<Number_Type>, Number_Type> implements NumericModel2D<Number_Type> {
 	
 	public AsymmetricNumericModelSection2D(SymmetricNumericModel2D<Number_Type> source) {
 		super(source);
-	}
-	
-	@Override
-	public NumericModel2D<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return NumericModel2D.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public NumericModel/*1D*/<Number_Type> crossSection(int axis, int coordinate) {
-		return NumericModel2D.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public NumericModel/*1D*/<Number_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return NumericModel2D.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

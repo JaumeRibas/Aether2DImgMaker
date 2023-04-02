@@ -18,28 +18,11 @@ package cellularautomata.model;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.PartialCoordinates;
-
 public class NumericModelDiagonalCrossSection<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>>
 	extends ObjectModelDiagonalCrossSection<NumericModel<Number_Type>, Number_Type> implements NumericModel<Number_Type> {
 	
 	public NumericModelDiagonalCrossSection(NumericModel<Number_Type> grid, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
 		super(grid, firstAxis, secondAxis, positiveSlope, offset);
-	}
-	
-	@Override
-	public NumericModel<Number_Type> subsection(PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		return NumericModel.super.subsection(minCoordinates, maxCoordinates);
-	}
-	
-	@Override
-	public NumericModel<Number_Type> crossSection(int axis, int coordinate) {
-		return NumericModel.super.crossSection(axis, coordinate);
-	}
-	
-	@Override
-	public NumericModel<Number_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		return NumericModel.super.diagonalCrossSection(firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

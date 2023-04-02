@@ -16,9 +16,6 @@
  */
 package cellularautomata.model3d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import cellularautomata.model2d.Model2D;
 
 public class Model3DYZDiagonalCrossSection<Source_Type extends Model3D> implements Model2D {
@@ -176,7 +173,7 @@ public class Model3DYZDiagonalCrossSection<Source_Type extends Model3D> implemen
 	}
 
 	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+	public void backUp(String backupPath, String backupName) throws Exception {
 	    source.backUp(backupPath, backupName);
 	}
 

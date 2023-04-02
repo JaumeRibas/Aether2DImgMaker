@@ -16,9 +16,6 @@
  */
 package cellularautomata.model5d;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import cellularautomata.model4d.Model4D;
 
 public class Model5DVYDiagonalCrossSection<Source_Type extends Model5D> implements Model4D {
@@ -744,7 +741,7 @@ public class Model5DVYDiagonalCrossSection<Source_Type extends Model5D> implemen
 	}
 
 	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+	public void backUp(String backupPath, String backupName) throws Exception {
 	    source.backUp(backupPath, backupName);
 	}
 
