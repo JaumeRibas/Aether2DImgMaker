@@ -76,9 +76,9 @@ public interface Model {
 	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
-	 * @param  axis the index of the axis on which the max coordinate is requested.
+	 * @param axis the index of the axis on which the max coordinate is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
-	 * @return  the max coordinate
+	 * @return the max coordinate
 	 */
 	default int getMaxCoordinate(int axis, PartialCoordinates coordinates) {
 		return getMaxCoordinate(axis);
@@ -112,9 +112,9 @@ public interface Model {
 	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
-	 * @param  axis the index of the axis on which the min coordinate is requested.
+	 * @param axis the index of the axis on which the min coordinate is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
-	 * @return  the min coordinate
+	 * @return the min coordinate
 	 */
 	default int getMinCoordinate(int axis, PartialCoordinates coordinates) {
 		return getMinCoordinate(axis);

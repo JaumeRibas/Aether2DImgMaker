@@ -127,9 +127,9 @@ public interface MultidimensionalArray {
 	 * <p>Only the indexes on the axes smaller than the passed axis are used.</p>
 	 * <p>It is not defined to pass indexes outside the bounds of the array.</p>
 	 * 
-	 * @param  axis the axis on which the size is requested.
+	 * @param axis the axis on which the size is requested.
 	 * @param indexes a {@link Coordinates} object.
-	 * @return  the size
+	 * @return the size
 	 */
 	int getSize(int axis, Coordinates indexes);
 	

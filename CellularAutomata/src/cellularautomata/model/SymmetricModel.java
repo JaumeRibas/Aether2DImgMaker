@@ -60,9 +60,9 @@ public interface SymmetricModel extends Model {
 	 * getAsymmetricMaxCoordinate(0, new PartialCoordinates(null, 11, 3)) getAsymmetricMinCoordinate(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
-	 * @param  axis the index of the axis on which the upper bound is requested.
+	 * @param axis the index of the axis on which the upper bound is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
-	 * @return  the upper bound
+	 * @return the upper bound
 	 */
 	int getAsymmetricMaxCoordinate(int axis, PartialCoordinates coordinates);
 	
@@ -94,9 +94,9 @@ public interface SymmetricModel extends Model {
 	 * getAsymmetricMaxCoordinate(0, new PartialCoordinates(null, 11, 3)) getAsymmetricMinCoordinate(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
-	 * @param  axis the index of the axis on which the lower bound is requested.
+	 * @param axis the index of the axis on which the lower bound is requested.
 	 * @param coordinates a {@link PartialCoordinates} object.
-	 * @return  the lower bound
+	 * @return the lower bound
 	 */
 	int getAsymmetricMinCoordinate(int axis, PartialCoordinates coordinates);
 	
