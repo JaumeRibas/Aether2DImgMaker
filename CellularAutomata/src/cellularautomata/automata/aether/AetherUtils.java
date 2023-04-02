@@ -47,7 +47,7 @@ public class AetherUtils {
 	public static BigInt getMinAllowedSingleSourceValue(int dimension, BigInt maxAllowedValue) {
 		int maxAllowedValueComparedToZero = maxAllowedValue.compareTo(BigInt.ZERO);
 		if (maxAllowedValueComparedToZero < 0) {
-			throw new IllegalArgumentException("Max allowed cannot be less than zero.");
+			throw new IllegalArgumentException("Max allowed value cannot be less than zero.");
 		} else if (maxAllowedValueComparedToZero == 0) {
 			return BigInt.ZERO;
 		}
