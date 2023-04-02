@@ -799,13 +799,25 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
-		for (int i = 0, shareCount = neighborCount + 1; i < neighborCount; i++, shareCount--, isFirstNeighbor = false) {
-			long neighborValue = neighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		int shareCount = neighborCount + 1;
+		long neighborValue = neighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < neighborCount; j++) {
+				int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
+				newXSlices[nc[0]][nc[1]] += share * neighborShareMultipliers[sortedNeighborsIndexes[j]];
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount--;
+		for (int i = 1; i < neighborCount; i++) {
+			neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -816,6 +828,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 				}
 				previousNeighborValue = neighborValue;
 			}
+			shareCount--;
 		}
 		newXSlices[1][y] += value;
 		return toppled;
@@ -906,13 +919,25 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
 			int[][] neighborCoords, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
-		for (int i = 0, shareCount = neighborCount + 1; i < neighborCount; i++, shareCount--, isFirstNeighbor = false) {
-			long neighborValue = neighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		int shareCount = neighborCount + 1;
+		long neighborValue = neighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < neighborCount; j++) {
+				int[] nc = neighborCoords[sortedNeighborsIndexes[j]];
+				newXSlices[nc[0]][nc[1]] += share;
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount--;
+		for (int i = 1; i < neighborCount; i++) {
+			neighborValue = neighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -923,6 +948,7 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 				}
 				previousNeighborValue = neighborValue;
 			}
+			shareCount--;
 		}
 		newXSlices[1][y] += value;
 		return toppled;
@@ -1014,14 +1040,25 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
 		int shareCount = neighborCount + 1;
-		for (int i = 0; i < asymmetricNeighborCount; i++, isFirstNeighbor = false) {
-			long neighborValue = asymmetricNeighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		long neighborValue = asymmetricNeighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < asymmetricNeighborCount; j++) {
+				int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
+				newXSlices[nc[0]][nc[1]] += share;
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[0]];
+		for (int i = 1; i < asymmetricNeighborCount; i++) {
+			neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -1127,14 +1164,25 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
-		boolean isFirstNeighbor = true;
-		long previousNeighborValue = 0;
 		int shareCount = neighborCount + 1;
-		for (int i = 0; i < asymmetricNeighborCount; i++, isFirstNeighbor = false) {
-			long neighborValue = asymmetricNeighborValues[i];
-			if (neighborValue != previousNeighborValue || isFirstNeighbor) {
-				long toShare = value - neighborValue;
-				long share = toShare/shareCount;
+		long neighborValue = asymmetricNeighborValues[0];
+		long toShare = value - neighborValue;
+		long share = toShare/shareCount;
+		if (share != 0) {
+			toppled = true;
+			value = value - toShare + toShare%shareCount + share;
+			for (int j = 0; j < asymmetricNeighborCount; j++) {
+				int[] nc = asymmetricNeighborCoords[sortedNeighborsIndexes[j]];
+				newXSlices[nc[0]][nc[1]] += share * asymmetricNeighborShareMultipliers[sortedNeighborsIndexes[j]];
+			}
+		}
+		long previousNeighborValue = neighborValue;
+		shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[0]];
+		for (int i = 1; i < asymmetricNeighborCount; i++) {
+			neighborValue = asymmetricNeighborValues[i];
+			if (neighborValue != previousNeighborValue) {
+				toShare = value - neighborValue;
+				share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;

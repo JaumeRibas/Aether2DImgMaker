@@ -163,12 +163,11 @@ public class AsynchronousAether2D implements LongModel2D, Serializable {
 							}
 						}
 					}
-					boolean isFirst = true;
-					long previousNeighborValue = 0;
+					long previousNeighborValue = value;//all relevant neighbors' values are different from the current value
 					//Apply the algorithm
-					for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
+					for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--) {
 						neighborValue = neighbors.get(neighborIndex).getValue();
-						if (neighborValue != previousNeighborValue || isFirst) {
+						if (neighborValue != previousNeighborValue) {
 							//Add one for the current cell
 							int shareCount = neighbors.size() + 1;
 							long toShare = value - neighborValue;

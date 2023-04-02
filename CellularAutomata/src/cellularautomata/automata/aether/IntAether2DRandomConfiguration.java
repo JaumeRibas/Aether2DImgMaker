@@ -198,11 +198,10 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 					//sort
 					Utils.sortDescending(relevantNeighborCount, neighborValues, sortedNeighborsIndexes);
 					//divide
-					boolean isFirstNeighbor = true;
-					int previousNeighborValue = 0;
-					for (int neighborIndex = 0; neighborIndex < relevantNeighborCount; neighborIndex++,isFirstNeighbor = false) {
+					int previousNeighborValue = value;//all relevant neighbors' values are different from the current value
+					for (int neighborIndex = 0; neighborIndex < relevantNeighborCount; neighborIndex++) {
 						neighborValue = neighborValues[neighborIndex];
-						if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+						if (neighborValue != previousNeighborValue) {
 							int shareCount = relevantNeighborCount - neighborIndex + 1;
 							int toShare = value - neighborValue;
 							int share = toShare/shareCount;

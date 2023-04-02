@@ -221,11 +221,10 @@ public class Aether3DBoundedGrid implements LongModel3D, Serializable {
 						//sort
 						Utils.sortDescending(relevantNeighborCount, neighborValues, sortedNeighborsIndexes);
 						//divide
-						boolean isFirstNeighbor = true;
-						long previousNeighborValue = 0;
-						for (int i = 0; i < relevantNeighborCount; i++,isFirstNeighbor = false) {
+						long previousNeighborValue = value;//all relevant neighbors' values are different from the current value
+						for (int i = 0; i < relevantNeighborCount; i++) {
 							neighborValue = neighborValues[i];
-							if (neighborValue != previousNeighborValue || isFirstNeighbor) {
+							if (neighborValue != previousNeighborValue) {
 								int shareCount = relevantNeighborCount - i + 1;
 								long toShare = value - neighborValue;
 								long share = toShare/shareCount;
