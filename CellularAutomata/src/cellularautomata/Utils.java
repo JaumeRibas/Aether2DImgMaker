@@ -30,6 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.model.IntModel;
+import cellularautomata.model.ObjectModel;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.ObjectModel1D;
 import cellularautomata.model2d.IntModel2D;
@@ -1072,6 +1073,76 @@ public class Utils {
 		System.out.println(headFoot);
 	}
 	
+	public static <Object_Type> void printAsGrid2D(ObjectModel<Object_Type> grid) throws Exception {
+		int maxLength = 3;
+		int maxY = grid.getMaxCoordinate(1);
+		int minY = grid.getMinCoordinate(1);
+		int maxX = grid.getMaxCoordinate(0);
+		int minX = grid.getMinCoordinate(0);
+		for (int y = maxY; y >= minY; y--) {
+			PartialCoordinates coords = new PartialCoordinates(null, y);
+			int localMaxX = grid.getMaxCoordinate(0, coords);
+			for (int x = grid.getMinCoordinate(0, coords); x <= localMaxX; x++) {
+				int length = grid.getFromPosition(new Coordinates(x, y)).toString().length();
+				if (length > maxLength)
+					maxLength = length;
+			}
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxLength; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			PartialCoordinates coords = new PartialCoordinates(null, y);
+			int localMaxX = grid.getMaxCoordinate(0, coords);
+			int localMinX = grid.getMinCoordinate(0, coords);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
+			}
+			for (; x <= localMaxX; x++) {
+				String strVal = grid.getFromPosition(new Coordinates(x, y)) + "";
+				System.out.print("|" + padLeft(strVal, ' ', maxLength));
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|" + padLeft(" ", ' ', maxLength));
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static <Object_Type> void printAsGrid1D(ObjectModel<Object_Type> grid) throws Exception {
+		int maxLength = 3;
+		int maxX = grid.getMaxCoordinate(0);
+		int minX = grid.getMinCoordinate(0);
+		for (int x = minX; x <= maxX; x++) {
+			int length = grid.getFromPosition(new Coordinates(x)).toString().length();
+			if (length > maxLength)
+				maxLength = length;
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxLength; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		System.out.println(headFoot);
+		for (int x = minX; x <= maxX; x++) {
+			String strVal = grid.getFromPosition(new Coordinates(x)) + "";
+			System.out.print("|" + padLeft(strVal, ' ', maxLength));
+		}
+		System.out.println("|");
+		System.out.println(headFoot);
+	}
+	
 	public static String padLeft(String source, char c, int totalLength) {
 		int margin = totalLength - source.length();
 		for (int i = 0; i < margin; i++) {
@@ -1081,7 +1152,7 @@ public class Utils {
 	}
 	
 	/**
-	 * <p>Returns a plain text {@link String} representing the number, or {@link null} if no {@link String} shorter o equal to {@link maxLength} can be obtained</p>
+	 * <p>Returns a plain text {@link String} representing the number, or {@link null} if no {@link String} shorter or equal to {@link maxLength} can be obtained</p>
 	 * <p>The way this {@link String} is obtained is by initially representing the number in base 10. If the length is greater than {@link maxLength}, 
 	 * then base equal to {@link Character#MAX_RADIX} is tested, appending a suffix to denote the base.</p>
 	 * <p>The format of this suffix is that of a plain text representation of a subscript: "_{base}".</p>
