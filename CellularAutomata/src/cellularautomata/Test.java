@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 import org.apache.commons.math3.FieldElement;
+
 import cellularautomata.automata.aether.Aether2D;
 import cellularautomata.automata.aether.Aether4D;
 import cellularautomata.automata.aether.AetherSimple2D;
@@ -40,7 +41,9 @@ import cellularautomata.model.Model;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
 import cellularautomata.model.NumericModel;
+import cellularautomata.model.ObjectModel;
 import cellularautomata.model.HypercubicPyramidGrid;
+import cellularautomata.model1d.IntModel1D;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.NumericModel1D;
 import cellularautomata.model2d.ArrayIntGrid2D;
@@ -1827,6 +1830,78 @@ public class Test {
 		compareAllSteps(ae1, ae2);
 	}
 	
+	public static void compareAllSteps(IntModel1D ca1, IntModel1D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				//System.out.println("step " + ca1.getStep());
+				for (int x = ca2.getMinX(); x <= ca2.getMaxX(); x++) {
+//					System.out.println(x);
+					int a = ca1.getFromPosition(x);
+					int b = ca2.getFromPosition(x);
+					if (a != b) {
+						equal = false;
+						System.err.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
+								+ ca1.getClass().getSimpleName() + ":" + a 
+								+ " != " + ca2.getClass().getSimpleName() + ":" + b);
+						//return;
+					}
+				}
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compareAllSteps(IntModel1D ca1, LongModel1D ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+			boolean equal = true;
+			while (!finished1 && !finished2) {
+				//System.out.println("step " + ca1.getStep());
+				for (int x = ca1.getMinX(); x <= ca1.getMaxX(); x++) {
+//					System.out.println(x);
+					int a = ca1.getFromPosition(x);
+					long b = ca2.getFromPosition(x);
+					if (a != b) {
+						equal = false;
+						System.err.println("Different value at step " + ca1.getStep() + " (" + x + "): " 
+								+ ca1.getClass().getSimpleName() + ":" + a 
+								+ " != " + ca2.getClass().getSimpleName() + ":" + b);
+						return;
+					}
+				}
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
+				if (finished1 != finished2) {
+					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+			if (equal)
+				System.out.println("Equal!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void compareAllSteps(LongModel1D ca1, LongModel1D ca2) {
 		try {
 			System.out.println("Comparing...");
@@ -2953,7 +3028,6 @@ public class Test {
 										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(coordinates));
 							}
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -2994,7 +3068,90 @@ public class Test {
 										+ " != " + ca2.getClass().getSimpleName() + ":" + ca2.getFromPosition(coordinates));
 							}
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
+				if (finished1 != finished2) {
+//					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+//			if (equal)
+//				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static <Object_Type> void compareAllSteps(ObjectModel<Object_Type> ca1, ObjectModel<Object_Type> ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+//			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("Comparing step " + ca1.getStep());//debug
+				ca1.forEachPosition(new Consumer<Coordinates>() {
+					
+					@Override
+					public void accept(Coordinates coordinates) {
+						try {
+							Object_Type element1 = ca1.getFromPosition(coordinates);
+							Object_Type element2 = ca2.getFromPosition(coordinates);
+							if (!element1.equals(element2)) {
+//							equal = false;
+								System.err.println("Different element at step " + ca1.getStep() + " " + coordinates + ": " 
+										+ ca1.getClass().getSimpleName() + ":" + element1 
+										+ " != " + ca2.getClass().getSimpleName() + ":" + element2);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				Boolean changed;
+				finished1 = (changed = ca1.nextStep()) != null && !changed;
+				finished2 = (changed = ca2.nextStep()) != null && !changed;
+				if (finished1 != finished2) {
+//					equal = false;
+					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+				}
+			}
+//			if (equal)
+//				System.out.println("Equal");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void compareAllSteps(ObjectModel<BigInt> ca1, IntModel ca2) {
+		try {
+			System.out.println("Comparing...");
+			boolean finished1 = false;
+			boolean finished2 = false;
+//			boolean equal = true;
+			while (!finished1 && !finished2) {
+				System.out.println("Comparing step " + ca1.getStep());//debug
+				ca1.forEachPosition(new Consumer<Coordinates>() {
+					
+					@Override
+					public void accept(Coordinates coordinates) {
+						try {
+							BigInt value1 = ca1.getFromPosition(coordinates);
+							int value2 = ca2.getFromPosition(coordinates);
+							if (!value1.equals(BigInt.valueOf(value2))) {
+//							equal = false;
+								System.err.println("Different value at step " + ca1.getStep() + " " + coordinates + ": " 
+										+ ca1.getClass().getSimpleName() + ":" + value1 
+										+ " != " + ca2.getClass().getSimpleName() + ":" + value2);
+							}
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
@@ -3018,7 +3175,63 @@ public class Test {
 	public static void stepByStep(IntModel ca) {
 		int dimension = ca.getGridDimension();
 		if (dimension != 1 && dimension != 2) {
-			throw new IllegalArgumentException("Grid's dimension must be 1 o two.");
+			throw new IllegalArgumentException("Grid's dimension must be one or two.");
+		}
+		try {
+			Scanner s = new Scanner(System.in);
+			Boolean changed;
+			if (dimension == 1) {
+				do {
+					System.out.println("step " + ca.getStep());
+					Utils.printAsGrid1D(ca);
+					System.out.println("total value " + ca.getTotal());
+					s.nextLine();
+				} while ((changed = ca.nextStep()) == null || changed);
+			} else {
+				do {
+					System.out.println("step " + ca.getStep());
+					Utils.printAsGrid2D(ca);
+					System.out.println("total value " + ca.getTotal());
+					s.nextLine();
+				} while ((changed = ca.nextStep()) == null || changed);
+			}
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static <Object_Type> void stepByStep(ObjectModel<Object_Type> ca) {
+		int dimension = ca.getGridDimension();
+		if (dimension != 1 && dimension != 2) {
+			throw new IllegalArgumentException("Grid's dimension must be one or two.");
+		}
+		try {
+			Scanner s = new Scanner(System.in);
+			Boolean changed;
+			if (dimension == 1) {
+				do {
+					System.out.println("step " + ca.getStep());
+					Utils.printAsGrid1D(ca);
+					s.nextLine();
+				} while ((changed = ca.nextStep()) == null || changed);
+			} else {
+				do {
+					System.out.println("step " + ca.getStep());
+					Utils.printAsGrid2D(ca);
+					s.nextLine();
+				} while ((changed = ca.nextStep()) == null || changed);
+			}
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void stepByStep(NumericModel<Number_Type> ca) {
+		int dimension = ca.getGridDimension();
+		if (dimension != 1 && dimension != 2) {
+			throw new IllegalArgumentException("Grid's dimension must be one or two.");
 		}
 		try {
 			Scanner s = new Scanner(System.in);
