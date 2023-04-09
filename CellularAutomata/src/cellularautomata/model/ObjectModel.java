@@ -94,6 +94,12 @@ public interface ObjectModel<Object_Type> extends Model, Iterable<Object_Type> {
 		return new ObjectModelCrossSection<ObjectModel<Object_Type>, Object_Type>(this, axis, coordinate);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	default ObjectModel<Object_Type> crossSection(PartialCoordinates coordinates) {
+		return (ObjectModel<Object_Type>) Model.super.crossSection(coordinates);
+	}
+	
 	@Override
 	default ObjectModel<Object_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
 		return new ObjectModelDiagonalCrossSection<ObjectModel<Object_Type>, Object_Type>(this, firstAxis, secondAxis, positiveSlope, offset);

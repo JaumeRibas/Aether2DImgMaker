@@ -151,6 +151,11 @@ public interface LongModel extends Model, Iterable<Long> {
 	}
 	
 	@Override
+	default LongModel crossSection(PartialCoordinates coordinates) {
+		return (LongModel) Model.super.crossSection(coordinates);
+	}
+	
+	@Override
 	default LongModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
 		return new LongModelDiagonalCrossSection(this, firstAxis, secondAxis, positiveSlope, offset);
 	}

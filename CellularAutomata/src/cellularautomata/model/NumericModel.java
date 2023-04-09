@@ -68,6 +68,11 @@ public interface NumericModel<Number_Type extends FieldElement<Number_Type> & Co
 	}
 	
 	@Override
+	default NumericModel<Number_Type> crossSection(PartialCoordinates coordinates) {
+		return (NumericModel<Number_Type>) ObjectModel.super.crossSection(coordinates);
+	}
+	
+	@Override
 	default NumericModel<Number_Type> diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
 		return new NumericModelDiagonalCrossSection<Number_Type>(this, firstAxis, secondAxis, positiveSlope, offset);
 	}

@@ -150,6 +150,11 @@ public interface IntModel extends Model, Iterable<Integer> {
 	}
 	
 	@Override
+	default IntModel crossSection(PartialCoordinates coordinates) {
+		return (IntModel) Model.super.crossSection(coordinates);
+	}
+	
+	@Override
 	default IntModel diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
 		return new IntModelDiagonalCrossSection(this, firstAxis, secondAxis, positiveSlope, offset);
 	}

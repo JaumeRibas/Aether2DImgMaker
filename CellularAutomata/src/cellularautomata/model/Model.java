@@ -416,6 +416,17 @@ public interface Model {
 		return new ModelCrossSection<Model>(this, axis, coordinate);
 	}
 	
+	default Model crossSection(PartialCoordinates coordinates) {
+		Model result = this;
+		for (int axis = coordinates.getCount() - 1; axis != -1; axis--) {
+			Integer coordinate = coordinates.get(axis);
+			if (coordinate != null) {
+				result = result.crossSection(axis, coordinate);
+			}
+		}
+		return result;
+	}
+	
 	default Model diagonalCrossSection(int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
 		return new ModelDiagonalCrossSection<Model>(this, firstAxis, secondAxis, positiveSlope, offset);
 	}
