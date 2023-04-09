@@ -219,13 +219,7 @@ public class BigIntAetherSimple2D implements SymmetricNumericModel2D<BigInt>, Is
 	public BigInt getFromPosition(int x, int y) {	
 		int i = originIndex + x;
 		int j = originIndex + y;
-		if (i < 0 || i > grid.length - 1 
-				|| j < 0 || j > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be zero
-			return BigInt.ZERO;
-		} else {
-			return grid[i][j];
-		}
+		return grid[i][j];
 	}
 	
 	@Override

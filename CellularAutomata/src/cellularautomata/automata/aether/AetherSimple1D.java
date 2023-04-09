@@ -182,13 +182,8 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	@Override
 	public long getFromPosition(int x) {	
 		int index = originIndex + x;
-		if (index < 0 || index > grid.length - 1) {
-			//If the coordinates are outside the array, the value will be 0
-			return 0;
-		} else {
-			//Note that the indexes whose value hasn't been defined have value zero by default
-			return grid[index];
-		}
+		//Note that the indexes whose value hasn't been defined have value zero by default
+		return grid[index];
 	}
 	
 	@Override

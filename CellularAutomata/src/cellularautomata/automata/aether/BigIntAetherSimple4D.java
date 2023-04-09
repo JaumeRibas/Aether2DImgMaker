@@ -273,15 +273,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 		int j = originIndex + x;
 		int k = originIndex + y;
 		int l = originIndex + z;
-		if (i < 0 || i > grid.length - 1 
-				|| j < 0 || j > grid.length - 1 
-				|| k < 0 || k > grid.length - 1
-				|| l < 0 || l > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be zero
-			return BigInt.ZERO;
-		} else {
-			return grid[i][j][k][l];
-		}
+		return grid[i][j][k][l];
 	}
 	
 	@Override

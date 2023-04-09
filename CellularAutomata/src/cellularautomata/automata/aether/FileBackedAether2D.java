@@ -1118,15 +1118,11 @@ public class FileBackedAether2D extends FileBackedModel implements SymmetricLong
 	public long getFromPosition(int x, int y) throws IOException {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
-		long value = 0;
+		long value;
 		if (y > x) {
-			if (y <= maxX) {
-				value = getFromAsymmetricPosition(y, x);
-			}
+			value = getFromAsymmetricPosition(y, x);
 		} else {
-			if (x <= maxX) {
-				value = getFromAsymmetricPosition(x, y);
-			}
+			value = getFromAsymmetricPosition(x, y);
 		}
 		return value;
 	}

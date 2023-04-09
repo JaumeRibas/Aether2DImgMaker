@@ -1001,17 +1001,11 @@ public class Aether2DInfinity implements SymmetricNumericModel2D<BigFraction>, I
 	public BigFraction getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
-		BigFraction value = BigFraction.ZERO;
+		BigFraction value;
 		if (y > x) {
-			if (y < grid.length 
-					&& x < grid[y].length) {
-				value = grid[y][x];
-			}
+			value = grid[y][x];
 		} else {
-			if (x < grid.length 
-					&& y < grid[x].length) {
-				value = grid[x][y];
-			}
+			value = grid[x][y];
 		}
 		return value;
 	}

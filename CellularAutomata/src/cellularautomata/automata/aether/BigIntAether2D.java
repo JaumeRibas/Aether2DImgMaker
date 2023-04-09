@@ -1281,15 +1281,9 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 		if (y < 0) y = -y;
 		BigInt value = BigInt.ZERO;
 		if (y > x) {
-			if (y < grid.length 
-					&& x < grid[y].length) {
-				value = grid[y][x];
-			}
+			value = grid[y][x];
 		} else {
-			if (x < grid.length 
-					&& y < grid[x].length) {
-				value = grid[x][y];
-			}
+			value = grid[x][y];
 		}
 		return value;
 	}

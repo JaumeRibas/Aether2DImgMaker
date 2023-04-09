@@ -280,17 +280,8 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 		int k = originIndex + x;
 		int l = originIndex + y;
 		int m = originIndex + z;
-		if (i < 0 || i > grid.length - 1 
-				|| j < 0 || j > grid.length - 1 
-				|| k < 0 || k > grid.length - 1
-				|| l < 0 || l > grid.length - 1
-				|| m < 0 || m > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be the zero
-			return 0;
-		} else {
-			//Note that the indexes whose value hasn't been defined have value zero by default
-			return grid[i][j][k][l][m];
-		}
+		//Note that the indexes whose value hasn't been defined have value zero by default
+		return grid[i][j][k][l][m];
 	}
 	
 	@Override

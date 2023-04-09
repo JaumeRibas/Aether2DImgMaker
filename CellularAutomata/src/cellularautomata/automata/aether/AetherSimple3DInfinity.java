@@ -228,15 +228,8 @@ public class AetherSimple3DInfinity implements SymmetricNumericModel3D<BigFracti
 		int i = originIndex + x;
 		int j = originIndex + y;
 		int k = originIndex + z;
-		if (i < 0 || i > grid.length - 1 
-				|| j < 0 || j > grid.length - 1
-				|| k < 0 || k > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be zero
-			return BigFraction.ZERO;
-		} else {
-			//Note that the indexes whose value hasn't been defined have value zero by default
-			return grid[i][j][k];
-		}
+		//Note that the indexes whose value hasn't been defined have value zero by default
+		return grid[i][j][k];
 	}
 
 	@Override

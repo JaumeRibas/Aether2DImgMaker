@@ -291,11 +291,7 @@ public class FileBackedAether1D extends FileBackedModel implements SymmetricLong
 	@Override
 	public long getFromPosition(int x) throws IOException {	
 		if (x < 0) x = -x;
-		if (x <= maxX) {
-			return getFromAsymmetricPosition(x);
-		} else {
-			return 0;
-		}
+		return getFromAsymmetricPosition(x);
 	}
 
 	@Override

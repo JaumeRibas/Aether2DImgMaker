@@ -2743,37 +2743,26 @@ public class Aether3DCubicGrid implements SymmetricLongModel3D, Serializable {
 		if (i >= j) {
 			if (j >= k) {
 				//i >= j >= k
-				if (i < grid.length) {
-					return grid[i][j][k];
-				}
+				return grid[i][j][k];
 			} else if (i >= k) { 
 				//i >= k > j
-				if (i < grid.length) {
-					return grid[i][k][j];
-				}
+				return grid[i][k][j];
 			} else {
 				//k > i >= j
-				if (k < grid.length) {
-					return grid[k][i][j];
-				}
+				return grid[k][i][j];
 			}
 		} else if (j >= k) {
-			if (j < grid.length) {
-				if (i >= k) {
-					//j > i >= k
-					return grid[j][i][k];
-				} else {
-					//j >= k > i
-					return grid[j][k][i];
-				}
+			if (i >= k) {
+				//j > i >= k
+				return grid[j][i][k];
+			} else {
+				//j >= k > i
+				return grid[j][k][i];
 			}
 		} else {
 			// k > j > i
-			if (k < grid.length) {
-				return grid[k][j][i];
-			}
+			return grid[k][j][i];
 		}
-		throw new IllegalArgumentException("Coordinates out of bounds.");
 	}
 	
 	@Override

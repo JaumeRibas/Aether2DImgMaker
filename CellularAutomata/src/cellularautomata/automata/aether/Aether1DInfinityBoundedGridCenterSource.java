@@ -238,11 +238,7 @@ public class Aether1DInfinityBoundedGridCenterSource implements SymmetricNumeric
 	public BigFraction getFromPosition(int x) {	
 		int i = x - singleSourceCoord;
 		if (i < 0) i = -i;
-		if (i < grid.length) {
-			return grid[i];
-		} else {
-			throw new IllegalArgumentException("Coordinate out of bounds.");
-		}
+		return grid[i];
 	}
 
 	@Override

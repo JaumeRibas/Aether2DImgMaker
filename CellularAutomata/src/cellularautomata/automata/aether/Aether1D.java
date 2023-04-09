@@ -285,11 +285,7 @@ public class Aether1D implements SymmetricLongModel1D, IsotropicModel1DA, Serial
 	@Override
 	public long getFromPosition(int x) {	
 		if (x < 0) x = -x;
-		if (x < grid.length) {
-			return grid[x];
-		} else {
-			return 0;
-		}
+		return grid[x];
 	}
 
 	@Override

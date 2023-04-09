@@ -167,12 +167,7 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 	@Override
 	public BigFraction getFromPosition(int x) {	
 		int index = originIndex + x;
-		if (index < 0 || index > grid.length - 1) {
-			//If the coordinates are outside the array, the value will be 0
-			return BigFraction.ZERO;
-		} else {
-			return grid[index];
-		}
+		return grid[index];
 	}
 	
 	@Override

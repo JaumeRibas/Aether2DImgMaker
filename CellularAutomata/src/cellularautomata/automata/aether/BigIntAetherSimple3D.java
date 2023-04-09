@@ -243,14 +243,7 @@ public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, Is
 		int i = originIndex + x;
 		int j = originIndex + y;
 		int k = originIndex + z;
-		if (i < 0 || i > grid.length - 1 
-				|| j < 0 || j > grid.length - 1
-				|| k < 0 || k > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be zero
-			return BigInt.ZERO;
-		} else {
-			return grid[i][j][k];
-		}
+		return grid[i][j][k];
 	}
 	
 	@Override

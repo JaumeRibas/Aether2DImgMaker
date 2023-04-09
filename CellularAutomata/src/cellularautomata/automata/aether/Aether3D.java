@@ -2005,37 +2005,26 @@ public class Aether3D implements SymmetricLongModel3D, IsotropicCubicModelA, Ser
 		if (x >= y) {
 			if (y >= z) {
 				//x >= y >= z
-				if (x < grid.length) {
-					return grid[x][y][z];
-				}
+				return grid[x][y][z];
 			} else if (x >= z) { 
 				//x >= z > y
-				if (x < grid.length) {
-					return grid[x][z][y];
-				}
+				return grid[x][z][y];
 			} else {
 				//z > x >= y
-				if (z < grid.length) {
-					return grid[z][x][y];
-				}
+				return grid[z][x][y];
 			}
 		} else if (y >= z) {
-			if (y < grid.length) {
-				if (x >= z) {
-					//y > x >= z
-					return grid[y][x][z];
-				} else {
-					//y >= z > x
-					return grid[y][z][x];
-				}
+			if (x >= z) {
+				//y > x >= z
+				return grid[y][x][z];
+			} else {
+				//y >= z > x
+				return grid[y][z][x];
 			}
 		} else {
 			// z > y > x
-			if (z < grid.length) {
-				return grid[z][y][x];
-			}
+			return grid[z][y][x];
 		}
-		return 0;
 	}
 	
 	@Override

@@ -1203,17 +1203,11 @@ public class Aether2D implements SymmetricLongModel2D, IsotropicSquareModelA, Se
 	public long getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
-		long value = 0;
+		long value;
 		if (y > x) {
-			if (y < grid.length 
-					&& x < grid[y].length) {
-				value = grid[y][x];
-			}
+			value = grid[y][x];
 		} else {
-			if (x < grid.length 
-					&& y < grid[x].length) {
-				value = grid[x][y];
-			}
+			value = grid[x][y];
 		}
 		return value;
 	}

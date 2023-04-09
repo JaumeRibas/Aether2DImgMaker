@@ -1205,15 +1205,9 @@ public class IntAether2D implements SymmetricIntModel2D, IsotropicSquareModelA, 
 		if (y < 0) y = -y;
 		int value = 0;
 		if (y > x) {
-			if (y < grid.length 
-					&& x < grid[y].length) {
-				value = grid[y][x];
-			}
+			value = grid[y][x];
 		} else {
-			if (x < grid.length 
-					&& y < grid[x].length) {
-				value = grid[x][y];
-			}
+			value = grid[x][y];
 		}
 		return value;
 	}

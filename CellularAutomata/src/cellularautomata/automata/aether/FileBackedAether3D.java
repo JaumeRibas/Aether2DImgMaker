@@ -1938,37 +1938,26 @@ public class FileBackedAether3D extends FileBackedModel implements SymmetricLong
 		if (x >= y) {
 			if (y >= z) {
 				//x >= y >= z
-				if (x <= maxX) {
-					return getFromAsymmetricPosition(x, y, z);
-				}
+				return getFromAsymmetricPosition(x, y, z);
 			} else if (x >= z) { 
 				//x >= z > y
-				if (x <= maxX) {
-					return getFromAsymmetricPosition(x, z, y);
-				}
+				return getFromAsymmetricPosition(x, z, y);
 			} else {
 				//z > x >= y
-				if (z <= maxX) {
-					return getFromAsymmetricPosition(z, x, y);
-				}
+				return getFromAsymmetricPosition(z, x, y);
 			}
 		} else if (y >= z) {
-			if (y <= maxX) {
-				if (x >= z) {
-					//y > x >= z
-					return getFromAsymmetricPosition(y, x, z);
-				} else {
-					//y >= z > x
-					return getFromAsymmetricPosition(y, z, x);
-				}
+			if (x >= z) {
+				//y > x >= z
+				return getFromAsymmetricPosition(y, x, z);
+			} else {
+				//y >= z > x
+				return getFromAsymmetricPosition(y, z, x);
 			}
 		} else {
 			// z > y > x
-			if (z <= maxX) {
-				return getFromAsymmetricPosition(z, y, x);
-			}
+			return getFromAsymmetricPosition(z, y, x);
 		}
-		return 0;
 	}
 	
 	@Override

@@ -224,11 +224,7 @@ public class Aether1DInfinity implements SymmetricNumericModel1D<BigFraction>, I
 	@Override
 	public BigFraction getFromPosition(int x) {	
 		if (x < 0) x = -x;
-		if (x < grid.length) {
-			return grid[x];
-		} else {
-			return BigFraction.ZERO;
-		}
+		return grid[x];
 	}
 
 	@Override
