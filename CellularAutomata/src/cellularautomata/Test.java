@@ -44,15 +44,23 @@ import cellularautomata.model.NumericModel;
 import cellularautomata.model.ObjectModel;
 import cellularautomata.model.HypercubicPyramidGrid;
 import cellularautomata.model1d.IntModel1D;
+import cellularautomata.model1d.IntModelAs1D;
 import cellularautomata.model1d.LongModel1D;
+import cellularautomata.model1d.LongModelAs1D;
 import cellularautomata.model1d.NumericModel1D;
+import cellularautomata.model1d.NumericModelAs1D;
+import cellularautomata.model1d.ObjectModelAs1D;
 import cellularautomata.model2d.ArrayIntGrid2D;
 import cellularautomata.model2d.ArrayLongGrid2D;
 import cellularautomata.model2d.ArrayNumberGrid2D;
 import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.IntModel2D;
+import cellularautomata.model2d.IntModelAs2D;
 import cellularautomata.model2d.LongModel2D;
+import cellularautomata.model2d.LongModelAs2D;
 import cellularautomata.model2d.NumericModel2D;
+import cellularautomata.model2d.NumericModelAs2D;
+import cellularautomata.model2d.ObjectModelAs2D;
 import cellularautomata.model3d.Model3D;
 import cellularautomata.model3d.ModelAs3D;
 import cellularautomata.model3d.IntModel3D;
@@ -3177,27 +3185,22 @@ public class Test {
 		if (dimension != 1 && dimension != 2) {
 			throw new IllegalArgumentException("Grid's dimension must be one or two.");
 		}
-		try {
-			Scanner s = new Scanner(System.in);
-			Boolean changed;
-			if (dimension == 1) {
-				do {
-					System.out.println("step " + ca.getStep());
-					Utils.printAsGrid1D(ca);
-					System.out.println("total value " + ca.getTotal());
-					s.nextLine();
-				} while ((changed = ca.nextStep()) == null || changed);
-			} else {
-				do {
-					System.out.println("step " + ca.getStep());
-					Utils.printAsGrid2D(ca);
-					System.out.println("total value " + ca.getTotal());
-					s.nextLine();
-				} while ((changed = ca.nextStep()) == null || changed);
-			}
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (dimension == 1) {
+			stepByStep(new IntModelAs1D(ca));
+		} else {
+			stepByStep(new IntModelAs2D(ca));
+		}
+	}
+	
+	public static void stepByStep(LongModel ca) {
+		int dimension = ca.getGridDimension();
+		if (dimension != 1 && dimension != 2) {
+			throw new IllegalArgumentException("Grid's dimension must be one or two.");
+		}
+		if (dimension == 1) {
+			stepByStep(new LongModelAs1D(ca));
+		} else {
+			stepByStep(new LongModelAs2D(ca));
 		}
 	}
 	
@@ -3206,25 +3209,10 @@ public class Test {
 		if (dimension != 1 && dimension != 2) {
 			throw new IllegalArgumentException("Grid's dimension must be one or two.");
 		}
-		try {
-			Scanner s = new Scanner(System.in);
-			Boolean changed;
-			if (dimension == 1) {
-				do {
-					System.out.println("step " + ca.getStep());
-					Utils.printAsGrid1D(ca);
-					s.nextLine();
-				} while ((changed = ca.nextStep()) == null || changed);
-			} else {
-				do {
-					System.out.println("step " + ca.getStep());
-					Utils.printAsGrid2D(ca);
-					s.nextLine();
-				} while ((changed = ca.nextStep()) == null || changed);
-			}
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (dimension == 1) {
+			stepByStep(new ObjectModelAs1D<Object_Type>(ca));
+		} else {
+			stepByStep(new ObjectModelAs2D<Object_Type>(ca));
 		}
 	}
 	
@@ -3233,27 +3221,10 @@ public class Test {
 		if (dimension != 1 && dimension != 2) {
 			throw new IllegalArgumentException("Grid's dimension must be one or two.");
 		}
-		try {
-			Scanner s = new Scanner(System.in);
-			Boolean changed;
-			if (dimension == 1) {
-				do {
-					System.out.println("step " + ca.getStep());
-					Utils.printAsGrid1D(ca);
-					System.out.println("total value " + ca.getTotal());
-					s.nextLine();
-				} while ((changed = ca.nextStep()) == null || changed);
-			} else {
-				do {
-					System.out.println("step " + ca.getStep());
-					Utils.printAsGrid2D(ca);
-					System.out.println("total value " + ca.getTotal());
-					s.nextLine();
-				} while ((changed = ca.nextStep()) == null || changed);
-			}
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (dimension == 1) {
+			stepByStep(new NumericModelAs1D<Number_Type>(ca));
+		} else {
+			stepByStep(new NumericModelAs2D<Number_Type>(ca));
 		}
 	}
 
