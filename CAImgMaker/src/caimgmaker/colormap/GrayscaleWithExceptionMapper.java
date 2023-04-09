@@ -26,14 +26,16 @@ import cellularautomata.model2d.NumericModel2D;
 import cellularautomata.model2d.ObjectModel2D;
 import cellularautomata.numbers.BigInt;
 
-public class HueWithBackgroundMapper implements ColorMapper {
+public class GrayscaleWithExceptionMapper implements ColorMapper {
 
-	private Object backgroundValue;
-	private Color backgroundColor;
+	private int minBrightness;
+	private Object exceptionValue;
+	private Color exceptionColor;
 	
-	public HueWithBackgroundMapper(Object backgroundValue, Color backgroundColor) {
-		this.backgroundValue = backgroundValue;
-		this.backgroundColor = backgroundColor;
+	public GrayscaleWithExceptionMapper(int minBrightness, Object exceptionValue, Color exceptionColor) {
+		this.minBrightness = minBrightness;
+		this.exceptionValue = exceptionValue;
+		this.exceptionColor = exceptionColor;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -41,54 +43,47 @@ public class HueWithBackgroundMapper implements ColorMapper {
 	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> ObjectModel2D<Color> getMappedModel(NumericModel2D<Number_Type> grid, Number_Type minValue, Number_Type maxValue) {
 		ColorMap<Number_Type> colorMap = null;
 		if (minValue.equals(maxValue)) {
-			colorMap = new SolidColorMap<Number_Type>(getEmptyColor());
+			colorMap = new SolidColorMap<Number_Type>(new Color(0, 0, minBrightness/255));
 		} else {
 			if (minValue instanceof BigInt) {
-				colorMap = (ColorMap<Number_Type>) new BigIntHueMap((BigInt)minValue, (BigInt)maxValue);
+				colorMap = (ColorMap<Number_Type>) new BigIntGrayscaleMap((BigInt)minValue, (BigInt)maxValue, minBrightness);
 			}  else if (minValue instanceof BigFraction) {
-				colorMap = (ColorMap<Number_Type>) new BigFractionHueMap((BigFraction)minValue, (BigFraction)maxValue);
+				colorMap = (ColorMap<Number_Type>) new BigFractionGrayscaleMap((BigFraction)minValue, (BigFraction)maxValue, minBrightness);
 			} else {
 				throw new UnsupportedOperationException(
 						"Missing " + ColorMap.class.getSimpleName() + "<"
 								+ minValue.getClass().getSimpleName() + "> implementation for " 
-								+ HueWithBackgroundMapper.class.getSimpleName());
+								+ GrayscaleWithExceptionMapper.class.getSimpleName());
 			} 
 		}
-		return new ColorMappedObjectGrid2DWithBackground<Number_Type>(grid, colorMap, (Number_Type) backgroundValue, backgroundColor);
+		return new ColorMappedObjectGrid2DWithException<Number_Type>(grid, colorMap, (Number_Type) exceptionValue, exceptionColor);
 	}
-
+	
 	@Override
 	public ObjectModel2D<Color> getMappedModel(LongModel2D grid, long minValue, long maxValue) {
 		LongColorMap colorMap = null;
 		if (minValue == maxValue) {
-			colorMap = new SolidColorMap<Object>(getEmptyColor());
+			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
 		} else {
-			colorMap = new LongHueMap(minValue, maxValue);
+			colorMap = new LongGrayscaleMap(minValue, maxValue, minBrightness);
 		}
-		return new ColorMappedLongGrid2DWithBackground(grid, colorMap, (Long)backgroundValue, backgroundColor);
+		return new ColorMappedLongGrid2DWithException(grid, colorMap, (Long)exceptionValue, exceptionColor);
 	}
 
 	@Override
 	public ObjectModel2D<Color> getMappedModel(IntModel2D grid, int minValue, int maxValue) {
 		IntColorMap colorMap = null;
 		if (minValue == maxValue) {
-			colorMap = new SolidColorMap<Object>(getEmptyColor());
+			colorMap = new SolidColorMap<Object>(new Color(0, 0, minBrightness/255));
 		} else {
-			colorMap = new IntHueMap(minValue, maxValue);
+			colorMap = new IntGrayscaleMap(minValue, maxValue, minBrightness);
 		}
-		return new ColorMappedIntGrid2DWithBackground(grid, colorMap, (Integer)backgroundValue, backgroundColor);
-	}
-	
-	private Color getEmptyColor() {
-		float hue = (float)IntHueMap.HUE_MARGIN/255;
-		hue = (hue + (float)1/6)%1;
-		hue = 1 - hue;
-		return new Color(Color.HSBtoRGB(hue, 1, 1));
+		return new ColorMappedIntGrid2DWithException(grid, colorMap, (Integer)exceptionValue, exceptionColor);
 	}
 
 	@Override
 	public String getColormapName() {
-		return "Hue colormap with exception (" + backgroundValue + "->" + backgroundColor + ")";
+		return "Grayscale with exception (" + exceptionValue + "->" + exceptionColor + ")";
 	}
 
 }

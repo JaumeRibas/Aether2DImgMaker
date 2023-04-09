@@ -20,23 +20,23 @@ import java.awt.Color;
 
 import cellularautomata.model2d.IntModel2D;
 
-public class ColorMappedIntGrid2DWithBackground extends ColorMappedIntGrid2D {
+public class ColorMappedIntGrid2DWithException extends ColorMappedIntGrid2D {
 
-	protected int backgroundValue;
-	protected Color backgroundColor;
+	protected int exceptionValue;
+	protected Color exceptionColor;
 	
-	public ColorMappedIntGrid2DWithBackground(IntModel2D grid, IntColorMap colorMap, 
-			int backgroundValue, Color backgroundColor) {
+	public ColorMappedIntGrid2DWithException(IntModel2D grid, IntColorMap colorMap, 
+			int exceptionValue, Color exceptionColor) {
 		super(grid, colorMap);
-		this.backgroundColor = backgroundColor;
-		this.backgroundValue = backgroundValue;
+		this.exceptionColor = exceptionColor;
+		this.exceptionValue = exceptionValue;
 	}
 
 	@Override
 	public Color getFromPosition(int x, int y) throws Exception {
 		int value = source.getFromPosition(x, y);
-		if (value == backgroundValue) {
-			return backgroundColor;
+		if (value == exceptionValue) {
+			return exceptionColor;
 		}
 		return colorMap.getColor(value);
 	}
