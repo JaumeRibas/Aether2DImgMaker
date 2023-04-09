@@ -282,11 +282,8 @@ public class AetherSimple5D2 implements SymmetricLongModel5D, IsotropicHypercubi
 	}
 
 	@Override
-	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {	
-		if (v < grid.length)
-			return grid[v][w][x][y][z];
-		else
-			return 0;
+	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {
+		return grid[v][w][x][y][z];
 	}
 
 	@Override

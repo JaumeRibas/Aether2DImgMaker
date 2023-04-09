@@ -276,11 +276,7 @@ public class SpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHype
 				w = swp;
 			}
 		} while (!sorted);
-		if (w < grid.length) {
-			return grid[w][x][y][z];
-		} else {
-			return 0;
-		}
+		return grid[w][x][y][z];
 	}
 	
 	@Override

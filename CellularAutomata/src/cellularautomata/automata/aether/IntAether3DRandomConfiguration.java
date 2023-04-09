@@ -166,37 +166,37 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 					int value = grid[i][j][k];
 					int relevantNeighborCount = 0;
 					int neighborValue;
-					neighborValue = getFromIndex(i + 1, j, k);
+					neighborValue = getFromIndexOrZero(i + 1, j, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = RIGHT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(i - 1, j, k);
+					neighborValue = getFromIndexOrZero(i - 1, j, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = LEFT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(i, j + 1, k);
+					neighborValue = getFromIndexOrZero(i, j + 1, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = UP;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(i, j - 1, k);
+					neighborValue = getFromIndexOrZero(i, j - 1, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = DOWN;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(i, j, k + 1);
+					neighborValue = getFromIndexOrZero(i, j, k + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = FRONT;
 						relevantNeighborCount++;
 					}
-					neighborValue = getFromIndex(i, j, k - 1);
+					neighborValue = getFromIndexOrZero(i, j, k - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
 						neighborDirections[relevantNeighborCount] = BACK;
@@ -291,17 +291,15 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		int i = originIndex + x;
 		int j = originIndex + y;
 		int k = originIndex + z;
-		return getFromIndex(i, j, k);
+		return grid[i][j][k];
 	}
 	
-	private int getFromIndex(int i, int j, int k) {
+	private int getFromIndexOrZero(int i, int j, int k) {
 		if (i < 0 || i > grid.length - 1 
 				|| j < 0 || j > grid.length - 1
 				|| k < 0 || k > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be zero
 			return 0;
 		} else {
-			//Note that the indexes whose value hasn't been defined have value zero by default
 			return grid[i][j][k];
 		}
 	}

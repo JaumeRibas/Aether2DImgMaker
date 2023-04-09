@@ -217,14 +217,8 @@ public class NearAether5Simple2D implements SymmetricLongModel2D, IsotropicSquar
 	public long getFromPosition(int x, int y) {	
 		int i = originIndex + x;
 		int j = originIndex + y;
-		if (i < 0 || i > grid.length - 1 
-				|| j < 0 || j > grid.length - 1) {
-			//If the coordinates are outside the array, the value will be 0
-			return 0;
-		} else {
-			//Note that the indexes whose value hasn't been defined have value zero by default
-			return grid[i][j];
-		}
+		//Note that the indexes whose value hasn't been defined have value zero by default
+		return grid[i][j];
 	}
 	
 	@Override

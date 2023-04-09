@@ -181,13 +181,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 	public long getFromPosition(int x, int y) {	
 		int i = originIndex + x;
 		int j = originIndex + y;
-		if (i < 0 || i > grid.length - 1 
-				|| j < 0 || j > grid[0].length - 1) {
-			//If the passed coordinates are outside the array, the value will be the backgroundValue
-			return backgroundValue;
-		} else {
-			return grid[i][j];
-		}
+		return grid[i][j];
 	}
 	
 	@Override

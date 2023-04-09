@@ -207,11 +207,7 @@ public class SpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubi
 				x = swp;
 			}
 		} while (!sorted);
-		if (x < grid.length) {
-			return grid[x][y][z];
-		} else {
-			return 0;
-		}
+		return grid[x][y][z];
 	}
 	
 	@Override

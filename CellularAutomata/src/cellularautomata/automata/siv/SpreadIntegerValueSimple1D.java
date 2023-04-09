@@ -159,12 +159,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	@Override
 	public long getFromPosition(int x) {	
 		int index = originIndex + x;
-		if (index < 0 || index > grid.length - 1) {
-			//If the passed coordinates are outside the array, the value will be the backgroundValue
-			return backgroundValue;
-		} else {
-			return grid[index];
-		}
+		return grid[index];
 	}
 	
 	@Override
