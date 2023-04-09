@@ -25,7 +25,9 @@ import cellularautomata.model.LongModel;
 public interface LongModel1D extends Model1D, LongModel {
 	
 	/**
-	 * Returns the value at a given position
+	 * <p>Returns the value at a given position.</p>
+	 * <p>It is not defined to call this method passing coordinates outside the bounds of the region. 
+	 * To get these bounds use the {@link #getMaxX()} and {@link #getMinX()} methods.</p>
 	 * 
 	 * @param x the position on the x-axis
 	 * @return the value at (x)

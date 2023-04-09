@@ -26,7 +26,8 @@ import cellularautomata.model3d.ObjectModel3D;
 public interface ObjectModel4D<Object_Type> extends Model4D, ObjectModel<Object_Type> {
 	
 	/**
-	 * Returns the value at a given position
+	 * <p>Returns the value at a given position.</p>
+	 * <p>It is not defined to call this method passing coordinates outside the bounds of the region.</p>
 	 * 
 	 * @param w the position on the w-axis 
 	 * @param x the position on the x-axis

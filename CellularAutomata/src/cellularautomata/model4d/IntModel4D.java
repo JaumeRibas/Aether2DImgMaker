@@ -26,7 +26,8 @@ import cellularautomata.model3d.IntModel3D;
 public interface IntModel4D extends Model4D, IntModel {
 	
 	/**
-	 * Returns the value at a given position
+	 * <p>Returns the value at a given position.</p>
+	 * <p>It is not defined to call this method passing coordinates outside the bounds of the region.</p>
 	 * 
 	 * @param w the position on the w-axis 
 	 * @param x the position on the x-axis

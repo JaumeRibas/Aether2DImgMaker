@@ -25,7 +25,8 @@ import cellularautomata.model.LongModel;
 public interface LongModel2D extends Model2D, LongModel {
 	
 	/**
-	 * Returns the value at a given position
+	 * <p>Returns the value at a given position.</p>
+	 * <p>It is not defined to call this method passing coordinates outside the bounds of the region.</p>
 	 * 
 	 * @param x the position on the x-axis
 	 * @param y the position on the y-axis
