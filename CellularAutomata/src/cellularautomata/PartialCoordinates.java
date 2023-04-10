@@ -16,6 +16,8 @@
  */
 package cellularautomata;
 
+import java.util.Arrays;
+
 /**
  * A way to pass immutable partial coordinates to methods.
  * @author Jaume
@@ -43,6 +45,36 @@ public class PartialCoordinates {
 	
 	public void copyIntoArray(Integer[] array) {
 		System.arraycopy(coordinates, 0, array, 0, array.length);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("(");
+		int length = coordinates.length;
+		if (length != 0) {
+			sb.append(coordinates[0]);
+			for (int i = 1; i != length; i++) {
+				sb.append(", ").append(coordinates[i]);
+			}
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+	
+	public boolean equals(PartialCoordinates other) {
+		if (other == null)
+			return false;
+		return Arrays.equals(coordinates, other.coordinates);
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		if (other == null || other.getClass() != this.getClass()) {
+			return false;
+		}
+		return Arrays.equals(coordinates, ((PartialCoordinates)other).coordinates);
 	}
 	
 }
