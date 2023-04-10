@@ -2719,7 +2719,7 @@ public class Test {
 		}
 	}
 	
-	public static long[][] parseCSVLong2DArray(String pathName) throws IOException {
+	public static long[][] parseCsvLong2DArray(String pathName) throws IOException {
 		long[][] array = null;
 		try(BufferedReader br = new BufferedReader(new FileReader(pathName))) {
 		    String line = br.readLine();
