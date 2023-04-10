@@ -49,7 +49,16 @@ public class Coordinates {
 	
 	@Override
 	public String toString() {
-		return Arrays.toString(coordinates);
+		StringBuilder sb = new StringBuilder("(");
+		int length = coordinates.length;
+		if (length != 0) {
+			sb.append(coordinates[0]);
+			for (int i = 1; i != length; i++) {
+				sb.append(", ").append(coordinates[i]);
+			}
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 	
 	public boolean equals(Coordinates other) {
