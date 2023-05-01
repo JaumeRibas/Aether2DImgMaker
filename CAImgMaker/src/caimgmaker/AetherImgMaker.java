@@ -57,7 +57,7 @@ import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
 import cellularautomata.automata.aether.IntAether4D;
 import cellularautomata.automata.aether.IntAether5D;
-import cellularautomata.automata.nearaether.BigIntNearAether3_3DSimple;
+import cellularautomata.automata.nearaether.SimpleBigIntNearAether3_3D;
 import cellularautomata.automata.nearaether.IntNearAether1_3D;
 import cellularautomata.automata.nearaether.IntNearAether2_3D;
 import cellularautomata.automata.siv.IntSpreadIntegerValue2D;
@@ -1038,12 +1038,12 @@ public class AetherImgMaker {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								model = new BigIntNearAether3_3DSimple(args.initialConfiguration.singleSource);
+								model = new SimpleBigIntNearAether3_3D(args.initialConfiguration.singleSource);
 							} else {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
-							model = new BigIntNearAether3_3DSimple(args.backupToRestorePath);
+							model = new SimpleBigIntNearAether3_3D(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
