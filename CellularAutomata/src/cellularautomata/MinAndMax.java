@@ -35,4 +35,9 @@ public class MinAndMax<Number_Type extends FieldElement<Number_Type> & Comparabl
 	public Number_Type getMax() {
 		return max;
 	}
+	
+	@Override
+	public String toString() {
+		return "min: " + min + ", max: " + max;
+	}
 }
