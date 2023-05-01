@@ -29,6 +29,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.arrays.AnisotropicIntArray;
+import cellularautomata.model1d.IntModel1D;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.ObjectModel1D;
 import cellularautomata.model2d.IntModel2D;
@@ -41,8 +43,16 @@ public class Utils {
 	
 	public static boolean isEvenPosition(int[] coordinates) {
 		int sum = 0;
-		for (int i = 0; i < coordinates.length; i++) {
+		for (int i = 0; i != coordinates.length; i++) {
 			sum += coordinates[i];
+		}
+		return sum%2 == 0;
+	}
+	
+	public static boolean isEvenPosition(Coordinates coordinates) {
+		int sum = 0;
+		for (int i = coordinates.getCount() - 1; i != -1; i--) {
+			sum += coordinates.get(i);
 		}
 		return sum%2 == 0;
 	}
@@ -231,6 +241,15 @@ public class Utils {
 			anisotropic2DArray[x] = new long[x + 1];
 		}
 		return anisotropic2DArray;
+	}
+	
+	public static AnisotropicIntArray[] buildAnisotropicNDIntArray(int dimension, int side) {
+		AnisotropicIntArray[] anisotropicNDArray = new AnisotropicIntArray[side];
+		int dimensionMinusOne = dimension - 1;
+		for (int x1 = 0; x1 < anisotropicNDArray.length; x1++) {
+			anisotropicNDArray[x1] = new AnisotropicIntArray(dimensionMinusOne, x1 + 1);
+		}
+		return anisotropicNDArray;
 	}
 	
 	public static int[][][][][] buildAnisotropic5DIntArray(int side) {
@@ -970,6 +989,32 @@ public class Utils {
 			}
 			System.out.println("|");
 		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(IntModel1D grid) throws Exception {
+		int maxLength = 3;
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		for (int x = minX; x <= maxX; x++) {
+			int length = Integer.toString(grid.getFromPosition(x)).length();
+			if (length > maxLength)
+				maxLength = length;
+		}
+		String headFootGap = "";
+		for (int i = 0; i < maxLength; i++) {
+			headFootGap += "-";
+		}
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += headFootGap + "+";
+		}
+		System.out.println(headFoot);
+		for (int x = minX; x <= maxX; x++) {
+			String strVal = grid.getFromPosition(x) + "";
+			System.out.print("|" + padLeft(strVal, ' ', maxLength));
+		}
+		System.out.println("|");
 		System.out.println(headFoot);
 	}
 	

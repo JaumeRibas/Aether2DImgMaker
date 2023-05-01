@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+
 import org.apache.commons.math3.FieldElement;
 
 import cellularautomata.automata.aether.Aether2D;
@@ -41,6 +42,7 @@ import cellularautomata.model.LongModel;
 import cellularautomata.model.NumericModel;
 import cellularautomata.model.ObjectModel;
 import cellularautomata.model.HypercubicPyramidGrid;
+import cellularautomata.model1d.IntModel1D;
 import cellularautomata.model1d.IntModelAs1D;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.LongModelAs1D;
@@ -2569,6 +2571,21 @@ public class Test {
 		}
 	}
 	
+	public static void stepByStep(IntModel1D ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			Boolean changed;
+			do {
+				System.out.println("step " + ca.getStep());
+				Utils.printAsGrid(ca);
+				System.out.println("total value " + ca.getTotal());
+				s.nextLine();
+			} while ((changed = ca.nextStep()) == null || changed);
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public static void stepByStep(IntModel2D ca) {
 		try {
