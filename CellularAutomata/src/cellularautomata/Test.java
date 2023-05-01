@@ -2571,6 +2571,210 @@ public class Test {
 		}
 	}
 	
+	private static boolean isBondBetweenCoordinateParityAndValueSignum(int minAtEvenCompareToZero, int maxAtEvenCompareToZero, int minAtOddCompareToZero, int maxAtOddCompareToZero) {
+		return minAtEvenCompareToZero <= 0 && maxAtEvenCompareToZero <= 0 && minAtOddCompareToZero >= 0 && maxAtOddCompareToZero >= 0
+				|| minAtEvenCompareToZero >= 0 && maxAtEvenCompareToZero >= 0 && minAtOddCompareToZero <= 0 && maxAtOddCompareToZero <= 0;
+	}
+	
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void testBondBetweenCoordinateParityAndValueSignum(ObjectModel<Number_Type> ca, Number_Type zero) {
+		System.out.println("Checking bond between coordinate parity and value signum...");
+		try {
+			MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
+			ca.forEachAtEvenPosition(consumer);
+			MinAndMax<Number_Type> minAndMax = consumer.getMinAndMaxValue();
+			int minAtEvenCompareToZero = minAndMax.getMin().compareTo(zero);
+			int maxAtEvenCompareToZero = minAndMax.getMax().compareTo(zero);
+			consumer = new MinAndMaxConsumer<Number_Type>();
+			ca.forEachAtOddPosition(consumer);
+			minAndMax = consumer.getMinAndMaxValue();
+			int minAtOddCompareToZero = minAndMax.getMin().compareTo(zero);
+			int maxAtOddCompareToZero = minAndMax.getMax().compareTo(zero);
+			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
+				boolean isEvenPositive = maxAtEvenCompareToZero > 0;
+				boolean finished = false;
+				while (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero) 
+						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
+					Boolean changed;
+					finished = (changed = ca.nextStep()) != null && !changed;
+					consumer = new MinAndMaxConsumer<Number_Type>();
+					ca.forEachAtEvenPosition(consumer);
+					minAndMax = consumer.getMinAndMaxValue();
+					minAtEvenCompareToZero = minAndMax.getMin().compareTo(zero);
+					maxAtEvenCompareToZero = minAndMax.getMax().compareTo(zero);
+					consumer = new MinAndMaxConsumer<Number_Type>();
+					ca.forEachAtOddPosition(consumer);
+					minAndMax = consumer.getMinAndMaxValue();
+					minAtOddCompareToZero = minAndMax.getMin().compareTo(zero);
+					maxAtOddCompareToZero = minAndMax.getMax().compareTo(zero);
+					isEvenPositive = !isEvenPositive;
+				}
+				if (!finished) {
+					System.err.println("The bond broke at step " + ca.getStep());
+				} else {
+					System.out.println("A perfect bond was found!");
+				}				
+			} else {
+				System.err.println("No bond was found.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void testBondBetweenCoordinateParityAndValueSignum(IntModel ca) {
+		System.out.println("Checking bond between coordinate parity and value signum...");
+		try {
+			MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+			ca.forEachAtEvenPosition(consumer);
+			int[] minAndMax = consumer.getMinAndMaxValue();
+			int minAtEvenCompareToZero = minAndMax[0];
+			int maxAtEvenCompareToZero = minAndMax[1];
+			consumer = new MinAndMaxIntConsumer();
+			ca.forEachAtOddPosition(consumer);
+			minAndMax = consumer.getMinAndMaxValue();
+			int minAtOddCompareToZero = minAndMax[0];
+			int maxAtOddCompareToZero = minAndMax[1];
+			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
+				boolean isEvenPositive = maxAtEvenCompareToZero > 0;
+				boolean finished = false;
+				while (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero) 
+						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
+					Boolean changed;
+					finished = (changed = ca.nextStep()) != null && !changed;
+					consumer = new MinAndMaxIntConsumer();
+					ca.forEachAtEvenPosition(consumer);
+					minAndMax = consumer.getMinAndMaxValue();
+					minAtEvenCompareToZero = minAndMax[0];
+					maxAtEvenCompareToZero = minAndMax[1];
+					consumer = new MinAndMaxIntConsumer();
+					ca.forEachAtOddPosition(consumer);
+					minAndMax = consumer.getMinAndMaxValue();
+					minAtOddCompareToZero = minAndMax[0];
+					maxAtOddCompareToZero = minAndMax[1];
+					isEvenPositive = !isEvenPositive;
+				}
+				if (!finished) {
+					System.err.println("The bond broke at step " + ca.getStep());
+				} else {
+					System.out.println("A perfect bond was found!");
+				}				
+			} else {
+				System.err.println("No bond was found.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void testBondBetweenCoordinateParityAndValueSignum(LongModel ca) {
+		System.out.println("Checking bond between coordinate parity and value signum...");
+		try {
+			MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+			ca.forEachAtEvenPosition(consumer);
+			long[] minAndMax = consumer.getMinAndMaxValue();
+			long tmp;
+			int minAtEvenCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+			int maxAtEvenCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+			consumer = new MinAndMaxLongConsumer();
+			ca.forEachAtOddPosition(consumer);
+			minAndMax = consumer.getMinAndMaxValue();
+			int minAtOddCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+			int maxAtOddCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
+				boolean isEvenPositive = maxAtEvenCompareToZero > 0;
+				boolean finished = false;
+				while (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero) 
+						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
+					Boolean changed;
+					finished = (changed = ca.nextStep()) != null && !changed;
+					consumer = new MinAndMaxLongConsumer();
+					ca.forEachAtEvenPosition(consumer);
+					minAndMax = consumer.getMinAndMaxValue();
+					minAtEvenCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+					maxAtEvenCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+					consumer = new MinAndMaxLongConsumer();
+					ca.forEachAtOddPosition(consumer);
+					minAndMax = consumer.getMinAndMaxValue();
+					minAtOddCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+					maxAtOddCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
+					isEvenPositive = !isEvenPositive;
+				}
+				if (!finished) {
+					System.err.println("The bond broke at step " + ca.getStep());
+				} else {
+					System.out.println("A perfect bond was found!");
+				}				
+			} else {
+				System.err.println("No bond was found.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void printEvenOddMinMaxValues(ObjectModel<Number_Type> ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step: " + ca.getStep());
+				MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
+				ca.forEachAtEvenPosition(consumer);
+				MinAndMax<Number_Type> minAndMax = consumer.getMinAndMaxValue();
+				System.out.println("even positions:\t{ min: " + minAndMax.getMin() + ",\tmax: " + minAndMax.getMax() + " }");
+				consumer = new MinAndMaxConsumer<Number_Type>();
+				ca.forEachAtOddPosition(consumer);
+				minAndMax = consumer.getMinAndMaxValue();
+				System.out.println("odd positions:\t{ min: " + minAndMax.getMin() + ",\tmax: " + minAndMax.getMax() + " }");
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void printEvenOddMinMaxValues(IntModel ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step: " + ca.getStep());
+				MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+				ca.forEachAtEvenPosition(consumer);
+				int[] minAndMax = consumer.getMinAndMaxValue();
+				System.out.println("even positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }");
+				consumer = new MinAndMaxIntConsumer();
+				ca.forEachAtOddPosition(consumer);
+				minAndMax = consumer.getMinAndMaxValue();
+				System.out.println("odd positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }" + System.lineSeparator());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void printEvenOddMinMaxValues(LongModel ca) {
+		try {
+			Scanner s = new Scanner(System.in);
+			do {
+				System.out.println("step: " + ca.getStep());
+				MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+				ca.forEachAtEvenPosition(consumer);
+				long[] minAndMax = consumer.getMinAndMaxValue();
+				System.out.println("even positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }");
+				consumer = new MinAndMaxLongConsumer();
+				ca.forEachAtOddPosition(consumer);
+				minAndMax = consumer.getMinAndMaxValue();
+				System.out.println("odd positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }" + System.lineSeparator());
+				s.nextLine();
+			} while (ca.nextStep());
+			s.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void stepByStep(IntModel1D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
