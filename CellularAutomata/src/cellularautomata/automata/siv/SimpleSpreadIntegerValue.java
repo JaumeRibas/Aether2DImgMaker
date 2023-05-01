@@ -34,7 +34,7 @@ import cellularautomata.model.SymmetricIntModel;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHypercubicModelA {
+public class SimpleSpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubicModelA {
 
 	private int gridDimension;
 	private long step;
@@ -55,7 +55,7 @@ public class SpreadIntegerValueSimple implements SymmetricIntModel, IsotropicHyp
 	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
-	public SpreadIntegerValueSimple(int gridDimension, int initialValue, int backgroundValue) {
+	public SimpleSpreadIntegerValue(int gridDimension, int initialValue, int backgroundValue) {
 		this.gridDimension = gridDimension;
 		//two neighbors
 		shareCount = gridDimension * 2 + 1;

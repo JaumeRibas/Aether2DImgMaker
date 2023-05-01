@@ -30,7 +30,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubicModelA {	
+public class SimpleNearAether2_3D implements SymmetricLongModel3D, IsotropicCubicModelA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -61,7 +61,7 @@ public class NearAether2Simple3D implements SymmetricLongModel3D, IsotropicCubic
 	 *  
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public NearAether2Simple3D(long initialValue) {
+	public SimpleNearAether2_3D(long initialValue) {
 		//safety check to prevent exceeding the data type's max value
 		if (initialValue < MIN_INITIAL_VALUE) {
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));

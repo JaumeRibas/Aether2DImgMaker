@@ -34,7 +34,7 @@ import cellularautomata.model2d.SymmetricNumericModel2D;
  * @author Jaume
  *
  */
-public class AetherSimple2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
+public class SimpleAether2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -53,7 +53,7 @@ public class AetherSimple2DInfinity implements SymmetricNumericModel2D<BigFracti
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	public AetherSimple2DInfinity(boolean isPositive) {
+	public SimpleAether2DInfinity(boolean isPositive) {
 		this.isPositive = isPositive;
 		//initial side of the array, will be increased as needed
 		int side = 5;

@@ -35,7 +35,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAetherSimple implements SymmetricNumericModel<BigInt>, IsotropicHypercubicModelA {//TODO fix 1D error
+public class SimpleBigIntAether implements SymmetricNumericModel<BigInt>, IsotropicHypercubicModelA {//TODO fix 1D error
 
 	private final int gridDimension;
 	private long step;
@@ -54,7 +54,7 @@ public class BigIntAetherSimple implements SymmetricNumericModel<BigInt>, Isotro
 	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
-	public BigIntAetherSimple(int gridDimension, BigInt initialValue) {
+	public SimpleBigIntAether(int gridDimension, BigInt initialValue) {
 		this.gridDimension = gridDimension;
 		//two neighbors per dimension
 		neighborCount = gridDimension * 2;

@@ -25,16 +25,15 @@ import java.util.List;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricNumericModel1D;
+import cellularautomata.model1d.NumericModel1D;
 
 /**
- * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a single source initial configuration of infinity, for review and testing purposes
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a finite grid and a single source initial configuration of infinity, for review and testing purposes
  * 
  * @author Jaume
  *
  */
-public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFraction>, IsotropicModel1DA {
+public class SimpleAether1DInfinityFiniteGrid implements NumericModel1D<BigFraction> {
 	
 	private static final byte RIGHT = 2;
 	private static final byte LEFT = 3;
@@ -44,22 +43,19 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 	
 	private long step;
 	private final boolean isPositive;
+	private final int side;
+	/** Whether or not the state of the model changed between the current and the previous step **/
+	private Boolean changed = null;
 	
-	/** The index of the origin within the array */
-	private int originIndex;
-
-	/** Whether or not the values reached the bounds of the array */
-	private boolean boundsReached;
-	
-	public AetherSimple1DInfinity(boolean isPositive) {
+	public SimpleAether1DInfinityFiniteGrid(boolean isPositive, int side) {
+		if (side < 1) {
+			throw new IllegalArgumentException("Grid side cannot be smaller than one.");
+		}
 		this.isPositive = isPositive;
-		int side = 5;
+		this.side = side;
 		grid = new BigFraction[side];
-		//The origin will be at the center of the array
-		originIndex = (side - 1)/2;
 		Arrays.fill(grid, BigFraction.ZERO);
-		grid[originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
-		boundsReached = false;
+		grid[0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		step = 0;
 	}
 	
@@ -67,19 +63,12 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 	public Boolean nextStep() {
 		//Use new array to store the values of the next step
 		BigFraction[] newGrid = null;
-		//The offset between the indexes of the new and old array
-		int indexOffset = 0;
 		//If at the previous step the values reached the edge, make the new array bigger
-		if (boundsReached) {
-			boundsReached = false;
-			newGrid = new BigFraction[grid.length + 2];
-			indexOffset = 1;
-		} else {
-			newGrid = new BigFraction[grid.length];
-		}
+		newGrid = new BigFraction[grid.length];
 		Arrays.fill(newGrid, BigFraction.ZERO);
+		boolean changed = false;
 		//For every cell
-		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++) {
+		for (int index = 0; index < grid.length; index++) {
 			//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 			
 			//Get the cell's value
@@ -87,21 +76,24 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 			//Get a list of the neighbors whose value is smaller than the one at the current cell
 			List<Neighbor<BigFraction>> neighbors = new ArrayList<Neighbor<BigFraction>>(2);						
 			BigFraction neighborValue;
-			if (index < grid.length - 1)
+			if (index < grid.length - 1) {
 				neighborValue = grid[index + 1];
-			else
-				neighborValue = BigFraction.ZERO;
+			} else {
+				neighborValue = grid[0];
+			}
 			if (neighborValue.compareTo(value) < 0)
 				neighbors.add(new Neighbor<BigFraction>(RIGHT, neighborValue));
-			if (index > 0)
+			if (index > 0) {
 				neighborValue = grid[index - 1];
-			else
-				neighborValue = BigFraction.ZERO;
+			} else {
+				neighborValue = grid[grid.length - 1];
+			}
 			if (neighborValue.compareTo(value) < 0)
 				neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
 
 			//If there are any
 			if (neighbors.size() > 0) {
+				changed = true;
 				if (neighbors.size() > 1) {
 					//Sort them by value in ascending order
 					Neighbor<BigFraction> next = neighbors.get(1);
@@ -120,11 +112,10 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 						int shareCount = neighbors.size() + 1;
 						BigFraction toShare = value.subtract(neighborValue);
 						BigFraction share = toShare.divide(shareCount);
-						checkBoundsReached(index + indexOffset, newGrid.length);
 						//The current cell keeps one share
 						value = value.subtract(toShare).add(share);
 						for (Neighbor<BigFraction> n : neighbors) {
-							int nc = getNeighborCoordinates(index, n.getDirection()) + indexOffset;
+							int nc = getNeighborIndex(index, n.getDirection());
 							newGrid[nc] = newGrid[nc].add(share);
 						}
 						previousNeighborValue = neighborValue;
@@ -132,59 +123,54 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 					neighbors.remove(i);
 				}	
 			}					
-			newGrid[newIndex] = newGrid[newIndex].add(value);
+			newGrid[index] = newGrid[index].add(value);
 		}
 		//Replace the old array with the new one
 		this.grid = newGrid;
-		//Update the index of the origin
-		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		this.changed = changed;
 		//Return whether or not the state of the grid changed
-		return true;
+		return changed;
 	}
 
 	@Override
 	public Boolean isChanged() {
-		return step == 0 ? null : true;
+		return changed;
 	}
 	
-	private void checkBoundsReached(int index, int length) {
-		if (index == 1 || index == length - 2) {
-			boundsReached = true;
-		}
-	}
-	
-	private static int getNeighborCoordinates(int x, byte direction) {
+	private int getNeighborIndex(int index, byte direction) {
 		if (direction == RIGHT) {
-			x++;
+			if (index == side - 1) {
+				index = 0;
+			} else {
+				index++;
+			}
 		} else {
-			x--;
+			if (index == 0) {
+				index = side - 1;
+			} else {
+				index--;
+			}
 		}
-		return x;
+		return index;
 	}
 	
 	@Override
-	public BigFraction getFromPosition(int x) {	
-		int index = originIndex + x;
-		return grid[index];
+	public BigFraction getFromPosition(int x) {
+		//Transform passed coordinates to grid coordinates
+		x = x < 0 ? side - 1 + x%side : x%side;
+		return grid[x];
 	}
 	
 	@Override
-	public BigFraction getFromAsymmetricPosition(int x) {
-		return getFromPosition(x);
+	public int getMaxX() {
+		return side - 1;
 	}
 	
 	@Override
-	public int getAsymmetricMaxX() {
-		int arrayMaxX = grid.length - 1 - originIndex;
-		int valuesMaxX;
-		if (boundsReached) {
-			valuesMaxX = arrayMaxX;
-		} else {
-			valuesMaxX = arrayMaxX - 1;
-		}
-		return valuesMaxX;
+	public int getMinX() {
+		return 0;
 	}
 	
 	@Override
@@ -196,10 +182,10 @@ public class AetherSimple1DInfinity implements SymmetricNumericModel1D<BigFracti
 	public String getName() {
 		return "Aether";
 	}
-	
+
 	@Override
 	public String getSubfolderPath() {
-		String path = getName() + "/1D/";
+		String path = getName() + "/1D/finite_grid/" + side + "/";
 		if (!isPositive) path += "-";
 		path += "infinity";
 		return path;

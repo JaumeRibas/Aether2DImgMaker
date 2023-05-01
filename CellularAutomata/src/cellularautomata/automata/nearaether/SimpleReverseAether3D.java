@@ -26,13 +26,16 @@ import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
- * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
+ * Implementation of a CA that behaves the same way as the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton, but with opposite values.
  * 
  * @author Jaume
  *
  */
-public class NearAether3Simple3D implements SymmetricLongModel3D, IsotropicCubicModelA {
-
+public class SimpleReverseAether3D implements SymmetricLongModel3D, IsotropicCubicModelA {	
+	
+	public static final long MAX_INITIAL_VALUE = 3689348814741910323L;
+	public static final long MIN_INITIAL_VALUE = Long.MIN_VALUE;
+	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
 	private static final byte RIGHT = 2;
@@ -59,12 +62,11 @@ public class NearAether3Simple3D implements SymmetricLongModel3D, IsotropicCubic
 	 *  
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public NearAether3Simple3D(long initialValue) {
-		//TODO figure out safe range for initial value
+	public SimpleReverseAether3D(long initialValue) {
 		//safety check to prevent exceeding the data type's max value
-//		if (initialValue < MIN_INITIAL_VALUE) {
-//			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
-//		}
+		if (initialValue > MAX_INITIAL_VALUE) {
+			throw new IllegalArgumentException(String.format("Initial value cannot be greater than %,d. Use a smaller initial value or a different implementation.", MAX_INITIAL_VALUE));
+		}
 		this.initialValue = initialValue;
 		//initial side of the array, will be increased as needed
 		int side = 5;
@@ -96,100 +98,83 @@ public class NearAether3Simple3D implements SymmetricLongModel3D, IsotropicCubic
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
 					long value = grid[i][j][k];
-					if (value > Long.MIN_VALUE) {
-						//make list of von Neumann neighbors with the smallest value
-						List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(6);			
-						long neighborValue;
-						long smallestNeighborValue = value - 1;
-						if (i < grid.length - 1) {
-							neighborValue = grid[i + 1][j][k];
-						} else {
-							neighborValue = 0;
-						}
-						if (neighborValue < smallestNeighborValue) {
-							smallestNeighborValue = neighborValue;
-							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
-						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
-						}
-						if (i > 0) {
-							neighborValue = grid[i - 1][j][k];
-						} else {
-							neighborValue = 0;
-						}
-						if (neighborValue < smallestNeighborValue) {
-							smallestNeighborValue = neighborValue;
-							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
-						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
-						}
-						if (j < grid[i].length - 1) {
-							neighborValue = grid[i][j + 1][k];
-						} else {
-							neighborValue = 0;
-						}
-						if (neighborValue < smallestNeighborValue) {
-							smallestNeighborValue = neighborValue;
-							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(UP, neighborValue));
-						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(UP, neighborValue));
-						}
-						if (j > 0) {
-							neighborValue = grid[i][j - 1][k];
-						} else {
-							neighborValue = 0;
-						}
-						if (neighborValue < smallestNeighborValue) {
-							smallestNeighborValue = neighborValue;
-							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
-						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
-						}
-						if (k < grid[i][j].length - 1) {
-							neighborValue = grid[i][j][k + 1];
-						} else {
-							neighborValue = 0;
-						}
-						if (neighborValue < smallestNeighborValue) {
-							smallestNeighborValue = neighborValue;
-							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
-						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
-						}
-						if (k > 0) {
-							neighborValue = grid[i][j][k - 1];
-						} else {
-							neighborValue = 0;
-						}
-						if (neighborValue < smallestNeighborValue) {
-							smallestNeighborValue = neighborValue;
-							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(BACK, neighborValue));
-						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(BACK, neighborValue));
-						}
-						
-						if (neighbors.size() > 0) {
-							//apply algorithm rules to redistribute value
-							int shareCount = neighbors.size() + 1;
-							long toShare = value - smallestNeighborValue;
-							long share = toShare/shareCount;
-							if (share != 0) {
-								checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
-								changed = true;
-								value = value - toShare + toShare%shareCount + share;
-								for (Neighbor<Long> neighbor : neighbors) {
-									int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
-									newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
+					//make list of von Neumann neighbors with value greater than current position's value
+					List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(6);						
+					long neighborValue;
+					if (i < grid.length - 1)
+						neighborValue = grid[i + 1][j][k];
+					else
+						neighborValue = 0;
+					if (neighborValue > value)
+						neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+					if (i > 0)
+						neighborValue = grid[i - 1][j][k];
+					else
+						neighborValue = 0;
+					if (neighborValue > value)
+						neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+					if (j < grid[i].length - 1)
+						neighborValue = grid[i][j + 1][k];
+					else
+						neighborValue = 0;
+					if (neighborValue > value)
+						neighbors.add(new Neighbor<Long>(UP, neighborValue));
+					if (j > 0)
+						neighborValue = grid[i][j - 1][k];
+					else
+						neighborValue = 0;
+					if (neighborValue > value)
+						neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
+					if (k < grid[i][j].length - 1)
+						neighborValue = grid[i][j][k + 1];
+					else
+						neighborValue = 0;
+					if (neighborValue > value)
+						neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
+					if (k > 0)
+						neighborValue = grid[i][j][k - 1];
+					else
+						neighborValue = 0;
+					if (neighborValue > value)
+						neighbors.add(new Neighbor<Long>(BACK, neighborValue));
+					
+					if (neighbors.size() > 0) {
+						//sort neighbors by value ascending
+						boolean sorted = false;
+						while (!sorted) {
+							sorted = true;
+							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
+								Neighbor<Long> next = neighbors.get(neighborIndex+1);
+								if (neighbors.get(neighborIndex).getValue() < next.getValue()) {
+									sorted = false;
+									neighbors.remove(neighborIndex+1);
+									neighbors.add(neighborIndex, next);
 								}
-							}	
+							}
 						}
-					}
+						//apply algorithm rules to redistribute value
+						boolean isFirst = true;
+						long previousNeighborValue = 0;
+						for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
+							neighborValue = neighbors.get(neighborIndex).getValue();
+							if (neighborValue != previousNeighborValue || isFirst) {
+								int shareCount = neighbors.size() + 1;
+								long toShare = value - neighborValue;
+								long share = toShare/shareCount;
+								if (share != 0) {
+									checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
+									changed = true;
+									value = value - toShare + toShare%shareCount + share;
+									for (Neighbor<Long> neighbor : neighbors) {
+										int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
+										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
+									}
+								}
+								previousNeighborValue = neighborValue;
+							}
+							neighbors.remove(neighborIndex);
+						}	
+					}					
 					newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
 				}
 			}
@@ -291,7 +276,7 @@ public class NearAether3Simple3D implements SymmetricLongModel3D, IsotropicCubic
 
 	@Override
 	public String getName() {
-		return "NearAether3";
+		return "ReverseAether";
 	}
 
 	@Override

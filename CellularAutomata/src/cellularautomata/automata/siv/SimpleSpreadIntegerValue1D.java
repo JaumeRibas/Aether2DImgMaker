@@ -29,7 +29,7 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {	
+public class SimpleSpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicModel1DA {	
 
 	/** A 1D array representing the grid */
 	private long[] grid;
@@ -53,7 +53,7 @@ public class SpreadIntegerValueSimple1D implements SymmetricLongModel1D, Isotrop
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public SpreadIntegerValueSimple1D(long initialValue, long backgroundValue) {
+	public SimpleSpreadIntegerValue1D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//Create a 1D array to represent the grid. With the initial value at the origin.

@@ -28,7 +28,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, IsotropicCubicModelA {
+public class SimpleSpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubicModelA {
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
@@ -52,7 +52,7 @@ public class SpreadIntegerValueSimple3D implements SymmetricLongModel3D, Isotrop
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value at all other positions of the grid
 	 */
-	public SpreadIntegerValueSimple3D(long initialValue, long backgroundValue) {
+	public SimpleSpreadIntegerValue3D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//initial side of the array, will be increased as needed

@@ -31,7 +31,7 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {	
+public class SimpleAether1D implements SymmetricLongModel1D, IsotropicModel1DA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -59,7 +59,7 @@ public class AetherSimple1D implements SymmetricLongModel1D, IsotropicModel1DA {
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public AetherSimple1D(long initialValue) {
+	public SimpleAether1D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }

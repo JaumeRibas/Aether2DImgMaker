@@ -30,7 +30,7 @@ import cellularautomata.model2d.SymmetricNumericModel2D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
+public class SimpleSpreadIntegerValue2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
 	
 	/** 2D array representing the grid **/
 	private BigFraction[][] grid;
@@ -43,7 +43,7 @@ public class SpreadIntegerValueSimple2DInfinity implements SymmetricNumericModel
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	public SpreadIntegerValueSimple2DInfinity() {
+	public SimpleSpreadIntegerValue2DInfinity() {
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigFraction[side][side];

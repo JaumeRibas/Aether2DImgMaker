@@ -31,7 +31,7 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume
  *
  */
-public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
+public class SimpleAether2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -61,7 +61,7 @@ public class AetherSimple2D implements SymmetricLongModel2D, IsotropicSquareMode
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public AetherSimple2D(long initialValue) {
+	public SimpleAether2D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }

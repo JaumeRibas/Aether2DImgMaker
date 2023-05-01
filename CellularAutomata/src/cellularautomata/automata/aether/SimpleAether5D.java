@@ -31,7 +31,7 @@ import cellularautomata.model5d.SymmetricLongModel5D;
  * @author Jaume
  *
  */
-public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubicModel5DA {	
+public class SimpleAether5D implements SymmetricLongModel5D, IsotropicHypercubicModel5DA {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -67,7 +67,7 @@ public class AetherSimple5D implements SymmetricLongModel5D, IsotropicHypercubic
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public AetherSimple5D(long initialValue) {
+	public SimpleAether5D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}

@@ -29,7 +29,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
+public class SimpleSpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
 	
 	private long[][][][] grid;
 	
@@ -52,7 +52,7 @@ public class SpreadIntegerValueSimple4D implements SymmetricLongModel4D, Isotrop
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value at all other positions of the grid
 	 */
-	public SpreadIntegerValueSimple4D(long initialValue, long backgroundValue) {
+	public SimpleSpreadIntegerValue4D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		int side = 5;

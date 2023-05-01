@@ -35,7 +35,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class AetherSimple implements SymmetricIntModel, IsotropicHypercubicModelA {//TODO fix 1D error
+public class SimpleAether implements SymmetricIntModel, IsotropicHypercubicModelA {//TODO fix 1D error
 
 	private final int gridDimension;
 	private long step;
@@ -54,7 +54,7 @@ public class AetherSimple implements SymmetricIntModel, IsotropicHypercubicModel
 	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
-	public AetherSimple(int gridDimension, int initialValue) {
+	public SimpleAether(int gridDimension, int initialValue) {
 		if (gridDimension != 0) {
 			int minInitialValue = AetherUtils.getMinAllowedSingleSourceValue(gridDimension, BigInt.valueOf(Integer.MAX_VALUE)).intValue();
 			if (initialValue < minInitialValue) {//to prevent overflow of int type

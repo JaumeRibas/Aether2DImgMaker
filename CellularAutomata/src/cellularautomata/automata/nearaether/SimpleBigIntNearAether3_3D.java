@@ -14,10 +14,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.aether;
+package cellularautomata.automata.nearaether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +30,17 @@ import cellularautomata.model3d.SymmetricNumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 /**
- * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D, with a single source initial configuration, for review and testing purposes
+ * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
  * 
  * @author Jaume
  *
  */
-public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, IsotropicCubicModelA {	
+public class SimpleBigIntNearAether3_3D implements SymmetricNumericModel3D<BigInt>, IsotropicCubicModelA, Serializable {	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4799014576150501853L;
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -62,7 +68,7 @@ public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, Is
 	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
-	public BigIntAetherSimple3D(BigInt initialValue) {
+	public SimpleBigIntNearAether3_3D(BigInt initialValue) {
 		this.initialValue = initialValue;
 		//initial side of the array, will be increased as needed
 		int side = 5;
@@ -79,6 +85,25 @@ public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, Is
 		} else {
 			folderName = strInitialValue;
 		}
+	}
+	
+	/**
+	 * Creates an instance restoring a backup
+	 * 
+	 * @param backupPath the path to the backup file to restore.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
+	 */
+	public SimpleBigIntNearAether3_3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		SimpleBigIntNearAether3_3D data = (SimpleBigIntNearAether3_3D) Utils.deserializeFromFile(backupPath);
+		grid = data.grid;
+		step = data.step;
+		initialValue = data.initialValue;
+		originIndex = data.originIndex;
+		boundsReached = data.boundsReached;
+		folderName = data.folderName;
+		changed = data.changed;
 	}
 	
 	@Override
@@ -102,86 +127,76 @@ public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, Is
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
 					BigInt value = grid[i][j][k];
-					//make list of von Neumann neighbors with value smaller than current cell's value
+					//make list of von Neumann neighbors. Get all neighbors as opposed to Aether
 					List<Neighbor<BigInt>> neighbors = new ArrayList<Neighbor<BigInt>>(6);						
 					BigInt neighborValue;
 					if (i < grid.length - 1)
 						neighborValue = grid[i + 1][j][k];
 					else
 						neighborValue = BigInt.ZERO;
-					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(RIGHT, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(RIGHT, neighborValue));
 					if (i > 0)
 						neighborValue = grid[i - 1][j][k];
 					else
 						neighborValue = BigInt.ZERO;
-					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(LEFT, neighborValue));
-					if (j < grid.length - 1)
+					neighbors.add(new Neighbor<BigInt>(LEFT, neighborValue));
+					if (j < grid[i].length - 1)
 						neighborValue = grid[i][j + 1][k];
 					else
 						neighborValue = BigInt.ZERO;
-					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(UP, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(UP, neighborValue));
 					if (j > 0)
 						neighborValue = grid[i][j - 1][k];
 					else
 						neighborValue = BigInt.ZERO;
-					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(DOWN, neighborValue));
-					if (k < grid.length - 1)
+					neighbors.add(new Neighbor<BigInt>(DOWN, neighborValue));
+					if (k < grid[i][j].length - 1)
 						neighborValue = grid[i][j][k + 1];
 					else
 						neighborValue = BigInt.ZERO;
-					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(FRONT, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(FRONT, neighborValue));
 					if (k > 0)
 						neighborValue = grid[i][j][k - 1];
 					else
 						neighborValue = BigInt.ZERO;
-					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(BACK, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(BACK, neighborValue));
 					
-					if (neighbors.size() > 0) {
-						//sort neighbors by value
-						boolean sorted = false;
-						while (!sorted) {
-							sorted = true;
-							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
-								Neighbor<BigInt> next = neighbors.get(neighborIndex+1);
-								if (neighbors.get(neighborIndex).getValue().compareTo(next.getValue()) > 0) {
-									sorted = false;
-									neighbors.remove(neighborIndex+1);
-									neighbors.add(neighborIndex, next);
-								}
+					//sort neighbors by value
+					boolean sorted = false;
+					while (!sorted) {
+						sorted = true;
+						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
+							Neighbor<BigInt> next = neighbors.get(neighborIndex+1);
+							if (neighbors.get(neighborIndex).getValue().compareTo(next.getValue()) > 0) {
+								sorted = false;
+								neighbors.remove(neighborIndex+1);
+								neighbors.add(neighborIndex, next);
 							}
 						}
-						//apply algorithm rules to redistribute value
-						boolean isFirst = true;
-						BigInt previousNeighborValue = null;
-						for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
-							neighborValue = neighbors.get(neighborIndex).getValue();
-							if (isFirst || !neighborValue.equals(previousNeighborValue)) {
-								//Add one for the current cell
-								int shareCount = neighbors.size() + 1;
-								BigInt toShare = value.subtract(neighborValue);
-								BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
-								BigInt share = shareAndRemainder[0];
-								if (!share.equals(BigInt.ZERO)) {
-									checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
-									changed = true;
-									//The current cell keeps the remainder and one share
-									value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
-									for (Neighbor<BigInt> neighbor : neighbors) {
-										int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
-										newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] = 
-												newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset].add(share);
-									}
+					}
+					//apply algorithm rules to redistribute value
+					boolean isFirst = true;
+					BigInt previousNeighborValue = null;
+					for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--,isFirst = false) {
+						neighborValue = neighbors.get(neighborIndex).getValue();
+						if (isFirst || !neighborValue.equals(previousNeighborValue)) {
+							int shareCount = neighbors.size() + 1;
+							BigInt toShare = value.subtract(neighborValue);
+							BigInt[] shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
+							BigInt share = shareAndRemainder[0];
+							if (!share.equals(BigInt.ZERO)) {
+								checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
+								changed = true;
+								value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
+								for (Neighbor<BigInt> neighbor : neighbors) {
+									int[] nc = getNeighborCoordinates(i, j, k, neighbor.getDirection());
+									newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] = 
+											newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset].add(share);
 								}
-								previousNeighborValue = neighborValue;
 							}
-							neighbors.remove(neighborIndex);
-						}	
+							previousNeighborValue = neighborValue;
+						}
+						neighbors.remove(neighborIndex);
 					}					
 					newGrid[i + indexOffset][j + indexOffset][k + indexOffset] = 
 							newGrid[i + indexOffset][j + indexOffset][k + indexOffset].add(value);
@@ -275,20 +290,24 @@ public class BigIntAetherSimple3D implements SymmetricNumericModel3D<BigInt>, Is
 	 */
 	public BigInt getInitialValue() {
 		return initialValue;
-	}	
-	
-	@Override
-	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getName() {
-		return "Aether";
+		return "NearAether3";
 	}
 	
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/3D/" + folderName;
+		String strInitialValue = initialValue.toString();
+		if (strInitialValue.length() > Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH)
+			strInitialValue = folderName;
+		return getName() + "/3D/" + strInitialValue;
 	}
+	
+	@Override
+	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
+		Utils.serializeToFile(this, backupPath, backupName);
+	}
+
 }

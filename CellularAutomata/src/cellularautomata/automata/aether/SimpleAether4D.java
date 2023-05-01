@@ -31,7 +31,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class AetherSimple4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
+public class SimpleAether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
@@ -65,7 +65,7 @@ public class AetherSimple4D implements SymmetricLongModel4D, IsotropicHypercubic
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public AetherSimple4D(long initialValue) {
+	public SimpleAether4D(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}

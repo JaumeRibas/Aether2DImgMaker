@@ -34,7 +34,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {	
+public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {	
 	
 	private static final byte W_POSITIVE = 0;
 	private static final byte W_NEGATIVE = 1;
@@ -69,7 +69,7 @@ public class BigIntAetherSimple4D implements SymmetricNumericModel4D<BigInt>, Is
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public BigIntAetherSimple4D(BigInt initialValue) {
+	public SimpleBigIntAether4D(BigInt initialValue) {
 		this.initialValue = initialValue;
 		int side = 5;
 		grid = new BigInt[side][side][side][side];

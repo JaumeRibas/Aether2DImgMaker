@@ -28,7 +28,7 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume Ribas
  *
  */
-public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
+public class SimpleSpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
 
 	/** A 2D array representing the grid */
 	private long[][] grid;
@@ -52,7 +52,7 @@ public class SpreadIntegerValueSimple2D implements SymmetricLongModel2D, Isotrop
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public SpreadIntegerValueSimple2D(long initialValue, long backgroundValue) {
+	public SimpleSpreadIntegerValue2D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//Create a 2D array to represent the grid. With the initial value at the origin.
