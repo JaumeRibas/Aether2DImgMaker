@@ -2576,17 +2576,13 @@ public class Test {
 				|| minAtEvenCompareToZero >= 0 && maxAtEvenCompareToZero >= 0 && minAtOddCompareToZero <= 0 && maxAtOddCompareToZero <= 0;
 	}
 	
-	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void testBondBetweenCoordinateParityAndValueSignum(ObjectModel<Number_Type> ca, Number_Type zero) {
+	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void testBondBetweenCoordinateParityAndValueSignum(NumericModel<Number_Type> ca, Number_Type zero) {
 		System.out.println("Checking bond between coordinate parity and value signum...");
 		try {
-			MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
-			ca.forEachAtEvenPosition(consumer);
-			MinAndMax<Number_Type> minAndMax = consumer.getMinAndMaxValue();
+			MinAndMax<Number_Type> minAndMax = ca.getEvenPositionsMinAndMax();
 			int minAtEvenCompareToZero = minAndMax.getMin().compareTo(zero);
 			int maxAtEvenCompareToZero = minAndMax.getMax().compareTo(zero);
-			consumer = new MinAndMaxConsumer<Number_Type>();
-			ca.forEachAtOddPosition(consumer);
-			minAndMax = consumer.getMinAndMaxValue();
+			minAndMax = ca.getOddPositionsMinAndMax();
 			int minAtOddCompareToZero = minAndMax.getMin().compareTo(zero);
 			int maxAtOddCompareToZero = minAndMax.getMax().compareTo(zero);
 			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
@@ -2596,14 +2592,10 @@ public class Test {
 						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
 					Boolean changed;
 					finished = (changed = ca.nextStep()) != null && !changed;
-					consumer = new MinAndMaxConsumer<Number_Type>();
-					ca.forEachAtEvenPosition(consumer);
-					minAndMax = consumer.getMinAndMaxValue();
+					minAndMax = ca.getEvenPositionsMinAndMax();
 					minAtEvenCompareToZero = minAndMax.getMin().compareTo(zero);
 					maxAtEvenCompareToZero = minAndMax.getMax().compareTo(zero);
-					consumer = new MinAndMaxConsumer<Number_Type>();
-					ca.forEachAtOddPosition(consumer);
-					minAndMax = consumer.getMinAndMaxValue();
+					minAndMax = ca.getOddPositionsMinAndMax();
 					minAtOddCompareToZero = minAndMax.getMin().compareTo(zero);
 					maxAtOddCompareToZero = minAndMax.getMax().compareTo(zero);
 					isEvenPositive = !isEvenPositive;
@@ -2624,14 +2616,10 @@ public class Test {
 	public static void testBondBetweenCoordinateParityAndValueSignum(IntModel ca) {
 		System.out.println("Checking bond between coordinate parity and value signum...");
 		try {
-			MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
-			ca.forEachAtEvenPosition(consumer);
-			int[] minAndMax = consumer.getMinAndMaxValue();
+			int[] minAndMax = ca.getEvenPositionsMinAndMax();
 			int minAtEvenCompareToZero = minAndMax[0];
 			int maxAtEvenCompareToZero = minAndMax[1];
-			consumer = new MinAndMaxIntConsumer();
-			ca.forEachAtOddPosition(consumer);
-			minAndMax = consumer.getMinAndMaxValue();
+			minAndMax = ca.getOddPositionsMinAndMax();
 			int minAtOddCompareToZero = minAndMax[0];
 			int maxAtOddCompareToZero = minAndMax[1];
 			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
@@ -2641,14 +2629,10 @@ public class Test {
 						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
 					Boolean changed;
 					finished = (changed = ca.nextStep()) != null && !changed;
-					consumer = new MinAndMaxIntConsumer();
-					ca.forEachAtEvenPosition(consumer);
-					minAndMax = consumer.getMinAndMaxValue();
+					minAndMax = ca.getEvenPositionsMinAndMax();
 					minAtEvenCompareToZero = minAndMax[0];
 					maxAtEvenCompareToZero = minAndMax[1];
-					consumer = new MinAndMaxIntConsumer();
-					ca.forEachAtOddPosition(consumer);
-					minAndMax = consumer.getMinAndMaxValue();
+					minAndMax = ca.getOddPositionsMinAndMax();
 					minAtOddCompareToZero = minAndMax[0];
 					maxAtOddCompareToZero = minAndMax[1];
 					isEvenPositive = !isEvenPositive;
@@ -2669,15 +2653,11 @@ public class Test {
 	public static void testBondBetweenCoordinateParityAndValueSignum(LongModel ca) {
 		System.out.println("Checking bond between coordinate parity and value signum...");
 		try {
-			MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
-			ca.forEachAtEvenPosition(consumer);
-			long[] minAndMax = consumer.getMinAndMaxValue();
 			long tmp;
+			long[] minAndMax = ca.getEvenPositionsMinAndMax();
 			int minAtEvenCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
 			int maxAtEvenCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-			consumer = new MinAndMaxLongConsumer();
-			ca.forEachAtOddPosition(consumer);
-			minAndMax = consumer.getMinAndMaxValue();
+			minAndMax = ca.getOddPositionsMinAndMax();
 			int minAtOddCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
 			int maxAtOddCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
 			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
@@ -2687,14 +2667,10 @@ public class Test {
 						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
 					Boolean changed;
 					finished = (changed = ca.nextStep()) != null && !changed;
-					consumer = new MinAndMaxLongConsumer();
-					ca.forEachAtEvenPosition(consumer);
-					minAndMax = consumer.getMinAndMaxValue();
+					minAndMax = ca.getEvenPositionsMinAndMax();
 					minAtEvenCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
 					maxAtEvenCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-					consumer = new MinAndMaxLongConsumer();
-					ca.forEachAtOddPosition(consumer);
-					minAndMax = consumer.getMinAndMaxValue();
+					minAndMax = ca.getOddPositionsMinAndMax();
 					minAtOddCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
 					maxAtOddCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
 					isEvenPositive = !isEvenPositive;
