@@ -36,7 +36,6 @@ import org.apache.commons.math3.FieldElement;
 
 import caimgmaker.colormap.ColorMapper;
 import cellularautomata.MinAndMax;
-import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
@@ -1867,22 +1866,6 @@ public class ImgMaker {
 		return Math.min(xSize, ySize);
 	}
 	
-	private static int getModelPositionSize(Model2D grid, int preferredMaxWidth, int preferredMaxHeight) {
-		int ySize = 1;
-		int gridHeight = grid.getMaxY() - grid.getMinY() + 1;
-		if (gridHeight > 0) {
-			ySize = preferredMaxHeight/gridHeight;
-        }
-		if (ySize == 0) ySize = 1;
-		int xSize = 1;
-		int gridWidth = grid.getMaxX() - grid.getMinX() + 1;
-		if (gridWidth > 0) {
-			xSize = preferredMaxWidth/gridWidth;
-        }
-		if (xSize == 0) xSize = 1;
-		return Math.min(xSize, ySize);
-	}
-	
 	public static void createImage(ObjectModel2D<Color> grid, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
 			throws Exception {
 		int gridPositionSize = getModelPositionSize(minX, maxX, minY, maxY, minWidth, minHeight);
@@ -1991,135 +1974,6 @@ public class ImgMaker {
 		int byteCount = (int)longByteCount;
 		byte[] pixelData = new byte[byteCount];	
 		saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
-	}
-	
-	public static void createImage(ObjectModel2D<Color> grid, int minWidth, int minHeight, String path, String name) 
-			throws Exception {
-		int gridPositionSize = getModelPositionSize(grid, minWidth, minHeight);
-		createImage(grid, gridPositionSize, minWidth, minHeight, path, name);
-	}
-	
-	public static void createImage(ObjectModel2D<Color> grid, int gridPositionSize, int minWidth, int minHeight, String path, String name) throws Exception {
-		int maxX = grid.getMaxX(), minX = grid.getMinX(), maxY = grid.getMaxY(), minY = grid.getMinY();
-		int dataWidth = (maxX - minX + 1) * gridPositionSize;
-		int dataHeight = (maxY - minY + 1) * gridPositionSize;
-		int width = Math.max(dataWidth, minWidth);
-		int height = Math.max(dataHeight, minHeight);
-		long longByteCount = (long)width * height * 3;
-		if (longByteCount > Integer.MAX_VALUE)
-			throw new Exception("Integer max value exceeded");
-		int byteCount = (int)longByteCount;
-		byte[] pixelData = new byte[byteCount];
-		int topMargin = height - dataHeight;
-		int rightMargin = width - dataWidth;
-		int dataIndex = topMargin * width * 3;		
-		for (int y = maxY; y >= minY; y--) {
-			int localMinX = grid.getMinX(y);
-			int localMaxX = grid.getMaxX(y);
-			int localLeftMargin = (localMinX - minX)  * gridPositionSize * 3;
-			int localRightMargin = (rightMargin + ((maxX - localMaxX) * gridPositionSize)) * 3;
-			dataIndex += localLeftMargin;
-			int firstDataIndexToCopyFrom = dataIndex;
-			for (int x = localMinX; x <= localMaxX; x++) {
-				java.awt.Color c = grid.getFromPosition(x,y);
-				for (int j = 0; j < gridPositionSize; j++) {
-					pixelData[dataIndex++] = (byte) c.getRed();
-					pixelData[dataIndex++] = (byte) c.getGreen();
-					pixelData[dataIndex++] = (byte) c.getBlue();
-				}
-			}
-			dataIndex += localRightMargin;
-			for (int i = 1; i < gridPositionSize; i++) {
-				dataIndex += localLeftMargin;
-				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
-				for (int x = localMinX; x <= localMaxX; x++) {
-					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
-						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
-						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
-					}
-				}
-				dataIndex += localRightMargin;
-			}
-		}
-		saveAsPngImage(pixelData, width, height, path, name);
-	}
-	
-	public static void createImageFromEvenOrOddPositions(boolean isEven, ObjectModel2D<Color> grid, int minWidth, int minHeight, String path, String name) 
-			throws Exception {
-		int gridPositionSize = getModelPositionSize(grid, minWidth, minHeight);
-		createImageFromEvenOrOddPositions(isEven, grid, gridPositionSize, minWidth, minHeight, path, name);
-	}
-	
-	public static void createImageFromEvenOrOddPositions(boolean isEven, ObjectModel2D<Color> grid, int gridPositionSize, int minWidth, int minHeight, String path, String name) throws Exception {
-		int maxX = grid.getMaxX(), minX = grid.getMinX(), maxY = grid.getMaxY(), minY = grid.getMinY();
-		int dataWidth = (maxX - minX + 1) * gridPositionSize;
-		int dataHeight = (maxY - minY + 1) * gridPositionSize;
-		int width = Math.max(dataWidth, minWidth);
-		int height = Math.max(dataHeight, minHeight);
-		long longByteCount = (long)width * height * 3;
-		if (longByteCount > Integer.MAX_VALUE)
-			throw new Exception("Integer max value exceeded");
-		int byteCount = (int)longByteCount;
-		byte[] pixelData = new byte[byteCount];
-		int topMargin = height - dataHeight;
-		int rightMargin = width - dataWidth;
-		int dataIndex = topMargin * width * 3;
-		int gridPositionSizeTimes3 = gridPositionSize * 3;
-		for (int y = maxY; y >= minY; y--) {
-			int localMinX = grid.getMinX(y);
-			int localMaxX = grid.getMaxX(y);
-			boolean isPositionEven = (localMinX+y)%2 == 0;
-			if (isEven != isPositionEven) { 
-				localMinX++;
-			}
-			int localLeftMargin = (localMinX - minX)  * gridPositionSizeTimes3;
-			int localRightMargin = (rightMargin + ((maxX - localMaxX) * gridPositionSize)) * 3;
-			dataIndex += localLeftMargin;
-			int firstDataIndexToCopyFrom = dataIndex;
-			int x = localMinX;
-			for (; x < localMaxX; x+=2) {
-				java.awt.Color c = grid.getFromPosition(x,y);
-				for (int j = 0; j < gridPositionSize; j++) {
-					pixelData[dataIndex++] = (byte) c.getRed();
-					pixelData[dataIndex++] = (byte) c.getGreen();
-					pixelData[dataIndex++] = (byte) c.getBlue();
-				}
-				dataIndex += gridPositionSizeTimes3;
-			}
-			if (x == localMaxX) {
-				java.awt.Color c = grid.getFromPosition(x,y);
-				for (int j = 0; j < gridPositionSize; j++) {
-					pixelData[dataIndex++] = (byte) c.getRed();
-					pixelData[dataIndex++] = (byte) c.getGreen();
-					pixelData[dataIndex++] = (byte) c.getBlue();
-				}
-			}
-			dataIndex += localRightMargin;
-			for (int i = 1; i < gridPositionSize; i++) {
-				dataIndex += localLeftMargin;
-				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
-				x = localMinX;
-				for (; x < localMaxX; x+=2) {
-					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
-						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
-						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
-					}
-					dataIndex += gridPositionSizeTimes3;
-					dataIndexToCopyFrom += gridPositionSizeTimes3;
-				}
-				if (x == localMaxX) {
-					for (int j = 0; j < gridPositionSize; j++) {
-						pixelData[dataIndex++] =  pixelData[dataIndexToCopyFrom++];
-						pixelData[dataIndex++] =  pixelData[dataIndexToCopyFrom++];
-						pixelData[dataIndex++] =  pixelData[dataIndexToCopyFrom++];
-					}
-				}
-				dataIndex += localRightMargin;
-			}
-		}
-		saveAsPngImage(pixelData, width, height, path, name);
 	}
 	
 	public static void createImageFromEvenOrOddPositions(ObjectModel2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, String path, String name) 
