@@ -29,13 +29,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.math3.FieldElement;
 
-import cellularautomata.automata.aether.Aether2D;
-import cellularautomata.automata.aether.Aether4D;
-import cellularautomata.automata.aether.SimpleAether2D;
-import cellularautomata.automata.aether.SimpleAether5D;
+import cellularautomata.automata.aether.LongAether2D;
+import cellularautomata.automata.aether.LongAether4D;
+import cellularautomata.automata.aether.SimpleLongAether2D;
+import cellularautomata.automata.aether.SimpleLongAether5D;
 import cellularautomata.automata.aether.IntAether4D;
-import cellularautomata.automata.siv.SpreadIntegerValue2D;
-import cellularautomata.automata.siv.SimpleSpreadIntegerValue2D;
+import cellularautomata.automata.siv.LongSpreadIntegerValue2D;
+import cellularautomata.automata.siv.SimpleLongSpreadIntegerValue2D;
 import cellularautomata.model.Model;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
@@ -80,8 +80,8 @@ public class Test {
 	
 	public static void main(String[] args) throws Exception {
 		long initialValue = -3000;
-		Aether2D ae1 = new Aether2D(initialValue);
-		SimpleAether2D ae2 = new SimpleAether2D(initialValue);
+		LongAether2D ae1 = new LongAether2D(initialValue);
+		SimpleLongAether2D ae2 = new SimpleLongAether2D(initialValue);
 		compareAllSteps(ae1, ae2);
 	}
 	
@@ -1660,7 +1660,7 @@ public class Test {
 		int x = Integer.parseInt(args[4]);
 		int y = Integer.parseInt(args[5]);
 		int z = Integer.parseInt(args[6]);
-		SimpleAether5D ae = new SimpleAether5D(initialValue);
+		SimpleLongAether5D ae = new SimpleLongAether5D(initialValue);
 		System.out.println("Initial value: " + initialValue);
 		for (int i = 0; i < step; i++) {
 			System.out.print("Step: " + i + "\r");
@@ -1677,7 +1677,7 @@ public class Test {
 		int x = Integer.parseInt(args[3]);
 		int y = Integer.parseInt(args[4]);
 		int z = Integer.parseInt(args[5]);
-		Aether4D ae = new Aether4D(initialValue);
+		LongAether4D ae = new LongAether4D(initialValue);
 		System.out.println("Initial value: " + initialValue);
 		for (int i = 0; i < step; i++) {
 			System.out.print("Step: " + i + "\r");
@@ -1828,8 +1828,8 @@ public class Test {
 	
 	public static void sivTesting() {
 		long initialValue = 100000;
-		SpreadIntegerValue2D ae1 = new SpreadIntegerValue2D(initialValue, 0);
-		SimpleSpreadIntegerValue2D ae2 = new SimpleSpreadIntegerValue2D(initialValue, 0);
+		LongSpreadIntegerValue2D ae1 = new LongSpreadIntegerValue2D(initialValue, 0);
+		SimpleLongSpreadIntegerValue2D ae2 = new SimpleLongSpreadIntegerValue2D(initialValue, 0);
 		compareAllSteps(ae1, ae2);
 	}
 	

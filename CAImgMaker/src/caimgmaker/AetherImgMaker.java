@@ -35,14 +35,14 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import caimgmaker.colormap.HueMapper;
 import cellularautomata.PartialCoordinates;
-import cellularautomata.automata.AbelianSandpileSingleSource2D;
-import cellularautomata.automata.aether.Aether1D;
-import cellularautomata.automata.aether.Aether2D;
+import cellularautomata.automata.IntAbelianSandpileSingleSource2D;
+import cellularautomata.automata.aether.LongAether1D;
+import cellularautomata.automata.aether.LongAether2D;
 import cellularautomata.automata.aether.IntAether2DRandomConfiguration;
-import cellularautomata.automata.aether.Aether3D;
-import cellularautomata.automata.aether.Aether3DCubicGrid;
-import cellularautomata.automata.aether.Aether4D;
-import cellularautomata.automata.aether.Aether5D;
+import cellularautomata.automata.aether.LongAether3D;
+import cellularautomata.automata.aether.LongAether3DCubicGrid;
+import cellularautomata.automata.aether.LongAether4D;
+import cellularautomata.automata.aether.LongAether5D;
 import cellularautomata.automata.aether.BigIntAether2D;
 import cellularautomata.automata.aether.BigIntAether3D;
 import cellularautomata.automata.aether.BigIntAether3DCubicGrid;
@@ -61,11 +61,11 @@ import cellularautomata.automata.nearaether.SimpleBigIntNearAether3_3D;
 import cellularautomata.automata.nearaether.IntNearAether1_3D;
 import cellularautomata.automata.nearaether.IntNearAether2_3D;
 import cellularautomata.automata.siv.IntSpreadIntegerValue2D;
-import cellularautomata.automata.siv.SpreadIntegerValue;
-import cellularautomata.automata.siv.SpreadIntegerValue1D;
-import cellularautomata.automata.siv.SpreadIntegerValue2D;
-import cellularautomata.automata.siv.SpreadIntegerValue3D;
-import cellularautomata.automata.siv.SpreadIntegerValue4D;
+import cellularautomata.automata.siv.IntSpreadIntegerValue;
+import cellularautomata.automata.siv.LongSpreadIntegerValue1D;
+import cellularautomata.automata.siv.LongSpreadIntegerValue2D;
+import cellularautomata.automata.siv.LongSpreadIntegerValue3D;
+import cellularautomata.automata.siv.LongSpreadIntegerValue4D;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.Model;
 import cellularautomata.model.SymmetricModel;
@@ -534,7 +534,7 @@ public class AetherImgMaker {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new SpreadIntegerValue1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
+									model = new LongSpreadIntegerValue1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
 								} else {
 									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}								
@@ -542,7 +542,7 @@ public class AetherImgMaker {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
-							model = new SpreadIntegerValue1D(args.backupToRestorePath);
+							model = new LongSpreadIntegerValue1D(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
@@ -557,7 +557,7 @@ public class AetherImgMaker {
 									model = new IntSpreadIntegerValue2D(args.initialConfiguration.singleSource.intValue(), 0);
 								} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new SpreadIntegerValue2D(args.initialConfiguration.singleSource.longValue(), 0);
+									model = new LongSpreadIntegerValue2D(args.initialConfiguration.singleSource.longValue(), 0);
 								} else {
 									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}
@@ -568,7 +568,7 @@ public class AetherImgMaker {
 							try {
 								model = new IntSpreadIntegerValue2D(args.backupToRestorePath);
 							} catch (Exception ex) {
-								model = new SpreadIntegerValue2D(args.backupToRestorePath);
+								model = new LongSpreadIntegerValue2D(args.backupToRestorePath);
 							}
 						}
 					} else {
@@ -581,7 +581,7 @@ public class AetherImgMaker {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new SpreadIntegerValue3D(args.initialConfiguration.singleSource.longValue());
+									model = new LongSpreadIntegerValue3D(args.initialConfiguration.singleSource.longValue());
 								} else {
 									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}
@@ -589,7 +589,7 @@ public class AetherImgMaker {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
-							model = new SpreadIntegerValue3D(args.backupToRestorePath);
+							model = new LongSpreadIntegerValue3D(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
@@ -601,7 +601,7 @@ public class AetherImgMaker {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new SpreadIntegerValue4D(args.initialConfiguration.singleSource.longValue());
+									model = new LongSpreadIntegerValue4D(args.initialConfiguration.singleSource.longValue());
 								} else {
 									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
 								}
@@ -609,7 +609,7 @@ public class AetherImgMaker {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
-							model = new SpreadIntegerValue4D(args.backupToRestorePath);
+							model = new LongSpreadIntegerValue4D(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
@@ -621,7 +621,7 @@ public class AetherImgMaker {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-									model = new SpreadIntegerValue(args.grid.dimension, args.initialConfiguration.singleSource.intValue(), 0);
+									model = new IntSpreadIntegerValue(args.grid.dimension, args.initialConfiguration.singleSource.intValue(), 0);
 								} else {
 									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
 								}
@@ -629,7 +629,7 @@ public class AetherImgMaker {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
-							model = new SpreadIntegerValue(args.backupToRestorePath);
+							model = new IntSpreadIntegerValue(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
@@ -659,7 +659,7 @@ public class AetherImgMaker {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.ZERO) >= 0) {
-									model = new AbelianSandpileSingleSource2D(args.initialConfiguration.singleSource.intValue());
+									model = new IntAbelianSandpileSingleSource2D(args.initialConfiguration.singleSource.intValue());
 								} else {
 									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, 0, Integer.MAX_VALUE);
 								}
@@ -667,7 +667,7 @@ public class AetherImgMaker {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
-							model = new AbelianSandpileSingleSource2D(args.backupToRestorePath);
+							model = new IntAbelianSandpileSingleSource2D(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
@@ -697,15 +697,15 @@ public class AetherImgMaker {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether1D.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether1D.MIN_INITIAL_VALUE)) >= 0) {
+								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MAX_INITIAL_VALUE)) <= 0
+										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MIN_INITIAL_VALUE)) >= 0) {
 									if (args.memorySafe) {
 										model = new FileBackedAether1D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										model = new Aether1D(args.initialConfiguration.singleSource.longValue());
+										model = new LongAether1D(args.initialConfiguration.singleSource.longValue());
 									}
 								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Aether1D.MIN_INITIAL_VALUE, Aether1D.MAX_INITIAL_VALUE);
+									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, LongAether1D.MIN_INITIAL_VALUE, LongAether1D.MAX_INITIAL_VALUE);
 								}								
 							} else {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
@@ -714,7 +714,7 @@ public class AetherImgMaker {
 							if (args.memorySafe) {
 								model = new FileBackedAether1D(args.backupToRestorePath, args.path);
 							} else {
-								model = new Aether1D(args.backupToRestorePath);
+								model = new LongAether1D(args.backupToRestorePath);
 							}
 						}
 					} else {
@@ -736,9 +736,9 @@ public class AetherImgMaker {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MAX_INITIAL_VALUE)) <= 0
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new IntAether2D(args.initialConfiguration.singleSource.intValue());
-									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether2D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new Aether2D(args.initialConfiguration.singleSource.longValue());
+									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new LongAether2D(args.initialConfiguration.singleSource.longValue());
 									} else {
 										model = new BigIntAether2D(args.initialConfiguration.singleSource);
 									}
@@ -761,7 +761,7 @@ public class AetherImgMaker {
 									model = new IntAether2D(args.backupToRestorePath);							
 								} catch (Exception ex1) {
 									try {
-										model = new Aether2D(args.backupToRestorePath);							
+										model = new LongAether2D(args.backupToRestorePath);							
 									} catch (Exception ex2) {
 										try {
 											model = new BigIntAether2D(args.backupToRestorePath);							
@@ -791,9 +791,9 @@ public class AetherImgMaker {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MAX_INITIAL_VALUE)) <= 0
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new IntAether3D(args.initialConfiguration.singleSource.intValue());
-									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new Aether3D(args.initialConfiguration.singleSource.longValue());
+									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new LongAether3D(args.initialConfiguration.singleSource.longValue());
 									} else {
 										model = new BigIntAether3D(args.initialConfiguration.singleSource);
 									}
@@ -816,7 +816,7 @@ public class AetherImgMaker {
 									model = new IntAether3D(args.backupToRestorePath);							
 								} catch (Exception ex1) {
 									try {
-										model = new Aether3D(args.backupToRestorePath);							
+										model = new LongAether3D(args.backupToRestorePath);							
 									} catch (Exception ex2) {
 										try {
 											model = new BigIntAether3D(args.backupToRestorePath);							
@@ -830,9 +830,9 @@ public class AetherImgMaker {
 					} else {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) { 
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3DCubicGrid.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether3DCubicGrid.MIN_INITIAL_VALUE)) >= 0) {
-									model = new Aether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource.longValue());
+								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DCubicGrid.MAX_INITIAL_VALUE)) <= 0
+										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DCubicGrid.MIN_INITIAL_VALUE)) >= 0) {
+									model = new LongAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource.longValue());
 								} else {
 									model = new BigIntAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource);
 								}
@@ -841,7 +841,7 @@ public class AetherImgMaker {
 							}
 						} else {
 							try {
-								model = new Aether3DCubicGrid(args.backupToRestorePath);							
+								model = new LongAether3DCubicGrid(args.backupToRestorePath);							
 							} catch (Exception ex1) {
 								model = new BigIntAether3DCubicGrid(args.backupToRestorePath);			
 							}
@@ -865,9 +865,9 @@ public class AetherImgMaker {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MAX_INITIAL_VALUE)) <= 0
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new IntAether4D(args.initialConfiguration.singleSource.intValue());
-									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether4D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether4D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new Aether4D(args.initialConfiguration.singleSource.longValue());
+									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new LongAether4D(args.initialConfiguration.singleSource.longValue());
 									} else {
 										model = new BigIntAether4D(args.initialConfiguration.singleSource);
 									}		
@@ -880,7 +880,7 @@ public class AetherImgMaker {
 								model = new FileBackedAether4D(args.backupToRestorePath, args.path);
 							} else {	
 								try {
-									model = new Aether4D(args.backupToRestorePath);							
+									model = new LongAether4D(args.backupToRestorePath);							
 								} catch (Exception ex1) {
 									model = new BigIntAether4D(args.backupToRestorePath);			
 								}
@@ -907,11 +907,11 @@ public class AetherImgMaker {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5D.MAX_INITIAL_VALUE)) <= 0
 											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5D.MIN_INITIAL_VALUE)) >= 0) {
 										model = new IntAether5D(args.initialConfiguration.singleSource.intValue());
-									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether5D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Aether5D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new Aether5D(args.initialConfiguration.singleSource.longValue());
+									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new LongAether5D(args.initialConfiguration.singleSource.longValue());
 									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Aether5D.MIN_INITIAL_VALUE, Aether5D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, LongAether5D.MIN_INITIAL_VALUE, LongAether5D.MAX_INITIAL_VALUE);
 									}
 								}
 							} else {
@@ -924,7 +924,7 @@ public class AetherImgMaker {
 								try {
 									model = new IntAether5D(args.backupToRestorePath);							
 								} catch (Exception ex1) {
-									model = new Aether5D(args.backupToRestorePath);			
+									model = new LongAether5D(args.backupToRestorePath);			
 								}
 							}
 						}
