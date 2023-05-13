@@ -81,11 +81,11 @@ public interface MultidimensionalArray {
 	}
 	
 	/**
-	 * Feeds every index of the array to a {@link Consumer<Coordinates>}.
+	 * Feeds every index of the array to a {@link Consumer}.
 	 * 
 	 * @param consumer
 	 */
-	default void forEachIndex(Consumer<Coordinates> consumer) {
+	default void forEachIndex(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}

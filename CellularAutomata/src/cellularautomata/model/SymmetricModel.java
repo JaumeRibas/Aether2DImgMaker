@@ -101,11 +101,11 @@ public interface SymmetricModel extends Model {
 	int getAsymmetricMinCoordinate(int axis, PartialCoordinates coordinates);
 	
 	/**
-	 * Feeds every position of the asymmetric section to a {@link Consumer<Coordinates>}.
+	 * Feeds every position of the asymmetric section to a {@link Consumer}.
 	 * 
 	 * @param consumer
 	 */
-	default void forEachPositionInAsymmetricSection(Consumer<Coordinates> consumer) {
+	default void forEachPositionInAsymmetricSection(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -156,11 +156,11 @@ public interface SymmetricModel extends Model {
 	}
 	
 	/**
-	 * Feeds every even position of the asymmetric section to a {@link Consumer<Coordinates>}.
+	 * Feeds every even position of the asymmetric section to a {@link Consumer}.
 	 * 
 	 * @param consumers
 	 */
-	default void forEachEvenPositionInAsymmetricSection(Consumer<Coordinates> consumer) {
+	default void forEachEvenPositionInAsymmetricSection(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -216,11 +216,11 @@ public interface SymmetricModel extends Model {
 	}
 	
 	/**
-	 * Feeds every odd position of the asymmetric section to a {@link Consumer<Coordinates>}.
+	 * Feeds every odd position of the asymmetric section to a {@link Consumer}.
 	 * 
 	 * @param consumers
 	 */
-	default void forEachOddPositionInAsymmetricSection(Consumer<Coordinates> consumer) {
+	default void forEachOddPositionInAsymmetricSection(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}

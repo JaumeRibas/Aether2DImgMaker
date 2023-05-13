@@ -97,7 +97,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	
 	
 	@Override
-	public void forEachIndex(Consumer<Coordinates> consumer) {
+	public void forEachIndex(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -112,11 +112,11 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	}
 	
 	/**
-	 * Executes a {@link Consumer<Coordinates>} for every index of the edges of the array.
+	 * Executes a {@link Consumer} for every index of the edges of the array.
 	 * 
 	 * @param consumer
 	 */
-	public void forEachEdgeIndex(int edgeWidth, Consumer<Coordinates> consumer) {
+	public void forEachEdgeIndex(int edgeWidth, Consumer<? super Coordinates> consumer) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
 		}
@@ -158,13 +158,13 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 	}
 	
 	/**
-	 * Feeds every index within the passed bounds to a {@link Consumer<Coordinates>}. 
+	 * Feeds every index within the passed bounds to a {@link Consumer}. 
 	 * 
 	 * @param upperBounds
 	 * @param lowerBounds
 	 * @param consumer
 	 */
-	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, Consumer<Coordinates> consumer) {
+	public static void forEachIndexWithinBounds(int[] upperBounds, int[] lowerBounds, Consumer<? super Coordinates> consumer) {
 		int dimension = upperBounds.length;
 		int[] indexes = lowerBounds.clone();
 		if (dimension == 0) {

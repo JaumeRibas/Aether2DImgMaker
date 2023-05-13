@@ -125,7 +125,7 @@ public interface Model {
 	 * 
 	 * @param consumer
 	 */
-	default void forEachPosition(Consumer<Coordinates> consumer) {
+	default void forEachPosition(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -183,7 +183,7 @@ public interface Model {
 	 * @param consumer
 	 * @param axesOrder
 	 */
-	default void forEachPosition(Consumer<Coordinates> consumer, int[] axesOrder) {
+	default void forEachPosition(Consumer<? super Coordinates> consumer, int[] axesOrder) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -252,7 +252,7 @@ public interface Model {
 	 * 
 	 * @param consumer
 	 */
-	default void forEachEvenPosition(Consumer<Coordinates> consumer) {
+	default void forEachEvenPosition(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -310,7 +310,7 @@ public interface Model {
 	 * 
 	 * @param consumer
 	 */
-	default void forEachOddPosition(Consumer<Coordinates> consumer) {
+	default void forEachOddPosition(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}

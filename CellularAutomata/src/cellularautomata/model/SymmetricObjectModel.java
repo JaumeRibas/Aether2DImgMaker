@@ -43,7 +43,7 @@ public interface SymmetricObjectModel<Object_Type> extends ObjectModel<Object_Ty
 	 * Feeds every value of an asymmetric section, in a consistent order, to a {@link Consumer}.
 	 * @param consumer
 	 */
-	default void forEachInAsymmetricSection(Consumer<Object_Type> consumer) {
+	default void forEachInAsymmetricSection(Consumer<? super Object_Type> consumer) {
 		forEachPositionInAsymmetricSection(new Consumer<Coordinates>() {
 			
 			@Override

@@ -64,7 +64,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	}
 	
 	@Override
-	public void forEachIndex(Consumer<Coordinates> consumer) {
+	public void forEachIndex(Consumer<? super Coordinates> consumer) {
 		if (consumer == null) {
 			throw new IllegalArgumentException("The consumer cannot be null.");
 		}
@@ -92,7 +92,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	}
 	
 	@Override
-	public void forEachEdgeIndex(int edgeWidth, Consumer<Coordinates> consumer) {
+	public void forEachEdgeIndex(int edgeWidth, Consumer<? super Coordinates> consumer) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
 		}

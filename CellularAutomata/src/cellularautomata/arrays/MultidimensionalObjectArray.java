@@ -16,17 +16,9 @@
  */
 package cellularautomata.arrays;
 
-import java.util.function.Consumer;
 import cellularautomata.Coordinates;
 
-public interface MultidimensionalObjectArray<Object_Type> extends MultidimensionalArray {
-	
-	/**
-	 * Feeds every element of the array to a {@link Consumer<? super Object_Type>}.
-	 * 
-	 * @param consumer
-	 */
-	void forEach(Consumer<? super Object_Type> consumer);
+public interface MultidimensionalObjectArray<Object_Type> extends MultidimensionalArray, Iterable<Object_Type> {
 	
 	/**
 	 * <p>Gets the element at the given indexes.</p>

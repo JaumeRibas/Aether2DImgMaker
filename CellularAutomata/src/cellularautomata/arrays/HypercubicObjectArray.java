@@ -17,6 +17,7 @@
 package cellularautomata.arrays;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.function.Consumer;
 import cellularautomata.Coordinates;
 
@@ -57,6 +58,11 @@ public abstract class HypercubicObjectArray<Object_Type> extends HypercubicArray
 		for (int i = 0; i < underlyingArray.length; i++) {
 			consumer.accept(underlyingArray[i]);
 		}
+	}
+	
+	@Override
+	public Iterator<Object_Type> iterator() {
+		return Arrays.asList(underlyingArray).iterator();
 	}
 	
 }

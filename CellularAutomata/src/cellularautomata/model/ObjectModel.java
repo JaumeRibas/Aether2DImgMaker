@@ -43,7 +43,7 @@ public interface ObjectModel<Object_Type> extends Model, Iterable<Object_Type> {
 	 * @param consumer
 	 * @throws Exception 
 	 */
-	default void forEachAtEvenPosition(Consumer<Object_Type> consumer) throws Exception {
+	default void forEachAtEvenPosition(Consumer<? super Object_Type> consumer) throws Exception {
 		forEachEvenPosition(new Consumer<Coordinates>() {
 			
 			@Override
@@ -64,7 +64,7 @@ public interface ObjectModel<Object_Type> extends Model, Iterable<Object_Type> {
 	 * @param consumer
 	 * @throws Exception 
 	 */
-	default void forEachAtOddPosition(Consumer<Object_Type> consumer) throws Exception {
+	default void forEachAtOddPosition(Consumer<? super Object_Type> consumer) throws Exception {
 		forEachOddPosition(new Consumer<Coordinates>() {
 			
 			@Override

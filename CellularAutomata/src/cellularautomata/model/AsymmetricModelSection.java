@@ -60,17 +60,17 @@ public class AsymmetricModelSection<Source_Type extends SymmetricModel> implemen
 	}
 
 	@Override
-	public void forEachPosition(Consumer<Coordinates> consumer) {
+	public void forEachPosition(Consumer<? super Coordinates> consumer) {
 		source.forEachPositionInAsymmetricSection(consumer);
 	}
 	
 	@Override
-	public void forEachEvenPosition(Consumer<Coordinates> consumer) {
+	public void forEachEvenPosition(Consumer<? super Coordinates> consumer) {
 		source.forEachEvenPositionInAsymmetricSection(consumer);
 	}
 	
 	@Override
-	public void forEachOddPosition(Consumer<Coordinates> consumer) {
+	public void forEachOddPosition(Consumer<? super Coordinates> consumer) {
 		source.forEachOddPositionInAsymmetricSection(consumer);
 	}
 
