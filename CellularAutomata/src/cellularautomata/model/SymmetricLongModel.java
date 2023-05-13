@@ -53,7 +53,6 @@ public interface SymmetricLongModel extends LongModel, SymmetricModel {
 				try {
 					consumer.accept(getFromPosition(coords));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
 			}

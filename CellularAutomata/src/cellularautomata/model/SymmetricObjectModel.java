@@ -51,7 +51,6 @@ public interface SymmetricObjectModel<Object_Type> extends ObjectModel<Object_Ty
 				try {
 					consumer.accept(getFromPosition(coords));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
 			}
