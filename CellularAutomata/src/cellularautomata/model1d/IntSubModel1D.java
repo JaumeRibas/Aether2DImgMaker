@@ -16,9 +16,9 @@
  */
 package cellularautomata.model1d;
 
-public class IntSubModel1D<Source_Type extends IntModel1D> extends SubModel1D<Source_Type> implements IntModel1D {
+public class IntSubModel1D extends SubModel1D<IntModel1D> implements IntModel1D {
 
-	public IntSubModel1D(Source_Type source, Integer minX, Integer maxX) {
+	public IntSubModel1D(IntModel1D source, Integer minX, Integer maxX) {
 		super(source, minX, maxX);
 	}
 

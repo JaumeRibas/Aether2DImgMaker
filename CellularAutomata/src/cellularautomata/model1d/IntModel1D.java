@@ -91,7 +91,7 @@ public interface IntModel1D extends Model1D, IntModel {
 	
 	@Override
 	default IntModel1D subsection(Integer minX, Integer maxX) {
-		return new IntSubModel1D<IntModel1D>(this, minX, maxX);
+		return new IntSubModel1D(this, minX, maxX);
 	}
 
 	@Override

@@ -91,7 +91,7 @@ public interface LongModel1D extends Model1D, LongModel {
 	
 	@Override
 	default LongModel1D subsection(Integer minX, Integer maxX) {
-		return new LongSubModel1D<LongModel1D>(this, minX, maxX);
+		return new LongSubModel1D(this, minX, maxX);
 	}
 
 	@Override
