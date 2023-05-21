@@ -24,7 +24,7 @@ public class InitialConfigValidator implements IParameterValidator {
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
-		if (!value.matches("^single-source_-?\\d+|random-region_\\d+_-?\\d+_-?\\d+$")) {
+		if (!value.matches("^-?\\d+|single-source_-?\\d+|random-region_\\d+_-?\\d+_-?\\d+$")) {
 			throw new ParameterException("The value of " + name + " has an incorrect format.");
 		}
 	}

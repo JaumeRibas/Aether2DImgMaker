@@ -22,21 +22,18 @@ import caimgmaker.ImgMakerConstants;
 
 public class Args {
 
-	public static final String NORMAL = "normal";
-	public static final String SPLIT_PARITY = "split-parity";
-	public static final String EVEN_ONLY = "even-only";
-	public static final String ODD_ONLY = "odd-only";
-	//TODO missing modes
-	
 	@Parameter(names = "-model", description = "The model to generate images from. The currently available models are: 'Aether', 'Spread_Integer_Value' and 'Abelian_sandpile'.")
     public String model = "Aether";
 	
 	@Parameter(names = "-grid", validateWith = GridValidator.class, converter = GridConverter.class, description = "The type of grid to use. Currently, the only available types are: '{dimension}d', a infinite flat grid of dimension {dimension} (e.g. '3d'); and'{dimension}d_{side}', a finite flat grid shaped as a hypercube of dimension {dimension} and side {side} (e.g. '2d_101').")
     public GridOptionValue grid = null;
-
-	//TODO make single source the default
-	@Parameter(names = { "-initial-configuration", "-initial-config", "-init-configuration", "-init-config" }, validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class, description = "The initial configuration. The currently available configurations are: 'single-source_{value}', for a single source initial configuration (e.g. 'single-source_-1000'), and 'random-region_{side}_{min}_{max}', for an initial configuration consisting of an hypercubic region of side {side} filled with random values ranging form {min} to {max} (e.g. 'random-region_250_-45_60'). Note that outside this region the value will be zero.")
+	
+	@Parameter(names = "-initial-configuration", validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class, description = "This is the main option and can be used without the option name. The initial configuration for the model. The currently available configurations are: 'single-source_{value}', or just '{value}', for a single source initial configuration (e.g. 'single-source_-1000' or '-1000'), and 'random-region_{side}_{min}_{max}', for an initial configuration consisting of an hypercubic region of side {side} filled with random values ranging form {min} to {max} (e.g. 'random-region_250_-45_60'). Note that outside this region the value will be zero.")
     public InitialConfigOptionValue initialConfiguration = null;
+
+	//I repeat the option as a hack because I don't like how the main option's description is displayed
+	@Parameter(validateWith = InitialConfigValidator.class, converter = InitialConfigConverter.class)
+    public InitialConfigOptionValue initialConfiguration2 = null;
 
 	@Parameter(names = { "-asymmetric", "-asymm", "-asym" }, description = "Generate images only of an asymmetric section of a symmetric model.")
 	public boolean asymmetric = false;
@@ -74,8 +71,8 @@ public class Args {
 	@Parameter(names = "-scan3-start", description = "The scan3 will start at this coordinate. Only applies to model sections with dimension three (see -grid and -coordinate-filters options).")
     public Integer zScanInitialIndex = null;
     
-    @Parameter(names = { "-image-generation-mode", "-img-generation-mode", "-image-gen-mode", "-img-gen-mode" }, description = "Option to affect image generation. The currently available modes are: '" + NORMAL + "', '" + SPLIT_PARITY + "', '" + EVEN_ONLY + "' and '" + ODD_ONLY + "'.")
-    public String imgGenerationMode = NORMAL;
+    @Parameter(names = { "-image-generation-mode", "-img-generation-mode", "-image-gen-mode", "-img-gen-mode" }, validateWith = ImageGenerationModeValidator.class, description = "Option to affect image generation. The currently available modes are: " + ImageGenerationMode.FRIENDLY_VALUES_LIST + ".")
+    public String imgGenerationMode = ImageGenerationMode.NORMAL.getName();//I use String instead of the enum directly in order to have lower case values
     
     @Parameter(names = "-memory-safe", description = "Use temporary files, within the -path folder, to store the grid so as to avoid running out of memory. In exchange, processing speed and storage space are sacrificed.")
 	public boolean memorySafe = false;

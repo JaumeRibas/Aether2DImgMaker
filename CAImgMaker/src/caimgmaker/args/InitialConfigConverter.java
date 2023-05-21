@@ -27,7 +27,9 @@ public class InitialConfigConverter implements IStringConverter<InitialConfigOpt
 		InitialConfigOptionValue value = null;
 		if (strValue != null) {
 			String[] parts = strValue.split("_");
-			if (parts[0].equals("single-source")) {
+			if (parts.length == 1) {
+				value = new InitialConfigOptionValue(new BigInt(strValue));
+			} else if (parts[0].equals("single-source")) {
 				value = new InitialConfigOptionValue(new BigInt(parts[1]));
 			} else {
 				value = new InitialConfigOptionValue(Integer.parseInt(parts[1]), new BigInt(parts[2]), new BigInt(parts[3]));
