@@ -41,7 +41,9 @@ import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
 import cellularautomata.model.NumericModel;
 import cellularautomata.model.ObjectModel;
+import cellularautomata.model.BooleanModel;
 import cellularautomata.model.HypercubicPyramidGrid;
+import cellularautomata.model1d.BooleanModel1D;
 import cellularautomata.model1d.IntModel1D;
 import cellularautomata.model1d.IntModelAs1D;
 import cellularautomata.model1d.LongModel1D;
@@ -52,6 +54,7 @@ import cellularautomata.model1d.ObjectModelAs1D;
 import cellularautomata.model2d.ArrayIntGrid2D;
 import cellularautomata.model2d.ArrayLongGrid2D;
 import cellularautomata.model2d.ArrayNumberGrid2D;
+import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.IntModelAs2D;
@@ -1833,6 +1836,106 @@ public class Test {
 		compareAllSteps(ae1, ae2);
 	}
 	
+	public static void compareAllSteps(BooleanModel ca1, BooleanModel ca2) {
+		System.out.println("Comparing...");
+		int dimension = ca1.getGridDimension();
+		int dimension2 = ca2.getGridDimension();
+		if (dimension == dimension2) {
+			try {
+				boolean finished1 = false;
+				boolean finished2 = false;
+				boolean equal = true;
+				int[] coordinates = new int[dimension];
+				while (equal && !finished1 && !finished2) {
+					if (dimension == 0) {
+						Coordinates coordinatesObj = new Coordinates(coordinates);
+						boolean val1 = ca1.getFromPosition(coordinatesObj);
+						boolean val2 = ca2.getFromPosition(coordinatesObj);
+						if (val1 != val2) {
+							equal = false;
+							System.err.println("Different value at step " + ca1.getStep() + " " + coordinatesObj + ": " 
+									+ ca1.getClass().getSimpleName() + ":" + val1 
+									+ " != " + ca2.getClass().getSimpleName() + ":" + val2);
+						}
+					} else {
+						Integer[] partialCoordinates = new Integer[dimension];
+						int[] maxCoords = new int[dimension];
+						int currentAxis = dimension - 1;
+						boolean isBeginningOfLoop = true;
+						while (currentAxis < dimension) {
+							if (currentAxis == 0) {
+								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
+								//ignore possible differences in bounds
+								int minCoord = Math.max(ca1.getMinCoordinate(0, partialCoordinatesObj), ca2.getMinCoordinate(0, partialCoordinatesObj));
+								int maxCoord = Math.min(ca1.getMaxCoordinate(0, partialCoordinatesObj), ca2.getMaxCoordinate(0, partialCoordinatesObj));
+								for (int currentCoordinate = minCoord; currentCoordinate != maxCoord; currentCoordinate++) {
+									coordinates[0] = currentCoordinate;
+									Coordinates coordinatesObj = new Coordinates(coordinates);
+									boolean val1 = ca1.getFromPosition(coordinatesObj);
+									boolean val2 = ca2.getFromPosition(coordinatesObj);
+									if (val1 != val2) {
+										equal = false;
+										System.err.println("Different value at step " + ca1.getStep() + " " + coordinatesObj + ": " 
+												+ ca1.getClass().getSimpleName() + ":" + val1 
+												+ " != " + ca2.getClass().getSimpleName() + ":" + val2);
+									}
+								}
+								//to prevent infinite loop if maxCoord is equal to Integer.MAX_VALUE
+								coordinates[0] = maxCoord;
+								Coordinates coordinatesObj = new Coordinates(coordinates);
+								boolean val1 = ca1.getFromPosition(coordinatesObj);
+								boolean val2 = ca2.getFromPosition(coordinatesObj);
+								if (val1 != val2) {
+									equal = false;
+									System.err.println("Different value at step " + ca1.getStep() + " " + coordinatesObj + ": " 
+											+ ca1.getClass().getSimpleName() + ":" + val1 
+											+ " != " + ca2.getClass().getSimpleName() + ":" + val2);
+								}
+								isBeginningOfLoop = false;
+								currentAxis++;
+							} else if (isBeginningOfLoop) {
+								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
+								int localMinCoord = Math.max(ca1.getMinCoordinate(0, partialCoordinatesObj), ca2.getMinCoordinate(0, partialCoordinatesObj));
+								maxCoords[currentAxis] = Math.min(ca1.getMaxCoordinate(0, partialCoordinatesObj), ca2.getMaxCoordinate(0, partialCoordinatesObj));
+								coordinates[currentAxis] = localMinCoord;
+								partialCoordinates[currentAxis] = localMinCoord;
+								currentAxis--;
+							} else {
+								int currentCoordinate = coordinates[currentAxis];
+								if (currentCoordinate < maxCoords[currentAxis]) {
+									isBeginningOfLoop = true;
+									currentCoordinate++;
+									coordinates[currentAxis] = currentCoordinate;
+									partialCoordinates[currentAxis] = currentCoordinate;
+									currentAxis--;
+								} else {
+									partialCoordinates[currentAxis] = null;
+									currentAxis++;
+								}
+							}
+						}
+					}
+					Boolean changed;
+					finished1 = (changed = ca1.nextStep()) != null && !changed;
+					finished2 = (changed = ca2.nextStep()) != null && !changed;
+					if (finished1 != finished2) {
+						equal = false;
+						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
+						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
+					}
+				}
+				if (equal)
+					System.out.println("Equal!");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.err.println("Different grid dimension: " 
+					+ ca1.getClass().getSimpleName() + ":" + dimension 
+					+ " != " + ca2.getClass().getSimpleName() + ":" + dimension2);
+		}
+	}
+	
 	public static void compareAllSteps(IntModel ca1, IntModel ca2) {
 		System.out.println("Comparing...");
 		int dimension = ca1.getGridDimension();
@@ -2341,7 +2444,6 @@ public class Test {
 		}
 	}
 	
-
 	public static <Number_Type extends Number & FieldElement<Number_Type> & Comparable<Number_Type>> void compareAllSteps(IntModel ca1, NumericModel<Number_Type> ca2) {
 		compareAllSteps(ca2, ca1);
 	}
@@ -2444,8 +2546,7 @@ public class Test {
 					+ ca1.getClass().getSimpleName() + ":" + dimension 
 					+ " != " + ca2.getClass().getSimpleName() + ":" + dimension2);
 		}
-	}
-	
+	}	
 	
 	public static void compareAllStepsWithIterators(LongModel ca1, LongModel ca2) {
 		try {
@@ -2494,8 +2595,7 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 	
 	public static void testTotalValueConservation(LongModel ca) {
 		System.out.println("Checking total value conservation...");
@@ -2515,8 +2615,7 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 	
 	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void testTotalValueConservation(NumericModel<Number_Type> ca) {
 		System.out.println("Checking total value conservation...");
@@ -2536,8 +2635,7 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 	
 	public static void printTotalValueEvolution(LongModel ca) {
 		try {
@@ -2548,8 +2646,7 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 	
 	public static void testTotalValueConservation(IntModel ca) {
 		System.out.println("Checking total value conservation...");
@@ -2571,180 +2668,30 @@ public class Test {
 		}
 	}
 	
-	private static boolean isBondBetweenCoordinateParityAndValueSignum(int minAtEvenCompareToZero, int maxAtEvenCompareToZero, int minAtOddCompareToZero, int maxAtOddCompareToZero) {
-		return minAtEvenCompareToZero <= 0 && maxAtEvenCompareToZero <= 0 && minAtOddCompareToZero >= 0 && maxAtOddCompareToZero >= 0
-				|| minAtEvenCompareToZero >= 0 && maxAtEvenCompareToZero >= 0 && minAtOddCompareToZero <= 0 && maxAtOddCompareToZero <= 0;
-	}
-	
-	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void testBondBetweenCoordinateParityAndValueSignum(NumericModel<Number_Type> ca, Number_Type zero) {
-		System.out.println("Checking bond between coordinate parity and value signum...");
-		try {
-			MinAndMax<Number_Type> minAndMax = ca.getEvenPositionsMinAndMax();
-			int minAtEvenCompareToZero = minAndMax.getMin().compareTo(zero);
-			int maxAtEvenCompareToZero = minAndMax.getMax().compareTo(zero);
-			minAndMax = ca.getOddPositionsMinAndMax();
-			int minAtOddCompareToZero = minAndMax.getMin().compareTo(zero);
-			int maxAtOddCompareToZero = minAndMax.getMax().compareTo(zero);
-			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
-				boolean isEvenPositive = maxAtEvenCompareToZero > 0;
-				boolean finished = false;
-				while (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero) 
-						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
-					Boolean changed;
-					finished = (changed = ca.nextStep()) != null && !changed;
-					minAndMax = ca.getEvenPositionsMinAndMax();
-					minAtEvenCompareToZero = minAndMax.getMin().compareTo(zero);
-					maxAtEvenCompareToZero = minAndMax.getMax().compareTo(zero);
-					minAndMax = ca.getOddPositionsMinAndMax();
-					minAtOddCompareToZero = minAndMax.getMin().compareTo(zero);
-					maxAtOddCompareToZero = minAndMax.getMax().compareTo(zero);
-					isEvenPositive = !isEvenPositive;
-				}
-				if (!finished) {
-					System.err.println("The bond broke at step " + ca.getStep());
-				} else {
-					System.out.println("A perfect bond was found!");
-				}				
-			} else {
-				System.err.println("No bond was found.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void testBondBetweenCoordinateParityAndValueSignum(IntModel ca) {
-		System.out.println("Checking bond between coordinate parity and value signum...");
-		try {
-			int[] minAndMax = ca.getEvenPositionsMinAndMax();
-			int minAtEvenCompareToZero = minAndMax[0];
-			int maxAtEvenCompareToZero = minAndMax[1];
-			minAndMax = ca.getOddPositionsMinAndMax();
-			int minAtOddCompareToZero = minAndMax[0];
-			int maxAtOddCompareToZero = minAndMax[1];
-			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
-				boolean isEvenPositive = maxAtEvenCompareToZero > 0;
-				boolean finished = false;
-				while (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero) 
-						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
-					Boolean changed;
-					finished = (changed = ca.nextStep()) != null && !changed;
-					minAndMax = ca.getEvenPositionsMinAndMax();
-					minAtEvenCompareToZero = minAndMax[0];
-					maxAtEvenCompareToZero = minAndMax[1];
-					minAndMax = ca.getOddPositionsMinAndMax();
-					minAtOddCompareToZero = minAndMax[0];
-					maxAtOddCompareToZero = minAndMax[1];
-					isEvenPositive = !isEvenPositive;
-				}
-				if (!finished) {
-					System.err.println("The bond broke at step " + ca.getStep());
-				} else {
-					System.out.println("A perfect bond was found!");
-				}				
-			} else {
-				System.err.println("No bond was found.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void testBondBetweenCoordinateParityAndValueSignum(LongModel ca) {
-		System.out.println("Checking bond between coordinate parity and value signum...");
-		try {
-			long tmp;
-			long[] minAndMax = ca.getEvenPositionsMinAndMax();
-			int minAtEvenCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-			int maxAtEvenCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-			minAndMax = ca.getOddPositionsMinAndMax();
-			int minAtOddCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-			int maxAtOddCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-			if (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero)) {
-				boolean isEvenPositive = maxAtEvenCompareToZero > 0;
-				boolean finished = false;
-				while (isBondBetweenCoordinateParityAndValueSignum(minAtEvenCompareToZero, maxAtEvenCompareToZero, minAtOddCompareToZero, maxAtOddCompareToZero) 
-						&& isEvenPositive == maxAtEvenCompareToZero > 0 && !finished) {
-					Boolean changed;
-					finished = (changed = ca.nextStep()) != null && !changed;
-					minAndMax = ca.getEvenPositionsMinAndMax();
-					minAtEvenCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-					maxAtEvenCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-					minAndMax = ca.getOddPositionsMinAndMax();
-					minAtOddCompareToZero = (tmp = minAndMax[0]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-					maxAtOddCompareToZero = (tmp = minAndMax[1]) == 0 ? 0 : tmp > 0 ? 1 : -1;
-					isEvenPositive = !isEvenPositive;
-				}
-				if (!finished) {
-					System.err.println("The bond broke at step " + ca.getStep());
-				} else {
-					System.out.println("A perfect bond was found!");
-				}				
-			} else {
-				System.err.println("No bond was found.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void printEvenOddMinMaxValues(ObjectModel<Number_Type> ca) {
+	public static void stepByStep(BooleanModel1D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			do {
-				System.out.println("step: " + ca.getStep());
-				MinAndMaxConsumer<Number_Type> consumer = new MinAndMaxConsumer<Number_Type>();
-				ca.forEachAtEvenPosition(consumer);
-				MinAndMax<Number_Type> minAndMax = consumer.getMinAndMaxValue();
-				System.out.println("even positions:\t{ min: " + minAndMax.getMin() + ",\tmax: " + minAndMax.getMax() + " }");
-				consumer = new MinAndMaxConsumer<Number_Type>();
-				ca.forEachAtOddPosition(consumer);
-				minAndMax = consumer.getMinAndMaxValue();
-				System.out.println("odd positions:\t{ min: " + minAndMax.getMin() + ",\tmax: " + minAndMax.getMax() + " }");
+				System.out.println("step " + ca.getStep());
+				Utils.printAsGrid(ca);
 				s.nextLine();
-			} while (ca.nextStep());
+			} while ((changed = ca.nextStep()) == null || changed);
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void printEvenOddMinMaxValues(IntModel ca) {
+	public static void stepByStep(BooleanModel2D ca) {
 		try {
 			Scanner s = new Scanner(System.in);
+			Boolean changed;
 			do {
-				System.out.println("step: " + ca.getStep());
-				MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
-				ca.forEachAtEvenPosition(consumer);
-				int[] minAndMax = consumer.getMinAndMaxValue();
-				System.out.println("even positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }");
-				consumer = new MinAndMaxIntConsumer();
-				ca.forEachAtOddPosition(consumer);
-				minAndMax = consumer.getMinAndMaxValue();
-				System.out.println("odd positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }" + System.lineSeparator());
+				System.out.println("step " + ca.getStep());
+				Utils.printAsGrid(ca);
 				s.nextLine();
-			} while (ca.nextStep());
-			s.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void printEvenOddMinMaxValues(LongModel ca) {
-		try {
-			Scanner s = new Scanner(System.in);
-			do {
-				System.out.println("step: " + ca.getStep());
-				MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
-				ca.forEachAtEvenPosition(consumer);
-				long[] minAndMax = consumer.getMinAndMaxValue();
-				System.out.println("even positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }");
-				consumer = new MinAndMaxLongConsumer();
-				ca.forEachAtOddPosition(consumer);
-				minAndMax = consumer.getMinAndMaxValue();
-				System.out.println("odd positions:\t{ min: " + minAndMax[0] + ",\tmax: " + minAndMax[1] + " }" + System.lineSeparator());
-				s.nextLine();
-			} while (ca.nextStep());
+			} while ((changed = ca.nextStep()) == null || changed);
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();

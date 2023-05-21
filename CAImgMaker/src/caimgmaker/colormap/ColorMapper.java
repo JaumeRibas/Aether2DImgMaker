@@ -20,6 +20,7 @@ import java.awt.Color;
 
 import org.apache.commons.math3.FieldElement;
 
+import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
@@ -32,6 +33,8 @@ public interface ColorMapper {
 	ObjectModel2D<Color> getMappedModel(LongModel2D grid, long minValue, long maxValue);
 	
 	ObjectModel2D<Color> getMappedModel(IntModel2D grid, int minValue, int maxValue);
+	
+	ObjectModel2D<Color> getMappedModel(BooleanModel2D grid);
 	
 	/**
 	 * Return the colormap's name in a format that can be used in file names

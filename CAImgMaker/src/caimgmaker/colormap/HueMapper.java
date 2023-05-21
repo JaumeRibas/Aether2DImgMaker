@@ -21,6 +21,7 @@ import java.awt.Color;
 import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
@@ -70,6 +71,11 @@ public class HueMapper implements ColorMapper {
 			colorMap = new IntHueMap(minValue, maxValue);
 		}
 		return new ColorMappedIntGrid2D(grid, colorMap);
+	}
+
+	@Override
+	public ObjectModel2D<Color> getMappedModel(BooleanModel2D grid) {
+		return new ColorMappedBooleanGrid2D(grid, new BooleanHueMap());
 	}
 	
 	private Color getEmptyColor() {

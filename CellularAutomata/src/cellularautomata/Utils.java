@@ -30,9 +30,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.arrays.AnisotropicIntArray;
+import cellularautomata.model1d.BooleanModel1D;
 import cellularautomata.model1d.IntModel1D;
 import cellularautomata.model1d.LongModel1D;
 import cellularautomata.model1d.ObjectModel1D;
+import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.Model2D;
@@ -280,6 +282,14 @@ public class Utils {
 		int[][] anisotropic2DArray = new int[side][];
 		for (int x = 0; x < anisotropic2DArray.length; x++) {
 			anisotropic2DArray[x] = new int[x + 1];
+		}
+		return anisotropic2DArray;
+	}
+	
+	public static boolean[][] buildAnisotropic2DBooleanArray(int side) {
+		boolean[][] anisotropic2DArray = new boolean[side][];
+		for (int x = 0; x < anisotropic2DArray.length; x++) {
+			anisotropic2DArray[x] = new boolean[x + 1];
 		}
 		return anisotropic2DArray;
 	}
@@ -1018,14 +1028,14 @@ public class Utils {
 		System.out.println(headFoot);
 	}
 	
-	public static void printAsGrid(Model2D grid) throws Exception {
+	public static void printAsGrid(BooleanModel2D grid) throws Exception {
 		int maxY = grid.getMaxY();
 		int minY = grid.getMinY();
 		int maxX = grid.getMaxX();
 		int minX = grid.getMinX();
 		String headFoot = "+";
 		for (int i = minX; i <= maxX; i++) {
-			headFoot += "-+";
+			headFoot += "---+";
 		}
 		for (int y = maxY; y >= minY; y--) {
 			System.out.println(headFoot);
@@ -1033,13 +1043,58 @@ public class Utils {
 			int localMinX = grid.getMinX(y);
 			int x = minX;
 			for (; x < localMinX; x++) {
-				System.out.print("| ");
+				System.out.print("|   ");
 			}
 			for (; x <= localMaxX; x++) {
-				System.out.print("|#");
+				String strVal = grid.getFromPosition(x, y) ? "###" : "   ";
+				System.out.print("|" + strVal);
 			}
 			for (; x <= maxX; x++) {
-				System.out.print("| ");
+				System.out.print("|   ");
+			}
+			System.out.println("|");
+		}
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(BooleanModel1D grid) throws Exception {
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += "---+";
+		}
+		System.out.println(headFoot);
+		for (int x = minX; x <= maxX; x++) {
+			String strVal = grid.getFromPosition(x) ? "###" : "   ";
+			System.out.print("|" + strVal);
+		}
+		System.out.println("|");
+		System.out.println(headFoot);
+	}
+	
+	public static void printAsGrid(Model2D grid) throws Exception {
+		int maxY = grid.getMaxY();
+		int minY = grid.getMinY();
+		int maxX = grid.getMaxX();
+		int minX = grid.getMinX();
+		String headFoot = "+";
+		for (int i = minX; i <= maxX; i++) {
+			headFoot += "---+";
+		}
+		for (int y = maxY; y >= minY; y--) {
+			System.out.println(headFoot);
+			int localMaxX = grid.getMaxX(y);
+			int localMinX = grid.getMinX(y);
+			int x = minX;
+			for (; x < localMinX; x++) {
+				System.out.print("|   ");
+			}
+			for (; x <= localMaxX; x++) {
+				System.out.print("|###");
+			}
+			for (; x <= maxX; x++) {
+				System.out.print("|   ");
 			}
 			System.out.println("|");
 		}

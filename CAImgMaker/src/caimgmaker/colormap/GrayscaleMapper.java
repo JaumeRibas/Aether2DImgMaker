@@ -22,6 +22,7 @@ import org.apache.commons.math3.FieldElement;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.math3.util.Decimal64;
 
+import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
@@ -102,6 +103,11 @@ public class GrayscaleMapper implements ColorMapper {
 			colorMap = new IntUnboundedColorMap(colorMap, minValue, maxValue, outOfLowerBoundColor, outOfUpperBoundColor);
 		}
 		return new ColorMappedIntGrid2D(grid, colorMap);
+	}
+
+	@Override
+	public ObjectModel2D<Color> getMappedModel(BooleanModel2D grid) {
+		return new ColorMappedBooleanGrid2D(grid, new BooleanGrayscaleMap());
 	}
 
 	@Override
