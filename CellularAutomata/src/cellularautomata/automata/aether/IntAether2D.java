@@ -1203,7 +1203,7 @@ public class IntAether2D implements SymmetricIntModel2D, IsotropicSquareModelA, 
 	public int getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
-		int value = 0;
+		int value;
 		if (y > x) {
 			value = grid[y][x];
 		} else {
