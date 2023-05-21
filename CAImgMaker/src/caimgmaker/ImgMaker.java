@@ -36,6 +36,7 @@ import org.apache.commons.math3.FieldElement;
 
 import caimgmaker.colormap.ColorMapper;
 import cellularautomata.MinAndMax;
+import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
@@ -57,6 +58,69 @@ public class ImgMaker {
 	
 	public ImgMaker(long millisecondsBetweenBackups) {
 		this.millisecondsBetweenBackups = millisecondsBetweenBackups;
+	}
+	
+	public void createImages(BooleanModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {	
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		try { 
+			long step = ca.getStep();
+			String caName = ca.getName();
+			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
+			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
+			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
+			String imgPath = path + "/";
+			int currentStepLeap = (int) (step%stepLeap);
+			if (currentStepLeap == 0) {
+				currentStepLeap = stepLeap;
+			}
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
+			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
+			do {
+				System.out.println("Step: " + step);
+				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
+					currentStepLeap = 0;
+					if (changed != null && !changed) {
+						createLastImage = false;
+					}
+					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
+							minY = ca.getMinY(), maxY = ca.getMaxY();
+					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);//TODO improve. e.g. x: [min, max] ...
+					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca);
+					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, caName + "_" + step + ".png");
+					folderImageCount++;
+					if (folderImageCount == imgsPerFolder) {
+						numberedFolder++;
+						folderImageCount = 0;
+					}		
+					boolean backUp = false;
+					if (saveBackupsAutomatically) {
+						backUp = System.currentTimeMillis() >= nextBckTime;
+						if (backUp) {
+							nextBckTime += millisecondsBetweenBackups;
+						}
+					}
+					if (backupRequested) {
+						backUp = true;
+						backupRequested = false;
+					}
+					if (backUp) {
+						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
+						ca.backUp(backupPath, backupName);		
+						System.out.println("Backing up finished");
+					}
+					System.out.println();
+				}		
+				step++;
+				currentStepLeap++;
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
+			System.out.println("Finished!");
+		} finally {
+			stdIn.stop();
+			inputThread.join();
+		}
 	}
 	
 	public void createImages(IntModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {	
@@ -247,6 +311,80 @@ public class ImgMaker {
 				}
 				step++;
 				currentStepLeap++;
+			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
+			System.out.println("Finished!");
+		} finally {
+			stdIn.stop();
+			inputThread.join();
+		}
+	}
+	
+	public void createEvenOddImages(BooleanModel2D ca, ColorMapper colorMapper, 
+			int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
+		StdInRunnable stdIn = new StdInRunnable();
+		Thread inputThread = new Thread(stdIn);
+		inputThread.start();
+		try {
+			long step = ca.getStep();
+			String caName = ca.getName();
+			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
+			boolean isEvenStep = step%2 == 0;
+			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
+			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
+			String imgPath = path + "/";
+			int currentStepLeap = (int) (step%stepLeap);
+			if (currentStepLeap == 0) {
+				currentStepLeap = stepLeap;
+			}
+			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
+			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
+			do {
+				System.out.println("Step: " + step);
+				if (currentStepLeap == stepLeap || changed != null && changed != null && !changed && createLastImage) {
+					currentStepLeap = 0;
+					if (changed != null && !changed) {
+						createLastImage = false;
+					}
+					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
+							minY = ca.getMinY(), maxY = ca.getMaxY();
+					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);
+					if (!omitEven) {
+						ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca);
+						createImageFromEvenOrOddPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
+							imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+					}
+					if (!omitOdd) {
+						ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca);
+						createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
+								imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+					}			
+					folderImageCount++;
+					if (folderImageCount == imgsPerFolder) {
+						numberedFolder++;
+						folderImageCount = 0;
+					}		
+					boolean backUp = false;
+					if (saveBackupsAutomatically) {
+						backUp = System.currentTimeMillis() >= nextBckTime;
+						if (backUp) {
+							nextBckTime += millisecondsBetweenBackups;
+						}
+					}
+					if (backupRequested) {
+						backUp = true;
+						backupRequested = false;
+					}
+					if (backUp) {
+						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
+						ca.backUp(backupPath, backupName);		
+						System.out.println("Backing up finished");
+					}	
+					System.out.println();
+				}
+				step++;
+				currentStepLeap++;
+				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
 			System.out.println("Finished!");
 		} finally {
@@ -1974,13 +2112,6 @@ public class ImgMaker {
 		int byteCount = (int)longByteCount;
 		byte[] pixelData = new byte[byteCount];	
 		saveAsPngImage(pixelData, imageWidth, imageHeight, path, name);
-	}
-	
-	public static void createImageFromEvenOrOddPositions(ObjectModel2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, String path, String name) 
-			throws Exception {
-		int width = maxX - minX + 1;
-		int height = maxY - minY + 1;
-		createImageFromEvenOrOddPositions(grid, isEven, minX, maxX, minY, maxY, 1, width, height, path, name);
 	}
 	
 	public static void createImageFromEvenOrOddPositions(ObjectModel2D<Color> grid, boolean isEven, int minX, int maxX, int minY, int maxY, int minWidth, int minHeight, String path, String name) 
