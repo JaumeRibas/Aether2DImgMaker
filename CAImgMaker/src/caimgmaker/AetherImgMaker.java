@@ -51,11 +51,11 @@ import cellularautomata.automata.aether.BigIntAether2DTopplingAlternationViolati
 import cellularautomata.automata.aether.BigIntAether3D;
 import cellularautomata.automata.aether.BigIntAether3DCubicGrid;
 import cellularautomata.automata.aether.BigIntAether4D;
-import cellularautomata.automata.aether.FileBackedAether1D;
-import cellularautomata.automata.aether.FileBackedAether2D;
-import cellularautomata.automata.aether.FileBackedAether3D;
-import cellularautomata.automata.aether.FileBackedAether4D;
-import cellularautomata.automata.aether.FileBackedAether5D;
+import cellularautomata.automata.aether.FileBackedLongAether1D;
+import cellularautomata.automata.aether.FileBackedLongAether2D;
+import cellularautomata.automata.aether.FileBackedLongAether3D;
+import cellularautomata.automata.aether.FileBackedLongAether4D;
+import cellularautomata.automata.aether.FileBackedLongAether5D;
 import cellularautomata.automata.aether.IntAether2D;
 import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
@@ -755,7 +755,7 @@ public class AetherImgMaker {
 								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MAX_INITIAL_VALUE)) <= 0
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MIN_INITIAL_VALUE)) >= 0) {
 									if (args.memorySafe) {
-										model = new FileBackedAether1D(args.initialConfiguration.singleSource.longValue(), args.path);
+										model = new FileBackedLongAether1D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
 										model = new LongAether1D(args.initialConfiguration.singleSource.longValue());
 									}
@@ -767,7 +767,7 @@ public class AetherImgMaker {
 							}
 						} else {
 							if (args.memorySafe) {
-								model = new FileBackedAether1D(args.backupToRestorePath, args.path);
+								model = new FileBackedLongAether1D(args.backupToRestorePath, args.path);
 							} else {
 								model = new LongAether1D(args.backupToRestorePath);
 							}
@@ -796,11 +796,11 @@ public class AetherImgMaker {
 									}
 								} else {
 									if (args.memorySafe) {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether2D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether2D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new FileBackedAether2D(args.initialConfiguration.singleSource.longValue(), args.path);
+										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether2D.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether2D.MIN_INITIAL_VALUE)) >= 0) {
+											model = new FileBackedLongAether2D(args.initialConfiguration.singleSource.longValue(), args.path);
 										} else {
-											System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether2D.MIN_INITIAL_VALUE, FileBackedAether2D.MAX_INITIAL_VALUE);
+											System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether2D.MIN_INITIAL_VALUE, FileBackedLongAether2D.MAX_INITIAL_VALUE);
 										}
 									} else {
 										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MAX_INITIAL_VALUE)) <= 0
@@ -828,7 +828,7 @@ public class AetherImgMaker {
 						} else {
 							boolean successfullyRestored = true;
 							if (args.memorySafe) {
-								model = new FileBackedAether2D(args.backupToRestorePath, args.path);
+								model = new FileBackedLongAether2D(args.backupToRestorePath, args.path);
 							} else if (imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_VIOLATIONS) {
 								try {
 									model = new IntAether2DTopplingAlternationViolations(args.backupToRestorePath);							
@@ -875,11 +875,11 @@ public class AetherImgMaker {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 								if (args.memorySafe) {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether3D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether3D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new FileBackedAether3D(args.initialConfiguration.singleSource.longValue(), args.path);
+									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new FileBackedLongAether3D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether3D.MIN_INITIAL_VALUE, FileBackedAether3D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether3D.MIN_INITIAL_VALUE, FileBackedLongAether3D.MAX_INITIAL_VALUE);
 									}
 								} else {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MAX_INITIAL_VALUE)) <= 0
@@ -904,7 +904,7 @@ public class AetherImgMaker {
 							}
 						} else {
 							if (args.memorySafe) {
-								model = new FileBackedAether3D(args.backupToRestorePath, args.path);
+								model = new FileBackedLongAether3D(args.backupToRestorePath, args.path);
 							} else {	
 								try {
 									model = new IntAether3D(args.backupToRestorePath);							
@@ -949,11 +949,11 @@ public class AetherImgMaker {
 								//TODO use memory safe implementations depending on asymmetric and single source options and available heap space?
 								//long heapFreeSize = Runtime.getRuntime().freeMemory();
 								if (args.memorySafe) {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether4D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether4D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new FileBackedAether4D(args.initialConfiguration.singleSource.longValue(), args.path);
+									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new FileBackedLongAether4D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether4D.MIN_INITIAL_VALUE, FileBackedAether4D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether4D.MIN_INITIAL_VALUE, FileBackedLongAether4D.MAX_INITIAL_VALUE);
 									}
 								} else {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MAX_INITIAL_VALUE)) <= 0
@@ -971,7 +971,7 @@ public class AetherImgMaker {
 							}
 						} else {
 							if (args.memorySafe) {
-								model = new FileBackedAether4D(args.backupToRestorePath, args.path);
+								model = new FileBackedLongAether4D(args.backupToRestorePath, args.path);
 							} else {	
 								try {
 									model = new LongAether4D(args.backupToRestorePath);							
@@ -991,11 +991,11 @@ public class AetherImgMaker {
 								//TODO use memory safe implementations depending on asymmetric and single source options and available heap space?
 								//long heapFreeSize = Runtime.getRuntime().freeMemory();
 								if (args.memorySafe) {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether5D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedAether5D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new FileBackedAether5D(args.initialConfiguration.singleSource.longValue(), args.path);
+									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether5D.MAX_INITIAL_VALUE)) <= 0
+											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether5D.MIN_INITIAL_VALUE)) >= 0) {
+										model = new FileBackedLongAether5D(args.initialConfiguration.singleSource.longValue(), args.path);
 									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedAether5D.MIN_INITIAL_VALUE, FileBackedAether5D.MAX_INITIAL_VALUE);
+										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether5D.MIN_INITIAL_VALUE, FileBackedLongAether5D.MAX_INITIAL_VALUE);
 									}
 								} else {
 									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5D.MAX_INITIAL_VALUE)) <= 0
@@ -1013,7 +1013,7 @@ public class AetherImgMaker {
 							}
 						} else {
 							if (args.memorySafe) {
-								model = new FileBackedAether5D(args.backupToRestorePath, args.path);
+								model = new FileBackedLongAether5D(args.backupToRestorePath, args.path);
 							} else {	
 								try {
 									model = new IntAether5D(args.backupToRestorePath);							
