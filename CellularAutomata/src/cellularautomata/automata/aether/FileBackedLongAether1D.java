@@ -32,7 +32,7 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class FileBackedAether1D extends FileBackedModel implements SymmetricLongModel1D, IsotropicModel1DA {
+public class FileBackedLongAether1D extends FileBackedModel implements SymmetricLongModel1D, IsotropicModel1DA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -43,7 +43,7 @@ public class FileBackedAether1D extends FileBackedModel implements SymmetricLong
 	private int maxX;
 	private Boolean changed = null;
 
-	public FileBackedAether1D(long initialValue, String folderPath) throws IOException {
+	public FileBackedLongAether1D(long initialValue, String folderPath) throws IOException {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
@@ -66,7 +66,7 @@ public class FileBackedAether1D extends FileBackedModel implements SymmetricLong
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public FileBackedAether1D(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public FileBackedLongAether1D(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		super(backupPath, folderPath);
 	}
 	

@@ -33,7 +33,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class FileBackedAether4D extends FileBackedModel implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {
+public class FileBackedLongAether4D extends FileBackedModel implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
@@ -44,7 +44,7 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 	private int maxW;
 	private Boolean changed = null;
 
-	public FileBackedAether4D(long initialValue, String folderPath) throws IOException {
+	public FileBackedLongAether4D(long initialValue, String folderPath) throws IOException {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
@@ -67,7 +67,7 @@ public class FileBackedAether4D extends FileBackedModel implements SymmetricLong
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public FileBackedAether4D(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public FileBackedLongAether4D(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		super(backupPath, folderPath);
 	}
 

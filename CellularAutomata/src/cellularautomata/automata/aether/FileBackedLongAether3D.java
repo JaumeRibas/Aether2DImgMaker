@@ -33,7 +33,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class FileBackedAether3D extends FileBackedModel implements SymmetricLongModel3D, IsotropicCubicModelA {
+public class FileBackedLongAether3D extends FileBackedModel implements SymmetricLongModel3D, IsotropicCubicModelA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -44,7 +44,7 @@ public class FileBackedAether3D extends FileBackedModel implements SymmetricLong
 	private int maxX;
 	private Boolean changed = null;
 	
-	public FileBackedAether3D(long initialValue, String folderPath) throws IOException {
+	public FileBackedLongAether3D(long initialValue, String folderPath) throws IOException {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
@@ -67,7 +67,7 @@ public class FileBackedAether3D extends FileBackedModel implements SymmetricLong
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public FileBackedAether3D(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public FileBackedLongAether3D(String backupPath, String folderPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		super(backupPath, folderPath);
 	}
 	
