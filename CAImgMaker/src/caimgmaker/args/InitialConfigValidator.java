@@ -25,7 +25,13 @@ public class InitialConfigValidator implements IParameterValidator {
 	public void validate(String name, String value)
 			throws ParameterException {
 		if (!value.matches("^-?\\d+|single-source_-?\\d+|random-region_\\d+_-?\\d+_-?\\d+$")) {
-			throw new ParameterException("The value of " + name + " has an incorrect format.");
+			String message;
+			if (name.equals("Default")) {
+				message = "One or more unrecognized options found.";//this is the main (default) option so it could be an error on any other option
+			} else {
+				message = "The value of " + name + " has an incorrect format.";
+			}
+			throw new ParameterException(message);
 		}
 	}
 	
