@@ -160,13 +160,11 @@ public class AetherImgMaker {
 			if (message == null) {
 				System.out.println("Unexpected error.");
 				ex.printStackTrace();
-			} else if (message.startsWith("For input string")) {
-				System.out.println("One or more unrecognized options found.");
 			} else {
 				System.out.println(message);
 			}
 			System.out.println(USE_HELP_MESSAGE);
-			//throw ex;//debug
+//			throw ex;//debug
 		}
 	}
 	
