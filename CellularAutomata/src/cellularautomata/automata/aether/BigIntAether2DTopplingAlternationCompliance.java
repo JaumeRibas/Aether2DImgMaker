@@ -27,7 +27,7 @@ import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 import cellularautomata.numbers.BigInt;
 
-public class BigIntAether2DTopplingAlternationViolations implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
+public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
 	
 	/**
 	 * 
@@ -42,7 +42,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 	/** A 2D array representing the grid */
 	private BigInt[][] grid;
 	
-	private boolean[][] violations;
+	private boolean[][] topplingAlternationCompliance;
 	private boolean topplingAlternationOffset;
 	
 	private final BigInt initialValue;
@@ -59,12 +59,12 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public BigIntAether2DTopplingAlternationViolations(BigInt initialValue) {
+	public BigIntAether2DTopplingAlternationCompliance(BigInt initialValue) {
 		this.initialValue = initialValue;
-		topplingAlternationOffset = initialValue.compareTo(BigInt.ZERO) < 0;
+		topplingAlternationOffset = initialValue.compareTo(BigInt.ZERO) >= 0;
 		final int side = 6;
 		grid = Utils.buildAnisotropic2DBigIntArray(side);
-		violations = Utils.buildAnisotropic2DBooleanArray(side);
+		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(side);
 		grid[0][0] = this.initialValue;
 		maxX = 3;
 		step = 0;
@@ -74,6 +74,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		} else {
 			folderName = strInitialValue;
 		}
+		nextStep();
 	}
 	
 	/**
@@ -84,11 +85,11 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public BigIntAether2DTopplingAlternationViolations(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		BigIntAether2DTopplingAlternationViolations data = (BigIntAether2DTopplingAlternationViolations) Utils.deserializeFromFile(backupPath);
+	public BigIntAether2DTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		BigIntAether2DTopplingAlternationCompliance data = (BigIntAether2DTopplingAlternationCompliance) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
-		violations = data.violations;
+		topplingAlternationCompliance = data.topplingAlternationCompliance;
 		topplingAlternationOffset = data.topplingAlternationOffset;
 		maxX = data.maxX;
 		step = data.step;
@@ -100,8 +101,8 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 	public Boolean nextStep() {
 		final int newSide = maxX + 3;
 		BigInt[][] newGrid = new BigInt[newSide][];
-		violations = null;
-		violations = Utils.buildAnisotropic2DBooleanArray(newSide);
+		topplingAlternationCompliance = null;
+		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(newSide);
 		boolean offset = this.topplingAlternationOffset;
 		boolean changed = false;
 		BigInt currentValue, greaterXNeighborValue;
@@ -109,7 +110,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		BigInt[] newSmallerXSlice = null, newCurrentXSlice = new BigInt[1], newGreaterXSlice = new BigInt[2];// build new grid progressively to save memory
 		Arrays.fill(newCurrentXSlice, BigInt.ZERO);
 		Arrays.fill(newGreaterXSlice, BigInt.ZERO);
-		boolean[] newCurrentXSliceViolations = violations[0]; 
+		boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[0]; 
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0
@@ -131,7 +132,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		} else {
 			newCurrentXSlice[0] = newCurrentXSlice[0].add(currentValue);
 		}
-		newCurrentXSliceViolations[0] = toppled == offset;
+		newCurrentXSliceCompliance[0] = toppled == offset;
 		offset = !offset;		
 		// x = 1, y = 0
 		// smallerXSlice = currentXSlice; // not needed here
@@ -140,7 +141,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
 		newGreaterXSlice = new BigInt[3];
-		newCurrentXSliceViolations = violations[1];
+		newCurrentXSliceCompliance = topplingAlternationCompliance[1];
 		Arrays.fill(newGreaterXSlice, BigInt.ZERO);
 		newGrid[2] = newGreaterXSlice;
 		BigInt[][] newXSlices = new BigInt[][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
@@ -190,9 +191,9 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			changed = true;
-			newCurrentXSliceViolations[0] = offset;
+			newCurrentXSliceCompliance[0] = offset;
 		} else {
-			newCurrentXSliceViolations[0] = !offset;
+			newCurrentXSliceCompliance[0] = !offset;
 		}
 		offset = !offset;
 		// x = 1, y = 1
@@ -285,7 +286,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 			// gx >= current <= sy
 			newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue);
 		}
-		newCurrentXSliceViolations[1] = toppled == offset;
+		newCurrentXSliceCompliance[1] = toppled == offset;
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0
 		smallerXSlice = currentXSlice;
@@ -294,7 +295,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
 		newGreaterXSlice = new BigInt[4];	
-		newCurrentXSliceViolations = violations[2];
+		newCurrentXSliceCompliance = topplingAlternationCompliance[2];
 		Arrays.fill(newGreaterXSlice, BigInt.ZERO);
 		newGrid[3] = newGreaterXSlice;
 		newXSlices[0] = newSmallerXSlice;
@@ -338,9 +339,9 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			changed = true;
-			newCurrentXSliceViolations[0] = offset;
+			newCurrentXSliceCompliance[0] = offset;
 		} else {
-			newCurrentXSliceViolations[0] = !offset;
+			newCurrentXSliceCompliance[0] = !offset;
 		}
 		offset = !offset;
 		// x = 2, y = 1
@@ -386,9 +387,9 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
 			changed = true;
-			newCurrentXSliceViolations[1] = offset;
+			newCurrentXSliceCompliance[1] = offset;
 		} else {
-			newCurrentXSliceViolations[1] = !offset;
+			newCurrentXSliceCompliance[1] = !offset;
 		}
 		offset = !offset;
 		// x = 2, y = 2
@@ -481,7 +482,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 			// gx >= current <= sy
 			newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue);
 		}
-		newCurrentXSliceViolations[2] = toppled == offset;
+		newCurrentXSliceCompliance[2] = toppled == offset;
 		offset = !offset;
 		grid[1] = null;
 		// 3 <= x < edge - 2
@@ -502,7 +503,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 			changed = true;
 			maxX++;
 		}
-		registerStaticGridSliceViolations(edge);
+		registerStaticGridSliceCompliance(edge);
 		if (newGrid.length > grid.length) {
 			newGreaterXSlice = new BigInt[newGrid.length];
 			Arrays.fill(newGreaterXSlice, BigInt.ZERO);
@@ -515,14 +516,14 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		return changed;
 	}
 	
-	private void registerStaticGridSliceViolations(int x) {
-		boolean[] newCurrentXSliceViolations = violations[x];
+	private void registerStaticGridSliceCompliance(int x) {
+		boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[x];
 		boolean offset = x%2 == 0 != this.topplingAlternationOffset;
 		int y = 0;
 		for (; y != x; y++, offset = !offset) {
-			newCurrentXSliceViolations[y] = offset;
+			newCurrentXSliceCompliance[y] = offset;
 		}
-		newCurrentXSliceViolations[y] = offset;
+		newCurrentXSliceCompliance[y] = offset;
 	}
 
 	@Override
@@ -548,7 +549,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 			newCurrentXSlice = newGreaterXSlice;
 			newGreaterXSlice = new BigInt[xPlusTwo];
 			Arrays.fill(newGreaterXSlice, BigInt.ZERO);
-			boolean[] newCurrentXSliceViolations = violations[x];
+			boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[x];
 			newGrid[xPlusOne] = newGreaterXSlice;
 			newXSlices[0] = newSmallerXSlice;
 			newXSlices[1] = newCurrentXSlice;
@@ -589,9 +590,9 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 			if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 				anyToppled = true;
-				newCurrentXSliceViolations[0] = offset;
+				newCurrentXSliceCompliance[0] = offset;
 			} else {
-				newCurrentXSliceViolations[0] = !offset;
+				newCurrentXSliceCompliance[0] = !offset;
 			}
 			offset = !offset;
 			// y = 1
@@ -637,9 +638,9 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 			if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
 				anyToppled = true;
-				newCurrentXSliceViolations[1] = offset;
+				newCurrentXSliceCompliance[1] = offset;
 			} else {
-				newCurrentXSliceViolations[1] = !offset;
+				newCurrentXSliceCompliance[1] = !offset;
 			}
 			offset = !offset;
 			// 2 >= y < x - 1
@@ -683,9 +684,9 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 				if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount)) {
 					anyToppled = true;
-					newCurrentXSliceViolations[y] = offset;
+					newCurrentXSliceCompliance[y] = offset;
 				} else {
-					newCurrentXSliceViolations[y] = !offset;
+					newCurrentXSliceCompliance[y] = !offset;
 				}
 				offset = !offset;
 			}
@@ -732,9 +733,9 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 			if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
 				anyToppled = true;
-				newCurrentXSliceViolations[y] = offset;
+				newCurrentXSliceCompliance[y] = offset;
 			} else {
-				newCurrentXSliceViolations[y] = !offset;
+				newCurrentXSliceCompliance[y] = !offset;
 			}
 			offset = !offset;
 			// y = x
@@ -829,7 +830,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 				// gx >= current <= sy
 				newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue);
 			}
-			newCurrentXSliceViolations[y] = toppled == offset;
+			newCurrentXSliceCompliance[y] = toppled == offset;
 			grid[xMinusOne] = null;
 		}
 		xSlices[1] = currentXSlice;
@@ -1366,16 +1367,16 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 		if (y < 0) y = -y;
 		boolean value;
 		if (y > x) {
-			value = violations[y][x];
+			value = topplingAlternationCompliance[y][x];
 		} else {
-			value = violations[x][y];
+			value = topplingAlternationCompliance[x][y];
 		}
 		return value;
 	}
 	
 	@Override
 	public boolean getFromAsymmetricPosition(int x, int y) {	
-		return violations[x][y];
+		return topplingAlternationCompliance[x][y];
 	}
 
 	@Override
@@ -1404,7 +1405,7 @@ public class BigIntAether2DTopplingAlternationViolations implements SymmetricBoo
 	
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/2D/" + folderName + "/toppling_alternation_violations";
+		return getName() + "/2D/" + folderName + "/toppling_alternation_compliance";
 	}
 	
 	@Override

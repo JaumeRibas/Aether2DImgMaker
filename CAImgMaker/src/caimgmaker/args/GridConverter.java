@@ -18,18 +18,18 @@ package caimgmaker.args;
 
 import com.beust.jcommander.IStringConverter;
 
-public class GridConverter implements IStringConverter<GridOptionValue> {
+public class GridConverter implements IStringConverter<GridParameterValue> {
 	
 	@Override
-	public GridOptionValue convert(String strValue) {
-		GridOptionValue value = null;
+	public GridParameterValue convert(String strValue) {
+		GridParameterValue value = null;
 		if (strValue != null) {
 			String[] parts = strValue.split("_");
 			int dimension = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1));
 			if (parts.length == 1 || parts[1].equals("infinite")) {
-				value = new GridOptionValue(dimension);
+				value = new GridParameterValue(dimension);
 			} else {
-				value = new GridOptionValue(dimension, Integer.parseInt(parts[1]));
+				value = new GridParameterValue(dimension, Integer.parseInt(parts[1]));
 			}
 		}
 		return value;

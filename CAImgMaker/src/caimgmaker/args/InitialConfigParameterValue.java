@@ -18,7 +18,7 @@ package caimgmaker.args;
 
 import cellularautomata.numbers.BigInt;
 
-public class InitialConfigOptionValue {	
+public class InitialConfigParameterValue {	
 	
 	public InitialConfigType type;
 	public BigInt singleSource;
@@ -26,12 +26,12 @@ public class InitialConfigOptionValue {
 	public BigInt max;
 	public Integer side;
 	
-	public InitialConfigOptionValue(BigInt singleSource) {
+	public InitialConfigParameterValue(BigInt singleSource) {
 		this.type = InitialConfigType.SINGLE_SOURCE;
 		this.singleSource = singleSource;
 	}
 	
-	public InitialConfigOptionValue(int side, BigInt min, BigInt max) {
+	public InitialConfigParameterValue(int side, BigInt min, BigInt max) {
 		this.type = InitialConfigType.RANDOM_REGION;
 		if (min.compareTo(max) > 0) {
 			BigInt swp = min;

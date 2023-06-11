@@ -18,14 +18,14 @@ package caimgmaker.args;
 
 import com.beust.jcommander.IStringConverter;
 
-public class ImgSizeConverter implements IStringConverter<ImgSizeOptionValue> {
+public class ImgSizeConverter implements IStringConverter<ImgSizeParameterValue> {
 	
 	@Override
-	public ImgSizeOptionValue convert(String value) {
+	public ImgSizeParameterValue convert(String value) {
 		String[] components = value.split("x");
 		int width = Integer.parseInt(components[0]);
 		int height = Integer.parseInt(components[1]);
-		return new ImgSizeOptionValue(width, height);
+		return new ImgSizeParameterValue(width, height);
 	}
 	
 }

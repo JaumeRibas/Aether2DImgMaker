@@ -47,8 +47,8 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 	private static final String REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The filter is either redundant or incompatible with one or a combination of preceding filters. Some possible causes are: incorrect coordinate indexes, repeated filters, too many greater/less than filters on the same set of interconnected coordinates, redundant interconnections of coordinates, etc.";
 
 	@Override
-	public CoordinateFilters convert(String optionValue) {
-		String[] strFilters = optionValue.split(";");
+	public CoordinateFilters convert(String parameterValue) {
+		String[] strFilters = parameterValue.split(";");
 		Pattern coordIndexPattern = Pattern.compile("(?<=x)\\d+");
 		CoordinateFilters resultingFilters = new CoordinateFilters();
 		for (int i = 0, filterPosition = 1; i < strFilters.length; i = filterPosition, filterPosition++) {

@@ -24,23 +24,23 @@ import cellularautomata.Utils;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 
-public class LongAether2DTopplingAlternationViolations implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
+public class IntAether2DTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7684750430031653985L;
+	private static final long serialVersionUID = 6667877779705476740L;
 	
-	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
-	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
+	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
+	public static final int MIN_INITIAL_VALUE = -1431655765;
 
 	/** A 2D array representing the grid */
-	private long[][] grid;
+	private int[][] grid;
 	
-	private boolean[][] violations;
+	private boolean[][] topplingAlternationCompliance;
 	private boolean topplingAlternationOffset;
 	
-	private final long initialValue;
+	private final int initialValue;
 	private long step;
 	private int maxX;
 	private Boolean changed = null;
@@ -50,18 +50,19 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public LongAether2DTopplingAlternationViolations(long initialValue) {
-		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
+	public IntAether2DTopplingAlternationCompliance(int initialValue) {
+		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of int type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
-		topplingAlternationOffset = initialValue < 0;
+		topplingAlternationOffset = initialValue >= 0;
 		final int side = 6;
-		grid = Utils.buildAnisotropic2DLongArray(side);
-		violations = Utils.buildAnisotropic2DBooleanArray(side);
+		grid = Utils.buildAnisotropic2DIntArray(side);
+		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(side);
 		grid[0][0] = initialValue;
 		maxX = 3;
 		step = 0;
+		nextStep();
 	}
 	
 	/**
@@ -72,11 +73,11 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public LongAether2DTopplingAlternationViolations(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		LongAether2DTopplingAlternationViolations data = (LongAether2DTopplingAlternationViolations) Utils.deserializeFromFile(backupPath);
+	public IntAether2DTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		IntAether2DTopplingAlternationCompliance data = (IntAether2DTopplingAlternationCompliance) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
-		violations = data.violations;
+		topplingAlternationCompliance = data.topplingAlternationCompliance;
 		topplingAlternationOffset = data.topplingAlternationOffset;
 		maxX = data.maxX;
 		step = data.step;
@@ -86,15 +87,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 	@Override
 	public Boolean nextStep() {
 		final int newSide = maxX + 3;
-		long[][] newGrid = new long[newSide][];
-		violations = null;
-		violations = Utils.buildAnisotropic2DBooleanArray(newSide);
+		int[][] newGrid = new int[newSide][];
+		topplingAlternationCompliance = null;
+		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(newSide);
 		boolean offset = this.topplingAlternationOffset;
 		boolean changed = false;
-		long currentValue, greaterXNeighborValue;
-		long[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
-		long[] newSmallerXSlice = null, newCurrentXSlice = new long[1], newGreaterXSlice = new long[2];// build new grid progressively to save memory
-		boolean[] newCurrentXSliceViolations = violations[0]; 
+		int currentValue, greaterXNeighborValue;
+		int[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
+		int[] newSmallerXSlice = null, newCurrentXSlice = new int[1], newGreaterXSlice = new int[2];// build new grid progressively to save memory
+		boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[0]; 
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0
@@ -102,8 +103,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		greaterXNeighborValue = greaterXSlice[0];
 		boolean toppled = false;
 		if (greaterXNeighborValue < currentValue) {
-			long toShare = currentValue - greaterXNeighborValue;
-			long share = toShare/5;
+			int toShare = currentValue - greaterXNeighborValue;
+			int share = toShare/5;
 			if (share != 0) {
 				changed = true;
 				toppled = true;
@@ -115,7 +116,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		} else {
 			newCurrentXSlice[0] += currentValue;
 		}	
-		newCurrentXSliceViolations[0] = toppled == offset;
+		newCurrentXSliceCompliance[0] = toppled == offset;
 		offset = !offset;
 		// x = 1, y = 0
 		// smallerXSlice = currentXSlice; // not needed here
@@ -123,22 +124,22 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		greaterXSlice = grid[2];
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = new long[3];
-		newCurrentXSliceViolations = violations[1];
+		newGreaterXSlice = new int[3];
+		newCurrentXSliceCompliance = topplingAlternationCompliance[1];
 		newGrid[2] = newGreaterXSlice;
-		long[][] newXSlices = new long[][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
+		int[][] newXSlices = new int[][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
-		long[] relevantAsymmetricNeighborValues = new long[4];
+		int[] relevantAsymmetricNeighborValues = new int[4];
 		int[] sortedNeighborsIndexes = new int[4];
 		int[][] relevantAsymmetricNeighborCoords = new int[4][2];
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[4];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[4];// to compensate for omitted symmetric positions
 		// reuse values obtained previously
-		long smallerXNeighborValue = currentValue;
+		int smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = greaterXSlice[0];
-		long greaterYNeighborValue = currentXSlice[1];
+		int greaterYNeighborValue = currentXSlice[1];
 		if (smallerXNeighborValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -173,14 +174,14 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
 				relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
-			newCurrentXSliceViolations[0] = offset;
+			newCurrentXSliceCompliance[0] = offset;
 		} else {
-			newCurrentXSliceViolations[0] = !offset;
+			newCurrentXSliceCompliance[0] = !offset;
 		}
 		offset = !offset;
 		// x = 1, y = 1
 		// reuse values obtained previously
-		long smallerYNeighborValue = currentValue;
+		int smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1];
 		toppled = false;
@@ -188,8 +189,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			if (greaterXNeighborValue < currentValue) {
 				if (smallerYNeighborValue == greaterXNeighborValue) {
 					// gx = sy < current
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/5;
 					if (share != 0) {
 						changed = true;
 						toppled = true;
@@ -199,15 +200,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newGreaterXSlice[1] += share;
 				} else if (smallerYNeighborValue < greaterXNeighborValue) {
 					// sy < gx < current
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/5;
 					if (share != 0) {
 						changed = true;
 						toppled = true;
 					}
 					newCurrentXSlice[0] += share + share;
 					newGreaterXSlice[1] += share;
-					long currentRemainingValue = currentValue - 4*share;
+					int currentRemainingValue = currentValue - 4*share;
 					toShare = currentRemainingValue - smallerYNeighborValue; 
 					share = toShare/3;
 					if (share != 0) {
@@ -218,15 +219,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newCurrentXSlice[1] += currentRemainingValue - toShare + share + toShare%3;
 				} else {
 					// gx < sy < current
-					long toShare = currentValue - smallerYNeighborValue; 
-					long share = toShare/5;
+					int toShare = currentValue - smallerYNeighborValue; 
+					int share = toShare/5;
 					if (share != 0) {
 						changed = true;
 						toppled = true;
 					}
 					newCurrentXSlice[0] += share + share;
 					newGreaterXSlice[1] += share;
-					long currentRemainingValue = currentValue - 4*share;
+					int currentRemainingValue = currentValue - 4*share;
 					toShare = currentRemainingValue - greaterXNeighborValue; 
 					share = toShare/3;
 					if (share != 0) {
@@ -238,8 +239,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				}
 			} else {
 				// sy < current <= gx
-				long toShare = currentValue - smallerYNeighborValue; 
-				long share = toShare/3;
+				int toShare = currentValue - smallerYNeighborValue; 
+				int share = toShare/3;
 				if (share != 0) {
 					changed = true;
 					toppled = true;
@@ -249,8 +250,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			}
 		} else if (greaterXNeighborValue < currentValue) {
 			// gx < current <= sy
-			long toShare = currentValue - greaterXNeighborValue; 
-			long share = toShare/3;
+			int toShare = currentValue - greaterXNeighborValue; 
+			int share = toShare/3;
 			if (share != 0) {
 				changed = true;
 				toppled = true;
@@ -261,7 +262,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			// gx >= current <= sy
 			newCurrentXSlice[1] += currentValue;
 		}
-		newCurrentXSliceViolations[1] = toppled == offset;
+		newCurrentXSliceCompliance[1] = toppled == offset;
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0
 		smallerXSlice = currentXSlice;
@@ -269,8 +270,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		greaterXSlice = grid[3];
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
-		newGreaterXSlice = new long[4];
-		newCurrentXSliceViolations = violations[2];
+		newGreaterXSlice = new int[4];
+		newCurrentXSliceCompliance = topplingAlternationCompliance[2];
 		newGrid[3] = newGreaterXSlice;
 		newXSlices[0] = newSmallerXSlice;
 		newXSlices[1] = newCurrentXSlice;
@@ -313,9 +314,9 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
-			newCurrentXSliceViolations[0] = offset;
+			newCurrentXSliceCompliance[0] = offset;
 		} else {
-			newCurrentXSliceViolations[0] = !offset;
+			newCurrentXSliceCompliance[0] = !offset;
 		}
 		offset = !offset;
 		// x = 2, y = 1
@@ -361,9 +362,9 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
-			newCurrentXSliceViolations[1] = offset;
+			newCurrentXSliceCompliance[1] = offset;
 		} else {
-			newCurrentXSliceViolations[1] = !offset;
+			newCurrentXSliceCompliance[1] = !offset;
 		}
 		offset = !offset;
 		// x = 2, y = 2
@@ -376,8 +377,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			if (greaterXNeighborValue < currentValue) {
 				if (smallerYNeighborValue == greaterXNeighborValue) {
 					// gx = sy < current
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/5;
 					if (share != 0) {
 						changed = true;
 						toppled = true;
@@ -387,15 +388,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newGreaterXSlice[2] += share;
 				} else if (smallerYNeighborValue < greaterXNeighborValue) {
 					// sy < gx < current
-					long toShare = currentValue - greaterXNeighborValue; 
-					long share = toShare/5;
+					int toShare = currentValue - greaterXNeighborValue; 
+					int share = toShare/5;
 					if (share != 0) {
 						changed = true;
 						toppled = true;
 					}
 					newCurrentXSlice[1] += share;
 					newGreaterXSlice[2] += share;
-					long currentRemainingValue = currentValue - 4*share;
+					int currentRemainingValue = currentValue - 4*share;
 					toShare = currentRemainingValue - smallerYNeighborValue; 
 					share = toShare/3;
 					if (share != 0) {
@@ -406,15 +407,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newCurrentXSlice[2] += currentRemainingValue - toShare + share + toShare%3;
 				} else {
 					// gx < sy < current
-					long toShare = currentValue - smallerYNeighborValue; 
-					long share = toShare/5;
+					int toShare = currentValue - smallerYNeighborValue; 
+					int share = toShare/5;
 					if (share != 0) {
 						changed = true;
 						toppled = true;
 					}
 					newCurrentXSlice[1] += share;
 					newGreaterXSlice[2] += share;
-					long currentRemainingValue = currentValue - 4*share;
+					int currentRemainingValue = currentValue - 4*share;
 					toShare = currentRemainingValue - greaterXNeighborValue; 
 					share = toShare/3;
 					if (share != 0) {
@@ -426,8 +427,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				}
 			} else {
 				// sy < current <= gx
-				long toShare = currentValue - smallerYNeighborValue; 
-				long share = toShare/3;
+				int toShare = currentValue - smallerYNeighborValue; 
+				int share = toShare/3;
 				if (share != 0) {
 					changed = true;
 					toppled = true;
@@ -437,8 +438,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			}
 		} else if (greaterXNeighborValue < currentValue) {
 			// gx < current <= sy
-			long toShare = currentValue - greaterXNeighborValue; 
-			long share = toShare/3;
+			int toShare = currentValue - greaterXNeighborValue; 
+			int share = toShare/3;
 			if (share != 0) {
 				changed = true;
 				toppled = true;
@@ -449,13 +450,13 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			// gx >= current <= sy
 			newCurrentXSlice[2] += currentValue;
 		}
-		newCurrentXSliceViolations[2] = toppled == offset;
+		newCurrentXSliceCompliance[2] = toppled == offset;
 		offset = !offset;
 		grid[1] = null;
 		// 3 <= x < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
-		long[][] xSlices = new long[][] {null, currentXSlice, greaterXSlice};
+		int[][] xSlices = new int[][] {null, currentXSlice, greaterXSlice};
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
 		if (toppleRangeBeyondX2(xSlices, newXSlices, newGrid, 3, edgeMinusTwo, 
@@ -470,9 +471,9 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			changed = true;
 			maxX++;
 		}
-		registerStaticGridSliceViolations(edge);
+		registerStaticGridSliceCompliance(edge);
 		if (newGrid.length > grid.length) {
-			newGrid[grid.length] = new long[newGrid.length];
+			newGrid[grid.length] = new int[newGrid.length];
 		}
 		grid = newGrid;
 		step++;
@@ -481,14 +482,14 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return changed;
 	}
 	
-	private void registerStaticGridSliceViolations(int x) {
-		boolean[] newCurrentXSliceViolations = violations[x];
+	private void registerStaticGridSliceCompliance(int x) {
+		boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[x];
 		boolean offset = x%2 == 0 != this.topplingAlternationOffset;
 		int y = 0;
 		for (; y != x; y++, offset = !offset) {
-			newCurrentXSliceViolations[y] = offset;
+			newCurrentXSliceCompliance[y] = offset;
 		}
-		newCurrentXSliceViolations[y] = offset;
+		newCurrentXSliceCompliance[y] = offset;
 	}
 
 	@Override
@@ -496,13 +497,13 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return changed;
 	}
 	
-	private boolean toppleRangeBeyondX2(long[][] xSlices, long[][] newXSlices, long[][] newGrid, int minX, int maxX, 
-			long[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
+	private boolean toppleRangeBeyondX2(int[][] xSlices, int[][] newXSlices, int[][] newGrid, int minX, int maxX, 
+			int[] relevantAsymmetricNeighborValues, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, int[] sortedNeighborsIndexes) {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
-		long[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
-		long[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
+		int[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
+		int[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
 		boolean xOffset = x%2 == 0 == this.topplingAlternationOffset;
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, xOffset = !xOffset) {
 			boolean offset = xOffset;
@@ -512,18 +513,18 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			greaterXSlice = grid[xPlusOne];
 			newSmallerXSlice = newCurrentXSlice;
 			newCurrentXSlice = newGreaterXSlice;
-			newGreaterXSlice = new long[xPlusTwo];
-			boolean[] newCurrentXSliceViolations = violations[x];
+			newGreaterXSlice = new int[xPlusTwo];
+			boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[x];
 			newGrid[xPlusOne] = newGreaterXSlice;
 			newXSlices[0] = newSmallerXSlice;
 			newXSlices[1] = newCurrentXSlice;
 			newXSlices[2] = newGreaterXSlice;
 			int relevantAsymmetricNeighborCount = 0;
 			int relevantNeighborCount = 0;
-			long currentValue = currentXSlice[0];
-			long greaterYNeighborValue = currentXSlice[1];
-			long smallerXNeighborValue = smallerXSlice[0];
-			long greaterXNeighborValue = greaterXSlice[0];
+			int currentValue = currentXSlice[0];
+			int greaterYNeighborValue = currentXSlice[1];
+			int smallerXNeighborValue = smallerXSlice[0];
+			int greaterXNeighborValue = greaterXSlice[0];
 			if (smallerXNeighborValue < currentValue) {
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -554,15 +555,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
-				newCurrentXSliceViolations[0] = offset;
+				newCurrentXSliceCompliance[0] = offset;
 			} else {
-				newCurrentXSliceViolations[0] = !offset;
+				newCurrentXSliceCompliance[0] = !offset;
 			}
 			offset = !offset;
 			// y = 1
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
-			long smallerYNeighborValue = currentValue;
+			int smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[2];
 			smallerXNeighborValue = smallerXSlice[1];
@@ -602,9 +603,9 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
-				newCurrentXSliceViolations[1] = offset;
+				newCurrentXSliceCompliance[1] = offset;
 			} else {
-				newCurrentXSliceViolations[1] = !offset;
+				newCurrentXSliceCompliance[1] = !offset;
 			}
 			offset = !offset;
 			// 2 >= y < x - 1
@@ -648,9 +649,9 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 					anyToppled = true;
-					newCurrentXSliceViolations[y] = offset;
+					newCurrentXSliceCompliance[y] = offset;
 				} else {
-					newCurrentXSliceViolations[y] = !offset;
+					newCurrentXSliceCompliance[y] = !offset;
 				}
 				offset = !offset;
 			}
@@ -697,9 +698,9 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 			if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
-				newCurrentXSliceViolations[y] = offset;
+				newCurrentXSliceCompliance[y] = offset;
 			} else {
-				newCurrentXSliceViolations[y] = !offset;
+				newCurrentXSliceCompliance[y] = !offset;
 			}
 			offset = !offset;
 			// y = x
@@ -714,8 +715,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				if (greaterXNeighborValue < currentValue) {
 					if (smallerYNeighborValue == greaterXNeighborValue) {
 						// gx = sy < current
-						long toShare = currentValue - greaterXNeighborValue; 
-						long share = toShare/5;
+						int toShare = currentValue - greaterXNeighborValue; 
+						int share = toShare/5;
 						if (share != 0) {
 							anyToppled = true;
 							toppled = true;
@@ -725,15 +726,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 						newGreaterXSlice[y] += share;
 					} else if (smallerYNeighborValue < greaterXNeighborValue) {
 						// sy < gx < current
-						long toShare = currentValue - greaterXNeighborValue; 
-						long share = toShare/5;
+						int toShare = currentValue - greaterXNeighborValue; 
+						int share = toShare/5;
 						if (share != 0) {
 							anyToppled = true;
 							toppled = true;
 						}
 						newCurrentXSlice[yMinusOne] += share;
 						newGreaterXSlice[y] += share;
-						long currentRemainingValue = currentValue - 4*share;
+						int currentRemainingValue = currentValue - 4*share;
 						toShare = currentRemainingValue - smallerYNeighborValue; 
 						share = toShare/3;
 						if (share != 0) {
@@ -744,15 +745,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 						newCurrentXSlice[y] += currentRemainingValue - toShare + share + toShare%3;
 					} else {
 						// gx < sy < current
-						long toShare = currentValue - smallerYNeighborValue; 
-						long share = toShare/5;
+						int toShare = currentValue - smallerYNeighborValue; 
+						int share = toShare/5;
 						if (share != 0) {
 							anyToppled = true;
 							toppled = true;
 						}
 						newCurrentXSlice[yMinusOne] += share;
 						newGreaterXSlice[y] += share;
-						long currentRemainingValue = currentValue - 4*share;
+						int currentRemainingValue = currentValue - 4*share;
 						toShare = currentRemainingValue - greaterXNeighborValue; 
 						share = toShare/3;
 						if (share != 0) {
@@ -764,8 +765,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					}
 				} else {
 					// sy < current <= gx
-					long toShare = currentValue - smallerYNeighborValue; 
-					long share = toShare/3;
+					int toShare = currentValue - smallerYNeighborValue; 
+					int share = toShare/3;
 					if (share != 0) {
 						anyToppled = true;
 						toppled = true;
@@ -775,8 +776,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				}
 			} else if (greaterXNeighborValue < currentValue) {
 				// gx < current <= sy
-				long toShare = currentValue - greaterXNeighborValue; 
-				long share = toShare/3;
+				int toShare = currentValue - greaterXNeighborValue; 
+				int share = toShare/3;
 				if (share != 0) {
 					anyToppled = true;
 					toppled = true;
@@ -787,7 +788,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				// gx >= current <= sy
 				newCurrentXSlice[y] += currentValue;
 			}
-			newCurrentXSliceViolations[y] = toppled == offset;
+			newCurrentXSliceCompliance[y] = toppled == offset;
 			grid[xMinusOne] = null;
 		}
 		xSlices[1] = currentXSlice;
@@ -797,7 +798,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return anyToppled;
 	}
 	
-	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePosition(int[][] newXSlices, int value, int y, int[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -812,14 +813,14 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 						neighborCoords, neighborShareMultipliers, neighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
-				long n0Val = neighborValues[0], n1Val = neighborValues[1];
+				int n0Val = neighborValues[0], n1Val = neighborValues[1];
 				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
 				int n0Mult = neighborShareMultipliers[0], n1Mult = neighborShareMultipliers[1];
 				int shareCount = 3;
 				if (n0Val == n1Val) {
 					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
@@ -828,15 +829,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n1Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
 					shareCount = 2;
-					long currentRemainingValue = value - 2*share;
+					int currentRemainingValue = value - 2*share;
 					toShare = currentRemainingValue - n0Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -846,15 +847,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
 				} else {
 					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
 					shareCount = 2;
-					long currentRemainingValue = value - 2*share;
+					int currentRemainingValue = value - 2*share;
 					toShare = currentRemainingValue - n1Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -865,8 +866,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				}
 				break;
 			case 1:
-				long toShare = value - neighborValues[0];
-				long share = toShare/2;
+				int toShare = value - neighborValues[0];
+				int share = toShare/2;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%2 + share;
@@ -880,13 +881,13 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(int[][] newXSlices, int value, int y, int[] neighborValues,
 			int[][] neighborCoords, int[] neighborShareMultipliers, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		long neighborValue = neighborValues[0];
-		long toShare = value - neighborValue;
-		long share = toShare/shareCount;
+		int neighborValue = neighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
 		if (share != 0) {
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
@@ -895,7 +896,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				newXSlices[nc[0]][nc[1]] += share * neighborShareMultipliers[sortedNeighborsIndexes[j]];
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
@@ -918,7 +919,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return toppled;
 	}
 	
-	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePosition(int[][] newXSlices, int value, int y, int[] neighborValues,
 			int[][] neighborCoords, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		switch (neighborCount) {
@@ -933,13 +934,13 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 						neighborCoords, neighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
-				long n0Val = neighborValues[0], n1Val = neighborValues[1];
+				int n0Val = neighborValues[0], n1Val = neighborValues[1];
 				int[] n0Coords = neighborCoords[0], n1Coords = neighborCoords[1];
 				int shareCount = 3;
 				if (n0Val == n1Val) {
 					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
@@ -948,15 +949,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n1Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share;
 					shareCount = 2;
-					long currentRemainingValue = value - 2*share;
+					int currentRemainingValue = value - 2*share;
 					toShare = currentRemainingValue - n0Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -966,15 +967,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
 				} else {
 					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share;
 					shareCount = 2;
-					long currentRemainingValue = value - 2*share;
+					int currentRemainingValue = value - 2*share;
 					toShare = currentRemainingValue - n1Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -985,8 +986,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				}
 				break;
 			case 1:
-				long toShare = value - neighborValues[0];
-				long share = toShare/2;
+				int toShare = value - neighborValues[0];
+				int share = toShare/2;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%2 + share;
@@ -1000,13 +1001,13 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] neighborValues,
+	private static boolean topplePositionSortedNeighbors(int[][] newXSlices, int value, int y, int[] neighborValues,
 			int[][] neighborCoords, int neighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		long neighborValue = neighborValues[0];
-		long toShare = value - neighborValue;
-		long share = toShare/shareCount;
+		int neighborValue = neighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
 		if (share != 0) {
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
@@ -1015,7 +1016,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				newXSlices[nc[0]][nc[1]] += share;
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount--;
 		for (int i = 1; i < neighborCount; i++) {
 			neighborValue = neighborValues[i];
@@ -1038,7 +1039,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return toppled;
 	}
 	
-	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+	private static boolean topplePosition(int[][] newXSlices, int value, int y, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		switch (asymmetricNeighborCount) {
@@ -1053,13 +1054,13 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 						asymmetricNeighborCoords, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
-				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				int n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int shareCount = neighborCount + 1;
 				if (n0Val == n1Val) {
 					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
@@ -1068,15 +1069,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n1Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share;
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					long currentRemainingValue = value - neighborCount*share;
+					int currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n0Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -1086,15 +1087,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
 				} else {
 					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share;
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					long currentRemainingValue = value - neighborCount*share;
+					int currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n1Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -1106,8 +1107,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				long toShare = value - asymmetricNeighborValues[0];
-				long share = toShare/shareCount;
+				int toShare = value - asymmetricNeighborValues[0];
+				int share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -1121,13 +1122,13 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(int[][] newXSlices, int value, int y, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborSymmetryCounts, int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		long neighborValue = asymmetricNeighborValues[0];
-		long toShare = value - neighborValue;
-		long share = toShare/shareCount;
+		int neighborValue = asymmetricNeighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
 		if (share != 0) {
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
@@ -1136,7 +1137,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				newXSlices[nc[0]][nc[1]] += share;
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[0]];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
@@ -1159,7 +1160,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return toppled;
 	}
 	
-	private static boolean topplePosition(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+	private static boolean topplePosition(int[][] newXSlices, int value, int y, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
@@ -1175,14 +1176,14 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 						asymmetricNeighborCoords, asymmetricNeighborShareMultipliers, asymmetricNeighborSymmetryCounts, neighborCount, asymmetricNeighborCount, sortedNeighborsIndexes);
 				break;
 			case 2:
-				long n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
+				int n0Val = asymmetricNeighborValues[0], n1Val = asymmetricNeighborValues[1];
 				int[] n0Coords = asymmetricNeighborCoords[0], n1Coords = asymmetricNeighborCoords[1];
 				int n0Mult = asymmetricNeighborShareMultipliers[0], n1Mult = asymmetricNeighborShareMultipliers[1];
 				int shareCount = neighborCount + 1;
 				if (n0Val == n1Val) {
 					// n0Val = n1Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
@@ -1191,15 +1192,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += value - toShare + share + toShare%shareCount;
 				} else if (n0Val < n1Val) {
 					// n0Val < n1Val < value
-					long toShare = value - n1Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n1Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
 					shareCount -= asymmetricNeighborSymmetryCounts[1];
-					long currentRemainingValue = value - neighborCount*share;
+					int currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n0Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -1209,15 +1210,15 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 					newXSlices[1][y] += currentRemainingValue - toShare + share + toShare%shareCount;
 				} else {
 					// n1Val < n0Val < value
-					long toShare = value - n0Val; 
-					long share = toShare/shareCount;
+					int toShare = value - n0Val; 
+					int share = toShare/shareCount;
 					if (share != 0) {
 						toppled = true;
 					}
 					newXSlices[n0Coords[0]][n0Coords[1]] += share*n0Mult;
 					newXSlices[n1Coords[0]][n1Coords[1]] += share*n1Mult;
 					shareCount -= asymmetricNeighborSymmetryCounts[0];
-					long currentRemainingValue = value - neighborCount*share;
+					int currentRemainingValue = value - neighborCount*share;
 					toShare = currentRemainingValue - n1Val;
 					share = toShare/shareCount;
 					if (share != 0) {
@@ -1229,8 +1230,8 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				break;
 			case 1:
 				shareCount = neighborCount + 1;
-				long toShare = value - asymmetricNeighborValues[0];
-				long share = toShare/shareCount;
+				int toShare = value - asymmetricNeighborValues[0];
+				int share = toShare/shareCount;
 				if (share != 0) {
 					toppled = true;
 					value = value - toShare + toShare%shareCount + share;
@@ -1244,14 +1245,14 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		return toppled;
 	}
 	
-	private static boolean topplePositionSortedNeighbors(long[][] newXSlices, long value, int y, long[] asymmetricNeighborValues,
+	private static boolean topplePositionSortedNeighbors(int[][] newXSlices, int value, int y, int[] asymmetricNeighborValues,
 			int[][] asymmetricNeighborCoords, int[] asymmetricNeighborShareMultipliers, int[] asymmetricNeighborSymmetryCounts, 
 			int neighborCount, int asymmetricNeighborCount, int[] sortedNeighborsIndexes) {
 		boolean toppled = false;
 		int shareCount = neighborCount + 1;
-		long neighborValue = asymmetricNeighborValues[0];
-		long toShare = value - neighborValue;
-		long share = toShare/shareCount;
+		int neighborValue = asymmetricNeighborValues[0];
+		int toShare = value - neighborValue;
+		int share = toShare/shareCount;
 		if (share != 0) {
 			toppled = true;
 			value = value - toShare + toShare%shareCount + share;
@@ -1260,7 +1261,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 				newXSlices[nc[0]][nc[1]] += share * asymmetricNeighborShareMultipliers[sortedNeighborsIndexes[j]];
 			}
 		}
-		long previousNeighborValue = neighborValue;
+		int previousNeighborValue = neighborValue;
 		shareCount -= asymmetricNeighborSymmetryCounts[sortedNeighborsIndexes[0]];
 		for (int i = 1; i < asymmetricNeighborCount; i++) {
 			neighborValue = asymmetricNeighborValues[i];
@@ -1289,16 +1290,16 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 		if (y < 0) y = -y;
 		boolean value;
 		if (y > x) {
-			value = violations[y][x];
+			value = topplingAlternationCompliance[y][x];
 		} else {
-			value = violations[x][y];
+			value = topplingAlternationCompliance[x][y];
 		}
 		return value;
 	}
 	
 	@Override
 	public boolean getFromAsymmetricPosition(int x, int y) {	
-		return violations[x][y];
+		return topplingAlternationCompliance[x][y];
 	}
 
 	@Override
@@ -1311,7 +1312,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public long getInitialValue() {
+	public int getInitialValue() {
 		return initialValue;
 	}
 
@@ -1327,7 +1328,7 @@ public class LongAether2DTopplingAlternationViolations implements SymmetricBoole
 
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/2D/" + initialValue + "/toppling_alternation_violations";
+		return getName() + "/2D/" + initialValue + "/toppling_alternation_compliance";
 	}
 
 	@Override

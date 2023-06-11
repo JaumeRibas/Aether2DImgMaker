@@ -20,20 +20,20 @@ import com.beust.jcommander.IStringConverter;
 
 import cellularautomata.numbers.BigInt;
 
-public class InitialConfigConverter implements IStringConverter<InitialConfigOptionValue> {
+public class InitialConfigConverter implements IStringConverter<InitialConfigParameterValue> {
 	
 	@Override
-	public InitialConfigOptionValue convert(String strValue) {
+	public InitialConfigParameterValue convert(String strValue) {
 		new InitialConfigValidator().validate("Default", strValue);//There's a bug in the currently used version of JCommander that causes the main parameter to be converted before being validated
-		InitialConfigOptionValue value = null;
+		InitialConfigParameterValue value = null;
 		if (strValue != null) {
 			String[] parts = strValue.split("_");
 			if (parts.length == 1) {
-				value = new InitialConfigOptionValue(new BigInt(strValue));
+				value = new InitialConfigParameterValue(new BigInt(strValue));
 			} else if (parts[0].equals("single-source")) {
-				value = new InitialConfigOptionValue(new BigInt(parts[1]));
+				value = new InitialConfigParameterValue(new BigInt(parts[1]));
 			} else {
-				value = new InitialConfigOptionValue(Integer.parseInt(parts[1]), new BigInt(parts[2]), new BigInt(parts[3]));
+				value = new InitialConfigParameterValue(Integer.parseInt(parts[1]), new BigInt(parts[2]), new BigInt(parts[3]));
 			}
 		}
 		return value;

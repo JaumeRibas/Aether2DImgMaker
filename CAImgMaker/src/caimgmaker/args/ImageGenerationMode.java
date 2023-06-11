@@ -19,13 +19,11 @@ package caimgmaker.args;
 public enum ImageGenerationMode {	
 	
 	NORMAL ("normal"),
-	SPLIT_BY_COORDINATE_PARITY ("split-by-coordinate-parity"),
+	SPLIT_COORDINATE_PARITY ("split-coordinate-parity"),
 	EVEN_COORDINATES_ONLY ("even-coordinates-only"),
 	ODD_COORDINATES_ONLY ("odd-coordinates-only"),
 	//TODO missing modes
-	TOPPLING_ALTERNATION_VIOLATIONS ("toppling-alternation-violations");
-	
-	public static final String FRIENDLY_VALUES_LIST = "'normal', 'split-by-coordinate-parity', 'even-coordinates-only', 'odd-coordinates-only' and 'toppling-alternation-violations'";
+	TOPPLING_ALTERNATION_COMPLIANCE ("toppling-alternation-compliance");
 	
 	private final String name;
 
@@ -47,6 +45,11 @@ public enum ImageGenerationMode {
 			}
 		}
 		return result;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }

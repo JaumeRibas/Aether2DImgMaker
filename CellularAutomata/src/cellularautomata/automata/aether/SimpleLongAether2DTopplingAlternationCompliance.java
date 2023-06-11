@@ -25,7 +25,7 @@ import cellularautomata.automata.Neighbor;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 
-public class SimpleLongAether2DTopplingAlternationViolations implements SymmetricBooleanModel2D, IsotropicSquareModelA {
+public class SimpleLongAether2DTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -38,7 +38,7 @@ public class SimpleLongAether2DTopplingAlternationViolations implements Symmetri
 	/** A 2D array representing the grid */
 	private long[][] grid;
 	
-	private boolean[][] violations;
+	private boolean[][] topplingAlternationCompliance;
 	private boolean topplingAlternationOffset;
 	
 	private final long initialValue;
@@ -58,21 +58,22 @@ public class SimpleLongAether2DTopplingAlternationViolations implements Symmetri
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public SimpleLongAether2DTopplingAlternationViolations(long initialValue) {
+	public SimpleLongAether2DTopplingAlternationCompliance(long initialValue) {
 		if (initialValue < MIN_INITIAL_VALUE) {//to prevent overflow of long type
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
-		topplingAlternationOffset = initialValue < 0;
+		topplingAlternationOffset = initialValue >= 0;
 		int side = 5;
 		grid = new long[side][side];
-		violations = new boolean[side][side];
+		topplingAlternationCompliance = new boolean[side][side];
 		//The origin will be at the center of the array
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = initialValue;
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
+		nextStep();
 	}
 	
 	@Override
@@ -87,13 +88,13 @@ public class SimpleLongAether2DTopplingAlternationViolations implements Symmetri
 			boundsReached = false;
 			newSide = grid.length + 2;
 			newGrid = new long[newSide][newSide];
-			violations = new boolean[newSide][newSide];
-			registerTopplingAlternationViolationsInGridEdges();
+			topplingAlternationCompliance = new boolean[newSide][newSide];
+			registerTopplingAlternationComplianceInGridEdges();
 			indexOffset = 1;
 		} else {
 			newSide = grid.length;
 			newGrid = new long[newSide][newSide];
-			violations = new boolean[newSide][newSide];
+			topplingAlternationCompliance = new boolean[newSide][newSide];
 		}
 		boolean localTopplingAlternationOffset = topplingAlternationOffset;
 		boolean changed = false;
@@ -175,7 +176,7 @@ public class SimpleLongAether2DTopplingAlternationViolations implements Symmetri
 					changed = changed || toppled;
 				}					
 				newGrid[i + indexOffset][j + indexOffset] += value;
-				violations[i + indexOffset][j + indexOffset] = toppled == localTopplingAlternationOffset;
+				topplingAlternationCompliance[i + indexOffset][j + indexOffset] = toppled == localTopplingAlternationOffset;
 			}
 		}
 		//Replace the old array with the new one
@@ -190,19 +191,19 @@ public class SimpleLongAether2DTopplingAlternationViolations implements Symmetri
 		return changed;
 	}
 	
-	private void registerTopplingAlternationViolationsInGridEdges() {
+	private void registerTopplingAlternationComplianceInGridEdges() {
 		int i = 0;
-		int side = violations.length - 1;
+		int side = topplingAlternationCompliance.length - 1;
 		boolean localTopplingAlternationOffset = !topplingAlternationOffset;
 		for (int j = 0; j <= side; j++, localTopplingAlternationOffset = !localTopplingAlternationOffset) {
-			violations[i][j] = localTopplingAlternationOffset;
+			topplingAlternationCompliance[i][j] = localTopplingAlternationOffset;
 		}
 		for (i = 1; i < side; i++, localTopplingAlternationOffset = !localTopplingAlternationOffset) {
-			violations[i][0] = localTopplingAlternationOffset;
-			violations[i][side] = localTopplingAlternationOffset;
+			topplingAlternationCompliance[i][0] = localTopplingAlternationOffset;
+			topplingAlternationCompliance[i][side] = localTopplingAlternationOffset;
 		}
 		for (int j = 0; j <= side; j++, localTopplingAlternationOffset = !localTopplingAlternationOffset) {
-			violations[i][j] = localTopplingAlternationOffset;
+			topplingAlternationCompliance[i][j] = localTopplingAlternationOffset;
 		}
 	}
 
@@ -243,7 +244,7 @@ public class SimpleLongAether2DTopplingAlternationViolations implements Symmetri
 		int i = originIndex + x;
 		int j = originIndex + y;
 		//Note that the indexes whose value hasn't been defined have value false by default
-		return violations[i][j];
+		return topplingAlternationCompliance[i][j];
 	}
 	
 	@Override
@@ -284,7 +285,7 @@ public class SimpleLongAether2DTopplingAlternationViolations implements Symmetri
 	
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/2D/" + initialValue + "/toppling_alternation_violations";
+		return getName() + "/2D/" + initialValue + "/toppling_alternation_compliance";
 	}
 
 	@Override

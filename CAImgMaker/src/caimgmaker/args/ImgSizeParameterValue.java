@@ -16,12 +16,12 @@
  */
 package caimgmaker.args;
 
-public class ImgSizeOptionValue {	
+public class ImgSizeParameterValue {	
 	
 	public int width;
 	public int height;
 	
-	public ImgSizeOptionValue(int width, int height) {
+	public ImgSizeParameterValue(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}

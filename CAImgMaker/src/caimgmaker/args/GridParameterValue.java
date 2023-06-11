@@ -16,24 +16,27 @@
  */
 package caimgmaker.args;
 
-public class GridOptionValue {	
+public class GridParameterValue {	
 	
 	public int dimension;
 	public Integer side;
 	
-	public GridOptionValue(int dimension) {
+	public GridParameterValue(int dimension) {
 		this.dimension = dimension;
 	}
 	
-	public GridOptionValue(int dimension, int side) {
+	public GridParameterValue(int dimension, int side) {
 		this.dimension = dimension;
 		this.side = side;
 	}
 	
 	@Override
 	public String toString() {
-		String side = this.side == null ? "infinite" : this.side.toString();
-		return dimension + "d_" + side;
+		if (side == null) {
+			return dimension + "d";
+		} else {
+			return dimension + "d_" + side;
+		}
 	}
 	
 	
