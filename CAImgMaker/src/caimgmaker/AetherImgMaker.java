@@ -184,6 +184,10 @@ public class AetherImgMaker {
 		ColorMapper colorMapper = getColorMapper(args);
 		if (colorMapper == null)
 			return false;
+		String imagesName = args.imgName;
+		if (imagesName == null) {
+			imagesName = model.getName() + "_";
+		}
 		String imagesPath = args.path;
 		if (!args.noFolders) {
 			imagesPath += "/" + model.getSubfolderPath();
@@ -206,13 +210,13 @@ public class AetherImgMaker {
 					BooleanModel2D castedModel = (BooleanModel2D)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -222,13 +226,13 @@ public class AetherImgMaker {
 					IntModel2D castedModel = (IntModel2D)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -238,13 +242,13 @@ public class AetherImgMaker {
 					LongModel2D castedModel = (LongModel2D)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -255,13 +259,13 @@ public class AetherImgMaker {
 					NumericModel2D<BigInt> castedModel = (NumericModel2D<BigInt>)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -271,13 +275,13 @@ public class AetherImgMaker {
 					IntModel2D castedModel = new IntModelAs2D((IntModel)model);
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -310,13 +314,13 @@ public class AetherImgMaker {
 					IntModel3D castedModel = (IntModel3D)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -326,13 +330,13 @@ public class AetherImgMaker {
 					LongModel3D castedModel = (LongModel3D)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -343,13 +347,13 @@ public class AetherImgMaker {
 					NumericModel3D<BigInt> castedModel = (NumericModel3D<BigInt>)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
@@ -359,13 +363,13 @@ public class AetherImgMaker {
 					IntModel3D castedModel = new IntModelAs3D((IntModel)model);
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap);
+						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, false);
+						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
 							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, false, true);
+						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
 							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, backupsPath, args.steapLeap, true, false);
+						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
 							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);

@@ -54,6 +54,9 @@ public class Args {
 	
 	@Parameter(names = { "-image-generation-mode", "-img-generation-mode", "-image-gen-mode", "-img-gen-mode" }, validateWith = ImageGenerationModeValidator.class, description = "Parameter to affect image generation.\nThe currently available modes are:\n\n  normal\n\n  split-coordinate-parity: split the even and odd coordinates of the grid into sepate images\n\n  even-coordinates-only: generate images only of the even coordinates of the grid\n\n  odd-coordinates-only: generate images only of the odd coordinates of the grid\n\n  toppling-alternation-compliance (only available for the Aether model with single source initial configuration): color positions based on whether they keep the original toppling alternation phase between von Neumann neighbors")
     public ImageGenerationMode imgGenerationMode = ImageGenerationMode.NORMAL;
+	
+	@Parameter(names = { "-image-name", "-img-name" }, validateWith = ImgNameValidator.class, description = "The name of the generated images.\nThe step index will be appended to this string.\nBy default, the model name followed by an underscore is used.")
+    public String imgName = null;
     
 	@Parameter(names = "-memory-safe", description = "Use temporary files, within the -path folder, to store the grid so as to avoid running out of memory. In exchange, processing speed and storage space are sacrificed.")
 	public boolean memorySafe = false;
@@ -64,10 +67,10 @@ public class Args {
 	@Parameter(names = "-model", description = "The model to generate images from.\nThe currently available models are:\n\n  Aether: https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition\n\n  Spread_Integer_Value, SIV: https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition\n\n  Abelian_sandpile: https://en.wikipedia.org/wiki/Abelian_sandpile_model")
     public String model = "Aether";
 	
-	@Parameter(names = "-no-folders", description = "Do not create a subfolder structure at the provided -path.")
+	@Parameter(names = "-no-folders", description = "Do not create a subfolder structure at the provided -path apart from numbered folders.")
 	public boolean noFolders;
 	
-	@Parameter(names = "-path", description = "The path of the parent folder where the images are created. By default, a subfolder structure is created at this location for organizational purposes. This can be prevented using the -no-folders parameter.")
+	@Parameter(names = "-path", validateWith = PathValidator.class, description = "The path of the parent folder where the images are created. By default, a subfolder structure is created at this location for organizational purposes. This can be prevented using the -no-folders parameter.")
     public String path = "./";
 
 	@Parameter(names = "-restore", description = "The path of the backup to restore. Mandatory when no initial configuration is passed and the selected -model requires one.")

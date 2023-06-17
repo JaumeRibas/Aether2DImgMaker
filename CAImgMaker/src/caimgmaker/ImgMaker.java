@@ -60,13 +60,12 @@ public class ImgMaker {
 		this.millisecondsBetweenBackups = millisecondsBetweenBackups;
 	}
 	
-	public void createImages(BooleanModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {	
+	public void createImages(BooleanModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try { 
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
@@ -88,7 +87,7 @@ public class ImgMaker {
 							minY = ca.getMinY(), maxY = ca.getMaxY();
 					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);//TODO improve. e.g. x: [min, max] ...
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca);
-					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, caName + "_" + step + ".png");
+					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, name + step + ".png");
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
 						numberedFolder++;
@@ -123,13 +122,12 @@ public class ImgMaker {
 		}
 	}
 	
-	public void createImages(IntModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {	
+	public void createImages(IntModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try { 
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
@@ -153,7 +151,7 @@ public class ImgMaker {
 					int[] minAndMaxValue = ca.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue[0], minAndMaxValue[1]);
-					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, caName + "_" + step + ".png");
+					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, name + step + ".png");
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
 						numberedFolder++;
@@ -188,12 +186,11 @@ public class ImgMaker {
 		}
 	}
 	
-	public void createImages(LongModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {	
+	public void createImages(LongModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try {
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			long step = ca.getStep();
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
@@ -218,7 +215,7 @@ public class ImgMaker {
 					long[] minAndMaxValue = ca.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue[0], minAndMaxValue[1]);
-					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, caName + "_" + step + ".png");
+					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, name + step + ".png");
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
 						numberedFolder++;
@@ -254,13 +251,12 @@ public class ImgMaker {
 	}
 	
 	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void createImages(
-			NumericModel2D<Number_Type> ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {	
+			NumericModel2D<Number_Type> ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try {
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
@@ -284,7 +280,7 @@ public class ImgMaker {
 					MinAndMax<Number_Type> minAndMaxValue = ca.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + minAndMaxValue.getMax());
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue.getMin(), minAndMaxValue.getMax());
-					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, caName + "_" + step + ".png");
+					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, name + step + ".png");
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
 						numberedFolder++;
@@ -320,13 +316,12 @@ public class ImgMaker {
 	}
 	
 	public void createEvenOddImages(BooleanModel2D ca, ColorMapper colorMapper, 
-			int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
+			int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try {
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
@@ -351,12 +346,12 @@ public class ImgMaker {
 					if (!omitEven) {
 						ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca);
 						createImageFromEvenOrOddPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-							imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+							imgPath + "even/" + numberedFolder, name + step + ".png");
 					}
 					if (!omitOdd) {
 						ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca);
 						createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-								imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+								imgPath + "odd/" + numberedFolder, name + step + ".png");
 					}			
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
@@ -394,13 +389,12 @@ public class ImgMaker {
 	}
 	
 	public void createEvenOddImages(IntModel2D ca, ColorMapper colorMapper, 
-			int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
+			int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try {
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
@@ -428,10 +422,10 @@ public class ImgMaker {
 							System.out.println("Even positions: min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + evenMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-								imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+								imgPath + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -440,10 +434,10 @@ public class ImgMaker {
 							System.out.println("Odd positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -482,13 +476,12 @@ public class ImgMaker {
 	}
 	
 	public void createEvenOddImages(LongModel2D ca, ColorMapper colorMapper, 
-			int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
+			int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try {
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
@@ -516,10 +509,10 @@ public class ImgMaker {
 							System.out.println("Even positions: min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + evenMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-								imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+								imgPath + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -528,10 +521,10 @@ public class ImgMaker {
 							System.out.println("Odd positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -570,13 +563,12 @@ public class ImgMaker {
 	}
 	
 	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void createEvenOddImages(NumericModel2D<Number_Type> ca, ColorMapper colorMapper, 
-			int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
+			int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try {
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
@@ -604,10 +596,10 @@ public class ImgMaker {
 							System.out.println("Even positions: min value: " + evenMinAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + evenMinAndMaxValue.getMax());
 							ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca, evenMinAndMaxValue.getMin(), evenMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-								imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+								imgPath + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -616,10 +608,10 @@ public class ImgMaker {
 							System.out.println("Odd positions: min value: " + oddMinAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + oddMinAndMaxValue.getMax());
 							ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue.getMin(), oddMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -658,13 +650,12 @@ public class ImgMaker {
 	}
 	
 	public void createImagesFromEvenOddX(IntModel2D ca, ColorMapper colorMapper, 
-			int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
+			int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {	
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
 		try {
 			long step = ca.getStep();
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel();
 			boolean isEvenStep = step%2 == 0;
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
@@ -692,10 +683,10 @@ public class ImgMaker {
 							System.out.println("Even " + xLabel + " positions: min value: " + evenMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + evenMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca, evenMinAndMaxValue[0], evenMinAndMaxValue[1]);
 							createImageFromEvenOrOddXPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-								imgPath + "even_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+								imgPath + "even_" + xLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "even_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "even_" + xLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -704,10 +695,10 @@ public class ImgMaker {
 							System.out.println("Odd " + xLabel + " positions: min value: " + oddMinAndMaxValue[0] + System.lineSeparator() + "Max value: " + oddMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddColorModel = colorMapper.getMappedModel(ca, oddMinAndMaxValue[0], oddMinAndMaxValue[1]);
 							createImageFromEvenOrOddXPositions(oddColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd_" + xLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									imgPath + "odd_" + xLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									imgPath + "odd_" + xLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -746,7 +737,7 @@ public class ImgMaker {
 	}
 	
 	public void createScanningAndZCrossSectionImages(IntModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -755,7 +746,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -789,7 +779,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[0] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[0] + numberedFolder, name + step + ".png");
 					scanCoords[0]--;
 					//y scan
 					if (scanCoords[1] < ca.getMinY()) {
@@ -801,7 +791,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[1] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[1] + numberedFolder, name + step + ".png");
 					scanCoords[1]--;
 					//z scan
 					if (scanCoords[2] < ca.getMinZ()) {
@@ -813,7 +803,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[2] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[2] + numberedFolder, name + step + ".png");
 					scanCoords[2]--;
 					//cross section
 					crossSection = ca.crossSectionAtZ(crossSectionZ);
@@ -821,7 +811,7 @@ public class ImgMaker {
 					System.out.println("Cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-							caName + "_" + step + ".png");
+							name + step + ".png");
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
 						numberedFolder++;
@@ -857,7 +847,7 @@ public class ImgMaker {
 	}
 	
 	public void createScanningAndZCrossSectionImages(LongModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -866,7 +856,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -900,7 +889,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[0] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[0] + numberedFolder, name + step + ".png");
 					scanCoords[0]--;
 					//y scan
 					if (scanCoords[1] < ca.getMinY()) {
@@ -912,7 +901,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[1] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[1] + numberedFolder, name + step + ".png");
 					scanCoords[1]--;
 					//z scan
 					if (scanCoords[2] < ca.getMinZ()) {
@@ -924,7 +913,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[2] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[2] + numberedFolder, name + step + ".png");
 					scanCoords[2]--;
 					//cross section
 					crossSection = ca.crossSectionAtZ(crossSectionZ);
@@ -932,7 +921,7 @@ public class ImgMaker {
 					System.out.println("Cross section: min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue[0], minAndMaxValue[1]);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-							caName + "_" + step + ".png");
+							name + step + ".png");
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
 						numberedFolder++;
@@ -968,7 +957,7 @@ public class ImgMaker {
 	}
 	
 	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void createScanningAndZCrossSectionImages(NumericModel3D<Number_Type> ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -977,7 +966,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -1011,7 +999,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + minAndMaxValue.getMax());
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue.getMin(), minAndMaxValue.getMax());
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[0] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[0] + numberedFolder, name + step + ".png");
 					scanCoords[0]--;
 					//y scan
 					if (scanCoords[1] < ca.getMinY()) {
@@ -1023,7 +1011,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + minAndMaxValue.getMax());
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue.getMin(), minAndMaxValue.getMax());
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[1] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[1] + numberedFolder, name + step + ".png");
 					scanCoords[1]--;
 					//z scan
 					if (scanCoords[2] < ca.getMinZ()) {
@@ -1035,7 +1023,7 @@ public class ImgMaker {
 					System.out.println("Scan: min value: " + minAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + minAndMaxValue.getMax());
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue.getMin(), minAndMaxValue.getMax());
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-							scanImgPaths[2] + numberedFolder, caName + "_" + step + ".png");
+							scanImgPaths[2] + numberedFolder, name + step + ".png");
 					scanCoords[2]--;
 					//cross section
 					crossSection = ca.crossSectionAtZ(crossSectionZ);
@@ -1043,7 +1031,7 @@ public class ImgMaker {
 					System.out.println("Cross section: min value: " + minAndMaxValue.getMin() + System.lineSeparator() + "Max value: " + minAndMaxValue.getMax());
 					colorModel = colorMapper.getMappedModel(crossSection, minAndMaxValue.getMin(), minAndMaxValue.getMax());
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, crossSectionImgPath + numberedFolder, 
-							caName + "_" + step + ".png");
+							name + step + ".png");
 					folderImageCount++;
 					if (folderImageCount == imgsPerFolder) {
 						numberedFolder++;
@@ -1079,7 +1067,7 @@ public class ImgMaker {
 	}
 	
 	public void createScanningAndZCrossSectionEvenOddImages(IntModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -1090,7 +1078,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;		
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -1125,10 +1112,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[0]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1137,10 +1124,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[0]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[0]--;
@@ -1155,10 +1142,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[1]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1167,10 +1154,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[1]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[1]--;
@@ -1185,10 +1172,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[2]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1197,10 +1184,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[2]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[2]--;
@@ -1212,10 +1199,10 @@ public class ImgMaker {
 							System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenCrossSectionColorModel = colorMapper.getMappedModel(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenCrossSectionColorModel, isEvenStep == isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1224,10 +1211,10 @@ public class ImgMaker {
 							System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddCrossSectionColorModel = colorMapper.getMappedModel(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddCrossSectionColorModel, isEvenStep != isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
-											crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+											crossSectionImgPath + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -1266,7 +1253,7 @@ public class ImgMaker {
 	}
 	
 	public void createScanningAndZCrossSectionEvenOddImages(LongModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -1277,7 +1264,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;		
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -1312,10 +1298,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[0]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1324,10 +1310,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[0]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[0]--;
@@ -1342,10 +1328,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[1]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1354,10 +1340,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[1]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[1]--;
@@ -1372,10 +1358,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[2]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1384,10 +1370,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[2]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[2]--;
@@ -1399,10 +1385,10 @@ public class ImgMaker {
 							System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenCrossSectionColorModel = colorMapper.getMappedModel(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(evenCrossSectionColorModel, isEvenStep == isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1411,10 +1397,10 @@ public class ImgMaker {
 							System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddCrossSectionColorModel = colorMapper.getMappedModel(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddPositions(oddCrossSectionColorModel, isEvenStep != isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
-											crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+											crossSectionImgPath + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -1453,7 +1439,7 @@ public class ImgMaker {
 	}
 	
 	public <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void createScanningAndZCrossSectionEvenOddImages(NumericModel3D<Number_Type> ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();	
@@ -1464,7 +1450,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;		
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -1499,10 +1484,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue.getMin() + ", max value: " + evenScanMinAndMaxValue.getMax());
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue.getMin(), evenScanMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[0]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1511,10 +1496,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue.getMin() + ", max value: " + oddScanMinAndMaxValue.getMax());
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue.getMin(), oddScanMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[0]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[0]--;
@@ -1529,10 +1514,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue.getMin() + ", max value: " + evenScanMinAndMaxValue.getMax());
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue.getMin(), evenScanMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[1]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1541,10 +1526,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue.getMin() + ", max value: " + oddScanMinAndMaxValue.getMax());
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue.getMin(), oddScanMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[1]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[1]--;
@@ -1559,10 +1544,10 @@ public class ImgMaker {
 							System.out.println("Scan even positions: min value: " + evenScanMinAndMaxValue.getMin() + ", max value: " + evenScanMinAndMaxValue.getMax());
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue.getMin(), evenScanMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(evenScanColorModel, scanCoords[2]%2 == 0 == isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1571,10 +1556,10 @@ public class ImgMaker {
 							System.out.println("Scan odd positions: min value: " + oddScanMinAndMaxValue.getMin() + ", max value: " + oddScanMinAndMaxValue.getMax());
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue.getMin(), oddScanMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(oddScanColorModel, scanCoords[2]%2 == 0 != isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[2]--;
@@ -1586,10 +1571,10 @@ public class ImgMaker {
 							System.out.println("Cross section even positions: min value: " + evenCrossSectionMinAndMaxValue.getMin() + ", max value: " + evenCrossSectionMinAndMaxValue.getMax());
 							ObjectModel2D<Color> evenCrossSectionColorModel = colorMapper.getMappedModel(crossSection, evenCrossSectionMinAndMaxValue.getMin(), evenCrossSectionMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(evenCrossSectionColorModel, isEvenStep == isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1598,10 +1583,10 @@ public class ImgMaker {
 							System.out.println("Cross section odd positions: min value: " + oddCrossSectionMinAndMaxValue.getMin() + ", max value: " + oddCrossSectionMinAndMaxValue.getMax());
 							ObjectModel2D<Color> oddCrossSectionColorModel = colorMapper.getMappedModel(crossSection, oddCrossSectionMinAndMaxValue.getMin(), oddCrossSectionMinAndMaxValue.getMax());
 							createImageFromEvenOrOddPositions(oddCrossSectionColorModel, isEvenStep != isEvenCrossSectionZ, minX, maxX, minY, maxY, minWidth, minHeight, 
-											crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+											crossSectionImgPath + "odd/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "odd/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "odd/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -1641,7 +1626,7 @@ public class ImgMaker {
 	
 	//TODO review after changing cross section coordinate mapping
 	public void createScanningAndZCrossSectionImagesFromEvenOddY(LongModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();		
@@ -1651,7 +1636,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -1686,10 +1670,10 @@ public class ImgMaker {
 							System.out.println("Scan even " + yLabel + " positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(evenScanColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1698,10 +1682,10 @@ public class ImgMaker {
 							System.out.println("Scan odd " + yLabel + " positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(oddScanColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[0]--;
@@ -1716,7 +1700,7 @@ public class ImgMaker {
 						System.out.println("Scan even " + yLabel + " positions: min value: " + scanMinAndMaxValue[0] + ", max value: " + scanMinAndMaxValue[1]);
 						ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(crossSection, scanMinAndMaxValue[0], scanMinAndMaxValue[1]);
 						createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-								scanImgPaths[1] + (isEvenYScan ? "even" : "odd") + "_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+								scanImgPaths[1] + (isEvenYScan ? "even" : "odd") + "_" + yLabel + "/" + numberedFolder, name + step + ".png");
 					}
 					scanCoords[1]--;
 					//z scan
@@ -1730,10 +1714,10 @@ public class ImgMaker {
 							System.out.println("Scan even " + yLabel + " positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(evenScanColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1742,10 +1726,10 @@ public class ImgMaker {
 							System.out.println("Scan odd " + yLabel + " positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(oddScanColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[2]--;
@@ -1757,10 +1741,10 @@ public class ImgMaker {
 							System.out.println("Cross section even " + yLabel + " positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenCrossSectionColorModel = colorMapper.getMappedModel(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(evenCrossSectionColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1769,10 +1753,10 @@ public class ImgMaker {
 							System.out.println("Cross section odd " + yLabel + " positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddCrossSectionColorModel = colorMapper.getMappedModel(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(oddCrossSectionColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-											crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+											crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
@@ -1812,7 +1796,7 @@ public class ImgMaker {
 	
 	//TODO review after changing cross section coordinate mapping
 	public void createScanningAndZCrossSectionImagesFromEvenOddY(IntModel3D ca, int[] scanInitialCoords, int crossSectionZ, 
-			ColorMapper colorMapper, int minWidth, int minHeight, String path, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
+			ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap, boolean omitEven, boolean omitOdd) throws Exception {
 		StdInRunnable stdIn = new StdInRunnable();
 		Thread inputThread = new Thread(stdIn);
 		inputThread.start();
@@ -1822,7 +1806,6 @@ public class ImgMaker {
 			int numberedFolder = (int) ((step/stepLeap)/imgsPerFolder);
 			int folderImageCount = (int) ((step/stepLeap)%imgsPerFolder);
 			int[] scanCoords = scanInitialCoords;
-			String caName = ca.getName();
 			String xLabel = ca.getXLabel(), yLabel = ca.getYLabel(), zLabel = ca.getZLabel();
 			path += "/";
 			String[] scanImgPaths = new String[] { 
@@ -1857,10 +1840,10 @@ public class ImgMaker {
 							System.out.println("Scan even " + yLabel + " positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(evenScanColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1869,10 +1852,10 @@ public class ImgMaker {
 							System.out.println("Scan odd " + yLabel + " positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(oddScanColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[0] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[0]--;
@@ -1888,10 +1871,10 @@ public class ImgMaker {
 							System.out.println("Scan even " + yLabel + " positions: min value: " + scanMinAndMaxValue[0] + ", max value: " + scanMinAndMaxValue[1]);
 							ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(crossSection, scanMinAndMaxValue[0], scanMinAndMaxValue[1]);
 							createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + (isEvenYScan ? "even" : "odd") + "_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + (isEvenYScan ? "even" : "odd") + "_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[1] + (isEvenYScan ? "even" : "odd") + "_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[1] + (isEvenYScan ? "even" : "odd") + "_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[1]--;
@@ -1906,10 +1889,10 @@ public class ImgMaker {
 							System.out.println("Scan even " + yLabel + " positions: min value: " + evenScanMinAndMaxValue[0] + ", max value: " + evenScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenScanColorModel = colorMapper.getMappedModel(crossSection, evenScanMinAndMaxValue[0], evenScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(evenScanColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1918,10 +1901,10 @@ public class ImgMaker {
 							System.out.println("Scan odd " + yLabel + " positions: min value: " + oddScanMinAndMaxValue[0] + ", max value: " + oddScanMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddScanColorModel = colorMapper.getMappedModel(crossSection, oddScanMinAndMaxValue[0], oddScanMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(oddScanColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									scanImgPaths[2] + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					scanCoords[2]--;
@@ -1933,10 +1916,10 @@ public class ImgMaker {
 							System.out.println("Cross section even " + yLabel + " positions: min value: " + evenCrossSectionMinAndMaxValue[0] + ", max value: " + evenCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> evenCrossSectionColorModel = colorMapper.getMappedModel(crossSection, evenCrossSectionMinAndMaxValue[0], evenCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(evenCrossSectionColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "even_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}
 					if (!omitOdd) {
@@ -1945,10 +1928,10 @@ public class ImgMaker {
 							System.out.println("Cross section odd " + yLabel + " positions: min value: " + oddCrossSectionMinAndMaxValue[0] + ", max value: " + oddCrossSectionMinAndMaxValue[1]);
 							ObjectModel2D<Color> oddCrossSectionColorModel = colorMapper.getMappedModel(crossSection, oddCrossSectionMinAndMaxValue[0], oddCrossSectionMinAndMaxValue[1]);
 							createImageFromEvenOrOddYPositions(oddCrossSectionColorModel, !isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
-											crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+											crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						} else {
 							createEmptyImage(minX, maxX, minY, maxY, minWidth, minHeight, 
-									crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, caName + "_" + step + ".png");
+									crossSectionImgPath + "odd_" + yLabel + "/" + numberedFolder, name + step + ".png");
 						}
 					}			
 					folderImageCount++;
