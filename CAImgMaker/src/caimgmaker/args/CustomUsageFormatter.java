@@ -207,7 +207,7 @@ public class CustomUsageFormatter implements IUsageFormatter {
                 }
                 out.append(syntax);
             }
-            if (def != null && !pd.isHelp()) {
+            if (def != null && !(def instanceof Boolean)) {
                 String displayedDef = Strings.isStringEmpty(def.toString()) ? "<empty string>" : def.toString();
                 String defaultText = "Default: " + (parameter.password() ? "********" : displayedDef);
                 out.append("\n");
