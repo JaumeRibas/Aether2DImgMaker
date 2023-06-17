@@ -193,7 +193,7 @@ public class CustomUsageFormatter implements IUsageFormatter {
                     .append("\n\n");
 
             if (hasDescription) {
-                wrapDescription(out, indentCount, spaces + description.replaceAll("\\{br\\}", "\n" + spaces));
+                wrapDescription(out, indentCount, spaces + description.replaceAll("([\n]+)", "$1" + spaces));
             }
             Object def = pd.getDefault();
 
