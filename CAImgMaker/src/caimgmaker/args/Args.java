@@ -67,7 +67,7 @@ public class Args {
 	@Parameter(names = "-model", description = "The model to generate images from.\nThe currently available models are:\n\n  Aether: https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition\n\n  Spread_Integer_Value, SIV: https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition\n\n  Abelian_sandpile: https://en.wikipedia.org/wiki/Abelian_sandpile_model")
     public String model = "Aether";
 	
-	@Parameter(names = "-no-folders", description = "Do not create a subfolder structure at the provided -path apart from numbered folders.")
+	@Parameter(names = { "-no-folders", "-no-folder" }, description = "Do not create a subfolder structure at the -path apart from numbered folders.")
 	public boolean noFolders;
 	
 	@Parameter(names = "-path", validateWith = PathValidator.class, description = "The path of the parent folder where the images are created. By default, a subfolder structure is created at this location for organizational purposes. This can be prevented using the -no-folders parameter.")
