@@ -44,19 +44,23 @@ import cellularautomata.numbers.BigInt;
 public class Utils {
 	
 	public static boolean isEvenPosition(int[] coordinates) {
-		int sum = 0;
+		boolean isEven = true;
 		for (int i = 0; i != coordinates.length; i++) {
-			sum += coordinates[i];
+			if (coordinates[i]%2 != 0) {
+				isEven = !isEven;
+			}
 		}
-		return sum%2 == 0;
+		return isEven;
 	}
 	
 	public static boolean isEvenPosition(Coordinates coordinates) {
-		int sum = 0;
+		boolean isEven = true;
 		for (int i = coordinates.getCount() - 1; i != -1; i--) {
-			sum += coordinates.get(i);
+			if (coordinates.get(i)%2 != 0) {
+				isEven = !isEven;
+			}
 		}
-		return sum%2 == 0;
+		return isEven;
 	}
 	
 	public static int getRandomInt(int min, int max) {
