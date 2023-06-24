@@ -18,6 +18,7 @@ package cellularautomata.arrays;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -33,33 +34,76 @@ public class Test {
 	public static void testHypercubicIntArray() {
 		int side = 3;
 		int dimension = 5;
+		int positionCount = (int) Math.pow(side, dimension);
 		HypercubicIntArray arr = new HypercubicIntArray(dimension, side);
 		System.out.println("dimension: " + arr.getDimension());
+		HashSet<Coordinates> indexSets = new HashSet<Coordinates>();
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		System.out.println("Setting values");
+		System.out.println("Setting values.");
 		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
 			public void accept(Coordinates indexes) {
+				if (indexSets.contains(indexes)) {
+					System.err.println("Indexes " + indexes + " are repeated.");
+				}
+				indexSets.add(indexes);
 				int value = Utils.getRandomInt(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
 				list.add(value);
 				arr.set(indexes, value);		
 			}
 		});
-		System.out.println("Getting values");
+		System.out.println("Getting values.");
 		Iterator<Integer> iterator = list.iterator();
 		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
 			public void accept(Coordinates indexes) {
-				int value = arr.get(indexes);
-				if (value != iterator.next()) {
-					System.err.println("Wroong!");
+				int retrievedValue = arr.get(indexes);
+				int insertedValue = iterator.next();
+				if (retrievedValue != insertedValue) {
+					System.err.println("Retrieved value ("+retrievedValue+") is different from previouly inserted value ("+insertedValue+") at indexes " + indexes + ".");
 				}	
 			}
 		});
-		if (list.size() != Math.pow(side, dimension)) {
-			System.err.println("Wroong!");
+		if (list.size() != positionCount) {
+			System.err.println("Wrong position count.");
+		}
+		System.out.println("Testing even index traversal.");
+		HashSet<Coordinates> evenIndexes = new HashSet<Coordinates>();
+		arr.forEachEvenIndex(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates indexes) {
+				if (evenIndexes.contains(indexes)) {
+					System.err.println("Indexes " + indexes + " are repeated.");
+				}
+				evenIndexes.add(indexes);
+				if (!Utils.isEvenPosition(indexes)) {
+					System.err.println(indexes + " is not even.");
+				}	
+			}
+		});	
+		if (Math.abs(evenIndexes.size() - positionCount/2) > 1) {
+			System.err.println("Wrong even position count.");
+		}
+		System.out.println("Testing odd index traversal.");
+		HashSet<Coordinates> oddIndexes = new HashSet<Coordinates>();
+		arr.forEachOddIndex(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates indexes) {
+				if (oddIndexes.contains(indexes)) {
+					System.err.println("Indexes " + indexes + " are repeated.");
+				}
+				oddIndexes.add(indexes);
+				if (Utils.isEvenPosition(indexes)) {
+					System.err.println(indexes + " is not odd.");
+				}	
+			}
+		});	
+		if (Math.abs(oddIndexes.size() - positionCount/2) > 1) {
+			System.err.println("Wrong odd position count.");
 		}
 	}
 	
@@ -74,31 +118,73 @@ public class Test {
 		System.out.println(Arrays.toString(sizes));
 		HyperrectangularIntArray arr = new HyperrectangularIntArray(sizes);
 		System.out.println("dimension: " + arr.getDimension());
+		HashSet<Coordinates> indexSets = new HashSet<Coordinates>();
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		System.out.println("Setting values");
+		System.out.println("Setting values.");
 		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
 			public void accept(Coordinates indexes) {
+				if (indexSets.contains(indexes)) {
+					System.err.println("Indexes " + indexes + " are repeated.");
+				}
+				indexSets.add(indexes);
 				int value = Utils.getRandomInt(Integer.MIN_VALUE, Integer.MAX_VALUE - 1);
 				list.add(value);
 				arr.set(indexes, value);		
 			}
 		});
-		System.out.println("Getting values");
+		System.out.println("Getting values.");
 		Iterator<Integer> iterator = list.iterator();
 		arr.forEachIndex(new Consumer<Coordinates>() {
 			
 			@Override
 			public void accept(Coordinates indexes) {
-				int value = arr.get(indexes);
-				if (value != iterator.next()) {
-					System.err.println("Wroong!");
-				}	
+				int retrievedValue = arr.get(indexes);
+				int insertedValue = iterator.next();
+				if (retrievedValue != insertedValue) {
+					System.err.println("Retrieved value ("+retrievedValue+") is different from previouly inserted value ("+insertedValue+") at indexes " + indexes + ".");
+				}
 			}
 		});		
 		if (list.size() != positionCount) {
-			System.err.println("Wroong!");
+			System.err.println("Wrong position count.");
+		}
+		System.out.println("Testing even index traversal.");
+		HashSet<Coordinates> evenIndexes = new HashSet<Coordinates>();
+		arr.forEachEvenIndex(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates indexes) {
+				if (evenIndexes.contains(indexes)) {
+					System.err.println("Indexes " + indexes + " are repeated.");
+				}
+				evenIndexes.add(indexes);
+				if (!Utils.isEvenPosition(indexes)) {
+					System.err.println(indexes + " is not even.");
+				}	
+			}
+		});	
+		if (Math.abs(evenIndexes.size() - positionCount/2) > 1) {
+			System.err.println("Wrong even position count.");
+		}
+		System.out.println("Testing odd index traversal.");
+		HashSet<Coordinates> oddIndexes = new HashSet<Coordinates>();
+		arr.forEachOddIndex(new Consumer<Coordinates>() {
+			
+			@Override
+			public void accept(Coordinates indexes) {
+				if (oddIndexes.contains(indexes)) {
+					System.err.println("Indexes " + indexes + " are repeated.");
+				}
+				oddIndexes.add(indexes);
+				if (Utils.isEvenPosition(indexes)) {
+					System.err.println(indexes + " is not odd.");
+				}	
+			}
+		});	
+		if (Math.abs(oddIndexes.size() - positionCount/2) > 1) {
+			System.err.println("Wrong odd position count.");
 		}
 	}
 	
@@ -110,7 +196,7 @@ public class Test {
 		int size2 = arr.getSize(2);
 		int size3 = arr.getSize(3);
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		System.out.println("Setting values");
+		System.out.println("Setting values.");
 		for (int i = 0; i < size0; i++) {
 			for (int j = 0; j < size1; j++) {
 				for (int k = 0; k < size2; k++) {
@@ -124,14 +210,15 @@ public class Test {
 		}
 		System.out.println(list.size());
 		int listIndex = 0;
-		System.out.println("Getting values");
+		System.out.println("Getting values.");
 		for (int i = 0; i < size0; i++) {
 			for (int j = 0; j < size1; j++) {
 				for (int k = 0; k < size2; k++) {
 					for (int l = 0; l < size3; l++) {
-						int value = arr.get(new Coordinates(new int[] {i, j, k, l}));
+						Coordinates indexes = new Coordinates(new int[] {i, j, k, l});
+						int value = arr.get(indexes);
 						if (value != list.get(listIndex)) {
-							System.err.println("Wroong!");
+							System.err.println("Retrieved value is different from previouly inserted value at indexes " + indexes + ".");
 						}
 						listIndex++;
 					}

@@ -19,6 +19,7 @@ package cellularautomata.arrays;
 import java.util.function.Consumer;
 
 import cellularautomata.Coordinates;
+import cellularautomata.Utils;
 
 /**
  * An hypercube shaped multidimensional array.
@@ -92,6 +93,82 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	}
 	
 	@Override
+	public void forEachEvenIndex(Consumer<? super Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		int[] indexes = new int[dimension];
+		if (dimension == 0) {
+			consumer.accept(new Coordinates(indexes));
+		} else {
+			int sideMinusOne = side - 1;
+			int currentAxis = 0;
+			while (currentAxis < dimension) {
+				if (currentAxis == 0) {
+					int currentIndex = 0;
+					indexes[0] = currentIndex;
+					if (!Utils.isEvenPosition(indexes)) {
+						currentIndex++;
+					}
+					for (; currentIndex <= sideMinusOne; currentIndex += 2) {//TODO fix infinite loop if sideMinusOne >= Integer.MAX_VALUE - 1
+						indexes[0] = currentIndex;
+						consumer.accept(new Coordinates(indexes));
+					}
+					currentAxis = 1;
+				} else {
+					int currentIndex = indexes[currentAxis];
+					if (currentIndex < sideMinusOne) {
+						currentIndex++;
+						indexes[currentAxis] = currentIndex;
+						currentAxis = 0;
+					} else {
+						indexes[currentAxis] = 0;
+						currentAxis++;
+					}
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void forEachOddIndex(Consumer<? super Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		int[] indexes = new int[dimension];
+		if (dimension == 0) {
+			consumer.accept(new Coordinates(indexes));
+		} else {
+			int sideMinusOne = side - 1;
+			int currentAxis = 0;
+			while (currentAxis < dimension) {
+				if (currentAxis == 0) {
+					int currentIndex = 0;
+					indexes[0] = currentIndex;
+					if (Utils.isEvenPosition(indexes)) {
+						currentIndex++;
+					}
+					for (; currentIndex <= sideMinusOne; currentIndex += 2) {//TODO fix infinite loop if sideMinusOne >= Integer.MAX_VALUE - 1
+						indexes[0] = currentIndex;
+						consumer.accept(new Coordinates(indexes));
+					}
+					currentAxis = 1;
+				} else {
+					int currentIndex = indexes[currentAxis];
+					if (currentIndex < sideMinusOne) {
+						currentIndex++;
+						indexes[currentAxis] = currentIndex;
+						currentAxis = 0;
+					} else {
+						indexes[currentAxis] = 0;
+						currentAxis++;
+					}
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void forEachEdgeIndex(int edgeWidth, Consumer<? super Coordinates> consumer) {
 		if (edgeWidth < 1) {
 			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
@@ -119,6 +196,76 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 				//bottom edge
 				lowerBounds[i] = upperBounds[i] - edgeWidthMinusOne;
 				forEachIndexWithinBounds(upperBounds, lowerBounds, consumer);
+				//new bounds to prevent repeating positions
+				upperBounds[i] = lowerBounds[i] - 1;
+				lowerBounds[i] = edgeWidth;
+			}
+		}		
+	}
+	
+	@Override
+	public void forEachEvenEdgeIndex(int edgeWidth, Consumer<? super Coordinates> consumer) {
+		if (edgeWidth < 1) {
+			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
+		}
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		if (dimension > 0 && side <= 2*edgeWidth) {
+			forEachEvenIndex(consumer);
+		} else {
+			int[] upperBounds = new int[dimension];
+			int[] lowerBounds = new int[dimension];
+			int sideMinusOne = side - 1;  
+			for (int i = 0; i < dimension; i++) {
+				upperBounds[i] = sideMinusOne;
+				//lowerBounds[i] = 0; default value
+			}
+			int edgeWidthMinusOne = edgeWidth - 1;
+			for (int i = 0; i < dimension; i++) {
+				//top edge
+				int realUpperBound = upperBounds[i];
+				upperBounds[i] = edgeWidthMinusOne;
+				forEachEvenIndexWithinBounds(upperBounds, lowerBounds, consumer);
+				upperBounds[i] = realUpperBound;
+				//bottom edge
+				lowerBounds[i] = upperBounds[i] - edgeWidthMinusOne;
+				forEachEvenIndexWithinBounds(upperBounds, lowerBounds, consumer);
+				//new bounds to prevent repeating positions
+				upperBounds[i] = lowerBounds[i] - 1;
+				lowerBounds[i] = edgeWidth;
+			}
+		}		
+	}
+	
+	@Override
+	public void forEachOddEdgeIndex(int edgeWidth, Consumer<? super Coordinates> consumer) {
+		if (edgeWidth < 1) {
+			throw new IllegalArgumentException("The edge width must be greater than or equal to one.");
+		}
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		if (dimension > 0 && side <= 2*edgeWidth) {
+			forEachOddIndex(consumer);
+		} else {
+			int[] upperBounds = new int[dimension];
+			int[] lowerBounds = new int[dimension];
+			int sideMinusOne = side - 1;  
+			for (int i = 0; i < dimension; i++) {
+				upperBounds[i] = sideMinusOne;
+				//lowerBounds[i] = 0; default value
+			}
+			int edgeWidthMinusOne = edgeWidth - 1;
+			for (int i = 0; i < dimension; i++) {
+				//top edge
+				int realUpperBound = upperBounds[i];
+				upperBounds[i] = edgeWidthMinusOne;
+				forEachOddIndexWithinBounds(upperBounds, lowerBounds, consumer);
+				upperBounds[i] = realUpperBound;
+				//bottom edge
+				lowerBounds[i] = upperBounds[i] - edgeWidthMinusOne;
+				forEachOddIndexWithinBounds(upperBounds, lowerBounds, consumer);
 				//new bounds to prevent repeating positions
 				upperBounds[i] = lowerBounds[i] - 1;
 				lowerBounds[i] = edgeWidth;

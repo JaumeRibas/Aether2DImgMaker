@@ -19,6 +19,7 @@ package cellularautomata.arrays;
 import java.util.function.Consumer;
 
 import cellularautomata.Coordinates;
+import cellularautomata.Utils;
 
 public interface MultidimensionalArray {
 	
@@ -121,6 +122,114 @@ public interface MultidimensionalArray {
 			}
 		}
 	}	
+	
+	/**
+	 * Feeds every even index of the array to a {@link Consumer}.
+	 * 
+	 * @param consumer
+	 */
+	default void forEachEvenIndex(Consumer<? super Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		int dimension = getDimension();
+		if (dimension < 0) {
+			throw new IllegalArgumentException("Dimension cannot be smaller than zero.");
+		}
+		int[] indexes = new int[dimension];
+		if (dimension == 0) {
+			Coordinates indexesObj = new Coordinates(indexes);
+			consumer.accept(indexesObj);
+		} else {
+			int dimensionMinusOne = dimension - 1;
+			int currentAxis = dimensionMinusOne;
+			int sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+			while (currentAxis != -1) {
+				if (currentAxis == dimensionMinusOne) {
+					sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+					int currentIndex = 0;
+					indexes[currentAxis] = currentIndex;
+					if (!Utils.isEvenPosition(indexes)) {
+						currentIndex++;
+					}
+					for (; currentIndex <= sizeMinusOne; currentIndex += 2) {//TODO fix infinite loop if sizeMinusOne >= Integer.MAX_VALUE - 1
+						indexes[currentAxis] = currentIndex;
+						consumer.accept(new Coordinates(indexes));
+					}
+					currentAxis--;
+					sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+				} else {
+					int previousAxis = currentAxis;
+					int currentIndex = indexes[currentAxis];
+					if (currentIndex < sizeMinusOne) {
+						currentIndex++;
+						indexes[currentAxis] = currentIndex;
+						currentAxis = dimensionMinusOne;
+					} else {
+						indexes[currentAxis] = 0;
+						currentAxis--;
+					}
+					if (previousAxis != currentAxis && currentAxis != -1) {
+						sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Feeds every odd index of the array to a {@link Consumer}.
+	 * 
+	 * @param consumer
+	 */
+	default void forEachOddIndex(Consumer<? super Coordinates> consumer) {
+		if (consumer == null) {
+			throw new IllegalArgumentException("The consumer cannot be null.");
+		}
+		int dimension = getDimension();
+		if (dimension < 0) {
+			throw new IllegalArgumentException("Dimension cannot be smaller than zero.");
+		}
+		int[] indexes = new int[dimension];
+		if (dimension == 0) {
+			Coordinates indexesObj = new Coordinates(indexes);
+			consumer.accept(indexesObj);
+		} else {
+			int dimensionMinusOne = dimension - 1;
+			int currentAxis = dimensionMinusOne;
+			int sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+			while (currentAxis != -1) {
+				if (currentAxis == dimensionMinusOne) {
+					sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+					int currentIndex = 0;
+					indexes[currentAxis] = currentIndex;
+					if (Utils.isEvenPosition(indexes)) {
+						currentIndex++;
+					}
+					for (; currentIndex <= sizeMinusOne; currentIndex += 2) {//TODO fix infinite loop if sizeMinusOne >= Integer.MAX_VALUE - 1
+						indexes[currentAxis] = currentIndex;
+						consumer.accept(new Coordinates(indexes));
+					}
+					currentAxis--;
+					sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+				} else {
+					int previousAxis = currentAxis;
+					int currentIndex = indexes[currentAxis];
+					if (currentIndex < sizeMinusOne) {
+						currentIndex++;
+						indexes[currentAxis] = currentIndex;
+						currentAxis = dimensionMinusOne;
+					} else {
+						indexes[currentAxis] = 0;
+						currentAxis--;
+					}
+					if (previousAxis != currentAxis && currentAxis != -1) {
+						sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
+					}
+				}
+			}
+		}
+	}
 	
 	/**
 	 * <p>Returns the array's size on the passed axis at the passed indexes.</p>
