@@ -58,7 +58,6 @@ public class LongAether2DTopplingAlternationCompliance implements SymmetricBoole
 		topplingAlternationOffset = initialValue >= 0;
 		final int side = 6;
 		grid = Utils.buildAnisotropic2DLongArray(side);
-		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(side);
 		grid[0][0] = initialValue;
 		maxX = 3;
 		step = 0;

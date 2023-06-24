@@ -58,7 +58,6 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		topplingAlternationOffset = initialValue >= 0;
 		final int side = 6;
 		grid = Utils.buildAnisotropic2DIntArray(side);
-		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(side);
 		grid[0][0] = initialValue;
 		maxX = 3;
 		step = 0;

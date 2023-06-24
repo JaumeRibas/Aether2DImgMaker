@@ -66,7 +66,6 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 		topplingAlternationOffset = initialValue >= 0;
 		int side = 5;
 		grid = new long[side][side];
-		topplingAlternationCompliance = new boolean[side][side];
 		//The origin will be at the center of the array
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = initialValue;
@@ -82,17 +81,16 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 		long[][] newGrid = null;
 		//The offset between the indexes of the new and old array
 		int indexOffset = 0;
-		int newSide;
 		//If at the previous step the values reached the edge, make the new array bigger
 		if (boundsReached) {
 			boundsReached = false;
-			newSide = grid.length + 2;
+			int newSide = grid.length + 2;
 			newGrid = new long[newSide][newSide];
 			topplingAlternationCompliance = new boolean[newSide][newSide];
 			registerTopplingAlternationComplianceInGridEdges();
 			indexOffset = 1;
 		} else {
-			newSide = grid.length;
+			int newSide = grid.length;
 			newGrid = new long[newSide][newSide];
 			topplingAlternationCompliance = new boolean[newSide][newSide];
 		}

@@ -64,7 +64,6 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		topplingAlternationOffset = initialValue.compareTo(BigInt.ZERO) >= 0;
 		final int side = 6;
 		grid = Utils.buildAnisotropic2DBigIntArray(side);
-		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(side);
 		grid[0][0] = this.initialValue;
 		maxX = 3;
 		step = 0;
