@@ -43,7 +43,7 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 	private BigInt[][] grid;
 	
 	private boolean[][] topplingAlternationCompliance;
-	private boolean topplingAlternationOffset;
+	private boolean evenPositionsTurnToTopple;
 	
 	private final BigInt initialValue;
 	private long step;	
@@ -61,7 +61,7 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 	 */
 	public BigIntAether2DTopplingAlternationCompliance(BigInt initialValue) {
 		this.initialValue = initialValue;
-		topplingAlternationOffset = initialValue.compareTo(BigInt.ZERO) >= 0;
+		evenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0;
 		final int side = 6;
 		grid = Utils.buildAnisotropic2DBigIntArray(side);
 		grid[0][0] = this.initialValue;
@@ -89,7 +89,7 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		initialValue = data.initialValue;
 		grid = data.grid;
 		topplingAlternationCompliance = data.topplingAlternationCompliance;
-		topplingAlternationOffset = data.topplingAlternationOffset;
+		evenPositionsTurnToTopple = data.evenPositionsTurnToTopple;
 		maxX = data.maxX;
 		step = data.step;
 		folderName = data.folderName;
@@ -102,7 +102,7 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		BigInt[][] newGrid = new BigInt[newSide][];
 		topplingAlternationCompliance = null;
 		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(newSide);
-		boolean offset = this.topplingAlternationOffset;
+		boolean currentPositionsTurnToTopple = evenPositionsTurnToTopple;
 		boolean changed = false;
 		BigInt currentValue, greaterXNeighborValue;
 		BigInt[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -131,8 +131,8 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		} else {
 			newCurrentXSlice[0] = newCurrentXSlice[0].add(currentValue);
 		}
-		newCurrentXSliceCompliance[0] = toppled == offset;
-		offset = !offset;		
+		newCurrentXSliceCompliance[0] = toppled == currentPositionsTurnToTopple;
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;		
 		// x = 1, y = 0
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
@@ -190,11 +190,11 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			changed = true;
-			newCurrentXSliceCompliance[0] = offset;
+			newCurrentXSliceCompliance[0] = currentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0] = !offset;
+			newCurrentXSliceCompliance[0] = !currentPositionsTurnToTopple;
 		}
-		offset = !offset;
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// x = 1, y = 1
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
@@ -285,7 +285,7 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 			// gx >= current <= sy
 			newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue);
 		}
-		newCurrentXSliceCompliance[1] = toppled == offset;
+		newCurrentXSliceCompliance[1] = toppled == currentPositionsTurnToTopple;
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0
 		smallerXSlice = currentXSlice;
@@ -338,11 +338,11 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 			changed = true;
-			newCurrentXSliceCompliance[0] = offset;
+			newCurrentXSliceCompliance[0] = currentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0] = !offset;
+			newCurrentXSliceCompliance[0] = !currentPositionsTurnToTopple;
 		}
-		offset = !offset;
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// x = 2, y = 1
 		relevantAsymmetricNeighborCount = 0;
 		// reuse values obtained previously
@@ -386,11 +386,11 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
 			changed = true;
-			newCurrentXSliceCompliance[1] = offset;
+			newCurrentXSliceCompliance[1] = currentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1] = !offset;
+			newCurrentXSliceCompliance[1] = !currentPositionsTurnToTopple;
 		}
-		offset = !offset;
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// x = 2, y = 2
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
@@ -481,8 +481,8 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 			// gx >= current <= sy
 			newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue);
 		}
-		newCurrentXSliceCompliance[2] = toppled == offset;
-		offset = !offset;
+		newCurrentXSliceCompliance[2] = toppled == currentPositionsTurnToTopple;
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		grid[1] = null;
 		// 3 <= x < edge - 2
 		int edge = grid.length - 1;
@@ -510,19 +510,19 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		}
 		grid = newGrid;
 		step++;
-		this.topplingAlternationOffset = !this.topplingAlternationOffset;
+		evenPositionsTurnToTopple = !evenPositionsTurnToTopple;
 		this.changed = changed;
 		return changed;
 	}
 	
 	private void registerStaticGridSliceCompliance(int x) {
 		boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[x];
-		boolean offset = x%2 == 0 != this.topplingAlternationOffset;
+		boolean notCurrentPositionsTurnToTopple = x%2 == 0 != evenPositionsTurnToTopple;
 		int y = 0;
-		for (; y != x; y++, offset = !offset) {
-			newCurrentXSliceCompliance[y] = offset;
+		for (; y != x; y++, notCurrentPositionsTurnToTopple = !notCurrentPositionsTurnToTopple) {
+			newCurrentXSliceCompliance[y] = notCurrentPositionsTurnToTopple;
 		}
-		newCurrentXSliceCompliance[y] = offset;
+		newCurrentXSliceCompliance[y] = notCurrentPositionsTurnToTopple;
 	}
 
 	@Override
@@ -537,9 +537,9 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		BigInt[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		BigInt[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		boolean xOffset = x%2 == 0 == this.topplingAlternationOffset;
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, xOffset = !xOffset) {
-			boolean offset = xOffset;
+		boolean y0PositionsTurnToTopple = x%2 == 0 == evenPositionsTurnToTopple;
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, y0PositionsTurnToTopple = !y0PositionsTurnToTopple) {
+			boolean currentPositionsTurnToTopple = y0PositionsTurnToTopple;
 			// y = 0;
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;
@@ -589,11 +589,11 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 			if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[0] = offset;
+				newCurrentXSliceCompliance[0] = currentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[0] = !offset;
+				newCurrentXSliceCompliance[0] = !currentPositionsTurnToTopple;
 			}
-			offset = !offset;
+			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			// y = 1
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
@@ -637,11 +637,11 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 			if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[1] = offset;
+				newCurrentXSliceCompliance[1] = currentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[1] = !offset;
+				newCurrentXSliceCompliance[1] = !currentPositionsTurnToTopple;
 			}
-			offset = !offset;
+			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			// 2 >= y < x - 1
 			int y = 2, yMinusOne = 1, yPlusOne = 3;
 			for (; y < xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
@@ -683,11 +683,11 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 				if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y] = offset;
+					newCurrentXSliceCompliance[y] = currentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y] = !offset;
+					newCurrentXSliceCompliance[y] = !currentPositionsTurnToTopple;
 				}
-				offset = !offset;
+				currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			}
 			// y = x - 1
 			relevantAsymmetricNeighborCount = 0;
@@ -732,11 +732,11 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 			if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y] = offset;
+				newCurrentXSliceCompliance[y] = currentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y] = !offset;
+				newCurrentXSliceCompliance[y] = !currentPositionsTurnToTopple;
 			}
-			offset = !offset;
+			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			// y = x
 			yMinusOne = y;
 			y = x;
@@ -829,7 +829,7 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 				// gx >= current <= sy
 				newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue);
 			}
-			newCurrentXSliceCompliance[y] = toppled == offset;
+			newCurrentXSliceCompliance[y] = toppled == currentPositionsTurnToTopple;
 			grid[xMinusOne] = null;
 		}
 		xSlices[1] = currentXSlice;
