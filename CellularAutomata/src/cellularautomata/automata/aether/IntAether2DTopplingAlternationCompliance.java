@@ -116,8 +116,8 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			newCurrentXSlice[0] += currentValue;
 		}	
 		newCurrentXSliceCompliance[0] = toppled == currentPositionsTurnToTopple;
-		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// x = 1, y = 0
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[2];
@@ -177,8 +177,8 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		} else {
 			newCurrentXSliceCompliance[0] = !currentPositionsTurnToTopple;
 		}
-		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// x = 1, y = 1
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// reuse values obtained previously
 		int smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -317,8 +317,8 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		} else {
 			newCurrentXSliceCompliance[0] = !currentPositionsTurnToTopple;
 		}
-		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// x = 2, y = 1
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		relevantAsymmetricNeighborCount = 0;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
@@ -365,8 +365,8 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		} else {
 			newCurrentXSliceCompliance[1] = !currentPositionsTurnToTopple;
 		}
-		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// x = 2, y = 2
+		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -450,7 +450,6 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			newCurrentXSlice[2] += currentValue;
 		}
 		newCurrentXSliceCompliance[2] = toppled == currentPositionsTurnToTopple;
-		currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 		grid[1] = null;
 		// 3 <= x < edge - 2
 		int edge = grid.length - 1;
@@ -505,8 +504,8 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		int[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
 		boolean y0PositionsTurnToTopple = x%2 == 0 == evenPositionsTurnToTopple;
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, y0PositionsTurnToTopple = !y0PositionsTurnToTopple) {
-			boolean currentPositionsTurnToTopple = y0PositionsTurnToTopple;
 			// y = 0;
+			boolean currentPositionsTurnToTopple = y0PositionsTurnToTopple;
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;
 			greaterXSlice = grid[xPlusOne];
@@ -558,8 +557,8 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			} else {
 				newCurrentXSliceCompliance[0] = !currentPositionsTurnToTopple;
 			}
-			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			// y = 1
+			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
 			int smallerYNeighborValue = currentValue;
@@ -606,10 +605,10 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			} else {
 				newCurrentXSliceCompliance[1] = !currentPositionsTurnToTopple;
 			}
-			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			// 2 >= y < x - 1
 			int y = 2, yMinusOne = 1, yPlusOne = 3;
 			for (; y < xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
+				currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 				relevantAsymmetricNeighborCount = 0;
 				// reuse values obtained previously
 				smallerYNeighborValue = currentValue;
@@ -652,9 +651,9 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 				} else {
 					newCurrentXSliceCompliance[y] = !currentPositionsTurnToTopple;
 				}
-				currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			}
 			// y = x - 1
+			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
@@ -701,10 +700,10 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			} else {
 				newCurrentXSliceCompliance[y] = !currentPositionsTurnToTopple;
 			}
-			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			// y = x
 			yMinusOne = y;
 			y = x;
+			currentPositionsTurnToTopple = !currentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
