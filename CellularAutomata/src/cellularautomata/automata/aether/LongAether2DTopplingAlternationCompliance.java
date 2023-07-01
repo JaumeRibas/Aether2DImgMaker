@@ -481,13 +481,11 @@ public class LongAether2DTopplingAlternationCompliance implements SymmetricBoole
 	}
 	
 	private void registerStaticGridSliceCompliance(int x) {
-		boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[x];
-		boolean isNotCurrentPositionsTurnToTopple = x%2 == 0 != isEvenPositionsTurnToTopple;
-		int y = 0;
-		for (; y != x; y++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
-			newCurrentXSliceCompliance[y] = isNotCurrentPositionsTurnToTopple;
+		if (x%2 == 0 == isEvenPositionsTurnToTopple) {
+			Utils.fillArraysOddIndexes(topplingAlternationCompliance[x], true);
+		} else {
+			Utils.fillArraysEvenIndexes(topplingAlternationCompliance[x], true);
 		}
-		newCurrentXSliceCompliance[y] = isNotCurrentPositionsTurnToTopple;
 	}
 
 	@Override
