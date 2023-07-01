@@ -45,12 +45,14 @@ import cellularautomata.automata.aether.IntAether2DRandomConfiguration;
 import cellularautomata.automata.aether.IntAether2DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.LongAether3D;
 import cellularautomata.automata.aether.LongAether3DCubicGrid;
+import cellularautomata.automata.aether.LongAether3DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.LongAether4D;
 import cellularautomata.automata.aether.LongAether5D;
 import cellularautomata.automata.aether.BigIntAether2D;
 import cellularautomata.automata.aether.BigIntAether2DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.BigIntAether3D;
 import cellularautomata.automata.aether.BigIntAether3DCubicGrid;
+import cellularautomata.automata.aether.BigIntAether3DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.BigIntAether4D;
 import cellularautomata.automata.aether.FileBackedLongAether1D;
 import cellularautomata.automata.aether.FileBackedLongAether2D;
@@ -60,6 +62,7 @@ import cellularautomata.automata.aether.FileBackedLongAether5D;
 import cellularautomata.automata.aether.IntAether2D;
 import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
+import cellularautomata.automata.aether.IntAether3DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.IntAether4D;
 import cellularautomata.automata.aether.IntAether5D;
 import cellularautomata.automata.nearaether.SimpleBigIntNearAether3_3D;
@@ -79,6 +82,7 @@ import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.IntModelAs2D;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
+import cellularautomata.model3d.BooleanModel3D;
 import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model3d.IntModelAs3D;
 import cellularautomata.model3d.LongModel3D;
@@ -310,7 +314,23 @@ public class AetherImgMaker {
 					crossSectionZ = minZ + (maxZ - minZ + 1)/2;
 				}
 				int[] scanCoords = new int[] { args.xScanInitialIndex, args.yScanInitialIndex, args.zScanInitialIndex};
-				if (model instanceof IntModel3D) {
+				if (model instanceof BooleanModel3D) {
+					BooleanModel3D castedModel = (BooleanModel3D)model;
+					switch (args.imgGenerationMode) {
+					case TOPPLING_ALTERNATION_COMPLIANCE:	
+					case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
+						break;
+					case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
+						break;
+					case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
+						break;
+					case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
+						break;
+					default: 
+						System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+						error = true;
+					}				
+				} else if (model instanceof IntModel3D) {
 					IntModel3D castedModel = (IntModel3D)model;
 					switch (args.imgGenerationMode) {
 						case TOPPLING_ALTERNATION_COMPLIANCE:	
@@ -875,22 +895,38 @@ public class AetherImgMaker {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.memorySafe) {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new FileBackedLongAether3D(args.initialConfiguration.singleSource.longValue(), args.path);
+								if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+									if (args.memorySafe) {
+										System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_CONFIG_MESSAGE_FORMAT);
 									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether3D.MIN_INITIAL_VALUE, FileBackedLongAether3D.MAX_INITIAL_VALUE);
+										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
+											model = new IntAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
+										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
+											model = new LongAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
+										} else {
+											model = new BigIntAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
+										}
 									}
 								} else {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new IntAether3D(args.initialConfiguration.singleSource.intValue());
-									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new LongAether3D(args.initialConfiguration.singleSource.longValue());
+									if (args.memorySafe) {
+										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MIN_INITIAL_VALUE)) >= 0) {
+											model = new FileBackedLongAether3D(args.initialConfiguration.singleSource.longValue(), args.path);
+										} else {
+											System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether3D.MIN_INITIAL_VALUE, FileBackedLongAether3D.MAX_INITIAL_VALUE);
+										}
 									} else {
-										model = new BigIntAether3D(args.initialConfiguration.singleSource);
+										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MIN_INITIAL_VALUE)) >= 0) {
+											model = new IntAether3D(args.initialConfiguration.singleSource.intValue());
+										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MIN_INITIAL_VALUE)) >= 0) {
+											model = new LongAether3D(args.initialConfiguration.singleSource.longValue());
+										} else {
+											model = new BigIntAether3D(args.initialConfiguration.singleSource);
+										}
 									}
 								}
 							} else {
@@ -904,8 +940,23 @@ public class AetherImgMaker {
 								}
 							}
 						} else {
+							boolean successfullyRestored = true;
 							if (args.memorySafe) {
 								model = new FileBackedLongAether3D(args.backupToRestorePath, args.path);
+							} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+								try {
+									model = new IntAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
+								} catch (Exception ex1) {
+									try {
+										model = new LongAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
+									} catch (Exception ex2) {
+										try {
+											model = new BigIntAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
+										} catch (Exception ex3) {
+											successfullyRestored = false;
+										}						
+									}						
+								}
 							} else {	
 								try {
 									model = new IntAether3D(args.backupToRestorePath);							
@@ -916,10 +967,17 @@ public class AetherImgMaker {
 										try {
 											model = new BigIntAether3D(args.backupToRestorePath);							
 										} catch (Exception ex3) {
-											model = new IntAether3DRandomConfiguration(args.backupToRestorePath);							
+											try {
+												model = new IntAether3DRandomConfiguration(args.backupToRestorePath);			
+											} catch (Exception ex4) {
+												successfullyRestored = false;					
+											}
 										}						
 									}						
 								}
+							}
+							if (!successfullyRestored) {
+								//TODO output error			
 							}
 						}
 					} else {
