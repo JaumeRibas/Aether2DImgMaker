@@ -39,7 +39,7 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 	private long[][] grid;
 	
 	private boolean[][] topplingAlternationCompliance;
-	private boolean evenPositionsTurnToTopple;
+	private boolean isEvenPositionsTurnToTopple;
 	
 	private final long initialValue;
 	private long step;
@@ -63,7 +63,7 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
-		evenPositionsTurnToTopple = initialValue >= 0;
+		isEvenPositionsTurnToTopple = initialValue >= 0;
 		int side = 5;
 		grid = new long[side][side];
 		//The origin will be at the center of the array
@@ -94,11 +94,11 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 			newGrid = new long[newSide][newSide];
 			topplingAlternationCompliance = new boolean[newSide][newSide];
 		}
-		boolean currentPositionsTurnToTopple = evenPositionsTurnToTopple;
+		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		boolean changed = false;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid.length; j++, currentPositionsTurnToTopple = !currentPositionsTurnToTopple) {
+			for (int j = 0; j < grid.length; j++, isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple) {
 				//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 				
 				//Get the cell's value
@@ -174,7 +174,7 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 					changed = changed || toppled;
 				}					
 				newGrid[i + indexOffset][j + indexOffset] += value;
-				topplingAlternationCompliance[i + indexOffset][j + indexOffset] = toppled == currentPositionsTurnToTopple;
+				topplingAlternationCompliance[i + indexOffset][j + indexOffset] = toppled == isCurrentPositionsTurnToTopple;
 			}
 		}
 		//Replace the old array with the new one
@@ -183,7 +183,7 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		evenPositionsTurnToTopple = !evenPositionsTurnToTopple;
+		isEvenPositionsTurnToTopple = !isEvenPositionsTurnToTopple;
 		this.changed = changed;
 		//Return whether or not the state of the grid changed
 		return changed;
@@ -192,16 +192,16 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 	private void registerTopplingAlternationComplianceInGridEdges() {
 		int i = 0;
 		int side = topplingAlternationCompliance.length - 1;
-		boolean notCurrentPositionsTurnToTopple = !evenPositionsTurnToTopple;
-		for (int j = 0; j <= side; j++, notCurrentPositionsTurnToTopple = !notCurrentPositionsTurnToTopple) {
-			topplingAlternationCompliance[i][j] = notCurrentPositionsTurnToTopple;
+		boolean isNotCurrentPositionsTurnToTopple = !isEvenPositionsTurnToTopple;
+		for (int j = 0; j <= side; j++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][j] = isNotCurrentPositionsTurnToTopple;
 		}
-		for (i = 1; i < side; i++, notCurrentPositionsTurnToTopple = !notCurrentPositionsTurnToTopple) {
-			topplingAlternationCompliance[i][0] = notCurrentPositionsTurnToTopple;
-			topplingAlternationCompliance[i][side] = notCurrentPositionsTurnToTopple;
+		for (i = 1; i < side; i++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][0] = isNotCurrentPositionsTurnToTopple;
+			topplingAlternationCompliance[i][side] = isNotCurrentPositionsTurnToTopple;
 		}
-		for (int j = 0; j <= side; j++, notCurrentPositionsTurnToTopple = !notCurrentPositionsTurnToTopple) {
-			topplingAlternationCompliance[i][j] = notCurrentPositionsTurnToTopple;
+		for (int j = 0; j <= side; j++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][j] = isNotCurrentPositionsTurnToTopple;
 		}
 	}
 
