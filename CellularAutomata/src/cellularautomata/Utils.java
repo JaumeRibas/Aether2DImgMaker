@@ -290,6 +290,14 @@ public class Utils {
 		return anisotropic2DArray;
 	}
 	
+	public static boolean[][][] buildAnisotropic3DBooleanArray(int side) {
+		boolean[][][] anisotropic3DArray = new boolean[side][][];
+		for (int x = 0; x < anisotropic3DArray.length; x++) {
+			anisotropic3DArray[x] = buildAnisotropic2DBooleanArray(x + 1);
+		}
+		return anisotropic3DArray;
+	}
+	
 	public static boolean[][] buildAnisotropic2DBooleanArray(int side) {
 		boolean[][] anisotropic2DArray = new boolean[side][];
 		for (int x = 0; x < anisotropic2DArray.length; x++) {
@@ -373,6 +381,78 @@ public class Utils {
 	public static <Object_Type> void fillArray(Object_Type[][][][] array, Object_Type value) {
 		for (int i = 0; i < array.length; i++) {
 			fillArray(array[i], value);
+		}
+	}
+	
+	public static void fillArraysEvenIndexes(boolean[] array, boolean value) {
+		for (int i = 0; i < array.length; i += 2) {
+			array[i] = value;
+		}
+	}
+	
+	public static void fillArraysOddIndexes(boolean[] array, boolean value) {
+		for (int i = 1; i < array.length; i += 2) {
+			array[i] = value;
+		}
+	}
+	
+	public static void fillArraysEvenIndexes(boolean[][] array, boolean value) {
+		int lengthMinusOne = array.length - 1;
+		if (lengthMinusOne != -1) {
+			int i = 0;
+			for (; i < lengthMinusOne; i++) {
+				fillArraysEvenIndexes(array[i], value);
+				i++;
+				fillArraysOddIndexes(array[i], value);
+			}
+			if (i == lengthMinusOne) {
+				fillArraysEvenIndexes(array[lengthMinusOne], value);
+			}
+		}
+	}
+	
+	public static void fillArraysOddIndexes(boolean[][] array, boolean value) {
+		int lengthMinusOne = array.length - 1;
+		if (lengthMinusOne != -1) {
+			int i = 0;
+			for (; i < lengthMinusOne; i++) {
+				fillArraysOddIndexes(array[i], value);
+				i++;
+				fillArraysEvenIndexes(array[i], value);
+			}
+			if (i == lengthMinusOne) {
+				fillArraysOddIndexes(array[lengthMinusOne], value);
+			}
+		}
+	}
+	
+	public static void fillArraysEvenIndexes(boolean[][][] array, boolean value) {
+		int lengthMinusOne = array.length - 1;
+		if (lengthMinusOne != -1) {
+			int i = 0;
+			for (; i < lengthMinusOne; i++) {
+				fillArraysEvenIndexes(array[i], value);
+				i++;
+				fillArraysOddIndexes(array[i], value);
+			}
+			if (i == lengthMinusOne) {
+				fillArraysEvenIndexes(array[lengthMinusOne], value);
+			}
+		}
+	}
+	
+	public static void fillArraysOddIndexes(boolean[][][] array, boolean value) {
+		int lengthMinusOne = array.length - 1;
+		if (lengthMinusOne != -1) {
+			int i = 0;
+			for (; i < lengthMinusOne; i++) {
+				fillArraysOddIndexes(array[i], value);
+				i++;
+				fillArraysEvenIndexes(array[i], value);
+			}
+			if (i == lengthMinusOne) {
+				fillArraysOddIndexes(array[lengthMinusOne], value);
+			}
 		}
 	}
 	
