@@ -126,7 +126,7 @@ public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 	
 	@Override
 	public String getZLabel() {
-		return source.getYLabel();
+		return source.getZLabel();
 	}
 
 	@Override
