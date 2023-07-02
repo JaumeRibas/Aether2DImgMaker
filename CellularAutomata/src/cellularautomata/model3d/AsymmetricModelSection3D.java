@@ -36,7 +36,7 @@ public class AsymmetricModelSection3D<Source_Type extends SymmetricModel3D> exte
 	
 	@Override
 	public String getZLabel() {
-		return source.getYLabel();
+		return source.getZLabel();
 	}
 
 	@Override
