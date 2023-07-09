@@ -47,6 +47,7 @@ import cellularautomata.automata.aether.LongAether3D;
 import cellularautomata.automata.aether.LongAether3DCubicGrid;
 import cellularautomata.automata.aether.LongAether3DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.LongAether4D;
+import cellularautomata.automata.aether.LongAether4DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.LongAether5D;
 import cellularautomata.automata.aether.BigIntAether2D;
 import cellularautomata.automata.aether.BigIntAether2DTopplingAlternationCompliance;
@@ -54,6 +55,7 @@ import cellularautomata.automata.aether.BigIntAether3D;
 import cellularautomata.automata.aether.BigIntAether3DCubicGrid;
 import cellularautomata.automata.aether.BigIntAether3DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.BigIntAether4D;
+import cellularautomata.automata.aether.BigIntAether4DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.FileBackedLongAether1D;
 import cellularautomata.automata.aether.FileBackedLongAether2D;
 import cellularautomata.automata.aether.FileBackedLongAether3D;
@@ -64,6 +66,7 @@ import cellularautomata.automata.aether.IntAether3D;
 import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
 import cellularautomata.automata.aether.IntAether3DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.IntAether4D;
+import cellularautomata.automata.aether.IntAether4DTopplingAlternationCompliance;
 import cellularautomata.automata.aether.IntAether5D;
 import cellularautomata.automata.nearaether.SimpleBigIntNearAether3_3D;
 import cellularautomata.automata.nearaether.IntNearAether1_3D;
@@ -1005,38 +1008,78 @@ public class AetherImgMaker {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								//TODO use memory safe implementations depending on asymmetric and single source parameters and available heap space?
-								//long heapFreeSize = Runtime.getRuntime().freeMemory();
-								if (args.memorySafe) {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new FileBackedLongAether4D(args.initialConfiguration.singleSource.longValue(), args.path);
+								if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+									if (args.memorySafe) {
+										System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_CONFIG_MESSAGE_FORMAT);
 									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether4D.MIN_INITIAL_VALUE, FileBackedLongAether4D.MAX_INITIAL_VALUE);
+										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
+											model = new IntAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
+										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
+											model = new LongAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
+										} else {
+											model = new BigIntAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
+										}
 									}
 								} else {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new IntAether4D(args.initialConfiguration.singleSource.intValue());
-									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new LongAether4D(args.initialConfiguration.singleSource.longValue());
+									if (args.memorySafe) {
+										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MIN_INITIAL_VALUE)) >= 0) {
+											model = new FileBackedLongAether4D(args.initialConfiguration.singleSource.longValue(), args.path);
+										} else {
+											System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether4D.MIN_INITIAL_VALUE, FileBackedLongAether4D.MAX_INITIAL_VALUE);
+										}
 									} else {
-										model = new BigIntAether4D(args.initialConfiguration.singleSource);
-									}		
+										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MIN_INITIAL_VALUE)) >= 0) {
+											model = new IntAether4D(args.initialConfiguration.singleSource.intValue());
+										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MAX_INITIAL_VALUE)) <= 0
+												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MIN_INITIAL_VALUE)) >= 0) {
+											model = new LongAether4D(args.initialConfiguration.singleSource.longValue());
+										} else {
+											model = new BigIntAether4D(args.initialConfiguration.singleSource);
+										}
+									}
 								}						
 							} else {
 								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
 							}
 						} else {
+							boolean successfullyRestored = true;
 							if (args.memorySafe) {
 								model = new FileBackedLongAether4D(args.backupToRestorePath, args.path);
+							} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+								try {
+									model = new IntAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
+								} catch (Exception ex1) {
+									try {
+										model = new LongAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
+									} catch (Exception ex2) {
+										try {
+											model = new BigIntAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
+										} catch (Exception ex3) {
+											successfullyRestored = false;
+										}						
+									}						
+								}
 							} else {	
 								try {
-									model = new LongAether4D(args.backupToRestorePath);							
+									model = new IntAether4D(args.backupToRestorePath);							
 								} catch (Exception ex1) {
-									model = new BigIntAether4D(args.backupToRestorePath);			
+									try {
+										model = new LongAether4D(args.backupToRestorePath);							
+									} catch (Exception ex2) {
+										try {
+											model = new BigIntAether4D(args.backupToRestorePath);							
+										} catch (Exception ex3) {
+											successfullyRestored = false;
+										}						
+									}						
 								}
+							}
+							if (!successfullyRestored) {
+								//TODO output error			
 							}
 						}
 					} else {
