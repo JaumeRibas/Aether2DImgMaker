@@ -44,6 +44,7 @@ import cellularautomata.model.ObjectModel;
 import cellularautomata.model.BooleanModel;
 import cellularautomata.model.HypercubicPyramidGrid;
 import cellularautomata.model1d.BooleanModel1D;
+import cellularautomata.model1d.BooleanModelAs1D;
 import cellularautomata.model1d.IntModel1D;
 import cellularautomata.model1d.IntModelAs1D;
 import cellularautomata.model1d.LongModel1D;
@@ -55,6 +56,7 @@ import cellularautomata.model2d.ArrayIntGrid2D;
 import cellularautomata.model2d.ArrayLongGrid2D;
 import cellularautomata.model2d.ArrayNumberGrid2D;
 import cellularautomata.model2d.BooleanModel2D;
+import cellularautomata.model2d.BooleanModelAs2D;
 import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.IntModelAs2D;
@@ -2795,6 +2797,18 @@ public class Test {
 			s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void stepByStep(BooleanModel ca) {
+		int dimension = ca.getGridDimension();
+		if (dimension != 1 && dimension != 2) {
+			throw new IllegalArgumentException("Grid's dimension must be one or two.");
+		}
+		if (dimension == 1) {
+			stepByStep(new BooleanModelAs1D(ca));
+		} else {
+			stepByStep(new BooleanModelAs2D(ca));
 		}
 	}
 	

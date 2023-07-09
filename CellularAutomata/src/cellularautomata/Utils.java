@@ -290,6 +290,22 @@ public class Utils {
 		return anisotropic2DArray;
 	}
 	
+	public static boolean[][][][][] buildAnisotropic5DBooleanArray(int side) {
+		boolean[][][][][] anisotropic5DArray = new boolean[side][][][][];
+		for (int v = 0; v < anisotropic5DArray.length; v++) {
+			anisotropic5DArray[v] = buildAnisotropic4DBooleanArray(v + 1);
+		}
+		return anisotropic5DArray;
+	}
+	
+	public static boolean[][][][] buildAnisotropic4DBooleanArray(int side) {
+		boolean[][][][] anisotropic4DArray = new boolean[side][][][];
+		for (int w = 0; w < anisotropic4DArray.length; w++) {
+			anisotropic4DArray[w] = buildAnisotropic3DBooleanArray(w + 1);
+		}
+		return anisotropic4DArray;
+	}
+	
 	public static boolean[][][] buildAnisotropic3DBooleanArray(int side) {
 		boolean[][][] anisotropic3DArray = new boolean[side][][];
 		for (int x = 0; x < anisotropic3DArray.length; x++) {
