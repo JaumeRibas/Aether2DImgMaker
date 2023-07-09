@@ -89,7 +89,6 @@ public class LongAether2DTopplingAlternationCompliance implements SymmetricBoole
 		long[][] newGrid = new long[newSide][];
 		topplingAlternationCompliance = null;
 		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(newSide);
-		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		boolean changed = false;
 		long currentValue, greaterXNeighborValue;
 		long[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -98,6 +97,7 @@ public class LongAether2DTopplingAlternationCompliance implements SymmetricBoole
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0
+		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		currentValue = currentXSlice[0];
 		greaterXNeighborValue = greaterXSlice[0];
 		boolean toppled = false;

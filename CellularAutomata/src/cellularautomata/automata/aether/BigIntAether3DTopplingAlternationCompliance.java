@@ -100,7 +100,6 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		BigInt[][][] newGrid = new BigInt[newSide][][];
 		topplingAlternationCompliance = null;
 		topplingAlternationCompliance = Utils.buildAnisotropic3DBooleanArray(newSide);
-		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		boolean changed = false;
 		BigInt[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
 		BigInt[][] newSmallerXSlice = null, 
@@ -110,6 +109,7 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0, z = 0
+		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		BigInt currentValue = currentXSlice[0][0];
 		BigInt greaterXNeighborValue = greaterXSlice[0][0];
 		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {

@@ -102,7 +102,6 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		BigInt[][] newGrid = new BigInt[newSide][];
 		topplingAlternationCompliance = null;
 		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(newSide);
-		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		boolean changed = false;
 		BigInt currentValue, greaterXNeighborValue;
 		BigInt[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
@@ -113,6 +112,7 @@ public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBoo
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0
+		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		currentValue = currentXSlice[0];
 		greaterXNeighborValue = greaterXSlice[0];
 		boolean toppled = false;

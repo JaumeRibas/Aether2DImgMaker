@@ -88,7 +88,6 @@ public class IntAether3DTopplingAlternationCompliance implements SymmetricBoolea
 		int[][][] newGrid = new int[newSide][][];
 		topplingAlternationCompliance = null;
 		topplingAlternationCompliance = Utils.buildAnisotropic3DBooleanArray(newSide);
-		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		boolean changed = false;
 		int[][] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
 		int[][] newSmallerXSlice = null, 
@@ -98,6 +97,7 @@ public class IntAether3DTopplingAlternationCompliance implements SymmetricBoolea
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0, z = 0
+		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
 		int currentValue = currentXSlice[0][0];
 		int greaterXNeighborValue = greaterXSlice[0][0];
 		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
