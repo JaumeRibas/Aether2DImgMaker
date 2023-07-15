@@ -246,7 +246,6 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 		if (w < 0) w = -w;
 		if (v < 0) v = -v;
 		//sort coordinates
-		//TODO faster sorting?
 		boolean sorted;
 		do {
 			sorted = true;
