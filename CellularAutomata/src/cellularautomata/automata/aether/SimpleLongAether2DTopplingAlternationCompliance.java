@@ -241,7 +241,6 @@ public class SimpleLongAether2DTopplingAlternationCompliance implements Symmetri
 	public boolean getFromPosition(int x, int y) {	
 		int i = originIndex + x;
 		int j = originIndex + y;
-		//Note that the indexes whose value hasn't been defined have value false by default
 		return topplingAlternationCompliance[i][j];
 	}
 	

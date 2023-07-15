@@ -263,7 +263,6 @@ public class SimpleLongAether3DTopplingAlternationCompliance implements Symmetri
 		int i = originIndex + x;
 		int j = originIndex + y;
 		int k = originIndex + z;
-		//Note that the indexes whose value hasn't been defined have value false by default
 		return topplingAlternationCompliance.get(new Coordinates(i, j, k));
 	}
 	
