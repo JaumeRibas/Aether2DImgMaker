@@ -472,6 +472,36 @@ public class Utils {
 		}
 	}
 	
+	public static void fillArraysEvenIndexes(boolean[][][][] array, boolean value) {
+		int lengthMinusOne = array.length - 1;
+		if (lengthMinusOne != -1) {
+			int i = 0;
+			for (; i < lengthMinusOne; i++) {
+				fillArraysEvenIndexes(array[i], value);
+				i++;
+				fillArraysOddIndexes(array[i], value);
+			}
+			if (i == lengthMinusOne) {
+				fillArraysEvenIndexes(array[lengthMinusOne], value);
+			}
+		}
+	}
+	
+	public static void fillArraysOddIndexes(boolean[][][][] array, boolean value) {
+		int lengthMinusOne = array.length - 1;
+		if (lengthMinusOne != -1) {
+			int i = 0;
+			for (; i < lengthMinusOne; i++) {
+				fillArraysOddIndexes(array[i], value);
+				i++;
+				fillArraysEvenIndexes(array[i], value);
+			}
+			if (i == lengthMinusOne) {
+				fillArraysOddIndexes(array[lengthMinusOne], value);
+			}
+		}
+	}
+	
 	public static long roundUpToEightMultiple(long value) {
 		long remainder = value % 8;
 		if (remainder > 0) {
