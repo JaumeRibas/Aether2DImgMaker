@@ -24,7 +24,7 @@ public class InitialConfigValidator implements IParameterValidator {
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
-		if (!value.matches("^-?\\d+|single-source_-?\\d+|random-region_\\d+_-?\\d+_-?\\d+$")) {
+		if (!value.matches("(?i)^-?\\d+|single-source_-?\\d+|random-region_\\d+_-?\\d+_-?\\d+$")) {
 			String message;
 			if (name.equals("Default")) {
 				message = "One or more unrecognized parameters found.";//this is the main (default) parameter so it could be an error on any other parameter

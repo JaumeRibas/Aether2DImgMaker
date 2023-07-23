@@ -24,7 +24,7 @@ public class ImageGenerationModeValidator implements IParameterValidator {
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
-		if (ImageGenerationMode.getByName(value) == null) {
+		if (ImageGenerationMode.getByNameOrAlias(value.toLowerCase()) == null) {
 			throw new ParameterException("The image generation mode is not recognized.");
 		}
 	}

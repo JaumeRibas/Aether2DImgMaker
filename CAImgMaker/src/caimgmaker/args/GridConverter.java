@@ -24,7 +24,7 @@ public class GridConverter implements IStringConverter<GridParameterValue> {
 	public GridParameterValue convert(String strValue) {
 		GridParameterValue value = null;
 		if (strValue != null) {
-			String[] parts = strValue.split("_");
+			String[] parts = strValue.toLowerCase().split("_");
 			int dimension = Integer.parseInt(parts[0].substring(0, parts[0].length() - 1));
 			if (parts.length == 1 || parts[1].equals("infinite")) {
 				value = new GridParameterValue(dimension);

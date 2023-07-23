@@ -34,7 +34,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 			throws ParameterException {
 		String[] filters = value.split(";");
 		for (int i = 0; i < filters.length; i++) {
-			if (!filters[i].matches("^(x\\d+=[+-]?(\\d+|x\\d+([+-]\\d+)?)|x\\d+[<>][+-]?\\d+)$")) {
+			if (!filters[i].matches("(?i)^(x\\d+=[+-]?(\\d+|x\\d+([+-]\\d+)?)|x\\d+[<>][+-]?\\d+)$")) {
 				throw new ParameterException("The coordinate filter at position " + (i+1) + " has an invalid format.");
 			}
 		}
@@ -49,7 +49,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 	@Override
 	public CoordinateFilters convert(String parameterValue) {
 		String[] strFilters = parameterValue.split(";");
-		Pattern coordIndexPattern = Pattern.compile("(?<=x)\\d+");
+		Pattern coordIndexPattern = Pattern.compile("(?<=x)\\d+", Pattern.CASE_INSENSITIVE);
 		CoordinateFilters resultingFilters = new CoordinateFilters();
 		for (int i = 0, filterPosition = 1; i < strFilters.length; i = filterPosition, filterPosition++) {
 			String strFilter = strFilters[i];

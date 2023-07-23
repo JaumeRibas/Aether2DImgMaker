@@ -24,7 +24,7 @@ public class ImgSizeValidator implements IParameterValidator {
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
-		if (!value.matches("^\\d+x\\d+$")) {
+		if (!value.matches("(?i)^\\d+x\\d+$")) {
 			throw new ParameterException("The value of " + name + " has an incorrect format.");
 		}
 	}

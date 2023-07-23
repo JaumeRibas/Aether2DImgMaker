@@ -22,7 +22,7 @@ public class ImgSizeConverter implements IStringConverter<ImgSizeParameterValue>
 	
 	@Override
 	public ImgSizeParameterValue convert(String value) {
-		String[] components = value.split("x");
+		String[] components = value.toLowerCase().split("x");
 		int width = Integer.parseInt(components[0]);
 		int height = Integer.parseInt(components[1]);
 		return new ImgSizeParameterValue(width, height);

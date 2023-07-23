@@ -22,7 +22,7 @@ public class ImageGenerationModeConverter implements IStringConverter<ImageGener
 	
 	@Override
 	public ImageGenerationMode convert(String value) {
-		return ImageGenerationMode.getByName(value);
+		return ImageGenerationMode.getByNameOrAlias(value.toLowerCase());
 	}
 	
 }

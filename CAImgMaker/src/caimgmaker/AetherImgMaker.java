@@ -122,6 +122,7 @@ public class AetherImgMaker {
 					.addObject(args)
 					.build();
 			jcommander.setUsageFormatter(new CustomUsageFormatter(jcommander));
+			jcommander.setCaseSensitiveOptions(false);
 			jcommander.parse(rawArgs);
 			if (args.help) {
 				jcommander.usage();
