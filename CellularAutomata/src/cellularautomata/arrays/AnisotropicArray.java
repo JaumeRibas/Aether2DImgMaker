@@ -30,8 +30,8 @@ import cellularautomata.Utils;
  */
 public abstract class AnisotropicArray implements MultidimensionalArray {
 
-	protected int dimension;
-	protected int side;
+	protected final int dimension;
+	protected final int side;
 
 	public AnisotropicArray(int dimension, int side) {
 		if (dimension < 0) {
