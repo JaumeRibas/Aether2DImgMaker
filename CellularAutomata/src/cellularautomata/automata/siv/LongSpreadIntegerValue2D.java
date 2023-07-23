@@ -59,7 +59,7 @@ public class LongSpreadIntegerValue2D implements SymmetricLongModel2D, Isotropic
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		grid = Utils.buildAnisotropic2DLongArray(3);
-		Utils.fillArray(grid, backgroundValue);
+		Utils.fill(grid, backgroundValue);
 		grid[0][0] = this.initialValue;
 		xBoundReached = false;
 		step = 0;

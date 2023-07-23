@@ -58,7 +58,7 @@ public class SimpleLongSpreadIntegerValue4D implements SymmetricLongModel4D, Iso
 		int side = 5;
 		grid = new long[side][side][side][side];
 		if (backgroundValue != 0) {
-			Utils.fillArray(grid, backgroundValue);
+			Utils.fill(grid, backgroundValue);
 		}
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex][originIndex][originIndex] = this.initialValue;

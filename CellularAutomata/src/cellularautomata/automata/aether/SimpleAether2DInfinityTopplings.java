@@ -55,7 +55,7 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 		int side = 5;
 		grid = new BigFraction[side][side];
 		topplings = new boolean[side][side];
-		Utils.fillArray(grid, BigFraction.ZERO);
+		Utils.fill(grid, BigFraction.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		boundsReached = false;
@@ -80,7 +80,7 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 		}
 		newGrid = new BigFraction[newSide][newSide];
 		topplings = new boolean[newSide][newSide];
-		Utils.fillArray(newGrid, BigFraction.ZERO);
+		Utils.fill(newGrid, BigFraction.ZERO);
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {

@@ -60,7 +60,7 @@ public class SimpleLongSpreadIntegerValue3D implements SymmetricLongModel3D, Iso
 		grid = new long[side][side][side];
 		originIndex = (side - 1)/2;
 		if (backgroundValue != 0) {
-			Utils.fillArray(grid, backgroundValue);
+			Utils.fill(grid, backgroundValue);
 		}
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;

@@ -67,7 +67,7 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigInt[side][side][side];
-		Utils.fillArray(grid, BigInt.ZERO);
+		Utils.fill(grid, BigInt.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex][originIndex] = initialValue;
 		boundsReached = false;
@@ -95,7 +95,7 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 		} else {
 			newGrid = new BigInt[grid.length][grid.length][grid.length];
 		}
-		Utils.fillArray(newGrid, BigInt.ZERO);
+		Utils.fill(newGrid, BigInt.ZERO);
 		boolean changed = false;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {

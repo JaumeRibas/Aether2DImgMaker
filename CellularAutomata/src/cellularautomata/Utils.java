@@ -346,158 +346,158 @@ public class Utils {
 		return anisotropic2DArray;
 	}
 	
-	public static void fillArray(long[][] array, long value) {
+	public static void fill(long[][] array, long value) {
 		for (int i = 0; i < array.length; i++) {
 			Arrays.fill(array[i], value);
 		}
 	}
 	
-	public static void fillArray(long[][][] array, long value) {
+	public static void fill(long[][][] array, long value) {
 		for (int i = 0; i < array.length; i++) {
-			fillArray(array[i], value);
+			fill(array[i], value);
 		}
 	}
 	
-	public static void fillArray(long[][][][] array, long value) {
+	public static void fill(long[][][][] array, long value) {
 		for (int i = 0; i < array.length; i++) {
-			fillArray(array[i], value);
+			fill(array[i], value);
 		}
 	}
 	
-	public static void fillArray(int[][] array, int value) {
-		for (int i = 0; i < array.length; i++) {
-			Arrays.fill(array[i], value);
-		}
-	}
-	
-	public static void fillArray(int[][][] array, int value) {
-		for (int i = 0; i < array.length; i++) {
-			fillArray(array[i], value);
-		}
-	}
-	
-	public static void fillArray(int[][][][] array, int value) {
-		for (int i = 0; i < array.length; i++) {
-			fillArray(array[i], value);
-		}
-	}
-	
-	public static <Object_Type> void fillArray(Object_Type[][] array, Object_Type value) {
+	public static void fill(int[][] array, int value) {
 		for (int i = 0; i < array.length; i++) {
 			Arrays.fill(array[i], value);
 		}
 	}
 	
-	public static <Object_Type> void fillArray(Object_Type[][][] array, Object_Type value) {
+	public static void fill(int[][][] array, int value) {
 		for (int i = 0; i < array.length; i++) {
-			fillArray(array[i], value);
+			fill(array[i], value);
 		}
 	}
 	
-	public static <Object_Type> void fillArray(Object_Type[][][][] array, Object_Type value) {
+	public static void fill(int[][][][] array, int value) {
 		for (int i = 0; i < array.length; i++) {
-			fillArray(array[i], value);
+			fill(array[i], value);
 		}
 	}
 	
-	public static void fillArraysEvenIndexes(boolean[] array, boolean value) {
+	public static <Object_Type> void fill(Object_Type[][] array, Object_Type value) {
+		for (int i = 0; i < array.length; i++) {
+			Arrays.fill(array[i], value);
+		}
+	}
+	
+	public static <Object_Type> void fill(Object_Type[][][] array, Object_Type value) {
+		for (int i = 0; i < array.length; i++) {
+			fill(array[i], value);
+		}
+	}
+	
+	public static <Object_Type> void fill(Object_Type[][][][] array, Object_Type value) {
+		for (int i = 0; i < array.length; i++) {
+			fill(array[i], value);
+		}
+	}
+	
+	public static void fillEvenIndexes(boolean[] array, boolean value) {
 		for (int i = 0; i < array.length; i += 2) {
 			array[i] = value;
 		}
 	}
 	
-	public static void fillArraysOddIndexes(boolean[] array, boolean value) {
+	public static void fillOddIndexes(boolean[] array, boolean value) {
 		for (int i = 1; i < array.length; i += 2) {
 			array[i] = value;
 		}
 	}
 	
-	public static void fillArraysEvenIndexes(boolean[][] array, boolean value) {
+	public static void fillEvenIndexes(boolean[][] array, boolean value) {
 		int lengthMinusOne = array.length - 1;
 		if (lengthMinusOne != -1) {
 			int i = 0;
 			for (; i < lengthMinusOne; i++) {
-				fillArraysEvenIndexes(array[i], value);
+				fillEvenIndexes(array[i], value);
 				i++;
-				fillArraysOddIndexes(array[i], value);
+				fillOddIndexes(array[i], value);
 			}
 			if (i == lengthMinusOne) {
-				fillArraysEvenIndexes(array[lengthMinusOne], value);
+				fillEvenIndexes(array[lengthMinusOne], value);
 			}
 		}
 	}
 	
-	public static void fillArraysOddIndexes(boolean[][] array, boolean value) {
+	public static void fillOddIndexes(boolean[][] array, boolean value) {
 		int lengthMinusOne = array.length - 1;
 		if (lengthMinusOne != -1) {
 			int i = 0;
 			for (; i < lengthMinusOne; i++) {
-				fillArraysOddIndexes(array[i], value);
+				fillOddIndexes(array[i], value);
 				i++;
-				fillArraysEvenIndexes(array[i], value);
+				fillEvenIndexes(array[i], value);
 			}
 			if (i == lengthMinusOne) {
-				fillArraysOddIndexes(array[lengthMinusOne], value);
+				fillOddIndexes(array[lengthMinusOne], value);
 			}
 		}
 	}
 	
-	public static void fillArraysEvenIndexes(boolean[][][] array, boolean value) {
+	public static void fillEvenIndexes(boolean[][][] array, boolean value) {
 		int lengthMinusOne = array.length - 1;
 		if (lengthMinusOne != -1) {
 			int i = 0;
 			for (; i < lengthMinusOne; i++) {
-				fillArraysEvenIndexes(array[i], value);
+				fillEvenIndexes(array[i], value);
 				i++;
-				fillArraysOddIndexes(array[i], value);
+				fillOddIndexes(array[i], value);
 			}
 			if (i == lengthMinusOne) {
-				fillArraysEvenIndexes(array[lengthMinusOne], value);
+				fillEvenIndexes(array[lengthMinusOne], value);
 			}
 		}
 	}
 	
-	public static void fillArraysOddIndexes(boolean[][][] array, boolean value) {
+	public static void fillOddIndexes(boolean[][][] array, boolean value) {
 		int lengthMinusOne = array.length - 1;
 		if (lengthMinusOne != -1) {
 			int i = 0;
 			for (; i < lengthMinusOne; i++) {
-				fillArraysOddIndexes(array[i], value);
+				fillOddIndexes(array[i], value);
 				i++;
-				fillArraysEvenIndexes(array[i], value);
+				fillEvenIndexes(array[i], value);
 			}
 			if (i == lengthMinusOne) {
-				fillArraysOddIndexes(array[lengthMinusOne], value);
+				fillOddIndexes(array[lengthMinusOne], value);
 			}
 		}
 	}
 	
-	public static void fillArraysEvenIndexes(boolean[][][][] array, boolean value) {
+	public static void fillEvenIndexes(boolean[][][][] array, boolean value) {
 		int lengthMinusOne = array.length - 1;
 		if (lengthMinusOne != -1) {
 			int i = 0;
 			for (; i < lengthMinusOne; i++) {
-				fillArraysEvenIndexes(array[i], value);
+				fillEvenIndexes(array[i], value);
 				i++;
-				fillArraysOddIndexes(array[i], value);
+				fillOddIndexes(array[i], value);
 			}
 			if (i == lengthMinusOne) {
-				fillArraysEvenIndexes(array[lengthMinusOne], value);
+				fillEvenIndexes(array[lengthMinusOne], value);
 			}
 		}
 	}
 	
-	public static void fillArraysOddIndexes(boolean[][][][] array, boolean value) {
+	public static void fillOddIndexes(boolean[][][][] array, boolean value) {
 		int lengthMinusOne = array.length - 1;
 		if (lengthMinusOne != -1) {
 			int i = 0;
 			for (; i < lengthMinusOne; i++) {
-				fillArraysOddIndexes(array[i], value);
+				fillOddIndexes(array[i], value);
 				i++;
-				fillArraysEvenIndexes(array[i], value);
+				fillEvenIndexes(array[i], value);
 			}
 			if (i == lengthMinusOne) {
-				fillArraysOddIndexes(array[lengthMinusOne], value);
+				fillOddIndexes(array[lengthMinusOne], value);
 			}
 		}
 	}

@@ -65,7 +65,7 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigInt[side][side];
-		Utils.fillArray(grid, BigInt.ZERO);
+		Utils.fill(grid, BigInt.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = initialValue;
 		boundsReached = false;
@@ -93,7 +93,7 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 		} else {
 			newGrid = new BigInt[grid.length][grid.length];
 		}
-		Utils.fillArray(newGrid, BigInt.ZERO);
+		Utils.fill(newGrid, BigInt.ZERO);
 		boolean changed = false;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {

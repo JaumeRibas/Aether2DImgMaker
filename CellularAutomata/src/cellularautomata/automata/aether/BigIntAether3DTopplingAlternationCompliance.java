@@ -484,9 +484,9 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 	
 	private void registerStaticGridSliceCompliance(int x) {
 		if (x%2 == 0 == isEvenPositionsTurnToTopple) {
-			Utils.fillArraysOddIndexes(topplingAlternationCompliance[x], true);
+			Utils.fillOddIndexes(topplingAlternationCompliance[x], true);
 		} else {
-			Utils.fillArraysEvenIndexes(topplingAlternationCompliance[x], true);
+			Utils.fillEvenIndexes(topplingAlternationCompliance[x], true);
 		}
 	}
 

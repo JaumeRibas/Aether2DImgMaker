@@ -62,7 +62,7 @@ public class SimpleLongSpreadIntegerValue2D implements SymmetricLongModel2D, Iso
 		//The origin will be at the center of the array
 		originIndex = (side - 1)/2;
 		if (backgroundValue != 0) {
-			Utils.fillArray(grid, backgroundValue);
+			Utils.fill(grid, backgroundValue);
 		}
 		grid[originIndex][originIndex] = initialValue;
 		boundsReached = false;

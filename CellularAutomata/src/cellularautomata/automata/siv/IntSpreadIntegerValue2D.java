@@ -53,7 +53,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		grid = Utils.buildAnisotropic2DIntArray(3);
-		Utils.fillArray(grid, backgroundValue);
+		Utils.fill(grid, backgroundValue);
 		grid[0][0] = this.initialValue;
 		xBoundReached = false;
 		step = 0;

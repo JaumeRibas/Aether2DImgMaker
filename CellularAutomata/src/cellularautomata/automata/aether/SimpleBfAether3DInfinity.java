@@ -64,7 +64,7 @@ public class SimpleBfAether3DInfinity implements SymmetricNumericModel3D<BigFrac
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigFraction[side][side][side];
-		Utils.fillArray(grid, BigFraction.ZERO);
+		Utils.fill(grid, BigFraction.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex][originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
 		boundsReached = false;
@@ -86,7 +86,7 @@ public class SimpleBfAether3DInfinity implements SymmetricNumericModel3D<BigFrac
 		} else {
 			newGrid = new BigFraction[grid.length][grid.length][grid.length];
 		}
-		Utils.fillArray(newGrid, BigFraction.ZERO);
+		Utils.fill(newGrid, BigFraction.ZERO);
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {

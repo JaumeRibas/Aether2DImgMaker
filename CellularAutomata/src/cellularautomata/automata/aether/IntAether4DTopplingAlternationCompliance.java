@@ -649,9 +649,9 @@ public class IntAether4DTopplingAlternationCompliance implements SymmetricBoolea
 	
 	private void registerStaticGridSliceCompliance(int w) {
 		if (w%2 == 0 == isEvenPositionsTurnToTopple) {
-			Utils.fillArraysOddIndexes(topplingAlternationCompliance[w], true);
+			Utils.fillOddIndexes(topplingAlternationCompliance[w], true);
 		} else {
-			Utils.fillArraysEvenIndexes(topplingAlternationCompliance[w], true);
+			Utils.fillEvenIndexes(topplingAlternationCompliance[w], true);
 		}
 	}
 
