@@ -86,7 +86,7 @@ public class ImgMaker {
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 							minY = ca.getMinY(), maxY = ca.getMaxY();
-					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);//TODO improve. e.g. x: [min, max] ...
+					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);//TODO improve. e.g., x: [min, max] ...
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca);
 					createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, name + step + ".png");
 					folderImageCount++;
@@ -148,7 +148,7 @@ public class ImgMaker {
 					}
 					int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 							minY = ca.getMinY(), maxY = ca.getMaxY();
-					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);//TODO improve. e.g. x: [min, max] ...
+					System.out.println("Max " + yLabel + ": " + maxY + System.lineSeparator() + "Max " + xLabel + ": " + maxX);//TODO improve. e.g., x: [min, max] ...
 					int[] minAndMaxValue = ca.getMinAndMax();
 					System.out.println("Min value: " + minAndMaxValue[0] + System.lineSeparator() + "Max value: " + minAndMaxValue[1]);
 					ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue[0], minAndMaxValue[1]);

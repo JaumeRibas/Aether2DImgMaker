@@ -13,7 +13,7 @@ To run this app you need to have Java (version 8 or higher) installed.
 
 To run the app open a terminal and use `java -jar`. For instance, if the .jar file is in the current directory, use `java -jar AetherImgMaker.jar [options]`, where `[options]` is a space separated list of the options and values to use. 
 
-Option names are prefixed with a hyphen, e.g. `-help`. Most options require a value that must come right after the option name, e.g. `-colormap grayscale`. Use the `-help` option to view a list of available options and their accepted values. 
+Option names are prefixed with a hyphen, e.g., `-help`. Most options require a value that must come right after the option name, e.g., `-colormap grayscale`. Use the `-help` option to view a list of available options and their accepted values. 
 
 The `Ctrl`+`C` command can be used to halt the execution.
 
