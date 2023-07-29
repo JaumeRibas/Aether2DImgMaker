@@ -31,7 +31,7 @@ public interface SymmetricBooleanModel1D extends BooleanModel1D, SymmetricModel1
 	 * <p>
 	 * 
 	 * @param x the position on the x-axis
-	 * @return the {@link long} value at (x)
+	 * @return the {@code boolean} value at (x)
 	 * @throws Exception 
 	 */
 	boolean getFromAsymmetricPosition(int x) throws Exception;

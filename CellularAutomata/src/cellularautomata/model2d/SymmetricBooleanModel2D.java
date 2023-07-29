@@ -37,7 +37,7 @@ public interface SymmetricBooleanModel2D extends BooleanModel2D, SymmetricModel2
 	 * 
 	 * @param x the position on the x-axis
 	 * @param y the position on the y-axis
-	 * @return the {@link int} value at (x,y)
+	 * @return the {@code boolean} value at (x,y)
 	 * @throws Exception 
 	 */
 	boolean getFromAsymmetricPosition(int x, int y) throws Exception;

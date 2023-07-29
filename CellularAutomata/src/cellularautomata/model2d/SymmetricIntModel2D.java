@@ -37,7 +37,7 @@ public interface SymmetricIntModel2D extends IntModel2D, SymmetricModel2D, Symme
 	 * 
 	 * @param x the position on the x-axis
 	 * @param y the position on the y-axis
-	 * @return the {@link int} value at (x,y)
+	 * @return the {@code int} value at (x,y)
 	 * @throws Exception 
 	 */
 	int getFromAsymmetricPosition(int x, int y) throws Exception;

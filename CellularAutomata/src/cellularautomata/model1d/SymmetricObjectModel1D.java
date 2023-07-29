@@ -31,7 +31,7 @@ public interface SymmetricObjectModel1D<Object_Type> extends ObjectModel1D<Objec
 	 * <p>
 	 * 
 	 * @param x the position on the x-axis
-	 * @return the {@link long} value at (x)
+	 * @return the object at (x)
 	 * @throws Exception 
 	 */
 	Object_Type getFromAsymmetricPosition(int x) throws Exception;

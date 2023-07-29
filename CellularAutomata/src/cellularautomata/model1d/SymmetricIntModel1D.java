@@ -31,7 +31,7 @@ public interface SymmetricIntModel1D extends IntModel1D, SymmetricModel1D, Symme
 	 * <p>
 	 * 
 	 * @param x the position on the x-axis
-	 * @return the {@link long} value at (x)
+	 * @return the {@code int} value at (x)
 	 * @throws Exception 
 	 */
 	int getFromAsymmetricPosition(int x) throws Exception;

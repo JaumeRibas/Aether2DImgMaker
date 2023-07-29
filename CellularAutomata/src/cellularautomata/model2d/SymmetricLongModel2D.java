@@ -37,7 +37,7 @@ public interface SymmetricLongModel2D extends LongModel2D, SymmetricModel2D, Sym
 	 * 
 	 * @param x the position on the x-axis
 	 * @param y the position on the y-axis
-	 * @return the {@link long} value at (x,y)
+	 * @return the {@code long} value at (x,y)
 	 * @throws Exception 
 	 */
 	long getFromAsymmetricPosition(int x, int y) throws Exception;
