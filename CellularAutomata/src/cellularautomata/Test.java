@@ -81,7 +81,9 @@ import cellularautomata.model5d.ModelAs5D;
 import cellularautomata.model5d.RegularIntGrid5D;
 import cellularautomata.numbers.BigInt;
 
-public class Test {
+public final class Test {
+	
+	private Test() {}
 	
 	public static void main(String[] args) throws Exception {
 		long initialValue = -3000;

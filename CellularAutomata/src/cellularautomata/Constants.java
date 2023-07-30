@@ -16,7 +16,10 @@
  */
 package cellularautomata;
 
-public class Constants {
+public final class Constants {
+	
+	private Constants() {}
+	
 	public static final int ARRAY_SIZE_OVERHEAD = 16;
 	
 	/**

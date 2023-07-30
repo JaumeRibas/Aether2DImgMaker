@@ -25,7 +25,9 @@ import java.util.function.Consumer;
 import cellularautomata.Coordinates;
 import cellularautomata.Utils;
 
-public class Test {	
+public final class Test {	
+	
+	private Test() {}
 
 	public static void main(String[] args) {
 		testHyperrectangularIntArray2();

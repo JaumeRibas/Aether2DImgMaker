@@ -16,7 +16,10 @@
  */
 package caimgmaker;
 
-public class ImgMakerConstants {
+public final class ImgMakerConstants {
+	
+	private ImgMakerConstants() {}
+	
 	public static final int HD_WIDTH = 1920;
 	public static final int HD_HEIGHT = 1080;
 }

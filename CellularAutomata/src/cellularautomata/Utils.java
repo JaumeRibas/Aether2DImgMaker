@@ -41,7 +41,9 @@ import cellularautomata.model2d.Model2D;
 import cellularautomata.model2d.ObjectModel2D;
 import cellularautomata.numbers.BigInt;
 
-public class Utils {
+public final class Utils {
+	
+	private Utils() {}
 	
 	public static boolean isEvenPosition(int[] coordinates) {
 		boolean isEven = true;
