@@ -807,7 +807,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				shareCount = neighborCount + 1;
 				BigFraction toShare = value.subtract(asymmetricNeighborValues[0]);
 				BigFraction share = toShare.divide(shareCount);
-				value = value.subtract(toShare).add(share);;
+				value = value.subtract(toShare).add(share);
 				int[] nc = asymmetricNeighborCoords[0];
 				newXSlices[nc[0]][nc[1]] = newXSlices[nc[0]][nc[1]].add(share.multiply(asymmetricNeighborShareMultipliers[0]));
 				// no break
@@ -902,7 +902,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			case 1:
 				BigFraction toShare = value.subtract(neighborValues[0]);
 				BigFraction share = toShare.divide(2);
-				value = value.subtract(toShare).add(share);;
+				value = value.subtract(toShare).add(share);
 				int[] nc = neighborCoords[0];
 				newXSlices[nc[0]][nc[1]] = newXSlices[nc[0]][nc[1]].add(share.multiply(neighborShareMultipliers[0]));
 				// no break
@@ -996,7 +996,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				shareCount = neighborCount + 1;
 				BigFraction toShare = value.subtract(asymmetricNeighborValues[0]);
 				BigFraction share = toShare.divide(shareCount);
-				value = value.subtract(toShare).add(share);;
+				value = value.subtract(toShare).add(share);
 				int[] nc = asymmetricNeighborCoords[0];
 				newXSlices[nc[0]][nc[1]] = newXSlices[nc[0]][nc[1]].add(share);
 				// no break

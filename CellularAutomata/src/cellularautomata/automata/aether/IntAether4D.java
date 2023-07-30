@@ -298,11 +298,11 @@ public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicMode
 		}
 	// 03 | 02 | 00 | 00 | 19
 		// reuse values obtained previously
-		currentValue = currentWSlice[2][0][0];;
+		currentValue = currentWSlice[2][0][0];
 		greaterWNeighborValue = greaterWSlice[2][0][0];
 		smallerWNeighborValue = smallerWSlice[2][0][0];
 		greaterXNeighborValue = currentWSlice[3][0][0];
-		smallerXNeighborValue = currentWSlice[1][0][0];;
+		smallerXNeighborValue = currentWSlice[1][0][0];
 		greaterYNeighborValue = currentWSlice[2][1][0];
 		if (topplePositionType7(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 

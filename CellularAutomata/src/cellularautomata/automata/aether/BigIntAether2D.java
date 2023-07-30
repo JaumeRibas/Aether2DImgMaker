@@ -831,7 +831,7 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);;
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = neighborCoords[0];
 					newXSlices[nc[0]][nc[1]] = newXSlices[nc[0]][nc[1]].add(share);
 				}
@@ -963,7 +963,7 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);;
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = asymmetricNeighborCoords[0];
 					newXSlices[nc[0]][nc[1]] = newXSlices[nc[0]][nc[1]].add(share.multiply(asymmetricNeighborShareMultipliers[0]));
 				}
@@ -1094,7 +1094,7 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);;
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = neighborCoords[0];
 					newXSlices[nc[0]][nc[1]] = newXSlices[nc[0]][nc[1]].add(share.multiply(neighborShareMultipliers[0]));
 				}
@@ -1224,7 +1224,7 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
-					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);;
+					value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
 					int[] nc = asymmetricNeighborCoords[0];
 					newXSlices[nc[0]][nc[1]] = newXSlices[nc[0]][nc[1]].add(share);
 				}
