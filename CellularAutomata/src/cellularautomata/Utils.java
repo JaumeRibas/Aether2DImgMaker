@@ -384,19 +384,19 @@ public final class Utils {
 		}
 	}
 	
-	public static <Object_Type> void fill(Object_Type[][] array, Object_Type value) {
+	public static void fill(Object[][] array, Object value) {
 		for (int i = 0; i < array.length; i++) {
 			Arrays.fill(array[i], value);
 		}
 	}
 	
-	public static <Object_Type> void fill(Object_Type[][][] array, Object_Type value) {
+	public static void fill(Object[][][] array, Object value) {
 		for (int i = 0; i < array.length; i++) {
 			fill(array[i], value);
 		}
 	}
 	
-	public static <Object_Type> void fill(Object_Type[][][][] array, Object_Type value) {
+	public static void fill(Object[][][][] array, Object value) {
 		for (int i = 0; i < array.length; i++) {
 			fill(array[i], value);
 		}
@@ -956,7 +956,7 @@ public final class Utils {
 		}
 	}
 	
-	public static <Object_Type> void printAsGrid(ObjectModel2D<Object_Type> grid) throws Exception {		
+	public static void printAsGrid(ObjectModel2D<?> grid) throws Exception {		
 		int maxLength = 3;
 		int maxY = grid.getMaxY();
 		int minY = grid.getMinY();
@@ -998,7 +998,7 @@ public final class Utils {
 		System.out.println(headFoot);
 	}
 	
-	public static <Object_Type> void printAsGrid(ObjectModel1D<Object_Type> grid) throws Exception {
+	public static void printAsGrid(ObjectModel1D<?> grid) throws Exception {
 		int maxLength = 3;
 		int maxX = grid.getMaxX();
 		int minX = grid.getMinX();
@@ -1318,6 +1318,20 @@ public final class Utils {
 			}
 		}
 		return false;
+	}
+	
+	public static boolean isHyperrectangular(Object[][] array) {
+		boolean result = false;
+		if (array.length != 0) {
+			int sideToCompare = array[0].length;
+			result = true;
+			for (int i = array.length - 1; i != 0 && result; i--) {
+				if (array[i].length != sideToCompare) {
+					result = false;
+				}
+			}
+		}
+		return result;
 	}
 
 }

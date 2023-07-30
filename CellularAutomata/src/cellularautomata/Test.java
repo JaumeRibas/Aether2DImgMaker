@@ -2140,7 +2140,7 @@ public final class Test {
 		}
 	}
 	
-	public static <Object_Type> void compareAllSteps(ObjectModel<Object_Type> ca1, ObjectModel<Object_Type> ca2) {
+	public static void compareAllSteps(ObjectModel<?> ca1, ObjectModel<?> ca2) {
 		System.out.println("Comparing...");
 		int dimension = ca1.getGridDimension();
 		int dimension2 = ca2.getGridDimension();
@@ -2153,8 +2153,8 @@ public final class Test {
 				while (equal && !finished1 && !finished2) {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
-						Object_Type val1 = ca1.getFromPosition(coordinatesObj);
-						Object_Type val2 = ca2.getFromPosition(coordinatesObj);
+						Object val1 = ca1.getFromPosition(coordinatesObj);
+						Object val2 = ca2.getFromPosition(coordinatesObj);
 						if (!val1.equals(val2)) {
 							equal = false;
 							System.err.println("Different value at step " + ca1.getStep() + " " + coordinatesObj + ": " 
@@ -2175,8 +2175,8 @@ public final class Test {
 								for (int currentCoordinate = minCoord; currentCoordinate != maxCoord; currentCoordinate++) {
 									coordinates[0] = currentCoordinate;
 									Coordinates coordinatesObj = new Coordinates(coordinates);
-									Object_Type val1 = ca1.getFromPosition(coordinatesObj);
-									Object_Type val2 = ca2.getFromPosition(coordinatesObj);
+									Object val1 = ca1.getFromPosition(coordinatesObj);
+									Object val2 = ca2.getFromPosition(coordinatesObj);
 									if (!val1.equals(val2)) {
 										equal = false;
 										System.err.println("Different value at step " + ca1.getStep() + " " + coordinatesObj + ": " 
@@ -2187,8 +2187,8 @@ public final class Test {
 								//to prevent infinite loop if maxCoord is equal to Integer.MAX_VALUE
 								coordinates[0] = maxCoord;
 								Coordinates coordinatesObj = new Coordinates(coordinates);
-								Object_Type val1 = ca1.getFromPosition(coordinatesObj);
-								Object_Type val2 = ca2.getFromPosition(coordinatesObj);
+								Object val1 = ca1.getFromPosition(coordinatesObj);
+								Object val2 = ca2.getFromPosition(coordinatesObj);
 								if (!val1.equals(val2)) {
 									equal = false;
 									System.err.println("Different value at step " + ca1.getStep() + " " + coordinatesObj + ": " 
