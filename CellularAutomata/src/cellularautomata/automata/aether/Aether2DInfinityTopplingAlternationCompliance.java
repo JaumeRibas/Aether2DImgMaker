@@ -24,10 +24,11 @@ import java.util.Arrays;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 
-public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
+public class Aether2DInfinityTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
 
 	/**
 	 * 
@@ -37,20 +38,22 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 	/** A 2D array representing the grid */
 	private BigFraction[][] grid;
 	
-	private boolean[][] topplings;
+	private boolean[][] topplingAlternationCompliance;
+	private boolean itsEvenPositionsTurnToTopple;
 
 	private final boolean isPositive;
 	private long step;	
 	private int maxX;
 	
-	public Aether2DInfinityTopplings(boolean isPositive) {
+	public Aether2DInfinityTopplingAlternationCompliance(boolean isPositive) {
 		this.isPositive = isPositive;
 		final int side = 6;
 		grid = Utils.buildAnisotropic2DBigFractionArray(side);
-		topplings = Utils.buildAnisotropic2DBooleanArray(side);
 		grid[0][0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
+		itsEvenPositionsTurnToTopple = isPositive;
 		maxX = 3;
 		step = 0;
+		nextStep();
 	}
 	
 	/**
@@ -61,49 +64,67 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether2DInfinityTopplings(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Aether2DInfinityTopplings data = (Aether2DInfinityTopplings) Utils.deserializeFromFile(backupPath);
-		isPositive = data.isPositive;
-		grid = data.grid;
-		topplings = data.topplings;
-		maxX = data.maxX;
-		step = data.step;
+	public Aether2DInfinityTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_SQUARE.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + Aether2DInfinityTopplingAlternationCompliance.class + " class.");
+		}
+		isPositive = (boolean) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (BigFraction[][]) data.get(SerializableModelData.GRID);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		itsEvenPositionsTurnToTopple = isPositive == (step%2 == 0);
+		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
+			topplingAlternationCompliance = (boolean[][]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
+		} else {
+			nextStep();
+		}
 	}
 	
 	@Override
 	public Boolean nextStep() {
 		final int newSide = maxX + 3;
 		BigFraction[][] newGrid = new BigFraction[newSide][];
-		topplings = null;
-		topplings = Utils.buildAnisotropic2DBooleanArray(newSide);
+		topplingAlternationCompliance = null;
+		topplingAlternationCompliance = Utils.buildAnisotropic2DBooleanArray(newSide);
 		BigFraction currentValue, greaterXNeighborValue;
 		BigFraction[] smallerXSlice = null, currentXSlice = grid[0], greaterXSlice = grid[1];
 		BigFraction[] newSmallerXSlice = null, newCurrentXSlice = new BigFraction[1], newGreaterXSlice = new BigFraction[2];// build new grid progressively to save memory
-		boolean[] newCurrentXSliceTopplings = topplings[0];
+		boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[0];
 		Arrays.fill(newCurrentXSlice, BigFraction.ZERO);
 		Arrays.fill(newGreaterXSlice, BigFraction.ZERO);
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentXSlice[0];
 		greaterXNeighborValue = greaterXSlice[0];
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[0] = true;
 			BigFraction toShare = currentValue.subtract(greaterXNeighborValue);
 			BigFraction share = toShare.divide(5);
 			newCurrentXSlice[0] = newCurrentXSlice[0].add(currentValue.subtract(toShare).add(share));
-			newGreaterXSlice[0] = newGreaterXSlice[0].add(share);	
+			newGreaterXSlice[0] = newGreaterXSlice[0].add(share);
+			newCurrentXSliceCompliance[0] = itsCurrentPositionsTurnToTopple;
 		} else {
 			newCurrentXSlice[0] = newCurrentXSlice[0].add(currentValue);
+			newCurrentXSliceCompliance[0] = !itsCurrentPositionsTurnToTopple;
 		}		
 		// x = 1, y = 0
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[2];
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
 		newGreaterXSlice = new BigFraction[3];
-		newCurrentXSliceTopplings = topplings[1];
+		newCurrentXSliceCompliance = topplingAlternationCompliance[1];
 		Arrays.fill(newGreaterXSlice, BigFraction.ZERO);
 		newGrid[2] = newGreaterXSlice;
 		BigFraction[][] newXSlices = new BigFraction[][] { newSmallerXSlice, newCurrentXSlice, newGreaterXSlice};
@@ -119,8 +140,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = greaterXSlice[0];
 		BigFraction greaterYNeighborValue = currentXSlice[1];
+		boolean toppled = false;
 		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[0] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;// this is the index of the new slice: 0->newSmallerXSlice, 1->newCurrentXSlice, 2->newGreaterXSlice
@@ -131,7 +153,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[0] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -142,7 +164,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[0] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -155,13 +177,16 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount);
+		newCurrentXSliceCompliance[0] = toppled == itsCurrentPositionsTurnToTopple;
 		// x = 1, y = 1
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigFraction smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1];
+		toppled = false;
 		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[1] = true;
+			toppled = true;
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				if (smallerYNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sy < current
@@ -201,7 +226,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue.subtract(toShare).add(share));
 			}
 		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[1] = true;
+			toppled = true;
 			// gx < current <= sy
 			BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 			BigFraction share = toShare.divide(3);
@@ -211,6 +236,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			// gx >= current <= sy
 			newCurrentXSlice[1] = newCurrentXSlice[1].add(currentValue);
 		}
+		newCurrentXSliceCompliance[1] = toppled == itsCurrentPositionsTurnToTopple;
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0
 		smallerXSlice = currentXSlice;
@@ -219,7 +245,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
 		newGreaterXSlice = new BigFraction[4];
-		newCurrentXSliceTopplings = topplings[2];
+		newCurrentXSliceCompliance = topplingAlternationCompliance[2];
 		Arrays.fill(newGreaterXSlice, BigFraction.ZERO);
 		newGrid[3] = newGreaterXSlice;
 		newXSlices[0] = newSmallerXSlice;
@@ -232,8 +258,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		currentValue = currentXSlice[0];
 		greaterXNeighborValue = greaterXSlice[0];
 		smallerXNeighborValue = smallerXSlice[0];
+		toppled = false;
 		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[0] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -243,7 +270,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[0] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -253,7 +280,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[0] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -265,7 +292,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount);
+		newCurrentXSliceCompliance[0] = toppled == itsCurrentPositionsTurnToTopple;
 		// x = 2, y = 1
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		relevantAsymmetricNeighborCount = 0;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
@@ -273,8 +302,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		greaterYNeighborValue = currentXSlice[2];
 		smallerXNeighborValue = smallerXSlice[1];
 		greaterXNeighborValue = greaterXSlice[1];
+		toppled = false;
 		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[1] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 0;
@@ -283,7 +313,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[1] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 2;
@@ -292,7 +322,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			relevantAsymmetricNeighborCount++;
 		}
 		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[1] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -301,7 +331,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			relevantAsymmetricNeighborCount++;
 		}
 		if (greaterYNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[1] = true;
+			toppled = true;
 			relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 			int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 			nc[0] = 1;
@@ -311,13 +341,16 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		}
 		topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount);
+		newCurrentXSliceCompliance[1] = toppled == itsCurrentPositionsTurnToTopple;
 		// x = 2, y = 2
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[2];
+		toppled = false;
 		if (smallerYNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[2] = true;
+			toppled = true;
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				if (smallerYNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sy < current
@@ -357,7 +390,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue.subtract(toShare).add(share));
 			}
 		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			newCurrentXSliceTopplings[2] = true;
+			toppled = true;
 			// gx < current <= sy
 			BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 			BigFraction share = toShare.divide(3);
@@ -367,20 +400,17 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			// gx >= current <= sy
 			newCurrentXSlice[2] = newCurrentXSlice[2].add(currentValue);
 		}
+		newCurrentXSliceCompliance[2] = toppled == itsCurrentPositionsTurnToTopple;
 		grid[1] = null;
-		// 3 <= x < edge - 2
+		// 3 <= x < edge
 		int edge = grid.length - 1;
-		int edgeMinusTwo = edge - 2;
 		BigFraction[][] xSlices = new BigFraction[][] {null, currentXSlice, greaterXSlice};
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
-		toppleRangeBeyondX2(xSlices, newXSlices, newGrid, 3, edgeMinusTwo, 
+		toppleRangeBeyondX2(xSlices, newXSlices, newGrid, 3, edge, 
 				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes); // is it faster to reuse these arrays?
-		//edge - 2 <= x < edge
-		toppleRangeBeyondX2(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
-				relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, sortedNeighborsIndexes);
+		registerStaticGridSliceCompliance(edge);
 		if (newGrid.length > grid.length) {
 			newGreaterXSlice = new BigFraction[newGrid.length];
 			Arrays.fill(newGreaterXSlice, BigFraction.ZERO);
@@ -389,7 +419,16 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		grid = newGrid;
 		maxX++;
 		step++;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		return true;
+	}
+	
+	private void registerStaticGridSliceCompliance(int x) {
+		if (x%2 == 0 == itsEvenPositionsTurnToTopple) {
+			Utils.fillOddIndexes(topplingAlternationCompliance[x], true);
+		} else {
+			Utils.fillEvenIndexes(topplingAlternationCompliance[x], true);
+		}
 	}
 
 	@Override
@@ -403,15 +442,17 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		BigFraction[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		BigFraction[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
+		boolean isY0PositionsTurnToTopple = x%2 == 0 == itsEvenPositionsTurnToTopple;
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, isY0PositionsTurnToTopple = !isY0PositionsTurnToTopple) {
 			// y = 0;
+			boolean itsCurrentPositionsTurnToTopple = isY0PositionsTurnToTopple;
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;
 			greaterXSlice = grid[xPlusOne];
 			newSmallerXSlice = newCurrentXSlice;
 			newCurrentXSlice = newGreaterXSlice;
 			newGreaterXSlice = new BigFraction[xPlusTwo];
-			boolean[] newCurrentXSliceTopplings = topplings[x];
+			boolean[] newCurrentXSliceCompliance = topplingAlternationCompliance[x];
 			Arrays.fill(newGreaterXSlice, BigFraction.ZERO);
 			newGrid[xPlusOne] = newGreaterXSlice;
 			newXSlices[0] = newSmallerXSlice;
@@ -423,8 +464,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			BigFraction greaterYNeighborValue = currentXSlice[1];
 			BigFraction smallerXNeighborValue = smallerXSlice[0];
 			BigFraction greaterXNeighborValue = greaterXSlice[0];
+			boolean toppled = false;
 			if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[0] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 0;
@@ -434,7 +476,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[0] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 2;
@@ -444,7 +486,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (greaterYNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[0] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 1;
@@ -455,7 +497,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			}
 			topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
+			newCurrentXSliceCompliance[0] = toppled == itsCurrentPositionsTurnToTopple;
 			// y = 1
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
 			BigFraction smallerYNeighborValue = currentValue;
@@ -463,8 +507,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			greaterYNeighborValue = currentXSlice[2];
 			smallerXNeighborValue = smallerXSlice[1];
 			greaterXNeighborValue = greaterXSlice[1];
+			toppled = false;
 			if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[1] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 0;
@@ -473,7 +518,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[1] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 2;
@@ -482,7 +527,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (smallerYNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[1] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 1;
@@ -491,7 +536,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (greaterYNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[1] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 1;
@@ -501,9 +546,11 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			}
 			topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount);
+			newCurrentXSliceCompliance[1] = toppled == itsCurrentPositionsTurnToTopple;
 			// 2 >= y < x - 1
 			int y = 2, yMinusOne = 1, yPlusOne = 3;
 			for (; y < xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				relevantAsymmetricNeighborCount = 0;
 				// reuse values obtained previously
 				smallerYNeighborValue = currentValue;
@@ -511,8 +558,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				greaterYNeighborValue = currentXSlice[yPlusOne];
 				smallerXNeighborValue = smallerXSlice[y];
 				greaterXNeighborValue = greaterXSlice[y];
+				toppled = false;
 				if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-					newCurrentXSliceTopplings[y] = true;
+					toppled = true;
 					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 					nc[0] = 0;
@@ -520,7 +568,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 					relevantAsymmetricNeighborCount++;
 				}
 				if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-					newCurrentXSliceTopplings[y] = true;
+					toppled = true;
 					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 					nc[0] = 2;
@@ -528,7 +576,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 					relevantAsymmetricNeighborCount++;
 				}
 				if (smallerYNeighborValue.compareTo(currentValue) < 0) {
-					newCurrentXSliceTopplings[y] = true;
+					toppled = true;
 					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 					nc[0] = 1;
@@ -536,7 +584,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 					relevantAsymmetricNeighborCount++;
 				}
 				if (greaterYNeighborValue.compareTo(currentValue) < 0) {
-					newCurrentXSliceTopplings[y] = true;
+					toppled = true;
 					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 					nc[0] = 1;
@@ -545,8 +593,10 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				}
 				topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount);
+				newCurrentXSliceCompliance[y] = toppled == itsCurrentPositionsTurnToTopple;
 			}
 			// y = x - 1
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
@@ -554,8 +604,9 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			greaterYNeighborValue = currentXSlice[yPlusOne];
 			smallerXNeighborValue = smallerXSlice[y];
 			greaterXNeighborValue = greaterXSlice[y];
+			toppled = false;
 			if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[y] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 0;
@@ -564,7 +615,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[y] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 2;
@@ -573,7 +624,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (smallerYNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[y] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerYNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 1;
@@ -582,7 +633,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				relevantAsymmetricNeighborCount++;
 			}
 			if (greaterYNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[y] = true;
+				toppled = true;
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = greaterYNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
 				nc[0] = 1;
@@ -592,15 +643,18 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 			}
 			topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount);
+			newCurrentXSliceCompliance[y] = toppled == itsCurrentPositionsTurnToTopple;
 			// y = x
 			yMinusOne = y;
 			y = x;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
 			greaterXNeighborValue = greaterXSlice[y];
+			toppled = false;
 			if (smallerYNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[y] = true;
+				toppled = true;
 				if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 					if (smallerYNeighborValue.equals(greaterXNeighborValue)) {
 						// gx = sy < current
@@ -640,7 +694,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 					newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue.subtract(toShare).add(share));
 				}
 			} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				newCurrentXSliceTopplings[y] = true;
+				toppled = true;
 				// gx < current <= sy
 				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 				BigFraction share = toShare.divide(3);
@@ -650,6 +704,7 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 				// gx >= current <= sy
 				newCurrentXSlice[y] = newCurrentXSlice[y].add(currentValue);
 			}
+			newCurrentXSliceCompliance[y] = toppled == itsCurrentPositionsTurnToTopple;
 			grid[xMinusOne] = null;
 		}
 		xSlices[1] = currentXSlice;
@@ -1041,16 +1096,16 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		if (y < 0) y = -y;
 		boolean value;
 		if (y > x) {
-			value = topplings[y][x];
+			value = topplingAlternationCompliance[y][x];
 		} else {
-			value = topplings[x][y];
+			value = topplingAlternationCompliance[x][y];
 		}
 		return value;
 	}
 	
 	@Override
 	public boolean getFromAsymmetricPosition(int x, int y) {	
-		return topplings[x][y];
+		return topplingAlternationCompliance[x][y];
 	}
 
 	@Override
@@ -1073,12 +1128,25 @@ public class Aether2DInfinityTopplings implements SymmetricBooleanModel2D, Isotr
 		String path = getName() + "/2D/";
 		if (!isPositive) path += "-";
 		path += "infinity";
-		return path + "/topplings";
+		return path + "/toppling_alternation_compliance";
 	}
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, isPositive);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_SQUARE);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE, topplingAlternationCompliance);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 	
 }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model4d.IsotropicHypercubicModel4DA;
 import cellularautomata.model4d.SymmetricLongModel4D;
 
@@ -73,12 +74,23 @@ public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicMo
 	 * @throws FileNotFoundException 
 	 */
 	public LongAether4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		LongAether4D data = (LongAether4D) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		grid = data.grid;
-		maxW = data.maxW;
-		step = data.step;
-		changed = data.changed;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.LONG.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.REGULAR_INFINITE_4D.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_LONG_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
+				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + LongAether4D.class + " class.");
+		}
+		initialValue = (long) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (long[][][][]) data.get(SerializableModelData.GRID);
+		maxW = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
 	}
 
 	@Override
@@ -4187,7 +4199,19 @@ public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicMo
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialValue);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.LONG);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.REGULAR_INFINITE_4D);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_LONG_PRIMITIVE_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxW);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 
 	@Override

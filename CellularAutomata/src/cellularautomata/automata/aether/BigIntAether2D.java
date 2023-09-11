@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import cellularautomata.Constants;
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricNumericModel2D;
 import cellularautomata.numbers.BigInt;
@@ -84,13 +85,25 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 	 * @throws FileNotFoundException 
 	 */
 	public BigIntAether2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		BigIntAether2D data = (BigIntAether2D) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		grid = data.grid;
-		maxX = data.maxX;
-		step = data.step;
-		folderName = data.folderName;
-		changed = data.changed;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.BIG_INT.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_SQUARE.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
+				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)
+				|| !data.contains(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME)) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + BigIntAether2D.class + " class.");
+		}
+		initialValue = (BigInt) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (BigInt[][]) data.get(SerializableModelData.GRID);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
+		folderName = (String) data.get(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME);
 	}
 	
 	@Override
@@ -1324,7 +1337,20 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialValue);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.BIG_INT);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_SQUARE);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_INT_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME, folderName);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 	
 }

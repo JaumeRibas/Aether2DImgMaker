@@ -46,7 +46,7 @@ public class SimpleLongAether4DTopplingAlternationCompliance implements Symmetri
 	private long[][][][] grid;
 	
 	private HypercubicBooleanArray topplingAlternationCompliance;
-	private boolean isEvenPositionsTurnToTopple;
+	private boolean itsEvenPositionsTurnToTopple;
 	
 	private final long initialValue;
 	private long step;
@@ -70,7 +70,7 @@ public class SimpleLongAether4DTopplingAlternationCompliance implements Symmetri
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
-		isEvenPositionsTurnToTopple = initialValue >= 0;
+		itsEvenPositionsTurnToTopple = initialValue >= 0;
 		int side = 5;
 		grid = new long[side][side][side][side];
 		originIndex = (side - 1)/2;
@@ -99,13 +99,13 @@ public class SimpleLongAether4DTopplingAlternationCompliance implements Symmetri
 			newGrid = new long[grid.length][grid.length][grid.length][grid.length];
 			topplingAlternationCompliance = new HypercubicBooleanArray(4, grid.length);
 		}
-		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		boolean changed = false;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				for (int k = 0; k < grid.length; k++) {
-					for (int l = 0; l < grid.length; l++, isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple) {
+					for (int l = 0; l < grid.length; l++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
 						long value = grid[i][j][k][l];
 						List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(8);						
 						long neighborValue;
@@ -198,7 +198,7 @@ public class SimpleLongAether4DTopplingAlternationCompliance implements Symmetri
 							changed = changed || toppled;
 						}					
 						newGrid[i + indexOffset][j + indexOffset][k + indexOffset][l + indexOffset] += value;
-						topplingAlternationCompliance.set(new Coordinates(i + indexOffset, j + indexOffset, k + indexOffset, l + indexOffset), toppled == isCurrentPositionsTurnToTopple);
+						topplingAlternationCompliance.set(new Coordinates(i + indexOffset, j + indexOffset, k + indexOffset, l + indexOffset), toppled == itsCurrentPositionsTurnToTopple);
 					}
 				}
 			}
@@ -209,7 +209,7 @@ public class SimpleLongAether4DTopplingAlternationCompliance implements Symmetri
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		isEvenPositionsTurnToTopple = !isEvenPositionsTurnToTopple;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		this.changed = changed;
 		//Return whether or not the state of the grid changed
 		return changed;
@@ -224,8 +224,8 @@ public class SimpleLongAether4DTopplingAlternationCompliance implements Symmetri
 			}
 			
 		};
-		boolean notEvenIndexesTurnToTopple = !isEvenPositionsTurnToTopple;
-		if (notEvenIndexesTurnToTopple) {
+		boolean isNotEvenIndexesTurnToTopple = !itsEvenPositionsTurnToTopple;
+		if (isNotEvenIndexesTurnToTopple) {
 			topplingAlternationCompliance.forEachEvenEdgeIndex(1, setToTrueIndexConsumer);
 		} else {
 			topplingAlternationCompliance.forEachOddEdgeIndex(1, setToTrueIndexConsumer);

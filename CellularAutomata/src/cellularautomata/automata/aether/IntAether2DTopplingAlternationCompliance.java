@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 
@@ -38,7 +39,7 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 	private int[][] grid;
 	
 	private boolean[][] topplingAlternationCompliance;
-	private boolean isEvenPositionsTurnToTopple;
+	private boolean itsEvenPositionsTurnToTopple;
 	
 	private final int initialValue;
 	private long step;
@@ -55,7 +56,7 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 	    }
 		this.initialValue = initialValue;
-		isEvenPositionsTurnToTopple = initialValue >= 0;
+		itsEvenPositionsTurnToTopple = initialValue >= 0;
 		final int side = 6;
 		grid = Utils.buildAnisotropic2DIntArray(side);
 		grid[0][0] = initialValue;
@@ -73,14 +74,29 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 	 * @throws FileNotFoundException 
 	 */
 	public IntAether2DTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		IntAether2DTopplingAlternationCompliance data = (IntAether2DTopplingAlternationCompliance) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		grid = data.grid;
-		topplingAlternationCompliance = data.topplingAlternationCompliance;
-		isEvenPositionsTurnToTopple = data.isEvenPositionsTurnToTopple;
-		maxX = data.maxX;
-		step = data.step;
-		changed = data.changed;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.INTEGER.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_SQUARE.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
+				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + IntAether2DTopplingAlternationCompliance.class + " class.");
+		}
+		initialValue = (int) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (int[][]) data.get(SerializableModelData.GRID);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
+		itsEvenPositionsTurnToTopple = initialValue >= 0 == (step%2 == 0);
+		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
+			topplingAlternationCompliance = (boolean[][]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
+		} else {
+			nextStep();
+		}
 	}
 	
 	@Override
@@ -97,7 +113,7 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0
-		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentXSlice[0];
 		greaterXNeighborValue = greaterXSlice[0];
 		boolean toppled = false;
@@ -115,9 +131,9 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		} else {
 			newCurrentXSlice[0] += currentValue;
 		}	
-		newCurrentXSliceCompliance[0] = toppled == isCurrentPositionsTurnToTopple;
+		newCurrentXSliceCompliance[0] = toppled == itsCurrentPositionsTurnToTopple;
 		// x = 1, y = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[2];
@@ -173,12 +189,12 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, 
 				relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
-			newCurrentXSliceCompliance[0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 1, y = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		int smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -261,7 +277,7 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			// gx >= current <= sy
 			newCurrentXSlice[1] += currentValue;
 		}
-		newCurrentXSliceCompliance[1] = toppled == isCurrentPositionsTurnToTopple;
+		newCurrentXSliceCompliance[1] = toppled == itsCurrentPositionsTurnToTopple;
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0
 		smallerXSlice = currentXSlice;
@@ -313,12 +329,12 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
-			newCurrentXSliceCompliance[0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		relevantAsymmetricNeighborCount = 0;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
@@ -361,12 +377,12 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 			changed = true;
-			newCurrentXSliceCompliance[1] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 2
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -449,7 +465,7 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			// gx >= current <= sy
 			newCurrentXSlice[2] += currentValue;
 		}
-		newCurrentXSliceCompliance[2] = toppled == isCurrentPositionsTurnToTopple;
+		newCurrentXSliceCompliance[2] = toppled == itsCurrentPositionsTurnToTopple;
 		grid[1] = null;
 		// 3 <= x < edge - 2
 		int edge = grid.length - 1;
@@ -475,13 +491,13 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		}
 		grid = newGrid;
 		step++;
-		isEvenPositionsTurnToTopple = !isEvenPositionsTurnToTopple;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		this.changed = changed;
 		return changed;
 	}
 	
 	private void registerStaticGridSliceCompliance(int x) {
-		if (x%2 == 0 == isEvenPositionsTurnToTopple) {
+		if (x%2 == 0 == itsEvenPositionsTurnToTopple) {
 			Utils.fillOddIndexes(topplingAlternationCompliance[x], true);
 		} else {
 			Utils.fillEvenIndexes(topplingAlternationCompliance[x], true);
@@ -500,10 +516,10 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		int[] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		int[] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		boolean isY0PositionsTurnToTopple = x%2 == 0 == isEvenPositionsTurnToTopple;
+		boolean isY0PositionsTurnToTopple = x%2 == 0 == itsEvenPositionsTurnToTopple;
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, isY0PositionsTurnToTopple = !isY0PositionsTurnToTopple) {
 			// y = 0;
-			boolean isCurrentPositionsTurnToTopple = isY0PositionsTurnToTopple;
+			boolean itsCurrentPositionsTurnToTopple = isY0PositionsTurnToTopple;
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;
 			greaterXSlice = grid[xPlusOne];
@@ -551,12 +567,12 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			if (topplePosition(newXSlices, currentValue, 0, relevantAsymmetricNeighborValues, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[0] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[0] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
 			int smallerYNeighborValue = currentValue;
@@ -599,14 +615,14 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			if (topplePosition(newXSlices, currentValue, 1, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[1] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[1] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// 2 >= y < x - 1
 			int y = 2, yMinusOne = 1, yPlusOne = 3;
 			for (; y < xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
-				isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				relevantAsymmetricNeighborCount = 0;
 				// reuse values obtained previously
 				smallerYNeighborValue = currentValue;
@@ -645,13 +661,13 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 				if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y] = isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y] = !isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// y = x - 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			relevantAsymmetricNeighborCount = 0;
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
@@ -694,14 +710,14 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 			if (topplePosition(newXSlices, currentValue, y, relevantAsymmetricNeighborValues, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborCount, sortedNeighborsIndexes)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = x
 			yMinusOne = y;
 			y = x;
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
@@ -784,7 +800,7 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 				// gx >= current <= sy
 				newCurrentXSlice[y] += currentValue;
 			}
-			newCurrentXSliceCompliance[y] = toppled == isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[y] = toppled == itsCurrentPositionsTurnToTopple;
 			grid[xMinusOne] = null;
 		}
 		xSlices[1] = currentXSlice;
@@ -1329,6 +1345,20 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialValue);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.INTEGER);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_SQUARE);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE, topplingAlternationCompliance);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 }

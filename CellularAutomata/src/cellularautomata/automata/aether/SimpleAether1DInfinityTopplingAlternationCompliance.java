@@ -28,7 +28,7 @@ import cellularautomata.automata.Neighbor;
 import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricBooleanModel1D;
 
-public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D, IsotropicModel1DA {
+public class SimpleAether1DInfinityTopplingAlternationCompliance implements SymmetricBooleanModel1D, IsotropicModel1DA {
 	
 	private static final byte RIGHT = 2;
 	private static final byte LEFT = 3;
@@ -36,7 +36,8 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 	/** A 1D array representing the grid */
 	private BigFraction[] grid;
 	
-	private boolean[] topplings;
+	private boolean[] topplingAlternationCompliance;
+	private boolean itsEvenPositionsTurnToTopple;
 	
 	private long step;
 	private final boolean isPositive;
@@ -47,17 +48,18 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	public SimpleAether1DInfinityTopplings(boolean isPositive) {
+	public SimpleAether1DInfinityTopplingAlternationCompliance(boolean isPositive) {
 		this.isPositive = isPositive;
 		int side = 5;
 		grid = new BigFraction[side];
-		topplings = new boolean[side];
 		//The origin will be at the center of the array
 		originIndex = (side - 1)/2;
 		Arrays.fill(grid, BigFraction.ZERO);
 		grid[originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
+		itsEvenPositionsTurnToTopple = isPositive;
 		boundsReached = false;
 		step = 0;
+		nextStep();
 	}
 	
 	@Override
@@ -72,14 +74,17 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 			boundsReached = false;
 			newSide = grid.length + 2;
 			indexOffset = 1;
+			topplingAlternationCompliance = new boolean[newSide];
+			registerTopplingAlternationComplianceInGridEdges();
 		} else {
 			newSide = grid.length;
+			topplingAlternationCompliance = new boolean[newSide];
 		}
 		newGrid = new BigFraction[newSide];
-		topplings = new boolean[newSide];
 		Arrays.fill(newGrid, BigFraction.ZERO);
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple == (originIndex%2 == 0); //when the dimension is odd the corner coordinates are not always even
 		//For every cell
-		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++) {
+		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
 			//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 			
 			//Get the cell's value
@@ -100,9 +105,10 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 			if (neighborValue.compareTo(value) < 0)
 				neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
 
+			boolean toppled = false;
 			//If there are any
 			if (neighbors.size() > 0) {
-				topplings[newIndex] = true;
+				toppled = true;
 				if (neighbors.size() > 1) {
 					//Sort them by value in ascending order
 					Neighbor<BigFraction> next = neighbors.get(1);
@@ -134,6 +140,7 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 				}	
 			}					
 			newGrid[newIndex] = newGrid[newIndex].add(value);
+			topplingAlternationCompliance[newIndex] = toppled == itsCurrentPositionsTurnToTopple;
 		}
 		//Replace the old array with the new one
 		this.grid = newGrid;
@@ -141,8 +148,18 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//Return whether or not the state of the grid changed
 		return true;
+	}
+	
+	private void registerTopplingAlternationComplianceInGridEdges() {
+		int side = topplingAlternationCompliance.length - 1;
+		boolean itsNotEvenIndexesTurnToTopple = itsEvenPositionsTurnToTopple == (originIndex%2 == 0);
+		if (itsNotEvenIndexesTurnToTopple) {
+			topplingAlternationCompliance[0] = true;
+			topplingAlternationCompliance[side] = true;
+		}
 	}
 
 	@Override
@@ -168,7 +185,7 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 	@Override
 	public boolean getFromPosition(int x) {	
 		int index = originIndex + x;
-		return topplings[index];
+		return topplingAlternationCompliance[index];
 	}
 	
 	@Override
@@ -203,7 +220,7 @@ public class SimpleAether1DInfinityTopplings implements SymmetricBooleanModel1D,
 		String path = getName() + "/1D/";
 		if (!isPositive) path += "-";
 		path += "infinity";
-		return path + "/topplings";
+		return path + "/toppling_alternation_compliance";
 	}
 
 	@Override

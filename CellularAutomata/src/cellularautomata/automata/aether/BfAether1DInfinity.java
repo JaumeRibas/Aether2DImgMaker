@@ -24,6 +24,7 @@ import java.util.Arrays;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricNumericModel1D;
 
@@ -65,11 +66,21 @@ public class BfAether1DInfinity implements SymmetricNumericModel1D<BigFraction>,
 	 * @throws FileNotFoundException 
 	 */
 	public BfAether1DInfinity(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		BfAether1DInfinity data = (BfAether1DInfinity) Utils.deserializeFromFile(backupPath);
-		isPositive = data.isPositive;
-		grid = data.grid;
-		maxX = data.maxX;
-		step = data.step;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_1D.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + BfAether1DInfinity.class + " class.");
+		}
+		isPositive = (boolean) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (BigFraction[]) data.get(SerializableModelData.GRID);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
 	}
 	
 	@Override
@@ -143,12 +154,9 @@ public class BfAether1DInfinity implements SymmetricNumericModel1D<BigFraction>,
 				newGrid[1] = newGrid[1].add(currentValue);
 			}
 		}
-		//2 <= x < edge - 2
+		//2 <= x < edge
 		int edge = grid.length - 1;
-		int edgeMinusTwo = edge - 2;
-		toppleRangeBeyondX1(newGrid, 2, edgeMinusTwo);
-		//edge - 2 <= x < edge
-		toppleRangeBeyondX1(newGrid, edgeMinusTwo, edge);
+		toppleRangeBeyondX1(newGrid, 2, edge);
 		grid = newGrid;
 		maxX++;
 		step++;
@@ -257,6 +265,17 @@ public class BfAether1DInfinity implements SymmetricNumericModel1D<BigFraction>,
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, isPositive);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_1D);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 }

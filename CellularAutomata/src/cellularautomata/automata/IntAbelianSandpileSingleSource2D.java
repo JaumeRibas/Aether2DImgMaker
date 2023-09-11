@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricIntModel2D;
 
@@ -44,7 +45,7 @@ public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, Is
 	private Boolean changed = null;
 
 	/** Whether or not the values reached the bounds of the array */
-	private boolean xBoundReached;
+	private boolean boundsReached;
 	
 	/**
 	 * Creates an instance with the given initial value
@@ -58,7 +59,7 @@ public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, Is
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic2DIntArray(3);
 		grid[0][0] = this.initialValue;
-		xBoundReached = false;
+		boundsReached = false;
 		step = 0;
 	}
 	
@@ -71,19 +72,29 @@ public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, Is
 	 * @throws FileNotFoundException 
 	 */
 	public IntAbelianSandpileSingleSource2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		IntAbelianSandpileSingleSource2D data = (IntAbelianSandpileSingleSource2D) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		grid = data.grid;
-		xBoundReached = data.xBoundReached;
-		step = data.step;
-		changed = data.changed;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.ABELIAN_SANDPILE.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.INTEGER.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_SQUARE.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + IntAbelianSandpileSingleSource2D.class + " class.");
+		}
+		initialValue = (int) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (int[][]) data.get(SerializableModelData.GRID);
+		boundsReached = (boolean) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
 	}
 	
 	@Override
 	public Boolean nextStep() {
 		int[][] newGrid = null;
-		if (xBoundReached) {
-			xBoundReached = false;
+		if (boundsReached) {
+			boundsReached = false;
 			newGrid = new int[grid.length + 1][];
 		} else {
 			newGrid = new int[grid.length][];
@@ -134,7 +145,7 @@ public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, Is
 					}
 					
 					if (x >= maxXMinusOne) {
-						xBoundReached = true;
+						boundsReached = true;
 					}
 					newGrid[x][y] += value - 4;
 				} else {
@@ -209,7 +220,19 @@ public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, Is
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.ABELIAN_SANDPILE);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialValue);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.INTEGER);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_SQUARE);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, boundsReached);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 	
 }

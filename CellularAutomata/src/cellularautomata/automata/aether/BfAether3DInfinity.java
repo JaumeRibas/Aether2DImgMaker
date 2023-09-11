@@ -23,6 +23,7 @@ import java.io.Serializable;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricNumericModel3D;
 
@@ -63,11 +64,21 @@ public class BfAether3DInfinity implements SymmetricNumericModel3D<BigFraction>,
 	 * @throws FileNotFoundException 
 	 */
 	public BfAether3DInfinity(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		BfAether3DInfinity data = (BfAether3DInfinity) Utils.deserializeFromFile(backupPath);
-		isPositive = data.isPositive;
-		grid = data.grid;
-		maxX = data.maxX;
-		step = data.step;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.REGULAR_INFINITE_3D.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + BfAether3DInfinity.class + " class.");
+		}
+		isPositive = (boolean) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (BigFraction[][][]) data.get(SerializableModelData.GRID);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
 	}
 	
 	@Override
@@ -305,19 +316,14 @@ public class BfAether3DInfinity implements SymmetricNumericModel3D<BigFraction>,
 		topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice);
 		grid[2] = null;
-		// 4 <= x < edge - 2
+		// 4 <= x < edge
 		int edge = grid.length - 1;
-		int edgeMinusTwo = edge - 2;
 		BigFraction[][][] xSlices = new BigFraction[][][] {null, currentXSlice, greaterXSlice};
 		newXSlices[1] = newCurrentXSlice;
 		newXSlices[2] = newGreaterXSlice;
-		toppleRangeBeyondX3(xSlices, newXSlices, newGrid, 4, edgeMinusTwo, 
+		toppleRangeBeyondX3(xSlices, newXSlices, newGrid, 4, edge, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts); // is it faster to reuse these arrays?
-		//edge - 2 <= x < edge
-		toppleRangeBeyondX3(xSlices, newXSlices, newGrid, edgeMinusTwo, edge, 
-				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
-				relevantAsymmetricNeighborSymmetryCounts);
 		if (newGrid.length > grid.length) {
 			newGrid[grid.length] = Utils.buildAnisotropic2DBigFractionArray(newGrid.length);
 		}
@@ -1790,7 +1796,18 @@ public class BfAether3DInfinity implements SymmetricNumericModel3D<BigFraction>,
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, isPositive);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.REGULAR_INFINITE_3D);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 	
 }

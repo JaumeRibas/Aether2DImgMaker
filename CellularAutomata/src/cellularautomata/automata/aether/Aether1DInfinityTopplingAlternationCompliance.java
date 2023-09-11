@@ -24,10 +24,11 @@ import java.util.Arrays;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricBooleanModel1D;
 
-public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, IsotropicModel1DA, Serializable {
+public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricBooleanModel1D, IsotropicModel1DA, Serializable {
 
 	/**
 	 * 
@@ -37,21 +38,23 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 	/** A 1D array representing the grid */
 	private BigFraction[] grid;
 	
-	private boolean[] topplings;
+	private boolean[] topplingAlternationCompliance;
+	private boolean itsEvenPositionsTurnToTopple;
 
 	private final boolean isPositive;
 	private long step;
 	private int maxX;
 	
-	public Aether1DInfinityTopplings(boolean isPositive) {
+	public Aether1DInfinityTopplingAlternationCompliance(boolean isPositive) {
 		this.isPositive = isPositive;
 		final int initialSize = 5;
 		grid = new BigFraction[initialSize];
-		topplings = new boolean[initialSize];
 		Arrays.fill(grid, BigFraction.ZERO);
 		grid[0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
+		itsEvenPositionsTurnToTopple = isPositive;
 		maxX = 2;
 		step = 0;
+		nextStep();
 	}
 	
 	/**
@@ -62,42 +65,61 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public Aether1DInfinityTopplings(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Aether1DInfinityTopplings data = (Aether1DInfinityTopplings) Utils.deserializeFromFile(backupPath);
-		isPositive = data.isPositive;
-		grid = data.grid;
-		topplings = data.topplings;
-		maxX = data.maxX;
-		step = data.step;
+	public Aether1DInfinityTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {		
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_1D.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + Aether1DInfinityTopplingAlternationCompliance.class + " class.");
+		}
+		isPositive = (boolean) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (BigFraction[]) data.get(SerializableModelData.GRID);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		itsEvenPositionsTurnToTopple = isPositive == (step%2 == 0);
+		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
+			topplingAlternationCompliance = (boolean[]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
+		} else {
+			nextStep();
+		}
 	}
 	
 	@Override
 	public Boolean nextStep() {
 		final int newSize = maxX + 3;
 		BigFraction[] newGrid = new BigFraction[newSize];
-		topplings = null;
-		topplings = new boolean[newSize];
+		topplingAlternationCompliance = null;
+		topplingAlternationCompliance = new boolean[newSize];
 		Arrays.fill(newGrid, BigFraction.ZERO);
 		BigFraction currentValue, greaterXNeighborValue, smallerXNeighborValue;
 		//x = 0
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = grid[0];
 		greaterXNeighborValue = grid[1];
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-			topplings[0] = true;
 			BigFraction toShare = currentValue.subtract(greaterXNeighborValue);
 			BigFraction share = toShare.divide(3);
 			newGrid[0] = newGrid[0].add(currentValue.subtract(toShare).add(share));
 			newGrid[1] = newGrid[1].add(share);	
+			topplingAlternationCompliance[0] = itsCurrentPositionsTurnToTopple;
 		} else {
 			newGrid[0] = newGrid[0].add(currentValue);
+			topplingAlternationCompliance[0] = !itsCurrentPositionsTurnToTopple;
 		}
 		//x = 1
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = grid[2];
+		boolean toppled = false;
 		if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-			topplings[1] = true;
+			toppled = true;
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				if (smallerXNeighborValue.equals(greaterXNeighborValue)) {
 					// gn == sn < current
@@ -138,7 +160,7 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 			}
 		} else {
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-				topplings[1] = true;
+				toppled = true;
 				// gn < current <= sn
 				BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 				BigFraction share = toShare.divide(2);
@@ -148,15 +170,15 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 				newGrid[1] = newGrid[1].add(currentValue);
 			}
 		}
-		//2 <= x < edge - 2
+		topplingAlternationCompliance[1] = toppled == itsCurrentPositionsTurnToTopple;
+		//2 <= x < edge
 		int edge = grid.length - 1;
-		int edgeMinusTwo = edge - 2;
-		toppleRangeBeyondX1(newGrid, 2, edgeMinusTwo);
-		//edge - 2 <= x < edge
-		toppleRangeBeyondX1(newGrid, edgeMinusTwo, edge);
+		toppleRangeBeyondX1(newGrid, 2, edge);
+		topplingAlternationCompliance[edge] = edge%2 == 0 != itsEvenPositionsTurnToTopple;
 		grid = newGrid;
 		maxX++;
 		step++;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		return true;
 	}
 
@@ -168,13 +190,15 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 	private void toppleRangeBeyondX1(BigFraction[] newGrid, int minX, int maxX) {
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
 		BigFraction smallerXNeighborValue, currentValue = grid[xMinusOne], greaterXNeighborValue = grid[x];
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
+		boolean itsCurrentPositionsTurnToTopple = x%2 == 0 == itsEvenPositionsTurnToTopple; 
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
 			//reuse values obtained previously
 			smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;
 			greaterXNeighborValue = grid[xPlusOne];
+			boolean toppled = false;
 			if (smallerXNeighborValue.compareTo(currentValue) < 0) {
-				topplings[x] = true;
+				toppled = true;
 				if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 					if (smallerXNeighborValue.equals(greaterXNeighborValue)) {
 						// gn == sn < current
@@ -215,7 +239,7 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 				}
 			} else {
 				if (greaterXNeighborValue.compareTo(currentValue) < 0) {
-					topplings[x] = true;
+					toppled = true;
 					// gn < current <= sn
 					BigFraction toShare = currentValue.subtract(greaterXNeighborValue); 
 					BigFraction share = toShare.divide(2);
@@ -225,18 +249,19 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 					newGrid[x] = newGrid[x].add(currentValue);
 				}
 			}
+			topplingAlternationCompliance[x] = toppled == itsCurrentPositionsTurnToTopple;
 		}
 	}
 	
 	@Override
 	public boolean getFromPosition(int x) {	
 		if (x < 0) x = -x;
-		return topplings[x];
+		return topplingAlternationCompliance[x];
 	}
 
 	@Override
 	public boolean getFromAsymmetricPosition(int x) {
-		return topplings[x];
+		return topplingAlternationCompliance[x];
 	}
 
 	@Override
@@ -259,11 +284,24 @@ public class Aether1DInfinityTopplings implements SymmetricBooleanModel1D, Isotr
 		String path = getName() + "/1D/";
 		if (!isPositive) path += "-";
 		path += "infinity";
-		return path + "/topplings";
+		return path + "/toppling_alternation_compliance";
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, isPositive);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.BOOLEAN);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_1D);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE, topplingAlternationCompliance);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 }

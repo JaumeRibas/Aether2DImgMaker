@@ -149,7 +149,7 @@ public class BfAether1DInfinityBoundedGridCenterSource implements SymmetricNumer
 			// gn >= current <= sn
 			newGrid[1] = newGrid[1].add(currentValue);
 		}
-		//2 <= i < edge - 1
+		//2 <= i < edge
 		int edge = grid.length - 1;
 		toppleRangeBeyondI1(newGrid, 2, edge);
 		//i = edge

@@ -28,7 +28,7 @@ import cellularautomata.automata.Neighbor;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 
-public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D, IsotropicSquareModelA {	
+public class SimpleAether2DInfinityTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA {	
 	
 	private static final byte UP = 0;
 	private static final byte DOWN = 1;
@@ -38,7 +38,8 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 	/** 2D array representing the grid **/
 	private BigFraction[][] grid;
 	
-	private boolean[][] topplings;
+	private boolean[][] topplingAlternationCompliance;
+	private boolean itsEvenPositionsTurnToTopple;
 	
 	private long step;
 	private final boolean isPositive;
@@ -49,18 +50,19 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	public SimpleAether2DInfinityTopplings(boolean isPositive) {
+	public SimpleAether2DInfinityTopplingAlternationCompliance(boolean isPositive) {
 		this.isPositive = isPositive;
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigFraction[side][side];
-		topplings = new boolean[side][side];
 		Utils.fill(grid, BigFraction.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
+		itsEvenPositionsTurnToTopple = isPositive;
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
+		nextStep();
 	}
 	
 	@Override
@@ -75,15 +77,18 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 			newSide = grid.length + 2;
 			//The offset between the indexes of the new and old array
 			indexOffset = 1;
+			topplingAlternationCompliance = new boolean[newSide][newSide];
+			registerTopplingAlternationComplianceInGridEdges();
 		} else {
 			newSide = grid.length;
+			topplingAlternationCompliance = new boolean[newSide][newSide];
 		}
 		newGrid = new BigFraction[newSide][newSide];
-		topplings = new boolean[newSide][newSide];
 		Utils.fill(newGrid, BigFraction.ZERO);
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid.length; j++) {
+			for (int j = 0; j < grid.length; j++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
 				BigFraction value = grid[i][j];
 				//make list of von Neumann neighbors with value smaller than current cell's value
 				List<Neighbor<BigFraction>> neighbors = new ArrayList<Neighbor<BigFraction>>(4);						
@@ -113,8 +118,9 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 				if (neighborValue.compareTo(value) < 0)
 					neighbors.add(new Neighbor<BigFraction>(DOWN, neighborValue));
 
+				boolean toppled = false;
 				if (neighbors.size() > 0) {
-					topplings[i + indexOffset][j + indexOffset] = true;
+					toppled = true;
 					//sort neighbors by value
 					boolean sorted = false;
 					while (!sorted) {
@@ -153,6 +159,7 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 				}					
 				newGrid[i + indexOffset][j + indexOffset] = 
 						newGrid[i + indexOffset][j + indexOffset].add(value);
+				topplingAlternationCompliance[i + indexOffset][j + indexOffset] = toppled == itsCurrentPositionsTurnToTopple;
 			}
 		}
 		//Replace the old array with the new one
@@ -161,8 +168,25 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//Return whether or not the state of the grid changed
 		return true;
+	}
+	
+	private void registerTopplingAlternationComplianceInGridEdges() {
+		int i = 0;
+		int side = topplingAlternationCompliance.length - 1;
+		boolean isNotCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		for (int j = 0; j <= side; j++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][j] = isNotCurrentPositionsTurnToTopple;
+		}
+		for (i = 1; i < side; i++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][0] = isNotCurrentPositionsTurnToTopple;
+			topplingAlternationCompliance[i][side] = isNotCurrentPositionsTurnToTopple;
+		}
+		for (int j = 0; j <= side; j++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][j] = isNotCurrentPositionsTurnToTopple;
+		}
 	}
 
 	@Override
@@ -201,7 +225,7 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 	public boolean getFromPosition(int x, int y) {	
 		int i = originIndex + x;
 		int j = originIndex + y;
-		return topplings[i][j];
+		return topplingAlternationCompliance[i][j];
 	}
 	
 	@Override
@@ -241,6 +265,6 @@ public class SimpleAether2DInfinityTopplings implements SymmetricBooleanModel2D,
 		String path = getName() + "/2D/";
 		if (!isPositive) path += "-";
 		path += "infinity";
-		return path + "/topplings";
+		return path + "/toppling_alternation_compliance";
 	}
 }

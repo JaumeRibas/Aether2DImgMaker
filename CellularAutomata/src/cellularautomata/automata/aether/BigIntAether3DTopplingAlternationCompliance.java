@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricBooleanModel3D;
 import cellularautomata.numbers.BigInt;
@@ -42,7 +43,7 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 	private BigInt[][][] grid;
 	
 	private boolean[][][] topplingAlternationCompliance;
-	private boolean isEvenPositionsTurnToTopple;
+	private boolean itsEvenPositionsTurnToTopple;
 	
 	private final BigInt initialValue;
 	private long step;
@@ -60,7 +61,7 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 	 */
 	public BigIntAether3DTopplingAlternationCompliance(BigInt initialValue) {
 		this.initialValue = initialValue;
-		isEvenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0;
+		itsEvenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0;
 		grid = Utils.buildAnisotropic3DBigIntArray(7);
 		grid[0][0][0] = this.initialValue;
 		maxX = 4;
@@ -83,15 +84,31 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 	 * @throws FileNotFoundException 
 	 */
 	public BigIntAether3DTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		BigIntAether3DTopplingAlternationCompliance data = (BigIntAether3DTopplingAlternationCompliance) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		grid = data.grid;
-		topplingAlternationCompliance = data.topplingAlternationCompliance;
-		isEvenPositionsTurnToTopple = data.isEvenPositionsTurnToTopple;
-		maxX = data.maxX;
-		step = data.step;
-		folderName = data.folderName;
-		changed = data.changed;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !SerializableModelData.InitialConfigurationImplementationTypes.BIG_INT.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.GridTypes.REGULAR_INFINITE_3D.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
+				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)
+				|| !data.contains(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME)) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + BigIntAether3DTopplingAlternationCompliance.class + " class.");
+		}
+		initialValue = (BigInt) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+		grid = (BigInt[][][]) data.get(SerializableModelData.GRID);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
+		folderName = (String) data.get(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME);
+		itsEvenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0 == (step%2 == 0);
+		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
+			topplingAlternationCompliance = (boolean[][][]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
+		} else {
+			nextStep();
+		}
 	}
 	
 	@Override
@@ -109,17 +126,17 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0, z = 0
-		boolean isCurrentPositionsTurnToTopple = isEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		BigInt currentValue = currentXSlice[0][0];
 		BigInt greaterXNeighborValue = greaterXSlice[0][0];
 		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 1, y = 0, z = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[2];
@@ -143,12 +160,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 1, y = 1, z = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -158,25 +175,25 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 1, y = 1, z = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][1];
 		if (topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][1] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][1] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0, z = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		smallerXSlice = currentXSlice;
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[3];
@@ -196,12 +213,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 1, z = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][0];
 		smallerXNeighborValue = smallerXSlice[1][0];
 		// reuse values obtained previously
@@ -214,12 +231,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 1, z = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][1];
 		smallerXNeighborValue = smallerXSlice[1][1];
 		greaterYNeighborValue = currentXSlice[2][1];
@@ -231,9 +248,9 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][1] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][1] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 2, z = 0
 		currentValue = currentXSlice[2][0];
@@ -245,12 +262,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 2, z = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[2][1];
 		smallerYNeighborValue = currentXSlice[1][1];
 		// reuse values obtained previously
@@ -262,12 +279,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][1] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][1] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 2, z = 2
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -275,13 +292,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		if (topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][2] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][2] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		grid[1] = null;
 		// x = 3, y = 0, z = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		smallerXSlice = currentXSlice;
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[4];
@@ -301,12 +318,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 1, z = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][0];
 		smallerXNeighborValue = smallerXSlice[1][0];
 		// reuse values obtained previously
@@ -319,12 +336,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 1, z = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][1];
 		smallerXNeighborValue = smallerXSlice[1][1];
 		greaterYNeighborValue = currentXSlice[2][1];
@@ -336,9 +353,9 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][1] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][1] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 2, z = 0
 		currentValue = currentXSlice[2][0];
@@ -353,12 +370,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 2, z = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[2][1];
 		smallerXNeighborValue = smallerXSlice[2][1];
 		greaterYNeighborValue = currentXSlice[3][1];
@@ -372,12 +389,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][1] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][1] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 2, z = 2
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[2][2];
 		smallerXNeighborValue = smallerXSlice[2][2];
 		greaterYNeighborValue = currentXSlice[3][2];
@@ -389,12 +406,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][2] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][2] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 0
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		currentValue = currentXSlice[3][0];
 		greaterXNeighborValue = greaterXSlice[3][0];
 		smallerYNeighborValue = currentXSlice[2][0];
@@ -403,12 +420,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][0] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][0] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 1
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[3][1];
 		smallerYNeighborValue = currentXSlice[2][1];
 		// reuse values obtained previously
@@ -420,12 +437,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][1] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][1] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 2
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[3][2];
 		smallerYNeighborValue = currentXSlice[2][2];
 		// reuse values obtained previously
@@ -437,12 +454,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][2] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][2] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 3
-		isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -450,9 +467,9 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		if (topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][3] = isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][3] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][3] = !isCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][3] = !itsCurrentPositionsTurnToTopple;
 		}
 		grid[2] = null;
 		// 4 <= x < edge - 2
@@ -477,13 +494,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		}
 		grid = newGrid;
 		step++;
-		isEvenPositionsTurnToTopple = !isEvenPositionsTurnToTopple;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		this.changed = changed;
 		return changed;
 	}
 	
 	private void registerStaticGridSliceCompliance(int x) {
-		if (x%2 == 0 == isEvenPositionsTurnToTopple) {
+		if (x%2 == 0 == itsEvenPositionsTurnToTopple) {
 			Utils.fillOddIndexes(topplingAlternationCompliance[x], true);
 		} else {
 			Utils.fillEvenIndexes(topplingAlternationCompliance[x], true);
@@ -502,10 +519,10 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		BigInt[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		BigInt[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		boolean isY0Z0PositionsTurnToTopple = x%2 == 0 == isEvenPositionsTurnToTopple;
+		boolean isY0Z0PositionsTurnToTopple = x%2 == 0 == itsEvenPositionsTurnToTopple;
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, isY0Z0PositionsTurnToTopple = !isY0Z0PositionsTurnToTopple) {
 			// y = 0, z = 0
-			boolean isCurrentPositionsTurnToTopple = isY0Z0PositionsTurnToTopple;
+			boolean itsCurrentPositionsTurnToTopple = isY0Z0PositionsTurnToTopple;
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;
 			greaterXSlice = grid[xPlusOne];
@@ -525,12 +542,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[0][0] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[0][0] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 1, z = 0
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[1][0];
 			smallerXNeighborValue = smallerXSlice[1][0];
 			// reuse values obtained previously
@@ -543,12 +560,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[1][0] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[1][0] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 1, z = 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[1][1];
 			smallerXNeighborValue = smallerXSlice[1][1];
 			greaterYNeighborValue = currentXSlice[2][1];
@@ -560,9 +577,9 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[1][1] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[1][1] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 2, z = 0
 			currentValue = currentXSlice[2][0];
@@ -576,12 +593,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[2][0] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[2][0] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 2, z = 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[2][1];
 			smallerXNeighborValue = smallerXSlice[2][1];
 			greaterYNeighborValue = currentXSlice[3][1];
@@ -595,12 +612,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[2][1] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[2][1] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 2, z = 2
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[2][2];
 			smallerXNeighborValue = smallerXSlice[2][2];
 			greaterYNeighborValue = currentXSlice[3][2];
@@ -611,15 +628,15 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[2][2] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][2] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[2][2] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][2] = !itsCurrentPositionsTurnToTopple;
 			}
 			int y = 3, yMinusOne = 2, yPlusOne = 4;
-			boolean isZ0PositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			boolean isZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			for (int lastY = x - 2; y <= lastY; yMinusOne = y, y = yPlusOne, yPlusOne++, isZ0PositionsTurnToTopple = !isZ0PositionsTurnToTopple) {
 				// z = 0
-				isCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
 				currentValue = currentXSlice[y][0];
 				greaterXNeighborValue = greaterXSlice[y][0];
 				smallerXNeighborValue = smallerXSlice[y][0];
@@ -630,12 +647,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][0] = isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][0] = !isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// z = 1
-				isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][1];
 				smallerXNeighborValue = smallerXSlice[y][1];
 				greaterYNeighborValue = currentXSlice[yPlusOne][1];
@@ -649,13 +666,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][1] = isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][1] = !isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				int z = 2, zPlusOne = 3;
 				for (int lastZ = y - 2; z <= lastZ; z = zPlusOne, zPlusOne++) {
-					isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					greaterXNeighborValue = greaterXSlice[y][z];
 					smallerXNeighborValue = smallerXSlice[y][z];
 					greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -668,13 +685,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 							relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newXSlices)) {
 						anyToppled = true;
-						newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+						newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+						newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// z = y - 1
-				isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerXNeighborValue = smallerXSlice[y][z];
 				greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -688,13 +705,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				// z = y
 				z = zPlusOne;
-				isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerXNeighborValue = smallerXSlice[y][z];
 				greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -705,13 +722,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// y = x - 1, z = 0
-			isCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
 			currentValue = currentXSlice[y][0];
 			greaterXNeighborValue = greaterXSlice[y][0];
 			smallerXNeighborValue = smallerXSlice[y][0];
@@ -723,12 +740,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][0] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][0] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = x - 1, z = 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][1];
 			smallerXNeighborValue = smallerXSlice[y][1];
 			greaterYNeighborValue = currentXSlice[yPlusOne][1];
@@ -742,13 +759,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][1] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][1] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			int z = 2, zPlusOne = 3, lastZ = y - 2;
 			for(; z <= lastZ; z = zPlusOne, zPlusOne++) {
-				isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerXNeighborValue = smallerXSlice[y][z];
 				greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -762,13 +779,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// y = x - 1, z = y - 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][z];
 			smallerXNeighborValue = smallerXSlice[y][z];
 			greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -782,14 +799,14 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = zPlusOne;
 			zPlusOne++;
 			// y = x - 1, z = y
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][z];
 			smallerXNeighborValue = smallerXSlice[y][z];
 			greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -801,15 +818,15 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			yMinusOne = y;
 			y = yPlusOne;
 			// y = x, z = 0
 			isZ0PositionsTurnToTopple = !isZ0PositionsTurnToTopple;
-			isCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
 			currentValue = currentXSlice[y][0];
 			greaterXNeighborValue = greaterXSlice[y][0];
 			smallerYNeighborValue = currentXSlice[yMinusOne][0];
@@ -818,12 +835,12 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][0] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][0] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = x, z = 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][1];
 			smallerYNeighborValue = currentXSlice[yMinusOne][1];
 			// reuse values obtained previously
@@ -835,15 +852,15 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][1] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][1] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = 2;
 			zPlusOne = 3;
 			lastZ++;
 			for(; z <= lastZ; z = zPlusOne, zPlusOne++) {
-				isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerYNeighborValue = currentXSlice[yMinusOne][z];
 				// reuse values obtained previously
@@ -854,13 +871,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}			
 			// y = x, z = y - 1
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][z];
 			smallerYNeighborValue = currentXSlice[yMinusOne][z];
 			// reuse values obtained previously
@@ -872,13 +889,13 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = zPlusOne;
 			// y = x, z = y
-			isCurrentPositionsTurnToTopple = !isCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -886,9 +903,9 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 			if (topplePositionType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 					newGreaterXSlice)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			grid[xMinusOne] = null;
 		}
@@ -2287,7 +2304,22 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 	
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.AETHER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialValue);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.BIG_INT);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.REGULAR_INFINITE_3D);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_INT_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME, folderName);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE, topplingAlternationCompliance);
+		data.put(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 	
 }
