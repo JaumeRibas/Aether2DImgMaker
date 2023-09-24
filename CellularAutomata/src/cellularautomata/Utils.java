@@ -48,9 +48,7 @@ public final class Utils {
 	public static boolean isEvenPosition(int[] coordinates) {
 		boolean isEven = true;
 		for (int i = 0; i != coordinates.length; i++) {
-			if (coordinates[i]%2 != 0) {
-				isEven = !isEven;
-			}
+			isEven = isEven == (coordinates[i]%2 == 0);
 		}
 		return isEven;
 	}
@@ -58,9 +56,7 @@ public final class Utils {
 	public static boolean isEvenPosition(Coordinates coordinates) {
 		boolean isEven = true;
 		for (int i = coordinates.getCount() - 1; i != -1; i--) {
-			if (coordinates.get(i)%2 != 0) {
-				isEven = !isEven;
-			}
+			isEven = isEven == (coordinates.get(i)%2 == 0);
 		}
 		return isEven;
 	}
