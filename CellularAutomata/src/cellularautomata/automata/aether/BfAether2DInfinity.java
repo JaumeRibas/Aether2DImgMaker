@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -34,12 +33,7 @@ import cellularautomata.model2d.SymmetricNumericModel2D;
  * @author Jaume
  *
  */
-public class BfAether2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7622600244531619169L;
+public class BfAether2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {
 
 	/** A 2D array representing the grid */
 	private BigFraction[][] grid;

@@ -18,19 +18,13 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
 import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricBooleanModel3D;
 
-public class IntAether3DTopplingAlternationCompliance implements SymmetricBooleanModel3D, IsotropicCubicModelA, Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8653305249896527393L;
+public class IntAether3DTopplingAlternationCompliance implements SymmetricBooleanModel3D, IsotropicCubicModelA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;

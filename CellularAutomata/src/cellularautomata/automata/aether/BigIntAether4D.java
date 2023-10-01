@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
@@ -32,12 +31,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5853970703675608009L;
+public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {
 
 	private static final BigInt TWO = BigInt.valueOf(2);
 	private static final BigInt THREE = BigInt.valueOf(3);

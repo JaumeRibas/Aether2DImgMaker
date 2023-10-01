@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
@@ -26,12 +25,7 @@ import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricBooleanModel3D;
 import cellularautomata.numbers.BigInt;
 
-public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBooleanModel3D, IsotropicCubicModelA, Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4074097937931487363L;
+public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBooleanModel3D, IsotropicCubicModelA {
 	
 	private static final BigInt TWO = BigInt.valueOf(2);
 	private static final BigInt THREE = BigInt.valueOf(3);

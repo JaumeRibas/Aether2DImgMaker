@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
@@ -31,15 +30,10 @@ import cellularautomata.model4d.SymmetricIntModel4D;
  * @author Jaume
  *
  */
-public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicModel4DA, Serializable {
+public class IntAether4D implements SymmetricIntModel4D, IsotropicHypercubicModel4DA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -613566757;
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 369363774578908578L;
 
 	/** A 4D array representing the grid */
 	private int[][][][] grid;

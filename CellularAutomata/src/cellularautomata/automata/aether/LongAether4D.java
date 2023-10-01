@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
@@ -31,12 +30,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8314893471774482651L;
+public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;

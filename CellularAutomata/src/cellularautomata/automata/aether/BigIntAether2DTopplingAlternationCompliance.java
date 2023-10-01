@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
 
 import cellularautomata.Constants;
@@ -28,12 +27,7 @@ import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 import cellularautomata.numbers.BigInt;
 
-public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2458804997418114734L;
+public class BigIntAether2DTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA {
 	
 	private static final BigInt TWO = BigInt.valueOf(2);
 	private static final BigInt THREE = BigInt.valueOf(3);

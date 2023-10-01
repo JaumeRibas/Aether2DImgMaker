@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
@@ -31,15 +30,10 @@ import cellularautomata.model3d.SymmetricIntModel3D;
  * @author Jaume
  *
  */
-public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA, Serializable {
+public class IntAether3D implements SymmetricIntModel3D, IsotropicCubicModelA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4812192909323907422L;
 
 	/** A 3D array representing the grid */
 	private int[][][] grid;

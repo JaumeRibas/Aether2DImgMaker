@@ -18,7 +18,6 @@ package cellularautomata.automata.aether;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -28,12 +27,7 @@ import cellularautomata.model.SerializableModelData;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 
-public class Aether2DInfinityTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 712939515015572944L;
+public class Aether2DInfinityTopplingAlternationCompliance implements SymmetricBooleanModel2D, IsotropicSquareModelA {
 
 	/** A 2D array representing the grid */
 	private BigFraction[][] grid;

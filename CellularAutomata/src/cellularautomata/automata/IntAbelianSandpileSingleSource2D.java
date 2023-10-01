@@ -18,8 +18,6 @@ package cellularautomata.automata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
-
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
 import cellularautomata.model2d.IsotropicSquareModelA;
@@ -31,12 +29,7 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicSquareModelA, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2801220671142073702L;
+public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicSquareModelA {
 
 	private int[][] grid;
 	
