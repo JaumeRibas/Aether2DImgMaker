@@ -39,7 +39,7 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 	private BigFraction[] grid;
 	
 	private boolean[] topplingAlternationCompliance;
-	private boolean itsEvenPositionsTurnToTopple;
+	private boolean isItEvenPositionsTurnToTopple;
 
 	private final boolean isPositive;
 	private long step;
@@ -51,7 +51,7 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 		grid = new BigFraction[initialSize];
 		Arrays.fill(grid, BigFraction.ZERO);
 		grid[0] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
-		itsEvenPositionsTurnToTopple = isPositive;
+		isItEvenPositionsTurnToTopple = isPositive;
 		maxX = 2;
 		step = 0;
 		nextStep();
@@ -81,7 +81,7 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 		grid = (BigFraction[]) data.get(SerializableModelData.GRID);
 		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
 		step = (long) data.get(SerializableModelData.STEP);
-		itsEvenPositionsTurnToTopple = isPositive == (step%2 == 0);
+		isItEvenPositionsTurnToTopple = isPositive == (step%2 == 0);
 		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
 			topplingAlternationCompliance = (boolean[]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
 		} else {
@@ -98,7 +98,7 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 		Arrays.fill(newGrid, BigFraction.ZERO);
 		BigFraction currentValue, greaterXNeighborValue, smallerXNeighborValue;
 		//x = 0
-		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		currentValue = grid[0];
 		greaterXNeighborValue = grid[1];
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -106,13 +106,13 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 			BigFraction share = toShare.divide(3);
 			newGrid[0] = newGrid[0].add(currentValue.subtract(toShare).add(share));
 			newGrid[1] = newGrid[1].add(share);	
-			topplingAlternationCompliance[0] = itsCurrentPositionsTurnToTopple;
+			topplingAlternationCompliance[0] = isItCurrentPositionsTurnToTopple;
 		} else {
 			newGrid[0] = newGrid[0].add(currentValue);
-			topplingAlternationCompliance[0] = !itsCurrentPositionsTurnToTopple;
+			topplingAlternationCompliance[0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//x = 1
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -170,15 +170,15 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 				newGrid[1] = newGrid[1].add(currentValue);
 			}
 		}
-		topplingAlternationCompliance[1] = toppled == itsCurrentPositionsTurnToTopple;
+		topplingAlternationCompliance[1] = toppled == isItCurrentPositionsTurnToTopple;
 		//2 <= x < edge
 		int edge = grid.length - 1;
 		toppleRangeBeyondX1(newGrid, 2, edge);
-		topplingAlternationCompliance[edge] = edge%2 == 0 != itsEvenPositionsTurnToTopple;
+		topplingAlternationCompliance[edge] = edge%2 == 0 != isItEvenPositionsTurnToTopple;
 		grid = newGrid;
 		maxX++;
 		step++;
-		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		return true;
 	}
 
@@ -190,8 +190,8 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 	private void toppleRangeBeyondX1(BigFraction[] newGrid, int minX, int maxX) {
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
 		BigFraction smallerXNeighborValue, currentValue = grid[xMinusOne], greaterXNeighborValue = grid[x];
-		boolean itsCurrentPositionsTurnToTopple = x%2 == 0 == itsEvenPositionsTurnToTopple; 
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
+		boolean isItCurrentPositionsTurnToTopple = x%2 == 0 == isItEvenPositionsTurnToTopple; 
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++, isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple) {
 			//reuse values obtained previously
 			smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;
@@ -249,7 +249,7 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 					newGrid[x] = newGrid[x].add(currentValue);
 				}
 			}
-			topplingAlternationCompliance[x] = toppled == itsCurrentPositionsTurnToTopple;
+			topplingAlternationCompliance[x] = toppled == isItCurrentPositionsTurnToTopple;
 		}
 	}
 	

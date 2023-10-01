@@ -109,7 +109,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		// x = 0, y = 0, z = 0
 		long currentValue = currentXSlice[0][0];
 		long greaterXNeighborValue = greaterXSlice[0][0];
-		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
+		if (topplePositionOfType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
 		}
 		// x = 1, y = 0, z = 0
@@ -131,7 +131,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = greaterXSlice[0][0];
 		long greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -142,7 +142,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][0];
 		long greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -152,7 +152,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][1];
-		if (topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
+		if (topplePositionOfType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
 		}
 		grid[0] = null;// free old grid progressively to save memory
@@ -171,7 +171,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -184,7 +184,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -197,7 +197,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		if (topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -209,7 +209,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
-		if (topplePositionType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				newXSlices)) {
 			changed = true;
@@ -221,7 +221,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		if (topplePositionOfType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -232,7 +232,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[2][2];
-		if (topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+		if (topplePositionOfType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
 		}
@@ -252,7 +252,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -265,7 +265,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		if (topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -278,7 +278,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		if (topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -292,7 +292,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		if (topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -307,7 +307,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -320,7 +320,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		if (topplePositionOfType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -331,7 +331,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		greaterXNeighborValue = greaterXSlice[3][0];
 		smallerYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[3][1];
-		if (topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -343,7 +343,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][2];
-		if (topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+		if (topplePositionOfType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -356,7 +356,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][3];
-		if (topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		if (topplePositionOfType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -367,7 +367,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[3][3];
-		if (topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+		if (topplePositionOfType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
 		}
@@ -425,7 +425,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			long greaterXNeighborValue = greaterXSlice[0][0];
 			long smallerXNeighborValue = smallerXSlice[0][0];
 			long greaterYNeighborValue = currentXSlice[1][0];
-			if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -438,7 +438,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			currentValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[2][0];
 			long greaterZNeighborValue = currentXSlice[1][1];
-			if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -451,7 +451,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			// reuse values obtained previously
 			long smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -465,7 +465,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			smallerYNeighborValue = smallerZNeighborValue;
 			greaterZNeighborValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[3][0];
-			if (topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -479,7 +479,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[2][2];
-			if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -492,7 +492,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -506,7 +506,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				greaterYNeighborValue = currentXSlice[yPlusOne][0];
 				smallerYNeighborValue = currentXSlice[yMinusOne][0];
 				greaterZNeighborValue = currentXSlice[y][1];
-				if (topplePositionType12(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType12(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
@@ -520,7 +520,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][2];
-				if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				if (topplePositionOfType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -536,7 +536,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
 					greaterZNeighborValue = currentXSlice[y][zPlusOne];
-					if (topplePositionType15(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
+					if (topplePositionOfType15(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 							relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newXSlices)) {
 						anyToppled = true;
@@ -553,7 +553,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][zPlusOne];
-				if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				if (topplePositionOfType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -567,7 +567,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				if (topplePositionType13(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType13(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
@@ -583,7 +583,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			greaterYNeighborValue = currentXSlice[yPlusOne][0];
 			smallerYNeighborValue = currentXSlice[yMinusOne][0];
 			greaterZNeighborValue = currentXSlice[y][1];
-			if (topplePositionType6(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionOfType6(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -598,7 +598,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][2];
-			if (topplePositionType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionOfType11(y, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -614,7 +614,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][zPlusOne];
-				if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				if (topplePositionOfType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -632,7 +632,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][zPlusOne];
-			if (topplePositionType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionOfType11(y, z, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -647,7 +647,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType7(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+			if (topplePositionOfType7(y, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -660,7 +660,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			greaterXNeighborValue = greaterXSlice[y][0];
 			smallerYNeighborValue = currentXSlice[yMinusOne][0];
 			greaterZNeighborValue = currentXSlice[y][1];
-			if (topplePositionType8(y, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType8(y, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -672,7 +672,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][2];
-			if (topplePositionType9(y, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+			if (topplePositionOfType9(y, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -688,7 +688,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[y][zPlusOne];
-				if (topplePositionType14(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
+				if (topplePositionOfType14(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
@@ -701,7 +701,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[y][zPlusOne];
-			if (topplePositionType9(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+			if (topplePositionOfType9(y, z, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 					greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -713,7 +713,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterXNeighborValue = greaterXSlice[y][z];
-			if (topplePositionType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+			if (topplePositionOfType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 					newGreaterXSlice)) {
 				anyToppled = true;
 			}
@@ -733,7 +733,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 //		}
 //	}
 
-	private static boolean topplePositionType1(long currentValue, long greaterXNeighborValue, long[][] newCurrentXSlice, 
+	private static boolean topplePositionOfType1(long currentValue, long greaterXNeighborValue, long[][] newCurrentXSlice, 
 			long[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (greaterXNeighborValue < currentValue) {
@@ -753,7 +753,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
+	private static boolean topplePositionOfType2(long currentValue, long greaterXNeighborValue, long smallerXNeighborValue, 
 			long greaterYNeighborValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -795,7 +795,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
+	private static boolean topplePositionOfType3(long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -837,7 +837,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(long currentValue, long greaterXNeighborValue, long smallerZNeighborValue, 
+	private static boolean topplePositionOfType4(long currentValue, long greaterXNeighborValue, long smallerZNeighborValue, 
 			long[][] newCurrentXSlice, long[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue < currentValue) {
@@ -913,7 +913,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		return toppled;
 	}
 
-	private static boolean topplePositionType5(long currentValue, long greaterXNeighborValue, 
+	private static boolean topplePositionOfType5(long currentValue, long greaterXNeighborValue, 
 			long smallerXNeighborValue, long greaterYNeighborValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
 			long[][][] newXSlices) {
@@ -953,7 +953,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType6(int y, long currentValue, long gXValue, long sXValue, 
+	private static boolean topplePositionOfType6(int y, long currentValue, long gXValue, long sXValue, 
 			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, 
 			long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1019,7 +1019,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType7(int coord, long currentValue, long gXValue, long sXValue, 
+	private static boolean topplePositionOfType7(int coord, long currentValue, long gXValue, long sXValue, 
 			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, 
 			int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1074,7 +1074,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int y, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
+	private static boolean topplePositionOfType8(int y, long currentValue, long greaterXNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1113,7 +1113,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int y, int z, long currentValue, long gXValue, long sYValue, 
+	private static boolean topplePositionOfType9(int y, int z, long currentValue, long gXValue, long sYValue, 
 			int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, 
 			long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1168,7 +1168,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int coord, long currentValue, long greaterXNeighborValue, 
+	private static boolean topplePositionOfType10(int coord, long currentValue, long greaterXNeighborValue, 
 			long smallerZNeighborValue, long[][] newCurrentXSlice, long[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue < currentValue) {
@@ -1245,7 +1245,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 		return toppled;
 	}
 
-	private static boolean topplePositionType11(int y, int z, long currentValue, long gXValue, long sXValue, 
+	private static boolean topplePositionOfType11(int y, int z, long currentValue, long gXValue, long sXValue, 
 			int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, 
 			long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantNeighborValues, 
 			int[] sortedNeighborsIndexes, int[][] relevantNeighborCoords, int[] relevantNeighborShareMultipliers, long[][][] newXSlices) {
@@ -1308,7 +1308,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int y, long currentValue, long greaterXNeighborValue, 
+	private static boolean topplePositionOfType12(int y, long currentValue, long greaterXNeighborValue, 
 			long smallerXNeighborValue, long greaterYNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1370,7 +1370,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int coord, long currentValue, long greaterXNeighborValue, 
+	private static boolean topplePositionOfType13(int coord, long currentValue, long greaterXNeighborValue, 
 			long smallerXNeighborValue, long greaterYNeighborValue, long smallerZNeighborValue, 
 			long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
@@ -1420,7 +1420,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int y, int z, long currentValue, long greaterXNeighborValue, 
+	private static boolean topplePositionOfType14(int y, int z, long currentValue, long greaterXNeighborValue, 
 			long smallerYNeighborValue,	long greaterZNeighborValue, long smallerZNeighborValue, 
 			long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, long[][][] newXSlices) {
@@ -1470,7 +1470,7 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int y, int z, long currentValue, long greaterXNeighborValue, 
+	private static boolean topplePositionOfType15(int y, int z, long currentValue, long greaterXNeighborValue, 
 			long smallerXNeighborValue,	long greaterYNeighborValue, long smallerYNeighborValue, 
 			long greaterZNeighborValue, long smallerZNeighborValue, long[] relevantNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantNeighborCoords, long[][][] newXSlices) {

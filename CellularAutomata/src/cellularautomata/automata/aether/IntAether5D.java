@@ -105,7 +105,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		// 0 | 0 | 0 | 0 | 0 | 1
 		int currentValue = currentVSlice[0][0][0][0];
 		int greaterVNeighborValue = greaterVSlice[0][0][0][0];
-		if (topplePositionType1(currentValue, greaterVNeighborValue, newCurrentVSlice, newGreaterVSlice)) {
+		if (topplePositionOfType1(currentValue, greaterVNeighborValue, newCurrentVSlice, newGreaterVSlice)) {
 			changed = true;
 		}
 		//v slice transition
@@ -128,7 +128,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		currentValue = greaterVNeighborValue;
 		greaterVNeighborValue = greaterVSlice[0][0][0][0];
 		int greaterWNeighborValue = currentVSlice[1][0][0][0];
-		if (topplePositionType2(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
+		if (topplePositionOfType2(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -139,7 +139,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		currentValue = greaterWNeighborValue;
 		greaterVNeighborValue = greaterVSlice[1][0][0][0];
 		int greaterXNeighborValue = currentVSlice[1][1][0][0];
-		if (topplePositionType3(currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType3(currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -150,7 +150,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		currentValue = greaterXNeighborValue;
 		greaterVNeighborValue = greaterVSlice[1][1][0][0];
 		int greaterYNeighborValue = currentVSlice[1][1][1][0];
-		if (topplePositionType4(currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType4(currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -161,7 +161,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		currentValue = greaterYNeighborValue;
 		greaterVNeighborValue = greaterVSlice[1][1][1][0];
 		int greaterZNeighborValue = currentVSlice[1][1][1][1];
-		if (topplePositionType5(currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
+		if (topplePositionOfType5(currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -170,7 +170,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterVNeighborValue = greaterVSlice[1][1][1][1];
-		if (topplePositionType6(currentValue, greaterVNeighborValue, smallerZNeighborValue, newCurrentVSlice, newGreaterVSlice)) {
+		if (topplePositionOfType6(currentValue, greaterVNeighborValue, smallerZNeighborValue, newCurrentVSlice, newGreaterVSlice)) {
 			changed = true;
 		}
 		//v slice transition
@@ -191,7 +191,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[0][0][0][0];
 		smallerVNeighborValue = smallerVSlice[0][0][0][0];
 		greaterWNeighborValue = currentVSlice[1][0][0][0];
-		if (topplePositionType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
+		if (topplePositionOfType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -203,7 +203,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerVNeighborValue = smallerVSlice[1][0][0][0];
 		greaterWNeighborValue = currentVSlice[2][0][0][0];
 		greaterXNeighborValue = currentVSlice[1][1][0][0];
-		if (topplePositionType8(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
+		if (topplePositionOfType8(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
 				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -216,7 +216,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerVNeighborValue = smallerVSlice[1][1][0][0];
 		greaterWNeighborValue = currentVSlice[2][1][0][0];
 		greaterYNeighborValue = currentVSlice[1][1][1][0];
-		if (topplePositionType9(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 6, 
+		if (topplePositionOfType9(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 6, 
 				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -229,7 +229,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerVNeighborValue = smallerVSlice[1][1][1][0];
 		greaterWNeighborValue = currentVSlice[2][1][1][0];
 		greaterZNeighborValue = currentVSlice[1][1][1][1];
-		if (topplePositionType10(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 4, 
+		if (topplePositionOfType10(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -241,7 +241,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[1][1][1][1];
 		smallerVNeighborValue = smallerVSlice[1][1][1][1];
 		greaterWNeighborValue = currentVSlice[2][1][1][1];
-		if (topplePositionType11(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 2, 
+		if (topplePositionOfType11(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -251,7 +251,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][0][0][0];
 		smallerWNeighborValue = currentVSlice[1][0][0][0];
 		greaterXNeighborValue = currentVSlice[2][1][0][0];
-		if (topplePositionType12(2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
+		if (topplePositionOfType12(2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -263,7 +263,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[1][1][0][0];
 		greaterXNeighborValue = currentVSlice[2][2][0][0];
 		greaterYNeighborValue = currentVSlice[2][1][1][0];
-		if (topplePositionType13(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 6, 
+		if (topplePositionOfType13(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 6, 
 				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -276,7 +276,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[1][1][1][0];
 		greaterXNeighborValue = currentVSlice[2][2][1][0];
 		greaterZNeighborValue = currentVSlice[2][1][1][1];
-		if (topplePositionType14(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 4, 
+		if (topplePositionOfType14(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -288,7 +288,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][1][1][1];
 		smallerWNeighborValue = currentVSlice[1][1][1][1];
 		greaterXNeighborValue = currentVSlice[2][2][1][1];
-		if (topplePositionType15(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 2, 
+		if (topplePositionOfType15(2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -298,7 +298,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][2][0][0];
 		smallerXNeighborValue = currentVSlice[2][1][0][0];
 		greaterYNeighborValue = currentVSlice[2][2][1][0];
-		if (topplePositionType16(2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
+		if (topplePositionOfType16(2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -310,7 +310,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[2][1][1][0];
 		greaterYNeighborValue = currentVSlice[2][2][2][0];
 		greaterZNeighborValue = currentVSlice[2][2][1][1];
-		if (topplePositionType17(2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 4, 
+		if (topplePositionOfType17(2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -322,7 +322,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][2][1][1];
 		smallerXNeighborValue = currentVSlice[2][1][1][1];
 		greaterYNeighborValue = currentVSlice[2][2][2][1];
-		if (topplePositionType18(2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 2, 
+		if (topplePositionOfType18(2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -333,7 +333,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterZNeighborValue = greaterYNeighborValue;
 		currentValue = currentVSlice[2][2][2][0];		
 		greaterVNeighborValue = greaterVSlice[2][2][2][0];
-		if (topplePositionType19(2, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
+		if (topplePositionOfType19(2, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -344,7 +344,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][2][2][1];
 		smallerYNeighborValue = currentVSlice[2][2][1][1];
 		greaterZNeighborValue = currentVSlice[2][2][2][2];
-		if (topplePositionType20(2, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 2,
+		if (topplePositionOfType20(2, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 2,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -353,7 +353,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;		
 		greaterVNeighborValue = greaterVSlice[2][2][2][2];
-		if (topplePositionType21(2, currentValue, greaterVNeighborValue, smallerZNeighborValue, newVSlices[1], newVSlices[2])) {
+		if (topplePositionOfType21(2, currentValue, greaterVNeighborValue, smallerZNeighborValue, newVSlices[1], newVSlices[2])) {
 			changed = true;
 		}		
 		//v slice transition
@@ -371,7 +371,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
-		if (toppleRangeType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -382,7 +382,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][0][0][0];
 		smallerWNeighborValue = currentVSlice[1][0][0][0];
 		greaterXNeighborValue = currentVSlice[2][1][0][0];
-		if (topplePositionType8(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
+		if (topplePositionOfType8(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
 				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -397,7 +397,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[1][1][0][0];
 		greaterXNeighborValue = currentVSlice[2][2][0][0];
 		greaterYNeighborValue = currentVSlice[2][1][1][0];
-		if (topplePositionType22(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
+		if (topplePositionOfType22(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -412,7 +412,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[1][1][1][0];
 		greaterXNeighborValue = currentVSlice[2][2][1][0];
 		greaterZNeighborValue = currentVSlice[2][1][1][1];
-		if (topplePositionType23(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType23(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -426,7 +426,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][1][1][1];
 		smallerWNeighborValue = currentVSlice[1][1][1][1];
 		greaterXNeighborValue = currentVSlice[2][2][1][1];
-		if (topplePositionType24(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
+		if (topplePositionOfType24(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -438,7 +438,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][2][0][0];
 		smallerXNeighborValue = currentVSlice[2][1][0][0];
 		greaterYNeighborValue = currentVSlice[2][2][1][0];
-		if (topplePositionType9(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType9(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -453,7 +453,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[2][1][1][0];
 		greaterYNeighborValue = currentVSlice[2][2][2][0];
 		greaterZNeighborValue = currentVSlice[2][2][1][1];
-		if (topplePositionType25(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType25(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -467,7 +467,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][2][1][1];
 		smallerXNeighborValue = currentVSlice[2][1][1][1];
 		greaterYNeighborValue = currentVSlice[2][2][2][1];
-		if (topplePositionType26(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
+		if (topplePositionOfType26(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -480,7 +480,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][2][2][0];
 		smallerVNeighborValue = smallerVSlice[2][2][2][0];
 		greaterWNeighborValue = currentVSlice[3][2][2][0];
-		if (topplePositionType10(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, 
+		if (topplePositionOfType10(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -494,7 +494,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][2][2][1];
 		smallerYNeighborValue = currentVSlice[2][2][1][1];
 		greaterZNeighborValue = currentVSlice[2][2][2][2];
-		if (topplePositionType27(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
+		if (topplePositionOfType27(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -506,12 +506,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][2][2][2];
 		smallerVNeighborValue = smallerVSlice[2][2][2][2];
 		greaterWNeighborValue = currentVSlice[3][2][2][2];
-		if (topplePositionType11(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 1, 
+		if (topplePositionOfType11(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType2(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType2(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -522,7 +522,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][0][0];
 		smallerXNeighborValue = currentVSlice[3][1][0][0];
 		greaterYNeighborValue = currentVSlice[3][2][1][0];
-		if (topplePositionType13(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, 
+		if (topplePositionOfType13(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -537,7 +537,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[3][1][1][0];
 		greaterYNeighborValue = currentVSlice[3][2][2][0];
 		greaterZNeighborValue = currentVSlice[3][2][1][1];
-		if (topplePositionType28(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType28(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -551,7 +551,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][1][1];
 		smallerXNeighborValue = currentVSlice[3][1][1][1];
 		greaterYNeighborValue = currentVSlice[3][2][2][1];
-		if (topplePositionType29(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
+		if (topplePositionOfType29(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -564,7 +564,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[3][2][2][0];
 		smallerWNeighborValue = currentVSlice[2][2][2][0];
 		greaterXNeighborValue = currentVSlice[3][3][2][0];
-		if (topplePositionType14(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, 
+		if (topplePositionOfType14(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -578,7 +578,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][2][1];
 		smallerYNeighborValue = currentVSlice[3][2][1][1];
 		greaterZNeighborValue = currentVSlice[3][2][2][2];		
-		if (topplePositionType30(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
+		if (topplePositionOfType30(3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -590,12 +590,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[3][2][2][2];
 		smallerWNeighborValue = currentVSlice[2][2][2][2];
 		greaterXNeighborValue = currentVSlice[3][3][2][2];
-		if (topplePositionType15(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 1, 
+		if (topplePositionOfType15(3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType3(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType3(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -606,7 +606,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[3][3][3][0];
 		smallerYNeighborValue = currentVSlice[3][3][1][0];
 		greaterZNeighborValue = currentVSlice[3][3][2][1];
-		if (topplePositionType17(3, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
+		if (topplePositionOfType17(3, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -620,7 +620,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[3][3][3][1];
 		smallerYNeighborValue = currentVSlice[3][3][1][1];
 		greaterZNeighborValue = currentVSlice[3][3][2][2];
-		if (topplePositionType31(3, 2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 2, 
+		if (topplePositionOfType31(3, 2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -632,12 +632,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[3][3][2][2];
 		smallerXNeighborValue = currentVSlice[3][2][2][2];
 		greaterYNeighborValue = currentVSlice[3][3][3][2];
-		if (topplePositionType18(3, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 1, 
+		if (topplePositionOfType18(3, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType4(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType4(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -656,11 +656,11 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
-		if (toppleRangeType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType6(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType6(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -673,7 +673,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][0][0];
 		smallerXNeighborValue = currentVSlice[3][1][0][0];
 		greaterYNeighborValue = currentVSlice[3][2][1][0];
-		if (topplePositionType22(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
+		if (topplePositionOfType22(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -690,7 +690,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[3][1][1][0];
 		greaterYNeighborValue = currentVSlice[3][2][2][0];
 		greaterZNeighborValue = currentVSlice[3][2][1][1];
-		if (topplePositionType36(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+		if (topplePositionOfType36(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -706,7 +706,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][1][1];
 		smallerXNeighborValue = currentVSlice[3][1][1][1];
 		greaterYNeighborValue = currentVSlice[3][2][2][1];
-		if (topplePositionType37(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
+		if (topplePositionOfType37(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -721,7 +721,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[4][2][2][0];
 		smallerWNeighborValue = currentVSlice[2][2][2][0];
 		greaterXNeighborValue = currentVSlice[3][3][2][0];
-		if (topplePositionType23(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType23(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -737,7 +737,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][2][1];
 		smallerYNeighborValue = currentVSlice[3][2][1][1];
 		greaterZNeighborValue = currentVSlice[3][2][2][2];
-		if (topplePositionType38(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType38(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -751,12 +751,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[4][2][2][2];
 		smallerWNeighborValue = currentVSlice[2][2][2][2];
 		greaterXNeighborValue = currentVSlice[3][3][2][2];
-		if (topplePositionType24(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
+		if (topplePositionOfType24(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType7(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType7(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -769,7 +769,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[3][3][3][0];
 		smallerYNeighborValue = currentVSlice[3][3][1][0];
 		greaterZNeighborValue = currentVSlice[3][3][2][1];
-		if (topplePositionType25(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType25(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -785,7 +785,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[3][3][3][1];
 		smallerYNeighborValue = currentVSlice[3][3][1][1];
 		greaterZNeighborValue = currentVSlice[3][3][2][2];
-		if (topplePositionType39(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType39(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -799,16 +799,16 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[4][3][2][2];
 		smallerXNeighborValue = currentVSlice[3][2][2][2];
 		greaterYNeighborValue = currentVSlice[3][3][3][2];
-		if (topplePositionType26(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
+		if (topplePositionOfType26(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType8(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType8(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType9(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType9(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -821,7 +821,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[4][3][3][0];
 		smallerYNeighborValue = currentVSlice[4][3][1][0];
 		greaterZNeighborValue = currentVSlice[4][3][2][1];
-		if (topplePositionType28(4, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType28(4, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -837,7 +837,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[4][3][3][1];
 		smallerYNeighborValue = currentVSlice[4][3][1][1];
 		greaterZNeighborValue = currentVSlice[4][3][2][2];
-		if (topplePositionType43(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType43(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -851,12 +851,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[4][4][2][2];
 		smallerXNeighborValue = currentVSlice[4][2][2][2];
 		greaterYNeighborValue = currentVSlice[4][3][3][2];
-		if (topplePositionType29(4, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
+		if (topplePositionOfType29(4, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType10(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType10(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -875,15 +875,15 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		newVSlices[0] = newSmallerVSlice;
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
-		if (toppleRangeType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType12(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType12(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType13(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType13(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -898,7 +898,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[4][3][3][0];
 		smallerYNeighborValue = currentVSlice[4][3][1][0];
 		greaterZNeighborValue = currentVSlice[4][3][2][1];
-		if (topplePositionType36(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+		if (topplePositionOfType36(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -916,7 +916,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[4][3][3][1];
 		smallerYNeighborValue = currentVSlice[4][3][1][1];
 		greaterZNeighborValue = currentVSlice[4][3][2][2];
-		if (topplePositionType47(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+		if (topplePositionOfType47(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
@@ -932,12 +932,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[4][4][2][2];
 		smallerXNeighborValue = currentVSlice[4][2][2][2];
 		greaterYNeighborValue = currentVSlice[4][3][3][2];
-		if (topplePositionType37(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
+		if (topplePositionOfType37(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType14(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType14(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -991,15 +991,15 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			newVSlices[0] = newSmallerVSlice;
 			newVSlices[1] = newCurrentVSlice;
 			newVSlices[2] = newGreaterVSlice;
-			if (toppleRangeType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType15(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType15(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType16(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType16(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1014,7 +1014,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			int greaterYNeighborValue = currentVSlice[4][3][3][0];
 			int smallerYNeighborValue = currentVSlice[4][3][1][0];
 			int greaterZNeighborValue = currentVSlice[4][3][2][1];
-			if (topplePositionType36(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+			if (topplePositionOfType36(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -1032,7 +1032,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[4][3][3][1];
 			smallerYNeighborValue = currentVSlice[4][3][1][1];
 			greaterZNeighborValue = currentVSlice[4][3][2][2];
-			if (topplePositionType47(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+			if (topplePositionOfType47(4, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
@@ -1048,22 +1048,22 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[4][4][2][2];
 			smallerXNeighborValue = currentVSlice[4][2][2][2];
 			greaterYNeighborValue = currentVSlice[4][3][3][2];
-			if (topplePositionType37(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
+			if (topplePositionOfType37(4, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType17(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType17(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			int w = 5, wMinusOne = w - 1, wPlusOne = w + 1;
-			for (int wMinusTwo = w - 2, wMinusThree = w - 3; w != vMinusOne; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne++) {
-				if (toppleRangeType15(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			int w = 5, wMinusOne = 4, wPlusOne = 6;
+			for (int wMinusTwo = 3, wMinusThree = 2; w != vMinusOne; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne++) {
+				if (toppleRangeOfType15(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
-				if (toppleRangeType18(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType18(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -1078,7 +1078,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][3][3][0];
 				smallerYNeighborValue = currentVSlice[w][3][1][0];
 				greaterZNeighborValue = currentVSlice[w][3][2][1];
-				if (topplePositionType36(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+				if (topplePositionOfType36(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -1096,7 +1096,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][3][3][1];
 				smallerYNeighborValue = currentVSlice[w][3][1][1];
 				greaterZNeighborValue = currentVSlice[w][3][2][2];
-				if (topplePositionType47(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+				if (topplePositionOfType47(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
@@ -1112,18 +1112,18 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterXNeighborValue = currentVSlice[w][4][2][2];
 				smallerXNeighborValue = currentVSlice[w][2][2][2];
 				greaterYNeighborValue = currentVSlice[w][3][3][2];
-				if (topplePositionType37(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
+				if (topplePositionOfType37(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
 						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
-				if (toppleRangeType19(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType19(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}			
-				int x = 4, xMinusOne = x - 1, xPlusOne = x + 1;
-				for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-					if (toppleRangeType18(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				int x = 4, xMinusOne = 3, xPlusOne = 5;
+				for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
+					if (toppleRangeOfType18(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 							relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 						changed = true;
 					}
@@ -1138,7 +1138,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][3][0];
 					smallerYNeighborValue = currentVSlice[w][x][1][0];
 					greaterZNeighborValue = currentVSlice[w][x][2][1];
-					if (topplePositionType58(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
+					if (topplePositionOfType58(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
@@ -1156,7 +1156,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][3][1];
 					smallerYNeighborValue = currentVSlice[w][x][1][1];
 					greaterZNeighborValue = currentVSlice[w][x][2][2];
-					if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+					if (topplePositionOfType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
@@ -1172,12 +1172,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterXNeighborValue = currentVSlice[w][xPlusOne][2][2];
 					smallerXNeighborValue = currentVSlice[w][xMinusOne][2][2];
 					greaterYNeighborValue = currentVSlice[w][x][3][2];
-					if (topplePositionType59(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+					if (topplePositionOfType59(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 							smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
 					}
-					int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+					int y = 3, yMinusOne = 2, yPlusOne = 4;
 					for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 						// v | w | x | y | 0 | 223
 						currentValue = currentVSlice[w][x][y][0];
@@ -1190,7 +1190,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 						greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 						smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 						greaterZNeighborValue = currentVSlice[w][x][y][1];
-						if (topplePositionType58(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
+						if (topplePositionOfType58(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 								greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 								relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 							changed = true;
@@ -1208,12 +1208,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 						greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 						smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 						greaterZNeighborValue = currentVSlice[w][x][y][2];
-						if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+						if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 								greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
 						}
-						int z = 2, zPlusOne = z + 1;
+						int z = 2, zPlusOne = 3;
 						for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 							// v | w | x | y | z | 243
 							//reuse values obtained previously
@@ -1228,7 +1228,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 							greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 							smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 							greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-							if (topplePositionType63(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
+							if (topplePositionOfType63(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 									greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newVSlices)) {
 								changed = true;
 							}
@@ -1246,7 +1246,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 						greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 						smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 						greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-						if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+						if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 								greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
@@ -1263,7 +1263,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 						greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 						smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 						greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-						if (topplePositionType59(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+						if (topplePositionOfType59(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 								smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 								relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 							changed = true;
@@ -1280,7 +1280,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 					greaterZNeighborValue = currentVSlice[w][x][y][1];
-					if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+					if (topplePositionOfType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
@@ -1298,12 +1298,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 					greaterZNeighborValue = currentVSlice[w][x][y][2];
-					if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+					if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
-					int z = 2, zPlusOne = z + 1;
+					int z = 2, zPlusOne = 3;
 					for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 						// v | w | x | y | z | 240
 						//reuse values obtained previously
@@ -1318,7 +1318,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 						greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 						smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 						greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-						if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+						if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 								greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
@@ -1337,7 +1337,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 					greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+					if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 							greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
@@ -1354,17 +1354,17 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 					smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-					if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
+					if (topplePositionOfType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
 							greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
 					}
-					if (toppleRangeType19(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+					if (toppleRangeOfType19(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 							relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 						changed = true;
 					}
 				}
-				if (toppleRangeType16(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType16(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -1379,7 +1379,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][3][0];
 				smallerYNeighborValue = currentVSlice[w][x][1][0];
 				greaterZNeighborValue = currentVSlice[w][x][2][1];
-				if (topplePositionType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+				if (topplePositionOfType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -1397,7 +1397,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][3][1];
 				smallerYNeighborValue = currentVSlice[w][x][1][1];
 				greaterZNeighborValue = currentVSlice[w][x][2][2];
-				if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+				if (topplePositionOfType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
@@ -1413,12 +1413,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterXNeighborValue = currentVSlice[w][xPlusOne][2][2];
 				smallerXNeighborValue = currentVSlice[w][xMinusOne][2][2];
 				greaterYNeighborValue = currentVSlice[w][x][3][2];
-				if (topplePositionType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+				if (topplePositionOfType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
-				int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+				int y = 3, yMinusOne = 2, yPlusOne = 4;
 				for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 					// v | w | x | y | 0 | 200
 					currentValue = currentVSlice[w][x][y][0];
@@ -1431,7 +1431,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 					greaterZNeighborValue = currentVSlice[w][x][y][1];
-					if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+					if (topplePositionOfType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
@@ -1449,12 +1449,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 					greaterZNeighborValue = currentVSlice[w][x][y][2];
-					if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+					if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
-					int z = 2, zPlusOne = z + 1;
+					int z = 2, zPlusOne = 3;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 						// v | w | x | y | z | 241
 						//reuse values obtained previously
@@ -1469,7 +1469,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 						greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 						smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 						greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-						if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+						if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 								greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
@@ -1488,7 +1488,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 					greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+					if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
@@ -1505,7 +1505,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 					smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-					if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+					if (topplePositionOfType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
@@ -1522,7 +1522,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 				greaterZNeighborValue = currentVSlice[w][x][y][1];
-				if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+				if (topplePositionOfType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -1540,12 +1540,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 				greaterZNeighborValue = currentVSlice[w][x][y][2];
-				if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+				if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 231
 					//reuse values obtained previously
@@ -1560,7 +1560,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 					greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+					if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
@@ -1579,7 +1579,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+				if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
@@ -1596,21 +1596,21 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 				smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-				if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
+				if (topplePositionOfType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
 						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
-				if (toppleRangeType17(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType17(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType12(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType12(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType20(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType20(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1625,7 +1625,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][3][3][0];
 			smallerYNeighborValue = currentVSlice[w][3][1][0];
 			greaterZNeighborValue = currentVSlice[w][3][2][1];
-			if (topplePositionType36(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+			if (topplePositionOfType36(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -1643,7 +1643,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][3][3][1];
 			smallerYNeighborValue = currentVSlice[w][3][1][1];
 			greaterZNeighborValue = currentVSlice[w][3][2][2];
-			if (topplePositionType47(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+			if (topplePositionOfType47(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
@@ -1659,18 +1659,18 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][4][2][2];
 			smallerXNeighborValue = currentVSlice[w][2][2][2];
 			greaterYNeighborValue = currentVSlice[w][3][3][2];
-			if (topplePositionType37(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
+			if (topplePositionOfType37(w, 3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType21(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType21(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			int x = 4, xMinusOne = x - 1, xPlusOne = x + 1;
-			for (int xMinusTwo = x - 2; x != vMinusTwo; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-				if (toppleRangeType20(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			int x = 4, xMinusOne = 3, xPlusOne = 5;
+			for (int xMinusTwo = 2; x != vMinusTwo; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
+				if (toppleRangeOfType20(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -1685,7 +1685,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][3][0];
 				smallerYNeighborValue = currentVSlice[w][x][1][0];
 				greaterZNeighborValue = currentVSlice[w][x][2][1];
-				if (topplePositionType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+				if (topplePositionOfType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -1703,7 +1703,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][3][1];
 				smallerYNeighborValue = currentVSlice[w][x][1][1];
 				greaterZNeighborValue = currentVSlice[w][x][2][2];
-				if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+				if (topplePositionOfType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
@@ -1719,12 +1719,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterXNeighborValue = currentVSlice[w][xPlusOne][2][2];
 				smallerXNeighborValue = currentVSlice[w][xMinusOne][2][2];
 				greaterYNeighborValue = currentVSlice[w][x][3][2];
-				if (topplePositionType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+				if (topplePositionOfType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
-				int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+				int y = 3, yMinusOne = 2, yPlusOne = 4;
 				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 					// v | w | x | y | 0 | 209
 					currentValue = currentVSlice[w][x][y][0];
@@ -1737,7 +1737,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 					greaterZNeighborValue = currentVSlice[w][x][y][1];
-					if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+					if (topplePositionOfType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
@@ -1755,12 +1755,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 					greaterZNeighborValue = currentVSlice[w][x][y][2];
-					if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+					if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
 					}
-					int z = 2, zPlusOne = z + 1;
+					int z = 2, zPlusOne = 3;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 						// v | w | x | y | z | 242
 						//reuse values obtained previously
@@ -1775,7 +1775,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 						greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 						smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 						greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-						if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+						if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 								greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
@@ -1794,7 +1794,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 					greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+					if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
@@ -1811,7 +1811,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 					smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-					if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+					if (topplePositionOfType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
@@ -1828,7 +1828,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 				greaterZNeighborValue = currentVSlice[w][x][y][1];
-				if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+				if (topplePositionOfType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -1846,12 +1846,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 				greaterZNeighborValue = currentVSlice[w][x][y][2];
-				if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+				if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 235
 					//reuse values obtained previously
@@ -1866,7 +1866,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 					greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+					if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
@@ -1885,7 +1885,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+				if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
@@ -1902,17 +1902,17 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 				smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-				if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
+				if (topplePositionOfType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
 						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
-				if (toppleRangeType21(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType21(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType13(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType13(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1927,7 +1927,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][3][0];
 			smallerYNeighborValue = currentVSlice[w][x][1][0];
 			greaterZNeighborValue = currentVSlice[w][x][2][1];
-			if (topplePositionType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+			if (topplePositionOfType36(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -1945,7 +1945,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][3][1];
 			smallerYNeighborValue = currentVSlice[w][x][1][1];
 			greaterZNeighborValue = currentVSlice[w][x][2][2];
-			if (topplePositionType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+			if (topplePositionOfType47(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
@@ -1961,12 +1961,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][xPlusOne][2][2];
 			smallerXNeighborValue = currentVSlice[w][xMinusOne][2][2];
 			greaterYNeighborValue = currentVSlice[w][x][3][2];
-			if (topplePositionType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+			if (topplePositionOfType37(w, x, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+			int y = 3, yMinusOne = 2, yPlusOne = 4;
 			for (; y != vMinusThree; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				// v | w | x | y | 0 | 174
 				currentValue = currentVSlice[w][x][y][0];
@@ -1979,7 +1979,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 				greaterZNeighborValue = currentVSlice[w][x][y][1];
-				if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+				if (topplePositionOfType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -1997,12 +1997,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 				greaterZNeighborValue = currentVSlice[w][x][y][2];
-				if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+				if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 236
 					//reuse values obtained previously
@@ -2017,7 +2017,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 					greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-					if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+					if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
@@ -2036,7 +2036,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+				if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
@@ -2053,7 +2053,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 				smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-				if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+				if (topplePositionOfType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -2070,7 +2070,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 			greaterZNeighborValue = currentVSlice[w][x][y][1];
-			if (topplePositionType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+			if (topplePositionOfType36(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -2088,12 +2088,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 			greaterZNeighborValue = currentVSlice[w][x][y][2];
-			if (topplePositionType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+			if (topplePositionOfType47(w, x, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
 			}
-			int z = 2, zPlusOne = z + 1;
+			int z = 2, zPlusOne = 3;
 			for (; z != vMinusFour; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 217
 				//reuse values obtained previously
@@ -2108,7 +2108,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+				if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
@@ -2127,7 +2127,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+			if (topplePositionOfType47(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
@@ -2144,12 +2144,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 			smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-			if (topplePositionType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
+			if (topplePositionOfType37(w, x, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType14(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType14(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -2161,7 +2161,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType1(int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType1(int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
@@ -2170,7 +2170,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterVNeighborValue = greaterVSlice[0][0][0][0];
 		int smallerVNeighborValue = smallerVSlice[0][0][0][0];
 		int greaterWNeighborValue = currentVSlice[1][0][0][0];
-		if (topplePositionType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
+		if (topplePositionOfType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2182,7 +2182,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerVNeighborValue = smallerVSlice[1][0][0][0];
 		greaterWNeighborValue = currentVSlice[2][0][0][0];
 		int greaterXNeighborValue = currentVSlice[1][1][0][0];
-		if (topplePositionType8(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, 
+		if (topplePositionOfType8(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, 
 				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2195,7 +2195,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerVNeighborValue = smallerVSlice[1][1][0][0];
 		greaterWNeighborValue = currentVSlice[2][1][0][0];
 		int greaterYNeighborValue = currentVSlice[1][1][1][0];
-		if (topplePositionType9(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 6, 
+		if (topplePositionOfType9(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 6, 
 				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2208,7 +2208,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerVNeighborValue = smallerVSlice[1][1][1][0];
 		greaterWNeighborValue = currentVSlice[2][1][1][0];
 		int greaterZNeighborValue = currentVSlice[1][1][1][1];
-		if (topplePositionType10(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 4, 
+		if (topplePositionOfType10(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2220,7 +2220,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[1][1][1][1];
 		smallerVNeighborValue = smallerVSlice[1][1][1][1];
 		greaterWNeighborValue = currentVSlice[2][1][1][1];
-		if (topplePositionType11(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType11(1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2228,7 +2228,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType2(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
@@ -2238,7 +2238,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterVNeighborValue = greaterVSlice[crd][0][0][0];
 		int smallerWNeighborValue = currentVSlice[crdMinusOne][0][0][0];
 		int greaterXNeighborValue = currentVSlice[crd][1][0][0];
-		if (topplePositionType12(crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
+		if (topplePositionOfType12(crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2250,7 +2250,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[crdMinusOne][1][0][0];
 		greaterXNeighborValue = currentVSlice[crd][2][0][0];
 		int greaterYNeighborValue = currentVSlice[crd][1][1][0];
-		if (topplePositionType13(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, 
+		if (topplePositionOfType13(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, 
 				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2263,7 +2263,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[crdMinusOne][1][1][0];
 		greaterXNeighborValue = currentVSlice[crd][2][1][0];
 		int greaterZNeighborValue = currentVSlice[crd][1][1][1];
-		if (topplePositionType14(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, 
+		if (topplePositionOfType14(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2275,7 +2275,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd][1][1][1];
 		smallerWNeighborValue = currentVSlice[crdMinusOne][1][1][1];
 		greaterXNeighborValue = currentVSlice[crd][2][1][1];
-		if (topplePositionType15(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType15(crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2283,7 +2283,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType3(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
@@ -2293,7 +2293,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterVNeighborValue = greaterVSlice[crd][crd][0][0];
 		int smallerXNeighborValue = currentVSlice[crd][crdMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[crd][crd][1][0];
-		if (topplePositionType16(crd, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
+		if (topplePositionOfType16(crd, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2305,7 +2305,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[crd][crdMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[crd][crd][2][0];
 		int greaterZNeighborValue = currentVSlice[crd][crd][1][1];
-		if (topplePositionType17(crd, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, 
+		if (topplePositionOfType17(crd, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2317,7 +2317,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd][crd][1][1];
 		smallerXNeighborValue = currentVSlice[crd][crdMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[crd][crd][2][1];
-		if (topplePositionType18(crd, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType18(crd, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2325,7 +2325,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType4(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
@@ -2335,7 +2335,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterVNeighborValue = greaterVSlice[crd][crd][crd][0];
 		int smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[crd][crd][crd][1];
-		if (topplePositionType19(crd, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
+		if (topplePositionOfType19(crd, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2346,11 +2346,11 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd][crd][crd][1];
 		smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[crd][crd][crd][2];
-		if (topplePositionType20(crd, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2,
+		if (topplePositionOfType20(crd, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// crd | crd | crd | crd | z | 96
 			//reuse values obtained previously
@@ -2359,7 +2359,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterVNeighborValue = greaterVSlice[crd][crd][crd][z];
 			smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[crd][crd][crd][zPlusOne];
-			if (topplePositionType46(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue,
+			if (topplePositionOfType46(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue,
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -2371,7 +2371,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd][crd][crd][z];
 		smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[crd][crd][crd][zPlusOne];
-		if (topplePositionType20(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 1,
+		if (topplePositionOfType20(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 1,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2380,17 +2380,17 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;		
 		greaterVNeighborValue = greaterVSlice[crd][crd][crd][crd];
-		if (topplePositionType21(crd, currentValue, greaterVNeighborValue, smallerZNeighborValue, newVSlices[1], newVSlices[2])) {
+		if (topplePositionOfType21(crd, currentValue, greaterVNeighborValue, smallerZNeighborValue, newVSlices[1], newVSlices[2])) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType5(int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -2401,7 +2401,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterWNeighborValue = currentVSlice[3][0][0][0];
 		int smallerWNeighborValue = currentVSlice[1][0][0][0];
 		int greaterXNeighborValue = currentVSlice[2][1][0][0];
-		if (topplePositionType32(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
+		if (topplePositionOfType32(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
 				greaterXNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2415,7 +2415,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[1][1][0][0];
 		greaterXNeighborValue = currentVSlice[2][2][0][0];
 		int greaterYNeighborValue = currentVSlice[2][1][1][0];
-		if (topplePositionType22(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
+		if (topplePositionOfType22(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2430,7 +2430,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[1][1][1][0];
 		greaterXNeighborValue = currentVSlice[2][2][1][0];
 		int greaterZNeighborValue = currentVSlice[2][1][1][1];
-		if (topplePositionType23(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType23(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2444,7 +2444,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][1][1][1];
 		smallerWNeighborValue = currentVSlice[1][1][1][1];
 		greaterXNeighborValue = currentVSlice[2][2][1][1];
-		if (topplePositionType24(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
+		if (topplePositionOfType24(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2456,7 +2456,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][2][0][0];
 		smallerXNeighborValue = currentVSlice[2][1][0][0];
 		greaterYNeighborValue = currentVSlice[2][2][1][0];
-		if (topplePositionType33(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
+		if (topplePositionOfType33(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2470,7 +2470,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[2][1][1][0];
 		greaterYNeighborValue = currentVSlice[2][2][2][0];
 		greaterZNeighborValue = currentVSlice[2][2][1][1];
-		if (topplePositionType25(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType25(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2484,7 +2484,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][2][1][1];
 		smallerXNeighborValue = currentVSlice[2][1][1][1];
 		greaterYNeighborValue = currentVSlice[2][2][2][1];
-		if (topplePositionType26(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
+		if (topplePositionOfType26(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2497,7 +2497,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][2][2][0];
 		smallerVNeighborValue = smallerVSlice[2][2][2][0];
 		greaterWNeighborValue = currentVSlice[3][2][2][0];
-		if (topplePositionType34(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
+		if (topplePositionOfType34(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2510,7 +2510,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[3][2][2][1];
 		smallerYNeighborValue = currentVSlice[2][2][1][1];
 		greaterZNeighborValue = currentVSlice[2][2][2][2];
-		if (topplePositionType27(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
+		if (topplePositionOfType27(2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2522,17 +2522,17 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[2][2][2][2];
 		smallerVNeighborValue = smallerVSlice[2][2][2][2];
 		greaterWNeighborValue = currentVSlice[3][2][2][2];
-		if (topplePositionType35(2,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType35(2,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType6(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
-		int  wMinusOne = w - 1, wPlusOne = w + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | 0 | 0 | 0 | 26
@@ -2542,7 +2542,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterWNeighborValue = currentVSlice[wPlusOne][0][0][0];
 		int smallerWNeighborValue = currentVSlice[wMinusOne][0][0][0];
 		int greaterXNeighborValue = currentVSlice[w][1][0][0];
-		if (topplePositionType8(w, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
+		if (topplePositionOfType8(w, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, 
 				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2557,7 +2557,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[wMinusOne][1][0][0];
 		greaterXNeighborValue = currentVSlice[w][2][0][0];
 		int greaterYNeighborValue = currentVSlice[w][1][1][0];
-		if (topplePositionType22(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType22(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2572,7 +2572,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[wMinusOne][1][1][0];
 		greaterXNeighborValue = currentVSlice[w][2][1][0];
 		int greaterZNeighborValue = currentVSlice[w][1][1][1];
-		if (topplePositionType23(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType23(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2586,7 +2586,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][1][1][1];
 		smallerWNeighborValue = currentVSlice[wMinusOne][1][1][1];
 		greaterXNeighborValue = currentVSlice[w][2][1][1];
-		if (topplePositionType24(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType24(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2594,7 +2594,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType7(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd = v - 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -2607,7 +2607,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterWNeighborValue = currentVSlice[crdPlusOne][crd][0][0];
 		int smallerXNeighborValue = currentVSlice[crd][crdMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[crd][crd][1][0];
-		if (topplePositionType9(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType9(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2622,7 +2622,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[crd][crdMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[crd][crd][2][0];
 		int greaterZNeighborValue = currentVSlice[crd][crd][1][1];
-		if (topplePositionType25(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType25(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2636,7 +2636,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][1][1];
 		smallerXNeighborValue = currentVSlice[crd][crdMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[crd][crd][2][1];
-		if (topplePositionType26(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType26(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2644,7 +2644,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType8(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int v = crd + 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -2657,7 +2657,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][0];
 		int smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[crd][crd][crd][1];
-		if (topplePositionType10(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, 
+		if (topplePositionOfType10(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2671,12 +2671,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][1];
 		smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[crd][crd][crd][2];
-		if (topplePositionType27(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
+		if (topplePositionOfType27(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | crd | crd | crd | z | 131
 			//reuse values obtained previously
@@ -2687,7 +2687,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][z];
 			smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[crd][crd][crd][zPlusOne];
-			if (topplePositionType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
+			if (topplePositionOfType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -2702,7 +2702,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][z];
 		smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[crd][crd][crd][zPlusOne];
-		if (topplePositionType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
+		if (topplePositionOfType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 4, greaterWNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2714,13 +2714,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd][crd][crd][crd];
 		smallerVNeighborValue = smallerVSlice[crd][crd][crd][crd];
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][crd];
-		if (topplePositionType11(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 1, 
+		if (topplePositionOfType11(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 5, greaterWNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		int w = crdPlusOne, wMinusOne = crd;
-		if (toppleRangeType2(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType2(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -2731,7 +2731,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][3][0][0];
 		int smallerXNeighborValue = currentVSlice[w][1][0][0];
 		int greaterYNeighborValue = currentVSlice[w][2][1][0];
-		if (topplePositionType40(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
+		if (topplePositionOfType40(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2745,7 +2745,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][1][1][0];
 		greaterYNeighborValue = currentVSlice[w][2][2][0];
 		greaterZNeighborValue = currentVSlice[w][2][1][1];
-		if (topplePositionType28(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType28(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2759,7 +2759,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][3][1][1];
 		smallerXNeighborValue = currentVSlice[w][1][1][1];
 		greaterYNeighborValue = currentVSlice[w][2][2][1];
-		if (topplePositionType29(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
+		if (topplePositionOfType29(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2772,7 +2772,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[w][2][2][0];
 		smallerWNeighborValue = currentVSlice[wMinusOne][2][2][0];
 		greaterXNeighborValue = currentVSlice[w][3][2][0];
-		if (topplePositionType41(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
+		if (topplePositionOfType41(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2785,7 +2785,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][3][2][1];
 		smallerYNeighborValue = currentVSlice[w][2][1][1];
 		greaterZNeighborValue = currentVSlice[w][2][2][2];		
-		if (topplePositionType30(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
+		if (topplePositionOfType30(w, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2797,17 +2797,17 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[w][2][2][2];
 		smallerWNeighborValue = currentVSlice[wMinusOne][2][2][2];
 		greaterXNeighborValue = currentVSlice[w][3][2][2];
-		if (topplePositionType42(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType42(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int crd, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType9(int crd, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int x = crd - 1;
-		int  crdMinusOne = x, xMinusOne = x - 1, xPlusOne = crd;
+		int crdMinusOne = x, xMinusOne = x - 1, xPlusOne = crd;
 		boolean changed = false;
 		int[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | x | 0 | 0 | 39
@@ -2817,7 +2817,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[crd][xPlusOne][0][0];
 		int smallerXNeighborValue = currentVSlice[crd][xMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[crd][x][1][0];
-		if (topplePositionType13(crd, x, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, 
+		if (topplePositionOfType13(crd, x, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2832,7 +2832,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[crd][xMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[crd][x][2][0];
 		int greaterZNeighborValue = currentVSlice[crd][x][1][1];
-		if (topplePositionType28(crd, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType28(crd, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2846,7 +2846,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[crd][xPlusOne][1][1];
 		smallerXNeighborValue = currentVSlice[crd][xMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[crd][x][2][1];
-		if (topplePositionType29(crd, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType29(crd, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2854,7 +2854,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType10(int crd1, int crd2, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType10(int crd1, int crd2, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd2 = crd1 - 1;
 		int crd2MinusOne = crd2 - 1, crd2PlusOne = crd1, crd1MinusOne = crd2, crd1MinusTwo = crd2MinusOne;
@@ -2867,7 +2867,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[crd1][crd2PlusOne][crd2][0];
 		int smallerYNeighborValue = currentVSlice[crd1][crd2][crd2MinusOne][0];
 		int greaterZNeighborValue = currentVSlice[crd1][crd2][crd2][1];
-		if (topplePositionType14(crd1, crd2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, 
+		if (topplePositionOfType14(crd1, crd2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2881,12 +2881,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[crd1][crd2PlusOne][crd2][1];
 		smallerYNeighborValue = currentVSlice[crd1][crd2][crd2MinusOne][1];
 		greaterZNeighborValue = currentVSlice[crd1][crd2][crd2][2];		
-		if (topplePositionType30(crd1, crd2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
+		if (topplePositionOfType30(crd1, crd2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != crd1MinusTwo; z = zPlusOne, zPlusOne++) {
 			// crd1 | crd1 | crd2 | crd2 | z | 144
 			//reuse values obtained previously
@@ -2897,7 +2897,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[crd1][crd2PlusOne][crd2][z];
 			smallerYNeighborValue = currentVSlice[crd1][crd2][crd2MinusOne][z];
 			greaterZNeighborValue = currentVSlice[crd1][crd2][crd2][zPlusOne];		
-			if (topplePositionType30(crd1, crd2, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
+			if (topplePositionOfType30(crd1, crd2, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -2912,7 +2912,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[crd1][crd2PlusOne][crd2][z];
 		smallerYNeighborValue = currentVSlice[crd1][crd2][crd2MinusOne][z];
 		greaterZNeighborValue = currentVSlice[crd1][crd2][crd2][zPlusOne];		
-		if (topplePositionType30(crd1, crd2, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
+		if (topplePositionOfType30(crd1, crd2, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2924,12 +2924,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd1][crd2][crd2][crd2];
 		smallerWNeighborValue = currentVSlice[crd1MinusOne][crd2][crd2][crd2];
 		greaterXNeighborValue = currentVSlice[crd1][crd2PlusOne][crd2][crd2];
-		if (topplePositionType15(crd1, crd2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 1, 
+		if (topplePositionOfType15(crd1, crd2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 3, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType3(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType3(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -2940,7 +2940,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterYNeighborValue = currentVSlice[crd1][crd1][3][0];
 		smallerYNeighborValue = currentVSlice[crd1][crd1][1][0];
 		greaterZNeighborValue = currentVSlice[crd1][crd1][2][1];
-		if (topplePositionType44(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType44(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -2953,7 +2953,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[crd1][crd1][3][1];
 		smallerYNeighborValue = currentVSlice[crd1][crd1][1][1];
 		greaterZNeighborValue = currentVSlice[crd1][crd1][2][2];
-		if (topplePositionType31(crd1, 2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, 
+		if (topplePositionOfType31(crd1, 2, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -2965,11 +2965,11 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd1][crd1][2][2];
 		smallerXNeighborValue = currentVSlice[crd1][crd1MinusOne][2][2];
 		greaterYNeighborValue = currentVSlice[crd1][crd1][3][2];
-		if (topplePositionType45(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType45(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+		int y = 3, yMinusOne = 2, yPlusOne = 4;
 		for (; y != crd1MinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 			// crd1 | crd1 | crd1 | y | 0 | 91
 			currentValue = currentVSlice[crd1][crd1][y][0];
@@ -2978,7 +2978,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][0];
 			smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][0];
 			greaterZNeighborValue = currentVSlice[crd1][crd1][y][1];
-			if (topplePositionType44(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+			if (topplePositionOfType44(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 					greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -2991,13 +2991,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][1];
 			smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][1];
 			greaterZNeighborValue = currentVSlice[crd1][crd1][y][2];
-			if (topplePositionType31(crd1, y, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, 
+			if (topplePositionOfType31(crd1, y, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			z = 2;
-			zPlusOne = z + 1;
+			zPlusOne = 3;
 			for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// crd1 | crd1 | crd1 | y | z | 192
 				//reuse values obtained previously
@@ -3008,7 +3008,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[crd1][crd1][y][zPlusOne];
-				if (topplePositionType57(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+				if (topplePositionOfType57(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -3022,7 +3022,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[crd1][crd1][y][zPlusOne];
-			if (topplePositionType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, 
+			if (topplePositionOfType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, 
 					greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3035,7 +3035,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterVNeighborValue = greaterVSlice[crd1][crd1][y][z];
 			smallerXNeighborValue = currentVSlice[crd1][crd1MinusOne][y][z];
 			greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][z];
-			if (topplePositionType45(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+			if (topplePositionOfType45(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3047,7 +3047,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][0];
 		smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][0];
 		greaterZNeighborValue = currentVSlice[crd1][crd1][y][1];
-		if (topplePositionType17(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
+		if (topplePositionOfType17(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3061,13 +3061,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][1];
 		smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][1];
 		greaterZNeighborValue = currentVSlice[crd1][crd1][y][2];
-		if (topplePositionType31(crd1, y, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
+		if (topplePositionOfType31(crd1, y, 1, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		z = 2;
-		zPlusOne = z + 1;
+		zPlusOne = 3;
 		for (; z != crd1MinusTwo; z = zPlusOne, zPlusOne++) {
 			// crd1 | crd1 | crd1 | y | z | 147
 			//reuse values obtained previously
@@ -3078,7 +3078,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[crd1][crd1][y][zPlusOne];
-			if (topplePositionType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
+			if (topplePositionOfType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3093,7 +3093,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][z];
 		smallerYNeighborValue = currentVSlice[crd1][crd1][yMinusOne][z];
 		greaterZNeighborValue = currentVSlice[crd1][crd1][y][zPlusOne];
-		if (topplePositionType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 2, 
+		if (topplePositionOfType31(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 4, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3106,27 +3106,27 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd1][crd1][y][z];
 		smallerXNeighborValue = currentVSlice[crd1][crd1MinusOne][y][z];
 		greaterYNeighborValue = currentVSlice[crd1][crd1][yPlusOne][z];
-		if (topplePositionType18(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 1, 
+		if (topplePositionOfType18(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 4, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType4(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType4(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType11(int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType11(int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType22(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType22(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3139,7 +3139,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[3][3][0][0];
 		int smallerXNeighborValue = currentVSlice[3][1][0][0];
 		int greaterYNeighborValue = currentVSlice[3][2][1][0];
-		if (topplePositionType22(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
+		if (topplePositionOfType22(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3156,7 +3156,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[3][1][1][0];
 		greaterYNeighborValue = currentVSlice[3][2][2][0];
 		int greaterZNeighborValue = currentVSlice[3][2][1][1];
-		if (topplePositionType36(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
+		if (topplePositionOfType36(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3172,7 +3172,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][1][1];
 		smallerXNeighborValue = currentVSlice[3][1][1][1];
 		greaterYNeighborValue = currentVSlice[3][2][2][1];
-		if (topplePositionType37(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
+		if (topplePositionOfType37(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3187,7 +3187,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[4][2][2][0];
 		smallerWNeighborValue = currentVSlice[2][2][2][0];
 		greaterXNeighborValue = currentVSlice[3][3][2][0];
-		if (topplePositionType23(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType23(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3203,7 +3203,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[3][3][2][1];
 		smallerYNeighborValue = currentVSlice[3][2][1][1];
 		greaterZNeighborValue = currentVSlice[3][2][2][2];
-		if (topplePositionType38(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType38(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3217,12 +3217,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[4][2][2][2];
 		smallerWNeighborValue = currentVSlice[2][2][2][2];
 		greaterXNeighborValue = currentVSlice[3][3][2][2];
-		if (topplePositionType24(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
+		if (topplePositionOfType24(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType23(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType23(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3235,7 +3235,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[3][3][3][0];
 		smallerYNeighborValue = currentVSlice[3][3][1][0];
 		greaterZNeighborValue = currentVSlice[3][3][2][1];
-		if (topplePositionType25(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType25(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3251,7 +3251,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[3][3][3][1];
 		smallerYNeighborValue = currentVSlice[3][3][1][1];
 		greaterZNeighborValue = currentVSlice[3][3][2][2];
-		if (topplePositionType39(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType39(3, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3265,25 +3265,25 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[4][3][2][2];
 		smallerXNeighborValue = currentVSlice[3][2][2][2];
 		greaterYNeighborValue = currentVSlice[3][3][3][2];
-		if (topplePositionType26(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
+		if (topplePositionOfType26(3, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType24(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType24(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType12(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType12(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
-		int  wMinusOne = w - 1, wPlusOne = w + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType6(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType6(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3296,7 +3296,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][3][0][0];
 		int smallerXNeighborValue = currentVSlice[w][1][0][0];
 		int greaterYNeighborValue = currentVSlice[w][2][1][0];
-		if (topplePositionType22(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType22(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3313,7 +3313,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][1][1][0];
 		greaterYNeighborValue = currentVSlice[w][2][2][0];
 		int greaterZNeighborValue = currentVSlice[w][2][1][1];
-		if (topplePositionType36(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+		if (topplePositionOfType36(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3329,7 +3329,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][3][1][1];
 		smallerXNeighborValue = currentVSlice[w][1][1][1];
 		greaterYNeighborValue = currentVSlice[w][2][2][1];
-		if (topplePositionType37(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
+		if (topplePositionOfType37(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3344,7 +3344,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][2][2][0];
 		smallerWNeighborValue = currentVSlice[wMinusOne][2][2][0];
 		greaterXNeighborValue = currentVSlice[w][3][2][0];
-		if (topplePositionType23(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType23(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3360,7 +3360,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][3][2][1];
 		smallerYNeighborValue = currentVSlice[w][2][1][1];
 		greaterZNeighborValue = currentVSlice[w][2][2][2];
-		if (topplePositionType38(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType38(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3374,7 +3374,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][2][2][2];
 		smallerWNeighborValue = currentVSlice[wMinusOne][2][2][2];
 		greaterXNeighborValue = currentVSlice[w][3][2][2];
-		if (topplePositionType24(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType24(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3382,9 +3382,9 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType13(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType13(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
-		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 65
@@ -3396,7 +3396,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][xPlusOne][0][0];
 		int smallerXNeighborValue = currentVSlice[w][xMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[w][x][1][0];
-		if (topplePositionType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
+		if (topplePositionOfType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3413,7 +3413,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[w][x][2][0];
 		int greaterZNeighborValue = currentVSlice[w][x][1][1];
-		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3429,7 +3429,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][xPlusOne][1][1];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3437,7 +3437,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType14(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType14(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int w = v - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -3452,7 +3452,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][0];
 		int smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[w][crd][crd][1];
-		if (topplePositionType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3468,12 +3468,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][1];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][2];
-		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 179
 			//reuse values obtained previously
@@ -3486,7 +3486,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 			smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-			if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+			if (topplePositionOfType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3503,7 +3503,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3517,12 +3517,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][crd][crd][crd];
 		smallerWNeighborValue = currentVSlice[wMinusOne][crd][crd][crd];
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][crd];
-		if (topplePositionType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
+		if (topplePositionOfType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType7(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType7(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3536,7 +3536,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterYNeighborValue = currentVSlice[w][x][3][0];
 		smallerYNeighborValue = currentVSlice[w][x][1][0];
 		greaterZNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType25(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType25(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3552,7 +3552,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][3][1];
 		smallerYNeighborValue = currentVSlice[w][x][1][1];
 		greaterZNeighborValue = currentVSlice[w][x][2][2];
-		if (topplePositionType39(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType39(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3566,12 +3566,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][x][2][2];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][2][2];
 		greaterYNeighborValue = currentVSlice[w][x][3][2];
-		if (topplePositionType26(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType26(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+		int y = 3, yMinusOne = 2, yPlusOne = 4;
 		for (; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 			// v | w | x | y | 0 | 126
 			currentValue = currentVSlice[w][x][y][0];
@@ -3582,7 +3582,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 			greaterZNeighborValue = currentVSlice[w][x][y][1];
-			if (topplePositionType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3598,13 +3598,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 			greaterZNeighborValue = currentVSlice[w][x][y][2];
-			if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			z = 2;
-			zPlusOne = z + 1;
+			zPlusOne = 3;
 			for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 218
 				//reuse values obtained previously
@@ -3617,7 +3617,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+				if (topplePositionOfType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -3634,7 +3634,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3649,7 +3649,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterWNeighborValue = currentVSlice[wPlusOne][x][y][z];
 			smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-			if (topplePositionType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3664,7 +3664,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 		greaterZNeighborValue = currentVSlice[w][x][y][1];
-		if (topplePositionType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3680,13 +3680,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][x][y][2];
-		if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		z = 2;
-		zPlusOne = z + 1;
+		zPlusOne = 3;
 		for (; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | x | y | z | 182
 			//reuse values obtained previously
@@ -3699,7 +3699,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+			if (topplePositionOfType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3716,7 +3716,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-		if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3731,12 +3731,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][x][y][z];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-		if (topplePositionType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
+		if (topplePositionOfType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 3, greaterWNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType8(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType8(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3745,7 +3745,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		wMinusOne = w;
 		w = wPlusOne;
 		wPlusOne++;
-		if (toppleRangeType25(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType25(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -3758,7 +3758,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][3][3][0];
 		smallerYNeighborValue = currentVSlice[w][3][1][0];
 		greaterZNeighborValue = currentVSlice[w][3][2][1];
-		if (topplePositionType28(w, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType28(w, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3774,7 +3774,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][3][3][1];
 		smallerYNeighborValue = currentVSlice[w][3][1][1];
 		greaterZNeighborValue = currentVSlice[w][3][2][2];
-		if (topplePositionType43(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType43(w, 3, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -3788,20 +3788,20 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][4][2][2];
 		smallerXNeighborValue = currentVSlice[w][2][2][2];
 		greaterYNeighborValue = currentVSlice[w][3][3][2];
-		if (topplePositionType29(w, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
+		if (topplePositionOfType29(w, 3, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType26(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType26(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		x = 4;
-		xMinusOne = x - 1;
-		int xPlusOne = x + 1;
-		for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-			if (toppleRangeType25(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		xMinusOne = 3;
+		int xPlusOne = 5;
+		for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
+			if (toppleRangeOfType25(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -3814,7 +3814,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][3][0];
 			smallerYNeighborValue = currentVSlice[w][x][1][0];
 			greaterZNeighborValue = currentVSlice[w][x][2][1];
-			if (topplePositionType54(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType54(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -3829,7 +3829,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][3][1];
 			smallerYNeighborValue = currentVSlice[w][x][1][1];
 			greaterZNeighborValue = currentVSlice[w][x][2][2];
-			if (topplePositionType43(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType43(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3843,13 +3843,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][xPlusOne][2][2];
 			smallerXNeighborValue = currentVSlice[w][xMinusOne][2][2];
 			greaterYNeighborValue = currentVSlice[w][x][3][2];
-			if (topplePositionType55(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType55(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			y = 3;
-			yMinusOne = y - 1;
-			yPlusOne = y + 1;
+			yMinusOne = 2;
+			yPlusOne = 4;
 			for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				// v | w | x | y | 0 | 183
 				currentValue = currentVSlice[w][x][y][0];
@@ -3860,7 +3860,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 				greaterZNeighborValue = currentVSlice[w][x][y][1];
-				if (topplePositionType54(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType54(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -3875,13 +3875,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 				greaterZNeighborValue = currentVSlice[w][x][y][2];
-				if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+				if (topplePositionOfType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
 				z = 2;
-				zPlusOne = z + 1;
+				zPlusOne = 3;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 237
 					//reuse values obtained previously
@@ -3894,7 +3894,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 					greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 					smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 					greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-					if (topplePositionType62(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
+					if (topplePositionOfType62(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
 							smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
@@ -3911,7 +3911,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+				if (topplePositionOfType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -3926,7 +3926,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 				smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-				if (topplePositionType55(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType55(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
 				}
@@ -3940,7 +3940,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 			greaterZNeighborValue = currentVSlice[w][x][y][1];
-			if (topplePositionType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+			if (topplePositionOfType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -3956,13 +3956,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 			greaterZNeighborValue = currentVSlice[w][x][y][2];
-			if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+			if (topplePositionOfType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			z = 2;
-			zPlusOne = z + 1;
+			zPlusOne = 3;
 			for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 221
 				//reuse values obtained previously
@@ -3975,7 +3975,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+				if (topplePositionOfType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -3992,7 +3992,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+			if (topplePositionOfType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4007,17 +4007,17 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 			smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-			if (topplePositionType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
+			if (topplePositionOfType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType26(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType26(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 		}
-		if (toppleRangeType9(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType9(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -4030,7 +4030,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][3][0];
 		smallerYNeighborValue = currentVSlice[w][x][1][0];
 		greaterZNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType28(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType28(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4046,7 +4046,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][3][1];
 		smallerYNeighborValue = currentVSlice[w][x][1][1];
 		greaterZNeighborValue = currentVSlice[w][x][2][2];
-		if (topplePositionType43(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType43(w, x, 2, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4060,14 +4060,14 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][xPlusOne][2][2];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][2][2];
 		greaterYNeighborValue = currentVSlice[w][x][3][2];
-		if (topplePositionType29(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType29(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		y = 3;
-		yMinusOne = y - 1;
-		yPlusOne = y + 1;
+		yMinusOne = 2;
+		yPlusOne = 4;
 		for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 			// v | w | x | y | 0 | 139
 			currentValue = currentVSlice[w][x][y][0];
@@ -4078,7 +4078,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 			greaterZNeighborValue = currentVSlice[w][x][y][1];
-			if (topplePositionType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4094,13 +4094,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 			greaterZNeighborValue = currentVSlice[w][x][y][2];
-			if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
 			z = 2;
-			zPlusOne = z + 1;
+			zPlusOne = 3;
 			for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 222
 				//reuse values obtained previously
@@ -4113,7 +4113,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+				if (topplePositionOfType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -4130,7 +4130,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4145,7 +4145,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 			smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-			if (topplePositionType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4160,7 +4160,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 		greaterZNeighborValue = currentVSlice[w][x][y][1];
-		if (topplePositionType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType28(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4176,13 +4176,13 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][x][y][2];
-		if (topplePositionType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType43(w, x, y, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		z = 2;
-		zPlusOne = z + 1;
+		zPlusOne = 3;
 		for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
 			// v | w | x | y | z | 191
 			//reuse values obtained previously
@@ -4195,7 +4195,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+			if (topplePositionOfType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4212,7 +4212,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-		if (topplePositionType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
+		if (topplePositionOfType43(w, x, y, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 2, greaterYNeighborValue, 2,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4227,24 +4227,24 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][xPlusOne][y][z];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-		if (topplePositionType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
+		if (topplePositionOfType29(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 3, smallerXNeighborValue, 3, greaterYNeighborValue, 2,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType10(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType10(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType15(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType15(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
-		int  wMinusOne = w - 1, wPlusOne = w + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
-		if (toppleRangeType22(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType22(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -4257,7 +4257,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][3][0][0];
 		int smallerXNeighborValue = currentVSlice[w][1][0][0];
 		int greaterYNeighborValue = currentVSlice[w][2][1][0];
-		if (topplePositionType48(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType48(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4273,7 +4273,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][1][1][0];
 		greaterYNeighborValue = currentVSlice[w][2][2][0];
 		int greaterZNeighborValue = currentVSlice[w][2][1][1];
-		if (topplePositionType36(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
+		if (topplePositionOfType36(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4289,7 +4289,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][3][1][1];
 		smallerXNeighborValue = currentVSlice[w][1][1][1];
 		greaterYNeighborValue = currentVSlice[w][2][2][1];
-		if (topplePositionType37(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
+		if (topplePositionOfType37(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4304,7 +4304,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][2][2][0];
 		smallerWNeighborValue = currentVSlice[wMinusOne][2][2][0];
 		greaterXNeighborValue = currentVSlice[w][3][2][0];
-		if (topplePositionType49(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType49(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4319,7 +4319,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][3][2][1];
 		smallerYNeighborValue = currentVSlice[w][2][1][1];
 		greaterZNeighborValue = currentVSlice[w][2][2][2];
-		if (topplePositionType38(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType38(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4334,16 +4334,16 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[wMinusOne][2][2][2];
 		greaterXNeighborValue = currentVSlice[w][3][2][2];
 		smallerZNeighborValue = currentVSlice[w][2][2][1];
-		if (topplePositionType50(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType50(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType16(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType16(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
-		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 100
@@ -4355,7 +4355,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][xPlusOne][0][0];
 		int smallerXNeighborValue = currentVSlice[w][xMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[w][x][1][0];
-		if (topplePositionType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
+		if (topplePositionOfType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2,
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4372,7 +4372,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[w][x][2][0];
 		int greaterZNeighborValue = currentVSlice[w][x][1][1];
-		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4388,7 +4388,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][xPlusOne][1][1];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4396,7 +4396,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType17(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType17(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		//int crd = w - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
@@ -4411,7 +4411,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][0];
 		int smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[w][crd][crd][1];
-		if (topplePositionType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4427,12 +4427,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][1];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][2];
-		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 205
 			//reuse values obtained previously
@@ -4445,7 +4445,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 			smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-			if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+			if (topplePositionOfType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4462,7 +4462,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
+		if (topplePositionOfType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 3, greaterXNeighborValue, 2,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4476,12 +4476,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][crd][crd][crd];
 		smallerWNeighborValue = currentVSlice[wMinusOne][crd][crd][crd];
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][crd];
-		if (topplePositionType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
+		if (topplePositionOfType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 4, greaterXNeighborValue, 2,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType23(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType23(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -4495,7 +4495,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterYNeighborValue = currentVSlice[w][x][3][0];
 		smallerYNeighborValue = currentVSlice[w][x][1][0];
 		greaterZNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType51(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType51(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4510,7 +4510,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][3][1];
 		smallerYNeighborValue = currentVSlice[w][x][1][1];
 		greaterZNeighborValue = currentVSlice[w][x][2][2];
-		if (topplePositionType39(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType39(w, 2, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4524,11 +4524,11 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][x][2][2];
 		smallerXNeighborValue = currentVSlice[x][xMinusOne][2][2];
 		greaterYNeighborValue = currentVSlice[w][x][3][2];
-		if (topplePositionType52(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType52(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+		int y = 3, yMinusOne = 2, yPlusOne = 4;
 		for (; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 			// v | w | x | y | 0 | 161
 			currentValue = currentVSlice[w][x][y][0];
@@ -4539,7 +4539,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 			greaterZNeighborValue = currentVSlice[w][x][y][1];
-			if (topplePositionType51(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+			if (topplePositionOfType51(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 					greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4554,12 +4554,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 			greaterZNeighborValue = currentVSlice[w][x][y][2];
-			if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
-			for (z = 2, zPlusOne = z + 1; z != yMinusOne; z = zPlusOne, zPlusOne++) {
+			for (z = 2, zPlusOne = 3; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 232
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
@@ -4571,7 +4571,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 				smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 				greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-				if (topplePositionType61(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
+				if (topplePositionOfType61(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
 						smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
@@ -4588,7 +4588,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+			if (topplePositionOfType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4603,7 +4603,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterWNeighborValue = currentVSlice[wPlusOne][x][y][z];
 			smallerXNeighborValue = currentVSlice[x][xMinusOne][y][z];
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-			if (topplePositionType52(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType52(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4617,7 +4617,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][0];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][0];
 		greaterZNeighborValue = currentVSlice[w][x][y][1];
-		if (topplePositionType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType25(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4633,12 +4633,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][1];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][x][y][2];
-		if (topplePositionType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType39(w, y, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		for (z = 2, zPlusOne = z + 1; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
+		for (z = 2, zPlusOne = 3; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | x | y | z | 208
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
@@ -4650,7 +4650,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 			smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-			if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+			if (topplePositionOfType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4667,7 +4667,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
 		smallerYNeighborValue = currentVSlice[w][x][yMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][x][y][zPlusOne];
-		if (topplePositionType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
+		if (topplePositionOfType39(w, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 3,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4682,21 +4682,21 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][x][y][z];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][y][z];
 		greaterYNeighborValue = currentVSlice[w][x][yPlusOne][z];
-		if (topplePositionType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
+		if (topplePositionOfType26(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 3,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType24(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType24(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType18(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType18(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
-		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 148
@@ -4708,7 +4708,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][xPlusOne][0][0];
 		int smallerXNeighborValue = currentVSlice[w][xMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[w][x][1][0];
-		if (topplePositionType48(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType48(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4724,7 +4724,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[w][x][2][0];
 		int greaterZNeighborValue = currentVSlice[w][x][1][1];
-		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+		if (topplePositionOfType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4740,7 +4740,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][xPlusOne][1][1];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+		if (topplePositionOfType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4748,7 +4748,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType19(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType19(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
@@ -4762,7 +4762,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][0];
 		int smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[w][crd][crd][1];
-		if (topplePositionType49(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType49(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -4777,12 +4777,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][1];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][2];
-		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 228
 			//reuse values obtained previously
@@ -4795,7 +4795,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 			smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-			if (topplePositionType60(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
+			if (topplePositionOfType60(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
 					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -4811,7 +4811,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4826,16 +4826,16 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[wMinusOne][crd][crd][crd];
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][crd];
 		smallerZNeighborValue = currentVSlice[w][crd][crd][crdMinusOne];
-		if (topplePositionType50(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType50(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType20(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType20(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
-		int  wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 113
@@ -4847,7 +4847,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][xPlusOne][0][0];
 		int smallerXNeighborValue = currentVSlice[w][xMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[w][x][1][0];
-		if (topplePositionType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType22(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4864,7 +4864,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[w][x][2][0];
 		int greaterZNeighborValue = currentVSlice[w][x][1][1];
-		if (topplePositionType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+		if (topplePositionOfType36(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4880,7 +4880,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][xPlusOne][1][1];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
+		if (topplePositionOfType37(w, x, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4888,9 +4888,9 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType21(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType21(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
-		int  wMinusOne = w - 1, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
+		int wMinusOne = w - 1, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		int[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 116
@@ -4902,7 +4902,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][0];
 		int smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[w][crd][crd][1];
-		if (topplePositionType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType23(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4918,12 +4918,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][1];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][2];
-		if (topplePositionType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType38(w, crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 214
 			//reuse values obtained previously
@@ -4936,7 +4936,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 			smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-			if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+			if (topplePositionOfType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
@@ -4953,7 +4953,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];
-		if (topplePositionType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType38(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4967,7 +4967,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][crd][crd][crd];
 		smallerWNeighborValue = currentVSlice[wMinusOne][crd][crd][crd];
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][crd];
-		if (topplePositionType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType24(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, 2, greaterWNeighborValue, 2, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -4975,7 +4975,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType22(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType22(int w, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
@@ -4987,7 +4987,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterWNeighborValue = currentVSlice[wPlusOne][0][0][0];
 		int smallerWNeighborValue = currentVSlice[wMinusOne][0][0][0];
 		int greaterXNeighborValue = currentVSlice[w][1][0][0];
-		if (topplePositionType32(w, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
+		if (topplePositionOfType32(w, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
 				greaterXNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5001,7 +5001,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[wMinusOne][1][0][0];
 		greaterXNeighborValue = currentVSlice[w][2][0][0];
 		int greaterYNeighborValue = currentVSlice[w][1][1][0];
-		if (topplePositionType22(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType22(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5016,7 +5016,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerWNeighborValue = currentVSlice[wMinusOne][1][1][0];
 		greaterXNeighborValue = currentVSlice[w][2][1][0];
 		int greaterZNeighborValue = currentVSlice[w][1][1][1];
-		if (topplePositionType23(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType23(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5030,7 +5030,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[wPlusOne][1][1][1];
 		smallerWNeighborValue = currentVSlice[wMinusOne][1][1][1];
 		greaterXNeighborValue = currentVSlice[w][2][1][1];
-		if (topplePositionType24(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
+		if (topplePositionOfType24(w, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerWNeighborValue, 1, greaterXNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5038,7 +5038,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType23(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType23(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
@@ -5050,7 +5050,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterWNeighborValue = currentVSlice[crdPlusOne][crd][0][0];
 		int smallerXNeighborValue = currentVSlice[crd][crdMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[crd][crd][1][0];
-		if (topplePositionType33(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
+		if (topplePositionOfType33(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5064,7 +5064,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[crd][crdMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[crd][crd][2][0];
 		int greaterZNeighborValue = currentVSlice[crd][crd][1][1];
-		if (topplePositionType25(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType25(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5078,7 +5078,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][1][1];
 		smallerXNeighborValue = currentVSlice[crd][crdMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[crd][crd][2][1];
-		if (topplePositionType26(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType26(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5086,7 +5086,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType24(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType24(int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
@@ -5098,7 +5098,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][0];
 		int smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[crd][crd][crd][1];
-		if (topplePositionType34(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
+		if (topplePositionOfType34(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5111,12 +5111,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][1];
 		smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[crd][crd][crd][2];
-		if (topplePositionType27(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
+		if (topplePositionOfType27(crd, 1, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | crd | crd | crd | z | 166
 			//reuse values obtained previously
@@ -5127,7 +5127,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][z];
 			smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[crd][crd][crd][zPlusOne];
-			if (topplePositionType53(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType53(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -5141,7 +5141,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][z];
 		smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[crd][crd][crd][zPlusOne];
-		if (topplePositionType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
+		if (topplePositionOfType27(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, 1, greaterWNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 4,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5153,14 +5153,14 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[crd][crd][crd][crd];
 		smallerVNeighborValue = smallerVSlice[crd][crd][crd][crd];
 		greaterWNeighborValue = currentVSlice[crdPlusOne][crd][crd][crd];
-		if (topplePositionType35(crd,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType35(crd,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType25(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType25(int w, int x, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int wMinusOne = w - 1, xPlusOne = x + 1, xMinusOne = x - 1;
 		boolean changed = false;
@@ -5172,7 +5172,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][xPlusOne][0][0];
 		int smallerXNeighborValue = currentVSlice[w][xMinusOne][0][0];
 		int greaterYNeighborValue = currentVSlice[w][x][1][0];
-		if (topplePositionType40(w, x, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
+		if (topplePositionOfType40(w, x, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5186,7 +5186,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][0];
 		greaterYNeighborValue = currentVSlice[w][x][2][0];
 		int greaterZNeighborValue = currentVSlice[w][x][1][1];
-		if (topplePositionType28(w, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType28(w, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5200,7 +5200,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][xPlusOne][1][1];
 		smallerXNeighborValue = currentVSlice[w][xMinusOne][1][1];
 		greaterYNeighborValue = currentVSlice[w][x][2][1];
-		if (topplePositionType29(w, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
+		if (topplePositionOfType29(w, x, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5208,7 +5208,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return changed;
 	}
 
-	private static boolean toppleRangeType26(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType26(int w, int crd, int[][][][][] vSlices, int[][][][][] newVSlices, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1;
 		boolean changed = false;
@@ -5220,7 +5220,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		int greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][0];
 		int smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][0];
 		int greaterZNeighborValue = currentVSlice[w][crd][crd][1];
-		if (topplePositionType41(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
+		if (topplePositionOfType41(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
@@ -5233,12 +5233,12 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][1];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][1];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][2];		
-		if (topplePositionType30(w, crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
+		if (topplePositionOfType30(w, crd, 1, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1,
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
-		int z = 2, zPlusOne = z + 1;
+		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 188
 			//reuse values obtained previously
@@ -5249,7 +5249,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 			greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 			smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 			greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];		
-			if (topplePositionType56(w, crd, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
+			if (topplePositionOfType56(w, crd, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
 			}
@@ -5263,7 +5263,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][z];
 		smallerYNeighborValue = currentVSlice[w][crd][crdMinusOne][z];
 		greaterZNeighborValue = currentVSlice[w][crd][crd][zPlusOne];		
-		if (topplePositionType30(w, crd, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
+		if (topplePositionOfType30(w, crd, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3,
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
@@ -5275,14 +5275,14 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		greaterVNeighborValue = greaterVSlice[w][crd][crd][crd];
 		smallerWNeighborValue = currentVSlice[wMinusOne][crd][crd][crd];
 		greaterXNeighborValue = currentVSlice[w][crdPlusOne][crd][crd];
-		if (topplePositionType42(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType42(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
 		}
 		return changed;
 	}		
 
-	private static boolean topplePositionType1(int currentValue, int gVValue, int[][][][] newCurrentVSlice, int[][][][] newGreaterVSlice) {
+	private static boolean topplePositionOfType1(int currentValue, int gVValue, int[][][][] newCurrentVSlice, int[][][][] newGreaterVSlice) {
 		boolean toppled = false;
 		if (gVValue < currentValue) {
 			int toShare = currentValue - gVValue;
@@ -5300,7 +5300,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType2(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5345,7 +5345,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType3(int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5390,7 +5390,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, 1, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType4(int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5435,7 +5435,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, 1, 1, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType5(int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType5(int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5480,7 +5480,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, 1, 1, 1, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType6(int currentValue, int gVValue, int sZValue, int[][][][] newCurrentVSlice, int[][][][] newGreaterVSlice) {
+	private static boolean topplePositionOfType6(int currentValue, int gVValue, int sZValue, int[][][][] newCurrentVSlice, int[][][][] newGreaterVSlice) {
 		boolean toppled = false;
 		if (sZValue < currentValue) {
 			if (gVValue < currentValue) {
@@ -5555,7 +5555,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return toppled;
 	}
 
-	private static boolean topplePositionType7(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType7(int currentValue, int gVValue, int sVValue, int gWValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5597,7 +5597,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, 0, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int w, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType8(int w, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5668,7 +5668,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType9(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5739,7 +5739,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType10(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5810,7 +5810,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType11(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType11(int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5868,7 +5868,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int w, int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType12(int w, int currentValue, int gVValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5910,7 +5910,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int w, int x, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType13(int w, int x, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -5981,7 +5981,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType14(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6052,7 +6052,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType15(int w, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6110,7 +6110,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType16(int coord, int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType16(int coord, int currentValue, int gVValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6152,7 +6152,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType17(int coord, int y, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType17(int coord, int y, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6223,7 +6223,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType18(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType18(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6281,7 +6281,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType19(int coord, int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType19(int coord, int currentValue, int gVValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6323,7 +6323,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType20(int coord, int z, int currentValue, int gVValue, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType20(int coord, int z, int currentValue, int gVValue, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6381,7 +6381,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType21(int coord, int currentValue, int gVValue, int sZValue, int[][][][] newCurrentVSlice, int[][][][] newGreaterVSlice) {
+	private static boolean topplePositionOfType21(int coord, int currentValue, int gVValue, int sZValue, int[][][][] newCurrentVSlice, int[][][][] newGreaterVSlice) {
 		boolean toppled = false;
 		if (sZValue < currentValue) {
 			if (gVValue < currentValue) {
@@ -6457,7 +6457,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return toppled;
 	}
 
-	private static boolean topplePositionType22(int w, int x, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType22(int w, int x, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6554,7 +6554,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType23(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType23(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6651,7 +6651,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType24(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType24(int w, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6735,7 +6735,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType25(int coord, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType25(int coord, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6832,7 +6832,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType26(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType26(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -6916,7 +6916,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType27(int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType27(int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7000,7 +7000,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType28(int w, int x, int y, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType28(int w, int x, int y, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7097,7 +7097,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType29(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType29(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7181,7 +7181,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType30(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType30(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7265,7 +7265,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType31(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType31(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7349,7 +7349,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType32(int w, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType32(int w, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7415,7 +7415,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType33(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType33(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7481,7 +7481,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType34(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType34(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7547,7 +7547,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType35(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType35(int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7601,7 +7601,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType36(int w, int x, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType36(int w, int x, int y, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7724,7 +7724,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType37(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType37(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7834,7 +7834,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType38(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType38(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -7944,7 +7944,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType39(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType39(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8054,7 +8054,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType40(int w, int x, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType40(int w, int x, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8120,7 +8120,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType41(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType41(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8186,7 +8186,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType42(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType42(int w, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8240,7 +8240,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType43(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType43(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8350,7 +8350,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType44(int coord, int y, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType44(int coord, int y, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8416,7 +8416,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType45(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType45(int coord1, int coord2, int currentValue, int gVValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8470,7 +8470,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType46(int coord, int z, int currentValue, int gVValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType46(int coord, int z, int currentValue, int gVValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8524,7 +8524,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType47(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType47(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int sVShareMultiplier, int gWValue, int gWShareMultiplier, int sWValue, int sWShareMultiplier, int gXValue, int gXShareMultiplier, int sXValue, int sXShareMultiplier, int gYValue, int gYShareMultiplier, int sYValue, int sYShareMultiplier, int gZValue, int gZShareMultiplier, int sZValue, int sZShareMultiplier, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[][][][][] newVSlices) {
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gVValue;
@@ -8639,7 +8639,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType48(int w, int x, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType48(int w, int x, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8729,7 +8729,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType49(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType49(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8819,7 +8819,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType50(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType50(int w, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8897,7 +8897,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType51(int coord, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType51(int coord, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -8987,7 +8987,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType52(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType52(int coord1, int coord2, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9065,7 +9065,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType53(int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType53(int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9143,7 +9143,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType54(int w, int x, int y, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType54(int w, int x, int y, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9233,7 +9233,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType55(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType55(int w, int x, int coord, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9311,7 +9311,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType56(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType56(int w, int coord, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9389,7 +9389,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType57(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType57(int coord, int y, int z, int currentValue, int gVValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9467,7 +9467,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType58(int w, int x, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType58(int w, int x, int y, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9581,7 +9581,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType59(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType59(int w, int x, int coord, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9683,7 +9683,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType60(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType60(int w, int coord, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9785,7 +9785,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType61(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType61(int coord, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9887,7 +9887,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType62(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType62(int w, int x, int y, int z, int currentValue, int gVValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[][][][][] newVSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
@@ -9989,7 +9989,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		return topplePosition(newVSlices, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType63(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[][][][][] newVSlices) {
+	private static boolean topplePositionOfType63(int w, int x, int y, int z, int currentValue, int gVValue, int sVValue, int gWValue, int sWValue, int gXValue, int sXValue, int gYValue, int sYValue, int gZValue, int sZValue, int[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[][][][][] newVSlices) {
 		int relevantNeighborCount = 0;
 		if (gVValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gVValue;

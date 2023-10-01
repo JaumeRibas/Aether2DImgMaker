@@ -1522,7 +1522,7 @@ public class CodeGeneration {
 		int ind2 = ind1 + 1;
 		int dimension = type.coordinates.length;
 		StringBuilder method = new StringBuilder(); 
-		method.append("private static boolean topplePositionType").append(number).append("(");
+		method.append("private static boolean topplePositionOfType").append(number).append("(");
 		//add coordinates parameters if needed
 		for (int i = 1; i < dimension; i++) {
 			if (type.coordinates[i] == null) {
@@ -1734,7 +1734,7 @@ public class CodeGeneration {
 		int ind2 = ind1 + 1;
 		int dimension = type.coordinates.length;
 		StringBuilder method = new StringBuilder(); 
-		method.append("private static boolean topplePositionType").append(number).append("(");
+		method.append("private static boolean topplePositionOfType").append(number).append("(");
 		//add coordinates parameters if needed
 		for (int i = 0; i < dimension; i++) {
 			if (type.coordinates[i] == null) {

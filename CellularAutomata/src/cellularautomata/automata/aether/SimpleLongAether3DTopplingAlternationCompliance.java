@@ -44,7 +44,7 @@ public class SimpleLongAether3DTopplingAlternationCompliance implements Symmetri
 	private long[][][] grid;
 	
 	private HypercubicBooleanArray topplingAlternationCompliance;
-	private boolean itsEvenPositionsTurnToTopple;
+	private boolean isItEvenPositionsTurnToTopple;
 	
 	private final long initialValue;
 	private long step;
@@ -69,7 +69,7 @@ public class SimpleLongAether3DTopplingAlternationCompliance implements Symmetri
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
-		itsEvenPositionsTurnToTopple = initialValue >= 0;
+		isItEvenPositionsTurnToTopple = initialValue >= 0;
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new long[side][side][side];
@@ -99,12 +99,12 @@ public class SimpleLongAether3DTopplingAlternationCompliance implements Symmetri
 			newGrid = new long[grid.length][grid.length][grid.length];
 			topplingAlternationCompliance = new HypercubicBooleanArray(3, grid.length);
 		}
-		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple == (originIndex%2 == 0); //when the dimension is odd the corner coordinates are not always even
+		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple == (originIndex%2 == 0); //when the dimension is odd the corner coordinates are not always even
 		boolean changed = false;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
-				for (int k = 0; k < grid.length; k++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
+				for (int k = 0; k < grid.length; k++, isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple) {
 					long value = grid[i][j][k];
 					//make list of von Neumann neighbors with value smaller than current cell's value
 					List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(6);						
@@ -186,7 +186,7 @@ public class SimpleLongAether3DTopplingAlternationCompliance implements Symmetri
 						changed = changed || toppled;
 					}					
 					newGrid[i + indexOffset][j + indexOffset][k + indexOffset] += value;
-					topplingAlternationCompliance.set(new Coordinates(i + indexOffset, j + indexOffset, k + indexOffset), toppled == itsCurrentPositionsTurnToTopple);
+					topplingAlternationCompliance.set(new Coordinates(i + indexOffset, j + indexOffset, k + indexOffset), toppled == isItCurrentPositionsTurnToTopple);
 				}
 			}
 		}
@@ -196,7 +196,7 @@ public class SimpleLongAether3DTopplingAlternationCompliance implements Symmetri
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		this.changed = changed;
 		//Return whether or not the state of the grid changed
 		return changed;
@@ -211,7 +211,7 @@ public class SimpleLongAether3DTopplingAlternationCompliance implements Symmetri
 			}
 			
 		};
-		boolean itsNotEvenIndexesTurnToTopple = itsEvenPositionsTurnToTopple == (originIndex%2 == 0);
+		boolean itsNotEvenIndexesTurnToTopple = isItEvenPositionsTurnToTopple == (originIndex%2 == 0);
 		if (itsNotEvenIndexesTurnToTopple) {
 			topplingAlternationCompliance.forEachEvenEdgeIndex(1, setToTrueIndexConsumer);
 		} else {

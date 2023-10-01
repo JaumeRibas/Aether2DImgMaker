@@ -88,7 +88,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// i = 0, j = 0, k = 0
 		BigFraction currentValue = currentXSlice[0][0];
 		BigFraction greaterXNeighborValue = greaterXSlice[0][0];
-		topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice);
+		topplePositionOfType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice);
 		// i = 1, j = 0, k = 0
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
@@ -108,7 +108,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = greaterXSlice[0][0];
 		BigFraction greaterYNeighborValue = currentXSlice[1][0];
-		topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionOfType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// i = 1, j = 1, k = 0
@@ -117,7 +117,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][0];
 		BigFraction greaterZNeighborValue = currentXSlice[1][1];
-		topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		topplePositionOfType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// i = 1, j = 1, k = 1
@@ -125,7 +125,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		BigFraction smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][1];
-		topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice);
+		topplePositionOfType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice);
 		grid[0] = null;// free old grid progressively to save memory
 		// i = 2, j = 0, k = 0
 		smallerXSlice = currentXSlice;
@@ -142,7 +142,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// i = 2, j = 1, k = 0
@@ -153,7 +153,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -164,7 +164,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -174,7 +174,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
-		topplePositionType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		topplePositionOfType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				newXSlices);
 		// i = 2, j = 2, k = 1
@@ -184,7 +184,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		topplePositionOfType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -193,7 +193,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[2][2];
-		topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+		topplePositionOfType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice);
 		grid[1] = null;
 		// i = 3, j = 0, k = 0
@@ -211,7 +211,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// i = 3, j = 1, k = 0
@@ -222,7 +222,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -233,7 +233,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -245,7 +245,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		topplePositionOfType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -258,7 +258,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		topplePositionOfType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -269,7 +269,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		topplePositionType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		topplePositionOfType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -278,7 +278,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		greaterXNeighborValue = greaterXSlice[3][0];
 		smallerYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[3][1];
-		topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		topplePositionOfType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// i = 3, j = 3, k = 1
@@ -288,7 +288,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][2];
-		topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+		topplePositionOfType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -299,7 +299,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][3];
-		topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		topplePositionOfType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -308,7 +308,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[3][3];
-		topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+		topplePositionOfType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice);
 		grid[2] = null;
 		// 4 <= i < edge - 1
@@ -353,7 +353,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			BigFraction greaterXNeighborValue = greaterXSlice[0][0];
 			BigFraction smallerXNeighborValue = smallerXSlice[0][0];
 			BigFraction greaterYNeighborValue = currentXSlice[1][0];
-			topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// j = 1, k = 0
@@ -364,7 +364,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			currentValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[2][0];
 			BigFraction greaterZNeighborValue = currentXSlice[1][1];
-			topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -375,7 +375,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			// reuse values obtained previously
 			BigFraction smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -387,7 +387,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerYNeighborValue = smallerZNeighborValue;
 			greaterZNeighborValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[3][0];
-			topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			topplePositionOfType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// j = 2, k = 1
@@ -399,7 +399,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[2][2];
-			topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			topplePositionOfType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -410,7 +410,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			topplePositionType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			topplePositionOfType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			int j = 3, jMinusOne = 2, jPlusOne = 4;
@@ -422,7 +422,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				greaterYNeighborValue = currentXSlice[jPlusOne][0];
 				smallerYNeighborValue = currentXSlice[jMinusOne][0];
 				greaterZNeighborValue = currentXSlice[j][1];
-				topplePositionType12(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				topplePositionOfType12(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 				// k = 1
@@ -434,7 +434,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][2];
-				topplePositionType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				topplePositionOfType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -448,7 +448,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
 					greaterZNeighborValue = currentXSlice[j][kPlusOne];
-					topplePositionType15(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
+					topplePositionOfType15(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 							relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newXSlices);
 					k = kPlusOne;
@@ -463,7 +463,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				topplePositionType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				topplePositionOfType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -475,7 +475,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				topplePositionType13(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				topplePositionOfType13(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newXSlices);				 
 				jMinusOne = j;
@@ -489,7 +489,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			greaterYNeighborValue = currentXSlice[jPlusOne][0];
 			smallerYNeighborValue = currentXSlice[jMinusOne][0];
 			greaterZNeighborValue = currentXSlice[j][1];
-			topplePositionType6(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			topplePositionOfType6(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -502,7 +502,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][2];
-			topplePositionType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			topplePositionOfType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -516,7 +516,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				topplePositionType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				topplePositionOfType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -532,7 +532,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			topplePositionType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			topplePositionOfType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -545,7 +545,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			topplePositionType7(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+			topplePositionOfType7(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -556,7 +556,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			greaterXNeighborValue = greaterXSlice[j][0];
 			smallerYNeighborValue = currentXSlice[jMinusOne][0];
 			greaterZNeighborValue = currentXSlice[j][1];
-			topplePositionType8(j, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			topplePositionOfType8(j, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// j = i, k = 1
@@ -566,7 +566,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][2];
-			topplePositionType9(j, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+			topplePositionOfType9(j, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -580,7 +580,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				topplePositionType14(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
+				topplePositionOfType14(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			}			
@@ -591,7 +591,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			topplePositionType9(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+			topplePositionOfType9(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 					greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -601,7 +601,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterXNeighborValue = greaterXSlice[j][k];
-			topplePositionType10(j, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+			topplePositionOfType10(j, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 					newGreaterXSlice);
 			grid[iMinusOne] = null;
 		}
@@ -626,7 +626,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		BigFraction currentValue = currentXSlice[0][0];
 		BigFraction smallerXNeighborValue = smallerXSlice[0][0];
 		BigFraction greaterYNeighborValue = currentXSlice[1][0];
-		topplePositionType5Edge(currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionOfType5Edge(currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// j = 1, k = 0
@@ -636,7 +636,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		BigFraction greaterZNeighborValue = currentXSlice[1][1];
-		topplePositionType6Edge(1, currentValue, smallerXNeighborValue, 1, 
+		topplePositionOfType6Edge(1, currentValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -646,7 +646,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		BigFraction smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		topplePositionType7Edge(1, currentValue, smallerXNeighborValue, 1, 
+		topplePositionOfType7Edge(1, currentValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -657,7 +657,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		topplePositionType12Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionOfType12Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// j = 2, k = 1
@@ -668,7 +668,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		topplePositionType11Edge(2, 1, currentValue, smallerXNeighborValue, 1, 
+		topplePositionOfType11Edge(2, 1, currentValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -678,7 +678,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		topplePositionType13Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+		topplePositionOfType13Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		int j = 3, jMinusOne = 2, jPlusOne = 4;
@@ -689,7 +689,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			greaterYNeighborValue = currentXSlice[jPlusOne][0];
 			smallerYNeighborValue = currentXSlice[jMinusOne][0];
 			greaterZNeighborValue = currentXSlice[j][1];
-			topplePositionType12Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+			topplePositionOfType12Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 			// k = 1
@@ -700,7 +700,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][2];
-			topplePositionType11Edge(j, 1, currentValue, smallerXNeighborValue, 1, 
+			topplePositionOfType11Edge(j, 1, currentValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -713,7 +713,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				topplePositionType15Edge(j, k, currentValue, smallerXNeighborValue, 
+				topplePositionOfType15Edge(j, k, currentValue, smallerXNeighborValue, 
 						greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newXSlices);
 				k = kPlusOne;
@@ -727,7 +727,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			topplePositionType11Edge(j, k, currentValue, smallerXNeighborValue, 1, 
+			topplePositionOfType11Edge(j, k, currentValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -738,7 +738,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			topplePositionType13Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+			topplePositionOfType13Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices);				 
 			jMinusOne = j;
@@ -751,7 +751,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		greaterYNeighborValue = currentXSlice[jPlusOne][0];
 		smallerYNeighborValue = currentXSlice[jMinusOne][0];
 		greaterZNeighborValue = currentXSlice[j][1];
-		topplePositionType6Edge(j, currentValue, smallerXNeighborValue, 2, 
+		topplePositionOfType6Edge(j, currentValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -763,7 +763,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][2];
-		topplePositionType11Edge(j, 1, currentValue, smallerXNeighborValue, 2, 
+		topplePositionOfType11Edge(j, 1, currentValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -776,7 +776,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			topplePositionType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
+			topplePositionOfType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -791,7 +791,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][kPlusOne];
-		topplePositionType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
+		topplePositionOfType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices);
@@ -803,7 +803,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		topplePositionType7Edge(j, currentValue, smallerXNeighborValue, 3, 
+		topplePositionOfType7Edge(j, currentValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -813,7 +813,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		currentValue = currentXSlice[j][0];
 		smallerYNeighborValue = currentXSlice[jMinusOne][0];
 		greaterZNeighborValue = currentXSlice[j][1];
-		topplePositionType8Edge(j, currentValue, smallerYNeighborValue, greaterZNeighborValue, 
+		topplePositionOfType8Edge(j, currentValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		// j = i, k = 1
@@ -822,7 +822,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][2];
-		topplePositionType9Edge(j, 1, currentValue, smallerYNeighborValue, 1, 
+		topplePositionOfType9Edge(j, 1, currentValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -835,7 +835,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			topplePositionType14Edge(j, k, currentValue, smallerYNeighborValue, 
+			topplePositionOfType14Edge(j, k, currentValue, smallerYNeighborValue, 
 					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices);
 		}			
@@ -845,7 +845,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][kPlusOne];
-		topplePositionType9Edge(j, k, currentValue, smallerYNeighborValue, 2, 
+		topplePositionOfType9Edge(j, k, currentValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices);
@@ -854,10 +854,10 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		topplePositionType10Edge(j, currentValue, smallerZNeighborValue, newCurrentXSlice);
+		topplePositionOfType10Edge(j, currentValue, smallerZNeighborValue, newCurrentXSlice);
 	}
 	
-	private static void topplePositionType1(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction[][] newCurrentXSlice, 
+	private static void topplePositionOfType1(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction[][] newCurrentXSlice, 
 			BigFraction[][] newGreaterXSlice) {
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			BigFraction toShare = currentValue.subtract(greaterXNeighborValue);
@@ -869,7 +869,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		}
 	}
 
-	private static void topplePositionType2(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerXNeighborValue, 
+	private static void topplePositionOfType2(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerXNeighborValue, 
 			BigFraction greaterYNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -911,7 +911,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType3(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerYNeighborValue, 
+	private static void topplePositionOfType3(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerYNeighborValue, 
 			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -953,7 +953,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType4(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerZNeighborValue, 
+	private static void topplePositionOfType4(BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerZNeighborValue, 
 			BigFraction[][] newCurrentXSlice, BigFraction[][] newGreaterXSlice) {
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -1006,7 +1006,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		}
 	}
 
-	private static void topplePositionType5(BigFraction currentValue, BigFraction greaterXNeighborValue, 
+	private static void topplePositionOfType5(BigFraction currentValue, BigFraction greaterXNeighborValue, 
 			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, 
 			int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
 			BigFraction[][][] newXSlices) {
@@ -1046,7 +1046,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType5Edge(BigFraction currentValue, BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, 
+	private static void topplePositionOfType5Edge(BigFraction currentValue, BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, 
 			BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1075,7 +1075,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType6(int j, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
+	private static void topplePositionOfType6(int j, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
 			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sYValue, int sYShareMultiplier, 
 			BigFraction gZValue, int gZShareMultiplier, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1141,7 +1141,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType6Edge(int j, BigFraction currentValue, BigFraction sXValue, 
+	private static void topplePositionOfType6Edge(int j, BigFraction currentValue, BigFraction sXValue, 
 			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sYValue, int sYShareMultiplier, 
 			BigFraction gZValue, int gZShareMultiplier, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1196,7 +1196,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType7(int coord, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
+	private static void topplePositionOfType7(int coord, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
 			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sZValue, 
 			int sZShareMultiplier, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1251,7 +1251,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType7Edge(int coord, BigFraction currentValue, BigFraction sXValue, 
+	private static void topplePositionOfType7Edge(int coord, BigFraction currentValue, BigFraction sXValue, 
 			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sZValue, 
 			int sZShareMultiplier, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1295,7 +1295,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType8(int j, BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerYNeighborValue, 
+	private static void topplePositionOfType8(int j, BigFraction currentValue, BigFraction greaterXNeighborValue, BigFraction smallerYNeighborValue, 
 			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1334,7 +1334,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType8Edge(int j, BigFraction currentValue, BigFraction smallerYNeighborValue, 
+	private static void topplePositionOfType8Edge(int j, BigFraction currentValue, BigFraction smallerYNeighborValue, 
 			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1363,7 +1363,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType9(int j, int k, BigFraction currentValue, BigFraction gXValue, BigFraction sYValue, 
+	private static void topplePositionOfType9(int j, int k, BigFraction currentValue, BigFraction gXValue, BigFraction sYValue, 
 			int sYShareMultiplier, BigFraction gZValue, int gZShareMultiplier, BigFraction sZValue, int sZShareMultiplier, 
 			BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
@@ -1417,7 +1417,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType9Edge(int j, int k, BigFraction currentValue, BigFraction sYValue, 
+	private static void topplePositionOfType9Edge(int j, int k, BigFraction currentValue, BigFraction sYValue, 
 			int sYShareMultiplier, BigFraction gZValue, int gZShareMultiplier, BigFraction sZValue, int sZShareMultiplier, 
 			BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1461,7 +1461,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType10(int coord, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+	private static void topplePositionOfType10(int coord, BigFraction currentValue, BigFraction greaterXNeighborValue, 
 			BigFraction smallerZNeighborValue, BigFraction[][] newCurrentXSlice, BigFraction[][] newGreaterXSlice) {
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			int coordMinusOne = coord - 1;
@@ -1515,7 +1515,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		}
 	}
 	
-	private static void topplePositionType10Edge(int coord, BigFraction currentValue, 
+	private static void topplePositionOfType10Edge(int coord, BigFraction currentValue, 
 			BigFraction smallerZNeighborValue, BigFraction[][] newCurrentXSlice) {
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
 			int coordMinusOne = coord - 1;
@@ -1530,7 +1530,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 		}
 	}
 
-	private static void topplePositionType11(int j, int k, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
+	private static void topplePositionOfType11(int j, int k, BigFraction currentValue, BigFraction gXValue, BigFraction sXValue, 
 			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sYValue, int sYShareMultiplier, 
 			BigFraction gZValue, int gZShareMultiplier, BigFraction sZValue, int sZShareMultiplier, BigFraction[] relevantNeighborValues, 
 			int[] sortedNeighborsIndexes, int[][] relevantNeighborCoords, int[] relevantNeighborShareMultipliers, BigFraction[][][] newXSlices) {
@@ -1593,7 +1593,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 	
-	private static void topplePositionType11Edge(int j, int k, BigFraction currentValue, BigFraction sXValue, 
+	private static void topplePositionOfType11Edge(int j, int k, BigFraction currentValue, BigFraction sXValue, 
 			int sXShareMultiplier, BigFraction gYValue, int gYShareMultiplier, BigFraction sYValue, int sYShareMultiplier, 
 			BigFraction gZValue, int gZShareMultiplier, BigFraction sZValue, int sZShareMultiplier, BigFraction[] relevantNeighborValues, 
 			int[] sortedNeighborsIndexes, int[][] relevantNeighborCoords, int[] relevantNeighborShareMultipliers, 
@@ -1648,7 +1648,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static void topplePositionType12(int j, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+	private static void topplePositionOfType12(int j, BigFraction currentValue, BigFraction greaterXNeighborValue, 
 			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction smallerYNeighborValue, 
 			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1710,7 +1710,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType12Edge(int j, BigFraction currentValue, 
+	private static void topplePositionOfType12Edge(int j, BigFraction currentValue, 
 			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction smallerYNeighborValue, 
 			BigFraction greaterZNeighborValue, BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1762,7 +1762,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType13(int coord, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+	private static void topplePositionOfType13(int coord, BigFraction currentValue, BigFraction greaterXNeighborValue, 
 			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction smallerZNeighborValue, 
 			BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
@@ -1812,7 +1812,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType13Edge(int coord, BigFraction currentValue, 
+	private static void topplePositionOfType13Edge(int coord, BigFraction currentValue, 
 			BigFraction smallerXNeighborValue, BigFraction greaterYNeighborValue, BigFraction smallerZNeighborValue, 
 			BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
@@ -1852,7 +1852,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType14(int j, int k, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+	private static void topplePositionOfType14(int j, int k, BigFraction currentValue, BigFraction greaterXNeighborValue, 
 			BigFraction smallerYNeighborValue,	BigFraction greaterZNeighborValue, BigFraction smallerZNeighborValue, 
 			BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
@@ -1902,7 +1902,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static void topplePositionType14Edge(int j, int k, BigFraction currentValue, 
+	private static void topplePositionOfType14Edge(int j, int k, BigFraction currentValue, 
 			BigFraction smallerYNeighborValue,	BigFraction greaterZNeighborValue, BigFraction smallerZNeighborValue, 
 			BigFraction[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigFraction[][][] newXSlices) {
@@ -1942,7 +1942,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static void topplePositionType15(int j, int k, BigFraction currentValue, BigFraction greaterXNeighborValue, 
+	private static void topplePositionOfType15(int j, int k, BigFraction currentValue, BigFraction greaterXNeighborValue, 
 			BigFraction smallerXNeighborValue,	BigFraction greaterYNeighborValue, BigFraction smallerYNeighborValue, 
 			BigFraction greaterZNeighborValue, BigFraction smallerZNeighborValue, BigFraction[] relevantNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantNeighborCoords, BigFraction[][][] newXSlices) {
@@ -1999,7 +1999,7 @@ public class BfAether3DInfinityCubicGrid implements SymmetricNumericModel3D<BigF
 				relevantNeighborCount);
 	}
 	
-	private static void topplePositionType15Edge(int j, int k, BigFraction currentValue, 
+	private static void topplePositionOfType15Edge(int j, int k, BigFraction currentValue, 
 			BigFraction smallerXNeighborValue,	BigFraction greaterYNeighborValue, BigFraction smallerYNeighborValue, 
 			BigFraction greaterZNeighborValue, BigFraction smallerZNeighborValue, BigFraction[] relevantNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantNeighborCoords, BigFraction[][][] newXSlices) {

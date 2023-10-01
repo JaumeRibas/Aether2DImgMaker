@@ -107,7 +107,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// i = 0, j = 0, k = 0
 		BigInt currentValue = currentXSlice[0][0];
 		BigInt greaterXNeighborValue = greaterXSlice[0][0];
-		if (topplePositionType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
+		if (topplePositionOfType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
 		}
 		// i = 1, j = 0, k = 0
@@ -129,7 +129,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		currentValue = greaterXNeighborValue;
 		greaterXNeighborValue = greaterXSlice[0][0];
 		BigInt greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType2(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -140,7 +140,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		currentValue = greaterYNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][0];
 		BigInt greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType3(currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -150,7 +150,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][1];
-		if (topplePositionType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
+		if (topplePositionOfType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
 		}
 		grid[0] = null;// free old grid progressively to save memory
@@ -169,7 +169,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -182,7 +182,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -195,7 +195,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		if (topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -207,7 +207,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
-		if (topplePositionType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType8(2, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				newXSlices)) {
 			changed = true;
@@ -219,7 +219,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		if (topplePositionOfType9(2, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -230,7 +230,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[2][2];
-		if (topplePositionType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+		if (topplePositionOfType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
 		}
@@ -250,7 +250,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		greaterXNeighborValue = greaterXSlice[0][0];
 		smallerXNeighborValue = smallerXSlice[0][0];
 		greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -263,7 +263,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		if (topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -276,7 +276,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+		if (topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -290,7 +290,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		if (topplePositionType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType6(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -305,7 +305,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -318,7 +318,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+		if (topplePositionOfType7(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -329,7 +329,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		greaterXNeighborValue = greaterXSlice[3][0];
 		smallerYNeighborValue = currentXSlice[2][0];
 		greaterZNeighborValue = currentXSlice[3][1];
-		if (topplePositionType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType8(3, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
@@ -341,7 +341,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][2];
-		if (topplePositionType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+		if (topplePositionOfType9(3, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -354,7 +354,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[3][3];
-		if (topplePositionType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+		if (topplePositionOfType9(3, 2, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -365,7 +365,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[3][3];
-		if (topplePositionType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+		if (topplePositionOfType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
 		}
@@ -418,7 +418,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			BigInt greaterXNeighborValue = greaterXSlice[0][0];
 			BigInt smallerXNeighborValue = smallerXSlice[0][0];
 			BigInt greaterYNeighborValue = currentXSlice[1][0];
-			if (topplePositionType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType5(currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -431,7 +431,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			currentValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[2][0];
 			BigInt greaterZNeighborValue = currentXSlice[1][1];
-			if (topplePositionType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType6(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -444,7 +444,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			// reuse values obtained previously
 			BigInt smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType7(1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -458,7 +458,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerYNeighborValue = smallerZNeighborValue;
 			greaterZNeighborValue = greaterYNeighborValue;
 			greaterYNeighborValue = currentXSlice[3][0];
-			if (topplePositionType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType12(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -472,7 +472,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[2][2];
-			if (topplePositionType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType11(2, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -485,7 +485,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType13(2, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -499,7 +499,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				greaterYNeighborValue = currentXSlice[jPlusOne][0];
 				smallerYNeighborValue = currentXSlice[jMinusOne][0];
 				greaterZNeighborValue = currentXSlice[j][1];
-				if (topplePositionType12(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType12(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
@@ -513,7 +513,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][2];
-				if (topplePositionType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				if (topplePositionOfType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -529,7 +529,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
 					greaterZNeighborValue = currentXSlice[j][kPlusOne];
-					if (topplePositionType15(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
+					if (topplePositionOfType15(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 							relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newXSlices)) {
 						anyToppled = true;
@@ -546,7 +546,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				if (topplePositionType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
+				if (topplePositionOfType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 1, 
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -560,7 +560,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				if (topplePositionType13(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType13(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
@@ -576,7 +576,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			greaterYNeighborValue = currentXSlice[jPlusOne][0];
 			smallerYNeighborValue = currentXSlice[jMinusOne][0];
 			greaterZNeighborValue = currentXSlice[j][1];
-			if (topplePositionType6(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionOfType6(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -591,7 +591,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][2];
-			if (topplePositionType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionOfType11(j, 1, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -607,7 +607,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				if (topplePositionType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+				if (topplePositionOfType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -625,7 +625,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			if (topplePositionType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
+			if (topplePositionOfType11(j, k, currentValue, greaterXNeighborValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -640,7 +640,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType7(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
+			if (topplePositionOfType7(j, currentValue, greaterXNeighborValue, smallerXNeighborValue, 3, 
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -653,7 +653,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			greaterXNeighborValue = greaterXSlice[j][0];
 			smallerYNeighborValue = currentXSlice[jMinusOne][0];
 			greaterZNeighborValue = currentXSlice[j][1];
-			if (topplePositionType8(j, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType8(j, currentValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -665,7 +665,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][2];
-			if (topplePositionType9(j, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
+			if (topplePositionOfType9(j, 1, currentValue, greaterXNeighborValue, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -681,7 +681,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				if (topplePositionType14(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
+				if (topplePositionOfType14(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
@@ -694,7 +694,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			if (topplePositionType9(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
+			if (topplePositionOfType9(j, k, currentValue, greaterXNeighborValue, smallerYNeighborValue, 2, 
 					greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -706,7 +706,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterXNeighborValue = greaterXSlice[j][k];
-			if (topplePositionType10(j, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
+			if (topplePositionOfType10(j, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 					newGreaterXSlice)) {
 				anyToppled = true;
 			}
@@ -735,7 +735,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		BigInt currentValue = currentXSlice[0][0];
 		BigInt smallerXNeighborValue = smallerXSlice[0][0];
 		BigInt greaterYNeighborValue = currentXSlice[1][0];
-		if (topplePositionType5Edge(currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType5Edge(currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			anyToppled = true;
@@ -747,7 +747,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		currentValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[2][0];
 		BigInt greaterZNeighborValue = currentXSlice[1][1];
-		if (topplePositionType6Edge(1, currentValue, smallerXNeighborValue, 1, 
+		if (topplePositionOfType6Edge(1, currentValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -759,7 +759,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7Edge(1, currentValue, smallerXNeighborValue, 1, 
+		if (topplePositionOfType7Edge(1, currentValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -772,7 +772,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
 		greaterYNeighborValue = currentXSlice[3][0];
-		if (topplePositionType12Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType12Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			anyToppled = true;
@@ -785,7 +785,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[2][2];
-		if (topplePositionType11Edge(2, 1, currentValue, smallerXNeighborValue, 1, 
+		if (topplePositionOfType11Edge(2, 1, currentValue, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -797,7 +797,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType13Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType13Edge(2, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			anyToppled = true;
@@ -810,7 +810,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			greaterYNeighborValue = currentXSlice[jPlusOne][0];
 			smallerYNeighborValue = currentXSlice[jMinusOne][0];
 			greaterZNeighborValue = currentXSlice[j][1];
-			if (topplePositionType12Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType12Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -823,7 +823,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][2];
-			if (topplePositionType11Edge(j, 1, currentValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType11Edge(j, 1, currentValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -838,7 +838,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterZNeighborValue = currentXSlice[j][kPlusOne];
-				if (topplePositionType15Edge(j, k, currentValue, smallerXNeighborValue, 
+				if (topplePositionOfType15Edge(j, k, currentValue, smallerXNeighborValue, 
 						greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newXSlices)) {
 					anyToppled = true;
@@ -854,7 +854,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			if (topplePositionType11Edge(j, k, currentValue, smallerXNeighborValue, 1, 
+			if (topplePositionOfType11Edge(j, k, currentValue, smallerXNeighborValue, 1, 
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -867,7 +867,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			if (topplePositionType13Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType13Edge(j, currentValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -882,7 +882,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		greaterYNeighborValue = currentXSlice[jPlusOne][0];
 		smallerYNeighborValue = currentXSlice[jMinusOne][0];
 		greaterZNeighborValue = currentXSlice[j][1];
-		if (topplePositionType6Edge(j, currentValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType6Edge(j, currentValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -896,7 +896,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][2];
-		if (topplePositionType11Edge(j, 1, currentValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType11Edge(j, 1, currentValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -911,7 +911,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			if (topplePositionType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
+			if (topplePositionOfType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -928,7 +928,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][kPlusOne];
-		if (topplePositionType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
+		if (topplePositionOfType11Edge(j, k, currentValue, smallerXNeighborValue, 2, 
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
@@ -942,7 +942,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType7Edge(j, currentValue, smallerXNeighborValue, 3, 
+		if (topplePositionOfType7Edge(j, currentValue, smallerXNeighborValue, 3, 
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -954,7 +954,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		currentValue = currentXSlice[j][0];
 		smallerYNeighborValue = currentXSlice[jMinusOne][0];
 		greaterZNeighborValue = currentXSlice[j][1];
-		if (topplePositionType8Edge(j, currentValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType8Edge(j, currentValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			anyToppled = true;
@@ -965,7 +965,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][2];
-		if (topplePositionType9Edge(j, 1, currentValue, smallerYNeighborValue, 1, 
+		if (topplePositionOfType9Edge(j, 1, currentValue, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -980,7 +980,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterZNeighborValue = currentXSlice[j][kPlusOne];
-			if (topplePositionType14Edge(j, k, currentValue, smallerYNeighborValue, 
+			if (topplePositionOfType14Edge(j, k, currentValue, smallerYNeighborValue, 
 					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
@@ -992,7 +992,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterZNeighborValue = currentXSlice[j][kPlusOne];
-		if (topplePositionType9Edge(j, k, currentValue, smallerYNeighborValue, 2, 
+		if (topplePositionOfType9Edge(j, k, currentValue, smallerYNeighborValue, 2, 
 				greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
@@ -1003,13 +1003,13 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		if (topplePositionType10Edge(j, currentValue, smallerZNeighborValue, newCurrentXSlice)) {
+		if (topplePositionOfType10Edge(j, currentValue, smallerZNeighborValue, newCurrentXSlice)) {
 			anyToppled = true;
 		}
 		return anyToppled;
 	}
 	
-	private static boolean topplePositionType1(BigInt currentValue, BigInt greaterXNeighborValue, BigInt[][] newCurrentXSlice, 
+	private static boolean topplePositionOfType1(BigInt currentValue, BigInt greaterXNeighborValue, BigInt[][] newCurrentXSlice, 
 			BigInt[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
@@ -1029,7 +1029,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerXNeighborValue, 
+	private static boolean topplePositionOfType2(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerXNeighborValue, 
 			BigInt greaterYNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1071,7 +1071,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerYNeighborValue, 
+	private static boolean topplePositionOfType3(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerYNeighborValue, 
 			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1113,7 +1113,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerZNeighborValue, 
+	private static boolean topplePositionOfType4(BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerZNeighborValue, 
 			BigInt[][] newCurrentXSlice, BigInt[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
@@ -1196,7 +1196,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		return toppled;
 	}
 
-	private static boolean topplePositionType5(BigInt currentValue, BigInt greaterXNeighborValue, 
+	private static boolean topplePositionOfType5(BigInt currentValue, BigInt greaterXNeighborValue, 
 			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt[] relevantAsymmetricNeighborValues, 
 			int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts,
 			BigInt[][][] newXSlices) {
@@ -1236,7 +1236,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType5Edge(BigInt currentValue, BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, 
+	private static boolean topplePositionOfType5Edge(BigInt currentValue, BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, 
 			BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1265,7 +1265,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType6(int j, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
+	private static boolean topplePositionOfType6(int j, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
 			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, 
 			BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1331,7 +1331,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType6Edge(int j, BigInt currentValue, BigInt sXValue, 
+	private static boolean topplePositionOfType6Edge(int j, BigInt currentValue, BigInt sXValue, 
 			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, 
 			BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1386,7 +1386,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType7(int coord, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
+	private static boolean topplePositionOfType7(int coord, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
 			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, 
 			int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1441,7 +1441,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType7Edge(int coord, BigInt currentValue, BigInt sXValue, 
+	private static boolean topplePositionOfType7Edge(int coord, BigInt currentValue, BigInt sXValue, 
 			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, 
 			int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, 
@@ -1485,7 +1485,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int j, BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerYNeighborValue, 
+	private static boolean topplePositionOfType8(int j, BigInt currentValue, BigInt greaterXNeighborValue, BigInt smallerYNeighborValue, 
 			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1524,7 +1524,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType8Edge(int j, BigInt currentValue, BigInt smallerYNeighborValue, 
+	private static boolean topplePositionOfType8Edge(int j, BigInt currentValue, BigInt smallerYNeighborValue, 
 			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices ) {
 		int relevantAsymmetricNeighborCount = 0;
@@ -1553,7 +1553,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int j, int k, BigInt currentValue, BigInt gXValue, BigInt sYValue, 
+	private static boolean topplePositionOfType9(int j, int k, BigInt currentValue, BigInt gXValue, BigInt sYValue, 
 			int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, 
 			BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
@@ -1607,7 +1607,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType9Edge(int j, int k, BigInt currentValue, BigInt sYValue, 
+	private static boolean topplePositionOfType9Edge(int j, int k, BigInt currentValue, BigInt sYValue, 
 			int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, 
 			BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1651,7 +1651,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int coord, BigInt currentValue, BigInt greaterXNeighborValue, 
+	private static boolean topplePositionOfType10(int coord, BigInt currentValue, BigInt greaterXNeighborValue, 
 			BigInt smallerZNeighborValue, BigInt[][] newCurrentXSlice, BigInt[][] newGreaterXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
@@ -1735,7 +1735,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		return toppled;
 	}
 	
-	private static boolean topplePositionType10Edge(int coord, BigInt currentValue, 
+	private static boolean topplePositionOfType10Edge(int coord, BigInt currentValue, 
 			BigInt smallerZNeighborValue, BigInt[][] newCurrentXSlice) {
 		boolean toppled = false;
 		if (smallerZNeighborValue.compareTo(currentValue) < 0) {
@@ -1756,7 +1756,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 		return toppled;
 	}
 
-	private static boolean topplePositionType11(int j, int k, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
+	private static boolean topplePositionOfType11(int j, int k, BigInt currentValue, BigInt gXValue, BigInt sXValue, 
 			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, 
 			BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantNeighborValues, 
 			int[] sortedNeighborsIndexes, int[][] relevantNeighborCoords, int[] relevantNeighborShareMultipliers, BigInt[][][] newXSlices) {
@@ -1819,7 +1819,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 	
-	private static boolean topplePositionType11Edge(int j, int k, BigInt currentValue, BigInt sXValue, 
+	private static boolean topplePositionOfType11Edge(int j, int k, BigInt currentValue, BigInt sXValue, 
 			int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, 
 			BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantNeighborValues, 
 			int[] sortedNeighborsIndexes, int[][] relevantNeighborCoords, int[] relevantNeighborShareMultipliers, 
@@ -1874,7 +1874,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int j, BigInt currentValue, BigInt greaterXNeighborValue, 
+	private static boolean topplePositionOfType12(int j, BigInt currentValue, BigInt greaterXNeighborValue, 
 			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt smallerYNeighborValue, 
 			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1936,7 +1936,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType12Edge(int j, BigInt currentValue, 
+	private static boolean topplePositionOfType12Edge(int j, BigInt currentValue, 
 			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt smallerYNeighborValue, 
 			BigInt greaterZNeighborValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, 
@@ -1988,7 +1988,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int coord, BigInt currentValue, BigInt greaterXNeighborValue, 
+	private static boolean topplePositionOfType13(int coord, BigInt currentValue, BigInt greaterXNeighborValue, 
 			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt smallerZNeighborValue, 
 			BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
@@ -2038,7 +2038,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType13Edge(int coord, BigInt currentValue, 
+	private static boolean topplePositionOfType13Edge(int coord, BigInt currentValue, 
 			BigInt smallerXNeighborValue, BigInt greaterYNeighborValue, BigInt smallerZNeighborValue, 
 			BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
@@ -2078,7 +2078,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int j, int k, BigInt currentValue, BigInt greaterXNeighborValue, 
+	private static boolean topplePositionOfType14(int j, int k, BigInt currentValue, BigInt greaterXNeighborValue, 
 			BigInt smallerYNeighborValue,	BigInt greaterZNeighborValue, BigInt smallerZNeighborValue, 
 			BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
@@ -2128,7 +2128,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 	
-	private static boolean topplePositionType14Edge(int j, int k, BigInt currentValue, 
+	private static boolean topplePositionOfType14Edge(int j, int k, BigInt currentValue, 
 			BigInt smallerYNeighborValue,	BigInt greaterZNeighborValue, BigInt smallerZNeighborValue, 
 			BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, 
 			int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][] newXSlices) {
@@ -2168,7 +2168,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int j, int k, BigInt currentValue, BigInt greaterXNeighborValue, 
+	private static boolean topplePositionOfType15(int j, int k, BigInt currentValue, BigInt greaterXNeighborValue, 
 			BigInt smallerXNeighborValue,	BigInt greaterYNeighborValue, BigInt smallerYNeighborValue, 
 			BigInt greaterZNeighborValue, BigInt smallerZNeighborValue, BigInt[] relevantNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantNeighborCoords, BigInt[][][] newXSlices) {
@@ -2225,7 +2225,7 @@ public class BigIntAether3DCubicGrid implements SymmetricNumericModel3D<BigInt>,
 				relevantNeighborCount);
 	}
 	
-	private static boolean topplePositionType15Edge(int j, int k, BigInt currentValue, 
+	private static boolean topplePositionOfType15Edge(int j, int k, BigInt currentValue, 
 			BigInt smallerXNeighborValue,	BigInt greaterYNeighborValue, BigInt smallerYNeighborValue, 
 			BigInt greaterZNeighborValue, BigInt smallerZNeighborValue, BigInt[] relevantNeighborValues, int[] sortedNeighborsIndexes, 
 			int[][] relevantNeighborCoords, BigInt[][][] newXSlices) {

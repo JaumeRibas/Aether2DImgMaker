@@ -119,7 +119,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		// w = 0, x = 0, y = 0, z = 0
 		BigInt currentValue = currentWSlice[0][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[0][0][0];
-		if (topplePositionType1(currentValue, greaterWNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
+		if (topplePositionOfType1(currentValue, greaterWNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
 			changed = true;
 		}
 		//w slice transition
@@ -142,7 +142,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		currentValue = greaterWNeighborValue;
 		greaterWNeighborValue = greaterWSlice[0][0][0];
 		BigInt greaterXNeighborValue = currentWSlice[1][0][0];
-		if (topplePositionType2(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType2(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -153,7 +153,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		currentValue = greaterXNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[1][1][0];
-		if (topplePositionType3(currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType3(currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -164,7 +164,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		currentValue = greaterYNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][1][0];
 		BigInt greaterZNeighborValue = currentWSlice[1][1][1];
-		if (topplePositionType4(currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType4(currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -174,7 +174,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][1][1];
-		if (topplePositionType5(currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
+		if (topplePositionOfType5(currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
 			changed = true;
 		}
 		//w slice transition
@@ -195,7 +195,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[0][0][0];
 		smallerWNeighborValue = smallerWSlice[0][0][0];
 		greaterXNeighborValue = currentWSlice[1][0][0];
-		if (topplePositionType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
@@ -207,7 +207,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerWNeighborValue = smallerWSlice[1][0][0];
 		greaterXNeighborValue = currentWSlice[2][0][0];
 		greaterYNeighborValue = currentWSlice[1][1][0];
-		if (topplePositionType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
+		if (topplePositionOfType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -220,7 +220,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerWNeighborValue = smallerWSlice[1][1][0];
 		greaterXNeighborValue = currentWSlice[2][1][0];
 		greaterZNeighborValue = currentWSlice[1][1][1];
-		if (topplePositionType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 4, 
+		if (topplePositionOfType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -232,7 +232,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[1][1][1];
 		smallerWNeighborValue = smallerWSlice[1][1][1];
 		greaterXNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
+		if (topplePositionOfType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -242,7 +242,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[2][0][0];
 		smallerXNeighborValue = currentWSlice[1][0][0];
 		greaterYNeighborValue = currentWSlice[2][1][0];
-		if (topplePositionType10(2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType10(2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
@@ -254,7 +254,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerXNeighborValue = currentWSlice[1][1][0];
 		greaterYNeighborValue = currentWSlice[2][2][0];
 		greaterZNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType11(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 4, 
+		if (topplePositionOfType11(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -266,7 +266,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[2][1][1];
 		smallerXNeighborValue = currentWSlice[1][1][1];
 		greaterYNeighborValue = currentWSlice[2][2][1];
-		if (topplePositionType12(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
+		if (topplePositionOfType12(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -277,7 +277,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterZNeighborValue = greaterYNeighborValue;		
 		currentValue = currentWSlice[2][2][0];
 		greaterWNeighborValue = greaterWSlice[2][2][0];
-		if (topplePositionType13(2, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType13(2, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -289,7 +289,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[2][2][1];
 		smallerYNeighborValue = currentWSlice[2][1][1];
 		greaterZNeighborValue = currentWSlice[2][2][2];
-		if (topplePositionType14(2, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, 
+		if (topplePositionOfType14(2, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -299,7 +299,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[2][2][2];
-		if (topplePositionType15(2, currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
+		if (topplePositionOfType15(2, currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
 			changed = true;
 		}		
 		//w slice transition
@@ -317,19 +317,18 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
-		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		// 03 | 02 | 00 | 00 | 19
-		// reuse values obtained previously
 		currentValue = currentWSlice[2][0][0];
 		greaterWNeighborValue = greaterWSlice[2][0][0];
 		smallerWNeighborValue = smallerWSlice[2][0][0];
 		greaterXNeighborValue = currentWSlice[3][0][0];
 		smallerXNeighborValue = currentWSlice[1][0][0];
 		greaterYNeighborValue = currentWSlice[2][1][0];
-		if (topplePositionType7(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
+		if (topplePositionOfType7(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -344,7 +343,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerXNeighborValue = currentWSlice[1][1][0];
 		greaterYNeighborValue = currentWSlice[2][2][0];
 		greaterZNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -358,7 +357,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[3][1][1];
 		smallerXNeighborValue = currentWSlice[1][1][1];
 		greaterYNeighborValue = currentWSlice[2][2][1];
-		if (topplePositionType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+		if (topplePositionOfType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -371,7 +370,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[2][2][0];
 		smallerWNeighborValue = smallerWSlice[2][2][0];
 		greaterXNeighborValue = currentWSlice[3][2][0];
-		if (topplePositionType8(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType8(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -385,7 +384,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[3][2][1];
 		smallerYNeighborValue = currentWSlice[2][1][1];
 		greaterZNeighborValue = currentWSlice[2][2][2];
-		if (topplePositionType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -397,12 +396,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[2][2][2];
 		smallerWNeighborValue = smallerWSlice[2][2][2];
 		greaterXNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType9(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
+		if (topplePositionOfType9(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType2(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType2(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -413,7 +412,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterYNeighborValue = currentWSlice[3][3][0];
 		smallerYNeighborValue = currentWSlice[3][1][0];
 		greaterZNeighborValue = currentWSlice[3][2][1];
-		if (topplePositionType11(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
+		if (topplePositionOfType11(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -427,7 +426,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterYNeighborValue = currentWSlice[3][3][1];
 		smallerYNeighborValue = currentWSlice[3][1][1];
 		greaterZNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType19(3, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(3, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -439,12 +438,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[3][2][2];
 		smallerXNeighborValue = currentWSlice[2][2][2];
 		greaterYNeighborValue = currentWSlice[3][3][2];
-		if (topplePositionType12(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
+		if (topplePositionOfType12(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType3(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType3(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -465,11 +464,11 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
 
-		if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType5(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType5(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -483,7 +482,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterYNeighborValue = currentWSlice[3][3][0];
 		smallerYNeighborValue = currentWSlice[3][1][0];
 		greaterZNeighborValue = currentWSlice[3][2][1];
-		if (topplePositionType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -499,7 +498,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterYNeighborValue = currentWSlice[3][3][1];
 		smallerYNeighborValue = currentWSlice[3][1][1];
 		greaterZNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 			changed = true;
@@ -513,16 +512,16 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[4][2][2];
 		smallerXNeighborValue = currentWSlice[2][2][2];
 		greaterYNeighborValue = currentWSlice[3][3][2];
-		if (topplePositionType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+		if (topplePositionOfType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
-		if (toppleRangeType6(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType6(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		if (toppleRangeType7(4, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType7(4, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -576,11 +575,11 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			newWSlices[0] = newSmallerWSlice;
 			newWSlices[1] = newCurrentWSlice;
 			newWSlices[2] = newGreaterWSlice;
-			if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType8(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType8(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -593,7 +592,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			BigInt greaterYNeighborValue = currentWSlice[3][3][0];
 			BigInt smallerYNeighborValue = currentWSlice[3][1][0];
 			BigInt greaterZNeighborValue = currentWSlice[3][2][1];
-			if (topplePositionType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
@@ -609,7 +608,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterYNeighborValue = currentWSlice[3][3][1];
 			smallerYNeighborValue = currentWSlice[3][1][1];
 			greaterZNeighborValue = currentWSlice[3][2][2];
-			if (topplePositionType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
@@ -623,18 +622,18 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterXNeighborValue = currentWSlice[4][2][2];
 			smallerXNeighborValue = currentWSlice[2][2][2];
 			greaterYNeighborValue = currentWSlice[3][3][2];
-			if (topplePositionType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
-			if (toppleRangeType9(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType9(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			int x = 4, xPlusOne = x + 1, xMinusOne = x - 1;
-			for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-				if (toppleRangeType8(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			int x = 4, xPlusOne = 5, xMinusOne = 3;
+			for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
+				if (toppleRangeOfType8(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -647,7 +646,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][3][0];
 				smallerYNeighborValue = currentWSlice[x][1][0];
 				greaterZNeighborValue = currentWSlice[x][2][1];
-				if (topplePositionType27(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType27(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
@@ -663,7 +662,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][3][1];
 				smallerYNeighborValue = currentWSlice[x][1][1];
 				greaterZNeighborValue = currentWSlice[x][2][2];
-				if (topplePositionType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
@@ -677,12 +676,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterXNeighborValue = currentWSlice[xPlusOne][2][2];
 				smallerXNeighborValue = currentWSlice[xMinusOne][2][2];
 				greaterYNeighborValue = currentWSlice[x][3][2];
-				if (topplePositionType28(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType28(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-				int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+				int y = 3, yMinusOne = 2, yPlusOne = 4;
 				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 					//  w |  x |  y | 00 | 67
 					currentValue = currentWSlice[x][y][0];
@@ -693,7 +692,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 					greaterZNeighborValue = currentWSlice[x][y][1];
-					if (topplePositionType27(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					if (topplePositionOfType27(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 						changed = true;
@@ -709,12 +708,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 					greaterZNeighborValue = currentWSlice[x][y][2];
-					if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
 					}
-					int z = 2, zPlusOne = z + 1;
+					int z = 2, zPlusOne = 3;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 						//  w |  x |  y |  z | 81
 						// reuse values obtained previously
@@ -727,7 +726,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 						greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 						smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 						greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-						if (topplePositionType31(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+						if (topplePositionOfType31(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 								smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newWSlices)) {
 							changed = true;
 						}
@@ -743,7 +742,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
@@ -758,7 +757,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 					greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 					smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-					if (topplePositionType28(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					if (topplePositionOfType28(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 						changed = true;
@@ -773,7 +772,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 				greaterZNeighborValue = currentWSlice[x][y][1];
-				if (topplePositionType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
@@ -789,12 +788,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 				greaterZNeighborValue = currentWSlice[x][y][2];
-				if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 79
 					// reuse values obtained previously
@@ -807,7 +806,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+					if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
@@ -824,7 +823,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
@@ -839,17 +838,17 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-				if (topplePositionType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+				if (topplePositionOfType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-				if (toppleRangeType9(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType9(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType5(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType5(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -862,7 +861,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterYNeighborValue = currentWSlice[x][3][0];
 			smallerYNeighborValue = currentWSlice[x][1][0];
 			greaterZNeighborValue = currentWSlice[x][2][1];
-			if (topplePositionType16(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType16(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
@@ -878,7 +877,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterYNeighborValue = currentWSlice[x][3][1];
 			smallerYNeighborValue = currentWSlice[x][1][1];
 			greaterZNeighborValue = currentWSlice[x][2][2];
-			if (topplePositionType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
@@ -892,12 +891,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterXNeighborValue = currentWSlice[xPlusOne][2][2];
 			smallerXNeighborValue = currentWSlice[xMinusOne][2][2];
 			greaterYNeighborValue = currentWSlice[x][3][2];
-			if (topplePositionType17(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType17(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
-			int y = 3, yPlusOne = y + 1, yMinusOne = y - 1;
+			int y = 3, yPlusOne = 4, yMinusOne = 2;
 			for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				//  w |  x |  y | 00 | 58
 				currentValue = currentWSlice[x][y][0];
@@ -908,7 +907,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 				greaterZNeighborValue = currentWSlice[x][y][1];
-				if (topplePositionType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
@@ -924,12 +923,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 				greaterZNeighborValue = currentWSlice[x][y][2];
-				if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 80
 					// reuse values obtained previously
@@ -942,7 +941,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
@@ -959,7 +958,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
@@ -974,7 +973,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-				if (topplePositionType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
@@ -989,7 +988,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 			greaterZNeighborValue = currentWSlice[x][y][1];
-			if (topplePositionType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
@@ -1005,12 +1004,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 			greaterZNeighborValue = currentWSlice[x][y][2];
-			if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
 			}
-			int z = 2, zPlusOne = z + 1;
+			int z = 2, zPlusOne = 3;
 			for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
 				//  w |  x |  y |  z | 75
 				// reuse values obtained previously
@@ -1023,7 +1022,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
@@ -1040,7 +1039,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 			greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-			if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
@@ -1055,18 +1054,18 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 			smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-			if (topplePositionType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}			
-			if (toppleRangeType6(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType6(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 			xMinusOne = x;
 			x = xPlusOne;
-			for (y = 3, yMinusOne = y - 1, yPlusOne = y + 1; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
+			for (y = 3, yMinusOne = 2, yPlusOne = 4; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				//  w |  x |  y | 00 | 45
 				currentValue = currentWSlice[x][y][0];
 				greaterWNeighborValue = greaterWSlice[x][y][0];
@@ -1074,7 +1073,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 				greaterZNeighborValue = currentWSlice[x][y][1];
-				if (topplePositionType24(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+				if (topplePositionOfType24(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
@@ -1088,12 +1087,12 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 				greaterZNeighborValue = currentWSlice[x][y][2];
-				if (topplePositionType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+				if (topplePositionOfType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 						smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
-				for (z = 2, zPlusOne = z + 1; z != yMinusOne; z = zPlusOne, zPlusOne++) {
+				for (z = 2, zPlusOne = 3; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 76
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
@@ -1103,7 +1102,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType30(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+					if (topplePositionOfType30(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 							relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 						changed = true;
@@ -1118,7 +1117,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+				if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
@@ -1131,13 +1130,13 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				greaterWNeighborValue = greaterWSlice[x][y][z];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-				if (topplePositionType25(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+				if (topplePositionOfType25(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType7(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType7(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1149,7 +1148,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean toppleRangeType1(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType1(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
@@ -1158,7 +1157,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterWNeighborValue = greaterWSlice[0][0][0];
 		BigInt smallerWNeighborValue = smallerWSlice[0][0][0];
 		BigInt greaterXNeighborValue = currentWSlice[1][0][0];
-		if (topplePositionType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}		
@@ -1170,7 +1169,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerWNeighborValue = smallerWSlice[1][0][0];
 		greaterXNeighborValue = currentWSlice[2][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[1][1][0];
-		if (topplePositionType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, greaterYNeighborValue, 2, 
+		if (topplePositionOfType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, greaterYNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1183,7 +1182,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerWNeighborValue = smallerWSlice[1][1][0];
 		greaterXNeighborValue = currentWSlice[2][1][0];
 		BigInt greaterZNeighborValue = currentWSlice[1][1][1];
-		if (topplePositionType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 3, 
+		if (topplePositionOfType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 3, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1195,7 +1194,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[1][1][1];
 		smallerWNeighborValue = smallerWSlice[1][1][1];
 		greaterXNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1203,7 +1202,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType2(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1;
 		boolean changed = false;
@@ -1213,7 +1212,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterWNeighborValue = greaterWSlice[x][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[xMinusOne][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[x][1][0];
-		if (topplePositionType10(x, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType10(x, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
@@ -1225,7 +1224,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][0];
 		greaterYNeighborValue = currentWSlice[x][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][1][1];
-		if (topplePositionType11(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+		if (topplePositionOfType11(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1237,7 +1236,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[x][1][1];
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][1];
 		greaterYNeighborValue = currentWSlice[x][2][1];
-		if (topplePositionType12(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType12(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1245,7 +1244,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType3(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1;
 		boolean changed = false;
@@ -1255,7 +1254,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterWNeighborValue = greaterWSlice[coord][coord][0];
 		BigInt smallerYNeighborValue = currentWSlice[coord][coordMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[coord][coord][1];
-		if (topplePositionType13(coord, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType13(coord, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
@@ -1266,13 +1265,13 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[coord][coord][1];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][1];
 		greaterZNeighborValue = currentWSlice[coord][coord][2];
-		if (topplePositionType14(coord, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType14(coord, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 50
 			// reuse values obtained previously
@@ -1281,7 +1280,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterWNeighborValue = greaterWSlice[coord][coord][z];
 			smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 			greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-			if (topplePositionType26(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
+			if (topplePositionOfType26(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
 			}
@@ -1293,7 +1292,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 		greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-		if (topplePositionType14(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, smallerZNeighborValue, 1, 
+		if (topplePositionOfType14(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1304,16 +1303,16 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
-		if (topplePositionType15(coord, currentValue, greaterWNeighborValue, smallerZNeighborValue, newWSlices[1], newWSlices[2])) {
+		if (topplePositionOfType15(coord, currentValue, greaterWNeighborValue, smallerZNeighborValue, newWSlices[1], newWSlices[2])) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType4(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		boolean changed = false;
-		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeOfType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -1325,7 +1324,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterXNeighborValue = currentWSlice[3][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[1][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[2][1][0];
-		if (topplePositionType20(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType20(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
@@ -1339,7 +1338,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerXNeighborValue = currentWSlice[1][1][0];
 		greaterYNeighborValue = currentWSlice[2][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1353,7 +1352,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[3][1][1];
 		smallerXNeighborValue = currentWSlice[1][1][1];
 		greaterYNeighborValue = currentWSlice[2][2][1];
-		if (topplePositionType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+		if (topplePositionOfType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1366,7 +1365,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[2][2][0];
 		smallerWNeighborValue = smallerWSlice[2][2][0];
 		greaterXNeighborValue = currentWSlice[3][2][0];
-		if (topplePositionType21(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType21(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
@@ -1379,7 +1378,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[3][2][1];
 		smallerYNeighborValue = currentWSlice[2][1][1];
 		greaterZNeighborValue = currentWSlice[2][2][2];
-		if (topplePositionType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1391,7 +1390,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[2][2][2];
 		smallerWNeighborValue = smallerWSlice[2][2][2];
 		greaterXNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType22(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType22(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1399,7 +1398,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType5(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
@@ -1411,7 +1410,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterXNeighborValue = currentWSlice[xPlusOne][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[xMinusOne][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[x][1][0];
-		if (topplePositionType7(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType7(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1426,7 +1425,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][0];
 		greaterYNeighborValue = currentWSlice[x][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][1][1];
-		if (topplePositionType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1440,7 +1439,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[xPlusOne][1][1];
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][1];
 		greaterYNeighborValue = currentWSlice[x][2][1];
-		if (topplePositionType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1448,7 +1447,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType6(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];	
@@ -1460,7 +1459,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterXNeighborValue = currentWSlice[coordPlusOne][coord][0];
 		BigInt smallerYNeighborValue = currentWSlice[coord][coordMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[coord][coord][1];
-		if (topplePositionType8(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType8(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1474,13 +1473,13 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][1];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][1];
 		greaterZNeighborValue = currentWSlice[coord][coord][2];
-		if (topplePositionType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 63
 			// reuse values obtained previously
@@ -1491,7 +1490,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 			smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 			greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-			if (topplePositionType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+			if (topplePositionOfType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
@@ -1506,7 +1505,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 		greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-		if (topplePositionType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1519,14 +1518,14 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
 		smallerWNeighborValue = smallerWSlice[coord][coord][z];
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
-		if (topplePositionType9(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, smallerZNeighborValue, 1, 
+		if (topplePositionOfType9(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
 		coordMinusOne = coord;
 		coord++;
-		if (toppleRangeType2(coord, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeOfType2(coord, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}		
@@ -1537,7 +1536,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterYNeighborValue = currentWSlice[coord][3][0];
 		smallerYNeighborValue = currentWSlice[coord][1][0];
 		greaterZNeighborValue = currentWSlice[coord][2][1];
-		if (topplePositionType24(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType24(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1551,7 +1550,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterYNeighborValue = currentWSlice[coord][3][1];
 		smallerYNeighborValue = currentWSlice[coord][1][1];
 		greaterZNeighborValue = currentWSlice[coord][2][2];
-		if (topplePositionType19(coord, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(coord, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1563,7 +1562,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[coord][2][2];
 		smallerXNeighborValue = currentWSlice[coordMinusOne][2][2];
 		greaterYNeighborValue = currentWSlice[coord][3][2];
-		if (topplePositionType25(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType25(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1571,7 +1570,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType7(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {		
 		int y = x - 1, xMinusOne = x - 1, xMinusTwo = x - 2, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
@@ -1583,7 +1582,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 		BigInt smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][y][1];
-		if (topplePositionType11(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
+		if (topplePositionOfType11(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1597,13 +1596,13 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 		smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 		greaterZNeighborValue = currentWSlice[x][y][2];
-		if (topplePositionType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 66
 			// reuse values obtained previously
@@ -1614,7 +1613,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 			greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-			if (topplePositionType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+			if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
@@ -1629,7 +1628,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 		smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 		greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-		if (topplePositionType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1642,19 +1641,19 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[x][y][z];
 		smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 		greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-		if (topplePositionType12(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, smallerZNeighborValue, 1, 
+		if (topplePositionOfType12(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}		
-		if (toppleRangeType3(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeOfType3(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType8(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
@@ -1666,7 +1665,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterXNeighborValue = currentWSlice[xPlusOne][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[xMinusOne][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[x][1][0];
-		if (topplePositionType20(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
+		if (topplePositionOfType20(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1681,7 +1680,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][0];
 		greaterYNeighborValue = currentWSlice[x][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][1][1];
-		if (topplePositionType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1695,7 +1694,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[xPlusOne][1][1];
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][1];
 		greaterYNeighborValue = currentWSlice[x][2][1];
-		if (topplePositionType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1703,7 +1702,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType9(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
@@ -1715,7 +1714,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt greaterXNeighborValue = currentWSlice[coordPlusOne][coord][0];
 		BigInt smallerYNeighborValue = currentWSlice[coord][coordMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[coord][coord][1];
-		if (topplePositionType21(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType21(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1729,13 +1728,13 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][1];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][1];
 		greaterZNeighborValue = currentWSlice[coord][coord][2];
-		if (topplePositionType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 72
 			// reuse values obtained previously
@@ -1746,7 +1745,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 			greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 			smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 			greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-			if (topplePositionType29(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType29(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
@@ -1761,7 +1760,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 		greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-		if (topplePositionType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1774,7 +1773,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
 		smallerWNeighborValue = smallerWSlice[coord][coord][z];
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
-		if (topplePositionType22(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType22(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
@@ -1782,7 +1781,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return changed;
 	}
 
-	private static boolean topplePositionType1(BigInt currentValue, BigInt gWValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
+	private static boolean topplePositionOfType1(BigInt currentValue, BigInt gWValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
 		boolean toppled = false;
 		if (gWValue.compareTo(currentValue) < 0) {
 			BigInt toShare = currentValue.subtract(gWValue);
@@ -1800,7 +1799,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType2(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -1842,7 +1841,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType3(BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -1884,7 +1883,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, 1, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType4(BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -1926,7 +1925,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, 1, 1, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType5(BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
+	private static boolean topplePositionOfType5(BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
 		boolean toppled = false;
 		if (sZValue.compareTo(currentValue) < 0) {
 			if (gWValue.compareTo(currentValue) < 0) {
@@ -2001,7 +2000,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return toppled;
 	}
 
-	private static boolean topplePositionType6(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType6(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2040,7 +2039,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType7(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType7(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2106,7 +2105,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType8(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2172,7 +2171,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType9(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2226,7 +2225,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int x, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType10(int x, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2265,7 +2264,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType11(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType11(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2331,7 +2330,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType12(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2385,7 +2384,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int coord, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType13(int coord, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2424,7 +2423,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType14(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2478,7 +2477,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int coord, BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
+	private static boolean topplePositionOfType15(int coord, BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
 		// 4*GW, 4*SZ | 15 | 15
 		boolean toppled = false;
 		if (sZValue.compareTo(currentValue) < 0) {
@@ -2558,7 +2557,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return toppled;
 	}
 
-	private static boolean topplePositionType16(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType16(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2648,7 +2647,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType17(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType17(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2726,7 +2725,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType18(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType18(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2804,7 +2803,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType19(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType19(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2882,7 +2881,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType20(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType20(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2943,7 +2942,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType21(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType21(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3004,7 +3003,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType22(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType22(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3054,7 +3053,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType23(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType23(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, BigInt[][][][] newWSlices) {
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
@@ -3139,7 +3138,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType24(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType24(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3200,7 +3199,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType25(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType25(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3250,7 +3249,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType26(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType26(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3300,7 +3299,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType27(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType27(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3383,7 +3382,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType28(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType28(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3455,7 +3454,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType29(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType29(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3527,7 +3526,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType30(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType30(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3599,7 +3598,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType31(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType31(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, BigInt[][][][] newWSlices) {
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;

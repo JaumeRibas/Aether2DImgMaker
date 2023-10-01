@@ -39,7 +39,7 @@ public class SimpleAether2DInfinityTopplingAlternationCompliance implements Symm
 	private BigFraction[][] grid;
 	
 	private boolean[][] topplingAlternationCompliance;
-	private boolean itsEvenPositionsTurnToTopple;
+	private boolean isItEvenPositionsTurnToTopple;
 	
 	private long step;
 	private final boolean isPositive;
@@ -58,7 +58,7 @@ public class SimpleAether2DInfinityTopplingAlternationCompliance implements Symm
 		Utils.fill(grid, BigFraction.ZERO);
 		originIndex = (side - 1)/2;
 		grid[originIndex][originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
-		itsEvenPositionsTurnToTopple = isPositive;
+		isItEvenPositionsTurnToTopple = isPositive;
 		boundsReached = false;
 		//Set the current step to zero
 		step = 0;
@@ -85,10 +85,10 @@ public class SimpleAether2DInfinityTopplingAlternationCompliance implements Symm
 		}
 		newGrid = new BigFraction[newSide][newSide];
 		Utils.fill(newGrid, BigFraction.ZERO);
-		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid.length; j++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
+			for (int j = 0; j < grid.length; j++, isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple) {
 				BigFraction value = grid[i][j];
 				//make list of von Neumann neighbors with value smaller than current cell's value
 				List<Neighbor<BigFraction>> neighbors = new ArrayList<Neighbor<BigFraction>>(4);						
@@ -159,7 +159,7 @@ public class SimpleAether2DInfinityTopplingAlternationCompliance implements Symm
 				}					
 				newGrid[i + indexOffset][j + indexOffset] = 
 						newGrid[i + indexOffset][j + indexOffset].add(value);
-				topplingAlternationCompliance[i + indexOffset][j + indexOffset] = toppled == itsCurrentPositionsTurnToTopple;
+				topplingAlternationCompliance[i + indexOffset][j + indexOffset] = toppled == isItCurrentPositionsTurnToTopple;
 			}
 		}
 		//Replace the old array with the new one
@@ -168,7 +168,7 @@ public class SimpleAether2DInfinityTopplingAlternationCompliance implements Symm
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		//Return whether or not the state of the grid changed
 		return true;
 	}
@@ -176,16 +176,16 @@ public class SimpleAether2DInfinityTopplingAlternationCompliance implements Symm
 	private void registerTopplingAlternationComplianceInGridEdges() {
 		int i = 0;
 		int side = topplingAlternationCompliance.length - 1;
-		boolean isNotCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
-		for (int j = 0; j <= side; j++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
-			topplingAlternationCompliance[i][j] = isNotCurrentPositionsTurnToTopple;
+		boolean isItNotCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		for (int j = 0; j <= side; j++, isItNotCurrentPositionsTurnToTopple = !isItNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][j] = isItNotCurrentPositionsTurnToTopple;
 		}
-		for (i = 1; i < side; i++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
-			topplingAlternationCompliance[i][0] = isNotCurrentPositionsTurnToTopple;
-			topplingAlternationCompliance[i][side] = isNotCurrentPositionsTurnToTopple;
+		for (i = 1; i < side; i++, isItNotCurrentPositionsTurnToTopple = !isItNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][0] = isItNotCurrentPositionsTurnToTopple;
+			topplingAlternationCompliance[i][side] = isItNotCurrentPositionsTurnToTopple;
 		}
-		for (int j = 0; j <= side; j++, isNotCurrentPositionsTurnToTopple = !isNotCurrentPositionsTurnToTopple) {
-			topplingAlternationCompliance[i][j] = isNotCurrentPositionsTurnToTopple;
+		for (int j = 0; j <= side; j++, isItNotCurrentPositionsTurnToTopple = !isItNotCurrentPositionsTurnToTopple) {
+			topplingAlternationCompliance[i][j] = isItNotCurrentPositionsTurnToTopple;
 		}
 	}
 

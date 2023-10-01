@@ -43,7 +43,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 	private BigInt[][][][] grid;
 	
 	private boolean[][][][] topplingAlternationCompliance;
-	private boolean itsEvenPositionsTurnToTopple;
+	private boolean isItEvenPositionsTurnToTopple;
 
 	private final BigInt initialValue;
 	private long step;
@@ -61,7 +61,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 	 */
 	public BigIntAether4DTopplingAlternationCompliance(BigInt initialValue) {
 		this.initialValue = initialValue;
-		itsEvenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0;
+		isItEvenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0;
 		grid = Utils.buildAnisotropic4DBigIntArray(8);
 		grid[0][0][0][0] = this.initialValue;
 		maxW = 5;
@@ -103,7 +103,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		step = (long) data.get(SerializableModelData.STEP);
 		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
 		folderName = (String) data.get(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME);
-		itsEvenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0 == (step%2 == 0);
+		isItEvenPositionsTurnToTopple = initialValue.compareTo(BigInt.ZERO) >= 0 == (step%2 == 0);
 		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
 			topplingAlternationCompliance = (boolean[][][][]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
 		} else {
@@ -126,14 +126,14 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		newGrid[0] = newCurrentWSlice;
 		newGrid[1] = newGreaterWSlice;
 		// w = 0, x = 0, y = 0, z = 0
-		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[0][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[0][0][0];
-		if (topplePositionType1(currentValue, greaterWNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
+		if (topplePositionOfType1(currentValue, greaterWNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
 			changed = true;
-			newCurrentWSliceCompliance[0][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[0][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//w slice transition
 		// smallerWSlice = currentWSlice; // not needed here
@@ -151,61 +151,61 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[8];// to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[8];// to compensate for omitted symmetric positions
 		// w = 1, x = 0, y = 0, z = 0
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerWNeighborValue = currentValue;
 		currentValue = greaterWNeighborValue;
 		greaterWNeighborValue = greaterWSlice[0][0][0];
 		BigInt greaterXNeighborValue = currentWSlice[1][0][0];
-		if (topplePositionType2(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType2(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[0][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[0][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 1, x = 1, y = 0, z = 0
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[1][1][0];
-		if (topplePositionType3(currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType3(currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 1, x = 1, y = 1, z = 0
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][1][0];
 		BigInt greaterZNeighborValue = currentWSlice[1][1][1];
-		if (topplePositionType4(currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType4(currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 1, x = 1, y = 1, z = 1
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][1][1];
-		if (topplePositionType5(currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
+		if (topplePositionOfType5(currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		//w slice transition
 		grid[0] = null;// free old grid progressively to save memory
@@ -222,20 +222,20 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
 		// w = 2, x = 0, y = 0, z = 0
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		currentValue = currentWSlice[0][0][0];
 		greaterWNeighborValue = greaterWSlice[0][0][0];
 		smallerWNeighborValue = smallerWSlice[0][0][0];
 		greaterXNeighborValue = currentWSlice[1][0][0];
-		if (topplePositionType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[0][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[0][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 1, y = 0, z = 0
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -243,16 +243,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerWNeighborValue = smallerWSlice[1][0][0];
 		greaterXNeighborValue = currentWSlice[2][0][0];
 		greaterYNeighborValue = currentWSlice[1][1][0];
-		if (topplePositionType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
+		if (topplePositionOfType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 1, y = 1, z = 0
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -260,45 +260,45 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerWNeighborValue = smallerWSlice[1][1][0];
 		greaterXNeighborValue = currentWSlice[2][1][0];
 		greaterZNeighborValue = currentWSlice[1][1][1];
-		if (topplePositionType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 4, 
+		if (topplePositionOfType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 1, y = 1, z = 1
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][1][1];
 		smallerWNeighborValue = smallerWSlice[1][1][1];
 		greaterXNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
+		if (topplePositionOfType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 2, y = 0, z = 0
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		currentValue = currentWSlice[2][0][0];
 		greaterWNeighborValue = greaterWSlice[2][0][0];
 		smallerXNeighborValue = currentWSlice[1][0][0];
 		greaterYNeighborValue = currentWSlice[2][1][0];
-		if (topplePositionType10(2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType10(2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 2, y = 1, z = 0
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -306,72 +306,72 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerXNeighborValue = currentWSlice[1][1][0];
 		greaterYNeighborValue = currentWSlice[2][2][0];
 		greaterZNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType11(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 4, 
+		if (topplePositionOfType11(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 4, 
 				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 2, y = 1, z = 1
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[2][1][1];
 		smallerXNeighborValue = currentWSlice[1][1][1];
 		greaterYNeighborValue = currentWSlice[2][2][1];
-		if (topplePositionType12(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
+		if (topplePositionOfType12(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 2, y = 2, z = 0
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;		
 		currentValue = currentWSlice[2][2][0];
 		greaterWNeighborValue = greaterWSlice[2][2][0];
-		if (topplePositionType13(2, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType13(2, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// w = 2, x = 2, y = 2, z = 1
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[2][2][1];
 		smallerYNeighborValue = currentWSlice[2][1][1];
 		greaterZNeighborValue = currentWSlice[2][2][2];
-		if (topplePositionType14(2, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, 
+		if (topplePositionOfType14(2, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 02 | 02 | 02 | 02 | 15
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[2][2][2];
-		if (topplePositionType15(2, currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
+		if (topplePositionOfType15(2, currentValue, greaterWNeighborValue, smallerZNeighborValue, newCurrentWSlice, newGreaterWSlice)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][2] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][2] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][2] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][2] = !isItCurrentPositionsTurnToTopple;
 		}
 		//w slice transition
 		grid[1] = null;// free old grid progressively to save memory
@@ -389,13 +389,13 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		newWSlices[0] = newSmallerWSlice;
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
-		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentWSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
+				newCurrentWSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 03 | 02 | 00 | 00 | 19
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		currentValue = currentWSlice[2][0][0];
 		greaterWNeighborValue = greaterWSlice[2][0][0];
@@ -403,16 +403,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[3][0][0];
 		smallerXNeighborValue = currentWSlice[1][0][0];
 		greaterYNeighborValue = currentWSlice[2][1][0];
-		if (topplePositionType7(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
+		if (topplePositionOfType7(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 03 | 02 | 01 | 00 | 20
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -422,16 +422,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerXNeighborValue = currentWSlice[1][1][0];
 		greaterYNeighborValue = currentWSlice[2][2][0];
 		greaterZNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 03 | 02 | 01 | 01 | 21
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -440,16 +440,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[3][1][1];
 		smallerXNeighborValue = currentWSlice[1][1][1];
 		greaterYNeighborValue = currentWSlice[2][2][1];
-		if (topplePositionType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+		if (topplePositionOfType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 03 | 02 | 02 | 00 | 22
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
@@ -457,16 +457,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterWNeighborValue = greaterWSlice[2][2][0];
 		smallerWNeighborValue = smallerWSlice[2][2][0];
 		greaterXNeighborValue = currentWSlice[3][2][0];
-		if (topplePositionType8(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType8(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 03 | 02 | 02 | 01 | 23
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -475,53 +475,53 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[3][2][1];
 		smallerYNeighborValue = currentWSlice[2][1][1];
 		greaterZNeighborValue = currentWSlice[2][2][2];
-		if (topplePositionType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 03 | 02 | 02 | 02 | 24
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[2][2][2];
 		smallerWNeighborValue = smallerWSlice[2][2][2];
 		greaterXNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType9(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
+		if (topplePositionOfType9(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][2] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][2] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][2] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][2] = !isItCurrentPositionsTurnToTopple;
 		}
-		if (toppleRangeType2(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType2(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentWSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
+				newCurrentWSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 03 | 03 | 02 | 00 | 27
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		currentValue = currentWSlice[3][2][0];
 		greaterWNeighborValue = greaterWSlice[3][2][0];
 		smallerXNeighborValue = currentWSlice[2][2][0];
 		greaterYNeighborValue = currentWSlice[3][3][0];
 		smallerYNeighborValue = currentWSlice[3][1][0];
 		greaterZNeighborValue = currentWSlice[3][2][1];
-		if (topplePositionType11(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
+		if (topplePositionOfType11(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[3][2][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[3][2][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 03 | 03 | 02 | 01 | 28
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -530,33 +530,33 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterYNeighborValue = currentWSlice[3][3][1];
 		smallerYNeighborValue = currentWSlice[3][1][1];
 		greaterZNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType19(3, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(3, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[3][2][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[3][2][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 03 | 03 | 02 | 02 | 29
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[3][2][2];
 		smallerXNeighborValue = currentWSlice[2][2][2];
 		greaterYNeighborValue = currentWSlice[3][3][2];
-		if (topplePositionType12(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
+		if (topplePositionOfType12(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[3][2][2] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][2] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[3][2][2] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][2] = !isItCurrentPositionsTurnToTopple;
 		}
-		if (toppleRangeType3(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType3(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentWSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
+				newCurrentWSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 
@@ -577,19 +577,19 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		newWSlices[1] = newCurrentWSlice;
 		newWSlices[2] = newGreaterWSlice;
 
-		if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentWSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
+				newCurrentWSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
-		if (toppleRangeType5(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType5(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentWSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
+				newCurrentWSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 
 		// 04 | 03 | 02 | 00 | 40
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		currentValue = currentWSlice[3][2][0];
 		greaterWNeighborValue = greaterWSlice[3][2][0];
 		smallerWNeighborValue = smallerWSlice[3][2][0];
@@ -598,16 +598,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterYNeighborValue = currentWSlice[3][3][0];
 		smallerYNeighborValue = currentWSlice[3][1][0];
 		greaterZNeighborValue = currentWSlice[3][2][1];
-		if (topplePositionType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[3][2][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[3][2][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 04 | 03 | 02 | 01 | 41
-		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -618,16 +618,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterYNeighborValue = currentWSlice[3][3][1];
 		smallerYNeighborValue = currentWSlice[3][1][1];
 		greaterZNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[3][2][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[3][2][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		// 04 | 03 | 02 | 02 | 42
-		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -636,22 +636,22 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[4][2][2];
 		smallerXNeighborValue = currentWSlice[2][2][2];
 		greaterYNeighborValue = currentWSlice[3][3][2];
-		if (topplePositionType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+		if (topplePositionOfType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[3][2][2] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][2] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[3][2][2] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[3][2][2] = !isItCurrentPositionsTurnToTopple;
 		}
-		if (toppleRangeType6(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType6(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentWSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
+				newCurrentWSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
-		if (toppleRangeType7(4, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+		if (toppleRangeOfType7(4, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentWSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
+				newCurrentWSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		grid[3] = null;// free old grid progressively to save memory		
@@ -674,13 +674,13 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		}
 		grid = newGrid;
 		step++;
-		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		this.changed = changed;
 		return changed;
 	}
 	
 	private void registerStaticGridSliceCompliance(int w) {
-		if (w%2 == 0 == itsEvenPositionsTurnToTopple) {
+		if (w%2 == 0 == isItEvenPositionsTurnToTopple) {
 			Utils.fillOddIndexes(topplingAlternationCompliance[w], true);
 		} else {
 			Utils.fillEvenIndexes(topplingAlternationCompliance[w], true);
@@ -716,18 +716,18 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			newWSlices[0] = newSmallerWSlice;
 			newWSlices[1] = newCurrentWSlice;
 			newWSlices[2] = newGreaterWSlice;
-			if (toppleRangeType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType4(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+					newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
-			if (toppleRangeType8(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType8(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+					newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			//  w | 03 | 02 | 00 | 53
-			boolean itsCurrentPositionsTurnToTopple = isWEven != itsEvenPositionsTurnToTopple;
+			boolean isItCurrentPositionsTurnToTopple = isWEven != isItEvenPositionsTurnToTopple;
 			BigInt currentValue = currentWSlice[3][2][0];
 			BigInt greaterWNeighborValue = greaterWSlice[3][2][0];
 			BigInt smallerWNeighborValue = smallerWSlice[3][2][0];
@@ -736,16 +736,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			BigInt greaterYNeighborValue = currentWSlice[3][3][0];
 			BigInt smallerYNeighborValue = currentWSlice[3][1][0];
 			BigInt greaterZNeighborValue = currentWSlice[3][2][1];
-			if (topplePositionType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[3][2][0] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[3][2][0] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[3][2][0] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[3][2][0] = !isItCurrentPositionsTurnToTopple;
 			}
 			//  w | 03 | 02 | 01 | 54
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			BigInt smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -756,16 +756,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterYNeighborValue = currentWSlice[3][3][1];
 			smallerYNeighborValue = currentWSlice[3][1][1];
 			greaterZNeighborValue = currentWSlice[3][2][2];
-			if (topplePositionType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[3][2][1] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[3][2][1] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[3][2][1] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[3][2][1] = !isItCurrentPositionsTurnToTopple;
 			}
 			//  w | 03 | 02 | 02 | 55
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -774,29 +774,29 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterXNeighborValue = currentWSlice[4][2][2];
 			smallerXNeighborValue = currentWSlice[2][2][2];
 			greaterYNeighborValue = currentWSlice[3][3][2];
-			if (topplePositionType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[3][2][2] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[3][2][2] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[3][2][2] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[3][2][2] = !isItCurrentPositionsTurnToTopple;
 			}
-			if (toppleRangeType9(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType9(3, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+					newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
-			int x = 4, xPlusOne = x + 1, xMinusOne = x - 1;
-			boolean isY2Z0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
-			for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, isY2Z0PositionsTurnToTopple = !isY2Z0PositionsTurnToTopple) {
-				if (toppleRangeType8(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			int x = 4, xPlusOne = 5, xMinusOne = 3;
+			boolean isItY2Z0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, isItY2Z0PositionsTurnToTopple = !isItY2Z0PositionsTurnToTopple) {
+				if (toppleRangeOfType8(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+						newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 				//  w |  x | 02 | 00 | 67
-				itsCurrentPositionsTurnToTopple = isY2Z0PositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
 				currentValue = currentWSlice[x][2][0];
 				greaterWNeighborValue = greaterWSlice[x][2][0];
 				smallerWNeighborValue = smallerWSlice[x][2][0];
@@ -805,16 +805,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][3][0];
 				smallerYNeighborValue = currentWSlice[x][1][0];
 				greaterZNeighborValue = currentWSlice[x][2][1];
-				if (topplePositionType27(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType27(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][2][0] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][2][0] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][2][0] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][2][0] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x | 02 | 01 | 68
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -825,16 +825,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][3][1];
 				smallerYNeighborValue = currentWSlice[x][1][1];
 				greaterZNeighborValue = currentWSlice[x][2][2];
-				if (topplePositionType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][2][1] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][2][1] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][2][1] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][2][1] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x | 02 | 02 | 69
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -843,19 +843,19 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterXNeighborValue = currentWSlice[xPlusOne][2][2];
 				smallerXNeighborValue = currentWSlice[xMinusOne][2][2];
 				greaterYNeighborValue = currentWSlice[x][3][2];
-				if (topplePositionType28(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType28(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][2][2] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][2][2] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][2][2] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][2][2] = !isItCurrentPositionsTurnToTopple;
 				}
-				int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
-				boolean isZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
-				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isZ0PositionsTurnToTopple = !isZ0PositionsTurnToTopple) {
+				int y = 3, yMinusOne = 2, yPlusOne = 4;
+				boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
 					//  w |  x |  y | 00 | 67
-					itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+					isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
 					currentValue = currentWSlice[x][y][0];
 					greaterWNeighborValue = greaterWSlice[x][y][0];
 					smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -864,16 +864,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 					greaterZNeighborValue = currentWSlice[x][y][1];
-					if (topplePositionType27(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					if (topplePositionOfType27(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 						changed = true;
-						newCurrentWSliceCompliance[x][y][0] = itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][0] = isItCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentWSliceCompliance[x][y][0] = !itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][0] = !isItCurrentPositionsTurnToTopple;
 					}
 					//  w |  x |  y | 01 | 77
-					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -884,18 +884,18 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 					greaterZNeighborValue = currentWSlice[x][y][2];
-					if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
-						newCurrentWSliceCompliance[x][y][1] = itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][1] = isItCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentWSliceCompliance[x][y][1] = !itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][1] = !isItCurrentPositionsTurnToTopple;
 					}
-					int z = 2, zPlusOne = z + 1;
+					int z = 2, zPlusOne = 3;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 						//  w |  x |  y |  z | 81
-						itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+						isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 						// reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -906,16 +906,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 						greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 						smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 						greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-						if (topplePositionType31(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+						if (topplePositionOfType31(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 								smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newWSlices)) {
 							changed = true;
-							newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+							newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+							newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 						}
 					}
 					//  w |  x |  y |  z | 78
-					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -926,17 +926,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
-						newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 					}
 					//  w |  x |  y |++z | 69
 					z = zPlusOne;
-					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -945,17 +945,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 					greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 					smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-					if (topplePositionType28(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					if (topplePositionOfType28(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 						changed = true;
-						newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 					}
 				}
 				//  w |  x |  y | 00 | 53
-				itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
 				currentValue = currentWSlice[x][y][0];
 				greaterWNeighborValue = greaterWSlice[x][y][0];
 				smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -964,16 +964,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 				greaterZNeighborValue = currentWSlice[x][y][1];
-				if (topplePositionType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][0] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][0] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][0] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][0] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x |  y | 01 | 70
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -984,18 +984,18 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 				greaterZNeighborValue = currentWSlice[x][y][2];
-				if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][1] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][1] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][1] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][1] = !isItCurrentPositionsTurnToTopple;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 79
-					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1006,17 +1006,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+					if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
-						newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 					}
 				}
 				//  w |  x |  y |  z | 71
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1027,17 +1027,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x |  y |++z | 55
 				z = zPlusOne;
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1046,27 +1046,27 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-				if (topplePositionType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+				if (topplePositionOfType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 				}
-				if (toppleRangeType9(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType9(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+						newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType5(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType5(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+					newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			//  w |  x | 02 | 00 | 58
-			itsCurrentPositionsTurnToTopple = isY2Z0PositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
 			currentValue = currentWSlice[x][2][0];
 			greaterWNeighborValue = greaterWSlice[x][2][0];
 			smallerWNeighborValue = smallerWSlice[x][2][0];
@@ -1075,16 +1075,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterYNeighborValue = currentWSlice[x][3][0];
 			smallerYNeighborValue = currentWSlice[x][1][0];
 			greaterZNeighborValue = currentWSlice[x][2][1];
-			if (topplePositionType16(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType16(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][2][0] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][2][0] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][2][0] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][2][0] = !isItCurrentPositionsTurnToTopple;
 			}
 			//  w |  x | 02 | 01 | 59
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1095,16 +1095,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterYNeighborValue = currentWSlice[x][3][1];
 			smallerYNeighborValue = currentWSlice[x][1][1];
 			greaterZNeighborValue = currentWSlice[x][2][2];
-			if (topplePositionType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType23(x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][2][1] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][2][1] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][2][1] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][2][1] = !isItCurrentPositionsTurnToTopple;
 			}
 			//  w |  x | 02 | 02 | 60
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1113,19 +1113,19 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterXNeighborValue = currentWSlice[xPlusOne][2][2];
 			smallerXNeighborValue = currentWSlice[xMinusOne][2][2];
 			greaterYNeighborValue = currentWSlice[x][3][2];
-			if (topplePositionType17(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType17(x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][2][2] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][2][2] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][2][2] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][2][2] = !isItCurrentPositionsTurnToTopple;
 			}
-			int y = 3, yPlusOne = y + 1, yMinusOne = y - 1;
-			boolean isZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
-			for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++, isZ0PositionsTurnToTopple = !isZ0PositionsTurnToTopple) {
+			int y = 3, yPlusOne = 4, yMinusOne = 2;
+			boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
 				//  w |  x |  y | 00 | 58
-				itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
 				currentValue = currentWSlice[x][y][0];
 				greaterWNeighborValue = greaterWSlice[x][y][0];
 				smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -1134,16 +1134,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 				greaterZNeighborValue = currentWSlice[x][y][1];
-				if (topplePositionType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][0] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][0] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][0] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][0] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x |  y | 01 | 73
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1154,18 +1154,18 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 				greaterZNeighborValue = currentWSlice[x][y][2];
-				if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][1] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][1] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][1] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][1] = !isItCurrentPositionsTurnToTopple;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 80
-					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1176,17 +1176,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 						changed = true;
-						newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 					}
 				}
 				//  w |  x |  y |  z | 74
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1197,17 +1197,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x |  y |++z | 60
 				z = zPlusOne;
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1216,17 +1216,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-				if (topplePositionType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 				}
 			}
 			//  w |  x |  y | 00 | 40
-			itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
 			currentValue = currentWSlice[x][y][0];
 			greaterWNeighborValue = greaterWSlice[x][y][0];
 			smallerWNeighborValue = smallerWSlice[x][y][0];
@@ -1235,16 +1235,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 			greaterZNeighborValue = currentWSlice[x][y][1];
-			if (topplePositionType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][y][0] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][0] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][y][0] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][0] = !isItCurrentPositionsTurnToTopple;
 			}
 			//  w |  x |  y | 01 | 61
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1255,18 +1255,18 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 			greaterZNeighborValue = currentWSlice[x][y][2];
-			if (topplePositionType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][y][1] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][1] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][y][1] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][1] = !isItCurrentPositionsTurnToTopple;
 			}
-			int z = 2, zPlusOne = z + 1;
+			int z = 2, zPlusOne = 3;
 			for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
 				//  w |  x |  y |  z | 75
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1277,17 +1277,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 				}
 			}
 			//  w |  x |  y |  z | 62
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1298,17 +1298,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 			greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-			if (topplePositionType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 			}
 			//  w |  x |  y |++z | 42
 			z = zPlusOne;
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1317,41 +1317,41 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterXNeighborValue = currentWSlice[xPlusOne][y][z];
 			smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-			if (topplePositionType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 			}
-			if (toppleRangeType6(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType6(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+					newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			xMinusOne = x;
 			x = xPlusOne;
-			isZ0PositionsTurnToTopple = isWEven == (x%2 == 0) != itsEvenPositionsTurnToTopple;
-			for (y = 3, yMinusOne = y - 1, yPlusOne = y + 1; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isZ0PositionsTurnToTopple = !isZ0PositionsTurnToTopple) {
+			isItZ0PositionsTurnToTopple = isWEven == (x%2 == 0) != isItEvenPositionsTurnToTopple;
+			for (y = 3, yMinusOne = 2, yPlusOne = 4; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
 				//  w |  x |  y | 00 | 45
-				itsCurrentPositionsTurnToTopple = isZ0PositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
 				currentValue = currentWSlice[x][y][0];
 				greaterWNeighborValue = greaterWSlice[x][y][0];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][0];
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 				greaterZNeighborValue = currentWSlice[x][y][1];
-				if (topplePositionType24(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+				if (topplePositionOfType24(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][0] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][0] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][0] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][0] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x |  y | 01 | 64
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1360,17 +1360,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 				greaterZNeighborValue = currentWSlice[x][y][2];
-				if (topplePositionType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+				if (topplePositionOfType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 						smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][1] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][1] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][1] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][1] = !isItCurrentPositionsTurnToTopple;
 				}
-				for (z = 2, zPlusOne = z + 1; z != yMinusOne; z = zPlusOne, zPlusOne++) {
+				for (z = 2, zPlusOne = 3; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 76
-					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1379,17 +1379,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 					greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 					smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 					greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-					if (topplePositionType30(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+					if (topplePositionOfType30(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 							relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 						changed = true;
-						newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+						newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 					}
 				}
 				//  w |  x |  y |  z | 65
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1398,35 +1398,35 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 				smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 				greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-				if (topplePositionType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+				if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 				}
 				//  w |  x |  y |++z | 47
 				z = zPlusOne;
-				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
 				greaterWNeighborValue = greaterWSlice[x][y][z];
 				smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 				greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-				if (topplePositionType25(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+				if (topplePositionOfType25(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 					changed = true;
-					newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+					newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 				}
 			}
-			if (toppleRangeType7(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType7(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+					newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 		}		
@@ -1437,26 +1437,26 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return changed;
 	}
 
-	private static boolean toppleRangeType1(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType1(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		boolean changed = false;
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 		//  w | 00 | 00 | 00 | 06
-		boolean itsCurrentPositionsTurnToTopple = isWEven == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[0][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[0][0][0];
 		BigInt smallerWNeighborValue = smallerWSlice[0][0][0];
 		BigInt greaterXNeighborValue = currentWSlice[1][0][0];
-		if (topplePositionType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType6(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[0][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[0][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[0][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 01 | 00 | 00 | 16
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -1464,16 +1464,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerWNeighborValue = smallerWSlice[1][0][0];
 		greaterXNeighborValue = currentWSlice[2][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[1][1][0];
-		if (topplePositionType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, greaterYNeighborValue, 2, 
+		if (topplePositionOfType7(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, greaterYNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 01 | 01 | 00 | 17
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1481,54 +1481,54 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerWNeighborValue = smallerWSlice[1][1][0];
 		greaterXNeighborValue = currentWSlice[2][1][0];
 		BigInt greaterZNeighborValue = currentWSlice[1][1][1];
-		if (topplePositionType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 3, 
+		if (topplePositionOfType8(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 3, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 01 | 01 | 01 | 18
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[1][1][1];
 		smallerWNeighborValue = smallerWSlice[1][1][1];
 		greaterXNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType9(1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[1][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[1][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[1][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType2(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType2(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		int xMinusOne = x - 1;
 		boolean changed = false;
 		BigInt[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 		//  w |  x | 00 | 00 | 10
-		boolean itsCurrentPositionsTurnToTopple = isWEven == (x%2 == 0) == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == (x%2 == 0) == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[x][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[xMinusOne][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[x][1][0];
-		if (topplePositionType10(x, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType10(x, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 01 | 00 | 25
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1536,145 +1536,145 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][0];
 		greaterYNeighborValue = currentWSlice[x][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][1][1];
-		if (topplePositionType11(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+		if (topplePositionOfType11(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 01 | 01 | 26
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[x][1][1];
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][1];
 		greaterYNeighborValue = currentWSlice[x][2][1];
-		if (topplePositionType12(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType12(x, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType3(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType3(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		int coordMinusOne = coord - 1;
 		boolean changed = false;
 		BigInt[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 		//  w |  x |  y | 00 | 13
-		boolean itsCurrentPositionsTurnToTopple = isWEven == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[coord][coord][0];
 		BigInt greaterWNeighborValue = greaterWSlice[coord][coord][0];
 		BigInt smallerYNeighborValue = currentWSlice[coord][coordMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[coord][coord][1];
-		if (topplePositionType13(coord, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType13(coord, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y | 01 | 30
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[coord][coord][1];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][1];
 		greaterZNeighborValue = currentWSlice[coord][coord][2];
-		if (topplePositionType14(coord, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType14(coord, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 50
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterWNeighborValue = greaterWSlice[coord][coord][z];
 			smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 			greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-			if (topplePositionType26(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
+			if (topplePositionOfType26(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 			}
 		}
 		//  w |  x |  y |  z | 31
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 		greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-		if (topplePositionType14(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, smallerZNeighborValue, 1, 
+		if (topplePositionOfType14(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y |++z | 15
 		z = zPlusOne;
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
-		if (topplePositionType15(coord, currentValue, greaterWNeighborValue, smallerZNeighborValue, newWSlices[1], newWSlices[2])) {
+		if (topplePositionOfType15(coord, currentValue, greaterWNeighborValue, smallerZNeighborValue, newWSlices[1], newWSlices[2])) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType4(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType4(BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		boolean changed = false;
-		if (toppleRangeType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers, newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+		if (toppleRangeOfType1(wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers, newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 		//  w | 02 | 00 | 00 | 32
-		boolean itsCurrentPositionsTurnToTopple = isWEven == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[2][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[2][0][0];
 		BigInt smallerWNeighborValue = smallerWSlice[2][0][0];
 		BigInt greaterXNeighborValue = currentWSlice[3][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[1][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[2][1][0];
-		if (topplePositionType20(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType20(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 02 | 01 | 00 | 33
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1684,16 +1684,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerXNeighborValue = currentWSlice[1][1][0];
 		greaterYNeighborValue = currentWSlice[2][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[2][1][1];
-		if (topplePositionType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType16(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 02 | 01 | 01 | 34
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1702,13 +1702,13 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[3][1][1];
 		smallerXNeighborValue = currentWSlice[1][1][1];
 		greaterYNeighborValue = currentWSlice[2][2][1];
-		if (topplePositionType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+		if (topplePositionOfType17(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 02 | 02 | 00 | 35
 		// reuse values obtained previously
@@ -1718,15 +1718,15 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterWNeighborValue = greaterWSlice[2][2][0];
 		smallerWNeighborValue = smallerWSlice[2][2][0];
 		greaterXNeighborValue = currentWSlice[3][2][0];
-		if (topplePositionType21(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType21(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 02 | 02 | 01 | 36
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1735,57 +1735,57 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[3][2][1];
 		smallerYNeighborValue = currentWSlice[2][1][1];
 		greaterZNeighborValue = currentWSlice[2][2][2];
-		if (topplePositionType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w | 02 | 02 | 02 | 37
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[2][2][2];
 		smallerWNeighborValue = smallerWSlice[2][2][2];
 		greaterXNeighborValue = currentWSlice[3][2][2];
-		if (topplePositionType22(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType22(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[2][2][2] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][2] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[2][2][2] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[2][2][2] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType5(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType5(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 		//  w |  x | 00 | 00 | 19
-		boolean itsCurrentPositionsTurnToTopple = isWEven == (x%2 == 0) == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == (x%2 == 0) == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[x][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][0][0];
 		BigInt smallerWNeighborValue = smallerWSlice[x][0][0];
 		BigInt greaterXNeighborValue = currentWSlice[xPlusOne][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[xMinusOne][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[x][1][0];
-		if (topplePositionType7(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType7(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 01 | 00 | 38
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -1795,16 +1795,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][0];
 		greaterYNeighborValue = currentWSlice[x][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][1][1];
-		if (topplePositionType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 01 | 01 | 39
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1813,41 +1813,41 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[xPlusOne][1][1];
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][1];
 		greaterYNeighborValue = currentWSlice[x][2][1];
-		if (topplePositionType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType6(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType6(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];	
 		boolean changed = false;		
 		//  w |  x |  y | 00 | 22
-		boolean itsCurrentPositionsTurnToTopple = isWEven == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[coord][coord][0];
 		BigInt greaterWNeighborValue = greaterWSlice[coord][coord][0];
 		BigInt smallerWNeighborValue = smallerWSlice[coord][coord][0];
 		BigInt greaterXNeighborValue = currentWSlice[coordPlusOne][coord][0];
 		BigInt smallerYNeighborValue = currentWSlice[coord][coordMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[coord][coord][1];
-		if (topplePositionType8(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType8(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y | 01 | 43
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1856,19 +1856,19 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][1];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][1];
 		greaterZNeighborValue = currentWSlice[coord][coord][2];
-		if (topplePositionType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 63
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1877,17 +1877,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 			smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 			greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-			if (topplePositionType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+			if (topplePositionOfType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 			}
 		}
 		//  w |  x |  y |  z | 44
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1896,55 +1896,55 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 		greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-		if (topplePositionType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y |++z | 24
 		z = zPlusOne;
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
 		smallerWNeighborValue = smallerWSlice[coord][coord][z];
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
-		if (topplePositionType9(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, smallerZNeighborValue, 1, 
+		if (topplePositionOfType9(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 		}
 		coordMinusOne = coord;
 		coord++;
-		if (toppleRangeType2(coord, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers, newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+		if (toppleRangeOfType2(coord, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers, newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}		
 		//  w |  x | 02 | 00 | 45
-		itsCurrentPositionsTurnToTopple = isWEven == (coord%2 == 0) == itsEvenPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = isWEven == (coord%2 == 0) == isItEvenPositionsTurnToTopple;
 		currentValue = currentWSlice[coord][2][0];
 		greaterWNeighborValue = greaterWSlice[coord][2][0];
 		BigInt smallerXNeighborValue = currentWSlice[coordMinusOne][2][0];
 		BigInt greaterYNeighborValue = currentWSlice[coord][3][0];
 		smallerYNeighborValue = currentWSlice[coord][1][0];
 		greaterZNeighborValue = currentWSlice[coord][2][1];
-		if (topplePositionType24(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType24(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][2][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][2][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][2][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][2][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 02 | 01 | 46
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1953,57 +1953,57 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterYNeighborValue = currentWSlice[coord][3][1];
 		smallerYNeighborValue = currentWSlice[coord][1][1];
 		greaterZNeighborValue = currentWSlice[coord][2][2];
-		if (topplePositionType19(coord, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(coord, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][2][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][2][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][2][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][2][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 02 | 02 | 47
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[coord][2][2];
 		smallerXNeighborValue = currentWSlice[coordMinusOne][2][2];
 		greaterYNeighborValue = currentWSlice[coord][3][2];
-		if (topplePositionType25(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType25(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][2][2] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][2][2] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][2][2] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][2][2] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType7(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType7(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {		
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {		
 		int y = x - 1, xMinusOne = x - 1, xMinusTwo = x - 2, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
 		BigInt[][][] currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 		//  w |  x |  y | 00 | 27
-		boolean itsCurrentPositionsTurnToTopple = isWEven != itsEvenPositionsTurnToTopple;//if x even -> y odd -> odd, if x odd -> y even -> odd
+		boolean isItCurrentPositionsTurnToTopple = isWEven != isItEvenPositionsTurnToTopple;//if x even -> y odd -> odd, if x odd -> y even -> odd
 		BigInt currentValue = currentWSlice[x][y][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][y][0];
 		BigInt smallerXNeighborValue = currentWSlice[xMinusOne][y][0];
 		BigInt greaterYNeighborValue = currentWSlice[x][yPlusOne][0];
 		BigInt smallerYNeighborValue = currentWSlice[x][yMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][y][1];
-		if (topplePositionType11(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
+		if (topplePositionOfType11(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][y][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][y][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y | 01 | 48
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2012,19 +2012,19 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterYNeighborValue = currentWSlice[x][yPlusOne][1];
 		smallerYNeighborValue = currentWSlice[x][yMinusOne][1];
 		greaterZNeighborValue = currentWSlice[x][y][2];
-		if (topplePositionType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][y][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][y][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 66
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2033,17 +2033,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 			smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 			greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-			if (topplePositionType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+			if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 			}
 		}
 		//  w |  x |  y |  z | 49
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2052,62 +2052,62 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
 		smallerYNeighborValue = currentWSlice[x][yMinusOne][z];
 		greaterZNeighborValue = currentWSlice[x][y][zPlusOne];
-		if (topplePositionType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y |++z | 29
 		z = zPlusOne;
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[x][y][z];
 		smallerXNeighborValue = currentWSlice[xMinusOne][y][z];
 		greaterYNeighborValue = currentWSlice[x][yPlusOne][z];
-		if (topplePositionType12(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, smallerZNeighborValue, 1, 
+		if (topplePositionOfType12(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][y][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][y][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][y][z] = !isItCurrentPositionsTurnToTopple;
 		}
-		if (toppleRangeType3(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
-				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers, newCurrentWSliceCompliance, isWEven, itsEvenPositionsTurnToTopple)) {
+		if (toppleRangeOfType3(x, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers, newCurrentWSliceCompliance, isWEven, isItEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType8(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType8(int x, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		int xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];		
 		//  w |  x | 00 | 00 | 32
-		boolean itsCurrentPositionsTurnToTopple = isWEven == (x%2 == 0) == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == (x%2 == 0) == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[x][0][0];
 		BigInt greaterWNeighborValue = greaterWSlice[x][0][0];
 		BigInt smallerWNeighborValue = smallerWSlice[x][0][0];
 		BigInt greaterXNeighborValue = currentWSlice[xPlusOne][0][0];
 		BigInt smallerXNeighborValue = currentWSlice[xMinusOne][0][0];
 		BigInt greaterYNeighborValue = currentWSlice[x][1][0];
-		if (topplePositionType20(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
+		if (topplePositionOfType20(x, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][0][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][0][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][0][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][0][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 01 | 00 | 51
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -2117,16 +2117,16 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][0];
 		greaterYNeighborValue = currentWSlice[x][2][0];
 		BigInt greaterZNeighborValue = currentWSlice[x][1][1];
-		if (topplePositionType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType16(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][1][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][1][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x | 01 | 01 | 52
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2135,41 +2135,41 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[xPlusOne][1][1];
 		smallerXNeighborValue = currentWSlice[xMinusOne][1][1];
 		greaterYNeighborValue = currentWSlice[x][2][1];
-		if (topplePositionType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType17(x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[x][1][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[x][1][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[x][1][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean toppleRangeType9(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private static boolean toppleRangeOfType9(int coord, BigInt[][][][] wSlices, BigInt[][][][] newWSlices, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean itsEvenPositionsTurnToTopple) {
+			boolean[][][] newCurrentWSliceCompliance, boolean isWEven, boolean isItEvenPositionsTurnToTopple) {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
 		BigInt[][][] smallerWSlice = wSlices[0], currentWSlice = wSlices[1], greaterWSlice = wSlices[2];
 		//  w |  x |  y | 00 | 35
-		boolean itsCurrentPositionsTurnToTopple = isWEven == itsEvenPositionsTurnToTopple;
+		boolean isItCurrentPositionsTurnToTopple = isWEven == isItEvenPositionsTurnToTopple;
 		BigInt currentValue = currentWSlice[coord][coord][0];
 		BigInt greaterWNeighborValue = greaterWSlice[coord][coord][0];
 		BigInt smallerWNeighborValue = smallerWSlice[coord][coord][0];
 		BigInt greaterXNeighborValue = currentWSlice[coordPlusOne][coord][0];
 		BigInt smallerYNeighborValue = currentWSlice[coord][coordMinusOne][0];
 		BigInt greaterZNeighborValue = currentWSlice[coord][coord][1];
-		if (topplePositionType21(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType21(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][0] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][0] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][0] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][0] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y | 01 | 56
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		BigInt smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2178,19 +2178,19 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][1];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][1];
 		greaterZNeighborValue = currentWSlice[coord][coord][2];
-		if (topplePositionType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType18(coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][1] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][1] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][1] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][1] = !isItCurrentPositionsTurnToTopple;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 72
-			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2199,17 +2199,17 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 			greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 			smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 			greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-			if (topplePositionType29(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType29(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 					relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 				changed = true;
-				newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+				newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 			}
 		}
 		//  w |  x |  y |  z | 57
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2218,35 +2218,35 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
 		smallerYNeighborValue = currentWSlice[coord][coordMinusOne][z];
 		greaterZNeighborValue = currentWSlice[coord][coord][zPlusOne];
-		if (topplePositionType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 		}
 		//  w |  x |  y |++z | 37
 		z = zPlusOne;
-		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = greaterWSlice[coord][coord][z];
 		smallerWNeighborValue = smallerWSlice[coord][coord][z];
 		greaterXNeighborValue = currentWSlice[coordPlusOne][coord][z];
-		if (topplePositionType22(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType22(coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newWSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[coord][coord][z] = itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = isItCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[coord][coord][z] = !itsCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[coord][coord][z] = !isItCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
-	private static boolean topplePositionType1(BigInt currentValue, BigInt gWValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
+	private static boolean topplePositionOfType1(BigInt currentValue, BigInt gWValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
 		boolean toppled = false;
 		if (gWValue.compareTo(currentValue) < 0) {
 			BigInt toShare = currentValue.subtract(gWValue);
@@ -2264,7 +2264,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType2(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2306,7 +2306,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType3(BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2348,7 +2348,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, 1, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType4(BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2390,7 +2390,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, 1, 1, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType5(BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
+	private static boolean topplePositionOfType5(BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
 		boolean toppled = false;
 		if (sZValue.compareTo(currentValue) < 0) {
 			if (gWValue.compareTo(currentValue) < 0) {
@@ -2465,7 +2465,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return toppled;
 	}
 
-	private static boolean topplePositionType6(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType6(BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2504,7 +2504,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType7(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType7(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2570,7 +2570,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType8(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2636,7 +2636,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType9(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2690,7 +2690,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int x, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType10(int x, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2729,7 +2729,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType11(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType11(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2795,7 +2795,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType12(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2849,7 +2849,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int coord, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType13(int coord, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2888,7 +2888,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType14(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -2942,7 +2942,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int coord, BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
+	private static boolean topplePositionOfType15(int coord, BigInt currentValue, BigInt gWValue, BigInt sZValue, BigInt[][][] newCurrentWSlice, BigInt[][][] newGreaterWSlice) {
 		// 4*GW, 4*SZ | 15 | 15
 		boolean toppled = false;
 		if (sZValue.compareTo(currentValue) < 0) {
@@ -3022,7 +3022,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return toppled;
 	}
 
-	private static boolean topplePositionType16(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType16(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3112,7 +3112,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType17(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType17(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3190,7 +3190,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType18(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType18(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3268,7 +3268,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType19(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType19(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3346,7 +3346,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType20(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType20(int x, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3407,7 +3407,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType21(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType21(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3468,7 +3468,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType22(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType22(int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3518,7 +3518,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType23(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType23(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, int sWShareMultiplier, BigInt gXValue, int gXShareMultiplier, BigInt sXValue, int sXShareMultiplier, BigInt gYValue, int gYShareMultiplier, BigInt sYValue, int sYShareMultiplier, BigInt gZValue, int gZShareMultiplier, BigInt sZValue, int sZShareMultiplier, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, BigInt[][][][] newWSlices) {
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
@@ -3603,7 +3603,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType24(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType24(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3664,7 +3664,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType25(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType25(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3714,7 +3714,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType26(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType26(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3764,7 +3764,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType27(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType27(int x, int y, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3847,7 +3847,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType28(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType28(int x, int coord, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3919,7 +3919,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType29(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType29(int coord, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -3991,7 +3991,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType30(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType30(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, BigInt[][][][] newWSlices) {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
@@ -4063,7 +4063,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 		return topplePosition(newWSlices, currentValue, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType31(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, BigInt[][][][] newWSlices) {
+	private static boolean topplePositionOfType31(int x, int y, int z, BigInt currentValue, BigInt gWValue, BigInt sWValue, BigInt gXValue, BigInt sXValue, BigInt gYValue, BigInt sYValue, BigInt gZValue, BigInt sZValue, BigInt[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, BigInt[][][][] newWSlices) {
 		int relevantNeighborCount = 0;
 		if (gWValue.compareTo(currentValue) < 0) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;

@@ -37,7 +37,7 @@ public class SimpleAether1DInfinityTopplingAlternationCompliance implements Symm
 	private BigFraction[] grid;
 	
 	private boolean[] topplingAlternationCompliance;
-	private boolean itsEvenPositionsTurnToTopple;
+	private boolean isItEvenPositionsTurnToTopple;
 	
 	private long step;
 	private final boolean isPositive;
@@ -56,7 +56,7 @@ public class SimpleAether1DInfinityTopplingAlternationCompliance implements Symm
 		originIndex = (side - 1)/2;
 		Arrays.fill(grid, BigFraction.ZERO);
 		grid[originIndex] = isPositive? BigFraction.ONE : BigFraction.MINUS_ONE;
-		itsEvenPositionsTurnToTopple = isPositive;
+		isItEvenPositionsTurnToTopple = isPositive;
 		boundsReached = false;
 		step = 0;
 		nextStep();
@@ -82,9 +82,9 @@ public class SimpleAether1DInfinityTopplingAlternationCompliance implements Symm
 		}
 		newGrid = new BigFraction[newSide];
 		Arrays.fill(newGrid, BigFraction.ZERO);
-		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple == (originIndex%2 == 0); //when the dimension is odd the corner coordinates are not always even
+		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple == (originIndex%2 == 0); //when the dimension is odd the corner coordinates are not always even
 		//For every cell
-		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++, itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple) {
+		for (int index = 0, newIndex = indexOffset; index < grid.length; index++, newIndex++, isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple) {
 			//Distribute the cell's value among its neighbors (von Neumann) using the algorithm
 			
 			//Get the cell's value
@@ -140,7 +140,7 @@ public class SimpleAether1DInfinityTopplingAlternationCompliance implements Symm
 				}	
 			}					
 			newGrid[newIndex] = newGrid[newIndex].add(value);
-			topplingAlternationCompliance[newIndex] = toppled == itsCurrentPositionsTurnToTopple;
+			topplingAlternationCompliance[newIndex] = toppled == isItCurrentPositionsTurnToTopple;
 		}
 		//Replace the old array with the new one
 		this.grid = newGrid;
@@ -148,14 +148,14 @@ public class SimpleAether1DInfinityTopplingAlternationCompliance implements Symm
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
+		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
 		//Return whether or not the state of the grid changed
 		return true;
 	}
 	
 	private void registerTopplingAlternationComplianceInGridEdges() {
 		int side = topplingAlternationCompliance.length - 1;
-		boolean itsNotEvenIndexesTurnToTopple = itsEvenPositionsTurnToTopple == (originIndex%2 == 0);
+		boolean itsNotEvenIndexesTurnToTopple = isItEvenPositionsTurnToTopple == (originIndex%2 == 0);
 		if (itsNotEvenIndexesTurnToTopple) {
 			topplingAlternationCompliance[0] = true;
 			topplingAlternationCompliance[side] = true;

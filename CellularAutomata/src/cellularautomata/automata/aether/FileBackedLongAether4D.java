@@ -82,7 +82,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			File newFile = new File(getGridFolderPath() + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
 			newGrid = new RandomAccessFile(newFile, "rw");
 			newGrid.setLength(Utils.getAnisotropic4DGridPositionCount(maxW + 4)*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
-			if (topplePositionType1(currentValue, greaterWNeighborValue, newGrid)) {
+			if (topplePositionOfType1(currentValue, greaterWNeighborValue, newGrid)) {
 				changed = true;
 			}
 			long[] relevantAsymmetricNeighborValues = new long[8];
@@ -96,7 +96,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			currentValue = greaterWNeighborValue;
 			greaterWNeighborValue = getFromAsymmetricPosition(2, 0, 0, 0);
 			long greaterXNeighborValue = getFromAsymmetricPosition(1, 1, 0, 0);
-			if (topplePositionType2(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+			if (topplePositionOfType2(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -107,7 +107,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			currentValue = greaterXNeighborValue;
 			greaterWNeighborValue = getFromAsymmetricPosition(2, 1, 0, 0);
 			long greaterYNeighborValue = getFromAsymmetricPosition(1, 1, 1, 0);
-			if (topplePositionType3(currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType3(currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -118,7 +118,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			currentValue = greaterYNeighborValue;
 			greaterWNeighborValue = getFromAsymmetricPosition(2, 1, 1, 0);
 			long greaterZNeighborValue = getFromAsymmetricPosition(1, 1, 1, 1);
-			if (topplePositionType4(currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType4(currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -128,7 +128,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			long smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterWNeighborValue = getFromAsymmetricPosition(2, 1, 1, 1);
-			if (topplePositionType5(currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
+			if (topplePositionOfType5(currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
 				changed = true;
 			}
 			// w = 2, x = 0, y = 0, z = 0
@@ -136,7 +136,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(3, 0, 0, 0);
 			smallerWNeighborValue = getFromAsymmetricPosition(1, 0, 0, 0);
 			greaterXNeighborValue = getFromAsymmetricPosition(2, 1, 0, 0);
-			if (topplePositionType6(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+			if (topplePositionOfType6(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
@@ -148,7 +148,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			smallerWNeighborValue = getFromAsymmetricPosition(1, 1, 0, 0);
 			greaterXNeighborValue = getFromAsymmetricPosition(2, 2, 0, 0);
 			greaterYNeighborValue = getFromAsymmetricPosition(2, 1, 1, 0);
-			if (topplePositionType7(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
+			if (topplePositionOfType7(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 					smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -161,7 +161,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			smallerWNeighborValue = getFromAsymmetricPosition(1, 1, 1, 0);
 			greaterXNeighborValue = getFromAsymmetricPosition(2, 2, 1, 0);
 			greaterZNeighborValue = getFromAsymmetricPosition(2, 1, 1, 1);
-			if (topplePositionType8(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 4, 
+			if (topplePositionOfType8(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 4, 
 					greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -173,7 +173,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(3, 1, 1, 1);
 			smallerWNeighborValue = getFromAsymmetricPosition(1, 1, 1, 1);
 			greaterXNeighborValue = getFromAsymmetricPosition(2, 2, 1, 1);
-			if (topplePositionType9(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
+			if (topplePositionOfType9(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -183,7 +183,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 0, 0);
 			smallerXNeighborValue = getFromAsymmetricPosition(2, 1, 0, 0);
 			greaterYNeighborValue = getFromAsymmetricPosition(2, 2, 1, 0);
-			if (topplePositionType10(2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+			if (topplePositionOfType10(2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
@@ -195,7 +195,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			smallerXNeighborValue = getFromAsymmetricPosition(2, 1, 1, 0);
 			greaterYNeighborValue = getFromAsymmetricPosition(2, 2, 2, 0);
 			greaterZNeighborValue = getFromAsymmetricPosition(2, 2, 1, 1);
-			if (topplePositionType11(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 4, 
+			if (topplePositionOfType11(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 4, 
 					greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -207,7 +207,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 1, 1);
 			smallerXNeighborValue = getFromAsymmetricPosition(2, 1, 1, 1);
 			greaterYNeighborValue = getFromAsymmetricPosition(2, 2, 2, 1);
-			if (topplePositionType12(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
+			if (topplePositionOfType12(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -218,7 +218,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterZNeighborValue = greaterYNeighborValue;		
 			currentValue = getFromAsymmetricPosition(2, 2, 2, 0);
 			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 2, 0);
-			if (topplePositionType13(2, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType13(2, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -230,7 +230,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 2, 1);
 			smallerYNeighborValue = getFromAsymmetricPosition(2, 2, 1, 1);
 			greaterZNeighborValue = getFromAsymmetricPosition(2, 2, 2, 2);
-			if (topplePositionType14(2, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, 
+			if (topplePositionOfType14(2, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -240,10 +240,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
 			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 2, 2);
-			if (topplePositionType15(2, currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
+			if (topplePositionOfType15(2, currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
 				changed = true;
 			}
-			if (toppleRangeType1(3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType1(3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -255,7 +255,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 0, 0);
 			smallerXNeighborValue = getFromAsymmetricPosition(3, 1, 0, 0);
 			greaterYNeighborValue = getFromAsymmetricPosition(3, 2, 1, 0);
-			if (topplePositionType7(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
+			if (topplePositionOfType7(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 					smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -270,7 +270,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			smallerXNeighborValue = getFromAsymmetricPosition(3, 1, 1, 0);
 			greaterYNeighborValue = getFromAsymmetricPosition(3, 2, 2, 0);
 			greaterZNeighborValue = getFromAsymmetricPosition(3, 2, 1, 1);
-			if (topplePositionType16(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -284,7 +284,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 1, 1);
 			smallerXNeighborValue = getFromAsymmetricPosition(3, 1, 1, 1);
 			greaterYNeighborValue = getFromAsymmetricPosition(3, 2, 2, 1);
-			if (topplePositionType17(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -297,7 +297,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 2, 0);
 			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 2, 0);
 			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 2, 0);
-			if (topplePositionType8(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+			if (topplePositionOfType8(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -311,7 +311,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 2, 1);
 			smallerYNeighborValue = getFromAsymmetricPosition(3, 2, 1, 1);
 			greaterZNeighborValue = getFromAsymmetricPosition(3, 2, 2, 2);
-			if (topplePositionType18(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+			if (topplePositionOfType18(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -323,12 +323,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 2, 2);
 			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 2, 2);
 			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 2, 2);
-			if (topplePositionType9(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
+			if (topplePositionOfType9(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
-			if (toppleRangeType2(3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType2(3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -339,7 +339,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(3, 3, 3, 0);
 			smallerYNeighborValue = getFromAsymmetricPosition(3, 3, 1, 0);
 			greaterZNeighborValue = getFromAsymmetricPosition(3, 3, 2, 1);
-			if (topplePositionType11(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
+			if (topplePositionOfType11(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -353,7 +353,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(3, 3, 3, 1);
 			smallerYNeighborValue = getFromAsymmetricPosition(3, 3, 1, 1);
 			greaterZNeighborValue = getFromAsymmetricPosition(3, 3, 2, 2);
-			if (topplePositionType19(3, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+			if (topplePositionOfType19(3, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -365,20 +365,20 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(4, 3, 2, 2);
 			smallerXNeighborValue = getFromAsymmetricPosition(3, 2, 2, 2);
 			greaterYNeighborValue = getFromAsymmetricPosition(3, 3, 3, 2);
-			if (topplePositionType12(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
+			if (topplePositionOfType12(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
-			if (toppleRangeType3(3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType3(3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType4(4, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType4(4, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType5(4, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType5(4, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -391,7 +391,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(4, 3, 3, 0);
 			smallerYNeighborValue = getFromAsymmetricPosition(4, 3, 1, 0);
 			greaterZNeighborValue = getFromAsymmetricPosition(4, 3, 2, 1);
-			if (topplePositionType16(4, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(4, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -407,7 +407,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(4, 3, 3, 1);
 			smallerYNeighborValue = getFromAsymmetricPosition(4, 3, 1, 1);
 			greaterZNeighborValue = getFromAsymmetricPosition(4, 3, 2, 2);
-			if (topplePositionType23(4, 3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(4, 3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 				changed = true;
@@ -421,16 +421,16 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(4, 4, 2, 2);
 			smallerXNeighborValue = getFromAsymmetricPosition(4, 2, 2, 2);
 			greaterYNeighborValue = getFromAsymmetricPosition(4, 3, 3, 2);
-			if (topplePositionType17(4, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(4, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
-			if (toppleRangeType6(4, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType6(4, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType7(4, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType7(4, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}		
@@ -477,11 +477,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		boolean changed = false;
 		int w = minW, wMinusOne = w - 1, wMinusTwo = w - 2, wMinusThree = w - 3, wPlusOne = w + 1, wPlusTwo = w + 2;
 		for (; w != maxW; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne = wPlusTwo, wPlusTwo++) {
-			if (toppleRangeType4(w, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType4(w, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			if (toppleRangeType8(w, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType8(w, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -494,7 +494,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			long greaterYNeighborValue = getFromAsymmetricPosition(w, 3, 3, 0);
 			long smallerYNeighborValue = getFromAsymmetricPosition(w, 3, 1, 0);
 			long greaterZNeighborValue = getFromAsymmetricPosition(w, 3, 2, 1);
-			if (topplePositionType16(w, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(w, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -510,7 +510,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(w, 3, 3, 1);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, 3, 1, 1);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, 3, 2, 2);
-			if (topplePositionType23(w, 3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(w, 3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 				changed = true;
@@ -524,18 +524,18 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(w, 4, 2, 2);
 			smallerXNeighborValue = getFromAsymmetricPosition(w, 2, 2, 2);
 			greaterYNeighborValue = getFromAsymmetricPosition(w, 3, 3, 2);
-			if (topplePositionType17(w, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(w, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
-			if (toppleRangeType9(w, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType9(w, 3, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
-			int x = 4, xPlusOne = x + 1, xMinusOne = x - 1;
-			for (int xMinusTwo = x - 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
-				if (toppleRangeType8(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			int x = 4, xPlusOne = 5, xMinusOne = 3;
+			for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++) {
+				if (toppleRangeOfType8(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
@@ -548,7 +548,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 0);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
-				if (topplePositionType27(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType27(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
@@ -564,7 +564,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 1);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 2);
-				if (topplePositionType23(w, x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(w, x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 					changed = true;
@@ -578,12 +578,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 2);
 				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 2);
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 2);
-				if (topplePositionType28(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+				if (topplePositionOfType28(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
 				}
-				int y = 3, yMinusOne = y - 1, yPlusOne = y + 1;
+				int y = 3, yMinusOne = 2, yPlusOne = 4;
 				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 					//  w |  x |  y | 00 | 67
 					currentValue = getFromAsymmetricPosition(w, x, y, 0);
@@ -594,7 +594,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
 					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
 					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
-					if (topplePositionType27(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					if (topplePositionOfType27(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 						changed = true;
@@ -610,12 +610,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
 					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
 					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
-					if (topplePositionType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 						changed = true;
 					}
-					int z = 2, zPlusOne = z + 1;
+					int z = 2, zPlusOne = 3;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 						//  w |  x |  y |  z | 81
 						// reuse values obtained previously
@@ -628,7 +628,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 						greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 						smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 						greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-						if (topplePositionType31(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+						if (topplePositionOfType31(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 								smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newGrid)) {
 							changed = true;
 						}
@@ -644,7 +644,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-					if (topplePositionType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 						changed = true;
@@ -659,7 +659,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
 					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
 					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-					if (topplePositionType28(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+					if (topplePositionOfType28(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 						changed = true;
@@ -674,7 +674,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
-				if (topplePositionType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
@@ -690,12 +690,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
-				if (topplePositionType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 					changed = true;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 79
 					// reuse values obtained previously
@@ -708,7 +708,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-					if (topplePositionType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+					if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 						changed = true;
@@ -725,7 +725,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-				if (topplePositionType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 					changed = true;
@@ -740,17 +740,17 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
 				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-				if (topplePositionType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+				if (topplePositionOfType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
 				}
-				if (toppleRangeType9(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+				if (toppleRangeOfType9(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType5(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType5(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -763,7 +763,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 0);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
-			if (topplePositionType16(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType16(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -779,7 +779,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 1);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 2);
-			if (topplePositionType23(w, x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType23(w, x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 				changed = true;
@@ -793,12 +793,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 2);
 			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 2);
 			greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 2);
-			if (topplePositionType17(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+			if (topplePositionOfType17(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
-			int y = 3, yPlusOne = y + 1, yMinusOne = y - 1;
+			int y = 3, yPlusOne = 4, yMinusOne = 2;
 			for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				//  w |  x |  y | 00 | 58
 				currentValue = getFromAsymmetricPosition(w, x, y, 0);
@@ -809,7 +809,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
-				if (topplePositionType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
@@ -825,12 +825,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
-				if (topplePositionType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 					changed = true;
 				}
-				int z = 2, zPlusOne = z + 1;
+				int z = 2, zPlusOne = 3;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 80
 					// reuse values obtained previously
@@ -843,7 +843,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-					if (topplePositionType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+					if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 						changed = true;
@@ -860,7 +860,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-				if (topplePositionType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 					changed = true;
@@ -875,7 +875,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
 				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-				if (topplePositionType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+				if (topplePositionOfType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
@@ -890,7 +890,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
-			if (topplePositionType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -906,12 +906,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
-			if (topplePositionType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 				changed = true;
 			}
-			int z = 2, zPlusOne = z + 1;
+			int z = 2, zPlusOne = 3;
 			for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
 				//  w |  x |  y |  z | 75
 				// reuse values obtained previously
@@ -924,7 +924,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-				if (topplePositionType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+				if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 					changed = true;
@@ -941,7 +941,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-			if (topplePositionType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+			if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
 				changed = true;
@@ -956,18 +956,18 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
 			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
 			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-			if (topplePositionType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+			if (topplePositionOfType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}			
-			if (toppleRangeType6(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType6(w, x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
 			xMinusOne = x;
 			x = xPlusOne;
-			for (y = 3, yMinusOne = y - 1, yPlusOne = y + 1; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
+			for (y = 3, yMinusOne = 2, yPlusOne = 4; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				//  w |  x |  y | 00 | 45
 				currentValue = getFromAsymmetricPosition(w, x, y, 0);
 				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 0);
@@ -975,7 +975,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
-				if (topplePositionType24(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+				if (topplePositionOfType24(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
@@ -989,12 +989,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
-				if (topplePositionType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+				if (topplePositionOfType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 						smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
 				}
-				for (z = 2, zPlusOne = z + 1; z != yMinusOne; z = zPlusOne, zPlusOne++) {
+				for (z = 2, zPlusOne = 3; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					//  w |  x |  y |  z | 76
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
@@ -1004,7 +1004,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-					if (topplePositionType30(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+					if (topplePositionOfType30(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 							relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 						changed = true;
@@ -1019,7 +1019,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
 				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
 				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
-				if (topplePositionType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+				if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
@@ -1032,13 +1032,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
 				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
 				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-				if (topplePositionType25(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+				if (topplePositionOfType25(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 					changed = true;
 				}
 			}
-			if (toppleRangeType7(x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
+			if (toppleRangeOfType7(x, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 				changed = true;
 			}
@@ -1046,7 +1046,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return changed;
 	}
 
-	private boolean toppleRangeType1(int w, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType1(int w, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		boolean changed = false;
 		int wPlusOne = w + 1, wMinusOne = w - 1;
@@ -1055,7 +1055,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 0, 0, 0);
 		long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 0, 0, 0);
 		long greaterXNeighborValue = getFromAsymmetricPosition(w, 1, 0, 0);
-		if (topplePositionType6(w, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
+		if (topplePositionOfType6(w, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}		
@@ -1067,7 +1067,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 1, 0, 0);
 		greaterXNeighborValue = getFromAsymmetricPosition(w, 2, 0, 0);
 		long greaterYNeighborValue = getFromAsymmetricPosition(w, 1, 1, 0);
-		if (topplePositionType7(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, greaterYNeighborValue, 2, 
+		if (topplePositionOfType7(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, greaterYNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1080,7 +1080,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 1, 1, 0);
 		greaterXNeighborValue = getFromAsymmetricPosition(w, 2, 1, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(w, 1, 1, 1);
-		if (topplePositionType8(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 3, 
+		if (topplePositionOfType8(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 3, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1092,7 +1092,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 1, 1, 1);
 		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 1, 1, 1);
 		greaterXNeighborValue = getFromAsymmetricPosition(w, 2, 1, 1);
-		if (topplePositionType9(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType9(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1100,7 +1100,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return changed;
 	}
 
-	private boolean toppleRangeType2(int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType2(int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
@@ -1109,7 +1109,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, 0, 0);
 		long smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, 0, 0);
 		long greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, 1, 0);
-		if (topplePositionType10(coord, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType10(coord, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
@@ -1121,7 +1121,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, 1, 0);
 		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, 2, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, 1, 1);
-		if (topplePositionType11(coord, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
+		if (topplePositionOfType11(coord, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1133,7 +1133,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, 1, 1);
 		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, 1, 1);
 		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, 2, 1);
-		if (topplePositionType12(coord, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType12(coord, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1141,7 +1141,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return changed;
 	}
 
-	private boolean toppleRangeType3(int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType3(int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
@@ -1150,7 +1150,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, 0);
 		long smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, 1);
-		if (topplePositionType13(coord, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType13(coord, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
@@ -1161,13 +1161,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, 1);
 		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, 1);
 		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, 2);
-		if (topplePositionType14(coord, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
+		if (topplePositionOfType14(coord, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 50
 			// reuse values obtained previously
@@ -1176,7 +1176,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, z);
 			smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, z);
 			greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, zPlusOne);
-			if (topplePositionType26(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
+			if (topplePositionOfType26(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
@@ -1188,7 +1188,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, z);
 		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, z);
 		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, zPlusOne);
-		if (topplePositionType14(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, smallerZNeighborValue, 1, 
+		if (topplePositionOfType14(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1199,17 +1199,17 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, z);
-		if (topplePositionType15(coord, currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
+		if (topplePositionOfType15(coord, currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private boolean toppleRangeType4(int w, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType4(int w, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		boolean changed = false;
 		int wPlusOne = w + 1, wMinusOne = w - 1;
-		if (toppleRangeType1(w, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeOfType1(w, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
@@ -1220,7 +1220,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 0, 0);
 		long smallerXNeighborValue = getFromAsymmetricPosition(w, 1, 0, 0);
 		long greaterYNeighborValue = getFromAsymmetricPosition(w, 2, 1, 0);
-		if (topplePositionType20(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
+		if (topplePositionOfType20(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
@@ -1234,7 +1234,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		smallerXNeighborValue = getFromAsymmetricPosition(w, 1, 1, 0);
 		greaterYNeighborValue = getFromAsymmetricPosition(w, 2, 2, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(w, 2, 1, 1);
-		if (topplePositionType16(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
+		if (topplePositionOfType16(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1248,7 +1248,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 1, 1);
 		smallerXNeighborValue = getFromAsymmetricPosition(w, 1, 1, 1);
 		greaterYNeighborValue = getFromAsymmetricPosition(w, 2, 2, 1);
-		if (topplePositionType17(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
+		if (topplePositionOfType17(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1261,7 +1261,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 2, 0);
 		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 2, 0);
 		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 2, 0);
-		if (topplePositionType21(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+		if (topplePositionOfType21(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
@@ -1274,7 +1274,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 2, 1);
 		smallerYNeighborValue = getFromAsymmetricPosition(w, 2, 1, 1);
 		greaterZNeighborValue = getFromAsymmetricPosition(w, 2, 2, 2);
-		if (topplePositionType18(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1286,7 +1286,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 2, 2);
 		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 2, 2);
 		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 2, 2);
-		if (topplePositionType22(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType22(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1294,7 +1294,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return changed;
 	}
 
-	private boolean toppleRangeType5(int w, int x, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType5(int w, int x, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		int xMinusOne = x - 1, xPlusOne = x + 1, wPlusOne = w + 1, wMinusOne = w - 1;
 		boolean changed = false;
@@ -1305,7 +1305,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 0, 0);
 		long smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 0, 0);
 		long greaterYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
-		if (topplePositionType7(w, x, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
+		if (topplePositionOfType7(w, x, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1320,7 +1320,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 0);
 		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
-		if (topplePositionType16(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType16(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1334,7 +1334,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 1, 1);
 		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 1);
 		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
-		if (topplePositionType17(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType17(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1342,7 +1342,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return changed;
 	}
 
-	private boolean toppleRangeType6(int w, int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType6(int w, int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1, wPlusOne = w + 1, wMinusOne = w - 1;
 		boolean changed = false;		
@@ -1353,7 +1353,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 0);
 		long smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 1);
-		if (topplePositionType8(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType8(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1367,13 +1367,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 1);
 		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 1);
 		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 2);
-		if (topplePositionType18(w, coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType18(w, coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 63
 			// reuse values obtained previously
@@ -1384,7 +1384,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
-			if (topplePositionType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+			if (topplePositionOfType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -1399,7 +1399,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
 		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
 		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
-		if (topplePositionType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1412,14 +1412,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
 		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
 		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
-		if (topplePositionType9(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, smallerZNeighborValue, 1, 
+		if (topplePositionOfType9(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
 		coordMinusOne = coord;
 		coord++;
-		if (toppleRangeType2(coord, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeOfType2(coord, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}		
@@ -1430,7 +1430,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterYNeighborValue = getFromAsymmetricPosition(w, coord, 3, 0);
 		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, 1, 0);
 		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, 2, 1);
-		if (topplePositionType24(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType24(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1444,7 +1444,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterYNeighborValue = getFromAsymmetricPosition(w, coord, 3, 1);
 		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, 1, 1);
 		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, 2, 2);
-		if (topplePositionType19(coord, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(coord, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1456,7 +1456,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, 2, 2);
 		smallerXNeighborValue = getFromAsymmetricPosition(w, coordMinusOne, 2, 2);
 		greaterYNeighborValue = getFromAsymmetricPosition(w, coord, 3, 2);
-		if (topplePositionType25(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType25(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1465,7 +1465,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 	}
 
 	//this range could be merged into type 6
-	private boolean toppleRangeType7(int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType7(int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {		
 		int y = coord - 1, coordMinusOne = coord - 1, coordMinusTwo = coord - 2, coordPlusOne = coord + 1, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
@@ -1476,7 +1476,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, 0);
 		long smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, 1);
-		if (topplePositionType11(coord, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
+		if (topplePositionOfType11(coord, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1490,13 +1490,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, 1);
 		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, 1);
 		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, 2);
-		if (topplePositionType19(coord, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType19(coord, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusTwo; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 66
 			// reuse values obtained previously
@@ -1507,7 +1507,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, z);
 			smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, z);
 			greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, zPlusOne);
-			if (topplePositionType19(coord, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+			if (topplePositionOfType19(coord, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -1522,7 +1522,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, z);
 		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, z);
 		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, zPlusOne);
-		if (topplePositionType19(coord, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
+		if (topplePositionOfType19(coord, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1535,19 +1535,19 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, y, z);
 		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, y, z);
 		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, z);
-		if (topplePositionType12(coord, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, smallerZNeighborValue, 1, 
+		if (topplePositionOfType12(coord, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}		
-		if (toppleRangeType3(coord, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
+		if (toppleRangeOfType3(coord, newGrid, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
 		return changed;
 	}
 
-	private boolean toppleRangeType8(int w, int x, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType8(int w, int x, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		int xMinusOne = x - 1, xPlusOne = x + 1, wPlusOne = w + 1, wMinusOne = w - 1;
 		boolean changed = false;
@@ -1558,7 +1558,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 0, 0);
 		long smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 0, 0);
 		long greaterYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
-		if (topplePositionType20(w, x, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
+		if (topplePositionOfType20(w, x, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1573,7 +1573,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 0);
 		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
-		if (topplePositionType16(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType16(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1587,7 +1587,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 1, 1);
 		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 1);
 		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
-		if (topplePositionType17(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
+		if (topplePositionOfType17(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1595,7 +1595,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return changed;
 	}
 
-	private boolean toppleRangeType9(int w, int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
+	private boolean toppleRangeOfType9(int w, int coord, RandomAccessFile newGrid, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers) throws IOException {
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		int wPlusOne = w + 1, wMinusOne = w - 1;
@@ -1607,7 +1607,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		long greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 0);
 		long smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 0);
 		long greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 1);
-		if (topplePositionType21(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
+		if (topplePositionOfType21(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1621,13 +1621,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 1);
 		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 1);
 		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 2);
-		if (topplePositionType18(w, coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
+		if (topplePositionOfType18(w, coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
 		}
 		int z = 2;
-		int zPlusOne = z + 1;
+		int zPlusOne = 3;
 		for (; z != coordMinusOne; z = zPlusOne, zPlusOne++) {
 			//  w |  x |  y |  z | 72
 			// reuse values obtained previously
@@ -1638,7 +1638,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
 			smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
 			greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
-			if (topplePositionType29(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
+			if (topplePositionOfType29(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -1653,7 +1653,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
 		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
 		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
-		if (topplePositionType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
+		if (topplePositionOfType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1666,7 +1666,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
 		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
 		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
-		if (topplePositionType22(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
+		if (topplePositionOfType22(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1674,7 +1674,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return changed;
 	}
 
-	private static boolean topplePositionType1(long currentValue, long gWValue, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType1(long currentValue, long gWValue, RandomAccessFile newGrid) throws IOException {
 		boolean toppled = false;
 		if (gWValue < currentValue) {
 			long toShare = currentValue - gWValue;
@@ -1692,7 +1692,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return toppled;
 	}
 
-	private static boolean topplePositionType2(long currentValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType2(long currentValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -1734,7 +1734,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, 1, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType3(long currentValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType3(long currentValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -1776,7 +1776,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, 1, 1, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType4(long currentValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType4(long currentValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -1818,7 +1818,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, 1, 1, 1, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType5(long currentValue, long gWValue, long sZValue, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType5(long currentValue, long gWValue, long sZValue, RandomAccessFile newGrid) throws IOException {
 		boolean toppled = false;
 		if (sZValue < currentValue) {
 			if (gWValue < currentValue) {
@@ -1893,7 +1893,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return toppled;
 	}
 
-	private static boolean topplePositionType6(int w, long currentValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType6(int w, long currentValue, long gWValue, long sWValue, long gXValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -1932,7 +1932,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, 0, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType7(int w, int x, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType7(int w, int x, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -1998,7 +1998,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType8(int w, int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType8(int w, int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2064,7 +2064,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType9(int w, int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType9(int w, int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2118,7 +2118,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType10(int coord, long currentValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType10(int coord, long currentValue, long gWValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2157,7 +2157,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType11(int coord, int y, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType11(int coord, int y, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2223,7 +2223,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType12(int coord1, int coord2, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType12(int coord1, int coord2, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2277,7 +2277,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType13(int coord, long currentValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType13(int coord, long currentValue, long gWValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2316,7 +2316,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType14(int coord, int z, long currentValue, long gWValue, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType14(int coord, int z, long currentValue, long gWValue, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2370,7 +2370,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType15(int coord, long currentValue, long gWValue, long sZValue, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType15(int coord, long currentValue, long gWValue, long sZValue, RandomAccessFile newGrid) throws IOException {
 		// 4*GW, 4*SZ | 15 | 15
 		boolean toppled = false;
 		if (sZValue < currentValue) {
@@ -2448,7 +2448,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return toppled;
 	}
 
-	private static boolean topplePositionType16(int w, int x, int y, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType16(int w, int x, int y, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2538,7 +2538,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType17(int w, int x, int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType17(int w, int x, int coord, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2616,7 +2616,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType18(int w, int coord, int z, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType18(int w, int coord, int z, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2694,7 +2694,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType19(int coord, int y, int z, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType19(int coord, int y, int z, long currentValue, long gWValue, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2772,7 +2772,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType20(int w, int x, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType20(int w, int x, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2833,7 +2833,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, x, 0, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType21(int w, int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType21(int w, int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2894,7 +2894,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, coord, coord, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType22(int w, int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType22(int w, int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -2944,7 +2944,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, coord, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType23(int w, int x, int y, int z, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType23(int w, int x, int y, int z, long currentValue, long gWValue, long sWValue, int sWShareMultiplier, long gXValue, int gXShareMultiplier, long sXValue, int sXShareMultiplier, long gYValue, int gYShareMultiplier, long sYValue, int sYShareMultiplier, long gZValue, int gZShareMultiplier, long sZValue, int sZShareMultiplier, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborShareMultipliers, RandomAccessFile newGrid) throws IOException {
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
@@ -3029,7 +3029,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, x, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantNeighborCount);
 	}
 
-	private static boolean topplePositionType24(int coord, int y, long currentValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType24(int coord, int y, long currentValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -3090,7 +3090,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType25(int coord1, int coord2, long currentValue, long gWValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType25(int coord1, int coord2, long currentValue, long gWValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -3140,7 +3140,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord1, coord1, coord2, coord2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType26(int coord, int z, long currentValue, long gWValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType26(int coord, int z, long currentValue, long gWValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -3190,7 +3190,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType27(int w, int x, int y, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType27(int w, int x, int y, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -3273,7 +3273,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, x, y, 0, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType28(int w, int x, int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType28(int w, int x, int coord, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -3345,7 +3345,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, x, coord, coord, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType29(int w, int coord, int z, long currentValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType29(int w, int coord, int z, long currentValue, long gWValue, long sWValue, long gXValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -3417,7 +3417,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, w, coord, coord, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType30(int coord, int y, int z, long currentValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType30(int coord, int y, int z, long currentValue, long gWValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, RandomAccessFile newGrid) throws IOException {
 		int relevantAsymmetricNeighborCount = 0;
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
@@ -3489,7 +3489,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		return topplePosition(newGrid, currentValue, coord, coord, y, z, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantNeighborCount, relevantAsymmetricNeighborCount);
 	}
 
-	private static boolean topplePositionType31(int w, int x, int y, int z, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, RandomAccessFile newGrid) throws IOException {
+	private static boolean topplePositionOfType31(int w, int x, int y, int z, long currentValue, long gWValue, long sWValue, long gXValue, long sXValue, long gYValue, long sYValue, long gZValue, long sZValue, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes, int[][] relevantAsymmetricNeighborCoords, RandomAccessFile newGrid) throws IOException {
 		int relevantNeighborCount = 0;
 		if (gWValue < currentValue) {
 			relevantAsymmetricNeighborValues[relevantNeighborCount] = gWValue;
