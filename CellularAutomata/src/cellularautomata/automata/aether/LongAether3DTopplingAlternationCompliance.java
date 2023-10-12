@@ -33,7 +33,7 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 	private long[][][] grid;
 	
 	private boolean[][][] topplingAlternationCompliance;
-	private boolean isItEvenPositionsTurnToTopple;
+	private boolean itsEvenPositionsTurnToTopple;
 	
 	private final long initialValue;
 	private long step;
@@ -50,7 +50,7 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
-		isItEvenPositionsTurnToTopple = initialValue >= 0;
+		itsEvenPositionsTurnToTopple = initialValue >= 0;
 		grid = Utils.buildAnisotropic3DLongArray(7);
 		grid[0][0][0] = this.initialValue;
 		maxX = 4;
@@ -84,7 +84,7 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
 		step = (long) data.get(SerializableModelData.STEP);
 		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
-		isItEvenPositionsTurnToTopple = initialValue >= 0 == (step%2 == 0);
+		itsEvenPositionsTurnToTopple = initialValue >= 0 == (step%2 == 0);
 		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
 			topplingAlternationCompliance = (boolean[][][]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
 		} else {
@@ -107,17 +107,17 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 		newGrid[0] = newCurrentXSlice;
 		newGrid[1] = newGreaterXSlice;
 		// x = 0, y = 0, z = 0
-		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		long currentValue = currentXSlice[0][0];
 		long greaterXNeighborValue = greaterXSlice[0][0];
 		if (topplePositionOfType1(currentValue, greaterXNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 1, y = 0, z = 0
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// smallerXSlice = currentXSlice; // not needed here
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[2];
@@ -141,12 +141,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 1, y = 1, z = 0
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -156,25 +156,25 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 1, y = 1, z = 1
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterXNeighborValue = greaterXSlice[1][1];
 		if (topplePositionOfType4(currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		grid[0] = null;// free old grid progressively to save memory
 		// x = 2, y = 0, z = 0
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		smallerXSlice = currentXSlice;
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[3];
@@ -194,12 +194,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 1, z = 0
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][0];
 		smallerXNeighborValue = smallerXSlice[1][0];
 		// reuse values obtained previously
@@ -212,12 +212,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 1, z = 1
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][1];
 		smallerXNeighborValue = smallerXSlice[1][1];
 		greaterYNeighborValue = currentXSlice[2][1];
@@ -229,9 +229,9 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 2, z = 0
 		currentValue = currentXSlice[2][0];
@@ -243,12 +243,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, 
 				newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 2, z = 1
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[2][1];
 		smallerYNeighborValue = currentXSlice[1][1];
 		// reuse values obtained previously
@@ -260,12 +260,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 2, y = 2, z = 2
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -273,13 +273,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType10(2, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		grid[1] = null;
 		// x = 3, y = 0, z = 0
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		smallerXSlice = currentXSlice;
 		currentXSlice = greaterXSlice;
 		greaterXSlice = grid[4];
@@ -299,12 +299,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 1, z = 0
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][0];
 		smallerXNeighborValue = smallerXSlice[1][0];
 		// reuse values obtained previously
@@ -317,12 +317,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 1, z = 1
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[1][1];
 		smallerXNeighborValue = smallerXSlice[1][1];
 		greaterYNeighborValue = currentXSlice[2][1];
@@ -334,9 +334,9 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 2, z = 0
 		currentValue = currentXSlice[2][0];
@@ -351,12 +351,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 2, z = 1
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[2][1];
 		smallerXNeighborValue = smallerXSlice[2][1];
 		greaterYNeighborValue = currentXSlice[3][1];
@@ -370,12 +370,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 2, z = 2
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[2][2];
 		smallerXNeighborValue = smallerXSlice[2][2];
 		greaterYNeighborValue = currentXSlice[3][2];
@@ -387,12 +387,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 0
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		currentValue = currentXSlice[3][0];
 		greaterXNeighborValue = greaterXSlice[3][0];
 		smallerYNeighborValue = currentXSlice[2][0];
@@ -401,12 +401,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 1
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[3][1];
 		smallerYNeighborValue = currentXSlice[2][1];
 		// reuse values obtained previously
@@ -418,12 +418,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 2
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		greaterXNeighborValue = greaterXSlice[3][2];
 		smallerYNeighborValue = currentXSlice[2][2];
 		// reuse values obtained previously
@@ -435,12 +435,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		// x = 3, y = 3, z = 3
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -448,9 +448,9 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType10(3, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 				newGreaterXSlice)) {
 			changed = true;
-			newCurrentXSliceCompliance[3][3] = isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][3] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentXSliceCompliance[3][3] = !isItCurrentPositionsTurnToTopple;
+			newCurrentXSliceCompliance[3][3] = !itsCurrentPositionsTurnToTopple;
 		}
 		grid[2] = null;
 		// 4 <= x < edge - 2
@@ -475,13 +475,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 		}
 		grid = newGrid;
 		step++;
-		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		this.changed = changed;
 		return changed;
 	}
 	
 	private void registerStaticGridSliceCompliance(int x) {
-		if (x%2 == 0 == isItEvenPositionsTurnToTopple) {
+		if (x%2 == 0 == itsEvenPositionsTurnToTopple) {
 			Utils.fillOddIndexes(topplingAlternationCompliance[x], true);
 		} else {
 			Utils.fillEvenIndexes(topplingAlternationCompliance[x], true);
@@ -500,10 +500,10 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		long[][] smallerXSlice = null, currentXSlice = xSlices[1], greaterXSlice = xSlices[2];
 		long[][] newSmallerXSlice = null, newCurrentXSlice = newXSlices[1], newGreaterXSlice = newXSlices[2];
-		boolean isItY0Z0PositionsTurnToTopple = x%2 == 0 == isItEvenPositionsTurnToTopple;
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, isItY0Z0PositionsTurnToTopple = !isItY0Z0PositionsTurnToTopple) {
+		boolean itsY0Z0PositionsTurnToTopple = x%2 == 0 == itsEvenPositionsTurnToTopple;
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++, itsY0Z0PositionsTurnToTopple = !itsY0Z0PositionsTurnToTopple) {
 			// y = 0, z = 0
-			boolean isItCurrentPositionsTurnToTopple = isItY0Z0PositionsTurnToTopple;
+			boolean itsCurrentPositionsTurnToTopple = itsY0Z0PositionsTurnToTopple;
 			smallerXSlice = currentXSlice;
 			currentXSlice = greaterXSlice;
 			greaterXSlice = grid[xPlusOne];
@@ -523,12 +523,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[0][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[0][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[0][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[0][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 1, z = 0
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[1][0];
 			smallerXNeighborValue = smallerXSlice[1][0];
 			// reuse values obtained previously
@@ -541,12 +541,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[1][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[1][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 1, z = 1
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[1][1];
 			smallerXNeighborValue = smallerXSlice[1][1];
 			greaterYNeighborValue = currentXSlice[2][1];
@@ -558,9 +558,9 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[1][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[1][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[1][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 2, z = 0
 			currentValue = currentXSlice[2][0];
@@ -574,12 +574,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[2][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[2][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 2, z = 1
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[2][1];
 			smallerXNeighborValue = smallerXSlice[2][1];
 			greaterYNeighborValue = currentXSlice[3][1];
@@ -593,12 +593,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[2][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[2][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = 2, z = 2
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[2][2];
 			smallerXNeighborValue = smallerXSlice[2][2];
 			greaterYNeighborValue = currentXSlice[3][2];
@@ -609,15 +609,15 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[2][2] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][2] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[2][2] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[2][2] = !itsCurrentPositionsTurnToTopple;
 			}
 			int y = 3, yMinusOne = 2, yPlusOne = 4;
-			boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-			for (int lastY = x - 2; y <= lastY; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+			boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			for (int lastY = x - 2; y <= lastY; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 				// z = 0
-				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 				currentValue = currentXSlice[y][0];
 				greaterXNeighborValue = greaterXSlice[y][0];
 				smallerXNeighborValue = smallerXSlice[y][0];
@@ -628,12 +628,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// z = 1
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][1];
 				smallerXNeighborValue = smallerXSlice[y][1];
 				greaterYNeighborValue = currentXSlice[yPlusOne][1];
@@ -647,13 +647,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				int z = 2, zPlusOne = 3;
 				for (int lastZ = y - 2; z <= lastZ; z = zPlusOne, zPlusOne++) {
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					greaterXNeighborValue = greaterXSlice[y][z];
 					smallerXNeighborValue = smallerXSlice[y][z];
 					greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -666,13 +666,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 							relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newXSlices)) {
 						anyToppled = true;
-						newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// z = y - 1
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerXNeighborValue = smallerXSlice[y][z];
 				greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -686,13 +686,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				// z = y
 				z = zPlusOne;
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerXNeighborValue = smallerXSlice[y][z];
 				greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -703,13 +703,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// y = x - 1, z = 0
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentXSlice[y][0];
 			greaterXNeighborValue = greaterXSlice[y][0];
 			smallerXNeighborValue = smallerXSlice[y][0];
@@ -721,12 +721,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = x - 1, z = 1
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][1];
 			smallerXNeighborValue = smallerXSlice[y][1];
 			greaterYNeighborValue = currentXSlice[yPlusOne][1];
@@ -740,13 +740,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			int z = 2, zPlusOne = 3, lastZ = y - 2;
 			for(; z <= lastZ; z = zPlusOne, zPlusOne++) {
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerXNeighborValue = smallerXSlice[y][z];
 				greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -760,13 +760,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// y = x - 1, z = y - 1
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][z];
 			smallerXNeighborValue = smallerXSlice[y][z];
 			greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -780,14 +780,14 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = zPlusOne;
 			zPlusOne++;
 			// y = x - 1, z = y
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][z];
 			smallerXNeighborValue = smallerXSlice[y][z];
 			greaterYNeighborValue = currentXSlice[yPlusOne][z];
@@ -799,15 +799,15 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			yMinusOne = y;
 			y = yPlusOne;
 			// y = x, z = 0
-			isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple;
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentXSlice[y][0];
 			greaterXNeighborValue = greaterXSlice[y][0];
 			smallerYNeighborValue = currentXSlice[yMinusOne][0];
@@ -816,12 +816,12 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// y = x, z = 1
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][1];
 			smallerYNeighborValue = currentXSlice[yMinusOne][1];
 			// reuse values obtained previously
@@ -833,15 +833,15 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = 2;
 			zPlusOne = 3;
 			lastZ++;
 			for(; z <= lastZ; z = zPlusOne, zPlusOne++) {
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				greaterXNeighborValue = greaterXSlice[y][z];
 				smallerYNeighborValue = currentXSlice[yMinusOne][z];
 				// reuse values obtained previously
@@ -852,13 +852,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 					anyToppled = true;
-					newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}			
 			// y = x, z = y - 1
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			greaterXNeighborValue = greaterXSlice[y][z];
 			smallerYNeighborValue = currentXSlice[yMinusOne][z];
 			// reuse values obtained previously
@@ -870,13 +870,13 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newXSlices)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = zPlusOne;
 			// y = x, z = y
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -884,9 +884,9 @@ public class LongAether3DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType10(y, currentValue, greaterXNeighborValue, smallerZNeighborValue, newCurrentXSlice, 
 					newGreaterXSlice)) {
 				anyToppled = true;
-				newCurrentXSliceCompliance[y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentXSliceCompliance[y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentXSliceCompliance[y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			grid[xMinusOne] = null;
 		}

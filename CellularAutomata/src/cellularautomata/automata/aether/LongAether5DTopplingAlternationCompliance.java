@@ -33,7 +33,7 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 	private long[][][][][] grid;
 	
 	private boolean[][][][][] topplingAlternationCompliance;
-	private boolean isItEvenPositionsTurnToTopple;
+	private boolean itsEvenPositionsTurnToTopple;
 
 	private final long initialValue;
 	private long step;
@@ -50,7 +50,7 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
-		isItEvenPositionsTurnToTopple = initialValue >= 0;
+		itsEvenPositionsTurnToTopple = initialValue >= 0;
 		grid = Utils.buildAnisotropic5DLongArray(9);
 		grid[0][0][0][0][0] = this.initialValue;
 		maxV = 6;
@@ -84,7 +84,7 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		maxV = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
 		step = (long) data.get(SerializableModelData.STEP);
 		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
-		isItEvenPositionsTurnToTopple = initialValue >= 0 == (step%2 == 0);
+		itsEvenPositionsTurnToTopple = initialValue >= 0 == (step%2 == 0);
 		if (SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE))) {
 			topplingAlternationCompliance = (boolean[][][][][]) data.get(SerializableModelData.TOPPLING_ALTERNATION_COMPLIANCE);
 		} else {
@@ -107,14 +107,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		newGrid[0] = newCurrentVSlice;
 		newGrid[1] = newGreaterVSlice;
 		// 0 | 0 | 0 | 0 | 0 | 1
-		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[0][0][0][0];
 		long greaterVNeighborValue = greaterVSlice[0][0][0][0];
 		if (topplePositionOfType1(currentValue, greaterVNeighborValue, newCurrentVSlice, newGreaterVSlice)) {
 			changed = true;
-			newCurrentVSliceCompliance[0][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[0][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		//v slice transition
 		//smallerVSlice = currentVSlice; //not needed here
@@ -132,7 +132,7 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		int[] relevantAsymmetricNeighborShareMultipliers = new int[10];//to compensate for omitted symmetric positions
 		int[] relevantAsymmetricNeighborSymmetryCounts = new int[10];//to compensate for omitted symmetric positions
 		// 1 | 0 | 0 | 0 | 0 | 2
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerVNeighborValue = currentValue;
 		currentValue = greaterVNeighborValue;
@@ -142,12 +142,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[0][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[0][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 1 | 1 | 0 | 0 | 0 | 3
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerWNeighborValue = currentValue;
 		currentValue = greaterWNeighborValue;
@@ -157,12 +157,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 1 | 1 | 1 | 0 | 0 | 4
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -172,12 +172,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 1 | 1 | 1 | 1 | 0 | 5
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -186,21 +186,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType5(currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, 
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 1 | 1 | 1 | 1 | 1 | 6
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterVNeighborValue = greaterVSlice[1][1][1][1];
 		if (topplePositionOfType6(currentValue, greaterVNeighborValue, smallerZNeighborValue, newCurrentVSlice, newGreaterVSlice)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		//v slice transition
 		grid[0] = null;//free old grid progressively to save memory
@@ -217,7 +217,7 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		newVSlices[1] = newCurrentVSlice;
 		newVSlices[2] = newGreaterVSlice;
 		// 2 | 0 | 0 | 0 | 0 | 7
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[0][0][0][0];
 		greaterVNeighborValue = greaterVSlice[0][0][0][0];
 		smallerVNeighborValue = smallerVSlice[0][0][0][0];
@@ -225,12 +225,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[0][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[0][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 1 | 0 | 0 | 0 | 8
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerWNeighborValue = currentValue;
 		currentValue = greaterWNeighborValue;
@@ -242,12 +242,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 1 | 1 | 0 | 0 | 9
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -259,12 +259,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 1 | 1 | 1 | 0 | 10
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -276,12 +276,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 1 | 1 | 1 | 1 | 11
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -292,12 +292,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 0 | 0 | 0 | 12
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[2][0][0][0];		
 		greaterVNeighborValue = greaterVSlice[2][0][0][0];
 		smallerWNeighborValue = currentVSlice[1][0][0][0];
@@ -305,12 +305,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType12(2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 1 | 0 | 0 | 13
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -322,12 +322,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 1 | 1 | 0 | 14
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -339,12 +339,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 1 | 1 | 1 | 15
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -355,12 +355,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 2 | 0 | 0 | 16
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[2][2][0][0];		
 		greaterVNeighborValue = greaterVSlice[2][2][0][0];
 		smallerXNeighborValue = currentVSlice[2][1][0][0];
@@ -368,12 +368,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType16(2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 2 | 1 | 0 | 17
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -385,12 +385,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 2 | 1 | 1 | 18
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -401,12 +401,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 2 | 2 | 0 | 19
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
@@ -415,12 +415,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType19(2, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 2 | 2 | 1 | 20
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -430,21 +430,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType20(2, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 2,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 2 | 2 | 2 | 2 | 2 | 21
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;		
 		greaterVNeighborValue = greaterVSlice[2][2][2][2];
 		if (topplePositionOfType21(2, currentValue, greaterVNeighborValue, smallerZNeighborValue, newVSlices[1], newVSlices[2])) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		//v slice transition
 		grid[1] = null;//free old grid progressively to save memory
@@ -464,11 +464,11 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		newVSlices[2] = newGreaterVSlice;
 		if (toppleRangeOfType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 3 | 2 | 0 | 0 | 0 | 26
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[2][0][0][0];
 		greaterVNeighborValue = greaterVSlice[2][0][0][0];
 		smallerVNeighborValue = smallerVSlice[2][0][0][0];
@@ -479,12 +479,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 1 | 0 | 0 | 27
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -498,12 +498,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 1 | 1 | 0 | 28
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -517,12 +517,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 1 | 1 | 1 | 29
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -535,12 +535,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 2 | 0 | 0 | 30
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[2][2][0][0];
 		greaterVNeighborValue = greaterVSlice[2][2][0][0];
 		smallerVNeighborValue = smallerVSlice[2][2][0][0];
@@ -551,12 +551,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 2 | 1 | 0 | 31
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -570,12 +570,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 2 | 1 | 1 | 32
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -588,12 +588,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 2 | 2 | 0 | 33
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
@@ -605,12 +605,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 2 | 2 | 1 | 34
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -623,12 +623,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 2 | 2 | 2 | 2 | 35
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -639,17 +639,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType2(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 3 | 3 | 2 | 0 | 0 | 39
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[3][2][0][0];
 		greaterVNeighborValue = greaterVSlice[3][2][0][0];
 		smallerWNeighborValue = currentVSlice[2][2][0][0];
@@ -660,12 +660,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 3 | 2 | 1 | 0 | 40
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -679,12 +679,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 3 | 2 | 1 | 1 | 41
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -697,12 +697,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 3 | 2 | 2 | 0 | 42
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
@@ -714,12 +714,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 3 | 2 | 2 | 1 | 43
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -732,12 +732,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 3 | 2 | 2 | 2 | 44
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -748,17 +748,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType3(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 3 | 3 | 3 | 2 | 0 | 47
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[3][3][2][0];
 		greaterVNeighborValue = greaterVSlice[3][3][2][0];
 		smallerXNeighborValue = currentVSlice[3][2][2][0];
@@ -769,12 +769,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 3 | 3 | 2 | 1 | 48
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -787,12 +787,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 3 | 3 | 3 | 2 | 2 | 49
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -803,13 +803,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType4(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		//v slice transition
@@ -830,16 +830,16 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		newVSlices[2] = newGreaterVSlice;
 		if (toppleRangeOfType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		if (toppleRangeOfType6(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 4 | 3 | 2 | 0 | 0 | 65
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[3][2][0][0];
 		greaterVNeighborValue = greaterVSlice[3][2][0][0];
 		smallerVNeighborValue = smallerVSlice[3][2][0][0];
@@ -852,12 +852,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 3 | 2 | 1 | 0 | 66
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -873,12 +873,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 3 | 2 | 1 | 1 | 67
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -893,12 +893,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 3 | 2 | 2 | 0 | 68
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;
@@ -912,12 +912,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 3 | 2 | 2 | 1 | 69
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -932,12 +932,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 3 | 2 | 2 | 2 | 70
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -950,17 +950,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType7(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 4 | 3 | 3 | 2 | 0 | 73
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[3][3][2][0];
 		greaterVNeighborValue = greaterVSlice[3][3][2][0];
 		smallerVNeighborValue = smallerVSlice[3][3][2][0];
@@ -973,12 +973,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 3 | 3 | 2 | 1 | 74
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -993,12 +993,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 3 | 3 | 2 | 2 | 75
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1011,22 +1011,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType8(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		if (toppleRangeOfType9(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 4 | 4 | 3 | 2 | 0 | 86
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[4][3][2][0];
 		greaterVNeighborValue = greaterVSlice[4][3][2][0];
 		smallerWNeighborValue = currentVSlice[3][3][2][0];
@@ -1039,12 +1039,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[4][3][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[4][3][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 4 | 3 | 2 | 1 | 87
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1059,12 +1059,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[4][3][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[4][3][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 4 | 4 | 3 | 2 | 2 | 88
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1077,13 +1077,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[4][3][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[4][3][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType10(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, true, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		//v slice transition
@@ -1104,21 +1104,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		newVSlices[2] = newGreaterVSlice;
 		if (toppleRangeOfType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		if (toppleRangeOfType12(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		if (toppleRangeOfType13(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// 5 | 4 | 3 | 2 | 0 | 121
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[4][3][2][0];
 		greaterVNeighborValue = greaterVSlice[4][3][2][0];
 		smallerVNeighborValue = smallerVSlice[4][3][2][0];
@@ -1133,12 +1133,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[4][3][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[4][3][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 5 | 4 | 3 | 2 | 1 | 122
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1155,12 +1155,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[4][3][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[4][3][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// 5 | 4 | 3 | 2 | 2 | 123
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -1175,13 +1175,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[4][3][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[4][3][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[4][3][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType14(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, false, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, false, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		grid[4] = null;//free old grid progressively to save memory		
@@ -1204,13 +1204,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		}
 		grid = newGrid;
 		step++;
-		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		this.changed = changed;
 		return changed;
 	}
 	
 	private void registerStaticGridSliceCompliance(int v) {
-		if (v%2 == 0 == isItEvenPositionsTurnToTopple) {
+		if (v%2 == 0 == itsEvenPositionsTurnToTopple) {
 			Utils.fillOddIndexes(topplingAlternationCompliance[v], true);
 		} else {
 			Utils.fillEvenIndexes(topplingAlternationCompliance[v], true);
@@ -1248,21 +1248,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			newVSlices[2] = newGreaterVSlice;
 			if (toppleRangeOfType11(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			if (toppleRangeOfType15(4, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			if (toppleRangeOfType16(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			// v | 4 | 3 | 2 | 0 | 156
-			boolean isItCurrentPositionsTurnToTopple = isVEven != isItEvenPositionsTurnToTopple;
+			boolean itsCurrentPositionsTurnToTopple = isVEven != itsEvenPositionsTurnToTopple;
 			long currentValue = currentVSlice[4][3][2][0];
 			long greaterVNeighborValue = greaterVSlice[4][3][2][0];
 			long smallerVNeighborValue = smallerVSlice[4][3][2][0];
@@ -1277,12 +1277,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[4][3][2][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[4][3][2][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[4][3][2][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[4][3][2][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | 4 | 3 | 2 | 1 | 157
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			long smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1299,12 +1299,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[4][3][2][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[4][3][2][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[4][3][2][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[4][3][2][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | 4 | 3 | 2 | 2 | 158
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -1319,30 +1319,30 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[4][3][2][2] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[4][3][2][2] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[4][3][2][2] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[4][3][2][2] = !itsCurrentPositionsTurnToTopple;
 			}
 			if (toppleRangeOfType17(4, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			int w = 5, wMinusOne = 4, wPlusOne = 6;
-			boolean isItX3Y2Z0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-			for (int wMinusTwo = 3, wMinusThree = 2; w != vMinusOne; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne++, isItX3Y2Z0PositionsTurnToTopple = !isItX3Y2Z0PositionsTurnToTopple) {
+			boolean itsX3Y2Z0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			for (int wMinusTwo = 3, wMinusThree = 2; w != vMinusOne; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne++, itsX3Y2Z0PositionsTurnToTopple = !itsX3Y2Z0PositionsTurnToTopple) {
 				if (toppleRangeOfType15(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+						newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 				if (toppleRangeOfType18(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+						newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 				// v | w | 3 | 2 | 0 | 195
-				isItCurrentPositionsTurnToTopple = isItX3Y2Z0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsX3Y2Z0PositionsTurnToTopple;
 				currentValue = currentVSlice[w][3][2][0];
 				greaterVNeighborValue = greaterVSlice[w][3][2][0];
 				smallerVNeighborValue = smallerVSlice[w][3][2][0];
@@ -1357,12 +1357,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][3][2][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][3][2][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][3][2][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][3][2][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | 3 | 2 | 1 | 196
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1379,12 +1379,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][3][2][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][3][2][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][3][2][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][3][2][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | 3 | 2 | 2 | 197
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1399,25 +1399,25 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][3][2][2] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][3][2][2] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][3][2][2] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][3][2][2] = !itsCurrentPositionsTurnToTopple;
 				}
 				if (toppleRangeOfType19(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+						newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 					changed = true;
 				}			
 				int x = 4, xMinusOne = 3, xPlusOne = 5;
-				boolean isItY2Z0PositionsTurnToTopple = !isItX3Y2Z0PositionsTurnToTopple;
-				for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, isItY2Z0PositionsTurnToTopple = !isItY2Z0PositionsTurnToTopple) {
+				boolean itsY2Z0PositionsTurnToTopple = !itsX3Y2Z0PositionsTurnToTopple;
+				for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, itsY2Z0PositionsTurnToTopple = !itsY2Z0PositionsTurnToTopple) {
 					if (toppleRangeOfType18(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 							relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-							newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+							newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 						changed = true;
 					}
 					// v | w | x | 2 | 0 | 223
-					isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = itsY2Z0PositionsTurnToTopple;
 					currentValue = currentVSlice[w][x][2][0];
 					greaterVNeighborValue = greaterVSlice[w][x][2][0];
 					smallerVNeighborValue = smallerVSlice[w][x][2][0];
@@ -1432,12 +1432,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 					}
 					// v | w | x | 2 | 1 | 224
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1454,12 +1454,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 					}
 					// v | w | x | 2 | 2 | 225
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1474,15 +1474,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 					}
 					int y = 3, yMinusOne = 2, yPlusOne = 4;
-					boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-					for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+					boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+					for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 						// v | w | x | y | 0 | 223
-						isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+						itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 						currentValue = currentVSlice[w][x][y][0];
 						greaterVNeighborValue = greaterVSlice[w][x][y][0];
 						smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -1497,12 +1497,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 								greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 								relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 							changed = true;
-							newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 						}
 						// v | w | x | y | 1 | 238
-						isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+						itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 						//reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -1519,14 +1519,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 								greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
-							newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 						}
 						int z = 2, zPlusOne = 3;
 						for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 							// v | w | x | y | z | 243
-							isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+							itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 							//reuse values obtained previously
 							smallerZNeighborValue = currentValue;
 							currentValue = greaterZNeighborValue;
@@ -1542,13 +1542,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							if (topplePositionOfType63(w, x, y, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 									greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newVSlices)) {
 								changed = true;
-								newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+								newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 							} else {
-								newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+								newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 							}
 						}
 						// v | w | x | y | z | 239
-						isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+						itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 						//reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -1565,13 +1565,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 								greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
-							newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 						}
 						z = y;
 						// v | w | x | y | z | 225
-						isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+						itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 						//reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -1586,13 +1586,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 								smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 								relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 							changed = true;
-							newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 						}
 					}
 					// v | w | x | y | 0 | 195
-					isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 					currentValue = currentVSlice[w][x][y][0];
 					greaterVNeighborValue = greaterVSlice[w][x][y][0];
 					smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -1607,12 +1607,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 					}
 					// v | w | x | y | 1 | 226
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1629,14 +1629,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 					}
 					int z = 2, zPlusOne = 3;
 					for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 						// v | w | x | y | z | 240
-						isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+						itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 						//reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -1653,13 +1653,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 								greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
-							newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 						}
 					}
 					// v | w | x | y | z | 227
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1676,13 +1676,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 					z = xMinusOne;
 					// v | w | x | y | z | 197
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1697,23 +1697,23 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 					if (toppleRangeOfType19(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 							relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-							newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+							newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 						changed = true;
 					}
 				}
 				if (toppleRangeOfType16(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+						newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 				// v | w | x | 2 | 0 | 200
-				isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsY2Z0PositionsTurnToTopple;
 				currentValue = currentVSlice[w][x][2][0];
 				greaterVNeighborValue = greaterVSlice[w][x][2][0];
 				smallerVNeighborValue = smallerVSlice[w][x][2][0];
@@ -1728,12 +1728,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | 2 | 1 | 201
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1750,12 +1750,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | 2 | 2 | 202
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1770,15 +1770,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 				}
 				int y = 3, yMinusOne = 2, yPlusOne = 4;
-				boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-				for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+				boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 					// v | w | x | y | 0 | 200
-					isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 					currentValue = currentVSlice[w][x][y][0];
 					greaterVNeighborValue = greaterVSlice[w][x][y][0];
 					smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -1793,12 +1793,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 					}
 					// v | w | x | y | 1 | 229
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1815,14 +1815,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 					}
 					int z = 2, zPlusOne = 3;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 						// v | w | x | y | z | 241
-						isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+						itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 						//reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -1839,13 +1839,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 								greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
-							newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 						}
 					}
 					// v | w | x | y | z | 230
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1862,13 +1862,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 					z = y;
 					// v | w | x | y | z | 202
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1883,13 +1883,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// v | w | x | y | 0 | 156
-				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 				currentValue = currentVSlice[w][x][y][0];
 				greaterVNeighborValue = greaterVSlice[w][x][y][0];
 				smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -1904,12 +1904,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | y | 1 | 203
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1926,14 +1926,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				int z = 2, zPlusOne = 3;
 				for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 231
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -1950,13 +1950,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// v | w | x | y | z | 204
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1973,13 +1973,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				z = wMinusTwo;
 				// v | w | x | y | z | 158
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -1994,28 +1994,28 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				if (toppleRangeOfType17(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+						newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 			}
 			if (toppleRangeOfType12(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			if (toppleRangeOfType20(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			// v | w | 3 | 2 | 0 | 169
-			isItCurrentPositionsTurnToTopple = isItX3Y2Z0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsX3Y2Z0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][3][2][0];
 			greaterVNeighborValue = greaterVSlice[w][3][2][0];
 			smallerVNeighborValue = smallerVSlice[w][3][2][0];
@@ -2030,12 +2030,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][3][2][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][3][2][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][3][2][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][3][2][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | 3 | 2 | 1 | 170
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2052,12 +2052,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][3][2][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][3][2][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][3][2][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][3][2][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | 3 | 2 | 2 | 171
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2072,25 +2072,25 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][3][2][2] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][3][2][2] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][3][2][2] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][3][2][2] = !itsCurrentPositionsTurnToTopple;
 			}
 			if (toppleRangeOfType21(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			int x = 4, xMinusOne = 3, xPlusOne = 5;
-			boolean isItY2Z0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-			for (int xMinusTwo = 2; x != vMinusTwo; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, isItY2Z0PositionsTurnToTopple = !isItY2Z0PositionsTurnToTopple) {
+			boolean itsY2Z0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			for (int xMinusTwo = 2; x != vMinusTwo; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, itsY2Z0PositionsTurnToTopple = !itsY2Z0PositionsTurnToTopple) {
 				if (toppleRangeOfType20(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+						newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 				// v | w | x | 2 | 0 | 209
-				isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsY2Z0PositionsTurnToTopple;
 				currentValue = currentVSlice[w][x][2][0];
 				greaterVNeighborValue = greaterVSlice[w][x][2][0];
 				smallerVNeighborValue = smallerVSlice[w][x][2][0];
@@ -2105,12 +2105,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | 2 | 1 | 210
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2127,12 +2127,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | 2 | 2 | 211
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2147,15 +2147,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 				}
 				int y = 3, yMinusOne = 2, yPlusOne = 4;
-				boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+				boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 					// v | w | x | y | 0 | 209
-					isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 					currentValue = currentVSlice[w][x][y][0];
 					greaterVNeighborValue = greaterVSlice[w][x][y][0];
 					smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -2170,12 +2170,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 					}
 					// v | w | x | y | 1 | 233
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -2192,14 +2192,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 					}
 					int z = 2, zPlusOne = 3;
 					for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 						// v | w | x | y | z | 242
-						isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+						itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 						//reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
@@ -2216,13 +2216,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 								greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 								newVSlices)) {
 							changed = true;
-							newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 						} else {
-							newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+							newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 						}
 					}
 					// v | w | x | y | z | 234
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -2239,13 +2239,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 					z = y;
 					// v | w | x | y | z | 211
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -2260,13 +2260,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// v | w | x | y | 0 | 169
-				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 				currentValue = currentVSlice[w][x][y][0];
 				greaterVNeighborValue = greaterVSlice[w][x][y][0];
 				smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -2281,12 +2281,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | y | 1 | 212
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2303,14 +2303,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				int z = 2, zPlusOne = 3;
 				for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 235
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -2327,13 +2327,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// v | w | x | y | z | 213
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2350,13 +2350,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				z = xMinusOne;
 				// v | w | x | y | z | 171
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2371,23 +2371,23 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				if (toppleRangeOfType21(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 						relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-						newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+						newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 					changed = true;
 				}
 			}
 			if (toppleRangeOfType13(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			// v | w | x | 2 | 0 | 174
-			isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsY2Z0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][x][2][0];
 			greaterVNeighborValue = greaterVSlice[w][x][2][0];
 			smallerVNeighborValue = smallerVSlice[w][x][2][0];
@@ -2402,12 +2402,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | 2 | 1 | 175
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2424,12 +2424,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | 2 | 2 | 176
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2444,15 +2444,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 			}
 			int y = 3, yMinusOne = 2, yPlusOne = 4;
-			boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-			for (; y != vMinusThree; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+			boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+			for (; y != vMinusThree; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 				// v | w | x | y | 0 | 174
-				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 				currentValue = currentVSlice[w][x][y][0];
 				greaterVNeighborValue = greaterVSlice[w][x][y][0];
 				smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -2467,12 +2467,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | y | 1 | 215
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2489,14 +2489,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				int z = 2, zPlusOne = 3;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 236
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -2513,13 +2513,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 							newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// v | w | x | y | z | 216
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2536,13 +2536,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				z = y;
 				// v | w | x | y | z | 176
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2557,13 +2557,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// v | w | x | y | 0 | 121
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][x][y][0];
 			greaterVNeighborValue = greaterVSlice[w][x][y][0];
 			smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -2578,12 +2578,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | y | 1 | 177
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2600,14 +2600,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			int z = 2, zPlusOne = 3;
 			for (; z != vMinusFour; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 217
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -2624,13 +2624,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						greaterYNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// v | w | x | y | z | 178
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2647,13 +2647,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = vMinusThree;
 			// v | w | x | y | z | 123
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -2668,13 +2668,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterYNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			if (toppleRangeOfType14(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 		}		
@@ -2687,11 +2687,11 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 
 	private static boolean toppleRangeOfType1(long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | 0 | 0 | 0 | 0 | 7
-		boolean isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[0][0][0][0];
 		long greaterVNeighborValue = greaterVSlice[0][0][0][0];
 		long smallerVNeighborValue = smallerVSlice[0][0][0][0];
@@ -2699,12 +2699,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType7(currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[0][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[0][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[0][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 1 | 0 | 0 | 0 | 22
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerWNeighborValue = currentValue;
 		currentValue = greaterWNeighborValue;
@@ -2716,12 +2716,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerWNeighborValue, 8, greaterXNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 1 | 1 | 0 | 0 | 23
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -2733,12 +2733,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 1 | 1 | 1 | 0 | 24
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -2750,13 +2750,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 4, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 1 | 1 | 1 | 1 | 25
 		//reuse values obtained previously
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
 		greaterVNeighborValue = greaterVSlice[1][1][1][1];
@@ -2766,21 +2766,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[1][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[1][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[1][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType2(int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean itsEvenPositionsTurnToTopple) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
 		long[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | 0 | 0 | 0 | 12
-		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][0][0][0];		
 		long greaterVNeighborValue = greaterVSlice[crd][0][0][0];
 		long smallerWNeighborValue = currentVSlice[crdMinusOne][0][0][0];
@@ -2788,12 +2788,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType12(crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | 1 | 0 | 0 | 36
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -2805,12 +2805,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | 1 | 1 | 0 | 37
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -2822,12 +2822,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | 1 | 1 | 1 | 38
-		isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2838,21 +2838,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType3(int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
 		long[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | crd | 0 | 0 | 16
-		boolean isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][crd][0][0];		
 		long greaterVNeighborValue = greaterVSlice[crd][crd][0][0];
 		long smallerXNeighborValue = currentVSlice[crd][crdMinusOne][0][0];
@@ -2860,12 +2860,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType16(crd, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | crd | 1 | 0 | 45
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -2877,12 +2877,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | crd | 1 | 1 | 46
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2893,21 +2893,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType4(int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean itsEvenPositionsTurnToTopple) {
 		int crdMinusOne = crd - 1;
 		boolean changed = false;
 		long[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | crd | crd | 0 | 19
-		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][crd][crd][0];		
 		long greaterVNeighborValue = greaterVSlice[crd][crd][crd][0];
 		long smallerYNeighborValue = currentVSlice[crd][crd][crdMinusOne][0];
@@ -2915,12 +2915,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType19(crd, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | crd | crd | 1 | 50
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -2930,14 +2930,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType20(crd, 1, currentValue, greaterVNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// crd | crd | crd | crd | z | 96
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;		
@@ -2947,13 +2947,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType46(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue,
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// crd | crd | crd | crd | z | 51
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;		
@@ -2963,37 +2963,37 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType20(crd, z, currentValue, greaterVNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 5, smallerZNeighborValue, 1,
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | crd | crd | crd | 21
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;		
 		greaterVNeighborValue = greaterVSlice[crd][crd][crd][crd];
 		if (topplePositionOfType21(crd, currentValue, greaterVNeighborValue, smallerZNeighborValue, newVSlices[1], newVSlices[2])) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType5(long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeOfType1(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | 2 | 0 | 0 | 0 | 52
-		boolean isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[2][0][0][0];
 		long greaterVNeighborValue = greaterVSlice[2][0][0][0];
 		long smallerVNeighborValue = smallerVSlice[2][0][0][0];
@@ -3003,12 +3003,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType32(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
 				greaterXNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 1 | 0 | 0 | 53
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -3022,12 +3022,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 1 | 1 | 0 | 54
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -3041,12 +3041,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 1 | 1 | 1 | 55
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3059,12 +3059,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 2 | 0 | 0 | 56
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		currentValue = currentVSlice[2][2][0][0];
 		greaterVNeighborValue = greaterVSlice[2][2][0][0];
 		smallerVNeighborValue = smallerVSlice[2][2][0][0];
@@ -3074,12 +3074,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType33(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 2 | 1 | 0 | 57
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -3093,12 +3093,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 2 | 1 | 1 | 58
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3111,9 +3111,9 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 2 | 2 | 0 | 59
 		//reuse values obtained previously
@@ -3126,12 +3126,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType34(2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 2 | 2 | 1 | 60
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3144,12 +3144,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 2 | 2 | 2 | 2 | 61
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3159,22 +3159,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType35(2,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[2][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[2][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[2][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType6(int w, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int w = v - 1;
 		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | 0 | 0 | 0 | 26
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][0][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][0][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][0][0][0];
@@ -3185,12 +3185,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerWNeighborValue, 1, greaterXNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 1 | 0 | 0 | 62
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -3204,12 +3204,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 1 | 1 | 0 | 63
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -3223,12 +3223,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 1 | 1 | 1 | 64
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3241,22 +3241,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType7(int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int crd = v - 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | 0 | 0 | 30
-		boolean isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][crd][0][0];		
 		long greaterVNeighborValue = greaterVSlice[crd][crd][0][0];
 		long smallerVNeighborValue = smallerVSlice[crd][crd][0][0];
@@ -3267,12 +3267,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | 1 | 0 | 71
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -3286,12 +3286,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | 1 | 1 | 72
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3304,22 +3304,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType8(int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int v = crd + 1;
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | crd | 0 | 33
-		boolean isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][crd][crd][0];		
 		long greaterVNeighborValue = greaterVSlice[crd][crd][crd][0];
 		long smallerVNeighborValue = smallerVSlice[crd][crd][crd][0];
@@ -3330,12 +3330,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | crd | 1 | 76
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3348,14 +3348,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | crd | crd | crd | z | 131
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -3368,13 +3368,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | crd | crd | crd | z | 77
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3387,12 +3387,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | crd | crd | 35
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3403,18 +3403,18 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		int w = crdPlusOne, wMinusOne = crd;
 		if (toppleRangeOfType2(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | w | 2 | 0 | 0 | 78
-		isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[w][2][0][0];
 		greaterVNeighborValue = greaterVSlice[w][2][0][0];
 		long smallerWNeighborValue = currentVSlice[wMinusOne][2][0][0];
@@ -3424,12 +3424,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType40(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 1 | 0 | 79
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -3443,12 +3443,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 1 | 1 | 80
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3461,9 +3461,9 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 0 | 81
 		//reuse values obtained previously
@@ -3476,12 +3476,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType41(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 1 | 82
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3494,12 +3494,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 2 | 83
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3509,22 +3509,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType42(w, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType9(int crd, int x, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int x = crd - 1;
 		int crdMinusOne = x, xMinusOne = x - 1, xPlusOne = crd;
 		boolean changed = false;
 		long[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd | crd | x | 0 | 0 | 39
-		boolean isItCurrentPositionsTurnToTopple = isVEven != isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven != itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][x][0][0];		
 		long greaterVNeighborValue = greaterVSlice[crd][x][0][0];
 		long smallerWNeighborValue = currentVSlice[crdMinusOne][x][0][0];
@@ -3535,12 +3535,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][x][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][x][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][x][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][x][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | x | 1 | 0 | 84
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -3554,12 +3554,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][x][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][x][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][x][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][x][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd | crd | x | 1 | 1 | 85
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3572,22 +3572,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][x][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][x][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][x][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][x][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType10(int crd1, int crd2, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int crd2 = crd1 - 1;
 		int crd2MinusOne = crd2 - 1, crd2PlusOne = crd1, crd1MinusOne = crd2, crd1MinusTwo = crd2MinusOne;
 		boolean changed = false;
 		long[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// crd1 | crd1 | crd2 | crd2 | 0 | 42
-		boolean isItCurrentPositionsTurnToTopple = isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd1][crd2][crd2][0];		
 		long greaterVNeighborValue = greaterVSlice[crd1][crd2][crd2][0];
 		long smallerWNeighborValue = currentVSlice[crd1MinusOne][crd2][crd2][0];
@@ -3598,12 +3598,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd2][crd2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd2][crd2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd1 | crd1 | crd2 | crd2 | 1 | 89
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3616,14 +3616,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd2][crd2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd2][crd2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != crd1MinusTwo; z = zPlusOne, zPlusOne++) {
 			// crd1 | crd1 | crd2 | crd2 | z | 144
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -3636,13 +3636,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd1][crd2][crd2][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd2][crd2][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd1][crd2][crd2][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd2][crd2][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// crd1 | crd1 | crd2 | crd2 | z | 90
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3655,12 +3655,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd2][crd2][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd2][crd2][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd1 | crd1 | crd2 | crd2 | crd2 | 44
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3671,17 +3671,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd2][crd2][crd2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][crd2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd2][crd2][crd2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd2][crd2][crd2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType3(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// crd1 | crd1 | crd1 | 2 | 0 | 91
-		isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[crd1][crd1][2][0];
 		greaterVNeighborValue = greaterVSlice[crd1][crd1][2][0];
 		long smallerXNeighborValue = currentVSlice[crd1][crd1MinusOne][2][0];
@@ -3691,12 +3691,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType44(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd1][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd1][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd1 | crd1 | crd1 | 2 | 1 | 92
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3709,12 +3709,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd1][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd1][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd1 | crd1 | crd1 | 2 | 2 | 93
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3724,15 +3724,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType45(crd1, 2, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd1][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd1][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		int y = 3, yMinusOne = 2, yPlusOne = 4;
-		boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-		for (; y != crd1MinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+		boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		for (; y != crd1MinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 			// crd1 | crd1 | crd1 | y | 0 | 91
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentVSlice[crd1][crd1][y][0];
 			greaterVNeighborValue = greaterVSlice[crd1][crd1][y][0];
 			smallerXNeighborValue = currentVSlice[crd1][crd1MinusOne][y][0];
@@ -3742,12 +3742,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType44(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 					greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd1][crd1][y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd1][crd1][y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// crd1 | crd1 | crd1 | y | 1 | 145
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -3760,15 +3760,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd1][crd1][y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd1][crd1][y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = 2;
 			zPlusOne = 3;
 			for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// crd1 | crd1 | crd1 | y | z | 192
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -3780,13 +3780,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				if (topplePositionOfType57(crd1, y, z, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[crd1][crd1][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[crd1][crd1][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[crd1][crd1][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[crd1][crd1][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// crd1 | crd1 | crd1 | y | z | 146
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -3799,13 +3799,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd1][crd1][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd1][crd1][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = zPlusOne;
 			// crd1 | crd1 | crd1 | y | z | 93
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -3815,13 +3815,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType45(crd1, y, currentValue, greaterVNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd1][crd1][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd1][crd1][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// crd1 | crd1 | crd1 | y | 0 | 47
-		isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 		currentValue = currentVSlice[crd1][crd1][y][0];
 		greaterVNeighborValue = greaterVSlice[crd1][crd1][y][0];
 		smallerXNeighborValue = currentVSlice[crd1][crd1MinusOne][y][0];
@@ -3832,12 +3832,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd1][y][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd1][y][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// crd1 | crd1 | crd1 | y | 1 | 94
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3850,15 +3850,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd1][y][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd1][y][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		z = 2;
 		zPlusOne = 3;
 		for (; z != crd1MinusTwo; z = zPlusOne, zPlusOne++) {
 			// crd1 | crd1 | crd1 | y | z | 147
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -3871,13 +3871,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd1][crd1][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd1][crd1][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd1][crd1][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// crd1 | crd1 | crd1 | y | z | 95
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3890,13 +3890,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd1][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd1][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		z = zPlusOne;
 		// crd1 | crd1 | crd1 | y | z | 49
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3907,13 +3907,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd1][crd1][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd1][crd1][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd1][crd1][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType4(crd1, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		return changed;
@@ -3921,21 +3921,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 
 	private static boolean toppleRangeOfType11(long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeOfType5(vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		if (toppleRangeOfType22(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | 3 | 2 | 0 | 0 | 100
-		boolean isItCurrentPositionsTurnToTopple = isVEven != isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven != itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[3][2][0][0];
 		long greaterVNeighborValue = greaterVSlice[3][2][0][0];
 		long smallerVNeighborValue = smallerVSlice[3][2][0][0];
@@ -3948,12 +3948,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 3 | 2 | 1 | 0 | 101
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -3969,12 +3969,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 3 | 2 | 1 | 1 | 102
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -3989,9 +3989,9 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 3 | 2 | 2 | 0 | 103
 		//reuse values obtained previously
@@ -4007,12 +4007,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 3 | 2 | 2 | 1 | 104
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4027,12 +4027,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 3 | 2 | 2 | 2 | 105
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4045,17 +4045,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType23(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | 3 | 3 | 2 | 0 | 108
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		currentValue = currentVSlice[3][3][2][0];
 		greaterVNeighborValue = greaterVSlice[3][3][2][0];
 		smallerVNeighborValue = smallerVSlice[3][3][2][0];
@@ -4068,12 +4068,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 3 | 3 | 2 | 1 | 109
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4088,12 +4088,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | 3 | 3 | 2 | 2 | 110
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4106,13 +4106,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[3][3][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[3][3][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[3][3][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType24(3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		return changed;
@@ -4120,18 +4120,18 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 
 	private static boolean toppleRangeOfType12(int w, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int w = v - 1;
 		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeOfType6(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | w | 2 | 0 | 0 | 113
-		boolean isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][2][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][2][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][2][0][0];
@@ -4144,12 +4144,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 1 | 0 | 114
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -4165,12 +4165,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 1 | 1 | 115
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4185,9 +4185,9 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 0 | 116
 		//reuse values obtained previously
@@ -4203,12 +4203,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 1 | 117
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4223,12 +4223,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 2 | 118
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4241,21 +4241,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType13(int w, int x, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 65
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][x][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][x][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][x][0][0];
@@ -4268,12 +4268,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 0 | 119
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -4289,12 +4289,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 1 | 120
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4309,22 +4309,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType14(int w, int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int w = v - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 68
-		boolean isItCurrentPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][crd][crd][0];
 		long greaterVNeighborValue = greaterVSlice[w][crd][crd][0];
 		long smallerVNeighborValue = smallerVSlice[w][crd][crd][0];
@@ -4337,12 +4337,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | 1 | 124
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4357,14 +4357,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 179
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4379,13 +4379,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | crd | crd | z | 125
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4400,12 +4400,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | crd | 70
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4418,18 +4418,18 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType7(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		int xMinusOne = crd, x = w;
 		// v | w | x | 2 | 0 | 126
-		isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[w][x][2][0];
 		greaterVNeighborValue = greaterVSlice[w][x][2][0];
 		smallerVNeighborValue = smallerVSlice[w][x][2][0];
@@ -4442,12 +4442,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 2 | 1 | 127
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4462,12 +4462,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 2 | 2 | 128
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4480,15 +4480,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		int y = 3, yMinusOne = 2, yPlusOne = 4;
-		boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-		for (; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+		boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		for (; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 			// v | w | x | y | 0 | 126
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][x][y][0];
 			greaterVNeighborValue = greaterVSlice[w][x][y][0];
 			smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -4501,12 +4501,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | y | 1 | 180
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4521,15 +4521,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = 2;
 			zPlusOne = 3;
 			for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 218
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -4544,13 +4544,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// v | w | x | y | z | 181
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4565,13 +4565,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = y;
 			// v | w | x | y | z | 128
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4584,13 +4584,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | x | y | 0 | 73
-		isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 		currentValue = currentVSlice[w][x][y][0];
 		greaterVNeighborValue = greaterVSlice[w][x][y][0];
 		smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -4603,12 +4603,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | y | 1 | 129
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4623,15 +4623,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		z = 2;
 		zPlusOne = 3;
 		for (; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | x | y | z | 182
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4646,13 +4646,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | x | y | z | 130
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4667,13 +4667,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		z = zPlusOne;
 		// v | w | x | y | z | 75
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4686,13 +4686,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType8(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		int wMinusThree = wMinusTwo;
@@ -4702,11 +4702,11 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		wPlusOne++;
 		if (toppleRangeOfType25(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | w | 3 | 2 | 0 | 134
-		isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) != isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) != itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[w][3][2][0];
 		greaterVNeighborValue = greaterVSlice[w][3][2][0];
 		smallerWNeighborValue = currentVSlice[wMinusOne][3][2][0];
@@ -4719,12 +4719,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][3][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][3][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][3][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][3][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 3 | 2 | 1 | 135
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4739,12 +4739,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][3][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][3][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][3][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][3][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 3 | 2 | 2 | 136
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -4757,27 +4757,27 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][3][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][3][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][3][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][3][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType26(w, 3, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		x = 4;
 		xMinusOne = 3;
 		int xPlusOne = 5;
-		boolean isItY2Z0PositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
-		for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, isItY2Z0PositionsTurnToTopple = !isItY2Z0PositionsTurnToTopple) {
+		boolean itsY2Z0PositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
+		for (int xMinusTwo = 2; x != wMinusOne; xMinusTwo = xMinusOne, xMinusOne = x, x = xPlusOne, xPlusOne++, itsY2Z0PositionsTurnToTopple = !itsY2Z0PositionsTurnToTopple) {
 			if (toppleRangeOfType25(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 			// v | w | x | 2 | 0 | 183
-			isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsY2Z0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][x][2][0];
 			greaterVNeighborValue = greaterVSlice[w][x][2][0];
 			smallerWNeighborValue = currentVSlice[wMinusOne][x][2][0];
@@ -4789,12 +4789,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType54(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | 2 | 1 | 184
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4809,12 +4809,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | 2 | 2 | 185
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4826,17 +4826,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType55(w, x, 2, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 			}
 			y = 3;
 			yMinusOne = 2;
 			yPlusOne = 4;
-			isItZ0PositionsTurnToTopple = !isItY2Z0PositionsTurnToTopple;
-			for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+			itsZ0PositionsTurnToTopple = !itsY2Z0PositionsTurnToTopple;
+			for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 				// v | w | x | y | 0 | 183
-				isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 				currentValue = currentVSlice[w][x][y][0];
 				greaterVNeighborValue = greaterVSlice[w][x][y][0];
 				smallerWNeighborValue = currentVSlice[wMinusOne][x][y][0];
@@ -4848,12 +4848,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				if (topplePositionOfType54(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 				}
 				// v | w | x | y | 1 | 219
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -4868,15 +4868,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 				}
 				z = 2;
 				zPlusOne = 3;
 				for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 					// v | w | x | y | z | 237
-					isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+					itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 					//reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
@@ -4891,13 +4891,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 							smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 						changed = true;
-						newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 					} else {
-						newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+						newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 					}
 				}
 				// v | w | x | y | z | 220
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -4912,13 +4912,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 				z = y;
 				// v | w | x | y | z | 185
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -4930,13 +4930,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				if (topplePositionOfType55(w, x, y, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// v | w | x | y | 0 | 134
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][x][y][0];
 			greaterVNeighborValue = greaterVSlice[w][x][y][0];
 			smallerWNeighborValue = currentVSlice[wMinusOne][x][y][0];
@@ -4949,12 +4949,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | y | 1 | 186
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -4969,15 +4969,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = 2;
 			zPlusOne = 3;
 			for (; z != xMinusTwo; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 221
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -4992,13 +4992,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// v | w | x | y | z | 187
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5013,13 +5013,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = xMinusOne;
 			// v | w | x | y | z | 136
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5032,23 +5032,23 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			if (toppleRangeOfType26(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 					relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-					newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+					newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 				changed = true;
 			}
 		}
 		if (toppleRangeOfType9(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | w | x | 2 | 0 | 139
-		isItCurrentPositionsTurnToTopple = isItY2Z0PositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsY2Z0PositionsTurnToTopple;
 		currentValue = currentVSlice[w][x][2][0];
 		greaterVNeighborValue = greaterVSlice[w][x][2][0];
 		smallerWNeighborValue = currentVSlice[wMinusOne][x][2][0];
@@ -5061,12 +5061,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 2 | 1 | 140
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5081,12 +5081,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 2 | 2 | 141
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5099,17 +5099,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		y = 3;
 		yMinusOne = 2;
 		yPlusOne = 4;
-		isItZ0PositionsTurnToTopple = !isItY2Z0PositionsTurnToTopple;
-		for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+		itsZ0PositionsTurnToTopple = !itsY2Z0PositionsTurnToTopple;
+		for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 			// v | w | x | y | 0 | 139
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][x][y][0];
 			greaterVNeighborValue = greaterVSlice[w][x][y][0];
 			smallerWNeighborValue = currentVSlice[wMinusOne][x][y][0];
@@ -5122,12 +5122,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | y | 1 | 189
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5142,15 +5142,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = 2;
 			zPlusOne = 3;
 			for (; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 222
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -5165,13 +5165,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// v | w | x | y | z | 190
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5186,13 +5186,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = y;
 			// v | w | x | y | z | 141
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5205,13 +5205,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | x | y | 0 | 86
-		isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 		currentValue = currentVSlice[w][x][y][0];
 		greaterVNeighborValue = greaterVSlice[w][x][y][0];
 		smallerWNeighborValue = currentVSlice[wMinusOne][x][y][0];
@@ -5224,12 +5224,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | y | 1 | 142
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5244,15 +5244,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		z = 2;
 		zPlusOne = 3;
 		for (; z != wMinusThree; z = zPlusOne, zPlusOne++) {
 			// v | w | x | y | z | 191
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5267,13 +5267,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | x | y | z | 143
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5288,13 +5288,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		z = wMinusTwo;
 		// v | w | x | y | z | 88
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5307,13 +5307,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType10(w, x, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		return changed;
@@ -5321,17 +5321,17 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 
 	private static boolean toppleRangeOfType15(int w, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		if (toppleRangeOfType22(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		// v | w | 2 | 0 | 0 | 148
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][2][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][2][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][2][0][0];
@@ -5343,12 +5343,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType48(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 1 | 0 | 149
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -5364,12 +5364,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 1 | 1 | 150
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5384,9 +5384,9 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 0 | 151
 		//reuse values obtained previously
@@ -5401,12 +5401,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType49(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 1 | 152
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5421,12 +5421,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 2 | 2 | 2 | 153
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5439,21 +5439,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType50(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][2][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][2][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][2][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType16(int w, int x, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 100
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][x][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][x][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][x][0][0];
@@ -5466,12 +5466,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 0 | 154
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -5487,12 +5487,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 1 | 155
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5507,22 +5507,22 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType17(int w, int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		//int crd = w - 1;
 		int wMinusOne = w - 1, wMinusTwo = w - 2, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 103
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][crd][crd][0];
 		long greaterVNeighborValue = greaterVSlice[w][crd][crd][0];
 		long smallerVNeighborValue = smallerVSlice[w][crd][crd][0];
@@ -5535,12 +5535,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | 1 | 159
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5555,14 +5555,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 205
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5577,13 +5577,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | crd | crd | z | 160
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5598,12 +5598,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | crd | 105
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5616,18 +5616,18 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType23(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		int x = w, xMinusOne = wMinusOne;
 		// v | w | x | 2 | 0 | 161
-		isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		currentValue = currentVSlice[w][x][2][0];
 		greaterVNeighborValue = greaterVSlice[w][x][2][0];
 		smallerVNeighborValue = smallerVSlice[w][x][2][0];
@@ -5639,12 +5639,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType51(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 2 | 1 | 162
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5659,12 +5659,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 2 | 2 | 163
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5676,15 +5676,15 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType52(w, 2, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][2][2] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][2] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][2][2] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][2][2] = !itsCurrentPositionsTurnToTopple;
 		}
 		int y = 3, yMinusOne = 2, yPlusOne = 4;
-		boolean isItZ0PositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
-		for (; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, isItZ0PositionsTurnToTopple = !isItZ0PositionsTurnToTopple) {
+		boolean itsZ0PositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
+		for (; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++, itsZ0PositionsTurnToTopple = !itsZ0PositionsTurnToTopple) {
 			// v | w | x | y | 0 | 161
-			isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 			currentValue = currentVSlice[w][x][y][0];
 			greaterVNeighborValue = greaterVSlice[w][x][y][0];
 			smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -5696,12 +5696,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType51(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 					greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 			}
 			// v | w | x | y | 1 | 206
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5716,13 +5716,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 			}
 			for (z = 2, zPlusOne = 3; z != yMinusOne; z = zPlusOne, zPlusOne++) {
 				// v | w | x | y | z | 232
-				isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+				itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 				//reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
@@ -5737,13 +5737,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 						smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 					changed = true;
-					newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 				} else {
-					newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+					newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 				}
 			}
 			// v | w | x | y | z | 207
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5758,13 +5758,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 			z = y;
 			// v | w | x | y | z | 163
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5776,13 +5776,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType52(w, y, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | x | y | 0 | 108
-		isItCurrentPositionsTurnToTopple = isItZ0PositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = itsZ0PositionsTurnToTopple;
 		currentValue = currentVSlice[w][x][y][0];
 		greaterVNeighborValue = greaterVSlice[w][x][y][0];
 		smallerVNeighborValue = smallerVSlice[w][x][y][0];
@@ -5795,12 +5795,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | y | 1 | 164
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5815,13 +5815,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		for (z = 2, zPlusOne = 3; z != wMinusTwo; z = zPlusOne, zPlusOne++) {
 			// v | w | x | y | z | 208
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -5836,13 +5836,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | x | y | z | 165
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5857,13 +5857,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		z = wMinusOne;
 		// v | w | x | y | z | 110
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5876,13 +5876,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][y][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][y][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][y][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		if (toppleRangeOfType24(w, vSlices, newVSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
-				newCurrentVSliceCompliance, isVEven, isItEvenPositionsTurnToTopple)) {
+				newCurrentVSliceCompliance, isVEven, itsEvenPositionsTurnToTopple)) {
 			changed = true;
 		}
 		return changed;
@@ -5890,12 +5890,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 
 	private static boolean toppleRangeOfType18(int w, int x, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 148
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][x][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][x][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][x][0][0];
@@ -5907,12 +5907,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType48(w, x, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerXNeighborValue, greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 0 | 193
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -5928,12 +5928,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 1 | 194
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5948,21 +5948,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType19(int w, int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 151
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][crd][crd][0];
 		long greaterVNeighborValue = greaterVSlice[w][crd][crd][0];
 		long smallerVNeighborValue = smallerVSlice[w][crd][crd][0];
@@ -5974,12 +5974,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType49(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | 1 | 198
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -5994,14 +5994,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 228
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -6015,13 +6015,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType60(w, crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
 					greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | crd | crd | z | 199
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6036,12 +6036,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | crd | 153
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6054,21 +6054,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType50(w, crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType20(int w, int x, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, wPlusOne = w + 1, xMinusOne = x - 1, xPlusOne = x + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 113
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][x][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][x][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][x][0][0];
@@ -6081,12 +6081,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 0 | 167
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -6102,12 +6102,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 1 | 168
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6122,21 +6122,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				greaterYNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType21(int w, int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, wPlusOne = w + 1, crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 116
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][crd][crd][0];
 		long greaterVNeighborValue = greaterVSlice[w][crd][crd][0];
 		long smallerVNeighborValue = smallerVSlice[w][crd][crd][0];
@@ -6149,12 +6149,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | 1 | 172
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6169,14 +6169,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 214
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -6191,13 +6191,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | crd | crd | z | 173
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6212,12 +6212,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 2, greaterZNeighborValue, 3, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | crd | 118
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6230,21 +6230,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType22(int w, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentWSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentWSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, wPlusOne = w + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | 0 | 0 | 0 | 52
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][0][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][0][0][0];
 		long smallerVNeighborValue = smallerVSlice[w][0][0][0];
@@ -6254,12 +6254,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType32(w, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerWNeighborValue,
 				greaterXNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[w][0][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][0][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[w][0][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][0][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 1 | 0 | 0 | 97
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
@@ -6273,12 +6273,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[w][1][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][1][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[w][1][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][1][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 1 | 1 | 0 | 98
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -6292,12 +6292,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[w][1][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][1][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[w][1][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][1][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | 1 | 1 | 1 | 99
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6310,21 +6310,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentWSliceCompliance[w][1][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][1][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentWSliceCompliance[w][1][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentWSliceCompliance[w][1][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType23(int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | 0 | 0 | 56
-		boolean isItCurrentPositionsTurnToTopple = isVEven == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][crd][0][0];
 		long greaterVNeighborValue = greaterVSlice[crd][crd][0][0];
 		long smallerVNeighborValue = smallerVSlice[crd][crd][0][0];
@@ -6334,12 +6334,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType33(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | 1 | 0 | 106
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -6353,12 +6353,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | 1 | 1 | 107
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6371,21 +6371,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType24(int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1;
 		boolean changed = false;
 		long[][][][] smallerVSlice = vSlices[0], currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | crd | crd | crd | 0 | 59
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (crd%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (crd%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[crd][crd][crd][0];
 		long greaterVNeighborValue = greaterVSlice[crd][crd][crd][0];
 		long smallerVNeighborValue = smallerVSlice[crd][crd][crd][0];
@@ -6395,12 +6395,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType34(crd, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | crd | 1 | 111
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6413,14 +6413,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | crd | crd | crd | z | 166
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -6432,13 +6432,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType53(crd, z, currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[crd][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[crd][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[crd][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | crd | crd | crd | z | 112
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6451,12 +6451,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | crd | crd | crd | crd | 61
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6466,21 +6466,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType35(crd,currentValue, greaterVNeighborValue, smallerVNeighborValue, greaterWNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[crd][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[crd][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[crd][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType25(int w, int x, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int wMinusOne = w - 1, xPlusOne = x + 1, xMinusOne = x - 1;
 		boolean changed = false;
 		long[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | x | 0 | 0 | 78
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == (x%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][x][0][0];
 		long greaterVNeighborValue = greaterVSlice[w][x][0][0];
 		long smallerWNeighborValue = currentVSlice[wMinusOne][x][0][0];
@@ -6490,12 +6490,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType40(w, x, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue,
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][0][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][0][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][0][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 0 | 132
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
@@ -6509,12 +6509,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | x | 1 | 1 | 133
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6527,21 +6527,21 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][x][1][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][x][1][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][x][1][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}
 
 	private static boolean toppleRangeOfType26(int w, int crd, long[][][][][] vSlices, long[][][][][] newVSlices, long[] relevantAsymmetricNeighborValues, int[] sortedNeighborsIndexes,
 			int[][] relevantAsymmetricNeighborCoords, int[] relevantAsymmetricNeighborSymmetryCounts, int[] relevantAsymmetricNeighborShareMultipliers, 
-			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean isItEvenPositionsTurnToTopple) {
+			boolean[][][][] newCurrentVSliceCompliance, boolean isVEven, boolean itsEvenPositionsTurnToTopple) {
 		int crdMinusOne = crd - 1, crdPlusOne = crd + 1, wMinusOne = w - 1;
 		boolean changed = false;
 		long[][][][] currentVSlice = vSlices[1], greaterVSlice = vSlices[2];		
 		// v | w | crd | crd | 0 | 81
-		boolean isItCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == isItEvenPositionsTurnToTopple;
+		boolean itsCurrentPositionsTurnToTopple = isVEven == (w%2 == 0) == itsEvenPositionsTurnToTopple;
 		long currentValue = currentVSlice[w][crd][crd][0];
 		long greaterVNeighborValue = greaterVSlice[w][crd][crd][0];
 		long smallerWNeighborValue = currentVSlice[wMinusOne][crd][crd][0];
@@ -6551,12 +6551,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType41(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue,
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][0] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][0] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][0] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | 1 | 137
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6569,14 +6569,14 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][1] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][1] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][1] = !itsCurrentPositionsTurnToTopple;
 		}
 		int z = 2, zPlusOne = 3;
 		for (; z != crdMinusOne; z = zPlusOne, zPlusOne++) {
 			// v | w | crd | crd | z | 188
-			isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+			itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 			//reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
@@ -6588,13 +6588,13 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 			if (topplePositionOfType56(w, crd, z, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue,
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 				changed = true;
-				newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 			} else {
-				newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+				newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 			}
 		}
 		// v | w | crd | crd | z | 138
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6607,12 +6607,12 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][z] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][z] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][z] = !itsCurrentPositionsTurnToTopple;
 		}
 		// v | w | crd | crd | crd | 83
-		isItCurrentPositionsTurnToTopple = !isItCurrentPositionsTurnToTopple;
+		itsCurrentPositionsTurnToTopple = !itsCurrentPositionsTurnToTopple;
 		//reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
@@ -6622,9 +6622,9 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 		if (topplePositionOfType42(w, crd, currentValue, greaterVNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newVSlices)) {
 			changed = true;
-			newCurrentVSliceCompliance[w][crd][crd][crd] = isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = itsCurrentPositionsTurnToTopple;
 		} else {
-			newCurrentVSliceCompliance[w][crd][crd][crd] = !isItCurrentPositionsTurnToTopple;
+			newCurrentVSliceCompliance[w][crd][crd][crd] = !itsCurrentPositionsTurnToTopple;
 		}
 		return changed;
 	}		

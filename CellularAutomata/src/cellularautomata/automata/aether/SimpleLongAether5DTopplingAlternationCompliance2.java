@@ -46,7 +46,7 @@ public class SimpleLongAether5DTopplingAlternationCompliance2 implements Symmetr
 	private long[][][][][] grid;
 	
 	private boolean[][][][][] topplingAlternationCompliance;
-	private boolean isItEvenPositionsTurnToTopple;
+	private boolean itsEvenPositionsTurnToTopple;
 	
 	private final long initialValue;
 	private long step;
@@ -67,7 +67,7 @@ public class SimpleLongAether5DTopplingAlternationCompliance2 implements Symmetr
 			throw new IllegalArgumentException(String.format("Initial value cannot be smaller than %,d. Use a greater initial value or a different implementation.", MIN_INITIAL_VALUE));
 		}
 		this.initialValue = initialValue;
-		isItEvenPositionsTurnToTopple = initialValue >= 0;
+		itsEvenPositionsTurnToTopple = initialValue >= 0;
 		grid = Utils.buildAnisotropic5DLongArray(4);
 		grid[0][0][0][0][0] = this.initialValue;
 		boundsReached = false;
@@ -174,7 +174,7 @@ public class SimpleLongAether5DTopplingAlternationCompliance2 implements Symmetr
 								changed = changed || toppled;
 							}
 							addToPosition(newGrid, v, w, x, y, z, value);
-							setComplianceAtPosition(v, w, x, y, z, toppled == isItEvenPositionsTurnToTopple == Utils.isEvenPosition(new int[] {v, w, x, y, z}));
+							setComplianceAtPosition(v, w, x, y, z, toppled == itsEvenPositionsTurnToTopple == Utils.isEvenPosition(new int[] {v, w, x, y, z}));
 						}
 					}
 				}
@@ -184,14 +184,14 @@ public class SimpleLongAether5DTopplingAlternationCompliance2 implements Symmetr
 		grid = newGrid;
 		//Increase the current step by one
 		step++;
-		isItEvenPositionsTurnToTopple = !isItEvenPositionsTurnToTopple;
+		itsEvenPositionsTurnToTopple = !itsEvenPositionsTurnToTopple;
 		this.changed = changed;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
 	
 	private void registerStaticGridSliceCompliance(int v) {
-		if (v%2 == 0 == isItEvenPositionsTurnToTopple) {
+		if (v%2 == 0 == itsEvenPositionsTurnToTopple) {
 			Utils.fillOddIndexes(topplingAlternationCompliance[v], true);
 		} else {
 			Utils.fillEvenIndexes(topplingAlternationCompliance[v], true);
