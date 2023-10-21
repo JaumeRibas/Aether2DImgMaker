@@ -1238,7 +1238,7 @@ public final class Utils {
 	}
 	
 	/**
-	 * <p>Returns a plain text {@link String} representing the number, or {@link null} if no {@link String} shorter or equal to {@link maxLength} can be obtained</p>
+	 * <p>Returns a plain text {@link String} representing the number, or {@link null} if no {@link String} shorter or equal to {@link maxLength} can be obtained.</p>
 	 * <p>The way this {@link String} is obtained is by initially representing the number in base 10. If the length is greater than {@link maxLength}, 
 	 * then base equal to {@link Character#MAX_RADIX} is tested, appending a suffix to denote the base.</p>
 	 * <p>The format of this suffix is that of a plain text representation of a subscript: "_{base}".</p>
@@ -1258,15 +1258,20 @@ public final class Utils {
 		return result;
 	}
 	
-	public static String getTimeStampFolderName() {
+	public static String getFileNameSafeTimeStamp() {
 		Calendar currentDate = Calendar.getInstance();
+		int month = currentDate.get(Calendar.MONTH) + 1;
+		int date = currentDate.get(Calendar.DATE);
+		int hour = currentDate.get(Calendar.HOUR_OF_DAY);
+		int minute = currentDate.get(Calendar.MINUTE);
+		int second = currentDate.get(Calendar.SECOND);
 		return currentDate.get(Calendar.YEAR) 
-				+ "-" + (currentDate.get(Calendar.MONTH) + 1)
-				+ "-" + currentDate.get(Calendar.DATE)
-				+ "_" + currentDate.get(Calendar.HOUR_OF_DAY)
-				+ "" + currentDate.get(Calendar.MINUTE)
-				+ "" + currentDate.get(Calendar.SECOND)
-				+ "." + currentDate.get(Calendar.MILLISECOND)
+				+ "-" + (month > 9 ? month : "0" + month)
+				+ "-" + (date > 9 ? date : "0" + date)
+				+ "T" + (hour > 9 ? hour : "0" + hour)
+				+ "" + (minute > 9 ? minute : "0" + minute)
+				+ "" + (second > 9 ? second : "0" + second)
+				+ "_" + currentDate.get(Calendar.MILLISECOND)
 				+ "_" + ThreadLocalRandom.current().nextInt(0, 100);
 	}
 	

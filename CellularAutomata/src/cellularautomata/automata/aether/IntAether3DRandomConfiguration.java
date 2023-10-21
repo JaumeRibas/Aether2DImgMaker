@@ -91,7 +91,7 @@ public class IntAether3DRandomConfiguration implements IntModel3D, Serializable 
 		this.initialSide = initialSide;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
-		timeStamp = Utils.getTimeStampFolderName();
+		timeStamp = Utils.getFileNameSafeTimeStamp();
 		int bufferMargin = 2;
 		int doubleBufferMargin = 2*bufferMargin;
 		grid = new int[initialSide + doubleBufferMargin][initialSide + doubleBufferMargin][initialSide + doubleBufferMargin];

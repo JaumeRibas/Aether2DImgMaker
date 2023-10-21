@@ -64,7 +64,7 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 		step = 0;
 		String strInitialValue = Utils.numberToPlainTextMaxLength(initialValue, Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH);
 		if (strInitialValue == null) {
-			folderName = Utils.getTimeStampFolderName();
+			folderName = Utils.getFileNameSafeTimeStamp();
 		} else {
 			folderName = strInitialValue;
 		}

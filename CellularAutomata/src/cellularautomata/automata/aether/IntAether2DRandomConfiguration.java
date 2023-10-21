@@ -89,7 +89,7 @@ public class IntAether2DRandomConfiguration implements IntModel2D, Serializable 
 		this.initialSide = initialSide;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
-		timeStamp = Utils.getTimeStampFolderName();
+		timeStamp = Utils.getFileNameSafeTimeStamp();
 		int bufferMargin = 2;
 		int doubleBufferMargin = 2*bufferMargin;
 		grid = new int[initialSide + doubleBufferMargin][initialSide + doubleBufferMargin];

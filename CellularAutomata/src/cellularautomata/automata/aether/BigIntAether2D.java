@@ -65,7 +65,7 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 		step = 0;
 		String strInitialValue = Utils.numberToPlainTextMaxLength(initialValue, Constants.MAX_INITIAL_VALUE_LENGTH_IN_PATH);
 		if (strInitialValue == null) {
-			folderName = Utils.getTimeStampFolderName();
+			folderName = Utils.getFileNameSafeTimeStamp();
 		} else {
 			folderName = strInitialValue;
 		}
