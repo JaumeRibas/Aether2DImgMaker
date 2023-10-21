@@ -17,8 +17,6 @@
 package caimgmaker;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -30,53 +28,10 @@ import com.beust.jcommander.JCommander;
 import caimgmaker.args.Args;
 import caimgmaker.args.CoordinateFilters;
 import caimgmaker.args.CustomUsageFormatter;
-import caimgmaker.args.GridParameterValue;
-import caimgmaker.args.ImageGenerationMode;
-import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
 import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import caimgmaker.colormap.HueMapper;
 import cellularautomata.PartialCoordinates;
-import cellularautomata.automata.IntAbelianSandpileSingleSource2D;
-import cellularautomata.automata.aether.LongAether1D;
-import cellularautomata.automata.aether.LongAether2D;
-import cellularautomata.automata.aether.LongAether2DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.IntAether2DRandomConfiguration;
-import cellularautomata.automata.aether.IntAether2DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.LongAether3D;
-import cellularautomata.automata.aether.LongAether3DCubicGrid;
-import cellularautomata.automata.aether.LongAether3DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.LongAether4D;
-import cellularautomata.automata.aether.LongAether4DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.LongAether5D;
-import cellularautomata.automata.aether.BigIntAether2D;
-import cellularautomata.automata.aether.BigIntAether2DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.BigIntAether3D;
-import cellularautomata.automata.aether.BigIntAether3DCubicGrid;
-import cellularautomata.automata.aether.BigIntAether3DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.BigIntAether4D;
-import cellularautomata.automata.aether.BigIntAether4DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.FileBackedLongAether1D;
-import cellularautomata.automata.aether.FileBackedLongAether2D;
-import cellularautomata.automata.aether.FileBackedLongAether3D;
-import cellularautomata.automata.aether.FileBackedLongAether4D;
-import cellularautomata.automata.aether.FileBackedLongAether5D;
-import cellularautomata.automata.aether.IntAether2D;
-import cellularautomata.automata.aether.IntAether3D;
-import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
-import cellularautomata.automata.aether.IntAether3DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.IntAether4D;
-import cellularautomata.automata.aether.IntAether4DTopplingAlternationCompliance;
-import cellularautomata.automata.aether.IntAether5D;
-import cellularautomata.automata.nearaether.SimpleBigIntNearAether3_3D;
-import cellularautomata.automata.nearaether.IntNearAether1_3D;
-import cellularautomata.automata.nearaether.IntNearAether2_3D;
-import cellularautomata.automata.siv.IntSpreadIntegerValue2D;
-import cellularautomata.automata.siv.IntSpreadIntegerValue;
-import cellularautomata.automata.siv.LongSpreadIntegerValue1D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue2D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue3D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue4D;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.Model;
 import cellularautomata.model.SymmetricModel;
@@ -95,22 +50,7 @@ import cellularautomata.model3d.NumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 public class AetherImgMaker {
-	
-	private static final String USE_HELP_MESSAGE = "Use -help to view the list of available parameters and their accepted values.";
-	private static final String GRID_NOT_SUPPORTED_MESSAGE_FORMAT = "The %s model is currently not supported with this type of grid.%n";
-	private static final String GRID_TYPE_NEEDED_IN_ORDER_TO_RESTORE_MESSAGE_FORMAT = "You need to specify the grid type of the backup you are trying to restore.%n";
-	private static final String INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT = "The %s model is currently not supported with the selected initial configuration.%n";
-	private static final String SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT = "The single source value is out of the currently supported range for this model: [%d, %d].%n";
-	private static final String MIN_MAX_OUT_OF_RANGE_MESSAGE_FORMAT = "The min/max values are out of the currently supported range for this model: [%d, %d].%n";
-	private static final String INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT = "The %s model needs and initial configuration.%n";
-	private static final String UNSUPPORTED_DIMENSION_MESSAGE_FORMAT = "Currently it is only supported to generate images from a model section with dimension two or three (found %d). Use the -coordinate-filters parameter or a -grid with two or three dimensions.%n";
-	private static final String UNKNOWN_IMG_GEN_MODE_MESSAGE = "Unrecognized image generation mode.";
-	private static final String UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT = "It is currently not supported to generate images form a model section of type %s.%n";
-	private static final String MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT = "The %s model is currently not supported with the -memory-safe parameter.%n";
-	private static final String MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_INITIAL_CONFIG_MESSAGE_FORMAT = "The %s model is currently not supported with the -memory-safe parameter and the selected initial configuration.%n";
-	private static final String IMG_GEN_MODE_NOT_SUPPORTED_MESSAGE_FORMAT = "The selected image generation mode is currently not supported for the %s model.%n";
-	private static final String MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_CONFIG_MESSAGE_FORMAT = "The -memory-safe parameter is currently not supported together with the given configuration.%n";
-	
+			
 	public static void main(String[] rawArgs) throws Exception {
 //		String debugArgs = "92233720368547758079999 -path D:/data/test";//debug
 //		debugArgs = "-help";//debug
@@ -129,7 +69,7 @@ public class AetherImgMaker {
 				return;
 			}
 			if (!mergeInitialConfigParameters(args)) {
-				System.out.println(USE_HELP_MESSAGE);
+				System.out.println(Resources.USE_HELP_MESSAGE);
 				return;
 			}
 			if (args.outputVersion) {
@@ -138,7 +78,7 @@ public class AetherImgMaker {
 			}
 			Model model = getModel(args);
 			if (model == null) {
-				System.out.println(USE_HELP_MESSAGE);
+				System.out.println(Resources.USE_HELP_MESSAGE);
 				return;
 			}
 			String path = args.path;
@@ -149,7 +89,7 @@ public class AetherImgMaker {
 			evolveModelToFirstStep(model, args, backupsPath);
 			Model modelSection = getModelSection(model, args);
 			if (modelSection == null) {
-				System.out.println(USE_HELP_MESSAGE);
+				System.out.println(Resources.USE_HELP_MESSAGE);
 				return;
 			}
 			if (args.backupToRestorePath == null)
@@ -160,7 +100,7 @@ public class AetherImgMaker {
 						true);
 			boolean success = generateImages(modelSection, args, backupsPath);
 			if(!success) {
-				System.out.println(USE_HELP_MESSAGE);
+				System.out.println(Resources.USE_HELP_MESSAGE);
 			}
 		} catch (Exception ex) {
 			String message = ex.getMessage();
@@ -170,7 +110,7 @@ public class AetherImgMaker {
 			} else {
 				System.out.println(message);
 			}
-			System.out.println(USE_HELP_MESSAGE);
+			System.out.println(Resources.USE_HELP_MESSAGE);
 //			throw ex;//debug
 		}
 	}
@@ -227,7 +167,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}				
 				} else if (model instanceof IntModel2D) {
@@ -243,7 +183,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}				
 				} else if (model instanceof LongModel2D) {
@@ -259,7 +199,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}	
 				} else if (model instanceof NumericModel2D) {
@@ -276,7 +216,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}
 				} else if (model instanceof IntModel) {
@@ -292,11 +232,11 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}
 				} else {
-					System.out.printf(UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
+					System.out.printf(Resources.UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
 					error = true;
 				}
 				break;
@@ -331,7 +271,7 @@ public class AetherImgMaker {
 					case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
-						System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+						System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 						error = true;
 					}				
 				} else if (model instanceof IntModel3D) {
@@ -347,7 +287,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}			
 				} else if (model instanceof LongModel3D) {
@@ -363,7 +303,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}
 				} else if (model instanceof NumericModel3D) {
@@ -380,7 +320,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}
 				} else if (model instanceof IntModel) {
@@ -396,16 +336,16 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
 							error = true;
 					}
 				} else {
-					System.out.printf(UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
+					System.out.printf(Resources.UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
 					error = true;
 				}
 				break;
 			default:
-				System.out.printf(UNSUPPORTED_DIMENSION_MESSAGE_FORMAT, dimension);
+				System.out.printf(Resources.UNSUPPORTED_DIMENSION_MESSAGE_FORMAT, dimension);
 				error = true;						
 		}
 		return !error;
@@ -557,704 +497,36 @@ public class AetherImgMaker {
 		return colorMapper;
 	}
 	
-	private static Model getModel(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
+	private static Model getModel(Args args) throws Exception {
 		Model model = null;
 		String lowerCaseModelName = args.model.toLowerCase();
 		switch (lowerCaseModelName) {
 			case "ae":
 			case "aether":
-				model = getAetherModel(args);
+				model = AetherFactory.create(args);
 				break;
 			case "siv":
 			case "spread_integer_value":
-				model = getSivModel(args);
+				model = SpreadIntegerValueFactory.create(args);
 				break;
 			case "as":
 			case "abelian_sandpile":
-				model = getAbelianSandpileModel(args);
+				model = AbelianSandpileFactory.create(args);
 				break;
 			case "nearae1":
 			case "nearaether1":
-				model = getNearAether1Model(args);
+				model = NearAether1Factory.create(args);
 				break;
 			case "nearae2":
 			case "nearaether2":
-				model = getNearAether2Model(args);
+				model = NearAether2Factory.create(args);
 				break;
 			case "nearae3":
 			case "nearaether3":
-				model = getNearAether3Model(args);
+				model = NearAether3Factory.create(args);
 				break;
 			default:
 				System.out.println("The model '" + args.model + "' is not recognized.");
-		}
-		return model;
-	}
-	
-	private static Model getSivModel(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Model model = null;
-		if (args.memorySafe) {
-			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
-		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
-		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(GRID_TYPE_NEEDED_IN_ORDER_TO_RESTORE_MESSAGE_FORMAT);
-		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(IMG_GEN_MODE_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-		} else {
-			if (args.grid == null) {
-				args.grid = new GridParameterValue(2);//default to 2D
-			}
-			switch (args.grid.dimension) {
-				case 1:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new LongSpreadIntegerValue1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
-								}								
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new LongSpreadIntegerValue1D(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				case 2:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-									model = new IntSpreadIntegerValue2D(args.initialConfiguration.singleSource.intValue(), 0);
-								} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new LongSpreadIntegerValue2D(args.initialConfiguration.singleSource.longValue(), 0);
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							try {
-								model = new IntSpreadIntegerValue2D(args.backupToRestorePath);
-							} catch (Exception ex) {
-								model = new LongSpreadIntegerValue2D(args.backupToRestorePath);
-							}
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				case 3:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new LongSpreadIntegerValue3D(args.initialConfiguration.singleSource.longValue());
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new LongSpreadIntegerValue3D(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				case 4:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-									model = new LongSpreadIntegerValue4D(args.initialConfiguration.singleSource.longValue());
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new LongSpreadIntegerValue4D(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				default:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-									model = new IntSpreadIntegerValue(args.grid.dimension, args.initialConfiguration.singleSource.intValue(), 0);
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new IntSpreadIntegerValue(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-			}
-		}
-		return model;
-	}
-
-	private static Model getAbelianSandpileModel(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Model model = null;
-		if (args.memorySafe) {
-			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
-		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
-//		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
-//			System.out.printf(gridTypeNeededToRestoreMessageFormat);
-		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(IMG_GEN_MODE_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-		} else {
-			if (args.grid == null) {
-				args.grid = new GridParameterValue(2);//default to 2D
-			}
-			switch (args.grid.dimension) {
-				case 2:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.ZERO) >= 0) {
-									model = new IntAbelianSandpileSingleSource2D(args.initialConfiguration.singleSource.intValue());
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, 0, Integer.MAX_VALUE);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new IntAbelianSandpileSingleSource2D(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				default:
-					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-			}
-		}
-		return model;
-	}
-	
-	private static Model getAetherModel(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Model model = null;
-		if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
-		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(GRID_TYPE_NEEDED_IN_ORDER_TO_RESTORE_MESSAGE_FORMAT);
-		} else if (args.memorySafe && args.initialConfiguration.type != InitialConfigType.SINGLE_SOURCE) {
-			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_INITIAL_CONFIG_MESSAGE_FORMAT, args.model);
-		} else {
-			if (args.grid == null) {
-				args.grid = new GridParameterValue(2);//default to 2D
-			}
-			switch (args.grid.dimension) {
-				case 1:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MIN_INITIAL_VALUE)) >= 0) {
-									if (args.memorySafe) {
-										model = new FileBackedLongAether1D(args.initialConfiguration.singleSource.longValue(), args.path);
-									} else {
-										model = new LongAether1D(args.initialConfiguration.singleSource.longValue());
-									}
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, LongAether1D.MIN_INITIAL_VALUE, LongAether1D.MAX_INITIAL_VALUE);
-								}								
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							if (args.memorySafe) {
-								model = new FileBackedLongAether1D(args.backupToRestorePath, args.path);
-							} else {
-								model = new LongAether1D(args.backupToRestorePath);
-							}
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				case 2:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-									if (args.memorySafe) {
-										System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_CONFIG_MESSAGE_FORMAT);
-									} else {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-											model = new IntAether2DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
-										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-											model = new LongAether2DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
-										} else {
-											model = new BigIntAether2DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
-										}
-									}
-								} else {
-									if (args.memorySafe) {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether2D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether2D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new FileBackedLongAether2D(args.initialConfiguration.singleSource.longValue(), args.path);
-										} else {
-											System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether2D.MIN_INITIAL_VALUE, FileBackedLongAether2D.MAX_INITIAL_VALUE);
-										}
-									} else {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new IntAether2D(args.initialConfiguration.singleSource.intValue());
-										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new LongAether2D(args.initialConfiguration.singleSource.longValue());
-										} else {
-											model = new BigIntAether2D(args.initialConfiguration.singleSource);
-										}
-									}
-								}
-							} else {
-								//TODO output error in case of -memory-safe
-								if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
-										&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-									model = new IntAether2DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
-								} else {
-									System.out.printf(MIN_MAX_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
-								}
-							}
-						} else {
-							boolean successfullyRestored = true;
-							if (args.memorySafe) {
-								model = new FileBackedLongAether2D(args.backupToRestorePath, args.path);
-							} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-								try {
-									model = new IntAether2DTopplingAlternationCompliance(args.backupToRestorePath);							
-								} catch (Exception ex1) {
-									try {
-										model = new LongAether2DTopplingAlternationCompliance(args.backupToRestorePath);							
-									} catch (Exception ex2) {
-										try {
-											model = new BigIntAether2DTopplingAlternationCompliance(args.backupToRestorePath);							
-										} catch (Exception ex3) {
-											successfullyRestored = false;
-										}						
-									}						
-								}
-							} else {	
-								try {
-									model = new IntAether2D(args.backupToRestorePath);							
-								} catch (Exception ex1) {
-									try {
-										model = new LongAether2D(args.backupToRestorePath);							
-									} catch (Exception ex2) {
-										try {
-											model = new BigIntAether2D(args.backupToRestorePath);							
-										} catch (Exception ex3) {
-											try {
-												model = new IntAether2DRandomConfiguration(args.backupToRestorePath);			
-											} catch (Exception ex4) {
-												successfullyRestored = false;					
-											}
-										}						
-									}						
-								}
-							}
-							if (!successfullyRestored) {
-								//TODO output error			
-							}
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				case 3:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-									if (args.memorySafe) {
-										System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_CONFIG_MESSAGE_FORMAT);
-									} else {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-											model = new IntAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
-										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-											model = new LongAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
-										} else {
-											model = new BigIntAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
-										}
-									}
-								} else {
-									if (args.memorySafe) {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new FileBackedLongAether3D(args.initialConfiguration.singleSource.longValue(), args.path);
-										} else {
-											System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether3D.MIN_INITIAL_VALUE, FileBackedLongAether3D.MAX_INITIAL_VALUE);
-										}
-									} else {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new IntAether3D(args.initialConfiguration.singleSource.intValue());
-										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new LongAether3D(args.initialConfiguration.singleSource.longValue());
-										} else {
-											model = new BigIntAether3D(args.initialConfiguration.singleSource);
-										}
-									}
-								}
-							} else {
-								if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
-										&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-										&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-									model = new IntAether3DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
-								} else {
-									System.out.printf(MIN_MAX_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
-								}
-							}
-						} else {
-							boolean successfullyRestored = true;
-							if (args.memorySafe) {
-								model = new FileBackedLongAether3D(args.backupToRestorePath, args.path);
-							} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-								try {
-									model = new IntAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
-								} catch (Exception ex1) {
-									try {
-										model = new LongAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
-									} catch (Exception ex2) {
-										try {
-											model = new BigIntAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
-										} catch (Exception ex3) {
-											successfullyRestored = false;
-										}						
-									}						
-								}
-							} else {	
-								try {
-									model = new IntAether3D(args.backupToRestorePath);							
-								} catch (Exception ex1) {
-									try {
-										model = new LongAether3D(args.backupToRestorePath);							
-									} catch (Exception ex2) {
-										try {
-											model = new BigIntAether3D(args.backupToRestorePath);							
-										} catch (Exception ex3) {
-											try {
-												model = new IntAether3DRandomConfiguration(args.backupToRestorePath);			
-											} catch (Exception ex4) {
-												successfullyRestored = false;					
-											}
-										}						
-									}						
-								}
-							}
-							if (!successfullyRestored) {
-								//TODO output error			
-							}
-						}
-					} else {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) { 
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DCubicGrid.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DCubicGrid.MIN_INITIAL_VALUE)) >= 0) {
-									model = new LongAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource.longValue());
-								} else {
-									model = new BigIntAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							try {
-								model = new LongAether3DCubicGrid(args.backupToRestorePath);							
-							} catch (Exception ex1) {
-								model = new BigIntAether3DCubicGrid(args.backupToRestorePath);			
-							}
-						}
-					}
-					break;
-				case 4:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-									if (args.memorySafe) {
-										System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_CONFIG_MESSAGE_FORMAT);
-									} else {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-											model = new IntAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
-										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-											model = new LongAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
-										} else {
-											model = new BigIntAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
-										}
-									}
-								} else {
-									if (args.memorySafe) {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new FileBackedLongAether4D(args.initialConfiguration.singleSource.longValue(), args.path);
-										} else {
-											System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether4D.MIN_INITIAL_VALUE, FileBackedLongAether4D.MAX_INITIAL_VALUE);
-										}
-									} else {
-										if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new IntAether4D(args.initialConfiguration.singleSource.intValue());
-										} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MAX_INITIAL_VALUE)) <= 0
-												&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4D.MIN_INITIAL_VALUE)) >= 0) {
-											model = new LongAether4D(args.initialConfiguration.singleSource.longValue());
-										} else {
-											model = new BigIntAether4D(args.initialConfiguration.singleSource);
-										}
-									}
-								}						
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							boolean successfullyRestored = true;
-							if (args.memorySafe) {
-								model = new FileBackedLongAether4D(args.backupToRestorePath, args.path);
-							} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-								try {
-									model = new IntAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
-								} catch (Exception ex1) {
-									try {
-										model = new LongAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
-									} catch (Exception ex2) {
-										try {
-											model = new BigIntAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
-										} catch (Exception ex3) {
-											successfullyRestored = false;
-										}						
-									}						
-								}
-							} else {	
-								try {
-									model = new IntAether4D(args.backupToRestorePath);							
-								} catch (Exception ex1) {
-									try {
-										model = new LongAether4D(args.backupToRestorePath);							
-									} catch (Exception ex2) {
-										try {
-											model = new BigIntAether4D(args.backupToRestorePath);							
-										} catch (Exception ex3) {
-											successfullyRestored = false;
-										}						
-									}						
-								}
-							}
-							if (!successfullyRestored) {
-								//TODO output error			
-							}
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				case 5:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								//TODO use memory safe implementations depending on asymmetric and single source parameters and available heap space?
-								//long heapFreeSize = Runtime.getRuntime().freeMemory();
-								if (args.memorySafe) {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether5D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether5D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new FileBackedLongAether5D(args.initialConfiguration.singleSource.longValue(), args.path);
-									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, FileBackedLongAether5D.MIN_INITIAL_VALUE, FileBackedLongAether5D.MAX_INITIAL_VALUE);
-									}
-								} else {
-									if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new IntAether5D(args.initialConfiguration.singleSource.intValue());
-									} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5D.MAX_INITIAL_VALUE)) <= 0
-											&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5D.MIN_INITIAL_VALUE)) >= 0) {
-										model = new LongAether5D(args.initialConfiguration.singleSource.longValue());
-									} else {
-										System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, LongAether5D.MIN_INITIAL_VALUE, LongAether5D.MAX_INITIAL_VALUE);
-									}
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							if (args.memorySafe) {
-								model = new FileBackedLongAether5D(args.backupToRestorePath, args.path);
-							} else {	
-								try {
-									model = new IntAether5D(args.backupToRestorePath);							
-								} catch (Exception ex1) {
-									model = new LongAether5D(args.backupToRestorePath);			
-								}
-							}
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				default:
-					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-			}
-		}
-		return model;
-	}
-
-	private static Model getNearAether1Model(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Model model = null;
-		if (args.memorySafe) {
-			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
-		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
-//		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
-//			System.out.printf(gridTypeNeededToRestoreMessageFormat);
-		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(IMG_GEN_MODE_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-		} else {
-			if (args.grid == null) {
-				args.grid = new GridParameterValue(3);//default
-			}
-			switch (args.grid.dimension) {
-				case 3:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether1_3D.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether1_3D.MIN_INITIAL_VALUE)) >= 0) {
-									model = new IntNearAether1_3D(args.initialConfiguration.singleSource.intValue());
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, IntNearAether1_3D.MIN_INITIAL_VALUE, IntNearAether1_3D.MAX_INITIAL_VALUE);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new IntNearAether1_3D(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				default:
-					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-			}
-		}
-		return model;
-	}
-	
-	private static Model getNearAether2Model(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Model model = null;
-		if (args.memorySafe) {
-			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
-		} else if (args.memorySafe) {
-			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
-		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
-//		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
-//			System.out.printf(gridTypeNeededToRestoreMessageFormat);
-		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(IMG_GEN_MODE_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-		} else {
-			if (args.grid == null) {
-				args.grid = new GridParameterValue(3);//default
-			}
-			switch (args.grid.dimension) {
-				case 3:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether2_3D.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether2_3D.MIN_INITIAL_VALUE)) >= 0) {
-									model = new IntNearAether2_3D(args.initialConfiguration.singleSource.intValue());
-								} else {
-									System.out.printf(SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, IntNearAether1_3D.MIN_INITIAL_VALUE, IntNearAether1_3D.MAX_INITIAL_VALUE);
-								}
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new IntNearAether2_3D(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				default:
-					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-			}
-		}
-		return model;
-	}
-	
-	private static Model getNearAether3Model(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
-		Model model = null;
-		if (args.memorySafe) {
-			System.out.printf(MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
-		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
-//		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
-//			System.out.printf(gridTypeNeededToRestoreMessageFormat);
-		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(IMG_GEN_MODE_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-		} else {
-			if (args.grid == null) {
-				args.grid = new GridParameterValue(3);//default
-			}
-			switch (args.grid.dimension) {
-				case 3:
-					if (args.grid.side == null) {
-						if (args.backupToRestorePath == null) {
-							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								model = new SimpleBigIntNearAether3_3D(args.initialConfiguration.singleSource);
-							} else {
-								System.out.printf(INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-							}
-						} else {
-							model = new SimpleBigIntNearAether3_3D(args.backupToRestorePath);
-						}
-					} else {
-						System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-					}
-					break;
-				default:
-					System.out.printf(GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
-			}
 		}
 		return model;
 	}
