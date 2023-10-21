@@ -30,7 +30,7 @@ public enum ImageGenerationMode {
 	SPLIT_COORDINATE_PARITY ("split-coordinate-parity", "split-coord-parity", "scp"),
 	EVEN_COORDINATES_ONLY ("even-coordinates-only", "even-coords-only", "eco"),
 	ODD_COORDINATES_ONLY ("odd-coordinates-only", "odd-coords-only", "oco"),
-	//TODO missing modes? or should the app figure out when to use even-y even-x, etc. based on coordinate filters?
+	//TODO missing modes? or should the app figure out when to use even-y even-x, etc., based on coordinate filters?
 	TOPPLING_ALTERNATION_COMPLIANCE ("toppling-alternation-compliance", "tac");
 	
 	private final String name;
