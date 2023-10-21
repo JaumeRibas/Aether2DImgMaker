@@ -44,7 +44,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 	private static final String INVALID_COORD_INDEX_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The coordinate index must be between one and the dimension, both included.";
 	private static final String COORD_RELATIVE_TO_ITSELF_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The coordinate cannot be set relative to itself.";
 	private static final String INVALID_RANGE_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "Invalid resulting range %d < x%d < %d.";
-	private static final String REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The filter is either redundant or incompatible with one or a combination of preceding filters. Some possible causes are: incorrect coordinate indexes, repeated filters, too many greater/less than filters on the same set of interconnected coordinates, redundant interconnections of coordinates, etc.";
+	private static final String REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The filter is either redundant or incompatible with one, or a combination of several, preceding filters. Some possible causes are: incorrect coordinate indexes, repeated filters, too many greater/less than filters on the same set of interconnected coordinates, redundant interconnections of coordinates, etc.";
 
 	@Override
 	public CoordinateFilters convert(String parameterValue) {
