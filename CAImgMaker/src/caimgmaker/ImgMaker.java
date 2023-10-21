@@ -36,6 +36,7 @@ import org.apache.commons.math3.FieldElement;
 
 import caimgmaker.colormap.ColorMapper;
 import cellularautomata.MinAndMax;
+import cellularautomata.Utils;
 import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
@@ -106,7 +107,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -170,7 +171,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -234,7 +235,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -299,7 +300,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -371,7 +372,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -458,7 +459,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -545,7 +546,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -632,7 +633,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -719,7 +720,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -822,7 +823,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -932,7 +933,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -1042,7 +1043,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -1152,7 +1153,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -1281,7 +1282,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -1467,7 +1468,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -1653,7 +1654,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -1839,7 +1840,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -2009,7 +2010,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
@@ -2184,7 +2185,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getClass().getSimpleName() + "_" + step;
+						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
 						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
 						ca.backUp(backupPath, backupName);		
 						System.out.println("Backing up finished");
