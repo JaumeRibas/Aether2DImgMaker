@@ -12013,7 +12013,7 @@ public class LongAether5DTopplingAlternationCompliance implements SymmetricBoole
 
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/5D/" + initialValue;
+		return getName() + "/5D/" + initialValue + "/toppling_alternation_compliance";
 	}
 
 }

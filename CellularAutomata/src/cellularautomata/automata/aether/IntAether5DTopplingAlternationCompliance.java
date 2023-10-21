@@ -12012,7 +12012,7 @@ public class IntAether5DTopplingAlternationCompliance implements SymmetricBoolea
 
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/5D/" + initialValue;
+		return getName() + "/5D/" + initialValue + "/toppling_alternation_compliance";
 	}
 
 }
