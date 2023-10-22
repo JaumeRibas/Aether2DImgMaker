@@ -13,7 +13,7 @@ To run this app you need to have Java (version 8 or higher) installed.
 
 To run the app open a terminal and use `java -jar`. For instance, if the .jar file is in the current directory, use `java -jar AetherImgMaker.jar [parameters]`, where `[parameters]` is a space separated list of the parameters and values to use. 
 
-Parameter names are prefixed with a hyphen, e.g., `-help`. Most parameters require a value that must come right after the parameter name, e.g., `-colormap grayscale`. The parameter `-initial-configuration` is the main parameter and it can be used omitting its name. Use the `-help` parameter to view a list of available parameter and their accepted values. 
+Parameter names are prefixed with a hyphen, e.g., `-help`. Most parameters require a value that must come right after the parameter name, e.g., `-colormap grayscale`. The parameter `-initial-configuration` is the main parameter and it can be used omitting its name. Use the `-help` parameter to view a list of available parameters and their accepted values. 
 
 The `Ctrl`+`C` command can be used to halt the execution.
 
