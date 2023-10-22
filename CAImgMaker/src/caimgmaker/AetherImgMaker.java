@@ -21,6 +21,8 @@ import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.SortedMap;
 import org.apache.commons.io.FileUtils;
 
@@ -50,12 +52,15 @@ import cellularautomata.model3d.NumericModel3D;
 import cellularautomata.numbers.BigInt;
 
 public class AetherImgMaker {
+	
+	private static ResourceBundle messages;
 			
 	public static void main(String[] rawArgs) throws Exception {
 //		String debugArgs = "92233720368547758079999 -path D:/data/test";//debug
 //		debugArgs = "-help";//debug
 //		rawArgs = debugArgs.split(" ");//debug
 		try {
+			messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault());
 			Args args = new Args();
 			JCommander jcommander = JCommander.newBuilder()
 					.programName(Args.PROGRAM_INVOCATION)
@@ -69,7 +74,7 @@ public class AetherImgMaker {
 				return;
 			}
 			if (!mergeInitialConfigParameters(args)) {
-				System.out.println(Resources.USE_HELP_MESSAGE);
+				System.out.println(messages.getString("use-help-message"));
 				return;
 			}
 			if (args.outputVersion) {
@@ -78,7 +83,7 @@ public class AetherImgMaker {
 			}
 			Model model = getModel(args);
 			if (model == null) {
-				System.out.println(Resources.USE_HELP_MESSAGE);
+				System.out.println(messages.getString("use-help-message"));
 				return;
 			}
 			String path = args.path;
@@ -89,7 +94,7 @@ public class AetherImgMaker {
 			evolveModelToFirstStep(model, args, backupsPath);
 			Model modelSection = getModelSection(model, args);
 			if (modelSection == null) {
-				System.out.println(Resources.USE_HELP_MESSAGE);
+				System.out.println(messages.getString("use-help-message"));
 				return;
 			}
 			if (args.backupToRestorePath == null)
@@ -100,7 +105,7 @@ public class AetherImgMaker {
 						true);
 			boolean success = generateImages(modelSection, args, backupsPath);
 			if(!success) {
-				System.out.println(Resources.USE_HELP_MESSAGE);
+				System.out.println(messages.getString("use-help-message"));
 			}
 		} catch (Exception ex) {
 			String message = ex.getMessage();
@@ -110,7 +115,7 @@ public class AetherImgMaker {
 			} else {
 				System.out.println(message);
 			}
-			System.out.println(Resources.USE_HELP_MESSAGE);
+			System.out.println(messages.getString("use-help-message"));
 //			throw ex;//debug
 		}
 	}
@@ -167,7 +172,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}				
 				} else if (model instanceof IntModel2D) {
@@ -183,7 +188,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}				
 				} else if (model instanceof LongModel2D) {
@@ -199,7 +204,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}	
 				} else if (model instanceof NumericModel2D) {
@@ -216,7 +221,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}
 				} else if (model instanceof IntModel) {
@@ -232,11 +237,11 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}
 				} else {
-					System.out.printf(Resources.UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
+					System.out.printf(messages.getString("unsupported-model-section-message-format"), model.getClass().getName());
 					error = true;
 				}
 				break;
@@ -271,7 +276,7 @@ public class AetherImgMaker {
 					case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 						break;
 					default: 
-						System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+						System.out.println(messages.getString("unknown-img-gen-mode-message"));
 						error = true;
 					}				
 				} else if (model instanceof IntModel3D) {
@@ -287,7 +292,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}			
 				} else if (model instanceof LongModel3D) {
@@ -303,7 +308,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}
 				} else if (model instanceof NumericModel3D) {
@@ -320,7 +325,7 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}
 				} else if (model instanceof IntModel) {
@@ -336,16 +341,16 @@ public class AetherImgMaker {
 						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
 							break;
 						default: 
-							System.out.println(Resources.UNKNOWN_IMG_GEN_MODE_MESSAGE);
+							System.out.println(messages.getString("unknown-img-gen-mode-message"));
 							error = true;
 					}
 				} else {
-					System.out.printf(Resources.UNSUPPORTED_MODEL_SECTION_MESSAGE_FORMAT, model.getClass().getName());
+					System.out.printf(messages.getString("unsupported-model-section-message-format"), model.getClass().getName());
 					error = true;
 				}
 				break;
 			default:
-				System.out.printf(Resources.UNSUPPORTED_DIMENSION_MESSAGE_FORMAT, dimension);
+				System.out.printf(messages.getString("unsupported-dimension-message-format"), dimension);
 				error = true;						
 		}
 		return !error;
@@ -379,8 +384,6 @@ public class AetherImgMaker {
 			}
 		}		
 	}
-	
-	private static final String INVALID_COORD_INDEX_MESSAGE_FORMAT = "Invalid coordinate in filter. The coordinate index must be between one and the dimension (%d), both included.%n";
 
 	private static Model getModelSection(Model model, Args args) {
 		//asymmetric section
@@ -397,7 +400,7 @@ public class AetherImgMaker {
 			int dimension = model.getGridDimension();
 			if (absoluteFilterCount != 0 && absoluteFilterCoords.get(absoluteFilterCount - 1) >= dimension 
 					|| minMaxFilterCount != 0 && minMaxFilterCoords.get(minMaxFilterCount - 1) >= dimension) {
-				System.out.printf(INVALID_COORD_INDEX_MESSAGE_FORMAT, dimension);
+				System.out.printf(messages.getString("invalid-coord-index-message-format"), dimension);
 				return null;
 			}
 			int relativeFilterGroupCount = filters.relativeFilterGroups.size();
@@ -406,7 +409,7 @@ public class AetherImgMaker {
 				SortedMap<Integer, int[]> group = filters.relativeFilterGroups.get(i);
 				List<Integer> groupCoords = new ArrayList<Integer>(group.keySet());
 				if (groupCoords.get(group.size() - 1) >= dimension) {
-					System.out.printf(INVALID_COORD_INDEX_MESSAGE_FORMAT, dimension);
+					System.out.printf(messages.getString("invalid-coord-index-message-format"), dimension);
 					return null;
 				}
 				relativeFilterGroupsCoords.add(groupCoords);
@@ -492,7 +495,7 @@ public class AetherImgMaker {
 				colorMapper = new HueMapper();
 				break;
 			default:
-				System.out.println("Color map '" + args.colormap + "' is not recognized.");
+				System.out.printf(messages.getString("model-not-recognized-message-format"), args.colormap);
 		}
 		return colorMapper;
 	}
@@ -503,30 +506,30 @@ public class AetherImgMaker {
 		switch (lowerCaseModelName) {
 			case "ae":
 			case "aether":
-				model = AetherFactory.create(args);
+				model = AetherFactory.create(args, messages);
 				break;
 			case "siv":
 			case "spread_integer_value":
-				model = SpreadIntegerValueFactory.create(args);
+				model = SpreadIntegerValueFactory.create(args, messages);
 				break;
 			case "as":
 			case "abelian_sandpile":
-				model = AbelianSandpileFactory.create(args);
+				model = AbelianSandpileFactory.create(args, messages);
 				break;
 			case "nearae1":
 			case "nearaether1":
-				model = NearAether1Factory.create(args);
+				model = NearAether1Factory.create(args, messages);
 				break;
 			case "nearae2":
 			case "nearaether2":
-				model = NearAether2Factory.create(args);
+				model = NearAether2Factory.create(args, messages);
 				break;
 			case "nearae3":
 			case "nearaether3":
-				model = NearAether3Factory.create(args);
+				model = NearAether3Factory.create(args, messages);
 				break;
 			default:
-				System.out.println("The model '" + args.model + "' is not recognized.");
+				System.out.printf(messages.getString("model-not-recognized-message-format"), args.model);
 		}
 		return model;
 	}

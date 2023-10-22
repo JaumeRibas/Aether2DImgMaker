@@ -18,6 +18,7 @@ package caimgmaker;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
@@ -36,42 +37,42 @@ public final class SpreadIntegerValueFactory {
 	
 	private SpreadIntegerValueFactory() {}
 	
-	public static Model create(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public static Model create(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(Resources.MEMORY_SAFE_NOT_SUPPORTED_FOR_THIS_MODEL_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("memory-safe-not-supported-for-this-model-message-format"), args.model);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(Resources.INITIAL_CONFIG_NEEDED_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("initial-config-needed-message-format"), args.model);
 		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(Resources.GRID_TYPE_NEEDED_IN_ORDER_TO_RESTORE_MESSAGE_FORMAT);
+			System.out.printf(messages.getString("grid-type-needed-in-order-to-restore-message-format"));
 		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(Resources.IMG_GEN_MODE_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("img-gen-mode-not-supported-message-format"), args.model);
 		} else {
 			if (args.grid == null) {
 				args.grid = new GridParameterValue(2);//default to 2D
 			}
 			switch (args.grid.dimension) {
 				case 1:
-					model = create1d(args);
+					model = create1d(args, messages);
 					break;
 				case 2:
-					model = create2d(args);
+					model = create2d(args, messages);
 					break;
 				case 3:
-					model = create3d(args);
+					model = create3d(args, messages);
 					break;
 				case 4:
-					model = create4d(args);
+					model = create4d(args, messages);
 					break;
 				default:
-					model = createNd(args);
+					model = createNd(args, messages);
 					break;
 			}
 		}
 		return model;
 	}
 	
-	private static Model create1d(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
+	private static Model create1d(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
@@ -80,21 +81,21 @@ public final class SpreadIntegerValueFactory {
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 						model = new LongSpreadIntegerValue1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
 					} else {
-						System.out.printf(Resources.SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
+						System.out.printf(messages.getString("single-source-out-of-range-message-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}								
 				} else {
-					System.out.printf(Resources.INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+					System.out.printf(messages.getString("initial-config-not-supported-message-format"), args.model);
 				}
 			} else {
 				model = new LongSpreadIntegerValue1D(args.backupToRestorePath);
 			}
 		} else {
-			System.out.printf(Resources.GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
 		}
 		return model;
 	}
 	
-	private static Model create2d(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
+	private static Model create2d(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
@@ -106,10 +107,10 @@ public final class SpreadIntegerValueFactory {
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 						model = new LongSpreadIntegerValue2D(args.initialConfiguration.singleSource.longValue(), 0);
 					} else {
-						System.out.printf(Resources.SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
+						System.out.printf(messages.getString("single-source-out-of-range-message-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}
 				} else {
-					System.out.printf(Resources.INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+					System.out.printf(messages.getString("initial-config-not-supported-message-format"), args.model);
 				}
 			} else {
 				try {
@@ -119,12 +120,12 @@ public final class SpreadIntegerValueFactory {
 				}
 			}
 		} else {
-			System.out.printf(Resources.GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
 		}
 		return model;
 	}
 	
-	private static Model create3d(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
+	private static Model create3d(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
@@ -133,21 +134,21 @@ public final class SpreadIntegerValueFactory {
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 						model = new LongSpreadIntegerValue3D(args.initialConfiguration.singleSource.longValue());
 					} else {
-						System.out.printf(Resources.SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
+						System.out.printf(messages.getString("single-source-out-of-range-message-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}
 				} else {
-					System.out.printf(Resources.INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+					System.out.printf(messages.getString("initial-config-not-supported-message-format"), args.model);
 				}
 			} else {
 				model = new LongSpreadIntegerValue3D(args.backupToRestorePath);
 			}
 		} else {
-			System.out.printf(Resources.GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
 		}
 		return model;
 	}
 	
-	private static Model create4d(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
+	private static Model create4d(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
@@ -156,21 +157,21 @@ public final class SpreadIntegerValueFactory {
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 						model = new LongSpreadIntegerValue4D(args.initialConfiguration.singleSource.longValue());
 					} else {
-						System.out.printf(Resources.SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Long.MIN_VALUE, Long.MAX_VALUE);
+						System.out.printf(messages.getString("single-source-out-of-range-message-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}
 				} else {
-					System.out.printf(Resources.INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+					System.out.printf(messages.getString("initial-config-not-supported-message-format"), args.model);
 				}
 			} else {
 				model = new LongSpreadIntegerValue4D(args.backupToRestorePath);
 			}
 		} else {
-			System.out.printf(Resources.GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
 		}
 		return model;
 	}
 	
-	private static Model createNd(Args args) throws FileNotFoundException, ClassNotFoundException, IOException {
+	private static Model createNd(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
@@ -179,16 +180,16 @@ public final class SpreadIntegerValueFactory {
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
 						model = new IntSpreadIntegerValue(args.grid.dimension, args.initialConfiguration.singleSource.intValue(), 0);
 					} else {
-						System.out.printf(Resources.SINGLE_SOURCE_OUT_OF_RANGE_MESSAGE_FORMAT, Integer.MIN_VALUE, Integer.MAX_VALUE);
+						System.out.printf(messages.getString("single-source-out-of-range-message-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
 					}
 				} else {
-					System.out.printf(Resources.INITIAL_CONFIG_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+					System.out.printf(messages.getString("initial-config-not-supported-message-format"), args.model);
 				}
 			} else {
 				model = new IntSpreadIntegerValue(args.backupToRestorePath);
 			}
 		} else {
-			System.out.printf(Resources.GRID_NOT_SUPPORTED_MESSAGE_FORMAT, args.model);
+			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
 		}
 		return model;
 	}
