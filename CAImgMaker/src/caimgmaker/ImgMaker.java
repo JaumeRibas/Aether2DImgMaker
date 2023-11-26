@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 
 import org.apache.commons.math3.FieldElement;
@@ -37,6 +39,7 @@ import org.apache.commons.math3.FieldElement;
 import caimgmaker.colormap.ColorMapper;
 import cellularautomata.MinAndMax;
 import cellularautomata.Utils;
+import cellularautomata.model.Model;
 import cellularautomata.model2d.BooleanModel2D;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.LongModel2D;
@@ -53,13 +56,23 @@ public class ImgMaker {
 	private long millisecondsBetweenBackups;
 	private boolean saveBackupsAutomatically = true;
 	private volatile boolean backupRequested = false;
+	private ResourceBundle messages;
 	
-	public ImgMaker() {
+	public ImgMaker(ResourceBundle messages) {
+		this.messages = messages;
 		saveBackupsAutomatically = false;
 	}
 	
-	public ImgMaker(long millisecondsBetweenBackups) {
+	public ImgMaker(ResourceBundle messages, long millisecondsBetweenBackups) {
+		this.messages = messages;
 		this.millisecondsBetweenBackups = millisecondsBetweenBackups;
+	}
+	
+	private void backUp(Model model, long step, String backupPath) throws Exception {
+		String backupName = model.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
+		System.out.printf(messages.getString("backing-up-instance-format"), backupPath + "/" + backupName);
+		model.backUp(backupPath, backupName);		
+		System.out.println(messages.getString("backing-up-finished"));
 	}
 	
 	public void createImages(BooleanModel2D ca, ColorMapper colorMapper, int minWidth, int minHeight, String path, String name, String backupPath, int stepLeap) throws Exception {	
@@ -79,7 +92,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -107,17 +120,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}		
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -141,7 +150,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -171,17 +180,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}		
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -205,7 +210,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -235,17 +240,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}		
 					System.out.println();
 				}
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -270,7 +271,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -300,17 +301,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}		
 					System.out.println();
 				}
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -336,7 +333,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -372,10 +369,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}	
 					System.out.println();
 				}
@@ -383,7 +377,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -409,7 +402,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -459,10 +452,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}	
 					System.out.println();
 				}
@@ -470,7 +460,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -496,7 +485,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -546,10 +535,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}	
 					System.out.println();
 				}
@@ -557,7 +543,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -583,7 +568,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -633,10 +618,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}	
 					System.out.println();
 				}
@@ -644,7 +626,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -670,7 +651,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -720,10 +701,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}	
 					System.out.println();
 				}
@@ -731,7 +709,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -762,7 +739,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -823,17 +800,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -864,7 +837,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -933,17 +906,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -974,7 +943,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -1043,17 +1012,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -1084,7 +1049,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -1153,17 +1118,13 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
 				step++;
 				currentStepLeap++;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -1196,7 +1157,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -1282,10 +1243,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
@@ -1293,7 +1251,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -1326,7 +1283,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -1468,10 +1425,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
@@ -1479,7 +1433,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -1512,7 +1465,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -1654,10 +1607,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
@@ -1665,7 +1615,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -1698,7 +1647,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;	
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -1840,10 +1789,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
@@ -1851,7 +1797,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -1884,7 +1829,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;	
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -2010,10 +1955,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
@@ -2021,7 +1963,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -2054,7 +1995,7 @@ public class ImgMaker {
 			Boolean changed = ca.isChanged(), createLastImage = stepLeap > 1;	
 			long nextBckTime = System.currentTimeMillis() + millisecondsBetweenBackups;
 			do {
-				System.out.println("Step: " + step);
+				System.out.println("step = " + step);
 				if (currentStepLeap == stepLeap || changed != null && !changed && createLastImage) {
 					currentStepLeap = 0;
 					if (changed != null && !changed) {
@@ -2185,10 +2126,7 @@ public class ImgMaker {
 						backupRequested = false;
 					}
 					if (backUp) {
-						String backupName = ca.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
-						System.out.println("Backing up instance at '" + backupPath + "/" + backupName + "'");
-						ca.backUp(backupPath, backupName);		
-						System.out.println("Backing up finished");
+						backUp(ca, step, backupPath);
 					}
 					System.out.println();
 				}
@@ -2196,7 +2134,6 @@ public class ImgMaker {
 				currentStepLeap++;
 				isEvenStep = !isEvenStep;
 			} while ((changed = ca.nextStep()) == null || changed || createLastImage);
-			System.out.println("Finished!");
 		} finally {
 			stdIn.stop();
 			inputThread.join();
@@ -2662,9 +2599,9 @@ public class ImgMaker {
 						String line = br.readLine().trim().toLowerCase();
 						if (line.equals("backup") || line.equals("save")) {
 							backupRequested = true;
-							System.out.println("Backup requested.");
+							System.out.println(messages.getString("backup-requested"));
 						} else {
-							System.out.println("Unknown command '" + line + "'. Use 'save' or 'backup' to request a backup.");
+							System.out.printf(messages.getString("unknown-command-format"), line);
 						}
 					}
 				}

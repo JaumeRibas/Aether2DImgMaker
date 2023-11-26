@@ -35,13 +35,13 @@ public final class AbelianSandpileFactory {
 	public static Model create(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(messages.getString("memory-safe-not-supported-for-this-model-message-format"), args.model);
+			System.out.printf(messages.getString("memory-safe-not-supported-for-this-model-format"), args.model, Args.MEMORY_SAFE);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(messages.getString("initial-config-needed-message-format"), args.model);
+			System.out.printf(messages.getString("initial-config-needed-format"), args.model);
 //		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
 //			System.out.printf(gridTypeNeededToRestoreMessageFormat);
 		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(messages.getString("img-gen-mode-not-supported-message-format"), args.model);
+			System.out.printf(messages.getString("img-gen-mode-not-supported-format"), args.model);
 		} else {
 			if (args.grid == null) {
 				args.grid = new GridParameterValue(2);//default to 2D
@@ -55,20 +55,20 @@ public final class AbelianSandpileFactory {
 										&& args.initialConfiguration.singleSource.compareTo(BigInt.ZERO) >= 0) {
 									model = new IntAbelianSandpileSingleSource2D(args.initialConfiguration.singleSource.intValue());
 								} else {
-									System.out.printf(messages.getString("single-source-out-of-range-message-format"), 0, Integer.MAX_VALUE);
+									System.out.printf(messages.getString("single-source-out-of-range-format"), 0, Integer.MAX_VALUE);
 								}
 							} else {
-								System.out.printf(messages.getString("initial-config-not-supported-message-format"), args.model);
+								System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 							}
 						} else {
 							model = new IntAbelianSandpileSingleSource2D(args.backupToRestorePath);
 						}
 					} else {
-						System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
+						System.out.printf(messages.getString("grid-not-supported-format"), args.model);
 					}
 					break;
 				default:
-					System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
+					System.out.printf(messages.getString("grid-not-supported-format"), args.model);
 			}
 		}
 		return model;

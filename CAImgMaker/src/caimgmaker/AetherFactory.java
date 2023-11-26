@@ -67,11 +67,11 @@ public final class AetherFactory {
 	public static Model create(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.initialConfiguration == null && args.backupToRestorePath == null) {
-			System.out.printf(messages.getString("initial-config-needed-message-format"), args.model);
+			System.out.printf(messages.getString("initial-config-needed-format"), args.model);
 		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(messages.getString("grid-type-needed-in-order-to-restore-message-format"));//TODO Add AetherImgMakerBackup class with parameters
+			System.out.printf(messages.getString("grid-type-needed-in-order-to-restore-format"));//TODO Add AetherImgMakerBackup class with parameters
 		} else if (args.memorySafe && args.initialConfiguration.type != InitialConfigType.SINGLE_SOURCE) {
-			System.out.printf(messages.getString("memory-safe-not-supported-for-this-initial-config-message-format"), args.model);
+			System.out.printf(messages.getString("memory-safe-not-supported-for-this-initial-config-format"), args.model, Args.MEMORY_SAFE);
 		} else {
 			if (args.grid == null) {
 				args.grid = new GridParameterValue(2);//default to 2D
@@ -107,13 +107,13 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-message-format"));
+							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
 								model = new LongAether1DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), LongAether1DTopplingAlternationCompliance.MIN_INITIAL_VALUE, LongAether1DTopplingAlternationCompliance.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAether1DTopplingAlternationCompliance.MIN_INITIAL_VALUE, LongAether1DTopplingAlternationCompliance.MAX_INITIAL_VALUE);
 							}
 						}
 					} else {
@@ -122,19 +122,19 @@ public final class AetherFactory {
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether1D.MIN_INITIAL_VALUE)) >= 0) {
 								model = new FileBackedLongAether1D(args.initialConfiguration.singleSource.longValue(), args.path);
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), FileBackedLongAether1D.MIN_INITIAL_VALUE, FileBackedLongAether1D.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), FileBackedLongAether1D.MIN_INITIAL_VALUE, FileBackedLongAether1D.MAX_INITIAL_VALUE);
 							}
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MAX_INITIAL_VALUE)) <= 0
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1D.MIN_INITIAL_VALUE)) >= 0) {
 								model = new LongAether1D(args.initialConfiguration.singleSource.longValue());
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), LongAether1D.MIN_INITIAL_VALUE, LongAether1D.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAether1D.MIN_INITIAL_VALUE, LongAether1D.MAX_INITIAL_VALUE);
 							}
 						}
 					}
 				} else {
-					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-message-format"));
+					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-format"));
 				}
 			} else {
 				//TODO Add AetherImgMakerBackup class with parameters
@@ -155,11 +155,11 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-message-format"));
+					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
 				}
 			}
 		} else {
-			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
+			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
 		}
 		return model;
 	}
@@ -171,7 +171,7 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-message-format"));
+							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
@@ -189,7 +189,7 @@ public final class AetherFactory {
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether2D.MIN_INITIAL_VALUE)) >= 0) {
 								model = new FileBackedLongAether2D(args.initialConfiguration.singleSource.longValue(), args.path);
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), FileBackedLongAether2D.MIN_INITIAL_VALUE, FileBackedLongAether2D.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), FileBackedLongAether2D.MIN_INITIAL_VALUE, FileBackedLongAether2D.MAX_INITIAL_VALUE);
 							}
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2D.MAX_INITIAL_VALUE)) <= 0
@@ -205,7 +205,7 @@ public final class AetherFactory {
 					}
 				} else {
 					if (args.memorySafe) {
-						System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-message-format"));
+						System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
 					} else {
 						if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 								&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
@@ -213,7 +213,7 @@ public final class AetherFactory {
 								&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
 							model = new IntAether2DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
 						} else {
-							System.out.printf(messages.getString("min-max-out-of-range-message-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
+							System.out.printf(messages.getString("min-max-out-of-range-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
 						}
 					}
 				}
@@ -255,11 +255,11 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-message-format"));
+					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
 				}
 			}
 		} else {
-			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
+			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
 		}
 		return model;
 	}
@@ -271,7 +271,7 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-message-format"));
+							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
@@ -289,7 +289,7 @@ public final class AetherFactory {
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether3D.MIN_INITIAL_VALUE)) >= 0) {
 								model = new FileBackedLongAether3D(args.initialConfiguration.singleSource.longValue(), args.path);
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), FileBackedLongAether3D.MIN_INITIAL_VALUE, FileBackedLongAether3D.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), FileBackedLongAether3D.MIN_INITIAL_VALUE, FileBackedLongAether3D.MAX_INITIAL_VALUE);
 							}
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3D.MAX_INITIAL_VALUE)) <= 0
@@ -310,7 +310,7 @@ public final class AetherFactory {
 							&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
 						model = new IntAether3DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
 					} else {
-						System.out.printf(messages.getString("min-max-out-of-range-message-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
+						System.out.printf(messages.getString("min-max-out-of-range-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
 					}
 				}
 			} else {
@@ -351,7 +351,7 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-message-format"));
+					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
 				}
 			}
 		} else {
@@ -364,7 +364,7 @@ public final class AetherFactory {
 						model = new BigIntAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource);
 					}
 				} else {
-					System.out.printf(messages.getString("initial-config-not-supported-message-format"), args.model);
+					System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 				}
 			} else {
 				try {
@@ -384,7 +384,7 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-message-format"));
+							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
@@ -402,7 +402,7 @@ public final class AetherFactory {
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether4D.MIN_INITIAL_VALUE)) >= 0) {
 								model = new FileBackedLongAether4D(args.initialConfiguration.singleSource.longValue(), args.path);
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), FileBackedLongAether4D.MIN_INITIAL_VALUE, FileBackedLongAether4D.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), FileBackedLongAether4D.MIN_INITIAL_VALUE, FileBackedLongAether4D.MAX_INITIAL_VALUE);
 							}
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4D.MAX_INITIAL_VALUE)) <= 0
@@ -417,7 +417,7 @@ public final class AetherFactory {
 						}
 					}
 				} else {
-					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-message-format"));
+					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-format"));
 				}
 			} else {
 				boolean successfullyRestored = true;
@@ -453,11 +453,11 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-message-format"));
+					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
 				}
 			}
 		} else {
-			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
+			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
 		}
 		return model;
 	}
@@ -469,7 +469,7 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-message-format"));
+							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
@@ -478,7 +478,7 @@ public final class AetherFactory {
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
 								model = new LongAether5DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), LongAether5DTopplingAlternationCompliance.MIN_INITIAL_VALUE, LongAether5DTopplingAlternationCompliance.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAether5DTopplingAlternationCompliance.MIN_INITIAL_VALUE, LongAether5DTopplingAlternationCompliance.MAX_INITIAL_VALUE);
 							}
 						}
 					} else {
@@ -487,7 +487,7 @@ public final class AetherFactory {
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(FileBackedLongAether5D.MIN_INITIAL_VALUE)) >= 0) {
 								model = new FileBackedLongAether5D(args.initialConfiguration.singleSource.longValue(), args.path);
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), FileBackedLongAether5D.MIN_INITIAL_VALUE, FileBackedLongAether5D.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), FileBackedLongAether5D.MIN_INITIAL_VALUE, FileBackedLongAether5D.MAX_INITIAL_VALUE);
 							}
 						} else {
 							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5D.MAX_INITIAL_VALUE)) <= 0
@@ -497,12 +497,12 @@ public final class AetherFactory {
 									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5D.MIN_INITIAL_VALUE)) >= 0) {
 								model = new LongAether5D(args.initialConfiguration.singleSource.longValue());
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-message-format"), LongAether5D.MIN_INITIAL_VALUE, LongAether5D.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAether5D.MIN_INITIAL_VALUE, LongAether5D.MAX_INITIAL_VALUE);
 							}
 						}
 					}
 				} else {
-					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-message-format"));
+					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-format"));
 				}
 			} else {
 				boolean successfullyRestored = true;
@@ -530,18 +530,18 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-message-format"));
+					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
 				}
 			}
 		} else {
-			System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
+			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
 		}
 		return model;
 	}
 	
 	private static Model createNd(Args args, ResourceBundle messages) {
 		Model model = null;
-		System.out.printf(messages.getString("grid-not-supported-message-format"), args.model);
+		System.out.printf(messages.getString("grid-not-supported-format"), args.model);
 		return model;
 	}
 	
