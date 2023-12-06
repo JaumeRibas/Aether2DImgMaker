@@ -31,6 +31,8 @@ import com.beust.jcommander.Strings;
 import com.beust.jcommander.WrappedParameter;
 import com.beust.jcommander.internal.Lists;
 
+import caimgmaker.AetherImgMaker;
+
 import java.util.*;
 import java.util.ResourceBundle;
 
@@ -146,18 +148,18 @@ public class CustomUsageFormatter implements IUsageFormatter {
     public void appendMainLine(StringBuilder out, boolean hasOptions, boolean hasCommands, int indentCount,
             String indent) {
         String programName = commander.getProgramDisplayName() != null
-                ? commander.getProgramDisplayName() : "<main class>";
+                ? commander.getProgramDisplayName() : "<" + AetherImgMaker.messages.getString("main-class") + ">";
         StringBuilder mainLine = new StringBuilder();
-        mainLine.append(indent).append("Usage: ").append(programName);
+        mainLine.append(indent).append(String.format(AetherImgMaker.messages.getString("usage-format"), programName));
 
         if (hasOptions) {
-            mainLine.append(" [parameters]");
+            mainLine.append(" [").append(AetherImgMaker.messages.getString("parameters")).append("]");
         }
 
         if (hasCommands) {
             mainLine.append(indent).append(" [command] [command parameters]");
         }
-        //The type JCommander.MainParameter is not visible
+        //Compiler error: The type JCommander.MainParameter is not visible
 //        if (commander.getMainParameter() != null && commander.getMainParameter().getDescription() != null) {
 //            mainLine.append(" ").append(commander.getMainParameter().getDescription().getDescription());
 //        }
@@ -177,7 +179,7 @@ public class CustomUsageFormatter implements IUsageFormatter {
     public void appendAllParametersDetails(StringBuilder out, int indentCount, String indent,
             List<ParameterDescription> sortedParameters) {
         if (sortedParameters.size() > 0) {
-            out.append(indent).append("\n  Parameters:");
+            out.append(indent).append("\n  ").append(AetherImgMaker.messages.getString("parameters-header"));
         }
         String spaces = s(indentCount);
         for (ParameterDescription pd : sortedParameters) {
@@ -208,8 +210,8 @@ public class CustomUsageFormatter implements IUsageFormatter {
                 out.append(syntax);
             }
             if (def != null && !(def instanceof Boolean)) {
-                String displayedDef = Strings.isStringEmpty(def.toString()) ? "<empty string>" : def.toString();
-                String defaultText = "Default: " + (parameter.password() ? "********" : displayedDef);
+                String displayedDef = Strings.isStringEmpty(def.toString()) ? "<" + AetherImgMaker.messages.getString("empty-string") + ">" : def.toString();
+                String defaultText = String.format(AetherImgMaker.messages.getString("default-param-value-format"), (parameter.password() ? "********" : displayedDef));
                 out.append("\n");
                 if (hasDescription) {
                     out.append(newLineAndIndent(indentCount));

@@ -27,6 +27,8 @@ import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
 
+import caimgmaker.AetherImgMaker;
+
 public class CoordinateFiltersValidatorAndConverter implements IParameterValidator, IStringConverter<CoordinateFilters> {
 	
 	@Override
@@ -35,16 +37,10 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 		String[] filters = value.split(";");
 		for (int i = 0; i < filters.length; i++) {
 			if (!filters[i].matches("(?i)^(x\\d+=[+-]?(\\d+|x\\d+([+-]\\d+)?)|x\\d+[<>][+-]?\\d+)$")) {
-				throw new ParameterException("The coordinate filter at position " + (i+1) + " has an invalid format.");
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("wrong-format-in-coord-filter-format"), (i+1)));
 			}
 		}
 	}
-
-	private static final String MESSAGE_FORMAT_PREFIX = "Invalid coordinate filter at position %d. ";
-	private static final String INVALID_COORD_INDEX_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The coordinate index must be between one and the dimension, both included.";
-	private static final String COORD_RELATIVE_TO_ITSELF_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The coordinate cannot be set relative to itself.";
-	private static final String INVALID_RANGE_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "Invalid resulting range %d < x%d < %d.";
-	private static final String REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT = MESSAGE_FORMAT_PREFIX + "The filter is either redundant or incompatible with one, or a combination of several, preceding filters. Some possible causes are: incorrect coordinate indexes, repeated filters, too many greater/less than filters on the same set of interconnected coordinates, redundant interconnections of coordinates, etc.";
 
 	@Override
 	public CoordinateFilters convert(String parameterValue) {
@@ -57,7 +53,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 			matcher.find();
 			int coordinate = Integer.parseInt(matcher.group()) - 1;
 			if (coordinate < 0) {
-				throw new ParameterException(String.format(INVALID_COORD_INDEX_MESSAGE_FORMAT, filterPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-index-in-coord-filter-format"), filterPosition));
 			}
 			int indexOfOperator = matcher.end();
 			char operatorCharacter = strFilter.charAt(indexOfOperator);
@@ -68,10 +64,10 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 					int referenceCoordinate = Integer.parseInt(matcher.group()) - 1;
 					boolean isCoordinateOpposite = strFilter.charAt(indexOfOperator + 1) == '-';
 					if (referenceCoordinate < 0) {
-						throw new ParameterException(String.format(INVALID_COORD_INDEX_MESSAGE_FORMAT, filterPosition));
+						throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-index-in-coord-filter-format"), filterPosition));
 					}
 					if (coordinate == referenceCoordinate) {
-						throw new ParameterException(String.format(COORD_RELATIVE_TO_ITSELF_MESSAGE_FORMAT, filterPosition));
+						throw new ParameterException(String.format(AetherImgMaker.messages.getString("coord-relative-to-itself-format"), filterPosition));
 					}	
 					int offset = 0;
 					int endOfMatch = matcher.end();
@@ -179,7 +175,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 					axisFilterGroup.put(referenceAxis, new int[] { signum, offset });
 				}
 			} else if (axisFilterGroup == referenceAxisFilterGroup) {
-				throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 			} else {
 				//merge groups
 				int[] axisFilter = axisFilterGroup.get(axis);
@@ -243,7 +239,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 			}
 		} else if (otherAxisMinMaxFilters != null) {
 			if (!combineMinMaxFilters(targetAxisMinMaxFilters, otherAxisMinMaxFilters, isOpposite, offset)) {
-				throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 			}
 			minMaxFilters.remove(otherAxis);
 		}
@@ -286,7 +282,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 	
 	private static void validateAndAddAbsoluteFilter(int userProvidedPosition, CoordinateFilters filters, int axis, int value) {
 		if (filters.absoluteFilters.containsKey(axis) || filters.minMaxFilters.containsKey(axis)) {
-			throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+			throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 		}
 		validateAndAddAbsoluteFilterWithoutCheck(userProvidedPosition, filters, axis, value);
 	}
@@ -298,7 +294,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 		} else {
 			int smallestAxisInGroup = filterGroup.keySet().iterator().next();
 			if (filters.minMaxFilters.containsKey(smallestAxisInGroup)) {
-				throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 			}
 			convertToAbsoluteFilters(filters.absoluteFilters, filterGroup, axis, value);
 			filters.relativeFilterGroups.remove(filterGroup);
@@ -331,7 +327,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 		Integer[] existingMinMaxFilters = filters.minMaxFilters.get(axis);
 		if (existingMinMaxFilters == null) {
 			if (filters.absoluteFilters.containsKey(axis)) {
-				throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 			}
 			SortedMap<Integer, int[]> filterGroup = getFilterGroupContainingAxis(filters.relativeFilterGroups, axis);
 			if (filterGroup == null) {
@@ -351,11 +347,11 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 							filters.minMaxFilters.put(axis, new Integer[] { min, null });
 						} else {
 							if (existingMinMaxFilters[0] != null) {
-								throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 							}
 							int existingMax = existingMinMaxFilters[1];//It can be assumed it's not null
 							if (existingMax < min) {
-								throw new ParameterException(String.format(INVALID_RANGE_MESSAGE_FORMAT, userProvidedPosition, min - 1, axis + 1, existingMax + 1));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-range-format"), userProvidedPosition, min - 1, axis + 1, existingMax + 1));
 							}
 							if (existingMax == min) {
 								filters.minMaxFilters.remove(axis);
@@ -371,11 +367,11 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 							filters.minMaxFilters.put(axis, new Integer[] { null, max });
 						} else {
 							if (existingMinMaxFilters[1] != null) {
-								throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 							}
 							int existingMin = existingMinMaxFilters[0];//It can be assumed it's not null
 							if (existingMin > max) {
-								throw new ParameterException(String.format(INVALID_RANGE_MESSAGE_FORMAT, userProvidedPosition, existingMin - 1, axis + 1, max + 1));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-range-format"), userProvidedPosition, existingMin - 1, axis + 1, max + 1));
 							}
 							if (existingMin == max) {
 								filters.minMaxFilters.remove(axis);
@@ -390,11 +386,11 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 			}
 		} else {
 			if (existingMinMaxFilters[0] != null) {
-				throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 			}
 			int existingMax = existingMinMaxFilters[1];//It can be assumed it's not null
 			if (existingMax < min) {
-				throw new ParameterException(String.format(INVALID_RANGE_MESSAGE_FORMAT, userProvidedPosition, min - 1, axis + 1, existingMax + 1));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-range-format"), userProvidedPosition, min - 1, axis + 1, existingMax + 1));
 			}
 			if (existingMax == min) {
 				filters.minMaxFilters.remove(axis);
@@ -409,7 +405,7 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 		Integer[] existingMinMaxFilters = filters.minMaxFilters.get(axis);
 		if (existingMinMaxFilters == null) {
 			if (filters.absoluteFilters.containsKey(axis)) {
-				throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 			}
 			SortedMap<Integer, int[]> filterGroup = getFilterGroupContainingAxis(filters.relativeFilterGroups, axis);
 			if (filterGroup == null) {
@@ -429,11 +425,11 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 							filters.minMaxFilters.put(axis, new Integer[] { null, max });
 						} else {
 							if (existingMinMaxFilters[1] != null) {
-								throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 							}
 							int existingMin = existingMinMaxFilters[0];//It can be assumed it's not null
 							if (existingMin > max) {
-								throw new ParameterException(String.format(INVALID_RANGE_MESSAGE_FORMAT, userProvidedPosition, existingMin - 1, axis + 1, max + 1));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-range-format"), userProvidedPosition, existingMin - 1, axis + 1, max + 1));
 							}
 							if (existingMin == max) {
 								filters.minMaxFilters.remove(axis);
@@ -449,11 +445,11 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 							filters.minMaxFilters.put(axis, new Integer[] { min, null });
 						} else {
 							if (existingMinMaxFilters[0] != null) {
-								throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 							}
 							int existingMax = existingMinMaxFilters[1];//It can be assumed it's not null
 							if (existingMax < min) {
-								throw new ParameterException(String.format(INVALID_RANGE_MESSAGE_FORMAT, userProvidedPosition, min - 1, axis + 1, existingMax + 1));
+								throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-range-format"), userProvidedPosition, min - 1, axis + 1, existingMax + 1));
 							}
 							if (existingMax == min) {
 								filters.minMaxFilters.remove(axis);
@@ -468,11 +464,11 @@ public class CoordinateFiltersValidatorAndConverter implements IParameterValidat
 			}
 		} else {
 			if (existingMinMaxFilters[1] != null) {
-				throw new ParameterException(String.format(REDUNDANT_OR_INCOMPATIBLE_FILTER_MESSAGE_FORMAT, userProvidedPosition));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("redundant-or-incompatible-filter-format"), userProvidedPosition));
 			}
 			int existingMin = existingMinMaxFilters[0];//It can be assumed it's not null
 			if (existingMin > max) {
-				throw new ParameterException(String.format(INVALID_RANGE_MESSAGE_FORMAT, userProvidedPosition, existingMin - 1, axis + 1, max + 1));
+				throw new ParameterException(String.format(AetherImgMaker.messages.getString("invalid-range-format"), userProvidedPosition, existingMin - 1, axis + 1, max + 1));
 			}
 			if (existingMin == max) {
 				filters.minMaxFilters.remove(axis);

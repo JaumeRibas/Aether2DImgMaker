@@ -19,6 +19,8 @@ package caimgmaker.args;
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
+import caimgmaker.AetherImgMaker;
+
 public class InitialConfigValidator implements IParameterValidator {
 	
 	@Override
@@ -27,9 +29,9 @@ public class InitialConfigValidator implements IParameterValidator {
 		if (!value.matches("(?i)^-?\\d+|single-source_-?\\d+|random-region_\\d+_-?\\d+_-?\\d+$")) {
 			String message;
 			if (name.equals("Default")) {
-				message = "One or more unrecognized parameters found.";//this is the main (default) parameter so it could be an error on any other parameter
+				message = AetherImgMaker.messages.getString("unrecognized-param-found");//this is the main (default) parameter so it could be an error on any other parameter
 			} else {
-				message = "The value of " + name + " has an incorrect format.";
+				message = String.format(AetherImgMaker.messages.getString("wrong-format-in-param-format"), name);
 			}
 			throw new ParameterException(message);
 		}

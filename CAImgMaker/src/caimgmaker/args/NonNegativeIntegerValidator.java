@@ -5,6 +5,8 @@ import java.math.BigInteger;
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
+import caimgmaker.AetherImgMaker;
+
 public class NonNegativeIntegerValidator implements IParameterValidator {
 	
 	@Override
@@ -12,7 +14,7 @@ public class NonNegativeIntegerValidator implements IParameterValidator {
 			throws ParameterException {
 		BigInteger n = new BigInteger(value);
 		if (n.compareTo(BigInteger.ZERO) < 0) {
-			throw new ParameterException("The value of " + name + " cannot be negative (found " + value +").");
+			throw new ParameterException(String.format(AetherImgMaker.messages.getString("param-cannot-be-negative-format"), name, value));
 		}
 	}
 	

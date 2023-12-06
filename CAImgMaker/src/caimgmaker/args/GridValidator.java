@@ -19,13 +19,15 @@ package caimgmaker.args;
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
+import caimgmaker.AetherImgMaker;
+
 public class GridValidator implements IParameterValidator {
 	
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
 		if (!value.matches("(?i)^\\d+d(_(\\d+|infinite))?$")) {
-			throw new ParameterException("The value of " + name + " has an incorrect format.");
+			throw new ParameterException(String.format(AetherImgMaker.messages.getString("wrong-format-in-param-format"), name));
 		}
 	}
 	

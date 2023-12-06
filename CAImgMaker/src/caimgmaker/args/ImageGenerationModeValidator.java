@@ -19,13 +19,15 @@ package caimgmaker.args;
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
+import caimgmaker.AetherImgMaker;
+
 public class ImageGenerationModeValidator implements IParameterValidator {
 	
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
 		if (ImageGenerationMode.getByNameOrAlias(value.toLowerCase()) == null) {
-			throw new ParameterException("The image generation mode is not recognized.");
+			throw new ParameterException(AetherImgMaker.messages.getString("unrecognized-img-gen-mode"));
 		}
 	}
 	

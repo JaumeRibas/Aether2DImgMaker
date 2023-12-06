@@ -53,7 +53,7 @@ import cellularautomata.numbers.BigInt;
 
 public class AetherImgMaker {
 	
-	private static ResourceBundle messages;
+	public static ResourceBundle messages;
 			
 	public static void main(String[] rawArgs) throws Exception {
 //		String debugArgs = "92233720368547758079999 -path D:/data/test";//debug
@@ -110,7 +110,7 @@ public class AetherImgMaker {
 				System.out.printf(messages.getString("use-help-format"), Args.HELP);
 			}
 		} catch (Exception ex) {
-			String message = ex.getMessage();
+			String message = ex.getLocalizedMessage();
 			if (message == null) {
 				System.out.println(messages.getString("unexpected-error"));
 				ex.printStackTrace();

@@ -30,7 +30,7 @@ public class PathValidator implements IParameterValidator {
 		try {
 			Paths.get(value);
 		} catch (InvalidPathException  ex) {
-			throw new ParameterException(ex.getMessage());
+			throw new ParameterException(ex.getLocalizedMessage());
 		}
 	}
 	

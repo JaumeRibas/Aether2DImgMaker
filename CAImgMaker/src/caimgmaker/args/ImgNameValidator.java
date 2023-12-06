@@ -22,6 +22,8 @@ import java.nio.file.Paths;
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
+import caimgmaker.AetherImgMaker;
+
 public class ImgNameValidator implements IParameterValidator {
 	
 	@Override
@@ -29,17 +31,17 @@ public class ImgNameValidator implements IParameterValidator {
 			throws ParameterException {
 		int index = value.indexOf('/');
 		if (index != -1) {
-			throw new ParameterException("Illegal char </> at index " + index + ": " + value);
+			throw new ParameterException(String.format(AetherImgMaker.messages.getString("illegal-char-at-index-format"), '/', index, value));
 		}
 		index = value.indexOf('\\');
 		if (index != -1) {
-			throw new ParameterException("Illegal char <\\> at index " + index + ": " + value);
+			throw new ParameterException(String.format(AetherImgMaker.messages.getString("illegal-char-at-index-format"), '\\', index, value));
 		}
 		value += ".";//so that trailing spaces don't cause the next validation to fail
 		try {
 			Paths.get(value);
 		} catch (InvalidPathException  ex) {
-			throw new ParameterException(ex.getMessage());
+			throw new ParameterException(ex.getLocalizedMessage());
 		}
 	}
 	
