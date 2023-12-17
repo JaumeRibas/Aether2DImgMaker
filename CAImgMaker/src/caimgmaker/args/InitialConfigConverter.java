@@ -24,7 +24,6 @@ public class InitialConfigConverter implements IStringConverter<InitialConfigPar
 	
 	@Override
 	public InitialConfigParameterValue convert(String strValue) {
-		new InitialConfigValidator().validate("Default", strValue);//There's a bug in the currently used version of JCommander that causes the main parameter to be converted before being validated
 		InitialConfigParameterValue value = null;
 		if (strValue != null) {
 			String[] parts = strValue.toLowerCase().split("_");
