@@ -27,6 +27,7 @@ import java.util.SortedMap;
 import org.apache.commons.io.FileUtils;
 
 import com.beust.jcommander.JCommander;
+
 import caimgmaker.args.Args;
 import caimgmaker.args.CoordinateFilters;
 import caimgmaker.args.CustomUsageFormatter;
@@ -34,6 +35,7 @@ import caimgmaker.colormap.ColorMapper;
 import caimgmaker.colormap.GrayscaleMapper;
 import caimgmaker.colormap.HueMapper;
 import cellularautomata.PartialCoordinates;
+import cellularautomata.Utils;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.Model;
 import cellularautomata.model.SymmetricModel;
@@ -59,8 +61,13 @@ public class AetherImgMaker {
 //		String debugArgs = "92233720368547758079999 -path D:/data/test";//debug
 //		debugArgs = "-help";//debug
 //		rawArgs = debugArgs.split(" ");//debug
+		InputReaderTask inputReader = null;
+		Thread inputThread = null;
 		try {
 			messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault());
+			inputReader = new InputReaderTask(messages);
+			inputThread = new Thread(inputReader);
+			inputThread.start();
 			Args args = new Args();
 			JCommander jcommander = JCommander.newBuilder()
 					.programName(Args.PROGRAM_INVOCATION)
@@ -86,12 +93,17 @@ public class AetherImgMaker {
 				System.out.printf(messages.getString("use-help-format"), Args.HELP);
 				return;
 			}
+			int lastCharacterInPathIndex = args.path.length() - 1;
+			char lastCharacterInPath = args.path.charAt(lastCharacterInPathIndex);
+			if (lastCharacterInPath == '/' || lastCharacterInPath == '\\') {
+				args.path = args.path.substring(0, lastCharacterInPathIndex);
+			}
 			String path = args.path;
 			if (!args.noFolders) {
 				path += "/" + model.getSubfolderPath();
 			}
 			String backupsPath = path + "/backups";
-			evolveModelToFirstStep(model, args, backupsPath);
+			evolveModelToFirstStep(model, args, backupsPath, inputReader);
 			Model modelSection = getModelSection(model, args);
 			if (modelSection == null) {
 				System.out.printf(messages.getString("use-help-format"), Args.HELP);
@@ -103,7 +115,7 @@ public class AetherImgMaker {
 						new Timestamp(System.currentTimeMillis()).toString() + "\t" + String.join(" ", rawArgs) + System.lineSeparator(), 
 						Charset.forName("UTF8"), 
 						true);
-			boolean success = generateImages(modelSection, args, backupsPath);
+			boolean success = generateImages(modelSection, args, backupsPath, inputReader);
 			if (success) {
 				System.out.println(messages.getString("finished"));
 			} else {
@@ -119,6 +131,13 @@ public class AetherImgMaker {
 			}
 			System.out.printf(messages.getString("use-help-format"), Args.HELP);
 //			throw ex;//debug
+		} finally {
+			if (inputReader != null) {
+				inputReader.stop();
+			}
+			if (inputThread != null) {
+				inputThread.join();
+			}
 		}
 	}
 	
@@ -135,7 +154,7 @@ public class AetherImgMaker {
 		return succeeded;
 	}
 	
-	private static boolean generateImages(Model model, Args args, String backupsPath) throws Exception {
+	private static boolean generateImages(Model model, Args args, String backupsPath, InputReaderTask inputReader) throws Exception {
 		ColorMapper colorMapper = getColorMapper(args);
 		if (colorMapper == null)
 			return false;
@@ -147,15 +166,15 @@ public class AetherImgMaker {
 		if (!args.noFolders) {
 			imagesPath += "/" + model.getSubfolderPath();
 			if (args.steapLeap > 1) {
-				imagesPath += "/step-leap=" + args.steapLeap;
+				imagesPath += "/stepleap=" + args.steapLeap;
 			}
 			imagesPath += "/img/" + colorMapper.getColormapName();
 		}
 		ImgMaker imgMaker = null;
 		if (args.millisBetweenBackups == null) {
-			imgMaker = new ImgMaker(messages);
+			imgMaker = new ImgMaker(messages, inputReader);
 		} else {
-			imgMaker = new ImgMaker(messages, args.millisBetweenBackups);
+			imgMaker = new ImgMaker(messages, inputReader, args.millisBetweenBackups);
 		}
 		boolean error = false;
 		int dimension = model.getGridDimension();
@@ -357,31 +376,48 @@ public class AetherImgMaker {
 		}
 		return !error;
 	}
+	
+	private static void backUp(Model model, long step, String backupsPath) throws Exception {
+		String backupName = model.getName() + "_" + step + "_" + Utils.getFileNameSafeTimeStamp();
+		System.out.printf(messages.getString("backing-up-instance-format"), backupsPath + "/" + backupName);
+		model.backUp(backupsPath, backupName);		
+		System.out.println(messages.getString("backing-up-finished"));
+	}
 
-	private static void evolveModelToFirstStep(Model model, Args args, String backupsPath) throws Exception {
+	private static void evolveModelToFirstStep(Model model, Args args, String backupsPath, InputReaderTask inputReader) throws Exception {
 		long step = model.getStep();
 		if (args.firstStep > step) {
 			System.out.printf(messages.getString("evolving-model-to-step-format"), args.firstStep);
 			Boolean changed;
+			String stepNameAndEquals = messages.getString("step") + " = ";
 			if (args.millisBetweenBackups != null) {
-				long millis = System.currentTimeMillis();
+				long nextBckTime = System.currentTimeMillis() + args.millisBetweenBackups;
 				do {
-					System.out.println("step = " + step);
+					System.out.println(stepNameAndEquals + step);
 					changed = model.nextStep();
 					step++;
-					if (System.currentTimeMillis() - millis >= args.millisBetweenBackups) {
-						String backupName = model.getClass().getSimpleName() + "_" + step;
-						System.out.printf(messages.getString("backing-up-instance-format"), backupsPath + "/" + backupName);
-						model.backUp(backupsPath, backupName);		
-						System.out.println(messages.getString("backing-up-finished"));
-						millis = System.currentTimeMillis();
+					boolean backUp = false;
+					if (System.currentTimeMillis() >= nextBckTime) {
+						backUp = true;
+						nextBckTime += args.millisBetweenBackups;
+					}
+					if (inputReader.backupRequested) {
+						backUp = true;
+						inputReader.backupRequested = false;
+					}
+					if (backUp) {
+						backUp(model, step, backupsPath);
 					}
 				} while ((changed == null || changed) && step < args.firstStep);
 			} else {
 				do {
-					System.out.println("step = " + step);
+					System.out.println(stepNameAndEquals + step);
 					changed = model.nextStep();
 					step++;
+					if (inputReader.backupRequested) {
+						inputReader.backupRequested = false;
+						backUp(model, step, backupsPath);
+					}
 				} while ((changed == null || changed) && step < args.firstStep);
 			}
 		}		
@@ -497,7 +533,7 @@ public class AetherImgMaker {
 				colorMapper = new HueMapper();
 				break;
 			default:
-				System.out.printf(messages.getString("model-not-recognized-format"), args.colormap);
+				System.out.printf(messages.getString("colormap-not-recognized-format"), args.colormap);
 		}
 		return colorMapper;
 	}
