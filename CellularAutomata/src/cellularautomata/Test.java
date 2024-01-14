@@ -33,9 +33,9 @@ import cellularautomata.automata.aether.LongAether2D;
 import cellularautomata.automata.aether.LongAether4D;
 import cellularautomata.automata.aether.SimpleLongAether2D;
 import cellularautomata.automata.aether.SimpleLongAether5D;
+import cellularautomata.automata.sunflower.LongSunflower2D;
+import cellularautomata.automata.sunflower.SimpleLongSunflower2D;
 import cellularautomata.automata.aether.IntAether4D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue2D;
-import cellularautomata.automata.siv.SimpleLongSpreadIntegerValue2D;
 import cellularautomata.model.Model;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.LongModel;
@@ -1833,10 +1833,10 @@ public final class Test {
 		}
 	}
 	
-	public static void sivTesting() {
+	public static void sunflowerTesting() {
 		long initialValue = 100000;
-		LongSpreadIntegerValue2D ae1 = new LongSpreadIntegerValue2D(initialValue, 0);
-		SimpleLongSpreadIntegerValue2D ae2 = new SimpleLongSpreadIntegerValue2D(initialValue, 0);
+		LongSunflower2D ae1 = new LongSunflower2D(initialValue, 0);
+		SimpleLongSunflower2D ae2 = new SimpleLongSunflower2D(initialValue, 0);
 		compareAllSteps(ae1, ae2);
 	}
 	

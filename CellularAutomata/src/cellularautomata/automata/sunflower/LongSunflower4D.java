@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,12 +25,12 @@ import cellularautomata.model4d.IsotropicHypercubicModel4DA;
 import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 4D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 4D with a single source initial configuration
  * 
  * @author Jaume
  *
  */
-public class LongSpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA, Serializable {
+public class LongSunflower4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA, Serializable {
 	
 	/**
 	 * 
@@ -55,7 +55,7 @@ public class LongSpreadIntegerValue4D implements SymmetricLongModel4D, Isotropic
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public LongSpreadIntegerValue4D(long initialValue) {
+	public LongSunflower4D(long initialValue) {
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic4DLongArray(3);
 		grid[0][0][0][0] = this.initialValue;
@@ -71,8 +71,8 @@ public class LongSpreadIntegerValue4D implements SymmetricLongModel4D, Isotropic
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public LongSpreadIntegerValue4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		LongSpreadIntegerValue4D data = (LongSpreadIntegerValue4D) Utils.deserializeFromFile(backupPath);
+	public LongSunflower4D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		LongSunflower4D data = (LongSunflower4D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
 		maxWMinusOne = data.maxWMinusOne;
@@ -305,7 +305,7 @@ public class LongSpreadIntegerValue4D implements SymmetricLongModel4D, Isotropic
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 	
 	@Override

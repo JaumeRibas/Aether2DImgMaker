@@ -24,18 +24,18 @@ import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
 import caimgmaker.args.ImageGenerationMode;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
-import cellularautomata.automata.siv.IntSpreadIntegerValue;
-import cellularautomata.automata.siv.IntSpreadIntegerValue2D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue1D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue2D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue3D;
-import cellularautomata.automata.siv.LongSpreadIntegerValue4D;
+import cellularautomata.automata.sunflower.IntSunflower;
+import cellularautomata.automata.sunflower.IntSunflower2D;
+import cellularautomata.automata.sunflower.LongSunflower1D;
+import cellularautomata.automata.sunflower.LongSunflower2D;
+import cellularautomata.automata.sunflower.LongSunflower3D;
+import cellularautomata.automata.sunflower.LongSunflower4D;
 import cellularautomata.model.Model;
 import cellularautomata.numbers.BigInt;
 
-public final class SpreadIntegerValueFactory {
+public final class SunflowerFactory {
 	
-	private SpreadIntegerValueFactory() {}
+	private SunflowerFactory() {}
 	
 	public static Model create(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
@@ -79,7 +79,7 @@ public final class SpreadIntegerValueFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-						model = new LongSpreadIntegerValue1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
+						model = new LongSunflower1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
 					} else {
 						System.out.printf(messages.getString("single-source-out-of-range-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}								
@@ -87,7 +87,7 @@ public final class SpreadIntegerValueFactory {
 					System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 				}
 			} else {
-				model = new LongSpreadIntegerValue1D(args.backupToRestorePath);
+				model = new LongSunflower1D(args.backupToRestorePath);
 			}
 		} else {
 			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
@@ -102,10 +102,10 @@ public final class SpreadIntegerValueFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-						model = new IntSpreadIntegerValue2D(args.initialConfiguration.singleSource.intValue(), 0);
+						model = new IntSunflower2D(args.initialConfiguration.singleSource.intValue(), 0);
 					} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-						model = new LongSpreadIntegerValue2D(args.initialConfiguration.singleSource.longValue(), 0);
+						model = new LongSunflower2D(args.initialConfiguration.singleSource.longValue(), 0);
 					} else {
 						System.out.printf(messages.getString("single-source-out-of-range-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}
@@ -114,9 +114,9 @@ public final class SpreadIntegerValueFactory {
 				}
 			} else {
 				try {
-					model = new IntSpreadIntegerValue2D(args.backupToRestorePath);
+					model = new IntSunflower2D(args.backupToRestorePath);
 				} catch (Exception ex) {
-					model = new LongSpreadIntegerValue2D(args.backupToRestorePath);
+					model = new LongSunflower2D(args.backupToRestorePath);
 				}
 			}
 		} else {
@@ -132,7 +132,7 @@ public final class SpreadIntegerValueFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-						model = new LongSpreadIntegerValue3D(args.initialConfiguration.singleSource.longValue());
+						model = new LongSunflower3D(args.initialConfiguration.singleSource.longValue());
 					} else {
 						System.out.printf(messages.getString("single-source-out-of-range-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}
@@ -140,7 +140,7 @@ public final class SpreadIntegerValueFactory {
 					System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 				}
 			} else {
-				model = new LongSpreadIntegerValue3D(args.backupToRestorePath);
+				model = new LongSunflower3D(args.backupToRestorePath);
 			}
 		} else {
 			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
@@ -155,7 +155,7 @@ public final class SpreadIntegerValueFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-						model = new LongSpreadIntegerValue4D(args.initialConfiguration.singleSource.longValue());
+						model = new LongSunflower4D(args.initialConfiguration.singleSource.longValue());
 					} else {
 						System.out.printf(messages.getString("single-source-out-of-range-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}
@@ -163,7 +163,7 @@ public final class SpreadIntegerValueFactory {
 					System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 				}
 			} else {
-				model = new LongSpreadIntegerValue4D(args.backupToRestorePath);
+				model = new LongSunflower4D(args.backupToRestorePath);
 			}
 		} else {
 			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
@@ -178,7 +178,7 @@ public final class SpreadIntegerValueFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-						model = new IntSpreadIntegerValue(args.grid.dimension, args.initialConfiguration.singleSource.intValue(), 0);
+						model = new IntSunflower(args.grid.dimension, args.initialConfiguration.singleSource.intValue(), 0);
 					} else {
 						System.out.printf(messages.getString("single-source-out-of-range-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
 					}
@@ -186,7 +186,7 @@ public final class SpreadIntegerValueFactory {
 					System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 				}
 			} else {
-				model = new IntSpreadIntegerValue(args.backupToRestorePath);
+				model = new IntSunflower(args.backupToRestorePath);
 			}
 		} else {
 			System.out.printf(messages.getString("grid-not-supported-format"), args.model);

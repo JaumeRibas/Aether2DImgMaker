@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,12 +25,12 @@ import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricLongModel1D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 1D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 1D with a single source initial configuration
  * 
  * @author Jaume
  *
  */
-public class LongSpreadIntegerValue1D implements SymmetricLongModel1D, IsotropicModel1DA, Serializable {
+public class LongSunflower1D implements SymmetricLongModel1D, IsotropicModel1DA, Serializable {
 
 	/**
 	 * 
@@ -54,7 +54,7 @@ public class LongSpreadIntegerValue1D implements SymmetricLongModel1D, Isotropic
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public LongSpreadIntegerValue1D(long initialValue, long backgroundValue) {
+	public LongSunflower1D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		grid = new long[3];
@@ -73,8 +73,8 @@ public class LongSpreadIntegerValue1D implements SymmetricLongModel1D, Isotropic
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public LongSpreadIntegerValue1D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		LongSpreadIntegerValue1D data = (LongSpreadIntegerValue1D) Utils.deserializeFromFile(backupPath);
+	public LongSunflower1D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		LongSunflower1D data = (LongSunflower1D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		backgroundValue = data.backgroundValue;
 		grid = data.grid;
@@ -186,7 +186,7 @@ public class LongSpreadIntegerValue1D implements SymmetricLongModel1D, Isotropic
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 	
 	@Override

@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,8 +30,13 @@ import cellularautomata.Utils;
 import cellularautomata.model.IsotropicHypercubicModelA;
 import cellularautomata.model.SymmetricIntModel;
 
-
-public class IntSpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubicModelA {
+/**
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton with a single source initial configuration
+ * 
+ * @author Jaume
+ *
+ */
+public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA {
 
 	private long step;
 	private final int initialValue;
@@ -45,7 +50,7 @@ public class IntSpreadIntegerValue implements SymmetricIntModel, IsotropicHyperc
 
 	private Boolean changed = null;
 	
-	public IntSpreadIntegerValue(int gridDimension, int initialValue, int backgroundValue) {
+	public IntSunflower(int gridDimension, int initialValue, int backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		int side = 3;
@@ -66,8 +71,8 @@ public class IntSpreadIntegerValue implements SymmetricIntModel, IsotropicHyperc
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public IntSpreadIntegerValue(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		IntSpreadIntegerValue data = (IntSpreadIntegerValue) Utils.deserializeFromFile(backupPath);
+	public IntSunflower(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		IntSunflower data = (IntSunflower) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		backgroundValue = data.backgroundValue;
 		grid = data.grid;
@@ -260,7 +265,7 @@ public class IntSpreadIntegerValue implements SymmetricIntModel, IsotropicHyperc
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 
 	@Override

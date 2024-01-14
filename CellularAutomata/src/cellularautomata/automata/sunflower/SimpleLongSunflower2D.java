@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,12 +23,12 @@ import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricLongModel2D;
 
 /**
- * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
  * 
  * @author Jaume Ribas
  *
  */
-public class SimpleLongSpreadIntegerValue2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
+public class SimpleLongSunflower2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
 
 	/** A 2D array representing the grid */
 	private long[][] grid;
@@ -52,7 +52,7 @@ public class SimpleLongSpreadIntegerValue2D implements SymmetricLongModel2D, Iso
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public SimpleLongSpreadIntegerValue2D(long initialValue, long backgroundValue) {
+	public SimpleLongSunflower2D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//Create a 2D array to represent the grid. With the initial value at the origin.
@@ -248,7 +248,7 @@ public class SimpleLongSpreadIntegerValue2D implements SymmetricLongModel2D, Iso
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 	
 	@Override

@@ -14,28 +14,34 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 
 import cellularautomata.Utils;
 import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricIntModel2D;
+import cellularautomata.model2d.SymmetricLongModel2D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 2D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 2D with a single source initial configuration
  * 
  * @author Jaume
  *
  */
-public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSquareModelA {
+public class LongSunflower2D implements SymmetricLongModel2D, IsotropicSquareModelA, Serializable {
 
-	private int[][] grid;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4731030611754620573L;
+
+	private long[][] grid;
 	
-	private final int initialValue;
-	private final int backgroundValue;
+	private final long initialValue;
+	private final long backgroundValue;
 	private long step;
 
 	/** Whether or not the values reached the bounds of the array */
@@ -49,10 +55,10 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public IntSpreadIntegerValue2D(int initialValue, int backgroundValue) {
+	public LongSunflower2D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
-		grid = Utils.buildAnisotropic2DIntArray(3);
+		grid = Utils.buildAnisotropic2DLongArray(3);
 		Utils.fill(grid, backgroundValue);
 		grid[0][0] = this.initialValue;
 		xBoundReached = false;
@@ -67,8 +73,8 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public IntSpreadIntegerValue2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		IntSpreadIntegerValue2D data = (IntSpreadIntegerValue2D) Utils.deserializeFromFile(backupPath);
+	public LongSunflower2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		LongSunflower2D data = (LongSunflower2D) Utils.deserializeFromFile(backupPath);
 		grid = data.grid;
 		initialValue = data.initialValue;
 		backgroundValue = data.backgroundValue;
@@ -79,37 +85,37 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	
 	@Override
 	public Boolean nextStep() {
-		int[][] newGrid = null;
+		long[][] newGrid = null;
 		if (xBoundReached) {
 			xBoundReached = false;
-			newGrid = new int[grid.length + 1][];
+			newGrid = new long[grid.length + 1][];
 		} else {
-			newGrid = new int[grid.length][];
+			newGrid = new long[grid.length][];
 		}
 		int maxXMinusOne = newGrid.length - 2;
 		boolean changed = false;
-		newGrid[0] = new int[1];
+		newGrid[0] = new long[1];
 		boolean isFirst = true;
 		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, isFirst = false) {
 			if (nextX < newGrid.length) {
-				newGrid[nextX] = new int[nextX + 1];
+				newGrid[nextX] = new long[nextX + 1];
 				if (nextX >= grid.length) {
 					Arrays.fill(newGrid[nextX], backgroundValue);
 				}
 			}
 			for (int y = 0; y <= x; y++) {
-				int value = grid[x][y];
+				long value = grid[x][y];
 				if (value != 0) {
-					int up = getFromPosition(x, y + 1);
-					int down = getFromPosition(x, y - 1); 
-					int left = getFromPosition(x - 1, y);
-					int right = getFromPosition(x + 1, y);
+					long up = getFromPosition(x, y + 1);
+					long down = getFromPosition(x, y - 1); 
+					long left = getFromPosition(x - 1, y);
+					long right = getFromPosition(x + 1, y);
 					boolean isUpEqual = value == up, isDownEqual = value == down, 
 							isRightEqual = value == right, isLeftEqual = value == left;
 					//If the current cell is equal to its neighbors, the algorithm has no effect
 					if (!(isUpEqual && isDownEqual && isRightEqual && isLeftEqual)) {
 						//Divide its value by 5 (using integer division)
-						int share = value/5;
+						long share = value/5;
 						if (share != 0) {
 							//If any share is not zero, the state changes
 							changed = true;
@@ -124,7 +130,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 							if (isLeftEqual)
 								newGrid[x][y] += share;
 							else if (x > y) {
-								int valueToAdd = share;
+								long valueToAdd = share;
 								if (x == y + 1) {
 									valueToAdd += share;
 									if (x == 1) {
@@ -137,7 +143,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 							if (isUpEqual)
 								newGrid[x][y] += share;
 							else if (y < x) {
-								int valueToAdd = share;
+								long valueToAdd = share;
 								if (y == x - 1) {
 									valueToAdd += share;
 								}
@@ -148,7 +154,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 							if (isDownEqual)
 								newGrid[x][y] += share;
 							else if (y > 0) {
-								int valueToAdd = share;
+								long valueToAdd = share;
 								if (y == 1) {
 									valueToAdd += share;
 								}
@@ -181,7 +187,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	}
 	
 	@Override
-	public int getFromPosition(int x, int y) {	
+	public long getFromPosition(int x, int y) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (y > x) {
@@ -198,7 +204,7 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	}
 	
 	@Override
-	public int getFromAsymmetricPosition(int x, int y) {	
+	public long getFromAsymmetricPosition(int x, int y) {	
 		return grid[x][y];
 	}
 
@@ -217,17 +223,17 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 	 * 
 	 * @return the value at the origin at step 0
 	 */
-	public int getInitialValue() {
+	public long getInitialValue() {
 		return initialValue;
 	}
 
-	public int getBackgroundValue() {
+	public long getBackgroundValue() {
 		return backgroundValue;
 	}
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 	
 	@Override
@@ -237,6 +243,6 @@ public class IntSpreadIntegerValue2D implements SymmetricIntModel2D, IsotropicSq
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }

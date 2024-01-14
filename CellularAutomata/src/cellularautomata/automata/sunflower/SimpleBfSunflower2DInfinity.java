@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,12 +25,12 @@ import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricNumericModel2D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 2D with a single source initial configuration of infinity
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 2D with a single source initial configuration of infinity
  * 
  * @author Jaume
  *
  */
-public class SimpleBfSpreadIntegerValue2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
+public class SimpleBfSunflower2DInfinity implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
 	
 	/** 2D array representing the grid **/
 	private BigFraction[][] grid;
@@ -43,7 +43,7 @@ public class SimpleBfSpreadIntegerValue2DInfinity implements SymmetricNumericMod
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	
-	public SimpleBfSpreadIntegerValue2DInfinity() {
+	public SimpleBfSunflower2DInfinity() {
 		//initial side of the array, will be increased as needed
 		int side = 5;
 		grid = new BigFraction[side][side];
@@ -143,7 +143,7 @@ public class SimpleBfSpreadIntegerValue2DInfinity implements SymmetricNumericMod
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 	
 	@Override

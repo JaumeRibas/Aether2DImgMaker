@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,12 +25,12 @@ import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 3D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 3D with a single source initial configuration
  * 
  * @author Jaume
  *
  */
-public class LongSpreadIntegerValue3D implements SymmetricLongModel3D, IsotropicCubicModelA, Serializable {	
+public class LongSunflower3D implements SymmetricLongModel3D, IsotropicCubicModelA, Serializable {	
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public class LongSpreadIntegerValue3D implements SymmetricLongModel3D, Isotropic
 	 * 
 	 * @param initialValue the value at the origin at step 0
 	 */
-	public LongSpreadIntegerValue3D(long initialValue) {
+	public LongSunflower3D(long initialValue) {
 		this.initialValue = initialValue;
 		grid = Utils.buildAnisotropic3DLongArray(2);
 		grid[0][0][0] = this.initialValue;
@@ -69,8 +69,8 @@ public class LongSpreadIntegerValue3D implements SymmetricLongModel3D, Isotropic
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public LongSpreadIntegerValue3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		LongSpreadIntegerValue3D data = (LongSpreadIntegerValue3D) Utils.deserializeFromFile(backupPath);
+	public LongSunflower3D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+		LongSunflower3D data = (LongSunflower3D) Utils.deserializeFromFile(backupPath);
 		initialValue = data.initialValue;
 		grid = data.grid;
 		xBoundReached = data.xBoundReached;
@@ -240,7 +240,7 @@ public class LongSpreadIntegerValue3D implements SymmetricLongModel3D, Isotropic
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 	
 	@Override

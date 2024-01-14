@@ -546,9 +546,8 @@ public class AetherImgMaker {
 			case "aether":
 				model = AetherFactory.create(args, messages);
 				break;
-			case "siv":
-			case "spread_integer_value":
-				model = SpreadIntegerValueFactory.create(args, messages);
+			case "sunflower":
+				model = SunflowerFactory.create(args, messages);
 				break;
 			case "as":
 			case "abelian_sandpile":

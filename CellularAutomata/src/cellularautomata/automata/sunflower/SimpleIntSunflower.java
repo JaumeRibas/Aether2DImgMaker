@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,12 +29,12 @@ import cellularautomata.model.IsotropicHypercubicModelA;
 import cellularautomata.model.SymmetricIntModel;
 
 /**
- * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton, with a single source initial configuration, for review and testing purposes
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton, with a single source initial configuration, for review and testing purposes
  * 
  * @author Jaume
  *
  */
-public class SimpleIntSpreadIntegerValue implements SymmetricIntModel, IsotropicHypercubicModelA {
+public class SimpleIntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA {
 
 	private int gridDimension;
 	private long step;
@@ -55,7 +55,7 @@ public class SimpleIntSpreadIntegerValue implements SymmetricIntModel, Isotropic
 	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
-	public SimpleIntSpreadIntegerValue(int gridDimension, int initialValue, int backgroundValue) {
+	public SimpleIntSunflower(int gridDimension, int initialValue, int backgroundValue) {
 		this.gridDimension = gridDimension;
 		//two neighbors
 		shareCount = gridDimension * 2 + 1;
@@ -111,16 +111,16 @@ public class SimpleIntSpreadIntegerValue implements SymmetricIntModel, Isotropic
 		} else {
 			newGrid = new HypercubicIntArray(gridDimension, grid.getSide());
 		}
-		SpreadIntegerValueConsumer sivConsumer = new SpreadIntegerValueConsumer(newGrid, indexOffset);
+		SunflowerConsumer sunflowerConsumer = new SunflowerConsumer(newGrid, indexOffset);
 		//For every cell apply rules
-		grid.forEachIndex(sivConsumer);
+		grid.forEachIndex(sunflowerConsumer);
 		//Replace the old array with the new one
 		grid = newGrid;
 		//Update the index of the origin
 		originIndex += indexOffset;
 		//Increase the current step by one
 		step++;
-		changed = sivConsumer.changed;
+		changed = sunflowerConsumer.changed;
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
@@ -130,14 +130,14 @@ public class SimpleIntSpreadIntegerValue implements SymmetricIntModel, Isotropic
 		return changed;
 	}
 	
-	class SpreadIntegerValueConsumer implements Consumer<Coordinates> {
+	class SunflowerConsumer implements Consumer<Coordinates> {
 		
 		public boolean changed = false;
 		private int gridSide;
 		private HypercubicIntArray newGrid;
 		private int indexOffset;
 		
-		public SpreadIntegerValueConsumer(HypercubicIntArray newGrid, int indexOffset) {
+		public SunflowerConsumer(HypercubicIntArray newGrid, int indexOffset) {
 			this.newGrid = newGrid;
 			this.indexOffset = indexOffset;
 			gridSide = grid.getSide();
@@ -243,7 +243,7 @@ public class SimpleIntSpreadIntegerValue implements SymmetricIntModel, Isotropic
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 
 	@Override

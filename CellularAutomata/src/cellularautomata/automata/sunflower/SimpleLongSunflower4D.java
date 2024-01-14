@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package cellularautomata.automata.siv;
+package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,12 +24,12 @@ import cellularautomata.model4d.IsotropicHypercubicModel4DA;
 import cellularautomata.model4d.SymmetricLongModel4D;
 
 /**
- * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition">Spread Integer Value</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
+ * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
  * 
  * @author Jaume
  *
  */
-public class SimpleLongSpreadIntegerValue4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
+public class SimpleLongSunflower4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
 	
 	private long[][][][] grid;
 	
@@ -52,7 +52,7 @@ public class SimpleLongSpreadIntegerValue4D implements SymmetricLongModel4D, Iso
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value at all other positions of the grid
 	 */
-	public SimpleLongSpreadIntegerValue4D(long initialValue, long backgroundValue) {
+	public SimpleLongSunflower4D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		int side = 5;
@@ -352,7 +352,7 @@ public class SimpleLongSpreadIntegerValue4D implements SymmetricLongModel4D, Iso
 
 	@Override
 	public String getName() {
-		return "SpreadIntegerValue";
+		return "Sunflower";
 	}
 
 	@Override

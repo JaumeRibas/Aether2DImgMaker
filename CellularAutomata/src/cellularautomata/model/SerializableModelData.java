@@ -70,7 +70,7 @@ public class SerializableModelData implements Serializable {
 	public static final class Models {
 		
 		public static final Integer AETHER = 0;
-		public static final Integer SPREAD_INTEGER_VALUE = 1;
+		public static final Integer SUNFLOWER = 1;
 		public static final Integer ABELIAN_SANDPILE = 2;
 		/*...*/
 		
