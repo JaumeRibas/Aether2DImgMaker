@@ -1,5 +1,5 @@
 # AetherImgMaker
-Console app to generate images from the [Aether](https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition) and [SIV](https://github.com/JaumeRibas/Aether2DImgMaker/wiki/SIV-Cellular-Automaton-Definition) models in different dimensions and initial configurations.
+Console app to generate images from the [Aether](https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition) and [Sunflower](https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition) models in different dimensions and initial configurations.
 
 ## Download
 
@@ -41,10 +41,10 @@ java -jar AetherImgMaker.jar 1000000000 -colormap hue
 java -jar AetherImgMaker.jar random-region_270_-100000_100000
 ```
 
-* Generate images from the SIV model on a square grid with a single source of 20,000,000:
+* Generate images from the Sunflower model on a square grid with a single source of 20,000,000:
 
 ```
-java -jar AetherImgMaker.jar -model siv 20000000
+java -jar AetherImgMaker.jar -model sunflower 20000000
 ```
 
 * Generate images from the asymmetric section of the Aether model on a 3D grid with a single source of -1,925 and splitting the even and odd positions into sepate images:
