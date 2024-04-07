@@ -24,6 +24,11 @@ import cellularautomata.Coordinates;
 
 public class AnisotropicIntArray extends AnisotropicArray implements MultidimensionalIntArray {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7155466160162596971L;
+	
 	private int[] values;
 	
 	public AnisotropicIntArray(int dimension, int side) {

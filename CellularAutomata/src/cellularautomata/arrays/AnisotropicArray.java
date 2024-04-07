@@ -16,6 +16,7 @@
  */
 package cellularautomata.arrays;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 import cellularautomata.Coordinates;
@@ -28,8 +29,13 @@ import cellularautomata.Utils;
  * @author Jaume
  *
  */
-public abstract class AnisotropicArray implements MultidimensionalArray {
+public abstract class AnisotropicArray implements MultidimensionalArray, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4191000703202212021L;
+	
 	protected final int dimension;
 	protected final int side;
 

@@ -18,6 +18,7 @@ package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
@@ -36,8 +37,13 @@ import cellularautomata.model.SymmetricIntModel;
  * @author Jaume
  *
  */
-public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA {
+public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3430434296740906188L;
+	
 	private long step;
 	private final int initialValue;
 	private final int backgroundValue;
