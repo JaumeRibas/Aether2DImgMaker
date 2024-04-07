@@ -67,6 +67,7 @@ public class SerializableModelData implements Serializable {
 	/*...*/
 	
 	//MODELS AND TYPES
+	// It might have been better not to repeat values across sections to prevent errors when comparing
 	public static final class Models {
 		
 		public static final Integer AETHER = 0;

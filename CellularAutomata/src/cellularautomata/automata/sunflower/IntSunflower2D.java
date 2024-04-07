@@ -18,6 +18,7 @@ package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 
 import cellularautomata.Utils;
@@ -30,7 +31,12 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class IntSunflower2D implements SymmetricIntModel2D, IsotropicSquareModelA {
+public class IntSunflower2D implements SymmetricIntModel2D, IsotropicSquareModelA, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1006521294018516433L;
 
 	private int[][] grid;
 	
@@ -237,6 +243,6 @@ public class IntSunflower2D implements SymmetricIntModel2D, IsotropicSquareModel
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		throw new UnsupportedOperationException();
+		Utils.serializeToFile(this, backupPath, backupName);
 	}
 }
