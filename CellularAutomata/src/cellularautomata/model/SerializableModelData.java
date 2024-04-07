@@ -42,23 +42,23 @@ public class SerializableModelData implements Serializable {
 	public static final int STEP = 1;
 	/** Key for a {@link Boolean} object representing whether or not the model's configuration changed from the previous step to the current one */
 	public static final int CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP = 2;
-	/** Key for the grid. See also {@link this#GRID_TYPE} and {@#link this#GRID_IMPLEMENTATION_TYPE} */
+	/** Key for the grid. See also {@link #GRID_TYPE} and {@link #GRID_IMPLEMENTATION_TYPE} */
 	public static final int GRID = 3;
 	/** Key for the grid's type. The value being one of the {@link GridTypes} */
 	public static final int GRID_TYPE = 4;
 	/** Key for the grid's implementation type. The value being one of the {@link GridImplementationTypes} */
 	public static final int GRID_IMPLEMENTATION_TYPE = 5;
-	/** Key for the model's initial configuration. See also {@link this#INITIAL_CONFIGURATION_TYPE} and {@#link this#INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE} */
+	/** Key for the model's initial configuration. See also {@link #INITIAL_CONFIGURATION_TYPE} and {@link #INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE} */
 	public static final int INITIAL_CONFIGURATION = 6;
 	/** Key for the model's initial configuration type. The value being one of the {@link InitialConfigurationTypes} */
 	public static final int INITIAL_CONFIGURATION_TYPE = 7;
 	/** Key for the model's initial configuration implementation type. The value being one of the {@link InitialConfigurationImplementationTypes} */
 	public static final int INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE = 8;
-	/** Key for the model's coordinate bounds. See also {@#link CoordinateBoundsImplementationTypes} */
+	/** Key for the model's coordinate bounds. See also {@link CoordinateBoundsImplementationTypes} */
 	public static final int COORDINATE_BOUNDS = 9;
 	/** Key for the model's coordinate bounds implementation type. The value being one of the {@link CoordinateBoundsImplementationTypes} */
 	public static final int COORDINATE_BOUNDS_IMPLEMENTATION_TYPE = 10;
-	/** Key for the model's toppling alternation compliance data. See also {@link this#TOPPLING_ALTERNATION_COMPLIANCE_TYPE} and {@#link this#TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE} */
+	/** Key for the model's toppling alternation compliance data. See also {@link #TOPPLING_ALTERNATION_COMPLIANCE_TYPE} and {@link #TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE} */
 	public static final int TOPPLING_ALTERNATION_COMPLIANCE = 11;
 	/** Key for the model's toppling alternation compliance implementation type. The value being one of the {@link GridImplementationTypes} */
 	public static final int TOPPLING_ALTERNATION_COMPLIANCE_IMPLEMENTATION_TYPE = 12;
@@ -130,6 +130,8 @@ public class SerializableModelData implements Serializable {
 		public static final Integer BIG_INT = 2;
 		/** An {@link Boolean} object */
 		public static final Integer BOOLEAN = 3;
+		/** A length 2 1D {@code int} array containing the value at the origin at index 0 and the background value at index 1 */
+		public static final Integer ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_INT_ARRAY = 4;
 		/*...*/
 		
 		private InitialConfigurationImplementationTypes() { }
