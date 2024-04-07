@@ -74,7 +74,7 @@ public abstract class FileBackedModel implements Closeable, Model {
 		readingBackup = true;
 		File backupGridFolder = new File(backupPath + File.separator + GRID_FOLDER_NAME);
 		if (!backupGridFolder.exists()) {
-			throw new FileNotFoundException("Missing grid folder at '" + backupGridFolder.getAbsolutePath() + "'");
+			throw new FileNotFoundException("Missing grid folder at \"" + backupGridFolder.getAbsolutePath() + '"');
 		}
 		@SuppressWarnings("unchecked")
 		HashMap<String, Object> properties = 

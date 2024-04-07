@@ -2509,7 +2509,7 @@ public class ImgMaker {
 		if (!dir.exists())
 			dir.mkdirs();
 		String pathName = path + "/" + name;
-		System.out.println(imagePathNameAndEquals + "'" + pathName + "'");
+		System.out.println(imagePathNameAndEquals + '"' + pathName + '"');
 		ImageIO.write(image, "png", new File(pathName));
 	}
 	
