@@ -78,7 +78,7 @@ public class LongAether2DTopplingAlternationCompliance implements SymmetricBoole
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_LONG_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
 				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
-			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + LongAether2DTopplingAlternationCompliance.class + " class.");
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
 		}
 		initialValue = (long) data.get(SerializableModelData.INITIAL_CONFIGURATION);
 		grid = (long[][]) data.get(SerializableModelData.GRID);

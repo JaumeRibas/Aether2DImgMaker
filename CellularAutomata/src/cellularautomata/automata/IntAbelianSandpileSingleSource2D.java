@@ -74,7 +74,7 @@ public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, Is
 				|| !SerializableModelData.GridTypes.INFINITE_SQUARE.equals(data.get(SerializableModelData.GRID_TYPE))
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))) {
-			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + IntAbelianSandpileSingleSource2D.class + " class.");
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
 		}
 		initialValue = (int) data.get(SerializableModelData.INITIAL_CONFIGURATION);
 		grid = (int[][]) data.get(SerializableModelData.GRID);

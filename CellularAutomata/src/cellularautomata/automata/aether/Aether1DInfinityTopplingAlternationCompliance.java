@@ -69,7 +69,7 @@ public class Aether1DInfinityTopplingAlternationCompliance implements SymmetricB
 				|| !SerializableModelData.GridTypes.INFINITE_1D.equals(data.get(SerializableModelData.GRID_TYPE))
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_FRACTION_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))) {
-			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + Aether1DInfinityTopplingAlternationCompliance.class + " class.");
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
 		}
 		isPositive = (boolean) data.get(SerializableModelData.INITIAL_CONFIGURATION);
 		grid = (BigFraction[]) data.get(SerializableModelData.GRID);

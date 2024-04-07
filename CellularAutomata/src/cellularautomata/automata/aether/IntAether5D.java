@@ -78,7 +78,7 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
 				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
-			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + IntAether5D.class + " class.");
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
 		}
 		initialValue = (int) data.get(SerializableModelData.INITIAL_CONFIGURATION);
 		grid = (int[][][][][]) data.get(SerializableModelData.GRID);

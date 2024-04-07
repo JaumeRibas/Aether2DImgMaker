@@ -89,7 +89,7 @@ public class BigIntAether4DTopplingAlternationCompliance implements SymmetricBoo
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
 				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)
 				|| !data.contains(SerializableModelData.INITIAL_CONFIGURATION_FOLDER_NAME)) {
-			throw new IllegalArgumentException("The backup file's configuration is not compatible with the " + BigIntAether4DTopplingAlternationCompliance.class + " class.");
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
 		}
 		initialValue = (BigInt) data.get(SerializableModelData.INITIAL_CONFIGURATION);
 		grid = (BigInt[][][][]) data.get(SerializableModelData.GRID);
