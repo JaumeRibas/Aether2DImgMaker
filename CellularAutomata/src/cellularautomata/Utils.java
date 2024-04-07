@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
@@ -124,7 +125,7 @@ public final class Utils {
 		return obj;
 	}
 	
-	public static void serializeToFile(Object obj, String path, String name) throws FileNotFoundException, IOException {
+	public static void serializeToFile(Serializable obj, String path, String name) throws FileNotFoundException, IOException {
 		String pathName = path + "/" + name;
 		File dir = new File(path);
 		if (!dir.exists())
