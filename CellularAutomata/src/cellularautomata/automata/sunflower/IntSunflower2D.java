@@ -18,10 +18,10 @@ package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
 
 import cellularautomata.Utils;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricIntModel2D;
 
@@ -31,12 +31,7 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class IntSunflower2D implements SymmetricIntModel2D, IsotropicSquareModelA, Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1006521294018516433L;
+public class IntSunflower2D implements SymmetricIntModel2D, IsotropicSquareModelA {
 
 	private int[][] grid;
 	
@@ -74,13 +69,33 @@ public class IntSunflower2D implements SymmetricIntModel2D, IsotropicSquareModel
 	 * @throws FileNotFoundException 
 	 */
 	public IntSunflower2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		IntSunflower2D data = (IntSunflower2D) Utils.deserializeFromFile(backupPath);
-		grid = data.grid;
-		initialValue = data.initialValue;
-		backgroundValue = data.backgroundValue;
-		step = data.step;
-		xBoundReached = data.xBoundReached;
-		changed = data.changed;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		data = SerializableModelData.updateDataFormat(data);
+		if (!SerializableModelData.Models.SUNFLOWER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !(SerializableModelData.InitialConfigurationImplementationTypes.ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_INT_ARRAY.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)) 
+						|| SerializableModelData.InitialConfigurationImplementationTypes.INTEGER.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)))
+				|| !SerializableModelData.GridTypes.INFINITE_REGULAR.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !Integer.valueOf(2).equals(data.get(SerializableModelData.GRID_DIMENSION))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
+				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
+		}
+		if (data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE).equals(SerializableModelData.InitialConfigurationImplementationTypes.INTEGER)) {
+			initialValue = (int) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+			backgroundValue = 0;
+		} else {
+			int[] initialConfiguration = (int[]) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+			initialValue = initialConfiguration[0];
+			backgroundValue = initialConfiguration[1];
+		}
+		grid = (int[][]) data.get(SerializableModelData.GRID);
+		xBoundReached = (boolean) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
 	}
 	
 	@Override
@@ -243,6 +258,20 @@ public class IntSunflower2D implements SymmetricIntModel2D, IsotropicSquareModel
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		int[] initialConfiguration = new int[] { initialValue, backgroundValue };
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.SUNFLOWER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialConfiguration);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_INT_ARRAY);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_REGULAR);
+		data.put(SerializableModelData.GRID_DIMENSION, 2);
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, xBoundReached);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 }

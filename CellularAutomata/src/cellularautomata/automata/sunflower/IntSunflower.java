@@ -18,7 +18,6 @@ package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
@@ -29,6 +28,7 @@ import cellularautomata.arrays.AnisotropicIntArray;
 import cellularautomata.arrays.HyperrectangularArray;
 import cellularautomata.Utils;
 import cellularautomata.model.IsotropicHypercubicModelA;
+import cellularautomata.model.SerializableModelData;
 import cellularautomata.model.SymmetricIntModel;
 
 /**
@@ -37,13 +37,8 @@ import cellularautomata.model.SymmetricIntModel;
  * @author Jaume
  *
  */
-public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA, Serializable {
+public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3430434296740906188L;
-	
 	private long step;
 	private final int initialValue;
 	private final int backgroundValue;
@@ -78,13 +73,31 @@ public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModel
 	 * @throws FileNotFoundException 
 	 */
 	public IntSunflower(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
-		IntSunflower data = (IntSunflower) Utils.deserializeFromFile(backupPath);
-		initialValue = data.initialValue;
-		backgroundValue = data.backgroundValue;
-		grid = data.grid;
-		boundsReached = data.boundsReached;
-		step = data.step;
-		changed = data.changed;
+		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		if (!SerializableModelData.Models.SUNFLOWER.equals(data.get(SerializableModelData.MODEL))) {
+			throw new IllegalArgumentException("The backup file contains a different model.");
+		}
+		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
+				|| !(SerializableModelData.InitialConfigurationImplementationTypes.ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_INT_ARRAY.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)) 
+						|| SerializableModelData.InitialConfigurationImplementationTypes.INTEGER.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)))
+				|| !SerializableModelData.GridTypes.INFINITE_REGULAR.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_CLASS_INSTANCE.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
+				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
+			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
+		}
+		if (data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE).equals(SerializableModelData.InitialConfigurationImplementationTypes.INTEGER)) {
+			initialValue = (int) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+			backgroundValue = 0;
+		} else {
+			int[] initialConfiguration = (int[]) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+			initialValue = initialConfiguration[0];
+			backgroundValue = initialConfiguration[1];
+		}
+		grid = (AnisotropicIntArray) data.get(SerializableModelData.GRID);
+		boundsReached = (boolean) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		step = (long) data.get(SerializableModelData.STEP);
+		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
 	}
 	
 	@Override
@@ -281,7 +294,21 @@ public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModel
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
-		Utils.serializeToFile(this, backupPath, backupName);
+		SerializableModelData data = new SerializableModelData();
+		int[] initialConfiguration = new int[] { initialValue, backgroundValue };
+		data.put(SerializableModelData.MODEL, SerializableModelData.Models.SUNFLOWER);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialConfiguration);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_INT_ARRAY);
+		data.put(SerializableModelData.GRID, grid);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_REGULAR);
+		data.put(SerializableModelData.GRID_DIMENSION, grid.getDimension());
+		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_CLASS_INSTANCE);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, boundsReached);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN);
+		data.put(SerializableModelData.STEP, step);
+		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
+		Utils.serializeToFile(data, backupPath, backupName);
 	}
 	
 	@Override
