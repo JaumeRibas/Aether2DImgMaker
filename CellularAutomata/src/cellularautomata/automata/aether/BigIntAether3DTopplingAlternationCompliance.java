@@ -79,12 +79,14 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 	 */
 	public BigIntAether3DTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		data = SerializableModelData.updateDataFormat(data);
 		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
 			throw new IllegalArgumentException("The backup file contains a different model.");
 		}
 		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
 				|| !SerializableModelData.InitialConfigurationImplementationTypes.BIG_INT.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
-				|| !SerializableModelData.GridTypes.REGULAR_INFINITE_3D.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_REGULAR.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !Integer.valueOf(3).equals(data.get(SerializableModelData.GRID_DIMENSION))
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
 				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)
@@ -2304,7 +2306,8 @@ public class BigIntAether3DTopplingAlternationCompliance implements SymmetricBoo
 		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
 		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.BIG_INT);
 		data.put(SerializableModelData.GRID, grid);
-		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.REGULAR_INFINITE_3D);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_REGULAR);
+		data.put(SerializableModelData.GRID_DIMENSION, 3);
 		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_BIG_INT_ARRAY_1);
 		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
 		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);

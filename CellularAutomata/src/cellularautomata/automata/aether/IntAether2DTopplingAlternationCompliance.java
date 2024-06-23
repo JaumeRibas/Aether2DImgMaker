@@ -69,12 +69,14 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 	 */
 	public IntAether2DTopplingAlternationCompliance(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
+		data = SerializableModelData.updateDataFormat(data);
 		if (!SerializableModelData.Models.AETHER.equals(data.get(SerializableModelData.MODEL))) {
 			throw new IllegalArgumentException("The backup file contains a different model.");
 		}
 		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
 				|| !SerializableModelData.InitialConfigurationImplementationTypes.INTEGER.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE))
-				|| !SerializableModelData.GridTypes.INFINITE_SQUARE.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !SerializableModelData.GridTypes.INFINITE_REGULAR.equals(data.get(SerializableModelData.GRID_TYPE))
+				|| !Integer.valueOf(2).equals(data.get(SerializableModelData.GRID_DIMENSION))
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
 				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
@@ -1345,7 +1347,8 @@ public class IntAether2DTopplingAlternationCompliance implements SymmetricBoolea
 		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
 		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.INTEGER);
 		data.put(SerializableModelData.GRID, grid);
-		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_SQUARE);
+		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_REGULAR);
+		data.put(SerializableModelData.GRID_DIMENSION, 2);
 		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_INT_ARRAY_1);
 		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
 		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);

@@ -36,6 +36,8 @@ public class SerializableModelData implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//KEYS
+	/** Key for the version of the data format. The value being an {@link Integer} object */
+	private static final int VERSION = 14;
 	/** Key for the model. The value being one the {@link Models} */
 	public static final int MODEL = 0;
 	/** Key for the model's step. The value being a {@link Long} object */
@@ -46,6 +48,8 @@ public class SerializableModelData implements Serializable {
 	public static final int GRID = 3;
 	/** Key for the grid's type. The value being one of the {@link GridTypes} */
 	public static final int GRID_TYPE = 4;
+	/** Key for the grid's dimension. The value being an {@link Integer} object  */
+	public static final int GRID_DIMENSION = 15;
 	/** Key for the grid's implementation type. The value being one of the {@link GridImplementationTypes} */
 	public static final int GRID_IMPLEMENTATION_TYPE = 5;
 	/** Key for the model's initial configuration. See also {@link #INITIAL_CONFIGURATION_TYPE} and {@link #INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE} */
@@ -80,18 +84,46 @@ public class SerializableModelData implements Serializable {
 	
 	public static final class GridTypes {
 
-		/** An infinite 1D grid */
-		public static final Integer INFINITE_1D = 0;
-		/** A regular infinite square grid */
-		public static final Integer INFINITE_SQUARE = 1;
-		/** A regular infinite 3D grid */
-		public static final Integer REGULAR_INFINITE_3D = 2;
-		/** A regular bounded 1D grid */
-		public static final Integer REGULAR_BOUNDED_1D = 3;
-		/** A regular infinite 4D grid */
-		public static final Integer REGULAR_INFINITE_4D = 4;
-		/** A regular infinite 5D grid */
-		public static final Integer REGULAR_INFINITE_5D = 5;
+		/** 
+		 * An infinite 1D grid 
+		 * 
+		 * @deprecated Use {@link #INFINITE_REGULAR} instead.  
+		 */
+		@Deprecated
+		private static final Integer INFINITE_1D = 0;
+		/** 
+		 * A regular infinite square grid
+		 * 
+		 * @deprecated Use {@link #INFINITE_REGULAR} instead.  
+		 */
+		@Deprecated
+		private static final Integer INFINITE_SQUARE = 1;
+		/** 
+		 * A regular infinite 3D grid
+		 * 
+		 * @deprecated Use {@link #INFINITE_REGULAR} instead.  
+		 */
+		@Deprecated
+		private static final Integer REGULAR_INFINITE_3D = 2;
+		/** 
+		 * A regular infinite 4D grid
+		 * 
+		 * @deprecated Use {@link #INFINITE_REGULAR} instead.  
+		 */
+		@Deprecated
+		private static final Integer REGULAR_INFINITE_4D = 4;
+		/** 
+		 * A regular infinite 5D grid
+		 * 
+		 * @deprecated Use {@link #INFINITE_REGULAR} instead.  
+		 */
+		@SuppressWarnings("unused")
+		@Deprecated
+		private static final Integer REGULAR_INFINITE_5D = 5;
+		/** An infinite regular grid */
+		public static final Integer INFINITE_REGULAR = 6;
+		/** A bounded regular grid */
+		public static final Integer BOUNDED_REGULAR = 7;
 		/*...*/
 		
 		private GridTypes() { }
@@ -99,16 +131,18 @@ public class SerializableModelData implements Serializable {
 	
 	public static final class GridImplementationTypes {
 		
-		/** {@code int} primitive array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
+		/** An {@code int} primitive array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
 		public static final Integer ANYSOTROPIC_INT_ARRAY_1 = 0;
-		/** {@code long} primitive array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
+		/** A {@code long} primitive array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
 		public static final Integer ANYSOTROPIC_LONG_PRIMITIVE_ARRAY_1 = 1;
-		/** {@link BigInt} array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
+		/** A {@link BigInt} array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
 		public static final Integer ANYSOTROPIC_BIG_INT_ARRAY_1 = 2;
-		/** {@code boolean} primitive array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
+		/** A {@code boolean} primitive array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
 		public static final Integer ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1 = 3;
-		/** {@code BigFraction} array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
+		/** A {@code BigFraction} array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
 		public static final Integer ANYSOTROPIC_BIG_FRACTION_ARRAY_1 = 4;
+		/** An {@link AnisotropicIntArray} object */
+		public static final Integer ANYSOTROPIC_INT_ARRAY_CLASS_INSTANCE = 5;
 		/*...*/
 		
 		private GridImplementationTypes() { }
@@ -129,10 +163,12 @@ public class SerializableModelData implements Serializable {
 		public static final Integer LONG = 1;
 		/** A {@link BigInt} object */
 		public static final Integer BIG_INT = 2;
-		/** An {@link Boolean} object */
+		/** A {@link Boolean} object */
 		public static final Integer BOOLEAN = 3;
 		/** A length 2 1D {@code int} array containing the value at the origin at index 0 and the background value at index 1 */
 		public static final Integer ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_INT_ARRAY = 4;
+		/** A length 2 1D {@code long} array containing the value at the origin at index 0 and the background value at index 1 */
+		public static final Integer ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_LONG_PRIMITIVE_ARRAY = 5;
 		/*...*/
 		
 		private InitialConfigurationImplementationTypes() { }
@@ -147,7 +183,39 @@ public class SerializableModelData implements Serializable {
 		private CoordinateBoundsImplementationTypes() { }
 	}
 	
+	/**
+	 * Updates an old instance to the latest format. If the instance is already up to date, the same instance is returned unchanged.
+	 * 
+	 * @param serializableData the instance to be updated
+	 * @return an up to date instance
+	 */
+	public static final SerializableModelData updateDataFormat(SerializableModelData serializableData) {
+		if (!serializableData.contains(VERSION)) {
+			//version 0
+			Integer gridType = (Integer) serializableData.get(GRID_TYPE);
+			int gridDimension;
+			if (GridTypes.INFINITE_1D.equals(gridType)) {
+				gridDimension = 1;
+			} else if (GridTypes.INFINITE_SQUARE.equals(gridType)) {
+				gridDimension = 2;
+			} else if (GridTypes.REGULAR_INFINITE_3D.equals(gridType)) {
+				gridDimension = 3;
+			} else if (GridTypes.REGULAR_INFINITE_4D.equals(gridType)) {
+				gridDimension = 4;
+			} else { //GridTypes.REGULAR_INFINITE_5D.equals(gridType)
+				gridDimension = 5;
+			}
+			serializableData.put(GRID_DIMENSION, gridDimension);
+			serializableData.put(GRID_TYPE, GridTypes.INFINITE_REGULAR);//only infinite regular grids where used
+		}
+		return serializableData;
+	}
+	
 	private final Map<Integer, Object> data = new HashMap<Integer, Object>();
+	
+	public SerializableModelData() {
+		data.put(VERSION, 1);
+	}
 	
 	public boolean contains(Integer key) {
 		return data.containsKey(key);
