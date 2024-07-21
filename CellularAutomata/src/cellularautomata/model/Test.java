@@ -21,12 +21,15 @@ import java.util.function.Consumer;
 import cellularautomata.Coordinates;
 import cellularautomata.Utils;
 
-public class Test {
+final class Test {
+	
+	private Test() {}
+	
 	public static void main(String[] args) {
 		testGridRegionForEachOddPosition();
 	}
 
-	public static void testGridRegionForEachPosition() {
+	static void testGridRegionForEachPosition() {
 		int dimension = 4;
 		int[] vertex1 = new int[dimension];
 		int[] vertex2 = new int[dimension];
@@ -44,7 +47,7 @@ public class Test {
 		});
 	}
 	
-	public static void testGridRegionForEachEvenPosition() {
+	static void testGridRegionForEachEvenPosition() {
 		int dimension = 4;
 		int[] vertex1 = new int[dimension];
 		int[] vertex2 = new int[dimension];
@@ -65,7 +68,7 @@ public class Test {
 		});
 	}
 	
-	public static void testGridRegionForEachOddPosition() {
+	static void testGridRegionForEachOddPosition() {
 		int dimension = 4;
 		int[] vertex1 = new int[dimension];
 		int[] vertex2 = new int[dimension];
