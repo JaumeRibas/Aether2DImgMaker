@@ -521,7 +521,6 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		grid[3] = null;// free old grid progressively to save memory		
 		// 5 <= w < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
@@ -558,6 +557,7 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		BigInt[][][] newSmallerWSlice = null, newCurrentWSlice = newWSlices[1], newGreaterWSlice = newWSlices[2];
 		for (; w != maxW; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne = wPlusTwo, wPlusTwo++) {
 			//w slice transition
+			grid[wMinusTwo] = null;// free old grid progressively to save memory
 			smallerWSlice = currentWSlice;
 			currentWSlice = greaterWSlice;
 			greaterWSlice = grid[wPlusOne];

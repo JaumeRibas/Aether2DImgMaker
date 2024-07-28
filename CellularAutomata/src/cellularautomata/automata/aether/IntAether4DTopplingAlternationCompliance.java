@@ -633,8 +633,7 @@ public class IntAether4DTopplingAlternationCompliance implements SymmetricBoolea
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers,
 				newCurrentWSliceCompliance, true, itsEvenPositionsTurnToTopple)) {
 			changed = true;
-		}
-		grid[3] = null;// free old grid progressively to save memory		
+		}		
 		// 5 <= w < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
@@ -682,6 +681,7 @@ public class IntAether4DTopplingAlternationCompliance implements SymmetricBoolea
 		boolean isWEven = w%2 == 0;
 		for (; w != maxW; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne = wPlusTwo, wPlusTwo++, isWEven = !isWEven) {
 			//w slice transition
+			grid[wMinusTwo] = null;// free old grid progressively to save memory
 			smallerWSlice = currentWSlice;
 			currentWSlice = greaterWSlice;
 			greaterWSlice = grid[wPlusOne];

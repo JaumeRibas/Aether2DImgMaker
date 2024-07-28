@@ -504,8 +504,7 @@ public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicMo
 		if (toppleRangeOfType7(4, wSlices, newWSlices, relevantAsymmetricNeighborValues, sortedNeighborsIndexes,
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
-		}
-		grid[3] = null;// free old grid progressively to save memory		
+		}	
 		// 5 <= w < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
@@ -542,6 +541,7 @@ public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicMo
 		long[][][] newSmallerWSlice = null, newCurrentWSlice = newWSlices[1], newGreaterWSlice = newWSlices[2];
 		for (; w != maxW; wMinusThree = wMinusTwo, wMinusTwo = wMinusOne, wMinusOne = w, w = wPlusOne, wPlusOne = wPlusTwo, wPlusTwo++) {
 			//w slice transition
+			grid[wMinusTwo] = null;// free old grid progressively to save memory
 			smallerWSlice = currentWSlice;
 			currentWSlice = greaterWSlice;
 			greaterWSlice = grid[wPlusOne];

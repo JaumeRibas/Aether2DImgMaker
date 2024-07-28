@@ -938,7 +938,6 @@ public class LongAether5D implements SymmetricLongModel5D, IsotropicHypercubicMo
 				relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, relevantAsymmetricNeighborShareMultipliers)) {
 			changed = true;
 		}
-		grid[4] = null;//free old grid progressively to save memory		
 		//6 <= v < edge - 2
 		int edge = grid.length - 1;
 		int edgeMinusTwo = edge - 2;
@@ -975,6 +974,7 @@ public class LongAether5D implements SymmetricLongModel5D, IsotropicHypercubicMo
 		long[][][][] newSmallerVSlice = null, newCurrentVSlice = newVSlices[1], newGreaterVSlice = newVSlices[2];
 		for (; v != maxV; vMinusFour = vMinusThree, vMinusThree = vMinusTwo, vMinusTwo = vMinusOne, vMinusOne = v, v = vPlusOne, vPlusOne = vPlusTwo, vPlusTwo++) {
 			//v slice transition
+			grid[vMinusTwo] = null;//free old grid progressively to save memory
 			smallerVSlice = currentVSlice;
 			currentVSlice = greaterVSlice;
 			greaterVSlice = grid[vPlusOne];
