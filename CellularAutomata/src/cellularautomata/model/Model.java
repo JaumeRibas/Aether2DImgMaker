@@ -68,12 +68,12 @@ public interface Model {
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
 	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
-	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getUpperBound(2) getLowerBound(2) (1 <= z <= 5)</li>
+	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getMaxCoordinate(2) getMinCoordinate(2) (1 <= z <= 5)</li>
 	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> = 3:
-	 * getUpperBound(1, new PartialCoordinates(null, null, 3)) getLowerBound(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
+	 * getMaxCoordinate(1, new PartialCoordinates(null, null, 3)) getMinCoordinate(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
 	 * <li>Using both the global <strong>z</strong> bounds and the local <strong>y</strong> bounds obtained, 
 	 * get the local <strong>x</strong> bounds where <strong>z</strong> = 3 and <strong>y</strong> = 11:
-	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
+	 * getMaxCoordinate(0, new PartialCoordinates(null, 11, 3)) getMinCoordinate(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
 	 * @param axis the index of the axis on which the max coordinate is requested.
@@ -104,12 +104,12 @@ public interface Model {
 	 * This extra coordinate being within the bounds obtained in the previous calls.</p>
 	 * <p>For example, consider a region in a 3D grid, assuming <strong>x</strong>, <strong>y</strong> and <strong>z</strong> to be the axis 0, 1 and 2 respectively:</p>
 	 * <ol>
-	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getUpperBound(2) getLowerBound(2) (1 <= z <= 5)</li>
+	 * <li>Get the global bounds of the region on the <strong>z</strong> axis: getMaxCoordinate(2) getMinCoordinate(2) (1 <= z <= 5)</li>
 	 * <li>Using the global <strong>z</strong> bounds, get the local <strong>y</strong> bounds where <strong>z</strong> = 3:
-	 * getUpperBound(1, new PartialCoordinates(null, null, 3)) getLowerBound(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
+	 * getMaxCoordinate(1, new PartialCoordinates(null, null, 3)) getMinCoordinate(1, new PartialCoordinates(null, null, 3)) (10 <= y <= 12)</li>
 	 * <li>Using both the global <strong>z</strong> bounds and the local <strong>y</strong> bounds obtained, 
 	 * get the local <strong>x</strong> bounds where <strong>z</strong> = 3 and <strong>y</strong> = 11:
-	 * getUpperBound(0, new PartialCoordinates(null, 11, 3)) getLowerBound(0, new PartialCoordinates(null, 11, 3))</li>
+	 * getMaxCoordinate(0, new PartialCoordinates(null, 11, 3)) getMinCoordinate(0, new PartialCoordinates(null, 11, 3))</li>
 	 * </ol>
 	 * 
 	 * @param axis the index of the axis on which the min coordinate is requested.
