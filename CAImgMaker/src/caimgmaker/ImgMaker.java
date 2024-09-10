@@ -2263,7 +2263,7 @@ public class ImgMaker {
 			dataIndex += dataLeftMargin;
 			int firstDataIndexToCopyFrom = dataIndex;
 			int x = framedModelMinXAtY;
-			for (; x < framedModelMaxXAtY; x+=2) {
+			for (; x < framedModelMaxXAtY; x += 2) {
 				java.awt.Color c = grid.getFromPosition(x,y);
 				for (int j = 0; j < gridPositionSize; j++) {
 					pixelData[dataIndex++] = (byte) c.getRed();
@@ -2285,7 +2285,7 @@ public class ImgMaker {
 				dataIndex += dataLeftMargin;
 				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
 				x = framedModelMinXAtY;
-				for (; x < framedModelMaxXAtY; x+=2) {
+				for (; x < framedModelMaxXAtY; x += 2) {
 					for (int j = 0; j < gridPositionSize; j++) {
 						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
@@ -2369,7 +2369,7 @@ public class ImgMaker {
 			dataIndex += dataLeftMargin;
 			int firstDataIndexToCopyFrom = dataIndex;
 			int x = framedModelMinXAtY;
-			for (; x < framedModelMaxXAtY; x+=2) {
+			for (; x < framedModelMaxXAtY; x += 2) {
 				java.awt.Color c = grid.getFromPosition(x,y);
 				for (int j = 0; j < gridPositionSize; j++) {
 					pixelData[dataIndex++] = (byte) c.getRed();
@@ -2391,7 +2391,7 @@ public class ImgMaker {
 				dataIndex += dataLeftMargin;
 				int dataIndexToCopyFrom = firstDataIndexToCopyFrom;
 				x = framedModelMinXAtY;
-				for (; x < framedModelMaxXAtY; x+=2) {
+				for (; x < framedModelMaxXAtY; x += 2) {
 					for (int j = 0; j < gridPositionSize; j++) {
 						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
 						pixelData[dataIndex++] = pixelData[dataIndexToCopyFrom++];
