@@ -43,12 +43,20 @@ public class Args {
 	public Long millisBetweenBackups;
 	
 	public static final String COLORMAP = "-colormap";
-	@Parameter(names = COLORMAP, descriptionKey = "colormap-description")
+	@Parameter(names = { COLORMAP, "-color" }, descriptionKey = "colormap-description")
     public String colormap = "Grayscale";
 	
 	public static final String COORDIANTE_FILTERS = "-coordinate-filters";
 	@Parameter(names = { COORDIANTE_FILTERS, "-coord-filters" }, validateWith = CoordinateFiltersValidatorAndConverter.class, converter = CoordinateFiltersValidatorAndConverter.class, descriptionKey = "coordinate-filters-description")
     public CoordinateFilters coordinateFilters = null;
+
+	public static final String DEBUG = "-debug";
+	@Parameter(names = DEBUG, hidden = true)
+	public boolean debug = false;
+
+	public static final String DELTA = "-delta";
+	@Parameter(names = DELTA, descriptionKey = "delta-description")
+	public boolean delta = false;
 	
 	public static final String FIRST_STEP = "-first-step";
 	@Parameter(names = FIRST_STEP, validateWith = NonNegativeIntegerValidator.class, descriptionKey = "first-step-description")
@@ -62,6 +70,7 @@ public class Args {
 	@Parameter(names = HELP, help = true, descriptionKey = "help-description")
 	public boolean help;
 	
+	//TODO Turn into separate parameters for simplicity and so they can be combined
 	public static final String IMAGE_GENERATION_MODE = "-image-generation-mode";
 	@Parameter(names = { IMAGE_GENERATION_MODE, "-img-generation-mode", "-image-gen-mode", "-img-gen-mode" }, validateWith = ImageGenerationModeValidator.class, converter = ImageGenerationModeConverter.class, descriptionKey = "image-generation-mode-description")
     public ImageGenerationMode imgGenerationMode = ImageGenerationMode.NORMAL;
@@ -109,6 +118,10 @@ public class Args {
 	public static final String STEP_LEAP = "-step-leap";
 	@Parameter(names = STEP_LEAP, validateWith = GreaterThanZeroIntegerValidator.class, descriptionKey = "step-leap-description")
 	public int steapLeap = 1;
+
+	public static final String TWO_STEPS_DELTA = "-two-steps-delta";
+	@Parameter(names = {TWO_STEPS_DELTA, "-two-step-delta", "-2-steps-delta", "-2-step-delta" }, descriptionKey = "two-steps-delta-description")
+	public boolean twoStepsDelta = false;
 
 	public static final String VERSION = "-version";
 	@Parameter(names = { VERSION, "-v" }, descriptionKey = "version-description")

@@ -34,10 +34,11 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
 				Number_Type value = getFromPosition(x, y);
-				if (value.compareTo(maxValue) > 0)
-					maxValue = value;
-				if (value.compareTo(minValue) < 0)
+				if (value.compareTo(minValue) < 0) {
 					minValue = value;
+				} else if (value.compareTo(maxValue) > 0) {
+					maxValue = value;
+				}
 			}
 		}
 		return new MinAndMax<Number_Type>(minValue, maxValue);
@@ -60,12 +61,13 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 				Number_Type value = getFromPosition(x, minY);
 				maxValue = value;
 				minValue = value;
-				for (int y = minY + 2; y <= maxY; y+=2) {
+				for (int y = minY + 2; y <= maxY; y += 2) {
 					value = getFromPosition(x, y);
-					if (value.compareTo(maxValue) > 0)
-						maxValue = value;
-					if (value.compareTo(minValue) < 0)
+					if (value.compareTo(minValue) < 0) {
 						minValue = value;
+					} else if (value.compareTo(maxValue) > 0) {
+						maxValue = value;
+					}
 				}
 			}
 		}
@@ -76,12 +78,13 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 			if (isPositionEven != isEven) {
 				minY++;
 			}
-			for (int y = minY; y <= maxY; y+=2) {
+			for (int y = minY; y <= maxY; y += 2) {
 				Number_Type value = getFromPosition(x, y);
-				if (value.compareTo(maxValue) > 0)
-					maxValue = value;
-				if (value.compareTo(minValue) < 0)
+				if (value.compareTo(minValue) < 0) {
 					minValue = value;
+				} else if (value.compareTo(maxValue) > 0) {
+					maxValue = value;
+				}
 			}
 		}
 		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
@@ -96,7 +99,7 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 		if (isXEven != isEven) {
 			x++;
 		}
-		for (; x <= maxX && maxValue == null; x+=2) {
+		for (; x <= maxX && maxValue == null; x += 2) {
 			int minY = getMinY(x);
 			int maxY = getMaxY(x);
 			if (minY <= maxY) {
@@ -105,22 +108,24 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 				minValue = value;
 				for (int y = minY + 1; y <= maxY; y++) {
 					value = getFromPosition(x, y);
-					if (value.compareTo(maxValue) > 0)
-						maxValue = value;
-					if (value.compareTo(minValue) < 0)
+					if (value.compareTo(minValue) < 0) {
 						minValue = value;
+					} else if (value.compareTo(maxValue) > 0) {
+						maxValue = value;
+					}
 				}
 			}
 		}
-		for (; x <= maxX; x+=2) {
+		for (; x <= maxX; x += 2) {
 			int minY = getMinY(x);
 			int maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
 				Number_Type value = getFromPosition(x, y);
-				if (value.compareTo(maxValue) > 0)
-					maxValue = value;
-				if (value.compareTo(minValue) < 0)
+				if (value.compareTo(minValue) < 0) {
 					minValue = value;
+				} else if (value.compareTo(maxValue) > 0) {
+					maxValue = value;
+				}
 			}
 		}
 		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);
@@ -142,12 +147,13 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 				Number_Type value = getFromPosition(x, minY);
 				maxValue = value;
 				minValue = value;
-				for (int y = minY + 2; y <= maxY; y+=2) {
+				for (int y = minY + 2; y <= maxY; y += 2) {
 					value = getFromPosition(x, y);
-					if (value.compareTo(maxValue) > 0)
-						maxValue = value;
-					if (value.compareTo(minValue) < 0)
+					if (value.compareTo(minValue) < 0) {
 						minValue = value;
+					} else if (value.compareTo(maxValue) > 0) {
+						maxValue = value;
+					}
 				}
 			}
 		}
@@ -158,12 +164,13 @@ public interface NumericModel2D<Number_Type extends FieldElement<Number_Type> & 
 			if (isYEven != isEven) {
 				minY++;
 			}
-			for (int y = minY; y <= maxY; y+=2) {
+			for (int y = minY; y <= maxY; y += 2) {
 				Number_Type value = getFromPosition(x, y);
-				if (value.compareTo(maxValue) > 0)
-					maxValue = value;
-				if (value.compareTo(minValue) < 0)
+				if (value.compareTo(minValue) < 0) {
 					minValue = value;
+				} else if (value.compareTo(maxValue) > 0) {
+					maxValue = value;
+				}
 			}
 		}
 		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);

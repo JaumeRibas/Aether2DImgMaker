@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model5d.IsotropicHypercubicModel5DA;
-import cellularautomata.model5d.SymmetricLongModel5D;
+import cellularautomata.model5d.IsotropicHypercubicLongArrayModel5DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D with a single source initial configuration
@@ -30,13 +29,10 @@ import cellularautomata.model5d.SymmetricLongModel5D;
  * @author Jaume
  *
  */
-public class LongAether5D implements SymmetricLongModel5D, IsotropicHypercubicModel5DA {
+public class LongAether5D extends IsotropicHypercubicLongArrayModel5DA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
-
-	/** A 5D array representing the grid */
-	private long[][][][][] grid;
 
 	private final long initialValue;
 	private long step;
@@ -10571,51 +10567,6 @@ public class LongAether5D implements SymmetricLongModel5D, IsotropicHypercubicMo
 		}
 		newVSlices[1][w][x][y][z] += value;
 		return toppled;
-	}
-
-	@Override
-	public long getFromPosition(int v, int w, int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (w < 0) w = -w;
-		if (v < 0) v = -v;
-		//sort coordinates
-		//TODO faster sorting?
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-			if (x > w) {
-				sorted = false;
-				int swp = x;
-				x = w;
-				w = swp;
-			}
-			if (w > v) {
-				sorted = false;
-				int swp = w;
-				w = v;
-				v = swp;
-			}
-		} while (!sorted);
-		return grid[v][w][x][y][z];
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {	
-		return grid[v][w][x][y][z];
 	}
 
 	@Override

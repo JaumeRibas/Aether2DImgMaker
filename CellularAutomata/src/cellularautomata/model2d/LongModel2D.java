@@ -21,6 +21,7 @@ import java.util.Iterator;
 import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 import cellularautomata.model.LongModel;
+import cellularautomata.numbers.BigInt;
 
 public interface LongModel2D extends Model2D, LongModel {
 	
@@ -70,7 +71,7 @@ public interface LongModel2D extends Model2D, LongModel {
 			if (isPositionEven != isEven) {
 				minY++;
 			}
-			for (int y = minY; y <= maxY; y+=2) {
+			for (int y = minY; y <= maxY; y += 2) {
 				anyPositionMatches = true;
 				long value = getFromPosition(x, y);
 				if (value > maxValue)
@@ -91,7 +92,7 @@ public interface LongModel2D extends Model2D, LongModel {
 		if (isXEven != isEven) {
 			x++;
 		}
-		for (; x <= maxX; x+=2) {
+		for (; x <= maxX; x += 2) {
 			int minY = getMinY(x);
 			int maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
@@ -117,7 +118,7 @@ public interface LongModel2D extends Model2D, LongModel {
 			if (isYEven != isEven) {
 				minY++;
 			}
-			for (int y = minY; y <= maxY; y+=2) {
+			for (int y = minY; y <= maxY; y += 2) {
 				anyPositionMatches = true;
 				long value = getFromPosition(x, y);
 				if (value > maxValue)
@@ -130,14 +131,14 @@ public interface LongModel2D extends Model2D, LongModel {
 	}
 	
 	@Override
-	default long getTotal() throws Exception {
-		long total = 0;
+	default BigInt getTotal() throws Exception {
+		BigInt total = BigInt.ZERO;
 		int maxX = getMaxX(), minX = getMinX(), maxY, minY;
 		for (int x = minX; x <= maxX; x++) {
 			minY = getMinY(x);
 			maxY = getMaxY(x);
 			for (int y = minY; y <= maxY; y++) {
-				total += getFromPosition(x, y);
+				total = total.add(BigInt.valueOf(getFromPosition(x, y)));
 			}	
 		}
 		return total;

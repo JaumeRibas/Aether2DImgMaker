@@ -19,7 +19,7 @@ package cellularautomata.model;
 import cellularautomata.Coordinates;
 
 /**
- * An hyperrectangular region of dimension n, whose edges are parallel to the axes.
+ * A hyperrectangular region of dimension n, whose edges are parallel to the axes.
  * 
  * @author Jaume
  *

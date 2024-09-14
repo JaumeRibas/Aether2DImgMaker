@@ -23,8 +23,7 @@ import java.util.Arrays;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricNumericModel2D;
+import cellularautomata.model2d.IsotropicSquareNumericArrayModelA;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -33,15 +32,12 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, IsotropicSquareModelA {
+public class BigIntAether2D extends IsotropicSquareNumericArrayModelA<BigInt> {
 	
 	private static final BigInt TWO = BigInt.valueOf(2);
 	private static final BigInt THREE = BigInt.valueOf(3);
 	private static final BigInt FOUR = BigInt.valueOf(4);
 	private static final BigInt FIVE = BigInt.valueOf(5);
-
-	/** A 2D array representing the grid */
-	private BigInt[][] grid;
 	
 	private final BigInt initialValue;
 	private long step;	
@@ -1283,24 +1279,6 @@ public class BigIntAether2D implements SymmetricNumericModel2D<BigInt>, Isotropi
 		}
 		newXSlices[1][y] = newXSlices[1][y].add(value);
 		return toppled;
-	}
-	
-	@Override
-	public BigInt getFromPosition(int x, int y) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		BigInt value = BigInt.ZERO;
-		if (y > x) {
-			value = grid[y][x];
-		} else {
-			value = grid[x][y];
-		}
-		return value;
-	}
-	
-	@Override
-	public BigInt getFromAsymmetricPosition(int x, int y) {	
-		return grid[x][y];
 	}
 
 	@Override

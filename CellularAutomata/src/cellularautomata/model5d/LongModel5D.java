@@ -22,6 +22,7 @@ import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 import cellularautomata.model.LongModel;
 import cellularautomata.model4d.LongModel4D;
+import cellularautomata.numbers.BigInt;
 
 public interface LongModel5D extends Model5D, LongModel {
 	
@@ -91,11 +92,12 @@ public interface LongModel5D extends Model5D, LongModel {
 					for (int y = minY; y <= maxY; y++) {
 						minZ = getMinZ(v, w, x, y);
 						maxZ = getMaxZ(v, w, x, y);
-						boolean isPositionEven = (minZ+w+x+y)%2 == 0;
+						boolean isPositionEven = (minZ+v+w+x+y)%2 == 0;
 						if (isPositionEven != isEven) {
 							minZ++;
 						}
-						for (int z = minZ; z <= maxZ; z+=2) {
+						for (int z = minZ; z <= maxZ; z += 2) {
+							anyPositionMatches = true;
 							long value = getFromPosition(v, w, x, y, z);
 							if (value > maxValue)
 								maxValue = value;
@@ -110,8 +112,8 @@ public interface LongModel5D extends Model5D, LongModel {
 	}
 	
 	@Override
-	default long getTotal() throws Exception {
-		long total = 0;
+	default BigInt getTotal() throws Exception {
+		BigInt total = BigInt.ZERO;
 		int maxV = getMaxV(), minV = getMinV(), maxW, minW, maxX, minX, maxY, minY, maxZ, minZ;
 		for (int v = minV; v <= maxV; v++) {
 			minW = getMinWAtV(v);
@@ -126,7 +128,7 @@ public interface LongModel5D extends Model5D, LongModel {
 						minZ = getMinZ(v, w, x, y);
 						maxZ = getMaxZ(v, w, x, y);
 						for (int z = minZ; z <= maxZ; z++) {
-							total += getFromPosition(v, w, x, y, z);
+							total = total.add(BigInt.valueOf(getFromPosition(v, w, x, y, z)));
 						}
 					}
 				}

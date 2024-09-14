@@ -25,38 +25,38 @@ import caimgmaker.args.GridParameterValue;
 import caimgmaker.args.ImageGenerationMode;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
 import cellularautomata.automata.aether.BigIntAether2D;
-import cellularautomata.automata.aether.BigIntAether2DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.BigIntAetherTopplingAlternationCompliance2D;
 import cellularautomata.automata.aether.BigIntAether3D;
-import cellularautomata.automata.aether.BigIntAether3DCubicGrid;
-import cellularautomata.automata.aether.BigIntAether3DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.BigIntAetherCubicGrid3D;
+import cellularautomata.automata.aether.BigIntAetherTopplingAlternationCompliance3D;
 import cellularautomata.automata.aether.BigIntAether4D;
-import cellularautomata.automata.aether.BigIntAether4DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.BigIntAetherTopplingAlternationCompliance4D;
 import cellularautomata.automata.aether.FileBackedLongAether1D;
 import cellularautomata.automata.aether.FileBackedLongAether2D;
 import cellularautomata.automata.aether.FileBackedLongAether3D;
 import cellularautomata.automata.aether.FileBackedLongAether4D;
 import cellularautomata.automata.aether.FileBackedLongAether5D;
 import cellularautomata.automata.aether.IntAether2D;
-import cellularautomata.automata.aether.IntAether2DRandomConfiguration;
-import cellularautomata.automata.aether.IntAether2DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.IntAetherRandomConfiguration2D;
+import cellularautomata.automata.aether.IntAetherTopplingAlternationCompliance2D;
 import cellularautomata.automata.aether.IntAether3D;
-import cellularautomata.automata.aether.IntAether3DRandomConfiguration;
-import cellularautomata.automata.aether.IntAether3DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.IntAetherRandomConfiguration3D;
+import cellularautomata.automata.aether.IntAetherTopplingAlternationCompliance3D;
 import cellularautomata.automata.aether.IntAether4D;
-import cellularautomata.automata.aether.IntAether4DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.IntAetherTopplingAlternationCompliance4D;
 import cellularautomata.automata.aether.IntAether5D;
-import cellularautomata.automata.aether.IntAether5DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.IntAetherTopplingAlternationCompliance5D;
 import cellularautomata.automata.aether.LongAether1D;
-import cellularautomata.automata.aether.LongAether1DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.LongAetherTopplingAlternationCompliance1D;
 import cellularautomata.automata.aether.LongAether2D;
-import cellularautomata.automata.aether.LongAether2DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.LongAetherTopplingAlternationCompliance2D;
 import cellularautomata.automata.aether.LongAether3D;
-import cellularautomata.automata.aether.LongAether3DCubicGrid;
-import cellularautomata.automata.aether.LongAether3DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.LongAetherCubicGrid3D;
+import cellularautomata.automata.aether.LongAetherTopplingAlternationCompliance3D;
 import cellularautomata.automata.aether.LongAether4D;
-import cellularautomata.automata.aether.LongAether4DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.LongAetherTopplingAlternationCompliance4D;
 import cellularautomata.automata.aether.LongAether5D;
-import cellularautomata.automata.aether.LongAether5DTopplingAlternationCompliance;
+import cellularautomata.automata.aether.LongAetherTopplingAlternationCompliance5D;
 import cellularautomata.model.Model;
 import cellularautomata.numbers.BigInt;
 
@@ -107,13 +107,13 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
+							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
-							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether1DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new LongAether1DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
+							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance1D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance1D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new LongAetherTopplingAlternationCompliance1D(args.initialConfiguration.singleSource.longValue());
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAether1DTopplingAlternationCompliance.MIN_INITIAL_VALUE, LongAether1DTopplingAlternationCompliance.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAetherTopplingAlternationCompliance1D.MIN_INITIAL_VALUE, LongAetherTopplingAlternationCompliance1D.MAX_INITIAL_VALUE);
 							}
 						}
 					} else {
@@ -143,7 +143,7 @@ public final class AetherFactory {
 					model = new FileBackedLongAether1D(args.backupToRestorePath, args.path);
 				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 					try {
-						model = new LongAether1DTopplingAlternationCompliance(args.backupToRestorePath);							
+						model = new LongAetherTopplingAlternationCompliance1D(args.backupToRestorePath);							
 					} catch (Exception ex) {
 						successfullyRestored = false;				
 					}
@@ -171,16 +171,16 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
+							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
-							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether2DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new IntAether2DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
-							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether2DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new LongAether2DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
+							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance2D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance2D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new IntAetherTopplingAlternationCompliance2D(args.initialConfiguration.singleSource.intValue());
+							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance2D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance2D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new LongAetherTopplingAlternationCompliance2D(args.initialConfiguration.singleSource.longValue());
 							} else {
-								model = new BigIntAether2DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
+								model = new BigIntAetherTopplingAlternationCompliance2D(args.initialConfiguration.singleSource);
 							}
 						}
 					} else {
@@ -205,13 +205,13 @@ public final class AetherFactory {
 					}
 				} else {
 					if (args.memorySafe) {
-						System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
+						System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 					} else {
 						if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 								&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
 								&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 								&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-							model = new IntAether2DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
+							model = new IntAetherRandomConfiguration2D(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
 						} else {
 							System.out.printf(messages.getString("min-max-out-of-range-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
 						}
@@ -223,13 +223,13 @@ public final class AetherFactory {
 					model = new FileBackedLongAether2D(args.backupToRestorePath, args.path);
 				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 					try {
-						model = new IntAether2DTopplingAlternationCompliance(args.backupToRestorePath);							
+						model = new IntAetherTopplingAlternationCompliance2D(args.backupToRestorePath);							
 					} catch (Exception ex1) {
 						try {
-							model = new LongAether2DTopplingAlternationCompliance(args.backupToRestorePath);							
+							model = new LongAetherTopplingAlternationCompliance2D(args.backupToRestorePath);							
 						} catch (Exception ex2) {
 							try {
-								model = new BigIntAether2DTopplingAlternationCompliance(args.backupToRestorePath);							
+								model = new BigIntAetherTopplingAlternationCompliance2D(args.backupToRestorePath);							
 							} catch (Exception ex3) {
 								successfullyRestored = false;
 							}						
@@ -246,7 +246,7 @@ public final class AetherFactory {
 								model = new BigIntAether2D(args.backupToRestorePath);							
 							} catch (Exception ex3) {
 								try {
-									model = new IntAether2DRandomConfiguration(args.backupToRestorePath);			
+									model = new IntAetherRandomConfiguration2D(args.backupToRestorePath);			
 								} catch (Exception ex4) {
 									successfullyRestored = false;					
 								}
@@ -271,16 +271,16 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
+							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
-							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether3DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new IntAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
-							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new LongAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
+							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance3D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance3D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new IntAetherTopplingAlternationCompliance3D(args.initialConfiguration.singleSource.intValue());
+							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance3D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance3D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new LongAetherTopplingAlternationCompliance3D(args.initialConfiguration.singleSource.longValue());
 							} else {
-								model = new BigIntAether3DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
+								model = new BigIntAetherTopplingAlternationCompliance3D(args.initialConfiguration.singleSource);
 							}
 						}
 					} else {
@@ -308,7 +308,7 @@ public final class AetherFactory {
 							&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
 							&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-						model = new IntAether3DRandomConfiguration(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
+						model = new IntAetherRandomConfiguration3D(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
 					} else {
 						System.out.printf(messages.getString("min-max-out-of-range-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
 					}
@@ -319,13 +319,13 @@ public final class AetherFactory {
 					model = new FileBackedLongAether3D(args.backupToRestorePath, args.path);
 				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 					try {
-						model = new IntAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
+						model = new IntAetherTopplingAlternationCompliance3D(args.backupToRestorePath);							
 					} catch (Exception ex1) {
 						try {
-							model = new LongAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
+							model = new LongAetherTopplingAlternationCompliance3D(args.backupToRestorePath);							
 						} catch (Exception ex2) {
 							try {
-								model = new BigIntAether3DTopplingAlternationCompliance(args.backupToRestorePath);							
+								model = new BigIntAetherTopplingAlternationCompliance3D(args.backupToRestorePath);							
 							} catch (Exception ex3) {
 								successfullyRestored = false;
 							}						
@@ -342,7 +342,7 @@ public final class AetherFactory {
 								model = new BigIntAether3D(args.backupToRestorePath);							
 							} catch (Exception ex3) {
 								try {
-									model = new IntAether3DRandomConfiguration(args.backupToRestorePath);			
+									model = new IntAetherRandomConfiguration3D(args.backupToRestorePath);			
 								} catch (Exception ex4) {
 									successfullyRestored = false;					
 								}
@@ -357,20 +357,20 @@ public final class AetherFactory {
 		} else {
 			if (args.backupToRestorePath == null) {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) { 
-					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DCubicGrid.MAX_INITIAL_VALUE)) <= 0
-							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether3DCubicGrid.MIN_INITIAL_VALUE)) >= 0) {
-						model = new LongAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource.longValue());
+					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherCubicGrid3D.MAX_INITIAL_VALUE)) <= 0
+							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherCubicGrid3D.MIN_INITIAL_VALUE)) >= 0) {
+						model = new LongAetherCubicGrid3D(args.grid.side, args.initialConfiguration.singleSource.longValue());
 					} else {
-						model = new BigIntAether3DCubicGrid(args.grid.side, args.initialConfiguration.singleSource);
+						model = new BigIntAetherCubicGrid3D(args.grid.side, args.initialConfiguration.singleSource);
 					}
 				} else {
 					System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 				}
 			} else {
 				try {
-					model = new LongAether3DCubicGrid(args.backupToRestorePath);							
+					model = new LongAetherCubicGrid3D(args.backupToRestorePath);							
 				} catch (Exception ex1) {
-					model = new BigIntAether3DCubicGrid(args.backupToRestorePath);			
+					model = new BigIntAetherCubicGrid3D(args.backupToRestorePath);			
 				}
 			}
 		}
@@ -384,16 +384,16 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
+							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
-							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether4DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new IntAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
-							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether4DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new LongAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
+							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance4D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance4D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new IntAetherTopplingAlternationCompliance4D(args.initialConfiguration.singleSource.intValue());
+							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance4D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance4D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new LongAetherTopplingAlternationCompliance4D(args.initialConfiguration.singleSource.longValue());
 							} else {
-								model = new BigIntAether4DTopplingAlternationCompliance(args.initialConfiguration.singleSource);
+								model = new BigIntAetherTopplingAlternationCompliance4D(args.initialConfiguration.singleSource);
 							}
 						}
 					} else {
@@ -425,13 +425,13 @@ public final class AetherFactory {
 					model = new FileBackedLongAether4D(args.backupToRestorePath, args.path);
 				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 					try {
-						model = new IntAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
+						model = new IntAetherTopplingAlternationCompliance4D(args.backupToRestorePath);							
 					} catch (Exception ex1) {
 						try {
-							model = new LongAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
+							model = new LongAetherTopplingAlternationCompliance4D(args.backupToRestorePath);							
 						} catch (Exception ex2) {
 							try {
-								model = new BigIntAether4DTopplingAlternationCompliance(args.backupToRestorePath);							
+								model = new BigIntAetherTopplingAlternationCompliance4D(args.backupToRestorePath);							
 							} catch (Exception ex3) {
 								successfullyRestored = false;
 							}						
@@ -469,16 +469,16 @@ public final class AetherFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 						if (args.memorySafe) {
-							System.out.printf(messages.getString("memory-safe-not-supported-with-these-params-format"), Args.MEMORY_SAFE);
+							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
-							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAether5DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new IntAether5DTopplingAlternationCompliance(args.initialConfiguration.singleSource.intValue());
-							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5DTopplingAlternationCompliance.MAX_INITIAL_VALUE)) <= 0
-									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAether5DTopplingAlternationCompliance.MIN_INITIAL_VALUE)) >= 0) {
-								model = new LongAether5DTopplingAlternationCompliance(args.initialConfiguration.singleSource.longValue());
+							if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance5D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntAetherTopplingAlternationCompliance5D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new IntAetherTopplingAlternationCompliance5D(args.initialConfiguration.singleSource.intValue());
+							} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance5D.MAX_INITIAL_VALUE)) <= 0
+									&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(LongAetherTopplingAlternationCompliance5D.MIN_INITIAL_VALUE)) >= 0) {
+								model = new LongAetherTopplingAlternationCompliance5D(args.initialConfiguration.singleSource.longValue());
 							} else {
-								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAether5DTopplingAlternationCompliance.MIN_INITIAL_VALUE, LongAether5DTopplingAlternationCompliance.MAX_INITIAL_VALUE);
+								System.out.printf(messages.getString("single-source-out-of-range-format"), LongAetherTopplingAlternationCompliance5D.MIN_INITIAL_VALUE, LongAetherTopplingAlternationCompliance5D.MAX_INITIAL_VALUE);
 							}
 						}
 					} else {
@@ -510,10 +510,10 @@ public final class AetherFactory {
 					model = new FileBackedLongAether5D(args.backupToRestorePath, args.path);
 				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
 					try {
-						model = new IntAether5DTopplingAlternationCompliance(args.backupToRestorePath);							
+						model = new IntAetherTopplingAlternationCompliance5D(args.backupToRestorePath);							
 					} catch (Exception ex1) {
 						try {
-							model = new LongAether5DTopplingAlternationCompliance(args.backupToRestorePath);							
+							model = new LongAetherTopplingAlternationCompliance5D(args.backupToRestorePath);							
 						} catch (Exception ex2) {
 							successfullyRestored = false;			
 						}						

@@ -21,6 +21,7 @@ import java.util.Iterator;
 import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 import cellularautomata.model.LongModel;
+import cellularautomata.numbers.BigInt;
 
 public interface LongModel1D extends Model1D, LongModel {
 	
@@ -44,12 +45,13 @@ public interface LongModel1D extends Model1D, LongModel {
 	default long[] getMinAndMax() throws Exception {
 		int maxX = getMaxX(), minX = getMinX();
 		long maxValue = getFromPosition(minX), minValue = maxValue;
-		for (int x = minX; x <= maxX; x++) {
+		for (int x = minX + 1; x <= maxX; x++) {
 			long value = getFromPosition(x);
-			if (value > maxValue)
+			if (value > maxValue) {
 				maxValue = value;
-			if (value < minValue)
+			} else if (value < minValue) {
 				minValue = value;
+			}
 		}
 		return new long[]{ minValue, maxValue };
 	}
@@ -63,23 +65,25 @@ public interface LongModel1D extends Model1D, LongModel {
 		if (isPositionEven != isEven) {
 			minX++;
 		}
-		for (int x = minX; x <= maxX; x+=2) {
+		for (int x = minX; x <= maxX; x += 2) {
 			anyPositionMatches = true;
 			long value = getFromPosition(x);
-			if (value > maxValue)
+			if (value > maxValue) {
 				maxValue = value;
-			if (value < minValue)
+			}
+			if (value < minValue) {
 				minValue = value;
+			}
 		}
 		return anyPositionMatches? new long[]{ minValue, maxValue } : null;
 	}
 	
 	@Override
-	default long getTotal() throws Exception {
-		long total = 0;
+	default BigInt getTotal() throws Exception {
+		BigInt total = BigInt.ZERO;
 		int maxX = getMaxX(), minX = getMinX();
 		for (int x = minX; x <= maxX; x++) {
-			total += getFromPosition(x);
+			total = total.add(BigInt.valueOf(getFromPosition(x)));
 		}
 		return total;
 	}

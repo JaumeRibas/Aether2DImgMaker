@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model5d.IsotropicHypercubicModel5DA;
-import cellularautomata.model5d.SymmetricIntModel5D;
+import cellularautomata.model5d.IsotropicHypercubicIntArrayModel5DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D with a single source initial configuration
@@ -30,13 +29,10 @@ import cellularautomata.model5d.SymmetricIntModel5D;
  * @author Jaume
  *
  */
-public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicModel5DA {
+public class IntAether5D extends IsotropicHypercubicIntArrayModel5DA {
 
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -477218589;
-
-	/** A 5D array representing the grid */
-	private int[][][][][] grid;
 
 	private final int initialValue;
 	private long step;
@@ -10571,51 +10567,6 @@ public class IntAether5D implements SymmetricIntModel5D, IsotropicHypercubicMode
 		}
 		newVSlices[1][w][x][y][z] += value;
 		return toppled;
-	}
-
-	@Override
-	public int getFromPosition(int v, int w, int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (w < 0) w = -w;
-		if (v < 0) v = -v;
-		//sort coordinates
-		//TODO faster sorting?
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-			if (x > w) {
-				sorted = false;
-				int swp = x;
-				x = w;
-				w = swp;
-			}
-			if (w > v) {
-				sorted = false;
-				int swp = w;
-				w = v;
-				v = swp;
-			}
-		} while (!sorted);
-		return grid[v][w][x][y][z];
-	}
-
-	@Override
-	public int getFromAsymmetricPosition(int v, int w, int x, int y, int z) {	
-		return grid[v][w][x][y][z];
 	}
 
 	@Override

@@ -1322,14 +1322,336 @@ public final class Utils {
 		return false;
 	}
 	
-	public static boolean isHyperrectangular(Object[][] array) {
-		boolean result = false;
+	public static boolean isHyperrectangular(int[][] array) {
+		boolean result = true;
 		if (array.length != 0) {
 			int sideToCompare = array[0].length;
-			result = true;
 			for (int i = array.length - 1; i != 0 && result; i--) {
 				if (array[i].length != sideToCompare) {
 					result = false;
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(long[][] array) {
+		boolean result = true;
+		if (array.length != 0) {
+			int sideToCompare = array[0].length;
+			for (int i = array.length - 1; i != 0 && result; i--) {
+				if (array[i].length != sideToCompare) {
+					result = false;
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(Object[][] array) {
+		boolean result = true;
+		if (array.length != 0) {
+			int sideToCompare = array[0].length;
+			for (int i = array.length - 1; i != 0 && result; i--) {
+				if (array[i].length != sideToCompare) {
+					result = false;
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(int[][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				for (int i = array.length - 1; i != -1 && result; i--) {
+					int[][] subarray = array[i];
+					if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare) {
+						result = false;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(long[][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				for (int i = array.length - 1; i != -1 && result; i--) {
+					long[][] subarray = array[i];
+					if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare) {
+						result = false;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(Object[][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				for (int i = array.length - 1; i != -1 && result; i--) {
+					Object[][] subarray = array[i];
+					if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare) {
+						result = false;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(int[][][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				if (side2ToCompare == 0) {
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						int[][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != 0) {
+							result = false;
+						}
+					}
+				} else {
+					int side3ToCompare = array[0][0][0].length;
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						int[][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != side3ToCompare) {
+							result = false;
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(long[][][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				if (side2ToCompare == 0) {
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						long[][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != 0) {
+							result = false;
+						}
+					}
+				} else {
+					int side3ToCompare = array[0][0][0].length;
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						long[][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != side3ToCompare) {
+							result = false;
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(Object[][][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				if (side2ToCompare == 0) {
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						Object[][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != 0) {
+							result = false;
+						}
+					}
+				} else {
+					int side3ToCompare = array[0][0][0].length;
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						Object[][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != side3ToCompare) {
+							result = false;
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(int[][][][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				if (side2ToCompare == 0) {
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						int[][][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != 0) {
+							result = false;
+						}
+					}
+				} else {
+					int side3ToCompare = array[0][0][0].length;
+					if (side3ToCompare == 0) {
+						for (int i = array.length - 1; i != -1 && result; i--) {
+							int[][][][] subarray = array[i];
+							if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != 0) {
+								result = false;
+							}
+						}
+					} else {
+						int side4ToCompare = array[0][0][0][0].length;
+						for (int i = array.length - 1; i != -1 && result; i--) {
+							int[][][][] subarray = array[i];
+							if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != side3ToCompare || subarray[0][0][0].length != side4ToCompare) {
+								result = false;
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(long[][][][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				if (side2ToCompare == 0) {
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						long[][][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != 0) {
+							result = false;
+						}
+					}
+				} else {
+					int side3ToCompare = array[0][0][0].length;
+					if (side3ToCompare == 0) {
+						for (int i = array.length - 1; i != -1 && result; i--) {
+							long[][][][] subarray = array[i];
+							if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != 0) {
+								result = false;
+							}
+						}
+					} else {
+						int side4ToCompare = array[0][0][0][0].length;
+						for (int i = array.length - 1; i != -1 && result; i--) {
+							long[][][][] subarray = array[i];
+							if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != side3ToCompare || subarray[0][0][0].length != side4ToCompare) {
+								result = false;
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isHyperrectangular(Object[][][][][] array) {
+		boolean result = true;		
+		if (array.length != 0) {
+			int side1ToCompare = array[0].length;
+			if (side1ToCompare == 0) {
+				for (int i = array.length - 1; i != 0 && result; i--) {
+					if (array[i].length != 0) {
+						result = false;
+					}
+				}
+			} else {
+				int side2ToCompare = array[0][0].length;
+				if (side2ToCompare == 0) {
+					for (int i = array.length - 1; i != -1 && result; i--) {
+						Object[][][][] subarray = array[i];
+						if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != 0) {
+							result = false;
+						}
+					}
+				} else {
+					int side3ToCompare = array[0][0][0].length;
+					if (side3ToCompare == 0) {
+						for (int i = array.length - 1; i != -1 && result; i--) {
+							Object[][][][] subarray = array[i];
+							if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != 0) {
+								result = false;
+							}
+						}
+					} else {
+						int side4ToCompare = array[0][0][0][0].length;
+						for (int i = array.length - 1; i != -1 && result; i--) {
+							Object[][][][] subarray = array[i];
+							if (!isHyperrectangular(subarray) || subarray.length != side1ToCompare || subarray[0].length != side2ToCompare || subarray[0][0].length != side3ToCompare || subarray[0][0][0].length != side4ToCompare) {
+								result = false;
+							}
+						}
+					}
 				}
 			}
 		}

@@ -24,7 +24,7 @@ import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
 import caimgmaker.args.ImageGenerationMode;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
-import cellularautomata.automata.nearaether.IntNearAether2_3D;
+import cellularautomata.automata.nearaether.IntNearAetherTwo3D;
 import cellularautomata.model.Model;
 import cellularautomata.numbers.BigInt;
 
@@ -51,17 +51,17 @@ public final class NearAether2Factory {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether2_3D.MAX_INITIAL_VALUE)) <= 0
-										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAether2_3D.MIN_INITIAL_VALUE)) >= 0) {
-									model = new IntNearAether2_3D(args.initialConfiguration.singleSource.intValue());
+								if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAetherTwo3D.MAX_INITIAL_VALUE)) <= 0
+										&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(IntNearAetherTwo3D.MIN_INITIAL_VALUE)) >= 0) {
+									model = new IntNearAetherTwo3D(args.initialConfiguration.singleSource.intValue());
 								} else {
-									System.out.printf(messages.getString("single-source-out-of-range-format"), IntNearAether2_3D.MIN_INITIAL_VALUE, IntNearAether2_3D.MAX_INITIAL_VALUE);
+									System.out.printf(messages.getString("single-source-out-of-range-format"), IntNearAetherTwo3D.MIN_INITIAL_VALUE, IntNearAetherTwo3D.MAX_INITIAL_VALUE);
 								}
 							} else {
 								System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 							}
 						} else {
-							model = new IntNearAether2_3D(args.backupToRestorePath);
+							model = new IntNearAetherTwo3D(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(messages.getString("grid-not-supported-format"), args.model);

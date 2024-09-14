@@ -18,44 +18,34 @@ package cellularautomata.automata.sunflower;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricLongModel1D;
+import cellularautomata.model1d.IsotropicLongArrayModel1DA;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 1D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 1D with a single source initial configuration.
  * 
  * @author Jaume
  *
  */
-public class LongSunflower1D implements SymmetricLongModel1D, IsotropicModel1DA {
-
-	private long[] grid;
+public class LongSunflower1D extends IsotropicLongArrayModel1DA {
 	
 	private final long initialValue;
-	private final long backgroundValue;
 	private long step;
-
-	/** Whether or not the values reached the bounds of the array */
-	private boolean boundReached;
-
+	private int maxX;
 	private Boolean changed = null;
 	
 	/**
 	 * Creates an instance with the given initial value
 	 * 
 	 * @param initialValue the value at the origin at step 0
-	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public LongSunflower1D(long initialValue, long backgroundValue) {
+	public LongSunflower1D(long initialValue) {
 		this.initialValue = initialValue;
-		this.backgroundValue = backgroundValue;
-		grid = new long[3];
-		grid[0] = this.initialValue;
-		grid[1] = backgroundValue;
-		grid[2] = backgroundValue;
-		boundReached = false;
+		grid = new long[5];
+		grid[0] = initialValue;
+		maxX = 3;
 		step = 0;
 	}
 	
@@ -73,82 +63,67 @@ public class LongSunflower1D implements SymmetricLongModel1D, IsotropicModel1DA 
 		if (!SerializableModelData.Models.SUNFLOWER.equals(data.get(SerializableModelData.MODEL))) {
 			throw new IllegalArgumentException("The backup file contains a different model.");
 		}
+		String incompatibleBackupconfigErrorMessage = "The backup file's configuration is not compatible with this class.";
 		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
 				|| !(SerializableModelData.InitialConfigurationImplementationTypes.ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_LONG_PRIMITIVE_ARRAY.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)) 
 						|| SerializableModelData.InitialConfigurationImplementationTypes.LONG.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)))
 				|| !SerializableModelData.GridTypes.INFINITE_REGULAR.equals(data.get(SerializableModelData.GRID_TYPE))
 				|| !Integer.valueOf(1).equals(data.get(SerializableModelData.GRID_DIMENSION))
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_LONG_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
-				|| !SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
+				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
 				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
-			throw new IllegalArgumentException("The backup file's configuration is not compatible with this class.");
+			throw new IllegalArgumentException(incompatibleBackupconfigErrorMessage);
 		}
 		if (data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE).equals(SerializableModelData.InitialConfigurationImplementationTypes.LONG)) {
 			initialValue = (long) data.get(SerializableModelData.INITIAL_CONFIGURATION);
-			backgroundValue = 0;
 		} else {
 			long[] initialConfiguration = (long[]) data.get(SerializableModelData.INITIAL_CONFIGURATION);
+			if (initialConfiguration[1] != 0) {
+				throw new IllegalArgumentException(incompatibleBackupconfigErrorMessage);
+			}
 			initialValue = initialConfiguration[0];
-			backgroundValue = initialConfiguration[1];
 		}
 		grid = (long[]) data.get(SerializableModelData.GRID);
-		boundReached = (boolean) data.get(SerializableModelData.COORDINATE_BOUNDS);
+		maxX = (int) data.get(SerializableModelData.COORDINATE_BOUNDS);
 		step = (long) data.get(SerializableModelData.STEP);
 		changed = (Boolean) data.get(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP);
 	}
 	
 	@Override
 	public Boolean nextStep() {
-		long[] newGrid = null;
-		if (boundReached) {
-			boundReached = false;
-			newGrid = new long[grid.length + 1];
-			newGrid[grid.length] = backgroundValue;
-		} else {
-			newGrid = new long[grid.length];
-		}
-		int maxXMinusOne = newGrid.length - 2;
+		long[] newGrid = new long[maxX + 2];
 		boolean changed = false;
-		for (int x = 0; x < grid.length; x++) {
-			long value = grid[x];
-			if (value != 0) {
-				long left = getFromPosition(x - 1);
-				long right = getFromPosition(x + 1);
-				boolean isRightEqual = value == right, isLeftEqual = value == left;
-				//If the current cell is equal to its neighbors, the algorithm has no effect
-				if (!(isRightEqual && isLeftEqual)) {
-					//Divide its value by 3 (using integer division)
-					long share = value/3;
-					if (share != 0) {
-						//If any share is not zero, the state changes
-						changed = true;
-						//Add the share to the neighboring cells
-						//If the neighbor's value is equal to the current value, add the share to the current cell instead
-						//x+
-						if (isRightEqual)
-							newGrid[x] += share;
-						else
-							newGrid[x+1] += share;
-						//x-
-						if (isLeftEqual)
-							newGrid[x] += share;
-						else if (x > 0) {
-							long valueToAdd = share;
-							if (x == 1) {
-								valueToAdd += share;							
-							}
-							newGrid[x-1] += valueToAdd;
-						}
-						
-						if (x >= maxXMinusOne) {
-							boundReached = true;
-						}								
-					}
-					newGrid[x] += value - 2*share;
-				} else {
-					newGrid[x] += value;
-				}
-			}
+		//x = 0
+		long currentValue = grid[0];
+		long share = currentValue / 3;
+		if (share != 0) {
+			changed = true;
+			newGrid[0] += currentValue - 2*share;
+			newGrid[1] += share;
+		} else {
+			newGrid[0] += currentValue;
+		}
+		//x = 1
+		currentValue = grid[1];
+		share = currentValue / 3;
+		if (share != 0) {
+			changed = true;
+			newGrid[0] += 2*share;
+			newGrid[1] += currentValue - 2*share;
+			newGrid[2] += share;
+		} else {
+			newGrid[1] += currentValue;
+		}
+		//2 <= x < edge - 2
+		int edge = grid.length - 1;
+		int edgeMinusTwo = edge - 2;
+		if (toppleRangeBeyondX1(newGrid, 2, edgeMinusTwo)) {
+			changed = true;
+		}
+		//edge - 2 <= x < edge
+		if (toppleRangeBeyondX1(newGrid, edgeMinusTwo, edge)) {
+			changed = true;
+			maxX++;
 		}
 		grid = newGrid;
 		step++;
@@ -161,29 +136,27 @@ public class LongSunflower1D implements SymmetricLongModel1D, IsotropicModel1DA 
 		return changed;
 	}
 	
-	@Override
-	public long getFromPosition(int x) {	
-		if (x < 0) x = -x;
-		if (x < grid.length) {
-			return grid[x];
-		} else {
-			return backgroundValue;
+	private boolean toppleRangeBeyondX1(long[] newGrid, int minX, int maxX) {
+		boolean anyToppled = false;
+		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
+		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
+			long currentValue = grid[x];
+			long share = currentValue / 3;
+			if (share != 0) {
+				anyToppled = true;
+				newGrid[xMinusOne] += share;
+				newGrid[x] += currentValue - 2*share;
+				newGrid[xPlusOne] += share;
+			} else {
+				newGrid[x] += currentValue;
+			}
 		}
-	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int x) {	
-		return grid[x];
+		return anyToppled;
 	}
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return grid.length - 1;
-	}
-	
-	@Override
-	public long getStep() {
-		return step;
+		return maxX;
 	}
 	
 	/**
@@ -194,9 +167,10 @@ public class LongSunflower1D implements SymmetricLongModel1D, IsotropicModel1DA 
 	public long getInitialValue() {
 		return initialValue;
 	}
-	
-	public long getBackgroundValue() {
-		return backgroundValue;
+
+	@Override
+	public long getStep() {
+		return step;
 	}
 
 	@Override
@@ -206,23 +180,22 @@ public class LongSunflower1D implements SymmetricLongModel1D, IsotropicModel1DA 
 	
 	@Override
 	public String getSubfolderPath() {
-		return getName() + "/1D/" + initialValue + "/" + backgroundValue;
+		return getName() + "/1D/" + initialValue + "/0";
 	}
 
 	@Override
 	public void backUp(String backupPath, String backupName) throws FileNotFoundException, IOException {
 		SerializableModelData data = new SerializableModelData();
-		long[] initialConfiguration = new long[] { initialValue, backgroundValue };
 		data.put(SerializableModelData.MODEL, SerializableModelData.Models.SUNFLOWER);
-		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialConfiguration);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION, initialValue);
 		data.put(SerializableModelData.INITIAL_CONFIGURATION_TYPE, SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN);
-		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_LONG_PRIMITIVE_ARRAY);
+		data.put(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE, SerializableModelData.InitialConfigurationImplementationTypes.LONG);
 		data.put(SerializableModelData.GRID, grid);
 		data.put(SerializableModelData.GRID_TYPE, SerializableModelData.GridTypes.INFINITE_REGULAR);
 		data.put(SerializableModelData.GRID_DIMENSION, 1);
 		data.put(SerializableModelData.GRID_IMPLEMENTATION_TYPE, SerializableModelData.GridImplementationTypes.ANYSOTROPIC_LONG_PRIMITIVE_ARRAY_1);
-		data.put(SerializableModelData.COORDINATE_BOUNDS, boundReached);
-		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.BOUNDS_REACHED_BOOLEAN);
+		data.put(SerializableModelData.COORDINATE_BOUNDS, maxX);
+		data.put(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE, SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER);
 		data.put(SerializableModelData.STEP, step);
 		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
 		Utils.serializeToFile(data, backupPath, backupName);

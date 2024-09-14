@@ -29,12 +29,13 @@ public interface NumericModel1D<Number_Type extends FieldElement<Number_Type> & 
 		int maxX = getMaxX(), minX = getMinX();
 		Number_Type minValue = getFromPosition(minX);
 		Number_Type maxValue = minValue;
-		for (int x = minX; x <= maxX; x++) {
+		for (int x = minX + 1; x <= maxX; x++) {
 			Number_Type value = getFromPosition(x);
-			if (value.compareTo(minValue) < 0)
+			if (value.compareTo(minValue) < 0) {
 				minValue = value;
-			if (value.compareTo(maxValue) > 0)
+			} else if (value.compareTo(maxValue) > 0) {
 				maxValue = value;
+			}
 		}
 		return new MinAndMax<Number_Type>(minValue, maxValue);
 	}
@@ -52,12 +53,13 @@ public interface NumericModel1D<Number_Type extends FieldElement<Number_Type> & 
 			Number_Type value = getFromPosition(minX);
 			minValue = value;
 			maxValue = value;
-			for (int x = minX + 2; x <= maxX; x+=2) {
+			for (int x = minX + 2; x <= maxX; x += 2) {
 				value = getFromPosition(x);
-				if (value.compareTo(minValue) < 0)
+				if (value.compareTo(minValue) < 0) {
 					minValue = value;
-				if (value.compareTo(maxValue) > 0)
+				} else if (value.compareTo(maxValue) > 0) {
 					maxValue = value;
+				}
 			}
 		}
 		return minValue == null? null : new MinAndMax<Number_Type>(minValue, maxValue);

@@ -21,8 +21,7 @@ import java.io.IOException;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricNumericModel3D;
+import cellularautomata.model3d.IsotropicCubicNumericArrayModelA;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -31,16 +30,13 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, IsotropicCubicModelA {
+public class BigIntAether3D extends IsotropicCubicNumericArrayModelA<BigInt> {
 	
 	private static final BigInt TWO = BigInt.valueOf(2);
 	private static final BigInt THREE = BigInt.valueOf(3);
 	private static final BigInt FOUR = BigInt.valueOf(4);
 	private static final BigInt SIX = BigInt.valueOf(6);
 	private static final BigInt SEVEN = BigInt.valueOf(7);
-
-	/** A 3D array representing the grid */
-	private BigInt[][][] grid;
 	
 	private final BigInt initialValue;
 	private long step;
@@ -2052,41 +2048,6 @@ public class BigIntAether3D implements SymmetricNumericModel3D<BigInt>, Isotropi
 		}
 		newXSlices[1][y][z] = newXSlices[1][y][z].add(value);
 		return toppled;
-	}
-	
-	@Override
-	public BigInt getFromPosition(int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (x >= y) {
-			if (y >= z) {
-				//x >= y >= z
-				return grid[x][y][z];
-			} else if (x >= z) { 
-				//x >= z > y
-				return grid[x][z][y];
-			} else {
-				//z > x >= y
-				return grid[z][x][y];
-			}
-		} else if (y >= z) {
-			if (x >= z) {
-				//y > x >= z
-				return grid[y][x][z];
-			} else {
-				//y >= z > x
-				return grid[y][z][x];
-			}
-		} else {
-			// z > y > x
-			return grid[z][y][x];
-		}
-	}
-	
-	@Override
-	public BigInt getFromAsymmetricPosition(int x, int y, int z) {	
-		return grid[x][y][z];
 	}
 
 	@Override

@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model4d.IsotropicHypercubicModel4DA;
-import cellularautomata.model4d.SymmetricLongModel4D;
+import cellularautomata.model4d.IsotropicHypercubicLongArrayModel4DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 4D with a single source initial configuration
@@ -30,10 +29,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class LongSunflower4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {
-
-	/** A 4D array representing the grid */
-	private long[][][][] grid;
+public class LongSunflower4D extends IsotropicHypercubicLongArrayModel4DA {
 	
 	private final long initialValue;
 	private long step;
@@ -261,43 +257,6 @@ public class LongSunflower4D implements SymmetricLongModel4D, IsotropicHypercubi
 			}
 			grid[w][x][y][z-1] += valueToAdd;
 		}
-	}
-	
-	@Override
-	public long getFromPosition(int w, int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (w < 0) w = -w;
-		//sort coordinates
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-			if (x > w) {
-				sorted = false;
-				int swp = x;
-				x = w;
-				w = swp;
-			}
-		} while (!sorted);
-		return grid[w][x][y][z];
-	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z) {
-		return grid[w][x][y][z];
 	}
 	
 	@Override

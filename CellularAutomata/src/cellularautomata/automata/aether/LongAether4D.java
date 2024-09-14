@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model4d.IsotropicHypercubicModel4DA;
-import cellularautomata.model4d.SymmetricLongModel4D;
+import cellularautomata.model4d.IsotropicHypercubicLongArrayModel4DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -30,13 +29,10 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {
+public class LongAether4D extends IsotropicHypercubicLongArrayModel4DA {
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
-
-	/** A 4D array representing the grid */
-	private long[][][][] grid;
 
 	private final long initialValue;
 	private long step;
@@ -4133,44 +4129,6 @@ public class LongAether4D implements SymmetricLongModel4D, IsotropicHypercubicMo
 		}
 		newWSlices[1][x][y][z] += value;
 		return toppled;
-	}
-
-	@Override
-	public long getFromPosition(int w, int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (w < 0) w = -w;
-		//sort coordinates
-		//TODO faster sorting?
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-			if (x > w) {
-				sorted = false;
-				int swp = x;
-				x = w;
-				w = swp;
-			}
-		} while (!sorted);
-		return grid[w][x][y][z];
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z) {	
-		return grid[w][x][y][z];
 	}
 
 	@Override

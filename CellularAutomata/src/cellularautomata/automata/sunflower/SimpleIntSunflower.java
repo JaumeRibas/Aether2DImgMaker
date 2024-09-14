@@ -41,7 +41,7 @@ public class SimpleIntSunflower implements SymmetricIntModel, IsotropicHypercubi
 	private final int initialValue;
 	private final int backgroundValue;
 	
-	/** An hypercubic array representing the grid */
+	/** A hypercubic array representing the grid */
 	private HypercubicIntArray grid;
 	
 	/** The index of the origin within the array */
@@ -62,7 +62,7 @@ public class SimpleIntSunflower implements SymmetricIntModel, IsotropicHypercubi
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		int[] indexes = new int[gridDimension];
-		//Create an hypercubic array to represent the grid. With the initial value at the origin.
+		//Create a hypercubic array to represent the grid. With the initial value at the origin.
 		//Make the array of side 5 so as to leave a margin of two cells around the center.
 		int side = 5;
 		grid = new HypercubicIntArray(gridDimension, side);

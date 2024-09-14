@@ -139,7 +139,7 @@ public class SerializableModelData implements Serializable {
 		public static final Integer ANYSOTROPIC_BIG_INT_ARRAY_1 = 2;
 		/** A {@code boolean} primitive array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
 		public static final Integer ANYSOTROPIC_BOOLEAN_PRIMITIVE_ARRAY_1 = 3;
-		/** A {@code BigFraction} array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
+		/** A {@link BigFraction} array of as many dimensions as the grid, holding an asymmetric section of an isotropic hypercube with a center cell. This center cell is also the origin. The array's indexes match the coordinates' absolute values. */
 		public static final Integer ANYSOTROPIC_BIG_FRACTION_ARRAY_1 = 4;
 		/** An {@link AnisotropicIntArray} object */
 		public static final Integer ANYSOTROPIC_INT_ARRAY_CLASS_INSTANCE = 5;

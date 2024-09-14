@@ -17,21 +17,28 @@
 package cellularautomata;
 
 import java.util.function.Consumer;
-import org.apache.commons.math3.FieldElement;
 
-public class MinAndMaxConsumer<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> implements Consumer<Number_Type> {
+public class MinAndMaxConsumer<Comparable_Type extends Comparable<Comparable_Type>> implements Consumer<Comparable_Type> {
 
-	private Number_Type min;
-	private Number_Type max;
+	private Comparable_Type min;
+	private Comparable_Type max;
 	
 	@Override
-	public void accept(Number_Type value) {
-		if (value != null && (min == null || value.compareTo(min) < 0)) min = value;
-		if (value != null && (max == null || value.compareTo(max) > 0)) max = value;
+	public void accept(Comparable_Type value) {
+		if (value != null) {
+			if (min == null) {
+				min = value;
+				max = value;
+			} else if (value.compareTo(min) < 0) {
+				min = value;
+			} else if (value.compareTo(max) > 0) {
+				max = value;
+			}
+		}
 	}
 	
-	public MinAndMax<Number_Type> getMinAndMaxValue() {
-		return min == null? null : new MinAndMax<Number_Type>(min, max);
+	public MinAndMax<Comparable_Type> getMinAndMaxValue() {
+		return min == null? null : new MinAndMax<Comparable_Type>(min, max);
 	}
 	
 }

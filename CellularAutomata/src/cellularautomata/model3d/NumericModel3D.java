@@ -39,10 +39,11 @@ public interface NumericModel3D<Number_Type extends FieldElement<Number_Type> & 
 				maxZ = getMaxZ(x, y);
 				for (int z = minZ; z <= maxZ; z++) {
 					Number_Type value = getFromPosition(x, y, z);
-					if (value.compareTo(maxValue) > 0)
-						maxValue = value;
-					if (value.compareTo(minValue) < 0)
+					if (value.compareTo(minValue) < 0) {
 						minValue = value;
+					} else if (value.compareTo(maxValue) > 0) {
+						maxValue = value;
+					}
 				}
 			}
 		}
@@ -58,7 +59,8 @@ public interface NumericModel3D<Number_Type extends FieldElement<Number_Type> & 
 		for (; x <= maxX && maxValue == null; x++) {
 			int minY = getMinYAtX(x);
 			int maxY = getMaxYAtX(x);
-			for (int y = minY; y <= maxY; y++) {
+			int y = minY;
+			for (; y <= maxY && maxValue == null; y++) {
 				int minZ = getMinZ(x, y);
 				int maxZ = getMaxZ(x, y);
 				boolean isPositionEven = (minZ+x+y)%2 == 0;
@@ -69,12 +71,29 @@ public interface NumericModel3D<Number_Type extends FieldElement<Number_Type> & 
 					Number_Type value = getFromPosition(x, y, minZ);
 					maxValue = value;
 					minValue = value;
-					for (int z = minZ + 2; z <= maxZ; z+=2) {
+					for (int z = minZ + 2; z <= maxZ; z += 2) {
 						value = getFromPosition(x, y, z);
-						if (value.compareTo(maxValue) > 0)
-							maxValue = value;
-						if (value.compareTo(minValue) < 0)
+						if (value.compareTo(minValue) < 0) {
 							minValue = value;
+						} else if (value.compareTo(maxValue) > 0) {
+							maxValue = value;
+						}
+					}
+				}
+			}
+			for (; y <= maxY; y++) {
+				int minZ = getMinZ(x, y);
+				int maxZ = getMaxZ(x, y);
+				boolean isPositionEven = (minZ+x+y)%2 == 0;
+				if (isPositionEven != isEven) {
+					minZ++;
+				}
+				for (int z = minZ; z <= maxZ; z += 2) {
+					Number_Type value = getFromPosition(x, y, z);
+					if (value.compareTo(minValue) < 0) {
+						minValue = value;
+					} else if (value.compareTo(maxValue) > 0) {
+						maxValue = value;
 					}
 				}
 			}
@@ -89,12 +108,13 @@ public interface NumericModel3D<Number_Type extends FieldElement<Number_Type> & 
 				if (isPositionEven != isEven) {
 					minZ++;
 				}
-				for (int z = minZ; z <= maxZ; z+=2) {
+				for (int z = minZ; z <= maxZ; z += 2) {
 					Number_Type value = getFromPosition(x, y, z);
-					if (value.compareTo(maxValue) > 0)
-						maxValue = value;
-					if (value.compareTo(minValue) < 0)
+					if (value.compareTo(minValue) < 0) {
 						minValue = value;
+					} else if (value.compareTo(maxValue) > 0) {
+						maxValue = value;
+					}
 				}
 			}
 		}

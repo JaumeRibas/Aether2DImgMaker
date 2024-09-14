@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricLongModel1D;
+import cellularautomata.model1d.IsotropicLongArrayModel1DA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
@@ -30,13 +29,10 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class LongAether1D implements SymmetricLongModel1D, IsotropicModel1DA {
+public class LongAether1D extends IsotropicLongArrayModel1DA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
-
-	/** A 1D array representing the grid */
-	private long[] grid;
 	
 	private final long initialValue;
 	private long step;
@@ -288,17 +284,6 @@ public class LongAether1D implements SymmetricLongModel1D, IsotropicModel1DA {
 			}
 		}
 		return anyToppled;
-	}
-	
-	@Override
-	public long getFromPosition(int x) {	
-		if (x < 0) x = -x;
-		return grid[x];
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int x) {
-		return grid[x];
 	}
 
 	@Override

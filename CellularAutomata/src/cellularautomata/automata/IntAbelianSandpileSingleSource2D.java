@@ -20,8 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricIntModel2D;
+import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
 
 /**
  * Implementation of the <a href="https://en.wikipedia.org/wiki/Abelian_sandpile_model">Abelian sandpile</a> cellular automaton in 2D with synchronous toppling and a single source initial configuration
@@ -29,9 +28,7 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, IsotropicSquareModelA {
-
-	private int[][] grid;
+public class IntAbelianSandpileSingleSource2D extends IsotropicSquareIntArrayModelA {
 	
 	private final int initialValue;
 	private long step;
@@ -160,28 +157,6 @@ public class IntAbelianSandpileSingleSource2D implements SymmetricIntModel2D, Is
 	@Override
 	public Boolean isChanged() {
 		return changed;
-	}
-	
-	@Override
-	public int getFromPosition(int x, int y) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (y > x) {
-			int swp = y;
-			y = x;
-			x = swp;
-		}
-		if (x < grid.length 
-				&& y < grid[x].length) {
-			return grid[x][y];
-		} else {
-			return 0;
-		}
-	}
-	
-	@Override
-	public int getFromAsymmetricPosition(int x, int y) {	
-		return grid[x][y];
 	}
 
 	@Override

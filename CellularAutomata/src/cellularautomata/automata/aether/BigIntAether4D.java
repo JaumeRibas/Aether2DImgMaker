@@ -21,8 +21,7 @@ import java.io.IOException;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model4d.IsotropicHypercubicModel4DA;
-import cellularautomata.model4d.SymmetricNumericModel4D;
+import cellularautomata.model4d.IsotropicHypercubicNumericArrayModel4DA;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -31,16 +30,13 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {
+public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigInt> {
 
 	private static final BigInt TWO = BigInt.valueOf(2);
 	private static final BigInt THREE = BigInt.valueOf(3);
 	private static final BigInt FIVE = BigInt.valueOf(5);
 	private static final BigInt EIGHT = BigInt.valueOf(8);
 	private static final BigInt NINE = BigInt.valueOf(9);
-
-	/** A 4D array representing the grid */
-	private BigInt[][][][] grid;
 
 	private final BigInt initialValue;
 	private long step;
@@ -4159,44 +4155,6 @@ public class BigIntAether4D implements SymmetricNumericModel4D<BigInt>, Isotropi
 		}
 		newWSlices[1][x][y][z] = newWSlices[1][x][y][z].add(value);
 		return toppled;
-	}
-
-	@Override
-	public BigInt getFromPosition(int w, int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (w < 0) w = -w;
-		//sort coordinates
-		//TODO faster sorting?
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-			if (x > w) {
-				sorted = false;
-				int swp = x;
-				x = w;
-				w = swp;
-			}
-		} while (!sorted);
-		return grid[w][x][y][z];
-	}
-
-	@Override
-	public BigInt getFromAsymmetricPosition(int w, int x, int y, int z) {	
-		return grid[w][x][y][z];
 	}
 
 	@Override

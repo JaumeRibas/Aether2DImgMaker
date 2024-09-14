@@ -22,7 +22,7 @@ import cellularautomata.Coordinates;
 import cellularautomata.Utils;
 
 /**
- * An hypercube shaped multidimensional array.
+ * A hypercube-shaped multidimensional array.
  * 
  * @author Jaume
  *
@@ -33,7 +33,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 	protected int side;
 	
 	/**
-	 * Creates an hypercube shaped multidimensional array with the given dimension and side.
+	 * Creates a hypercube-shaped multidimensional array with the given dimension and side.
 	 * 
 	 * @param dimension
 	 * @param side

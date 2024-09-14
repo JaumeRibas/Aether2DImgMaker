@@ -40,7 +40,7 @@ public class SimpleBfAetherInfinity implements SymmetricNumericModel<BigFraction
 	private long step;
 	private final boolean isPositive;
 	
-	/** An hypercubic array representing the grid */
+	/** A hypercubic array representing the grid */
 	private HypercubicBigFractionArray grid;
 	
 	/** The index of the origin within the array */
@@ -56,7 +56,7 @@ public class SimpleBfAetherInfinity implements SymmetricNumericModel<BigFraction
 		//two neighbors per dimension
 		neighborCount = gridDimension * 2;
 		this.isPositive = isPositive;
-		//Create an hypercubic array to represent the grid. With the initial value at the origin.
+		//Create a hypercubic array to represent the grid. With the initial value at the origin.
 		//Make the array of side 5 so as to leave a margin of two cells around the center.
 		int side = 5;
 		grid = new HypercubicBigFractionArray(gridDimension, side);

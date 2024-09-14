@@ -21,9 +21,10 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import cellularautomata.Coordinates;
-import cellularautomata.MinAndMaxIntConsumer;
+import cellularautomata.IntMinAndMaxConsumer;
 import cellularautomata.PartialCoordinates;
-import cellularautomata.TotalIntConsumer;
+import cellularautomata.IntTotalConsumer;
+import cellularautomata.numbers.BigInt;
 
 public interface IntModel extends Model, Iterable<Integer> {
 	
@@ -102,13 +103,13 @@ public interface IntModel extends Model, Iterable<Integer> {
 	}
 
 	default int[] getMinAndMax() throws Exception {
-		MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+		IntMinAndMaxConsumer consumer = new IntMinAndMaxConsumer();
 		forEach(consumer);
 		return consumer.getMinAndMaxValue();
 	}
 	
-	default int getTotal() throws Exception {
-		TotalIntConsumer consumer = new TotalIntConsumer();
+	default BigInt getTotal() throws Exception {
+		IntTotalConsumer consumer = new IntTotalConsumer();
 		forEach(consumer);
 		return consumer.getTotal();
 	}
@@ -122,13 +123,13 @@ public interface IntModel extends Model, Iterable<Integer> {
 	}
 	
 	default int[] getEvenPositionsMinAndMax() throws Exception {
-		MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+		IntMinAndMaxConsumer consumer = new IntMinAndMaxConsumer();
 		forEachAtEvenPosition(consumer);
 		return consumer.getMinAndMaxValue();
 	}
 	
 	default int[] getOddPositionsMinAndMax() throws Exception {
-		MinAndMaxIntConsumer consumer = new MinAndMaxIntConsumer();
+		IntMinAndMaxConsumer consumer = new IntMinAndMaxConsumer();
 		forEachAtOddPosition(consumer);
 		return consumer.getMinAndMaxValue();
 	}

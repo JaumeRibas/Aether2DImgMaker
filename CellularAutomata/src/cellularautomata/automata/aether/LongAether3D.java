@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricLongModel3D;
+import cellularautomata.model3d.IsotropicCubicLongArrayModelA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D with a single source initial configuration
@@ -30,16 +29,13 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA {
+public class LongAether3D extends IsotropicCubicLongArrayModelA {
 	
 	//debug
 //	private static HashSet<Integer> coverage = new HashSet<Integer>();
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
-
-	/** A 3D array representing the grid */
-	private long[][][] grid;
 	
 	private final long initialValue;
 	private long step;
@@ -2003,41 +1999,6 @@ public class LongAether3D implements SymmetricLongModel3D, IsotropicCubicModelA 
 		}
 		newXSlices[1][y][z] += value;
 		return toppled;
-	}
-	
-	@Override
-	public long getFromPosition(int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (x >= y) {
-			if (y >= z) {
-				//x >= y >= z
-				return grid[x][y][z];
-			} else if (x >= z) { 
-				//x >= z > y
-				return grid[x][z][y];
-			} else {
-				//z > x >= y
-				return grid[z][x][y];
-			}
-		} else if (y >= z) {
-			if (x >= z) {
-				//y > x >= z
-				return grid[y][x][z];
-			} else {
-				//y >= z > x
-				return grid[y][z][x];
-			}
-		} else {
-			// z > y > x
-			return grid[z][y][x];
-		}
-	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {	
-		return grid[x][y][z];
 	}
 
 	@Override

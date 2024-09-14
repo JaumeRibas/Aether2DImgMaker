@@ -23,7 +23,7 @@ import cellularautomata.Coordinates;
 import cellularautomata.Utils;
 
 /**
- * An array with the shape of an asymmetric sub-region of an hypercubic shape with isotropic symmetry around a center position.
+ * An array with the shape of an asymmetric sub-region of a hypercubic shape with isotropic symmetry around a center position.
  * Its positions are those that meet this condition: side >= coord 1 >= coord 2... >= coord n >= 0
  * 
  * @author Jaume

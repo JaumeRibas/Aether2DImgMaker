@@ -17,7 +17,7 @@
 package cellularautomata.model2d;
 
 /**
- * Represents a finite 2D region of a grid backed by a 2D array.
+ * Represents a finite region of a 2D grid backed by a 2D array.
  * The shape of the region is such that no line overlaps with it along more than one segment.
  * 
  * @author Jaume
@@ -54,11 +54,11 @@ public abstract class ArrayGrid2D implements Model2D {
 	}
 	
 	/**
-	 * Get absolute y bounds and validate shape
+	 * Set absolute y bounds and validate shape
 	 * 
 	 * @param localYMaxima
 	 */
-	protected void getYBounds(int[] localYMaxima) {
+	protected void setYBounds(int[] localYMaxima) {
 		if (localYMinima.length > 2) {
 			boolean minimaAscendingOrFlat = false;
 			boolean maximaDescendingOrFlat = false;
@@ -143,6 +143,36 @@ public abstract class ArrayGrid2D implements Model2D {
 	@Override
 	public int getMinY(int x) {
 		return localYMinima[x - minX];
+	}
+
+	@Override
+	public Boolean nextStep() throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Boolean isChanged() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public long getStep() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getName() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getSubfolderPath() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void backUp(String backupPath, String backupName) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 	
 }

@@ -16,23 +16,21 @@
  */
 package cellularautomata;
 
-import org.apache.commons.math3.FieldElement;
+public class MinAndMax<Object_Type> {
 
-public class MinAndMax<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> {
-
-	private final Number_Type min;
-	private final Number_Type max;
+	private final Object_Type min;
+	private final Object_Type max;
 	
-	public MinAndMax(Number_Type min, Number_Type max) {
+	public MinAndMax(Object_Type min, Object_Type max) {
 		this.min = min;
 		this.max = max;
 	}
 	
-	public Number_Type getMin() {
+	public Object_Type getMin() {
 		return min;
 	}
 	
-	public Number_Type getMax() {
+	public Object_Type getMax() {
 		return max;
 	}
 	

@@ -22,9 +22,10 @@ import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
 import cellularautomata.Coordinates;
-import cellularautomata.MinAndMaxLongConsumer;
+import cellularautomata.LongMinAndMaxConsumer;
 import cellularautomata.PartialCoordinates;
-import cellularautomata.TotalLongConsumer;
+import cellularautomata.LongTotalConsumer;
+import cellularautomata.numbers.BigInt;
 
 public interface LongModel extends Model, Iterable<Long> {
 
@@ -103,13 +104,13 @@ public interface LongModel extends Model, Iterable<Long> {
 	}
 
 	default long[] getMinAndMax() throws Exception {
-		MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+		LongMinAndMaxConsumer consumer = new LongMinAndMaxConsumer();
 		forEach(consumer);
 		return consumer.getMinAndMaxValue();
 	}
 	
-	default long getTotal() throws Exception {
-		TotalLongConsumer consumer = new TotalLongConsumer();
+	default BigInt getTotal() throws Exception {
+		LongTotalConsumer consumer = new LongTotalConsumer();
 		forEach(consumer);
 		return consumer.getTotal();
 	}
@@ -123,13 +124,13 @@ public interface LongModel extends Model, Iterable<Long> {
 	}
 	
 	default long[] getEvenPositionsMinAndMax() throws Exception {
-		MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+		LongMinAndMaxConsumer consumer = new LongMinAndMaxConsumer();
 		forEachAtEvenPosition(consumer);
 		return consumer.getMinAndMaxValue();
 	}
 	
 	default long[] getOddPositionsMinAndMax() throws Exception {
-		MinAndMaxLongConsumer consumer = new MinAndMaxLongConsumer();
+		LongMinAndMaxConsumer consumer = new LongMinAndMaxConsumer();
 		forEachAtOddPosition(consumer);
 		return consumer.getMinAndMaxValue();
 	}

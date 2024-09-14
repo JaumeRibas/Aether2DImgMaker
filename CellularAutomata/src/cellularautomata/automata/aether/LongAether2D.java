@@ -20,8 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricLongModel2D;
+import cellularautomata.model2d.IsotropicSquareLongArrayModelA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a single source initial configuration
@@ -29,13 +28,10 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume
  *
  */
-public class LongAether2D implements SymmetricLongModel2D, IsotropicSquareModelA {
+public class LongAether2D extends IsotropicSquareLongArrayModelA {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
-
-	/** A 2D array representing the grid */
-	private long[][] grid;
 	
 	private final long initialValue;
 	private long step;
@@ -1204,24 +1200,6 @@ public class LongAether2D implements SymmetricLongModel2D, IsotropicSquareModelA
 		}
 		newXSlices[1][y] += value;
 		return toppled;
-	}
-	
-	@Override
-	public long getFromPosition(int x, int y) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		long value;
-		if (y > x) {
-			value = grid[y][x];
-		} else {
-			value = grid[x][y];
-		}
-		return value;
-	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int x, int y) {	
-		return grid[x][y];
 	}
 
 	@Override

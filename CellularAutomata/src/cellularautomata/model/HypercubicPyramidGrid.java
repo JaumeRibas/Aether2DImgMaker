@@ -20,7 +20,7 @@ import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 
 /**
- * Hypercubic pyramid shaped region of a grid
+ * A region of a grid shaped like a hypercubic pyramid with the same dimension as the grid
  * 
  * @author Jaume
  *

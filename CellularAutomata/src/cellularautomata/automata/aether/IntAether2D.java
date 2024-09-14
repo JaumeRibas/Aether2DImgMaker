@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricIntModel2D;
+import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a single source initial configuration
@@ -30,13 +29,10 @@ import cellularautomata.model2d.SymmetricIntModel2D;
  * @author Jaume
  *
  */
-public class IntAether2D implements SymmetricIntModel2D, IsotropicSquareModelA {
+public class IntAether2D extends IsotropicSquareIntArrayModelA {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -1431655765;
-
-	/** A 2D array representing the grid */
-	private int[][] grid;
 	
 	private final int initialValue;
 	private long step;
@@ -1205,24 +1201,6 @@ public class IntAether2D implements SymmetricIntModel2D, IsotropicSquareModelA {
 		}
 		newXSlices[1][y] += value;
 		return toppled;
-	}
-	
-	@Override
-	public int getFromPosition(int x, int y) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		int value;
-		if (y > x) {
-			value = grid[y][x];
-		} else {
-			value = grid[x][y];
-		}
-		return value;
-	}
-	
-	@Override
-	public int getFromAsymmetricPosition(int x, int y) {	
-		return grid[x][y];
 	}
 
 	@Override

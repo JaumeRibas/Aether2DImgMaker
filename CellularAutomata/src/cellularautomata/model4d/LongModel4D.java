@@ -22,6 +22,7 @@ import cellularautomata.Coordinates;
 import cellularautomata.PartialCoordinates;
 import cellularautomata.model.LongModel;
 import cellularautomata.model3d.LongModel3D;
+import cellularautomata.numbers.BigInt;
 
 public interface LongModel4D extends Model4D, LongModel {
 	
@@ -87,7 +88,7 @@ public interface LongModel4D extends Model4D, LongModel {
 					if (isPositionEven != isEven) {
 						minZ++;
 					}
-					for (int z = minZ; z <= maxZ; z+=2) {
+					for (int z = minZ; z <= maxZ; z += 2) {
 						anyPositionMatches = true;
 						long value = getFromPosition(w, x, y, z);
 						if (value > maxValue)
@@ -102,8 +103,8 @@ public interface LongModel4D extends Model4D, LongModel {
 	}
 	
 	@Override
-	default long getTotal() throws Exception {
-		long total = 0;
+	default BigInt getTotal() throws Exception {
+		BigInt total = BigInt.ZERO;
 		int maxW = getMaxW(), minW = getMinW(), maxX, minX, maxY, minY, maxZ, minZ;
 		for (int w = minW; w <= maxW; w++) {
 			minX = getMinXAtW(w);
@@ -115,7 +116,7 @@ public interface LongModel4D extends Model4D, LongModel {
 					minZ = getMinZ(w, x, y);
 					maxZ = getMaxZ(w, x, y);
 					for (int z = minZ; z <= maxZ; z++) {
-						total += getFromPosition(w, x, y, z);
+						total = total.add(BigInt.valueOf(getFromPosition(w, x, y, z)));
 					}
 				}
 			}

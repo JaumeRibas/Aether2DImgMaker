@@ -24,7 +24,7 @@ import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
 import caimgmaker.args.ImageGenerationMode;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
-import cellularautomata.automata.nearaether.SimpleBigIntNearAether3_3D;
+import cellularautomata.automata.nearaether.SimpleBigIntNearAetherThree3D;
 import cellularautomata.model.Model;
 
 public final class NearAether3Factory {
@@ -50,12 +50,12 @@ public final class NearAether3Factory {
 					if (args.grid.side == null) {
 						if (args.backupToRestorePath == null) {
 							if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-								model = new SimpleBigIntNearAether3_3D(args.initialConfiguration.singleSource);
+								model = new SimpleBigIntNearAetherThree3D(args.initialConfiguration.singleSource);
 							} else {
 								System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 							}
 						} else {
-							model = new SimpleBigIntNearAether3_3D(args.backupToRestorePath);
+							model = new SimpleBigIntNearAetherThree3D(args.backupToRestorePath);
 						}
 					} else {
 						System.out.printf(messages.getString("grid-not-supported-format"), args.model);

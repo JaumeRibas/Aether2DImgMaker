@@ -21,8 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricLongModel3D;
+import cellularautomata.model3d.IsotropicCubicLongArrayModelA;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 3D with a single source initial configuration
@@ -30,10 +29,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class LongSunflower3D implements SymmetricLongModel3D, IsotropicCubicModelA {
-
-	/** A 3D array representing the grid */
-	private long[][][] grid;
+public class LongSunflower3D extends IsotropicCubicLongArrayModelA {
 	
 	private final long initialValue;
 	private long step;
@@ -200,36 +196,6 @@ public class LongSunflower3D implements SymmetricLongModel3D, IsotropicCubicMode
 	@Override
 	public Boolean isChanged() {
 		return changed;
-	}
-	
-	@Override
-	public long getFromPosition(int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		//sort coordinates
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-		} while (!sorted);
-		return grid[x][y][z];
-	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {	
-		return grid[x][y][z];
 	}
 
 	@Override

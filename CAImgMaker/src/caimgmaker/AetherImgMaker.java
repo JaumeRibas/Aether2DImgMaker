@@ -40,17 +40,65 @@ import cellularautomata.model.IntModel;
 import cellularautomata.model.Model;
 import cellularautomata.model.SymmetricModel;
 import cellularautomata.model2d.BooleanModel2D;
+import cellularautomata.model2d.CustomSquareBooleanArrayModel2StepsDelta;
+import cellularautomata.model2d.CustomSquareBooleanArrayModelDelta;
+import cellularautomata.model2d.CustomSquareIntArrayModel2StepsDelta;
+import cellularautomata.model2d.CustomSquareIntArrayModelDelta;
+import cellularautomata.model2d.CustomSquareLongArrayModel2StepsDelta;
+import cellularautomata.model2d.CustomSquareLongArrayModelDelta;
+import cellularautomata.model2d.CustomSquareNumericArrayModel2StepsDelta;
+import cellularautomata.model2d.CustomSquareNumericArrayModelDelta;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.IntModelAs2D;
+import cellularautomata.model2d.IsotropicSquareBooleanArrayModelA;
+import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
+import cellularautomata.model2d.IsotropicSquareLongArrayModelA;
+import cellularautomata.model2d.IsotropicSquareNumericArrayModelA;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
 import cellularautomata.model3d.BooleanModel3D;
+import cellularautomata.model3d.CustomCubicBooleanArrayModel2StepsDelta;
+import cellularautomata.model3d.CustomCubicBooleanArrayModelDelta;
+import cellularautomata.model3d.CustomCubicIntArrayModel2StepsDelta;
+import cellularautomata.model3d.CustomCubicIntArrayModelDelta;
+import cellularautomata.model3d.CustomCubicLongArrayModel2StepsDelta;
+import cellularautomata.model3d.CustomCubicLongArrayModelDelta;
+import cellularautomata.model3d.CustomCubicNumericArrayModel2StepsDelta;
+import cellularautomata.model3d.CustomCubicNumericArrayModelDelta;
 import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model3d.IntModelAs3D;
+import cellularautomata.model3d.IsotropicCubicBooleanArrayModelA;
+import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
+import cellularautomata.model3d.IsotropicCubicLongArrayModelA;
+import cellularautomata.model3d.IsotropicCubicNumericArrayModelA;
 import cellularautomata.model3d.LongModel3D;
 import cellularautomata.model3d.Model3D;
 import cellularautomata.model3d.ModelAs3D;
 import cellularautomata.model3d.NumericModel3D;
+import cellularautomata.model4d.CustomHypercubicBooleanArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomHypercubicBooleanArrayModel4DDelta;
+import cellularautomata.model4d.CustomHypercubicIntArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomHypercubicIntArrayModel4DDelta;
+import cellularautomata.model4d.CustomHypercubicLongArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomHypercubicLongArrayModel4DDelta;
+import cellularautomata.model4d.CustomHypercubicNumericArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomHypercubicNumericArrayModel4DDelta;
+import cellularautomata.model4d.IsotropicHypercubicBooleanArrayModel4DA;
+import cellularautomata.model4d.IsotropicHypercubicIntArrayModel4DA;
+import cellularautomata.model4d.IsotropicHypercubicLongArrayModel4DA;
+import cellularautomata.model4d.IsotropicHypercubicNumericArrayModel4DA;
+import cellularautomata.model5d.CustomHypercubicBooleanArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomHypercubicBooleanArrayModel5DDelta;
+import cellularautomata.model5d.CustomHypercubicIntArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomHypercubicIntArrayModel5DDelta;
+import cellularautomata.model5d.CustomHypercubicLongArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomHypercubicLongArrayModel5DDelta;
+import cellularautomata.model5d.CustomHypercubicNumericArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomHypercubicNumericArrayModel5DDelta;
+import cellularautomata.model5d.IsotropicHypercubicBooleanArrayModel5DA;
+import cellularautomata.model5d.IsotropicHypercubicIntArrayModel5DA;
+import cellularautomata.model5d.IsotropicHypercubicLongArrayModel5DA;
+import cellularautomata.model5d.IsotropicHypercubicNumericArrayModel5DA;
 import cellularautomata.numbers.BigInt;
 
 public class AetherImgMaker {
@@ -58,17 +106,18 @@ public class AetherImgMaker {
 	public static ResourceBundle messages;
 			
 	public static void main(String[] rawArgs) throws Exception {
-//		String debugArgs = "92233720368547758079999 -path D:/data/test";//debug
+//		String debugArgs = "-grid 3d -100 -delta -path D:/data/test -debug";//debug
 //		debugArgs = "-help";//debug
 //		rawArgs = debugArgs.split(" ");//debug
 		InputReaderTask inputReader = null;
 		Thread inputThread = null;
+		Args args = null;
 		try {
 			messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault());
 			inputReader = new InputReaderTask(messages);
 			inputThread = new Thread(inputReader);
 			inputThread.start();
-			Args args = new Args();
+			args = new Args();
 			JCommander jcommander = JCommander.newBuilder()
 					.programName(Args.PROGRAM_INVOCATION)
 					.addObject(args)
@@ -103,6 +152,11 @@ public class AetherImgMaker {
 				path += "/" + model.getSubfolderPath();
 			}
 			String backupsPath = path + "/backups";
+			model = getDelta(model, args);
+			if (model == null) {
+				System.out.printf(messages.getString("use-help-format"), Args.HELP);
+				return;
+			}
 			evolveModelToFirstStep(model, args, backupsPath, inputReader);
 			Model modelSection = getModelSection(model, args);
 			if (modelSection == null) {
@@ -122,6 +176,9 @@ public class AetherImgMaker {
 				System.out.printf(messages.getString("use-help-format"), Args.HELP);
 			}
 		} catch (Exception ex) {
+			if (args != null && args.debug) {
+				throw ex;
+			}
 			String message = ex.getLocalizedMessage();
 			if (message == null) {
 				System.out.println(messages.getString("unexpected-error"));
@@ -130,7 +187,6 @@ public class AetherImgMaker {
 				System.out.println(message);
 			}
 			System.out.printf(messages.getString("use-help-format"), Args.HELP);
-//			throw ex;//debug
 		} finally {
 			if (inputReader != null) {
 				inputReader.stop();
@@ -421,6 +477,121 @@ public class AetherImgMaker {
 				} while ((changed == null || changed) && step < args.firstStep);
 			}
 		}		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static Model getDelta(Model model, Args args) throws Exception { //add deltas to model interface?
+		Model result = null;
+		if (args.delta) {
+			if (args.twoStepsDelta) {
+				System.out.printf(messages.getString("incompatible-parameters-format"), Args.DELTA, Args.TWO_STEPS_DELTA);
+			} else {
+				int dimension = model.getGridDimension();
+				switch (dimension) {
+					case 2:
+						if (model instanceof IsotropicSquareBooleanArrayModelA) {
+							result = new CustomSquareBooleanArrayModelDelta((IsotropicSquareBooleanArrayModelA)model);			
+						} else if (model instanceof IsotropicSquareIntArrayModelA) {
+							result = new CustomSquareIntArrayModelDelta((IsotropicSquareIntArrayModelA)model);			
+						} else if (model instanceof IsotropicSquareLongArrayModelA) {
+							result = new CustomSquareLongArrayModelDelta((IsotropicSquareLongArrayModelA)model);
+						} else if (model instanceof IsotropicSquareNumericArrayModelA) {
+							result = new CustomSquareNumericArrayModelDelta<BigInt>((IsotropicSquareNumericArrayModelA<BigInt>)model);
+						}
+						break;
+					case 3:
+						if (model instanceof IsotropicCubicBooleanArrayModelA) {
+							result = new CustomCubicBooleanArrayModelDelta((IsotropicCubicBooleanArrayModelA)model);
+						} else if (model instanceof IsotropicCubicIntArrayModelA) {
+							result = new CustomCubicIntArrayModelDelta((IsotropicCubicIntArrayModelA)model);
+						} else if (model instanceof IsotropicCubicLongArrayModelA) {
+							result = new CustomCubicLongArrayModelDelta((IsotropicCubicLongArrayModelA)model);
+						} else if (model instanceof IsotropicCubicNumericArrayModelA) {
+							result = new CustomCubicNumericArrayModelDelta<BigInt>((IsotropicCubicNumericArrayModelA<BigInt>)model);
+						}
+						break;		
+					case 4:
+						if (model instanceof IsotropicHypercubicBooleanArrayModel4DA) {
+							result = new CustomHypercubicBooleanArrayModel4DDelta((IsotropicHypercubicBooleanArrayModel4DA)model);
+						} else if (model instanceof IsotropicHypercubicIntArrayModel4DA) {
+							result = new CustomHypercubicIntArrayModel4DDelta((IsotropicHypercubicIntArrayModel4DA)model);
+						} else if (model instanceof IsotropicHypercubicLongArrayModel4DA) {
+							result = new CustomHypercubicLongArrayModel4DDelta((IsotropicHypercubicLongArrayModel4DA)model);
+						} else if (model instanceof IsotropicHypercubicNumericArrayModel4DA) {
+							result = new CustomHypercubicNumericArrayModel4DDelta<BigInt>((IsotropicHypercubicNumericArrayModel4DA<BigInt>)model);
+						}
+						break;			
+					case 5:
+						if (model instanceof IsotropicHypercubicBooleanArrayModel5DA) {
+							result = new CustomHypercubicBooleanArrayModel5DDelta((IsotropicHypercubicBooleanArrayModel5DA)model);
+						} else if (model instanceof IsotropicHypercubicIntArrayModel5DA) {
+							result = new CustomHypercubicIntArrayModel5DDelta((IsotropicHypercubicIntArrayModel5DA)model);
+						} else if (model instanceof IsotropicHypercubicLongArrayModel5DA) {
+							result = new CustomHypercubicLongArrayModel5DDelta((IsotropicHypercubicLongArrayModel5DA)model);
+						} else if (model instanceof IsotropicHypercubicNumericArrayModel5DA) {
+							result = new CustomHypercubicNumericArrayModel5DDelta<BigInt>((IsotropicHypercubicNumericArrayModel5DA<BigInt>)model);
+						}
+						break;				
+				}
+				if (result == null) {
+					System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.DELTA);
+				}
+			}
+		} else if (args.twoStepsDelta) {
+			int dimension = model.getGridDimension();
+			switch (dimension) {
+				case 2:
+					if (model instanceof IsotropicSquareBooleanArrayModelA) {
+						result = new CustomSquareBooleanArrayModel2StepsDelta((IsotropicSquareBooleanArrayModelA)model);			
+					} else if (model instanceof IsotropicSquareIntArrayModelA) {
+						result = new CustomSquareIntArrayModel2StepsDelta((IsotropicSquareIntArrayModelA)model);			
+					} else if (model instanceof IsotropicSquareLongArrayModelA) {
+						result = new CustomSquareLongArrayModel2StepsDelta((IsotropicSquareLongArrayModelA)model);
+					} else if (model instanceof IsotropicSquareNumericArrayModelA) {
+						result = new CustomSquareNumericArrayModel2StepsDelta<BigInt>((IsotropicSquareNumericArrayModelA<BigInt>)model);
+					}
+					break;
+				case 3:
+					if (model instanceof IsotropicCubicBooleanArrayModelA) {
+						result = new CustomCubicBooleanArrayModel2StepsDelta((IsotropicCubicBooleanArrayModelA)model);
+					} else if (model instanceof IsotropicCubicIntArrayModelA) {
+						result = new CustomCubicIntArrayModel2StepsDelta((IsotropicCubicIntArrayModelA)model);
+					} else if (model instanceof IsotropicCubicLongArrayModelA) {
+						result = new CustomCubicLongArrayModel2StepsDelta((IsotropicCubicLongArrayModelA)model);
+					} else if (model instanceof IsotropicCubicNumericArrayModelA) {
+						result = new CustomCubicNumericArrayModel2StepsDelta<BigInt>((IsotropicCubicNumericArrayModelA<BigInt>)model);
+					}
+					break;		
+				case 4:
+					if (model instanceof IsotropicHypercubicBooleanArrayModel4DA) {
+						result = new CustomHypercubicBooleanArrayModel4D2StepsDelta((IsotropicHypercubicBooleanArrayModel4DA)model);
+					} else if (model instanceof IsotropicHypercubicIntArrayModel4DA) {
+						result = new CustomHypercubicIntArrayModel4D2StepsDelta((IsotropicHypercubicIntArrayModel4DA)model);
+					} else if (model instanceof IsotropicHypercubicLongArrayModel4DA) {
+						result = new CustomHypercubicLongArrayModel4D2StepsDelta((IsotropicHypercubicLongArrayModel4DA)model);
+					} else if (model instanceof IsotropicHypercubicNumericArrayModel4DA) {
+						result = new CustomHypercubicNumericArrayModel4D2StepsDelta<BigInt>((IsotropicHypercubicNumericArrayModel4DA<BigInt>)model);
+					}
+					break;			
+				case 5:
+					if (model instanceof IsotropicHypercubicBooleanArrayModel5DA) {
+						result = new CustomHypercubicBooleanArrayModel5D2StepsDelta((IsotropicHypercubicBooleanArrayModel5DA)model);
+					} else if (model instanceof IsotropicHypercubicIntArrayModel5DA) {
+						result = new CustomHypercubicIntArrayModel5D2StepsDelta((IsotropicHypercubicIntArrayModel5DA)model);
+					} else if (model instanceof IsotropicHypercubicLongArrayModel5DA) {
+						result = new CustomHypercubicLongArrayModel5D2StepsDelta((IsotropicHypercubicLongArrayModel5DA)model);
+					} else if (model instanceof IsotropicHypercubicNumericArrayModel5DA) {
+						result = new CustomHypercubicNumericArrayModel5D2StepsDelta<BigInt>((IsotropicHypercubicNumericArrayModel5DA<BigInt>)model);
+					}
+					break;				
+				}
+			if (result == null) {
+				System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.TWO_STEPS_DELTA);
+			}
+		} else {
+			result = model;
+		}
+		return result;
 	}
 
 	private static Model getModelSection(Model model, Args args) {
