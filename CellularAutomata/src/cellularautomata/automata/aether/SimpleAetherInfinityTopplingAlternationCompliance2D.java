@@ -23,17 +23,13 @@ import java.util.List;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
 
-public class SimpleAetherInfinityTopplingAlternationCompliance2D implements SymmetricBooleanModel2D, IsotropicSquareModelA {	
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
+public class SimpleAetherInfinityTopplingAlternationCompliance2D implements SymmetricBooleanModel2D, IsotropicSquareModelA {
 	
 	/** 2D array representing the grid **/
 	private BigFraction[][] grid;
@@ -98,25 +94,25 @@ public class SimpleAetherInfinityTopplingAlternationCompliance2D implements Symm
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(RIGHT, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.RIGHT, neighborValue));
 				if (i > 0)
 					neighborValue = grid[i - 1][j];
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.LEFT, neighborValue));
 				if (j < grid[i].length - 1)
 					neighborValue = grid[i][j + 1];
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(UP, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.UP, neighborValue));
 				if (j > 0)
 					neighborValue = grid[i][j - 1];
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(DOWN, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.DOWN, neighborValue));
 
 				boolean toppled = false;
 				if (neighbors.size() > 0) {
@@ -201,7 +197,8 @@ public class SimpleAetherInfinityTopplingAlternationCompliance2D implements Symm
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

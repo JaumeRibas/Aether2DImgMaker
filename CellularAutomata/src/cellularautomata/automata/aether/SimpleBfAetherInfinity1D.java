@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricNumericModel1D;
@@ -35,9 +36,6 @@ import cellularautomata.model1d.SymmetricNumericModel1D;
  *
  */
 public class SimpleBfAetherInfinity1D implements SymmetricNumericModel1D<BigFraction>, IsotropicModel1DA {
-	
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
 	
 	/** A 1D array representing the grid */
 	private BigFraction[] grid;
@@ -92,13 +90,13 @@ public class SimpleBfAetherInfinity1D implements SymmetricNumericModel1D<BigFrac
 			else
 				neighborValue = BigFraction.ZERO;
 			if (neighborValue.compareTo(value) < 0)
-				neighbors.add(new Neighbor<BigFraction>(RIGHT, neighborValue));
+				neighbors.add(new Neighbor<BigFraction>(Direction.RIGHT, neighborValue));
 			if (index > 0)
 				neighborValue = grid[index - 1];
 			else
 				neighborValue = BigFraction.ZERO;
 			if (neighborValue.compareTo(value) < 0)
-				neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
+				neighbors.add(new Neighbor<BigFraction>(Direction.LEFT, neighborValue));
 
 			//If there are any
 			if (neighbors.size() > 0) {
@@ -155,8 +153,8 @@ public class SimpleBfAetherInfinity1D implements SymmetricNumericModel1D<BigFrac
 		}
 	}
 	
-	private static int getNeighborCoordinates(int x, byte direction) {
-		if (direction == RIGHT) {
+	private static int getNeighborCoordinates(int x, Direction direction) {
+		if (direction == Direction.RIGHT) {
 			x++;
 		} else {
 			x--;

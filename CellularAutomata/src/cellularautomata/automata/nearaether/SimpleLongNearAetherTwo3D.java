@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Direction;
 import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricLongModel3D;
 
@@ -34,13 +35,6 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
-
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
@@ -98,7 +92,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 				for (int k = 0; k < grid[0][0].length; k++) {
 					long value = grid[i][j][k];
 					//make list of von Neumann neighbors with value smaller than current cell's value
-					List<Byte> relevantNeighborDirections = new ArrayList<Byte>(6);						
+					List<Direction> relevantNeighborDirections = new ArrayList<Direction>(6);						
 					long neighborValue;
 					long biggestSmallerNeighborValue = Long.MIN_VALUE;
 					if (i < grid.length - 1) {
@@ -110,7 +104,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						relevantNeighborDirections.add(RIGHT);
+						relevantNeighborDirections.add(Direction.RIGHT);
 					}
 					if (i > 0) {
 						neighborValue = grid[i - 1][j][k];
@@ -121,7 +115,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						relevantNeighborDirections.add(LEFT);
+						relevantNeighborDirections.add(Direction.LEFT);
 					}
 					if (j < grid[i].length - 1) {
 						neighborValue = grid[i][j + 1][k];
@@ -132,7 +126,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						relevantNeighborDirections.add(UP);
+						relevantNeighborDirections.add(Direction.UP);
 					}
 					if (j > 0) {
 						neighborValue = grid[i][j - 1][k];
@@ -143,7 +137,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						relevantNeighborDirections.add(DOWN);
+						relevantNeighborDirections.add(Direction.DOWN);
 					}
 					if (k < grid[i][j].length - 1) {
 						neighborValue = grid[i][j][k + 1];
@@ -154,7 +148,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						relevantNeighborDirections.add(FRONT);
+						relevantNeighborDirections.add(Direction.FRONT);
 					}
 					if (k > 0) {
 						neighborValue = grid[i][j][k - 1];
@@ -165,7 +159,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						relevantNeighborDirections.add(BACK);
+						relevantNeighborDirections.add(Direction.BACK);
 					}
 					
 					if (relevantNeighborDirections.size() > 0) {
@@ -177,7 +171,7 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 							checkBoundsReached(i + indexOffset, j + indexOffset, k + indexOffset, newGrid.length);
 							changed = true;
 							value = value - toShare + toShare%shareCount + share;
-							for (Byte neighborDirection : relevantNeighborDirections) {
+							for (Direction neighborDirection : relevantNeighborDirections) {
 								int[] nc = getNeighborCoordinates(i, j, k, neighborDirection);
 								newGrid[nc[0] + indexOffset][nc[1] + indexOffset][nc[2] + indexOffset] += share;
 							}
@@ -211,7 +205,8 @@ public class SimpleLongNearAetherTwo3D implements SymmetricLongModel3D, Isotropi
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

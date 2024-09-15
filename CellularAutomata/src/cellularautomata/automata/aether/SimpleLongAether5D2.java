@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model5d.IsotropicHypercubicModel5DA;
@@ -36,17 +37,6 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
-	
-	private static final byte V_POSITIVE = 8;
-	private static final byte V_NEGATIVE = 9;
-	private static final byte W_POSITIVE = 0;
-	private static final byte W_NEGATIVE = 1;
-	private static final byte X_POSITIVE = 2;
-	private static final byte X_NEGATIVE = 3;
-	private static final byte Y_POSITIVE = 4;
-	private static final byte Y_NEGATIVE = 5;
-	private static final byte Z_POSITIVE = 6;
-	private static final byte Z_NEGATIVE = 7;
 	
 	/** 5D array representing the grid **/
 	private long[][][][][] grid;
@@ -101,34 +91,34 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 							long neighborValue;
 							neighborValue = getFromPosition(v + 1, w, x, y, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(V_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.V_POSITIVE, neighborValue));
 							neighborValue = getFromPosition(v - 1, w, x, y, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(V_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.V_NEGATIVE, neighborValue));
 							neighborValue = getFromPosition(v, w + 1, x, y, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(W_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.W_POSITIVE, neighborValue));
 							neighborValue = getFromPosition(v, w - 1, x, y, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(W_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.W_NEGATIVE, neighborValue));
 							neighborValue = getFromPosition(v, w, x + 1, y, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(X_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.X_POSITIVE, neighborValue));
 							neighborValue = getFromPosition(v, w, x - 1, y, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(X_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.X_NEGATIVE, neighborValue));
 							neighborValue = getFromPosition(v, w, x, y + 1, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Y_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Y_POSITIVE, neighborValue));
 							neighborValue = getFromPosition(v, w, x, y - 1, z);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Y_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Y_NEGATIVE, neighborValue));
 							neighborValue = getFromPosition(v, w, x, y, z + 1);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Z_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Z_POSITIVE, neighborValue));
 							neighborValue = getFromPosition(v, w, x, y, z - 1);
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Z_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Z_NEGATIVE, neighborValue));
 							
 							if (neighbors.size() > 0) {
 								//sort
@@ -193,7 +183,8 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int v, int w, int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int v, int w, int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case V_POSITIVE:
 			v++;

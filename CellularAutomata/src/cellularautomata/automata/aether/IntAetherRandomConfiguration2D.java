@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.model2d.IntModel2D;
 
@@ -36,11 +37,6 @@ public class IntAetherRandomConfiguration2D implements IntModel2D, Serializable 
 	 * 
 	 */
 	private static final long serialVersionUID = -8460494265821920620L;
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
 	
 	/** A 2D array representing the grid */
 	private int[][] grid;
@@ -145,7 +141,7 @@ public class IntAetherRandomConfiguration2D implements IntModel2D, Serializable 
 		boolean changed = false;
 		int[] neighborValues = new int[4];
 		int[] sortedNeighborsIndexes = new int[4];
-		byte[] neighborDirections = new byte[4];
+		Direction[] neighborDirections = new Direction[4];
 		//For every cell
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
@@ -162,7 +158,7 @@ public class IntAetherRandomConfiguration2D implements IntModel2D, Serializable 
 					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = RIGHT;
+					neighborDirections[relevantNeighborCount] = Direction.RIGHT;
 					relevantNeighborCount++;
 				}
 				if (i > 0)
@@ -171,7 +167,7 @@ public class IntAetherRandomConfiguration2D implements IntModel2D, Serializable 
 					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = LEFT;
+					neighborDirections[relevantNeighborCount] = Direction.LEFT;
 					relevantNeighborCount++;
 				}
 				if (j < grid.length - 1)
@@ -180,7 +176,7 @@ public class IntAetherRandomConfiguration2D implements IntModel2D, Serializable 
 					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = UP;
+					neighborDirections[relevantNeighborCount] = Direction.UP;
 					relevantNeighborCount++;
 				}
 				if (j > 0)
@@ -189,7 +185,7 @@ public class IntAetherRandomConfiguration2D implements IntModel2D, Serializable 
 					neighborValue = 0;
 				if (neighborValue < value) {
 					neighborValues[relevantNeighborCount] = neighborValue;
-					neighborDirections[relevantNeighborCount] = DOWN;
+					neighborDirections[relevantNeighborCount] = Direction.DOWN;
 					relevantNeighborCount++;
 				}
 
@@ -244,7 +240,8 @@ public class IntAetherRandomConfiguration2D implements IntModel2D, Serializable 
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

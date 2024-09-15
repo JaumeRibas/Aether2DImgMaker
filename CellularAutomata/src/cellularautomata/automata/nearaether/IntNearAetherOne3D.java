@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
 
@@ -38,13 +39,6 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 	 * 
 	 */
 	private static final long serialVersionUID = -1151204213779876612L;
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
 	
 	private final int initialValue;
 	private long step;
@@ -104,7 +98,7 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 		newGrid[0] = Utils.buildAnisotropic2DIntArray(1);
 		boolean first = true;
 		int[] neighborValues = new int[6];
-		byte[] neighborDirections = new byte[6];
+		Direction[] neighborDirections = new Direction[6];
 		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, first = false) {
 			if (nextX < newGrid.length) {
 				newGrid[nextX] = Utils.buildAnisotropic2DIntArray(nextX + 1);
@@ -117,37 +111,37 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 					neighborValue = getFromPosition(x + 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = RIGHT;
+						neighborDirections[relevantNeighborCount] = Direction.RIGHT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x - 1, y, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = LEFT;
+						neighborDirections[relevantNeighborCount] = Direction.LEFT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y + 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = UP;
+						neighborDirections[relevantNeighborCount] = Direction.UP;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y - 1, z);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = DOWN;
+						neighborDirections[relevantNeighborCount] = Direction.DOWN;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y, z + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = FRONT;
+						neighborDirections[relevantNeighborCount] = Direction.FRONT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y, z - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = BACK;
+						neighborDirections[relevantNeighborCount] = Direction.BACK;
 						relevantNeighborCount++;
 					}
 					
@@ -162,7 +156,7 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 									int valSwap = neighborValues[i];
 									neighborValues[i] = neighborValues[i+1];
 									neighborValues[i+1] = valSwap;
-									byte dirSwap = neighborDirections[i];
+									Direction dirSwap = neighborDirections[i];
 									neighborDirections[i] = neighborDirections[i+1];
 									neighborDirections[i+1] = dirSwap;
 								}
@@ -208,7 +202,8 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 		return changed;
 	}
 	
-	private void addToNeighbor(int grid[][][], int x, int y, int z, byte direction, int value) {
+	@SuppressWarnings("incomplete-switch")
+	private void addToNeighbor(int grid[][][], int x, int y, int z, Direction direction, int value) {
 		switch(direction) {
 		case RIGHT:
 			addRight(grid, x, y, z, value);

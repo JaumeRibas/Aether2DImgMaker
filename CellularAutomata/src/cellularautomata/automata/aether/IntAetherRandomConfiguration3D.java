@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.model3d.IntModel3D;
 
@@ -36,13 +37,6 @@ public class IntAetherRandomConfiguration3D implements IntModel3D, Serializable 
 	 * 
 	 */
 	private static final long serialVersionUID = 6499405266821248687L;
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
 	
 	/** 3D array representing the grid **/
 	private int[][][] grid;
@@ -155,7 +149,7 @@ public class IntAetherRandomConfiguration3D implements IntModel3D, Serializable 
 		boolean first = true;
 		int[] neighborValues = new int[6];
 		int[] sortedNeighborsIndexes = new int[6];
-		byte[] neighborDirections = new byte[6];
+		Direction[] neighborDirections = new Direction[6];
 		//For every cell
 		for (int i = 0, nextI = i + 1 + indexOffset; i < grid.length; i++, nextI++) {
 			if (nextI < newGrid.length) {
@@ -169,37 +163,37 @@ public class IntAetherRandomConfiguration3D implements IntModel3D, Serializable 
 					neighborValue = getFromIndexOrZero(i + 1, j, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = RIGHT;
+						neighborDirections[relevantNeighborCount] = Direction.RIGHT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromIndexOrZero(i - 1, j, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = LEFT;
+						neighborDirections[relevantNeighborCount] = Direction.LEFT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromIndexOrZero(i, j + 1, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = UP;
+						neighborDirections[relevantNeighborCount] = Direction.UP;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromIndexOrZero(i, j - 1, k);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = DOWN;
+						neighborDirections[relevantNeighborCount] = Direction.DOWN;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromIndexOrZero(i, j, k + 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = FRONT;
+						neighborDirections[relevantNeighborCount] = Direction.FRONT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromIndexOrZero(i, j, k - 1);
 					if (neighborValue < value) {
 						neighborValues[relevantNeighborCount] = neighborValue;
-						neighborDirections[relevantNeighborCount] = BACK;
+						neighborDirections[relevantNeighborCount] = Direction.BACK;
 						relevantNeighborCount++;
 					}
 					
@@ -260,7 +254,8 @@ public class IntAetherRandomConfiguration3D implements IntModel3D, Serializable 
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

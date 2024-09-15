@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.Constants;
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model3d.IsotropicCubicModelA;
@@ -34,14 +35,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, IsotropicCubicModelA {	
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
+public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, IsotropicCubicModelA {
 	
 	/** 3D array representing the grid **/
 	private BigInt[][][] grid;
@@ -110,37 +104,37 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 					else
 						neighborValue = BigInt.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(RIGHT, neighborValue));
+						neighbors.add(new Neighbor<BigInt>(Direction.RIGHT, neighborValue));
 					if (i > 0)
 						neighborValue = grid[i - 1][j][k];
 					else
 						neighborValue = BigInt.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(LEFT, neighborValue));
+						neighbors.add(new Neighbor<BigInt>(Direction.LEFT, neighborValue));
 					if (j < grid.length - 1)
 						neighborValue = grid[i][j + 1][k];
 					else
 						neighborValue = BigInt.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(UP, neighborValue));
+						neighbors.add(new Neighbor<BigInt>(Direction.UP, neighborValue));
 					if (j > 0)
 						neighborValue = grid[i][j - 1][k];
 					else
 						neighborValue = BigInt.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(DOWN, neighborValue));
+						neighbors.add(new Neighbor<BigInt>(Direction.DOWN, neighborValue));
 					if (k < grid.length - 1)
 						neighborValue = grid[i][j][k + 1];
 					else
 						neighborValue = BigInt.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(FRONT, neighborValue));
+						neighbors.add(new Neighbor<BigInt>(Direction.FRONT, neighborValue));
 					if (k > 0)
 						neighborValue = grid[i][j][k - 1];
 					else
 						neighborValue = BigInt.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigInt>(BACK, neighborValue));
+						neighbors.add(new Neighbor<BigInt>(Direction.BACK, neighborValue));
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
@@ -212,7 +206,8 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

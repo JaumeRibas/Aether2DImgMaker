@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import cellularautomata.Coordinates;
+import cellularautomata.Direction;
 import cellularautomata.arrays.HypercubicBooleanArray;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model5d.IsotropicHypercubicModel5DA;
@@ -32,17 +33,6 @@ public class SimpleLongAetherTopplingAlternationCompliance5D implements Symmetri
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
-	
-	private static final byte V_POSITIVE = 8;
-	private static final byte V_NEGATIVE = 9;
-	private static final byte W_POSITIVE = 0;
-	private static final byte W_NEGATIVE = 1;
-	private static final byte X_POSITIVE = 2;
-	private static final byte X_NEGATIVE = 3;
-	private static final byte Y_POSITIVE = 4;
-	private static final byte Y_NEGATIVE = 5;
-	private static final byte Z_POSITIVE = 6;
-	private static final byte Z_NEGATIVE = 7;
 	
 	/** 5D array representing the grid **/
 	private long[][][][][] grid;
@@ -117,61 +107,61 @@ public class SimpleLongAetherTopplingAlternationCompliance5D implements Symmetri
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(V_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.V_POSITIVE, neighborValue));
 							if (i > 0)
 								neighborValue = grid[i - 1][j][k][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(V_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.V_NEGATIVE, neighborValue));
 							if (j < grid.length - 1)
 								neighborValue = grid[i][j + 1][k][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(W_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.W_POSITIVE, neighborValue));
 							if (j > 0)
 								neighborValue = grid[i][j - 1][k][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(W_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.W_NEGATIVE, neighborValue));
 							if (k < grid.length - 1)
 								neighborValue = grid[i][j][k + 1][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(X_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.X_POSITIVE, neighborValue));
 							if (k > 0)
 								neighborValue = grid[i][j][k - 1][l][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(X_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.X_NEGATIVE, neighborValue));
 							if (l < grid.length - 1)
 								neighborValue = grid[i][j][k][l + 1][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Y_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Y_POSITIVE, neighborValue));
 							if (l > 0)
 								neighborValue = grid[i][j][k][l - 1][m];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Y_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Y_NEGATIVE, neighborValue));
 							if (m < grid.length - 1)
 								neighborValue = grid[i][j][k][l][m + 1];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Z_POSITIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Z_POSITIVE, neighborValue));
 							if (m > 0)
 								neighborValue = grid[i][j][k][l][m - 1];
 							else
 								neighborValue = 0;
 							if (neighborValue < value)
-								neighbors.add(new Neighbor<Long>(Z_NEGATIVE, neighborValue));
+								neighbors.add(new Neighbor<Long>(Direction.Z_NEGATIVE, neighborValue));
 
 							boolean toppled = false;
 							if (neighbors.size() > 0) {
@@ -263,7 +253,8 @@ public class SimpleLongAetherTopplingAlternationCompliance5D implements Symmetri
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int v, int w, int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int v, int w, int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case V_POSITIVE:
 			v++;

@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
 
@@ -38,13 +39,6 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 	 * 
 	 */
 	private static final long serialVersionUID = -8988793559626431761L;
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
 	
 	private final int initialValue;
 	private long step;
@@ -103,7 +97,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 		boolean changed = false;
 		newGrid[0] = Utils.buildAnisotropic2DIntArray(1);
 		boolean first = true;
-		byte[] neighborDirections = new byte[6];
+		Direction[] neighborDirections = new Direction[6];
 		for (int x = 0, nextX = 1; x < grid.length; x = nextX, nextX++, first = false) {
 			if (nextX < newGrid.length) {
 				newGrid[nextX] = Utils.buildAnisotropic2DIntArray(nextX + 1);
@@ -119,7 +113,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						neighborDirections[relevantNeighborCount] = RIGHT;
+						neighborDirections[relevantNeighborCount] = Direction.RIGHT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x - 1, y, z);
@@ -127,7 +121,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						neighborDirections[relevantNeighborCount] = LEFT;
+						neighborDirections[relevantNeighborCount] = Direction.LEFT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y + 1, z);
@@ -135,7 +129,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						neighborDirections[relevantNeighborCount] = UP;
+						neighborDirections[relevantNeighborCount] = Direction.UP;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y - 1, z);
@@ -143,7 +137,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						neighborDirections[relevantNeighborCount] = DOWN;
+						neighborDirections[relevantNeighborCount] = Direction.DOWN;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y, z + 1);
@@ -151,7 +145,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						neighborDirections[relevantNeighborCount] = FRONT;
+						neighborDirections[relevantNeighborCount] = Direction.FRONT;
 						relevantNeighborCount++;
 					}
 					neighborValue = getFromPosition(x, y, z - 1);
@@ -159,7 +153,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 						if (neighborValue > biggestSmallerNeighborValue) {
 							biggestSmallerNeighborValue = neighborValue;
 						}
-						neighborDirections[relevantNeighborCount] = BACK;
+						neighborDirections[relevantNeighborCount] = Direction.BACK;
 						relevantNeighborCount++;
 					}
 					
@@ -194,7 +188,8 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 		return changed;
 	}
 	
-	private void addToNeighbor(int grid[][][], int x, int y, int z, byte direction, int value) {
+	@SuppressWarnings("incomplete-switch")
+	private void addToNeighbor(int grid[][][], int x, int y, int z, Direction direction, int value) {
 		switch(direction) {
 		case RIGHT:
 			addRight(grid, x, y, z, value);

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import cellularautomata.Coordinates;
+import cellularautomata.Direction;
 import cellularautomata.arrays.HypercubicBooleanArray;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model3d.IsotropicCubicModelA;
@@ -32,13 +33,6 @@ public class SimpleLongAetherTopplingAlternationCompliance3D implements Symmetri
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
@@ -114,37 +108,37 @@ public class SimpleLongAetherTopplingAlternationCompliance3D implements Symmetri
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+						neighbors.add(new Neighbor<Long>(Direction.RIGHT, neighborValue));
 					if (i > 0)
 						neighborValue = grid[i - 1][j][k];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+						neighbors.add(new Neighbor<Long>(Direction.LEFT, neighborValue));
 					if (j < grid.length - 1)
 						neighborValue = grid[i][j + 1][k];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(UP, neighborValue));
+						neighbors.add(new Neighbor<Long>(Direction.UP, neighborValue));
 					if (j > 0)
 						neighborValue = grid[i][j - 1][k];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
+						neighbors.add(new Neighbor<Long>(Direction.DOWN, neighborValue));
 					if (k < grid.length - 1)
 						neighborValue = grid[i][j][k + 1];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
+						neighbors.add(new Neighbor<Long>(Direction.FRONT, neighborValue));
 					if (k > 0)
 						neighborValue = grid[i][j][k - 1];
 					else
 						neighborValue = 0;
 					if (neighborValue < value)
-						neighbors.add(new Neighbor<Long>(BACK, neighborValue));
+						neighbors.add(new Neighbor<Long>(Direction.BACK, neighborValue));
 
 					boolean toppled = false;
 					if (neighbors.size() > 0) {
@@ -232,7 +226,8 @@ public class SimpleLongAetherTopplingAlternationCompliance3D implements Symmetri
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model3d.IsotropicCubicModelA;
@@ -34,14 +35,7 @@ import cellularautomata.model3d.SymmetricNumericModel3D;
  * @author Jaume
  *
  */
-public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFraction>, IsotropicCubicModelA {	
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
+public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFraction>, IsotropicCubicModelA {
 	
 	/** 3D array representing the grid **/
 	private BigFraction[][][] grid;
@@ -100,37 +94,37 @@ public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFrac
 					else
 						neighborValue = BigFraction.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigFraction>(RIGHT, neighborValue));
+						neighbors.add(new Neighbor<BigFraction>(Direction.RIGHT, neighborValue));
 					if (i > 0)
 						neighborValue = grid[i - 1][j][k];
 					else
 						neighborValue = BigFraction.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
+						neighbors.add(new Neighbor<BigFraction>(Direction.LEFT, neighborValue));
 					if (j < grid.length - 1)
 						neighborValue = grid[i][j + 1][k];
 					else
 						neighborValue = BigFraction.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigFraction>(UP, neighborValue));
+						neighbors.add(new Neighbor<BigFraction>(Direction.UP, neighborValue));
 					if (j > 0)
 						neighborValue = grid[i][j - 1][k];
 					else
 						neighborValue = BigFraction.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigFraction>(DOWN, neighborValue));
+						neighbors.add(new Neighbor<BigFraction>(Direction.DOWN, neighborValue));
 					if (k < grid.length - 1)
 						neighborValue = grid[i][j][k + 1];
 					else
 						neighborValue = BigFraction.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigFraction>(FRONT, neighborValue));
+						neighbors.add(new Neighbor<BigFraction>(Direction.FRONT, neighborValue));
 					if (k > 0)
 						neighborValue = grid[i][j][k - 1];
 					else
 						neighborValue = BigFraction.ZERO;
 					if (neighborValue.compareTo(value) < 0)
-						neighbors.add(new Neighbor<BigFraction>(BACK, neighborValue));
+						neighbors.add(new Neighbor<BigFraction>(Direction.BACK, neighborValue));
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
@@ -197,7 +191,8 @@ public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFrac
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

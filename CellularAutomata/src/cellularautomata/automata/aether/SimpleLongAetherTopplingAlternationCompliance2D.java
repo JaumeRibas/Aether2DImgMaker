@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model2d.IsotropicSquareModelA;
 import cellularautomata.model2d.SymmetricBooleanModel2D;
@@ -29,11 +30,6 @@ public class SimpleLongAetherTopplingAlternationCompliance2D implements Symmetri
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
 	
 	/** A 2D array representing the grid */
 	private long[][] grid;
@@ -111,25 +107,25 @@ public class SimpleLongAetherTopplingAlternationCompliance2D implements Symmetri
 				else
 					neighborValue = 0;
 				if (neighborValue < value)
-					neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+					neighbors.add(new Neighbor<Long>(Direction.RIGHT, neighborValue));
 				if (i > 0)
 					neighborValue = grid[i - 1][j];
 				else
 					neighborValue = 0;
 				if (neighborValue < value)
-					neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+					neighbors.add(new Neighbor<Long>(Direction.LEFT, neighborValue));
 				if (j < grid.length - 1)
 					neighborValue = grid[i][j + 1];
 				else
 					neighborValue = 0;
 				if (neighborValue < value)
-					neighbors.add(new Neighbor<Long>(UP, neighborValue));
+					neighbors.add(new Neighbor<Long>(Direction.UP, neighborValue));
 				if (j > 0)
 					neighborValue = grid[i][j - 1];
 				else
 					neighborValue = 0;
 				if (neighborValue < value)
-					neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
+					neighbors.add(new Neighbor<Long>(Direction.DOWN, neighborValue));
 
 				boolean toppled = false;
 				//If there are any
@@ -217,7 +213,8 @@ public class SimpleLongAetherTopplingAlternationCompliance2D implements Symmetri
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

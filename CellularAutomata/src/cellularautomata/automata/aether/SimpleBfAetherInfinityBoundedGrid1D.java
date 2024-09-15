@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model1d.NumericModel1D;
 
@@ -34,9 +35,6 @@ import cellularautomata.model1d.NumericModel1D;
  *
  */
 public class SimpleBfAetherInfinityBoundedGrid1D implements NumericModel1D<BigFraction> {
-	
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
 	
 	/** A 1D array representing the grid */
 	private BigFraction[] grid;
@@ -84,12 +82,12 @@ public class SimpleBfAetherInfinityBoundedGrid1D implements NumericModel1D<BigFr
 			if (index < grid.length - 1) {
 				neighborValue = grid[index + 1];
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(RIGHT, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.RIGHT, neighborValue));
 			}
 			if (index > 0) {
 				neighborValue = grid[index - 1];
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.LEFT, neighborValue));
 			}
 
 			//If there are any
@@ -140,8 +138,8 @@ public class SimpleBfAetherInfinityBoundedGrid1D implements NumericModel1D<BigFr
 		return changed;
 	}
 	
-	private static int getNeighborCoordinates(int x, byte direction) {
-		if (direction == RIGHT) {
+	private static int getNeighborCoordinates(int x, Direction direction) {
+		if (direction == Direction.RIGHT) {
 			x++;
 		} else {
 			x--;

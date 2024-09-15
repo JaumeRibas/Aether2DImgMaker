@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.Constants;
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model4d.IsotropicHypercubicModel4DA;
@@ -34,16 +35,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {	
-	
-	private static final byte W_POSITIVE = 0;
-	private static final byte W_NEGATIVE = 1;
-	private static final byte X_POSITIVE = 2;
-	private static final byte X_NEGATIVE = 3;
-	private static final byte Y_POSITIVE = 4;
-	private static final byte Y_NEGATIVE = 5;
-	private static final byte Z_POSITIVE = 6;
-	private static final byte Z_NEGATIVE = 7;
+public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {
 	
 	/** 4D array representing the grid **/
 	private BigInt[][][][] grid;
@@ -116,49 +108,49 @@ public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, Is
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(W_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.W_POSITIVE, neighborValue));
 						if (i > 0)
 							neighborValue = grid[i - 1][j][k][l];
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(W_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.W_NEGATIVE, neighborValue));
 						if (j < grid.length - 1)
 							neighborValue = grid[i][j + 1][k][l];
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(X_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.X_POSITIVE, neighborValue));
 						if (j > 0)
 							neighborValue = grid[i][j - 1][k][l];
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(X_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.X_NEGATIVE, neighborValue));
 						if (k < grid.length - 1)
 							neighborValue = grid[i][j][k + 1][l];
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(Y_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.Y_POSITIVE, neighborValue));
 						if (k > 0)
 							neighborValue = grid[i][j][k - 1][l];
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(Y_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.Y_NEGATIVE, neighborValue));
 						if (l < grid.length - 1)
 							neighborValue = grid[i][j][k][l + 1];
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(Z_POSITIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.Z_POSITIVE, neighborValue));
 						if (l > 0)
 							neighborValue = grid[i][j][k][l - 1];
 						else
 							neighborValue = BigInt.ZERO;
 						if (neighborValue.compareTo(value) < 0)
-							neighbors.add(new Neighbor<BigInt>(Z_NEGATIVE, neighborValue));
+							neighbors.add(new Neighbor<BigInt>(Direction.Z_NEGATIVE, neighborValue));
 						
 						if (neighbors.size() > 0) {
 							//sort
@@ -235,7 +227,8 @@ public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, Is
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int w, int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int w, int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case W_POSITIVE:
 			w++;

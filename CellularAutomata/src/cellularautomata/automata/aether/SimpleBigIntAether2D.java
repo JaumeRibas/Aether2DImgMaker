@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cellularautomata.Constants;
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model2d.IsotropicSquareModelA;
@@ -34,12 +35,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, IsotropicSquareModelA {	
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
+public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, IsotropicSquareModelA {
 	
 	/** 2D array representing the grid **/
 	private BigInt[][] grid;
@@ -107,25 +103,25 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigInt>(RIGHT, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(Direction.RIGHT, neighborValue));
 				if (i > 0)
 					neighborValue = grid[i - 1][j];
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigInt>(LEFT, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(Direction.LEFT, neighborValue));
 				if (j < grid[i].length - 1)
 					neighborValue = grid[i][j + 1];
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigInt>(UP, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(Direction.UP, neighborValue));
 				if (j > 0)
 					neighborValue = grid[i][j - 1];
 				else
 					neighborValue = BigInt.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigInt>(DOWN, neighborValue));
+					neighbors.add(new Neighbor<BigInt>(Direction.DOWN, neighborValue));
 
 				if (neighbors.size() > 0) {
 					//sort neighbors by value
@@ -195,7 +191,8 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

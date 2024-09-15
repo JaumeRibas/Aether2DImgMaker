@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model1d.IsotropicModel1DA;
 import cellularautomata.model1d.SymmetricBooleanModel1D;
@@ -35,9 +36,6 @@ public class SimpleLongAetherTopplingAlternationCompliance1D implements Symmetri
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
-	
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
 	
 	/** A 1D array representing the grid */
 	private long[] grid;
@@ -114,13 +112,13 @@ public class SimpleLongAetherTopplingAlternationCompliance1D implements Symmetri
 			else
 				neighborValue = 0;
 			if (neighborValue < value)
-				neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+				neighbors.add(new Neighbor<Long>(Direction.RIGHT, neighborValue));
 			if (index > 0)
 				neighborValue = grid[index - 1];
 			else
 				neighborValue = 0;
 			if (neighborValue < value)
-				neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+				neighbors.add(new Neighbor<Long>(Direction.LEFT, neighborValue));
 
 			boolean toppled = false;
 			//If there are any
@@ -191,8 +189,8 @@ public class SimpleLongAetherTopplingAlternationCompliance1D implements Symmetri
 		}
 	}
 	
-	private static int getNeighborCoordinates(int x, byte direction) {
-		if (direction == RIGHT) {
+	private static int getNeighborCoordinates(int x, Direction direction) {
+		if (direction == Direction.RIGHT) {
 			x++;
 		} else {
 			x--;

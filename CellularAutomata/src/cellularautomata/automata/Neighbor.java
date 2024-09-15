@@ -16,13 +16,15 @@
  */
 package cellularautomata.automata;
 
+import cellularautomata.Direction;
+
 public class Neighbor<Object_Type> {
 	
 	private Object_Type value;
 
-	private byte direction;
+	private Direction direction;
 	
-	public Neighbor(byte direction, Object_Type value) {
+	public Neighbor(Direction direction, Object_Type value) {
 		this.value = value;
 		this.direction = direction;
 	}
@@ -35,7 +37,7 @@ public class Neighbor<Object_Type> {
 		this.value = value;
 	}
 	
-	public byte getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
 	

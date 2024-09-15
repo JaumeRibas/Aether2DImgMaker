@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model3d.IsotropicCubicModelA;
 import cellularautomata.model3d.SymmetricLongModel3D;
@@ -32,13 +33,6 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  *
  */
 public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, IsotropicCubicModelA {
-
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
-	private static final byte FRONT = 4;
-	private static final byte BACK = 5;
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
@@ -109,9 +103,9 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 						if (neighborValue < smallestNeighborValue) {
 							smallestNeighborValue = neighborValue;
 							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.RIGHT, neighborValue));
 						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(RIGHT, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.RIGHT, neighborValue));
 						}
 						if (i > 0) {
 							neighborValue = grid[i - 1][j][k];
@@ -121,9 +115,9 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 						if (neighborValue < smallestNeighborValue) {
 							smallestNeighborValue = neighborValue;
 							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.LEFT, neighborValue));
 						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(LEFT, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.LEFT, neighborValue));
 						}
 						if (j < grid[i].length - 1) {
 							neighborValue = grid[i][j + 1][k];
@@ -133,9 +127,9 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 						if (neighborValue < smallestNeighborValue) {
 							smallestNeighborValue = neighborValue;
 							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(UP, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.UP, neighborValue));
 						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(UP, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.UP, neighborValue));
 						}
 						if (j > 0) {
 							neighborValue = grid[i][j - 1][k];
@@ -145,9 +139,9 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 						if (neighborValue < smallestNeighborValue) {
 							smallestNeighborValue = neighborValue;
 							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.DOWN, neighborValue));
 						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(DOWN, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.DOWN, neighborValue));
 						}
 						if (k < grid[i][j].length - 1) {
 							neighborValue = grid[i][j][k + 1];
@@ -157,9 +151,9 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 						if (neighborValue < smallestNeighborValue) {
 							smallestNeighborValue = neighborValue;
 							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.FRONT, neighborValue));
 						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(FRONT, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.FRONT, neighborValue));
 						}
 						if (k > 0) {
 							neighborValue = grid[i][j][k - 1];
@@ -169,9 +163,9 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 						if (neighborValue < smallestNeighborValue) {
 							smallestNeighborValue = neighborValue;
 							neighbors.clear();
-							neighbors.add(new Neighbor<Long>(BACK, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.BACK, neighborValue));
 						} else if (neighborValue == smallestNeighborValue) {
-							neighbors.add(new Neighbor<Long>(BACK, neighborValue));
+							neighbors.add(new Neighbor<Long>(Direction.BACK, neighborValue));
 						}
 						
 						if (neighbors.size() > 0) {
@@ -218,7 +212,8 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, int z, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, int z, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;

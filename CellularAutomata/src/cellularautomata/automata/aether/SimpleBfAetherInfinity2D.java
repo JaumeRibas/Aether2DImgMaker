@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
 import cellularautomata.model2d.IsotropicSquareModelA;
@@ -34,12 +35,7 @@ import cellularautomata.model2d.SymmetricNumericModel2D;
  * @author Jaume
  *
  */
-public class SimpleBfAetherInfinity2D implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
-	
-	private static final byte UP = 0;
-	private static final byte DOWN = 1;
-	private static final byte RIGHT = 2;
-	private static final byte LEFT = 3;
+public class SimpleBfAetherInfinity2D implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {
 	
 	/** 2D array representing the grid **/
 	private BigFraction[][] grid;
@@ -93,25 +89,25 @@ public class SimpleBfAetherInfinity2D implements SymmetricNumericModel2D<BigFrac
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(RIGHT, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.RIGHT, neighborValue));
 				if (i > 0)
 					neighborValue = grid[i - 1][j];
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(LEFT, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.LEFT, neighborValue));
 				if (j < grid[i].length - 1)
 					neighborValue = grid[i][j + 1];
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(UP, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.UP, neighborValue));
 				if (j > 0)
 					neighborValue = grid[i][j - 1];
 				else
 					neighborValue = BigFraction.ZERO;
 				if (neighborValue.compareTo(value) < 0)
-					neighbors.add(new Neighbor<BigFraction>(DOWN, neighborValue));
+					neighbors.add(new Neighbor<BigFraction>(Direction.DOWN, neighborValue));
 
 				if (neighbors.size() > 0) {
 					//sort neighbors by value
@@ -176,7 +172,8 @@ public class SimpleBfAetherInfinity2D implements SymmetricNumericModel2D<BigFrac
 		}
 	}
 	
-	private static int[] getNeighborCoordinates(int x, int y, byte direction) {
+	@SuppressWarnings("incomplete-switch")
+	private static int[] getNeighborCoordinates(int x, int y, Direction direction) {
 		switch(direction) {
 		case UP:
 			y++;
