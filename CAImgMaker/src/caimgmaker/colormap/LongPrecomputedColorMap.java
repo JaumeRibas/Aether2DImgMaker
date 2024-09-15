@@ -19,9 +19,11 @@ package caimgmaker.colormap;
 import java.awt.Color;
 
 public class LongPrecomputedColorMap implements LongBoundedColorMap {
+	
+	private static final int maxColorCount = 100;
+	
 	private LongBoundedColorMap colorMap;
 	private Color[] colors;
-	private static final int MAX_COLOR_COUNT = 100;
 	
 	public LongPrecomputedColorMap(LongBoundedColorMap colorMap) throws Exception {
 		this.colorMap = colorMap;
@@ -31,7 +33,7 @@ public class LongPrecomputedColorMap implements LongBoundedColorMap {
 	private void computeColors() throws Exception {
 		long minValue = colorMap.getMinValue(), maxValue = colorMap.getMaxValue();
 		long lRange = maxValue - minValue + 1;
-		if (lRange > MAX_COLOR_COUNT) {
+		if (lRange > maxColorCount) {
 			colors = null;
 			return;
 		}

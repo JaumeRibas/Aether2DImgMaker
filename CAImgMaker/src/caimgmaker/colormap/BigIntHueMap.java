@@ -24,11 +24,12 @@ import cellularautomata.numbers.BigInt;
 
 public class BigIntHueMap implements BoundedColorMap<BigInt> {
 	
+	private static final BigInt hueRange = BigInt.valueOf(220);
+	private static final int hueMargin = BigInt.valueOf(255).subtract(hueRange).intValue();
+	
 	private BigInt minValue;
 	private BigInt maxValue;
 	private BigDecimal range;
-	private static final BigInt HUE_RANGE = BigInt.valueOf(220);
-	private static final int HUE_MARGIN = BigInt.valueOf(255).subtract(HUE_RANGE).intValue();
 	
 	public BigIntHueMap(BigInt minValue, BigInt maxValue) {
 		if (minValue.equals(maxValue)) {
@@ -58,8 +59,8 @@ public class BigIntHueMap implements BoundedColorMap<BigInt> {
 	public Color getColor(BigInt value) throws IllegalArgumentException {
 		if (value.compareTo(minValue) < 0 || value.compareTo(maxValue) > 0)
 			throw new IllegalArgumentException("The value " + value + " is out of the [" + minValue + ", " + maxValue + "] range");
-		float hue = (new BigDecimal(HUE_RANGE.multiply(value.subtract(minValue)).bigIntegerValue())
-				.divide(range, RoundingMode.HALF_UP).floatValue() + HUE_MARGIN)/255;
+		float hue = (new BigDecimal(hueRange.multiply(value.subtract(minValue)).bigIntegerValue())
+				.divide(range, RoundingMode.HALF_UP).floatValue() + hueMargin)/255;
 		hue = (hue + (float)1/6)%1;
 		hue = 1 - hue;
 		Color color = new Color(Color.HSBtoRGB(hue, 1, 1));

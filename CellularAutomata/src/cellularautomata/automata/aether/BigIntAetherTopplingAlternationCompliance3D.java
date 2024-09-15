@@ -26,11 +26,11 @@ import cellularautomata.numbers.BigInt;
 
 public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicBooleanArrayModelA {
 	
-	private static final BigInt TWO = BigInt.valueOf(2);
-	private static final BigInt THREE = BigInt.valueOf(3);
-	private static final BigInt FOUR = BigInt.valueOf(4);
-	private static final BigInt SIX = BigInt.valueOf(6);
-	private static final BigInt SEVEN = BigInt.valueOf(7);
+	private static final BigInt two = BigInt.valueOf(2);
+	private static final BigInt three = BigInt.valueOf(3);
+	private static final BigInt four = BigInt.valueOf(4);
+	private static final BigInt six = BigInt.valueOf(6);
+	private static final BigInt seven = BigInt.valueOf(7);
 
 	/** A 3D array representing the grid */
 	private BigInt[][][] sourceGrid;
@@ -915,7 +915,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 		boolean toppled = false;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			BigInt toShare = currentValue.subtract(greaterXNeighborValue);
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(seven);
 			BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
@@ -1022,7 +1022,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue);
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(seven);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {//TODO test potential optimization adding else
 						toppled = true;
@@ -1033,16 +1033,16 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(seven);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(six));
 					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					shareAndRemainder = toShare.divideAndRemainder(four);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1052,16 +1052,16 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else {
 					// gx < sz < current
 					BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(seven);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[1][0] = newCurrentXSlice[1][0].add(share).add(share);
 					newGreaterXSlice[1][1] = newGreaterXSlice[1][1].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(six));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					shareAndRemainder = toShare.divideAndRemainder(four);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1072,7 +1072,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 			} else {
 				// sz < current <= gx
 				BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(four);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
@@ -1083,7 +1083,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			// gx < current <= sz
 			BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(four);
 			BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
@@ -1361,7 +1361,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				if (smallerZNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sz < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(seven);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1372,16 +1372,16 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else if (smallerZNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sz < gx < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(seven);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(six));
 					toShare = currentRemainingValue.subtract(smallerZNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					shareAndRemainder = toShare.divideAndRemainder(four);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1391,16 +1391,16 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else {
 					// gx < sz < current
 					BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(SEVEN);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(seven);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentXSlice[coord][coordMinusOne] = newCurrentXSlice[coord][coordMinusOne].add(share);
 					newGreaterXSlice[coord][coord] = newGreaterXSlice[coord][coord].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(SIX));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(six));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FOUR);
+					shareAndRemainder = toShare.divideAndRemainder(four);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1411,7 +1411,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 			} else {
 				// sz < current <= gx
 				BigInt toShare = currentValue.subtract(smallerZNeighborValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(four);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
@@ -1422,7 +1422,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			// gx < current <= sz
 			BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(FOUR);
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(four);
 			BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
@@ -1734,7 +1734,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1745,7 +1745,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
 					BigInt toShare = value.subtract(n1Val); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1754,7 +1754,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					shareAndRemainder = toShare.divideAndRemainder(two);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1764,7 +1764,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else {
 					// n1Val < n0Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1773,7 +1773,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share);
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					shareAndRemainder = toShare.divideAndRemainder(two);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -1784,7 +1784,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				break;
 			case 1:
 				BigInt toShare = value.subtract(neighborValues[0]);
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(two);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
@@ -1992,7 +1992,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				if (n0Val.equals(n1Val)) {
 					// n0Val = n1Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -2003,7 +2003,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else if (n0Val.compareTo(n1Val) < 0) {
 					// n0Val < n1Val < value
 					BigInt toShare = value.subtract(n1Val); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -2012,7 +2012,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n0Val);
-					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					shareAndRemainder = toShare.divideAndRemainder(two);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -2022,7 +2022,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				} else {
 					// n1Val < n0Val < value
 					BigInt toShare = value.subtract(n0Val); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -2031,7 +2031,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 					newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]] = newXSlices[n1Coords[0]][n1Coords[1]][n1Coords[2]].add(share.multiply(BigInt.valueOf(n1Mult)));
 					BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 					toShare = currentRemainingValue.subtract(n1Val);
-					shareAndRemainder = toShare.divideAndRemainder(TWO);
+					shareAndRemainder = toShare.divideAndRemainder(two);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
@@ -2042,7 +2042,7 @@ public class BigIntAetherTopplingAlternationCompliance3D extends IsotropicCubicB
 				break;
 			case 1:
 				BigInt toShare = value.subtract(neighborValues[0]);
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(two);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;

@@ -1355,7 +1355,7 @@ final class Test {
 		System.out.println("Passed!");
 	}
 
-	private static final String BOUNDS_CONSISTENCY_ERROR_FORMAT = "Inconsistency found in bounds in %s traversal%n";
+	private static final String boundsConsistencyErrorFormat = "Inconsistency found in bounds in %s traversal%n";
 	
 	static void testBoundsConsistency(Model2D grid) {
 		boolean consistentBounds = true;
@@ -1382,13 +1382,13 @@ final class Test {
 			for (int x = grid.getMinX(y); x <= localMaxX; x++) {
 				positionCount++;
 				if ((minMaxY = positions.get(x)) == null || y < minMaxY[0] || y > minMaxY[1]) {
-					System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+					System.err.printf(boundsConsistencyErrorFormat, traversal);
 					consistentBounds = false;
 				}
 			}
 		}
 		if (firstPositionCount != positionCount) {
-			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			System.err.printf(boundsConsistencyErrorFormat, traversal);
 			consistentBounds = false;
 		}
 		if (consistentBounds) {
@@ -1429,14 +1429,14 @@ final class Test {
 				for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
 					positionCount++;
 					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
-						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						System.err.printf(boundsConsistencyErrorFormat, traversal);
 						consistentBounds = false;
 					}
 				}
 			}
 		}
 		if (firstPositionCount != positionCount) {
-			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			System.err.printf(boundsConsistencyErrorFormat, traversal);
 			consistentBounds = false;
 		}
 		//yxz
@@ -1450,14 +1450,14 @@ final class Test {
 				for (int z = grid.getMinZ(x, y); z <= localMaxZ; z++) {
 					positionCount++;
 					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
-						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						System.err.printf(boundsConsistencyErrorFormat, traversal);
 						consistentBounds = false;
 					}
 				}
 			}
 		}
 		if (firstPositionCount != positionCount) {
-			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			System.err.printf(boundsConsistencyErrorFormat, traversal);
 			consistentBounds = false;
 		}
 		//yzx
@@ -1471,14 +1471,14 @@ final class Test {
 				for (int x = grid.getMinX(y, z); x <= localMaxX; x++) {
 					positionCount++;
 					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
-						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						System.err.printf(boundsConsistencyErrorFormat, traversal);
 						consistentBounds = false;
 					}
 				}
 			}
 		}
 		if (firstPositionCount != positionCount) {
-			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			System.err.printf(boundsConsistencyErrorFormat, traversal);
 			consistentBounds = false;
 		}
 		//zxy
@@ -1492,14 +1492,14 @@ final class Test {
 				for (int y = grid.getMinY(x, z); y <= localMaxY; y++) {
 					positionCount++;
 					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
-						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						System.err.printf(boundsConsistencyErrorFormat, traversal);
 						consistentBounds = false;
 					}
 				}
 			}
 		}
 		if (firstPositionCount != positionCount) {
-			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			System.err.printf(boundsConsistencyErrorFormat, traversal);
 			consistentBounds = false;
 		}
 		//zyx
@@ -1513,14 +1513,14 @@ final class Test {
 				for (int x = grid.getMinX(y, z); x <= localMaxX; x++) {
 					positionCount++;
 					if ((yzs = positions.get(x)) == null || (minMaxZ = yzs.get(y)) == null || z < minMaxZ[0] || z > minMaxZ[1]) {
-						System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+						System.err.printf(boundsConsistencyErrorFormat, traversal);
 						consistentBounds = false;
 					}
 				}
 			}
 		}
 		if (firstPositionCount != positionCount) {
-			System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+			System.err.printf(boundsConsistencyErrorFormat, traversal);
 			consistentBounds = false;
 		}
 		if (consistentBounds) {
@@ -1548,7 +1548,7 @@ final class Test {
 			grid.forEachPosition((counter = new CounterConsumer<Coordinates>())
 					.andThen((withinBounds = new WithinBoundsCoordinatesConsumer(grid))), axesOrder);
 			if (!withinBounds.isWithinBounds()) {
-				System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+				System.err.printf(boundsConsistencyErrorFormat, traversal);
 				consistentBounds = false;
 			}
 			BigInt firstPositionCount = counter.getCount();
@@ -1562,11 +1562,11 @@ final class Test {
 				grid.forEachPosition((counter = new CounterConsumer<Coordinates>())
 						.andThen((withinBounds = new WithinBoundsCoordinatesConsumer(grid))), axesOrder);
 				if (!withinBounds.isWithinBounds()) {
-					System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+					System.err.printf(boundsConsistencyErrorFormat, traversal);
 					consistentBounds = false;
 				}
 				if (!firstPositionCount.equals(counter.getCount())) {
-					System.err.printf(BOUNDS_CONSISTENCY_ERROR_FORMAT, traversal);
+					System.err.printf(boundsConsistencyErrorFormat, traversal);
 					consistentBounds = false;
 				}
 			}

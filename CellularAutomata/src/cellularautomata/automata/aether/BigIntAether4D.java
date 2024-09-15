@@ -32,11 +32,11 @@ import cellularautomata.numbers.BigInt;
  */
 public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigInt> {
 
-	private static final BigInt TWO = BigInt.valueOf(2);
-	private static final BigInt THREE = BigInt.valueOf(3);
-	private static final BigInt FIVE = BigInt.valueOf(5);
-	private static final BigInt EIGHT = BigInt.valueOf(8);
-	private static final BigInt NINE = BigInt.valueOf(9);
+	private static final BigInt two = BigInt.valueOf(2);
+	private static final BigInt three = BigInt.valueOf(3);
+	private static final BigInt five = BigInt.valueOf(5);
+	private static final BigInt eight = BigInt.valueOf(8);
+	private static final BigInt nine = BigInt.valueOf(9);
 
 	private final BigInt initialValue;
 	private long step;
@@ -1777,7 +1777,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 		boolean toppled = false;
 		if (gWValue.compareTo(currentValue) < 0) {
 			BigInt toShare = currentValue.subtract(gWValue);
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(nine);BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
 				newCurrentWSlice[0][0][0] = newCurrentWSlice[0][0][0].add(currentValue.subtract(toShare).add(share).add(shareAndRemainder[1]));
@@ -1924,7 +1924,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				if (sZValue.equals(gWValue)) {
 					// gw = sz < current
 					BigInt toShare = currentValue.subtract(gWValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(nine);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1934,15 +1934,15 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				} else if (sZValue.compareTo(gWValue) < 0) {
 					// sz < gw < current
 					BigInt toShare = currentValue.subtract(gWValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(nine);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentWSlice[1][1][0] = newCurrentWSlice[1][1][0].add(share.add(share));
 					newGreaterWSlice[1][1][1] = newGreaterWSlice[1][1][1].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(EIGHT));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(eight));
 					toShare = currentRemainingValue.subtract(sZValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FIVE);share = shareAndRemainder[0];
+					shareAndRemainder = toShare.divideAndRemainder(five);share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1951,15 +1951,15 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				} else {
 					// gw < sz < current
 					BigInt toShare = currentValue.subtract(sZValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(nine);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentWSlice[1][1][0] = newCurrentWSlice[1][1][0].add(share.add(share));
 					newGreaterWSlice[1][1][1] = newGreaterWSlice[1][1][1].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(EIGHT));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(eight));
 					toShare = currentRemainingValue.subtract(gWValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FIVE);share = shareAndRemainder[0];
+					shareAndRemainder = toShare.divideAndRemainder(five);share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -1969,7 +1969,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			} else {
 				// sz < current <= gw
 				BigInt toShare = currentValue.subtract(sZValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -1979,7 +1979,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 		} else if (gWValue.compareTo(currentValue) < 0) {
 			// gw < current <= sz
 			BigInt toShare = currentValue.subtract(gWValue); 
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
 			}
@@ -2478,7 +2478,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 					// gw = sz < current
 					int coordMinusOne = coord - 1;
 					BigInt toShare = currentValue.subtract(gWValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(nine);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -2489,15 +2489,15 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 					// sz < gw < current
 					int coordMinusOne = coord - 1;
 					BigInt toShare = currentValue.subtract(gWValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(nine);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentWSlice[coord][coord][coordMinusOne] = newCurrentWSlice[coord][coord][coordMinusOne].add(share);
 					newGreaterWSlice[coord][coord][coord] = newGreaterWSlice[coord][coord][coord].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(EIGHT));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(eight));
 					toShare = currentRemainingValue.subtract(sZValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FIVE);share = shareAndRemainder[0];
+					shareAndRemainder = toShare.divideAndRemainder(five);share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -2507,15 +2507,15 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 					// gw < sz < current
 					int coordMinusOne = coord - 1;
 					BigInt toShare = currentValue.subtract(sZValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(NINE);BigInt share = shareAndRemainder[0];
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(nine);BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
 					newCurrentWSlice[coord][coord][coordMinusOne] = newCurrentWSlice[coord][coord][coordMinusOne].add(share);
 					newGreaterWSlice[coord][coord][coord] = newGreaterWSlice[coord][coord][coord].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(EIGHT));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(eight));
 					toShare = currentRemainingValue.subtract(gWValue); 
-					shareAndRemainder = toShare.divideAndRemainder(FIVE);share = shareAndRemainder[0];
+					shareAndRemainder = toShare.divideAndRemainder(five);share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						toppled = true;
 					}
@@ -2526,7 +2526,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				// sz < current <= gw
 				int coordMinusOne = coord - 1;
 				BigInt toShare = currentValue.subtract(sZValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -2536,7 +2536,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 		} else if (gWValue.compareTo(currentValue) < 0) {
 			// gw < current <= sz
 			BigInt toShare = currentValue.subtract(gWValue); 
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);BigInt share = shareAndRemainder[0];
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
 			}
@@ -3684,7 +3684,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			if (n0Val.equals(n1Val)) {
 				// n0Val = n1Val < value
 				BigInt toShare = value.subtract(n0Val); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3694,7 +3694,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			} else if (n0Val.compareTo(n1Val) < 0) {
 				// n0Val < n1Val < value
 				BigInt toShare = value.subtract(n1Val); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3702,7 +3702,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				newWSlices[n1W][n1X][n1Y][n1Z] = newWSlices[n1W][n1X][n1Y][n1Z].add(share);
 				BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 				toShare = currentRemainingValue.subtract(n0Val);
-				shareAndRemainder = toShare.divideAndRemainder(TWO);share = shareAndRemainder[0];
+				shareAndRemainder = toShare.divideAndRemainder(two);share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3711,7 +3711,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			} else {
 				// n1Val < n0Val < value
 				BigInt toShare = value.subtract(n0Val); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3719,7 +3719,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				newWSlices[n1W][n1X][n1Y][n1Z] = newWSlices[n1W][n1X][n1Y][n1Z].add(share);
 				BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 				toShare = currentRemainingValue.subtract(n1Val);
-				shareAndRemainder = toShare.divideAndRemainder(TWO);share = shareAndRemainder[0];
+				shareAndRemainder = toShare.divideAndRemainder(two);share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3729,7 +3729,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			break;
 		case 1:
 			BigInt toShare = value.subtract(neighborValues[0]);
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);BigInt share = shareAndRemainder[0];
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(two);BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
 				value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);
@@ -3930,7 +3930,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			if (n0Val.equals(n1Val)) {
 				// n0Val = n1Val < value
 				BigInt toShare = value.subtract(n0Val); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3940,7 +3940,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			} else if (n0Val.compareTo(n1Val) < 0) {
 				// n0Val < n1Val < value
 				BigInt toShare = value.subtract(n1Val); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3948,7 +3948,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				newWSlices[n1W][n1X][n1Y][n1Z] = newWSlices[n1W][n1X][n1Y][n1Z].add(share.multiply(BigInt.valueOf(n1Mult)));
 				BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 				toShare = currentRemainingValue.subtract(n0Val);
-				shareAndRemainder = toShare.divideAndRemainder(TWO);share = shareAndRemainder[0];
+				shareAndRemainder = toShare.divideAndRemainder(two);share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3957,7 +3957,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			} else {
 				// n1Val < n0Val < value
 				BigInt toShare = value.subtract(n0Val); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);BigInt share = shareAndRemainder[0];
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3965,7 +3965,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 				newWSlices[n1W][n1X][n1Y][n1Z] = newWSlices[n1W][n1X][n1Y][n1Z].add(share.multiply(BigInt.valueOf(n1Mult)));
 				BigInt currentRemainingValue = value.subtract(share.multiply(BigInt.valueOf(neighborCount)));
 				toShare = currentRemainingValue.subtract(n1Val);
-				shareAndRemainder = toShare.divideAndRemainder(TWO);share = shareAndRemainder[0];
+				shareAndRemainder = toShare.divideAndRemainder(two);share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
 				}
@@ -3975,7 +3975,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 			break;
 		case 1:
 			BigInt toShare = value.subtract(neighborValues[0]);
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);BigInt share = shareAndRemainder[0];
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(two);BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				toppled = true;
 				value = value.subtract(toShare).add(share).add(shareAndRemainder[1]);

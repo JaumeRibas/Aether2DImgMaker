@@ -37,7 +37,7 @@ public class SerializableModelData implements Serializable {
 	
 	//KEYS
 	/** Key for the version of the data format. The value being an {@link Integer} object */
-	private static final int VERSION = 14;
+	private static final int version = 14;
 	/** Key for the model. The value being one the {@link Models} */
 	public static final int MODEL = 0;
 	/** Key for the model's step. The value being a {@link Long} object */
@@ -190,7 +190,7 @@ public class SerializableModelData implements Serializable {
 	 * @return an up to date instance
 	 */
 	public static final SerializableModelData updateDataFormat(SerializableModelData serializableData) {
-		if (!serializableData.contains(VERSION)) {
+		if (!serializableData.contains(version)) {
 			//version 0
 			Integer gridType = (Integer) serializableData.get(GRID_TYPE);
 			int gridDimension;
@@ -214,7 +214,7 @@ public class SerializableModelData implements Serializable {
 	private final Map<Integer, Object> data = new HashMap<Integer, Object>();
 	
 	public SerializableModelData() {
-		data.put(VERSION, 1);
+		data.put(version, 1);
 	}
 	
 	public boolean contains(Integer key) {

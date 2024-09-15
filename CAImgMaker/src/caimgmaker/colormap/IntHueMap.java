@@ -19,19 +19,20 @@ package caimgmaker.colormap;
 import java.awt.Color;
 
 public class IntHueMap implements IntBoundedColorMap {
+
+	private static final int hueRange = 220;
+	public static final int HUE_MARGIN = 255 - hueRange;
 	
 	private int minValue;
 	private int maxValue;
 	private double hueIncreasePerUnit;
-	private static final int HUE_RANGE = 220;
-	public static final int HUE_MARGIN = 255 - HUE_RANGE;
 	
 	public IntHueMap(int minValue, int maxValue) {
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		long range = maxValue - minValue;
 		if (range > 0) {
-			this.hueIncreasePerUnit = (double)HUE_RANGE/range;
+			this.hueIncreasePerUnit = (double)hueRange/range;
 		} else {
 			this.hueIncreasePerUnit = 0;
 		}

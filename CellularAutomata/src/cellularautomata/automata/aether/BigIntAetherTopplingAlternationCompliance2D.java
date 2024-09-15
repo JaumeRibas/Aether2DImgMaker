@@ -28,10 +28,10 @@ import cellularautomata.numbers.BigInt;
 
 public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquareBooleanArrayModelA {
 	
-	private static final BigInt TWO = BigInt.valueOf(2);
-	private static final BigInt THREE = BigInt.valueOf(3);
-	private static final BigInt FOUR = BigInt.valueOf(4);
-	private static final BigInt FIVE = BigInt.valueOf(5);
+	private static final BigInt two = BigInt.valueOf(2);
+	private static final BigInt three = BigInt.valueOf(3);
+	private static final BigInt four = BigInt.valueOf(4);
+	private static final BigInt five = BigInt.valueOf(5);
 
 	/** A 2D array representing the grid */
 	private BigInt[][] sourceGrid;
@@ -130,7 +130,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 		boolean toppled = false;
 		if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			BigInt toShare = currentValue.subtract(greaterXNeighborValue);
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 			BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				changed = true;
@@ -218,7 +218,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				if (smallerYNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sy < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -230,7 +230,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				} else if (smallerYNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sy < gx < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -238,9 +238,9 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					}
 					newCurrentXSlice[0] = newCurrentXSlice[0].add(share.add(share));
 					newGreaterXSlice[1] = newGreaterXSlice[1].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(FOUR));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(four));
 					toShare = currentRemainingValue.subtract(smallerYNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(THREE);
+					shareAndRemainder = toShare.divideAndRemainder(three);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -251,7 +251,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				} else {
 					// gx < sy < current
 					BigInt toShare = currentValue.subtract(smallerYNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -259,9 +259,9 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					}
 					newCurrentXSlice[0] = newCurrentXSlice[0].add(share.add(share));
 					newGreaterXSlice[1] = newGreaterXSlice[1].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(FOUR));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(four));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(THREE);
+					shareAndRemainder = toShare.divideAndRemainder(three);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -273,7 +273,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 			} else {
 				// sy < current <= gx
 				BigInt toShare = currentValue.subtract(smallerYNeighborValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					changed = true;
@@ -285,7 +285,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			// gx < current <= sy
 			BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 			BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				changed = true;
@@ -414,7 +414,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				if (smallerYNeighborValue.equals(greaterXNeighborValue)) {
 					// gx = sy < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -426,7 +426,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				} else if (smallerYNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 					// sy < gx < current
 					BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -434,9 +434,9 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					}
 					newCurrentXSlice[1] = newCurrentXSlice[1].add(share);
 					newGreaterXSlice[2] = newGreaterXSlice[2].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(FOUR));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(four));
 					toShare = currentRemainingValue.subtract(smallerYNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(THREE);
+					shareAndRemainder = toShare.divideAndRemainder(three);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -447,7 +447,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				} else {
 					// gx < sy < current
 					BigInt toShare = currentValue.subtract(smallerYNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -455,9 +455,9 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					}
 					newCurrentXSlice[1] = newCurrentXSlice[1].add(share);
 					newGreaterXSlice[2] = newGreaterXSlice[2].add(share);
-					BigInt currentRemainingValue = currentValue.subtract(share.multiply(FOUR));
+					BigInt currentRemainingValue = currentValue.subtract(share.multiply(four));
 					toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
-					shareAndRemainder = toShare.divideAndRemainder(THREE);
+					shareAndRemainder = toShare.divideAndRemainder(three);
 					share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						changed = true;
@@ -469,7 +469,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 			} else {
 				// sy < current <= gx
 				BigInt toShare = currentValue.subtract(smallerYNeighborValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					changed = true;
@@ -481,7 +481,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 		} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 			// gx < current <= sy
 			BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-			BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+			BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 			BigInt share = shareAndRemainder[0];
 			if (!share.equals(BigInt.ZERO)) {
 				changed = true;
@@ -759,7 +759,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					if (smallerYNeighborValue.equals(greaterXNeighborValue)) {
 						// gx = sy < current
 						BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-						BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+						BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 						BigInt share = shareAndRemainder[0];
 						if (!share.equals(BigInt.ZERO)) {
 							anyToppled = true;
@@ -771,7 +771,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					} else if (smallerYNeighborValue.compareTo(greaterXNeighborValue) < 0) {
 						// sy < gx < current
 						BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-						BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+						BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 						BigInt share = shareAndRemainder[0];
 						if (!share.equals(BigInt.ZERO)) {
 							anyToppled = true;
@@ -779,9 +779,9 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 						}
 						newCurrentXSlice[yMinusOne] = newCurrentXSlice[yMinusOne].add(share);
 						newGreaterXSlice[y] = newGreaterXSlice[y].add(share);
-						BigInt currentRemainingValue = currentValue.subtract(share.multiply(FOUR));
+						BigInt currentRemainingValue = currentValue.subtract(share.multiply(four));
 						toShare = currentRemainingValue.subtract(smallerYNeighborValue); 
-						shareAndRemainder = toShare.divideAndRemainder(THREE);
+						shareAndRemainder = toShare.divideAndRemainder(three);
 						share = shareAndRemainder[0];
 						if (!share.equals(BigInt.ZERO)) {
 							anyToppled = true;
@@ -792,7 +792,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					} else {
 						// gx < sy < current
 						BigInt toShare = currentValue.subtract(smallerYNeighborValue); 
-						BigInt[] shareAndRemainder = toShare.divideAndRemainder(FIVE);
+						BigInt[] shareAndRemainder = toShare.divideAndRemainder(five);
 						BigInt share = shareAndRemainder[0];
 						if (!share.equals(BigInt.ZERO)) {
 							anyToppled = true;
@@ -800,9 +800,9 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 						}
 						newCurrentXSlice[yMinusOne] = newCurrentXSlice[yMinusOne].add(share);
 						newGreaterXSlice[y] = newGreaterXSlice[y].add(share);
-						BigInt currentRemainingValue = currentValue.subtract(share.multiply(FOUR));
+						BigInt currentRemainingValue = currentValue.subtract(share.multiply(four));
 						toShare = currentRemainingValue.subtract(greaterXNeighborValue); 
-						shareAndRemainder = toShare.divideAndRemainder(THREE);
+						shareAndRemainder = toShare.divideAndRemainder(three);
 						share = shareAndRemainder[0];
 						if (!share.equals(BigInt.ZERO)) {
 							anyToppled = true;
@@ -814,7 +814,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				} else {
 					// sy < current <= gx
 					BigInt toShare = currentValue.subtract(smallerYNeighborValue); 
-					BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+					BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 					BigInt share = shareAndRemainder[0];
 					if (!share.equals(BigInt.ZERO)) {
 						anyToppled = true;
@@ -826,7 +826,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 			} else if (greaterXNeighborValue.compareTo(currentValue) < 0) {
 				// gx < current <= sy
 				BigInt toShare = currentValue.subtract(greaterXNeighborValue); 
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(THREE);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(three);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					anyToppled = true;
@@ -888,7 +888,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					newXSlices[n0Coords[0]][n0Coords[1]] = newXSlices[n0Coords[0]][n0Coords[1]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]] = newXSlices[n1Coords[0]][n1Coords[1]].add(share);
 					shareCount = 2;
-					BigInt currentRemainingValue = value.subtract(share.multiply(TWO));
+					BigInt currentRemainingValue = value.subtract(share.multiply(two));
 					toShare = currentRemainingValue.subtract(n0Val);
 					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndRemainder[0];
@@ -908,7 +908,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					newXSlices[n0Coords[0]][n0Coords[1]] = newXSlices[n0Coords[0]][n0Coords[1]].add(share);
 					newXSlices[n1Coords[0]][n1Coords[1]] = newXSlices[n1Coords[0]][n1Coords[1]].add(share);
 					shareCount = 2;
-					BigInt currentRemainingValue = value.subtract(share.multiply(TWO));
+					BigInt currentRemainingValue = value.subtract(share.multiply(two));
 					toShare = currentRemainingValue.subtract(n1Val);
 					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndRemainder[0];
@@ -921,7 +921,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				break;
 			case 1:
 				BigInt toShare = value.subtract(neighborValues[0]);
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(two);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;
@@ -1151,7 +1151,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					newXSlices[n0Coords[0]][n0Coords[1]] = newXSlices[n0Coords[0]][n0Coords[1]].add(share.multiply(n0Mult));
 					newXSlices[n1Coords[0]][n1Coords[1]] = newXSlices[n1Coords[0]][n1Coords[1]].add(share.multiply(n1Mult));
 					shareCount = 2;
-					BigInt currentRemainingValue = value.subtract(share.multiply(TWO));
+					BigInt currentRemainingValue = value.subtract(share.multiply(two));
 					toShare = currentRemainingValue.subtract(n0Val);
 					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndRemainder[0];
@@ -1171,7 +1171,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 					newXSlices[n0Coords[0]][n0Coords[1]] = newXSlices[n0Coords[0]][n0Coords[1]].add(share.multiply(n0Mult));
 					newXSlices[n1Coords[0]][n1Coords[1]] = newXSlices[n1Coords[0]][n1Coords[1]].add(share.multiply(n1Mult));
 					shareCount = 2;
-					BigInt currentRemainingValue = value.subtract(share.multiply(TWO));
+					BigInt currentRemainingValue = value.subtract(share.multiply(two));
 					toShare = currentRemainingValue.subtract(n1Val);
 					shareAndRemainder = toShare.divideAndRemainder(BigInt.valueOf(shareCount));
 					share = shareAndRemainder[0];
@@ -1184,7 +1184,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 				break;
 			case 1:
 				BigInt toShare = value.subtract(neighborValues[0]);
-				BigInt[] shareAndRemainder = toShare.divideAndRemainder(TWO);
+				BigInt[] shareAndRemainder = toShare.divideAndRemainder(two);
 				BigInt share = shareAndRemainder[0];
 				if (!share.equals(BigInt.ZERO)) {
 					toppled = true;

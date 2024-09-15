@@ -30,8 +30,8 @@ public abstract class ArrayGrid2D implements Model2D {
 	protected int[] localYMinima;
 	protected int minY;
 	protected int maxY;
-	
-	private static final String UNSUPPORTED_SHAPE_ERROR = "The shape of the region must be such that no line overlaps with it along more than one segment.";
+
+	private static final String unsupportedShapeError = "The shape of the region must be such that no line overlaps with it along more than one segment.";
 	
 	/**
 	 * Constructs an {@code ArrayGrid2D} with the specified bounds
@@ -71,12 +71,12 @@ public abstract class ArrayGrid2D implements Model2D {
 				int localMinY = localYMinima[i];
 				if (Math.abs(localMinY - previousLocalMinY) > 1) {
 					//some lines would overlap with it along more than one segment
-					throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
+					throw new IllegalArgumentException("Unsupported local y minima. " + unsupportedShapeError);
 				}
 				if (minimaAscendingOrFlat) {
 					if (localMinY < previousLocalMinY) {
 						//bounds would break or some lines would overlap with it along more than one segment
-						throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
+						throw new IllegalArgumentException("Unsupported local y minima. " + unsupportedShapeError);
 					}
 				} else if (localMinY >= previousLocalMinY) {
 					minimaAscendingOrFlat = true;
@@ -88,12 +88,12 @@ public abstract class ArrayGrid2D implements Model2D {
 				int localMaxY = localYMaxima[i];
 				if (Math.abs(localMaxY - previousLocalMaxY) > 1) {
 					//some lines would overlap with it along more than one segment
-					throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+					throw new IllegalArgumentException("Unsupported resulting local y maxima. " + unsupportedShapeError);
 				}
 				if (maximaDescendingOrFlat) {
 					if (localMaxY > previousLocalMaxY) {
 						//bounds would break or some lines would overlap with it along more than one segment
-						throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+						throw new IllegalArgumentException("Unsupported resulting local y maxima. " + unsupportedShapeError);
 					}
 				} else if (localMaxY <= previousLocalMaxY) {
 					maximaDescendingOrFlat = true;
@@ -108,11 +108,11 @@ public abstract class ArrayGrid2D implements Model2D {
 			if (localYMinima.length > 1) {
 				if (Math.abs(localYMinima[0] - localYMinima[1]) > 1) {
 					//some lines would overlap with it along more than one segment
-					throw new IllegalArgumentException("Unsupported local y minima. " + UNSUPPORTED_SHAPE_ERROR);
+					throw new IllegalArgumentException("Unsupported local y minima. " + unsupportedShapeError);
 				}
 				if (Math.abs(localYMaxima[0] - localYMaxima[1]) > 1) {
 					//some lines would overlap with it along more than one segment
-					throw new IllegalArgumentException("Unsupported resulting local y maxima. " + UNSUPPORTED_SHAPE_ERROR);
+					throw new IllegalArgumentException("Unsupported resulting local y maxima. " + unsupportedShapeError);
 				}
 				minY = Math.min(minY, localYMinima[1]);
 				maxY = Math.max(maxY, localYMaxima[1]);				

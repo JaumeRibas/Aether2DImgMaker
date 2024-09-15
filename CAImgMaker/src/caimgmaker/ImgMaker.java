@@ -50,6 +50,8 @@ import cellularautomata.model3d.NumericModel3D;
 
 public class ImgMaker {
 	
+	private static final String lineSeparator = System.lineSeparator();
+	
 	private long imgsPerFolder = 10000;
 	private long millisecondsBetweenBackups;
 	private boolean saveBackupsAutomatically = true;
@@ -66,7 +68,6 @@ public class ImgMaker {
 	private static String scanCoordAndEqualsFormat;
 	private static String imagePathNameAndEquals;
 	private static String maxImageSizeExceededMessage;
-	private static final String LINE_SEPARATOR = System.lineSeparator();
 	
 	public ImgMaker(ResourceBundle messages, InputReaderTask inputReader) {
 		saveBackupsAutomatically = false;
@@ -89,7 +90,7 @@ public class ImgMaker {
 		lessThanOrEqualToOddCoordsValueNameLessThanOrEqualTo = " <= " + messages.getString("odd-coords-value-no-spaces") + " <= ";
 		lessThanOrEqualToEvenCoordValueNameLessThanOrEqualToFormat = " <= " + messages.getString("even-coord-value-no-spaces-format") + " <= ";
 		lessThanOrEqualToOddCoordValueNameLessThanOrEqualToFormat = " <= " + messages.getString("odd-coord-value-no-spaces-format") + " <= ";
-		scanCoordAndEqualsFormat = LINE_SEPARATOR + messages.getString("scan-coord-no-spaces-format") + " = ";
+		scanCoordAndEqualsFormat = lineSeparator + messages.getString("scan-coord-no-spaces-format") + " = ";
 		imagePathNameAndEquals = messages.getString("image-path-no-spaces") + " = ";
 		maxImageSizeExceededMessage = messages.getString("max-img-size-exceeded");
 	}
@@ -122,7 +123,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca);
 				createImage(colorModel, minX, maxX, minY, maxY, minWidth, minHeight, imgPath + numberedFolder, name + step + ".png");
 				folderImageCount++;
@@ -172,7 +173,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				int[] minAndMaxValue = ca.getMinAndMax();
 				System.out.println(minAndMaxValue[0] + lessThanOrEqualToValueNameLessThanOrEqualTo + minAndMaxValue[1]);
 				ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue[0], minAndMaxValue[1]);
@@ -224,7 +225,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				long[] minAndMaxValue = ca.getMinAndMax();
 				System.out.println(minAndMaxValue[0] + lessThanOrEqualToValueNameLessThanOrEqualTo + minAndMaxValue[1]);
 				ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue[0], minAndMaxValue[1]);
@@ -277,7 +278,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				MinAndMax<Number_Type> minAndMaxValue = ca.getMinAndMax();
 				System.out.println(minAndMaxValue.getMin() + lessThanOrEqualToValueNameLessThanOrEqualTo + minAndMaxValue.getMax());
 				ObjectModel2D<Color> colorModel = colorMapper.getMappedModel(ca, minAndMaxValue.getMin(), minAndMaxValue.getMax());
@@ -331,7 +332,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				if (!omitEven) {
 					ObjectModel2D<Color> evenColorModel = colorMapper.getMappedModel(ca);
 					createImageFromEvenOrOddPositions(evenColorModel, isEvenStep, minX, maxX, minY, maxY, minWidth, minHeight, 
@@ -392,7 +393,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				if (!omitEven) {
 					int[] evenMinAndMaxValue = ca.getEvenOddPositionsMinAndMax(isEvenStep);			
 					if (evenMinAndMaxValue != null) {
@@ -467,7 +468,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				if (!omitEven) {
 					long[] evenMinAndMaxValue = ca.getEvenOddPositionsMinAndMax(isEvenStep);			
 					if (evenMinAndMaxValue != null) {
@@ -542,7 +543,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				if (!omitEven) {
 					MinAndMax<Number_Type> evenMinAndMaxValue = ca.getEvenOddPositionsMinAndMax(isEvenStep);			
 					if (evenMinAndMaxValue != null) {
@@ -619,7 +620,7 @@ public class ImgMaker {
 				}
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY);
 				if (!omitEven) {
 					int[] evenMinAndMaxValue = ca.getMinAndMaxAtEvenOddX(isEvenStep);			
 					if (evenMinAndMaxValue != null) {
@@ -686,7 +687,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -703,8 +704,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinX()) {
 					xScanCoord = ca.getMaxX();
@@ -746,7 +747,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -782,7 +783,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -799,8 +800,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinX()) {
 					xScanCoord = ca.getMaxX();
@@ -850,7 +851,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -886,7 +887,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -903,8 +904,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinX()) {
 					xScanCoord = ca.getMaxX();
@@ -954,7 +955,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -990,7 +991,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -1007,8 +1008,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinX()) {
 					xScanCoord = ca.getMaxX();
@@ -1058,7 +1059,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -1096,7 +1097,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -1113,8 +1114,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinY())
 					xScanCoord = ca.getMaxY();	
@@ -1181,7 +1182,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -1220,7 +1221,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -1237,8 +1238,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinY())
 					xScanCoord = ca.getMaxY();	
@@ -1361,7 +1362,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -1400,7 +1401,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -1417,8 +1418,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinY())
 					xScanCoord = ca.getMaxY();	
@@ -1541,7 +1542,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -1580,7 +1581,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -1597,8 +1598,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinY())
 					xScanCoord = ca.getMaxY();	
@@ -1721,7 +1722,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -1762,7 +1763,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -1779,8 +1780,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(), 
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinY())
 					xScanCoord = ca.getMaxY();	
@@ -1887,7 +1888,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
@@ -1928,7 +1929,7 @@ public class ImgMaker {
 		String yScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, yLabel);
 		String zScanCoordAndEquals = String.format(scanCoordAndEqualsFormat, zLabel);
 		String crossSectionImgPath = path + zLabel + "=" + crossSectionZ + "/";
-		String crossSectionLog = LINE_SEPARATOR + zLabel + " = " + crossSectionZ;
+		String crossSectionLog = lineSeparator + zLabel + " = " + crossSectionZ;
 		int currentStepLeap = (int) (step%stepLeap);
 		if (currentStepLeap == 0) {
 			currentStepLeap = stepLeap;
@@ -1945,8 +1946,8 @@ public class ImgMaker {
 				int minX = ca.getMinX(), maxX = ca.getMaxX(),
 						minY = ca.getMinY(), maxY = ca.getMaxY(), 
 						minZ = ca.getMinZ(), maxZ = ca.getMaxZ();
-				System.out.println(minX + " <= " + xLabel + " <= " + maxX + LINE_SEPARATOR + minY + " <= " + yLabel + " <= " + maxY 
-						+ LINE_SEPARATOR + minZ + " <= " + zLabel + " <= " + maxZ);
+				System.out.println(minX + " <= " + xLabel + " <= " + maxX + lineSeparator + minY + " <= " + yLabel + " <= " + maxY 
+						+ lineSeparator + minZ + " <= " + zLabel + " <= " + maxZ);
 				//x scan
 				if (xScanCoord < ca.getMinY())
 					xScanCoord = ca.getMaxY();	
@@ -2058,7 +2059,7 @@ public class ImgMaker {
 					numberedFolder++;
 					folderImageCount = 0;
 				}
-				System.out.println(LINE_SEPARATOR);
+				System.out.println(lineSeparator);
 			}
 			boolean backUp = false;
 			if (saveBackupsAutomatically) {
