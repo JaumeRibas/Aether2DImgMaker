@@ -24,10 +24,10 @@ import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
 import caimgmaker.args.ImageGenerationMode;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
+import cellularautomata.automata.sunflower.IntSunflower2D;
 import cellularautomata.automata.sunflower.IntSunflowerWithBackground;
-import cellularautomata.automata.sunflower.IntSunflowerWithBackground2D;
-import cellularautomata.automata.sunflower.LongSunflowerWithBackground1D;
-import cellularautomata.automata.sunflower.LongSunflowerWithBackground2D;
+import cellularautomata.automata.sunflower.LongSunflower1D;
+import cellularautomata.automata.sunflower.LongSunflower2D;
 import cellularautomata.automata.sunflower.LongSunflower3D;
 import cellularautomata.automata.sunflower.LongSunflower4D;
 import cellularautomata.model.Model;
@@ -79,7 +79,7 @@ public final class SunflowerFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-						model = new LongSunflowerWithBackground1D(args.initialConfiguration.singleSource.longValue(), 0); //TODO support background value?
+						model = new LongSunflower1D(args.initialConfiguration.singleSource.longValue()); //TODO support background value?
 					} else {
 						System.out.printf(messages.getString("single-source-out-of-range-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}								
@@ -87,7 +87,7 @@ public final class SunflowerFactory {
 					System.out.printf(messages.getString("initial-config-not-supported-format"), args.model);
 				}
 			} else {
-				model = new LongSunflowerWithBackground1D(args.backupToRestorePath);
+				model = new LongSunflower1D(args.backupToRestorePath);
 			}
 		} else {
 			System.out.printf(messages.getString("grid-not-supported-format"), args.model);
@@ -102,10 +102,10 @@ public final class SunflowerFactory {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
 					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-						model = new IntSunflowerWithBackground2D(args.initialConfiguration.singleSource.intValue(), 0);
+						model = new IntSunflower2D(args.initialConfiguration.singleSource.intValue());
 					} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
-						model = new LongSunflowerWithBackground2D(args.initialConfiguration.singleSource.longValue(), 0);
+						model = new LongSunflower2D(args.initialConfiguration.singleSource.longValue());
 					} else {
 						System.out.printf(messages.getString("single-source-out-of-range-format"), Long.MIN_VALUE, Long.MAX_VALUE);
 					}
@@ -114,9 +114,9 @@ public final class SunflowerFactory {
 				}
 			} else {
 				try {
-					model = new IntSunflowerWithBackground2D(args.backupToRestorePath);
+					model = new IntSunflower2D(args.backupToRestorePath);
 				} catch (Exception ex) {
-					model = new LongSunflowerWithBackground2D(args.backupToRestorePath);
+					model = new LongSunflower2D(args.backupToRestorePath);
 				}
 			}
 		} else {
