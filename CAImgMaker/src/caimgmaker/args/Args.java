@@ -55,7 +55,7 @@ public class Args {
 	public boolean debug = false;
 
 	public static final String DELTA = "-delta";
-	@Parameter(names = DELTA, descriptionKey = "delta-description")
+	@Parameter(names = { DELTA, "-d" }, descriptionKey = "delta-description")
 	public boolean delta = false;
 	
 	public static final String FIRST_STEP = "-first-step";
@@ -120,7 +120,7 @@ public class Args {
 	public int steapLeap = 1;
 
 	public static final String TWO_STEPS_DELTA = "-two-steps-delta";
-	@Parameter(names = {TWO_STEPS_DELTA, "-two-step-delta", "-2-steps-delta", "-2-step-delta" }, descriptionKey = "two-steps-delta-description")
+	@Parameter(names = {TWO_STEPS_DELTA, "-two-step-delta", "-2-steps-delta", "-2-step-delta", "-tsd", "-2sd" }, descriptionKey = "two-steps-delta-description")
 	public boolean twoStepsDelta = false;
 
 	public static final String VERSION = "-version";
