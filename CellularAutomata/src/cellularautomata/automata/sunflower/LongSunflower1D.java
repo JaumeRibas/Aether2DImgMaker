@@ -63,7 +63,7 @@ public class LongSunflower1D extends IsotropicLongArrayModel1DA {
 		if (!SerializableModelData.Models.SUNFLOWER.equals(data.get(SerializableModelData.MODEL))) {
 			throw new IllegalArgumentException("The backup file contains a different model.");
 		}
-		String incompatibleBackupconfigErrorMessage = "The backup file's configuration is not compatible with this class.";
+		String incompatibleBackupConfigErrorMessage = "The backup file's configuration is not compatible with this class.";
 		if (!SerializableModelData.InitialConfigurationTypes.SINGLE_SOURCE_AT_ORIGIN.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_TYPE))
 				|| !(SerializableModelData.InitialConfigurationImplementationTypes.ORIGIN_AND_BACKGROUND_VALUES_AS_LENGTH_2_LONG_PRIMITIVE_ARRAY.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)) 
 						|| SerializableModelData.InitialConfigurationImplementationTypes.LONG.equals(data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE)))
@@ -72,14 +72,14 @@ public class LongSunflower1D extends IsotropicLongArrayModel1DA {
 				|| !SerializableModelData.GridImplementationTypes.ANYSOTROPIC_LONG_PRIMITIVE_ARRAY_1.equals(data.get(SerializableModelData.GRID_IMPLEMENTATION_TYPE))
 				|| !SerializableModelData.CoordinateBoundsImplementationTypes.MAX_COORDINATE_INTEGER.equals(data.get(SerializableModelData.COORDINATE_BOUNDS_IMPLEMENTATION_TYPE))
 				|| !data.contains(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP)) {
-			throw new IllegalArgumentException(incompatibleBackupconfigErrorMessage);
+			throw new IllegalArgumentException(incompatibleBackupConfigErrorMessage);
 		}
 		if (data.get(SerializableModelData.INITIAL_CONFIGURATION_IMPLEMENTATION_TYPE).equals(SerializableModelData.InitialConfigurationImplementationTypes.LONG)) {
 			initialValue = (long) data.get(SerializableModelData.INITIAL_CONFIGURATION);
 		} else {
 			long[] initialConfiguration = (long[]) data.get(SerializableModelData.INITIAL_CONFIGURATION);
 			if (initialConfiguration[1] != 0) {
-				throw new IllegalArgumentException(incompatibleBackupconfigErrorMessage);
+				throw new IllegalArgumentException(incompatibleBackupConfigErrorMessage);
 			}
 			initialValue = initialConfiguration[0];
 		}
