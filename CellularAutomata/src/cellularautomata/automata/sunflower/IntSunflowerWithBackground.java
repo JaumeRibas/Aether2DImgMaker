@@ -37,7 +37,7 @@ import cellularautomata.model.SymmetricIntModel;
  * @author Jaume
  *
  */
-public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA {
+public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicHypercubicModelA {
 
 	private long step;
 	private final int initialValue;
@@ -51,7 +51,7 @@ public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModel
 
 	private Boolean changed = null;
 	
-	public IntSunflower(int gridDimension, int initialValue, int backgroundValue) {
+	public IntSunflowerWithBackground(int gridDimension, int initialValue, int backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		int side = 3;
@@ -72,7 +72,7 @@ public class IntSunflower implements SymmetricIntModel, IsotropicHypercubicModel
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public IntSunflower(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public IntSunflowerWithBackground(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
 		if (!SerializableModelData.Models.SUNFLOWER.equals(data.get(SerializableModelData.MODEL))) {
 			throw new IllegalArgumentException("The backup file contains a different model.");

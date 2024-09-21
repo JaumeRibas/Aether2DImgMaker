@@ -30,7 +30,7 @@ import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
  * @author Jaume
  *
  */
-public class IntSunflower2D extends IsotropicSquareIntArrayModelA {
+public class IntSunflowerWithBackground2D extends IsotropicSquareIntArrayModelA {
 	
 	private final int initialValue;
 	private final int backgroundValue;
@@ -47,7 +47,7 @@ public class IntSunflower2D extends IsotropicSquareIntArrayModelA {
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public IntSunflower2D(int initialValue, int backgroundValue) {
+	public IntSunflowerWithBackground2D(int initialValue, int backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		grid = Utils.buildAnisotropic2DIntArray(3);
@@ -65,7 +65,7 @@ public class IntSunflower2D extends IsotropicSquareIntArrayModelA {
 	 * @throws ClassNotFoundException 
 	 * @throws FileNotFoundException 
 	 */
-	public IntSunflower2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public IntSunflowerWithBackground2D(String backupPath) throws FileNotFoundException, ClassNotFoundException, IOException {
 		SerializableModelData data = (SerializableModelData) Utils.deserializeFromFile(backupPath);
 		data = SerializableModelData.updateDataFormat(data);
 		if (!SerializableModelData.Models.SUNFLOWER.equals(data.get(SerializableModelData.MODEL))) {
