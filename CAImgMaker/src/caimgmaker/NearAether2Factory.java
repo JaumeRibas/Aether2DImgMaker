@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 
 import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
-import caimgmaker.args.ImageGenerationMode;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
 import cellularautomata.automata.nearaether.IntNearAetherTwo3D;
 import cellularautomata.model.Model;
@@ -35,13 +34,13 @@ public final class NearAether2Factory {
 	public static Model create(Args args, ResourceBundle messages) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Model model = null;
 		if (args.memorySafe) {
-			System.out.printf(messages.getString("memory-safe-not-supported-for-this-model-format"), args.model, Args.MEMORY_SAFE);
+			System.out.printf(messages.getString("param-not-supported-for-this-model-format"), args.model, Args.MEMORY_SAFE);
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
 			System.out.printf(messages.getString("initial-config-needed-format"), args.model);
 //		} else if (args.backupToRestorePath != null && args.grid == null) { //uncomment if more grid types become supported
 //			System.out.printf(gridTypeNeededToRestoreMessageFormat);
-		} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
-			System.out.printf(messages.getString("img-gen-mode-not-supported-format"), args.model);
+		} else if (args.topplingAlternationCompliance) {
+			System.out.printf(messages.getString("param-incompatible-with-model-format"), Args.TOPPLING_ALTERNATION_COMPLIANCE, args.model);
 		} else {
 			if (args.grid == null) {
 				args.grid = new GridParameterValue(3);//default

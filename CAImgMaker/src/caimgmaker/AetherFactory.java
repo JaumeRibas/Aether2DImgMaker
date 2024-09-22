@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 
 import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
-import caimgmaker.args.ImageGenerationMode;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
 import cellularautomata.automata.aether.BigIntAether2D;
 import cellularautomata.automata.aether.BigIntAetherTopplingAlternationCompliance2D;
@@ -71,7 +70,7 @@ public final class AetherFactory {
 		} else if (args.backupToRestorePath != null && args.grid == null) {
 			System.out.printf(messages.getString("grid-type-needed-in-order-to-restore-format"));//TODO Add AetherImgMakerBackup class with parameters
 		} else if (args.memorySafe && args.initialConfiguration.type != InitialConfigType.SINGLE_SOURCE) {
-			System.out.printf(messages.getString("memory-safe-not-supported-for-this-initial-config-format"), args.model, Args.MEMORY_SAFE);
+			System.out.printf(messages.getString("param-not-supported-for-this-initial-config-format"), args.model, Args.MEMORY_SAFE);
 		} else {
 			if (args.grid == null) {
 				args.grid = new GridParameterValue(2);//default to 2D
@@ -105,7 +104,7 @@ public final class AetherFactory {
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+					if (args.topplingAlternationCompliance) {
 						if (args.memorySafe) {
 							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
@@ -141,7 +140,7 @@ public final class AetherFactory {
 				boolean successfullyRestored = true;
 				if (args.memorySafe) {
 					model = new FileBackedLongAether1D(args.backupToRestorePath, args.path);
-				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+				} else if (args.topplingAlternationCompliance) {
 					try {
 						model = new LongAetherTopplingAlternationCompliance1D(args.backupToRestorePath);							
 					} catch (Exception ex) {
@@ -169,7 +168,7 @@ public final class AetherFactory {
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+					if (args.topplingAlternationCompliance) {
 						if (args.memorySafe) {
 							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
@@ -206,6 +205,8 @@ public final class AetherFactory {
 				} else {
 					if (args.memorySafe) {
 						System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
+					} else if (args.topplingAlternationCompliance) {
+						System.out.printf(messages.getString("param-incompatible-with-initial-config"), Args.TOPPLING_ALTERNATION_COMPLIANCE);
 					} else {
 						if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
 								&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
@@ -221,7 +222,7 @@ public final class AetherFactory {
 				boolean successfullyRestored = true;
 				if (args.memorySafe) {
 					model = new FileBackedLongAether2D(args.backupToRestorePath, args.path);
-				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+				} else if (args.topplingAlternationCompliance) {
 					try {
 						model = new IntAetherTopplingAlternationCompliance2D(args.backupToRestorePath);							
 					} catch (Exception ex1) {
@@ -269,7 +270,7 @@ public final class AetherFactory {
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+					if (args.topplingAlternationCompliance) {
 						if (args.memorySafe) {
 							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
@@ -304,20 +305,26 @@ public final class AetherFactory {
 						}
 					}
 				} else {
-					if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-							&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
-							&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
-							&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
-						model = new IntAetherRandomConfiguration3D(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
+					if (args.memorySafe) {
+						System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
+					} else if (args.topplingAlternationCompliance) {
+						System.out.printf(messages.getString("param-incompatible-with-initial-config"), Args.TOPPLING_ALTERNATION_COMPLIANCE);
 					} else {
-						System.out.printf(messages.getString("min-max-out-of-range-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
+						if (args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
+								&& args.initialConfiguration.min.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0
+								&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
+								&& args.initialConfiguration.max.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
+							model = new IntAetherRandomConfiguration3D(args.initialConfiguration.side, args.initialConfiguration.min.intValue(), args.initialConfiguration.max.intValue());
+						} else {
+							System.out.printf(messages.getString("min-max-out-of-range-format"), Integer.MIN_VALUE, Integer.MAX_VALUE);
+						}
 					}
 				}
 			} else {
 				boolean successfullyRestored = true;
 				if (args.memorySafe) {
 					model = new FileBackedLongAether3D(args.backupToRestorePath, args.path);
-				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+				} else if (args.topplingAlternationCompliance) {
 					try {
 						model = new IntAetherTopplingAlternationCompliance3D(args.backupToRestorePath);							
 					} catch (Exception ex1) {
@@ -382,7 +389,7 @@ public final class AetherFactory {
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+					if (args.topplingAlternationCompliance) {
 						if (args.memorySafe) {
 							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
@@ -423,7 +430,7 @@ public final class AetherFactory {
 				boolean successfullyRestored = true;
 				if (args.memorySafe) {
 					model = new FileBackedLongAether4D(args.backupToRestorePath, args.path);
-				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+				} else if (args.topplingAlternationCompliance) {
 					try {
 						model = new IntAetherTopplingAlternationCompliance4D(args.backupToRestorePath);							
 					} catch (Exception ex1) {
@@ -467,7 +474,7 @@ public final class AetherFactory {
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-					if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+					if (args.topplingAlternationCompliance) {
 						if (args.memorySafe) {
 							System.out.printf(messages.getString("param-not-supported-with-other-params-format"), Args.MEMORY_SAFE);
 						} else {
@@ -508,7 +515,7 @@ public final class AetherFactory {
 				boolean successfullyRestored = true;
 				if (args.memorySafe) {
 					model = new FileBackedLongAether5D(args.backupToRestorePath, args.path);
-				} else if (args.imgGenerationMode == ImageGenerationMode.TOPPLING_ALTERNATION_COMPLIANCE) {
+				} else if (args.topplingAlternationCompliance) {
 					try {
 						model = new IntAetherTopplingAlternationCompliance5D(args.backupToRestorePath);							
 					} catch (Exception ex1) {

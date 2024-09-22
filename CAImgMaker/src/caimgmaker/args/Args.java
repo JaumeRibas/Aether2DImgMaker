@@ -57,6 +57,10 @@ public class Args {
 	public static final String DELTA = "-delta";
 	@Parameter(names = { DELTA, "-d" }, descriptionKey = "delta-description")
 	public boolean delta = false;
+
+	public static final String EVEN_COORDINATES_ONLY = "-even-coordinates-only";
+	@Parameter(names = { EVEN_COORDINATES_ONLY, "-even-coords-only", "-eco" }, descriptionKey = "even-coordinates-only-description")
+	public boolean evenCoordinatesOly = false;
 	
 	public static final String FIRST_STEP = "-first-step";
 	@Parameter(names = FIRST_STEP, validateWith = NonNegativeIntegerValidator.class, descriptionKey = "first-step-description")
@@ -70,14 +74,9 @@ public class Args {
 	@Parameter(names = HELP, help = true, descriptionKey = "help-description")
 	public boolean help;
 	
-	//TODO Turn into separate parameters for simplicity and so they can be combined
-	public static final String IMAGE_GENERATION_MODE = "-image-generation-mode";
-	@Parameter(names = { IMAGE_GENERATION_MODE, "-img-generation-mode", "-image-gen-mode", "-img-gen-mode" }, validateWith = ImageGenerationModeValidator.class, converter = ImageGenerationModeConverter.class, descriptionKey = "image-generation-mode-description")
-    public ImageGenerationMode imgGenerationMode = ImageGenerationMode.NORMAL;
-	
 	public static final String IMAGE_NAME = "-image-name";
 	@Parameter(names = { IMAGE_NAME, "-img-name" }, validateWith = ImgNameValidator.class, descriptionKey = "image-name-description")
-    public String imgName = null;
+    public String imageName = null;
     
 	public static final String MEMORY_SAFE = "-memory-safe";
 	@Parameter(names = MEMORY_SAFE, descriptionKey = "memory-safe-description")
@@ -94,6 +93,10 @@ public class Args {
 	public static final String NO_FOLDERS = "-no-folders";
 	@Parameter(names = { NO_FOLDERS, "-no-folder" }, descriptionKey = "no-folders-description")
 	public boolean noFolders;
+
+	public static final String ODD_COORDINATES_ONLY = "-odd-coordinates-only";
+	@Parameter(names = { ODD_COORDINATES_ONLY, "-odd-coords-only", "-oco" }, descriptionKey = "odd-coordinates-only-description")
+	public boolean oddCoordinatesOly = false;
 	
 	public static final String PATH = "-path";
 	@Parameter(names = PATH, validateWith = PathValidator.class, descriptionKey = "path-description")
@@ -114,10 +117,18 @@ public class Args {
 	public static final String SCAN3_START = "-scan3-start";
 	@Parameter(names = SCAN3_START, descriptionKey = "scan3-start-description")
     public Integer zScanInitialIndex = null;
+
+	public static final String SPLIT_BY_COORDINATE_PARITY = "-split-by-coordinate-parity";
+	@Parameter(names = { SPLIT_BY_COORDINATE_PARITY, "-split-by-coord-parity", "-sbcp" }, descriptionKey = "split-by-coord-parity-description")
+	public boolean splitByCoordinateParity = false;
     
 	public static final String STEP_LEAP = "-step-leap";
 	@Parameter(names = STEP_LEAP, validateWith = GreaterThanZeroIntegerValidator.class, descriptionKey = "step-leap-description")
 	public int steapLeap = 1;
+
+	public static final String TOPPLING_ALTERNATION_COMPLIANCE = "-toppling-alternation-compliance";
+	@Parameter(names = { TOPPLING_ALTERNATION_COMPLIANCE, "-tac" }, descriptionKey = "toppling-alternation-compliance-description")
+	public boolean topplingAlternationCompliance = false;
 
 	public static final String TWO_STEPS_DELTA = "-two-steps-delta";
 	@Parameter(names = {TWO_STEPS_DELTA, "-two-step-delta", "-2-steps-delta", "-2-step-delta", "-tsd", "-2sd" }, descriptionKey = "two-steps-delta-description")

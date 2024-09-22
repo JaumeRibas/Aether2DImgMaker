@@ -211,10 +211,28 @@ public class AetherImgMaker {
 	}
 	
 	private static boolean generateImages(Model model, Args args, String backupsPath, InputReaderTask inputReader) throws Exception {
+		boolean splitByCoordinateParity = false, omitEven = false, omitOdd = false;
+		if (args.splitByCoordinateParity) {
+			splitByCoordinateParity = true;
+			if (args.evenCoordinatesOly || args.oddCoordinatesOly) {
+				System.out.printf(messages.getString("only-one-of-three-params-format"), Args.SPLIT_BY_COORDINATE_PARITY, Args.EVEN_COORDINATES_ONLY, Args.ODD_COORDINATES_ONLY);
+				return false;
+			}
+		} else if (args.evenCoordinatesOly) {
+			splitByCoordinateParity = true;
+			omitOdd = true;
+			if (args.oddCoordinatesOly) {
+				System.out.printf(messages.getString("only-one-of-three-params-format"), Args.SPLIT_BY_COORDINATE_PARITY, Args.EVEN_COORDINATES_ONLY, Args.ODD_COORDINATES_ONLY);
+				return false;
+			}
+		} else if (args.oddCoordinatesOly) {
+			splitByCoordinateParity = true;
+			omitEven = true;
+		}
 		ColorMapper colorMapper = getColorMapper(args);
 		if (colorMapper == null)
 			return false;
-		String imagesName = args.imgName;
+		String imagesName = args.imageName;
 		if (imagesName == null) {
 			imagesName = model.getName() + "_";
 		}
@@ -238,84 +256,39 @@ public class AetherImgMaker {
 			case 2:
 				if (model instanceof BooleanModel2D) {
 					BooleanModel2D castedModel = (BooleanModel2D)model;
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
-					}				
+					if (splitByCoordinateParity) {
+						imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
+					}
 				} else if (model instanceof IntModel2D) {
 					IntModel2D castedModel = (IntModel2D)model;
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
-					}				
+					if (splitByCoordinateParity) {
+						imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
+					}
 				} else if (model instanceof LongModel2D) {
 					LongModel2D castedModel = (LongModel2D)model;
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
-					}	
+					if (splitByCoordinateParity) {
+						imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
+					}
 				} else if (model instanceof NumericModel2D) {
 					@SuppressWarnings("unchecked")
 					NumericModel2D<BigInt> castedModel = (NumericModel2D<BigInt>)model;
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
+					if (splitByCoordinateParity) {
+						imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 					}
 				} else if (model instanceof IntModel) {
 					IntModel2D castedModel = new IntModelAs2D((IntModel)model);
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
+					if (splitByCoordinateParity) {
+						imgMaker.createEvenOddImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createImages(castedModel, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 					}
 				} else {
 					System.out.printf(messages.getString("unsupported-model-section-format"), model.getClass().getName());
@@ -342,84 +315,39 @@ public class AetherImgMaker {
 				int[] scanCoords = new int[] { args.xScanInitialIndex, args.yScanInitialIndex, args.zScanInitialIndex};
 				if (model instanceof BooleanModel3D) {
 					BooleanModel3D castedModel = (BooleanModel3D)model;
-					switch (args.imgGenerationMode) {
-					case TOPPLING_ALTERNATION_COMPLIANCE:	
-					case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-						break;
-					case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-						break;
-					case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-						break;
-					case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-						break;
-					default: 
-						System.out.println(messages.getString("unknown-img-gen-mode"));
-						error = true;
-					}				
+					if (splitByCoordinateParity) {
+						imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
+					}
 				} else if (model instanceof IntModel3D) {
 					IntModel3D castedModel = (IntModel3D)model;
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
-					}			
+					if (splitByCoordinateParity) {
+						imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
+					}
 				} else if (model instanceof LongModel3D) {
 					LongModel3D castedModel = (LongModel3D)model;
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
+					if (splitByCoordinateParity) {
+						imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 					}
 				} else if (model instanceof NumericModel3D) {
 					@SuppressWarnings("unchecked")
 					NumericModel3D<BigInt> castedModel = (NumericModel3D<BigInt>)model;
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
+					if (splitByCoordinateParity) {
+						imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 					}
 				} else if (model instanceof IntModel) {
 					IntModel3D castedModel = new IntModelAs3D((IntModel)model);
-					switch (args.imgGenerationMode) {
-						case TOPPLING_ALTERNATION_COMPLIANCE:	
-						case NORMAL: imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
-							break;
-						case SPLIT_COORDINATE_PARITY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, false);
-							break;
-						case EVEN_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, false, true);
-							break;
-						case ODD_COORDINATES_ONLY: imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, true, false);
-							break;
-						default: 
-							System.out.println(messages.getString("unknown-img-gen-mode"));
-							error = true;
+					if (splitByCoordinateParity) {
+						imgMaker.createScanningAndZCrossSectionEvenOddImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap, omitEven, omitOdd);
+					} else {
+						imgMaker.createScanningAndZCrossSectionImages(castedModel, scanCoords, crossSectionZ, colorMapper, args.minimumImageSize.width, args.minimumImageSize.height, imagesPath, imagesName, backupsPath, args.steapLeap);
 					}
 				} else {
 					System.out.printf(messages.getString("unsupported-model-section-format"), model.getClass().getName());
