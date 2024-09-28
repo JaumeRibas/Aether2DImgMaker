@@ -50,5 +50,5 @@ java -jar AetherImgMaker.jar -model sunflower 20000000
 * Generate images from the asymmetric section of the Aether model on a 3D grid with a single source of -1,925 and splitting the even and odd positions into sepate images:
 
 ```
-java -jar AetherImgMaker.jar -grid 3d -1925 -img-generation-mode split-coordinate-parity -colormap hue -asymmetric
+java -jar AetherImgMaker.jar -grid 3d -1925 -split-by-coordinate-parity -colormap hue -asymmetric
 ```
