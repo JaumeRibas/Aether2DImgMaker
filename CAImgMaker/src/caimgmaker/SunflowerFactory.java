@@ -24,6 +24,7 @@ import caimgmaker.args.Args;
 import caimgmaker.args.GridParameterValue;
 import caimgmaker.args.InitialConfigParameterValue.InitialConfigType;
 import cellularautomata.automata.sunflower.IntSunflower2D;
+import cellularautomata.automata.sunflower.IntSunflower3D;
 import cellularautomata.automata.sunflower.IntSunflowerWithBackground;
 import cellularautomata.automata.sunflower.LongSunflower1D;
 import cellularautomata.automata.sunflower.LongSunflower2D;
@@ -129,7 +130,10 @@ public final class SunflowerFactory {
 		if (args.grid.side == null) {
 			if (args.backupToRestorePath == null) {
 				if (args.initialConfiguration.type == InitialConfigType.SINGLE_SOURCE) {
-					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
+					if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MAX_VALUE)) <= 0
+							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Integer.MIN_VALUE)) >= 0) {
+						model = new IntSunflower3D(args.initialConfiguration.singleSource.intValue());
+					} else if (args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MAX_VALUE)) <= 0
 							&& args.initialConfiguration.singleSource.compareTo(BigInt.valueOf(Long.MIN_VALUE)) >= 0) {
 						model = new LongSunflower3D(args.initialConfiguration.singleSource.longValue());
 					} else {
