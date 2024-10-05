@@ -139,7 +139,7 @@ public class LongSunflower1D extends IsotropicLongArrayModel1DA {
 	private boolean toppleRangeBeyondX1(long[] newGrid, int minX, int maxX) {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
+		for (; x != maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
 			long currentValue = grid[x];
 			long share = currentValue / 3;
 			if (share != 0) {
@@ -166,6 +166,10 @@ public class LongSunflower1D extends IsotropicLongArrayModel1DA {
 	 */
 	public long getInitialValue() {
 		return initialValue;
+	}
+
+	public long getBackgroundValue() {
+		return 0;
 	}
 
 	@Override

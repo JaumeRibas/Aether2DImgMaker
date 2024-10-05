@@ -138,7 +138,7 @@ public class IntSunflower2D extends IsotropicSquareIntArrayModelA {
 			newCurrentXSlice[1] += currentValue;
 		}
 		// x slice transition
-		grid[1] = null;// free old grid progressively to save memory
+		grid[1] = null;
 		currentXSlice = grid[2];
 		newSmallerXSlice = newCurrentXSlice;
 		newCurrentXSlice = newGreaterXSlice;
@@ -209,7 +209,7 @@ public class IntSunflower2D extends IsotropicSquareIntArrayModelA {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1, xPlusTwo = xPlusOne + 1;
 		int[] newSmallerXSlice = null, newCurrentXSlice = newGrid[xMinusOne], newGreaterXSlice = newGrid[x];
-		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
+		for (; x != maxX; xMinusOne = x, x = xPlusOne, xPlusOne = xPlusTwo, xPlusTwo++) {
 			//x slice transition
 			grid[xMinusOne] = null;
 			int[] currentXSlice = grid[x];
@@ -300,6 +300,10 @@ public class IntSunflower2D extends IsotropicSquareIntArrayModelA {
 	 */
 	public int getInitialValue() {
 		return initialValue;
+	}
+
+	public int getBackgroundValue() {
+		return 0;
 	}
 
 	@Override
