@@ -24,7 +24,7 @@ import cellularautomata.model.SerializableModelData;
 import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
 
 /**
- * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 3D with a single source initial configuration
+ * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 3D with a single source initial configuration.
  * 
  * @author Jaume
  *
@@ -720,7 +720,7 @@ public class IntSunflower3D extends IsotropicCubicIntArrayModelA {
 
 	@Override
 	public int getAsymmetricMaxX() {
-		return grid.length - 1;
+		return maxX;
 	}
 	
 	@Override
