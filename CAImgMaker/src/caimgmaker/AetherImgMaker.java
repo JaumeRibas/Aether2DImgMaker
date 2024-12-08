@@ -664,6 +664,8 @@ public class AetherImgMaker {
 			case "nearaether3":
 				model = NearAether3Factory.create(args, messages);
 				break;
+			case "test":
+				model = TestModelFactory.create(args, messages);
 			default:
 				System.out.printf(messages.getString("model-not-recognized-format"), args.model);
 		}
