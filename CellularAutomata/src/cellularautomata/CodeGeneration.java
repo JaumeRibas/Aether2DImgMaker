@@ -48,7 +48,14 @@ final class CodeGeneration {
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					getTypesOfAnisotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries(coordinates, neighborhoodTypes);
+					TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries type = getTypeOfAnisotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries(coordinates);
+					int indexOfType = getIndexOfSame(neighborhoodTypes, type);
+					if (indexOfType == -1) {
+						neighborhoodTypes.add(type);
+					} else {
+						TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries generalType = neighborhoodTypes.get(indexOfType);
+						generalize(generalType, type);
+					}
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;
@@ -260,7 +267,14 @@ final class CodeGeneration {
 			int currentAxis = dimensionMinusOne;
 			while (currentAxis > -1) {
 				if (currentAxis == dimensionMinusOne) {
-					getTypesOfAnisotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries(coordinates, neighborhoodTypes);
+					TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries type = getTypeOfAnisotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries(coordinates);
+					int indexOfType = getIndexOfSame(neighborhoodTypes, type);
+					if (indexOfType == -1) {
+						neighborhoodTypes.add(type);
+					} else {
+						TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries generalType = neighborhoodTypes.get(indexOfType);
+						generalize(generalType, type);
+					}
 				}
 				int currentCoordinate = coordinates[currentAxis];
 				int max;
@@ -2040,21 +2054,21 @@ final class CodeGeneration {
 		@Override
 		public boolean isSame(Object other) {
 			if (other == null || !(other instanceof TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries)) return false;
-			TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries otherNeighbor = (TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries)other;
-			int neighborCount = otherNeighbor.neighbors.size();
+			TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries otherNeighborhood = (TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries)other;
+			int neighborCount = otherNeighborhood.neighbors.size();
 			if (neighborCount != neighbors.size()) {
 				return false;
 			}
 			for (int i = 0; i != neighborCount; i++) {
-				if (!otherNeighbor.neighbors.get(i).isSame(neighbors.get(i))) {
+				if (!otherNeighborhood.neighbors.get(i).isSame(neighbors.get(i))) {
 					return false;
 				}
 			}
-			return otherNeighbor.hasOutgoingSymmetries == hasOutgoingSymmetries && otherNeighbor.hasIncomingSymmetries == hasIncomingSymmetries;
+			return otherNeighborhood.hasOutgoingSymmetries == hasOutgoingSymmetries && otherNeighborhood.hasIncomingSymmetries == hasIncomingSymmetries;
 		}
 	}
 	
-	static void getTypesOfAnisotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries(int[] coords, List<TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries> neighborhoodTypes) {
+	static TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries getTypeOfAnisotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries(int[] coords) {
 		TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries type = new TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries(coords);
 		for (int axis = 0; axis < coords.length; axis++) {
 			
@@ -2107,31 +2121,29 @@ final class CodeGeneration {
 				type.neighbors.add(neighbor);
 			}
 		}
-		int indexOfType = getIndexOfSameType(neighborhoodTypes, type);
-		if (indexOfType == -1) {
-			neighborhoodTypes.add(type);
-		} else {
-			TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries generalType = neighborhoodTypes.get(indexOfType);
-			for (int coord = 0; coord < coords.length; coord++) {
-				if (generalType.coordinates[coord] != type.coordinates[coord]) {
-					generalType.coordinates[coord] = null;//it doesn't repeat itself so set it to null
+		return type;
+	}
+	
+	static void generalize(TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries generalType, TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries type) {
+		for (int coord = 0; coord < type.coordinates.length; coord++) {
+			if (generalType.coordinates[coord] != type.coordinates[coord]) {
+				generalType.coordinates[coord] = null;//it doesn't repeat itself so set it to null
+			}
+		}
+		if (type.hasOutgoingSymmetries || type.hasIncomingSymmetries) {
+			int neighborsSize = type.neighbors.size();
+			for (int i = 0; i < neighborsSize; i++) {
+				TypeOfAnysotropicRegionVonNeumannNeighborWithBidirectionalSymmetries neighbor = type.neighbors.get(i);
+				TypeOfAnysotropicRegionVonNeumannNeighborWithBidirectionalSymmetries generalNeighbor = generalType.neighbors.get(i);					
+				if (generalNeighbor.outgoingSymmetryCount != neighbor.outgoingSymmetryCount) {
+//					System.out.println("It does enter here though");
+					generalNeighbor.outgoingSymmetryCount = null;//it doesn't repeat itself so set it to null
 				}
-			}
-			if (type.hasOutgoingSymmetries || type.hasIncomingSymmetries) {
-				int neighborsSize = type.neighbors.size();
-				for (int i = 0; i < neighborsSize; i++) {
-					TypeOfAnysotropicRegionVonNeumannNeighborWithBidirectionalSymmetries neighbor = type.neighbors.get(i);
-					TypeOfAnysotropicRegionVonNeumannNeighborWithBidirectionalSymmetries generalNeighbor = generalType.neighbors.get(i);					
-					if (generalNeighbor.outgoingSymmetryCount != neighbor.outgoingSymmetryCount) {
-//						System.out.println("It does enter here though");
-						generalNeighbor.outgoingSymmetryCount = null;//it doesn't repeat itself so set it to null
-					}
-					if (generalNeighbor.incomingSymmetryCount != neighbor.incomingSymmetryCount) {
-						System.out.println("Does it never enter here?");
-						generalNeighbor.incomingSymmetryCount = null;//it doesn't repeat itself so set it to null
-					}
-				}			
-			}
+				if (generalNeighbor.incomingSymmetryCount != neighbor.incomingSymmetryCount) {
+					System.out.println("Does it never enter here?");
+					generalNeighbor.incomingSymmetryCount = null;//it doesn't repeat itself so set it to null
+				}
+			}			
 		}
 	}
 	
@@ -2547,7 +2559,7 @@ final class CodeGeneration {
 		boolean isSame(Object other);		
 	}
 	
-	static <Equatable_Type extends Equatable> int getIndexOfSameType(List<Equatable_Type> list, Equatable type) {
+	static <Equatable_Type extends Equatable> int getIndexOfSame(List<Equatable_Type> list, Equatable type) {
 		for (int i = list.size() - 1; i != -1; i--) {
 			if (list.get(i).isSame(type)) {
 				return i;
