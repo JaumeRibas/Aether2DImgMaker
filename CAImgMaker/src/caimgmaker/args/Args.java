@@ -88,7 +88,7 @@ public class Args {
 	
 	public static final String MODEL = "-model";
 	@Parameter(names = MODEL, descriptionKey = "model-description")
-    public String model = "Aether";
+    public String model = null;
 	
 	public static final String NO_FOLDERS = "-no-folders";
 	@Parameter(names = { NO_FOLDERS, "-no-folder" }, descriptionKey = "no-folders-description")

@@ -44,7 +44,7 @@ public final class SunflowerFactory {
 		} else if (args.initialConfiguration == null && args.backupToRestorePath == null) {
 			System.out.printf(messages.getString("initial-config-needed-format"), args.model);
 		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(messages.getString("grid-type-needed-in-order-to-restore-format"));
+			System.out.println(messages.getString("grid-type-needed-in-order-to-restore"));
 		} else if (args.topplingAlternationCompliance) {
 			System.out.printf(messages.getString("param-incompatible-with-model-format"), Args.TOPPLING_ALTERNATION_COMPLIANCE, args.model);
 		} else {

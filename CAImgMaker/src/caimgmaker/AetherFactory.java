@@ -68,7 +68,7 @@ public final class AetherFactory {
 		if (args.initialConfiguration == null && args.backupToRestorePath == null) {
 			System.out.printf(messages.getString("initial-config-needed-format"), args.model);
 		} else if (args.backupToRestorePath != null && args.grid == null) {
-			System.out.printf(messages.getString("grid-type-needed-in-order-to-restore-format"));//TODO Add AetherImgMakerBackup class with parameters
+			System.out.println(messages.getString("grid-type-needed-in-order-to-restore"));//TODO Add AetherImgMakerBackup class with parameters
 		} else if (args.memorySafe && args.initialConfiguration.type != InitialConfigType.SINGLE_SOURCE) {
 			System.out.printf(messages.getString("param-not-supported-for-this-initial-config-format"), args.model, Args.MEMORY_SAFE);
 		} else {
@@ -133,7 +133,7 @@ public final class AetherFactory {
 						}
 					}
 				} else {
-					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-format"));
+					System.out.println(messages.getString("initial-config-not-supported-with-these-params"));
 				}
 			} else {
 				//TODO Add AetherImgMakerBackup class with parameters
@@ -154,7 +154,7 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
+					System.out.println(messages.getString("backup-could-not-be-restored"));
 				}
 			}
 		} else {
@@ -256,7 +256,7 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
+					System.out.println(messages.getString("backup-could-not-be-restored"));
 				}
 			}
 		} else {
@@ -358,7 +358,7 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
+					System.out.println(messages.getString("backup-could-not-be-restored"));
 				}
 			}
 		} else {
@@ -424,7 +424,7 @@ public final class AetherFactory {
 						}
 					}
 				} else {
-					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-format"));
+					System.out.println(messages.getString("initial-config-not-supported-with-these-params"));
 				}
 			} else {
 				boolean successfullyRestored = true;
@@ -460,7 +460,7 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
+					System.out.println(messages.getString("backup-could-not-be-restored"));
 				}
 			}
 		} else {
@@ -509,7 +509,7 @@ public final class AetherFactory {
 						}
 					}
 				} else {
-					System.out.printf(messages.getString("initial-config-not-supported-with-these-params-format"));
+					System.out.println(messages.getString("initial-config-not-supported-with-these-params"));
 				}
 			} else {
 				boolean successfullyRestored = true;
@@ -537,7 +537,7 @@ public final class AetherFactory {
 					}
 				}
 				if (!successfullyRestored) {
-					System.out.printf(messages.getString("backup-could-not-be-restored-format"));
+					System.out.println(messages.getString("backup-could-not-be-restored"));
 				}
 			}
 		} else {

@@ -639,35 +639,43 @@ public class AetherImgMaker {
 	
 	private static Model getModel(Args args) throws Exception {
 		Model model = null;
-		String lowerCaseModelName = args.model.toLowerCase();
-		switch (lowerCaseModelName) {
-			case "ae":
-			case "aether":
+		if (args.model == null) {
+			if (args.backupToRestorePath == null) {
 				model = AetherFactory.create(args, messages);
-				break;
-			case "sunflower":
-				model = SunflowerFactory.create(args, messages);
-				break;
-			case "as":
-			case "abelian_sandpile":
-				model = AbelianSandpileFactory.create(args, messages);
-				break;
-			case "nearae1":
-			case "nearaether1":
-				model = NearAether1Factory.create(args, messages);
-				break;
-			case "nearae2":
-			case "nearaether2":
-				model = NearAether2Factory.create(args, messages);
-				break;
-			case "nearae3":
-			case "nearaether3":
-				model = NearAether3Factory.create(args, messages);
-				break;
-			case "test":
-				model = TestModelFactory.create(args, messages);
-			default:
-				System.out.printf(messages.getString("model-not-recognized-format"), args.model);
+			} else {
+				System.out.println(messages.getString("model-needed-in-order-to-restore"));//TODO Add AetherImgMakerBackup class with parameters
+			}
+		} else {
+			String lowerCaseModelName = args.model.toLowerCase();
+			switch (lowerCaseModelName) {
+				case "ae":
+				case "aether":
+					model = AetherFactory.create(args, messages);
+					break;
+				case "sunflower":
+					model = SunflowerFactory.create(args, messages);
+					break;
+				case "as":
+				case "abelian_sandpile":
+					model = AbelianSandpileFactory.create(args, messages);
+					break;
+				case "nearae1":
+				case "nearaether1":
+					model = NearAether1Factory.create(args, messages);
+					break;
+				case "nearae2":
+				case "nearaether2":
+					model = NearAether2Factory.create(args, messages);
+					break;
+				case "nearae3":
+				case "nearaether3":
+					model = NearAether3Factory.create(args, messages);
+					break;
+				case "test":
+					model = TestModelFactory.create(args, messages);
+				default:
+					System.out.printf(messages.getString("model-not-recognized-format"), args.model);
+			}
 		}
 		return model;
 	}
