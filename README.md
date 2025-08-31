@@ -7,7 +7,7 @@ The runnable jar as well as the source code can be downloaded from [here](https:
 
 ## Requirements
 
-To run this app you need to have Java (version 8 or higher) installed.
+To run this app you need to have Java installed.
 
 ## How to run
 
