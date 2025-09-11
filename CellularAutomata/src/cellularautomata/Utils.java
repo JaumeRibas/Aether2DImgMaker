@@ -46,6 +46,23 @@ public final class Utils {
 	
 	private Utils() {}
 	
+	public static boolean isInteger(String str) {
+		boolean valid = false;
+		int length = str.length();
+		if (length != 0) {
+			char firstChar = str.charAt(0);
+			if (firstChar == '-') {
+				valid = length != 1;
+			} else {
+				valid = Constants.BASE_TEN_DIGITS.indexOf(firstChar) != -1;
+			}
+			for (int i = 1; i != length && valid; i++) {
+				valid = Constants.BASE_TEN_DIGITS.indexOf(str.charAt(i)) != -1;
+			}
+		}
+		return valid;
+	}
+	
 	public static boolean isEvenPosition(int[] coordinates) {
 		boolean isEven = true;
 		for (int i = 0; i != coordinates.length; i++) {
@@ -80,7 +97,7 @@ public final class Utils {
 	}
 	
 	public static void abs(int[] array) {
-		for (int i = 0; i < array.length; i++) {
+		for (int i = array.length - 1; i != -1; i--) {
 			int value = array[i]; 
 			if (value < 0) {
 				array[i] = -value;
@@ -126,7 +143,7 @@ public final class Utils {
 	}
 	
 	public static void serializeToFile(Serializable obj, String path, String name) throws FileNotFoundException, IOException {
-		String pathName = path + "/" + name;
+		String pathName = path + File.separatorChar + name;
 		File dir = new File(path);
 		if (!dir.exists())
 			dir.mkdirs();

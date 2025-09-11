@@ -6,12 +6,16 @@ import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
 import caimgmaker.AetherImgMaker;
+import cellularautomata.Utils;
 
 public class GreaterThanZeroIntegerValidator implements IParameterValidator {
 	
 	@Override
 	public void validate(String name, String value)
 			throws ParameterException {
+		if (!Utils.isInteger(value)) {
+			throw new ParameterException(String.format(AetherImgMaker.messages.getString("param-is-not-valid-integer-format"), name, value));
+		}
 		BigInteger n = new BigInteger(value);
 		if (n.compareTo(BigInteger.ONE) < 0) {
 			throw new ParameterException(String.format(AetherImgMaker.messages.getString("param-not-greater-than-zero-format"), name, value));

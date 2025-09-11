@@ -47,4 +47,6 @@ public final class Constants {
 	public static final String[] UPPERCASE_ABC = new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	
 	public static final int ABC_LENGTH = 26;
+	
+	public static final String BASE_TEN_DIGITS = "0123456789";
 }
