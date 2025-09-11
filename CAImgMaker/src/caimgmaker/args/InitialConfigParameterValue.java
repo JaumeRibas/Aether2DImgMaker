@@ -24,7 +24,7 @@ public class InitialConfigParameterValue {
 	public BigInt singleSource;
 	public BigInt min;
 	public BigInt max;
-	public Integer side;
+	public int side;
 	
 	public InitialConfigParameterValue(BigInt singleSource) {
 		this.type = InitialConfigType.SINGLE_SOURCE;
@@ -41,6 +41,19 @@ public class InitialConfigParameterValue {
 		this.min = min;
 		this.max = max;
 		this.side = side;
+	}
+	
+	@Override
+	public String toString() {
+		String result;
+		switch (type) {
+		case SINGLE_SOURCE:
+			result = singleSource.toString();
+			break;
+		default:
+			result = "random-region_" + side + "_" + min + "_" + max;
+		}
+		return result;
 	}
 	
 	public static enum InitialConfigType {
