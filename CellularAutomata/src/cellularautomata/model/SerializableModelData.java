@@ -206,7 +206,7 @@ public class SerializableModelData implements Serializable {
 				gridDimension = 5;
 			}
 			serializableData.put(GRID_DIMENSION, gridDimension);
-			serializableData.put(GRID_TYPE, GridTypes.INFINITE_REGULAR);//only infinite regular grids where used
+			serializableData.put(GRID_TYPE, GridTypes.INFINITE_REGULAR);//only infinite regular grids were used
 		}
 		return serializableData;
 	}
