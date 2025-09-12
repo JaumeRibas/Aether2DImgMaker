@@ -39,7 +39,9 @@ public interface Model {
 	int getGridDimension();
 	
 	/**
-	 * Returns the label of the given axis.
+	 * <p>Returns the label of the given axis.</p>
+	 * <p>This method can be called on model cross sections to keep track of the original axes.</p>
+	 * <p>It is not defined to call this method with an axis out of the [0, ({@link #getGridDimension()} - 1)] range.</p>
 	 * 
 	 * @param axis the index of the axis whose label is requested.
 	 * @return the label
@@ -49,7 +51,8 @@ public interface Model {
 	}
 	
 	/**
-	 * Returns the max coordinate of the region on the given axis.
+	 * <p>Returns the max coordinate of the region on the given axis.</p>
+	 * <p>It is not defined to call this method with an axis out of the [0, ({@link #getGridDimension()} - 1)] range.</p>
 	 * 
 	 * @param axis the index of the axis on which the max coordinate is requested.
 	 * @return the max coordinate
@@ -85,7 +88,8 @@ public interface Model {
 	}
 	
 	/**
-	 * Returns the min coordinate of the region on the given axis.
+	 * <p>Returns the min coordinate of the region on the given axis.</p>
+	 * <p>It is not defined to call this method with an axis out of the [0, ({@link #getGridDimension()} - 1)] range.</p>
 	 * 
 	 * @param axis the index of the axis on which the min coordinate is requested.
 	 * @return the min coordinate
@@ -138,7 +142,7 @@ public interface Model {
 			int[] maxCoords = new int[dimension];
 			int currentAxis = dimension - 1;
 			boolean isBeginningOfLoop = true;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) {
 					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int minCoord = getMinCoordinate(0, partialCoordinatesObj);
@@ -172,7 +176,7 @@ public interface Model {
 						currentAxis++;
 					}
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 	
@@ -209,7 +213,7 @@ public interface Model {
 			int[] maxCoords = new int[dimension];
 			int i = dimension - 1;
 			boolean isBeginningOfLoop = true;
-			while (i < dimension) {
+			do {
 				if (i == 0) {
 					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int minCoord = getMinCoordinate(axesOrder[0], partialCoordinatesObj);
@@ -243,7 +247,7 @@ public interface Model {
 						i++;
 					}
 				}
-			}
+			} while (i < dimension);
 		}
 	}
 	
@@ -265,7 +269,7 @@ public interface Model {
 			int[] maxCoords = new int[dimension];
 			int currentAxis = dimension - 1;
 			boolean isBeginningOfLoop = true;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) {
 					PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 					int minCoord = getMinCoordinate(0, partialCoordinatesObj);
@@ -301,7 +305,7 @@ public interface Model {
 						currentAxis++;
 					}
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 	
@@ -320,7 +324,7 @@ public interface Model {
 		int[] maxCoords = new int[dimension];
 		int currentAxis = dimension - 1;
 		boolean isBeginningOfLoop = true;
-		while (currentAxis < dimension) {
+		do {
 			if (currentAxis == 0) {
 				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 				int minCoord = getMinCoordinate(0, partialCoordinatesObj);
@@ -356,7 +360,7 @@ public interface Model {
 					currentAxis++;
 				}
 			}
-		}
+		} while (currentAxis < dimension);
 	}	
 	
 	/**
@@ -432,8 +436,8 @@ public interface Model {
 	}
 	
 	/**
-	 * Computes the next step of the model and returns whether
-	 * or not the state changed. Some implementations may choose not to check for state changes and return {@link null} instead.
+	 * Computes the next step of the model and returns whether or not the state changed.
+	 * Some implementations may choose not to check for state changes and return {@link null} instead.
 	 *  
 	 * @return {@link Boolean#TRUE} if the state changed, {@link Boolean#FALSE} if it didn't or {@link null} in case it is unknown
 	 * @throws Exception 
