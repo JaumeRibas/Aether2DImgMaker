@@ -253,7 +253,7 @@ public class SequentialLongAetherAsymmetricSection1D implements LongModel1D {
 		boolean currentSliceToppled = false;
 		boolean previousSliceToppled = false;
 		boolean endReached = false;
-		while (!endReached) {		
+		do {		
 			//slide new values
 			smallerXNewValue = currentNewValue;
 			currentNewValue = greaterXNewValue;
@@ -343,7 +343,7 @@ public class SequentialLongAetherAsymmetricSection1D implements LongModel1D {
 			}
 			newGridOutput.writeLong(smallerXNewValue);
 			action.accept(smallerXNewValue);
-		}
+		} while (!endReached);
 		newGridOutput.writeLong(currentNewValue);
 		action.accept(currentNewValue);
 		if (currentSliceToppled || previousSliceToppled) {
@@ -358,9 +358,9 @@ public class SequentialLongAetherAsymmetricSection1D implements LongModel1D {
 		DataInputStream inputStream = null;
 		try {
 			inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(currentFile)));
-			while (true) {
+			do {
 				action.accept(inputStream.readLong());
-			}
+			} while (true);
 		} catch (EOFException e) {
 			//end of file reached
 		} finally {
@@ -417,7 +417,7 @@ public class SequentialLongAetherAsymmetricSection1D implements LongModel1D {
 			inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(currentFile)));
 			if (!isEven)
 				inputStream.skipBytes(Long.BYTES);
-			while (true) {
+			do {
 				long value = inputStream.readLong();
 				if (value < min) {
 					min = value;
@@ -426,7 +426,7 @@ public class SequentialLongAetherAsymmetricSection1D implements LongModel1D {
 					max = value;
 				}
 				inputStream.skipBytes(Long.BYTES);	
-			}
+			} while (true);
 		} catch (EOFException e) {
 			return new long[] { min, max };
 		} finally {

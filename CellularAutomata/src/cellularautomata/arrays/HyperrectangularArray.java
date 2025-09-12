@@ -192,7 +192,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 			consumer.accept(new Coordinates(indexes));
 		} else {
 			int currentAxis = 0;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) {
 					consumer.accept(new Coordinates(indexes));
 				}
@@ -205,7 +205,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 					indexes[currentAxis] = lowerBounds[currentAxis];
 					currentAxis++;
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 	
@@ -269,7 +269,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 			consumer.accept(new Coordinates(indexes));
 		} else {
 			int currentAxis = 0;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) {
 					int lowerBound = lowerBounds[0];
 					int upperBound = upperBounds[0];
@@ -294,7 +294,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 						currentAxis++;
 					}
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 	
@@ -358,7 +358,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 			consumer.accept(new Coordinates(indexes));
 		} else {
 			int currentAxis = 0;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) {
 					int lowerBound = lowerBounds[0];
 					int upperBound = upperBounds[0];
@@ -383,7 +383,7 @@ public abstract class HyperrectangularArray implements MultidimensionalArray {
 						currentAxis++;
 					}
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 

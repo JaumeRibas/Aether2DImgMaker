@@ -53,7 +53,7 @@ public interface MultidimensionalArray {
 				previousSizeAxis = currentAxis - 1;
 				sizeMinusOne = getSize(previousSizeAxis, new Coordinates(indexes)) - 1;
 			}
-			while (currentAxis != -1) {
+			do {
 				if (currentAxis == dimensionMinusOne) { 
 					positionCount += getSize(currentAxis, new Coordinates(indexes));
 					currentAxis--;
@@ -76,7 +76,7 @@ public interface MultidimensionalArray {
 						}
 					}
 				}
-			}
+			} while (currentAxis != -1);
 		}
 		return positionCount;
 	}
@@ -102,7 +102,7 @@ public interface MultidimensionalArray {
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			int sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
-			while (currentAxis != -1) {
+			do {
 				if (currentAxis == dimensionMinusOne) { 
 					consumer.accept(new Coordinates(indexes));
 				}
@@ -119,7 +119,7 @@ public interface MultidimensionalArray {
 				if (previousAxis != currentAxis && currentAxis != -1) {
 					sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
 				}
-			}
+			} while (currentAxis != -1);
 		}
 	}	
 	
@@ -144,7 +144,7 @@ public interface MultidimensionalArray {
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			int sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
-			while (currentAxis != -1) {
+			do {
 				if (currentAxis == dimensionMinusOne) {
 					sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
 					int currentIndex = 0;
@@ -173,7 +173,7 @@ public interface MultidimensionalArray {
 						sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
 					}
 				}
-			}
+			} while (currentAxis != -1);
 		}
 	}
 	
@@ -198,7 +198,7 @@ public interface MultidimensionalArray {
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
 			int sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
-			while (currentAxis != -1) {
+			do {
 				if (currentAxis == dimensionMinusOne) {
 					sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
 					int currentIndex = 0;
@@ -227,7 +227,7 @@ public interface MultidimensionalArray {
 						sizeMinusOne = getSize(currentAxis, new Coordinates(indexes)) - 1;
 					}
 				}
-			}
+			} while (currentAxis != -1);
 		}
 	}
 	

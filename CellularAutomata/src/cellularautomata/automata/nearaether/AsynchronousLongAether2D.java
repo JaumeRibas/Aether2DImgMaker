@@ -147,8 +147,8 @@ public class AsynchronousLongAether2D implements LongModel2D, Serializable {
 				//If there are any
 				if (neighbors.size() > 0) {
 					//Sort them by value in ascending order
-					boolean sorted = false;
-					while (!sorted) {
+					boolean sorted;
+					do {
 						sorted = true;
 						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 							Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -158,7 +158,7 @@ public class AsynchronousLongAether2D implements LongModel2D, Serializable {
 								neighbors.add(neighborIndex, next);
 							}
 						}
-					}
+					} while (!sorted);
 					long previousNeighborValue = value;//all relevant neighbors' values are different from the current value
 					//Apply the algorithm
 					for (int neighborIndex = neighbors.size() - 1; neighborIndex >= 0; neighborIndex--) {

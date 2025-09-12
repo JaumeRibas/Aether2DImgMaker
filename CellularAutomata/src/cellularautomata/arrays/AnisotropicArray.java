@@ -78,7 +78,7 @@ public abstract class AnisotropicArray implements MultidimensionalArray, Seriali
 			int sideMinusOne = side - 1;
 			int dimensionMinusOne = dimension - 1;
 			int currentAxis = dimensionMinusOne;
-			while (currentAxis > -1) {
+			do {
 				if (currentAxis == dimensionMinusOne) {
 					consumer.accept(new Coordinates(indexes));
 				}
@@ -97,7 +97,7 @@ public abstract class AnisotropicArray implements MultidimensionalArray, Seriali
 					indexes[currentAxis] = 0;
 					currentAxis--;
 				}
-			}
+			} while (currentAxis > -1);
 		}
 	}
 

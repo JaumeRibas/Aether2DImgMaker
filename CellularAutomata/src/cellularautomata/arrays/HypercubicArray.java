@@ -75,7 +75,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 		} else {
 			int sideMinusOne = side - 1;
 			int currentAxis = 0;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) { 
 					consumer.accept(new Coordinates(indexes));
 				}
@@ -88,7 +88,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 					indexes[currentAxis] = 0;
 					currentAxis++;
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 	
@@ -103,7 +103,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 		} else {
 			int sideMinusOne = side - 1;
 			int currentAxis = 0;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) {
 					int currentIndex = 0;
 					indexes[0] = currentIndex;
@@ -126,7 +126,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 						currentAxis++;
 					}
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 	
@@ -141,7 +141,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 		} else {
 			int sideMinusOne = side - 1;
 			int currentAxis = 0;
-			while (currentAxis < dimension) {
+			do {
 				if (currentAxis == 0) {
 					int currentIndex = 0;
 					indexes[0] = currentIndex;
@@ -164,7 +164,7 @@ public abstract class HypercubicArray extends HyperrectangularArray {
 						currentAxis++;
 					}
 				}
-			}
+			} while (currentAxis < dimension);
 		}
 	}
 	
