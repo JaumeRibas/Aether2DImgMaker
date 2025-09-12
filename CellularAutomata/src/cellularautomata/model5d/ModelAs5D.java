@@ -21,7 +21,7 @@ import cellularautomata.PartialCoordinates;
 
 public class ModelAs5D<Source_Type extends Model> implements Model5D {
 
-	protected Source_Type source;
+	protected final Source_Type source;
 	
 	public ModelAs5D(Source_Type source) {
 		this.source = source;

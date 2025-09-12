@@ -20,7 +20,7 @@ import cellularautomata.Utils;
 
 public class HyperrectangularObjectArrayGrid4D<Object_Type> extends HyperrectangularArrayGrid4D implements ObjectModel4D<Object_Type> {
 
-	private Object_Type[][][][] values;
+	private final Object_Type[][][][] values;
 	
 	/**
 	 * Constructs a {@code HyperrectangularObjectArrayGrid4D} with the specified bounds

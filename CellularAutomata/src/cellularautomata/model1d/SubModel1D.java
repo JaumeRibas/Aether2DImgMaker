@@ -18,11 +18,11 @@ package cellularautomata.model1d;
 
 public class SubModel1D<Source_Type extends Model1D> implements Model1D {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
+	protected final Integer absoluteMinX;
+	protected final Integer absoluteMaxX;
 	protected int minX;
 	protected int maxX;
-	protected Integer absoluteMinX;
-	protected Integer absoluteMaxX;
 	
 	public SubModel1D(Source_Type source, Integer minX, Integer maxX) {
 		if (minX != null && maxX != null && minX > maxX) {

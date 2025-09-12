@@ -21,11 +21,11 @@ import java.util.NoSuchElementException;
 
 public abstract class Model3DIterator<Source_Type extends Model3D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
 	private int x;
 	private int y;
 	private int z;
-	private int maxX;
+	private final int maxX;
 	private int localMaxY;
 	private int localMaxZ;
 	private boolean hasNext;

@@ -20,11 +20,11 @@ import cellularautomata.PartialCoordinates;
 
 public class SubModel<Source_Type extends Model> implements Model {
 	
-	protected Source_Type source;	
-	protected int[] minCoordinates;
-	protected int[] maxCoordinates;
-	protected PartialCoordinates absoluteMinCoordinates;
-	protected PartialCoordinates absoluteMaxCoordinates;
+	protected final Source_Type source;	
+	protected final int[] minCoordinates;
+	protected final int[] maxCoordinates;
+	protected final PartialCoordinates absoluteMinCoordinates;
+	protected final PartialCoordinates absoluteMaxCoordinates;
 	
 	public SubModel(Source_Type source, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
 		this.source = source;

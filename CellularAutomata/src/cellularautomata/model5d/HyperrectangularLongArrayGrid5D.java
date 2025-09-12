@@ -20,7 +20,7 @@ import cellularautomata.Utils;
 
 public class HyperrectangularLongArrayGrid5D extends HyperrectangularArrayGrid5D implements LongModel5D {
 
-	private long[][][][][] values;
+	private final long[][][][][] values;
 	
 	/**
 	 * Constructs a {@code HyperrectangularLongArrayGrid5D} with the specified bounds

@@ -21,8 +21,8 @@ import cellularautomata.model3d.Model3D;
 
 public class Model4DWCrossSection<Source_Type extends Model4D> implements Model3D {
 
-	protected Source_Type source;
-	protected int w;
+	protected final Source_Type source;
+	protected final int w;
 	
 	public Model4DWCrossSection(Source_Type source, int w) {
 		if (w > source.getMaxW() || w < source.getMinW()) {

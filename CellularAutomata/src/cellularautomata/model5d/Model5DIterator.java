@@ -21,13 +21,13 @@ import java.util.NoSuchElementException;
 
 public abstract class Model5DIterator<Source_Type extends Model5D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
 	private int v;
 	private int w;
 	private int x;
 	private int y;
 	private int z;
-	private int maxV;
+	private final int maxV;
 	private int localMaxW;
 	private int localMaxX;
 	private int localMaxY;

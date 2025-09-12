@@ -25,9 +25,9 @@ package cellularautomata.model2d;
  */
 public abstract class ArrayGrid2D implements Model2D {
 
-	protected int minX;
-	protected int maxX;
-	protected int[] localYMinima;
+	protected final int minX;
+	protected final int maxX;
+	protected final int[] localYMinima;
 	protected int minY;
 	protected int maxY;
 

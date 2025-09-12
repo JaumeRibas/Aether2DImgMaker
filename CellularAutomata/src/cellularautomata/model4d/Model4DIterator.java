@@ -21,12 +21,12 @@ import java.util.NoSuchElementException;
 
 public abstract class Model4DIterator<Source_Type extends Model4D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
 	private int w;
 	private int x;
 	private int y;
 	private int z;
-	private int maxW;
+	private final int maxW;
 	private int localMaxX;
 	private int localMaxY;
 	private int localMaxZ;

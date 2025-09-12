@@ -21,8 +21,8 @@ import cellularautomata.model4d.Model4D;
 
 public class Model5DVCrossSection<Source_Type extends Model5D> implements Model4D {
 
-	protected Source_Type source;
-	protected int v;
+	protected final Source_Type source;
+	protected final int v;
 	
 	public Model5DVCrossSection(Source_Type source, int v) {
 		if (v > source.getMaxV() || v < source.getMinV()) {

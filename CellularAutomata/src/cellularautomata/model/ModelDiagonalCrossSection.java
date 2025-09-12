@@ -21,15 +21,15 @@ import cellularautomata.PartialCoordinates;
 
 public class ModelDiagonalCrossSection<Source_Type extends Model> implements Model {
 	
-	protected Source_Type source;
-	protected int firstAxis;
-	protected int secondAxis;
-	protected int slope;
-	protected int offset;
+	protected final Source_Type source;
+	protected final int firstAxis;
+	protected final int secondAxis;
+	protected final int slope;
+	protected final int offset;
 	protected int[] crossSectionMinCoordinates;
 	protected int[] crossSectionMaxCoordinates;
-	protected int sourceDimension;
-	protected int dimension;
+	protected final int sourceDimension;
+	protected final int dimension;
 	
 	public ModelDiagonalCrossSection(Source_Type source, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {		
 		this.source = source;
@@ -69,7 +69,7 @@ public class ModelDiagonalCrossSection<Source_Type extends Model> implements Mod
 	}
 	
 	protected boolean getBounds() {
-		crossSectionMinCoordinates = new int[dimension];
+		crossSectionMinCoordinates = new int[dimension];//TODO check if these can be moved to the constructor and made final 
 		crossSectionMaxCoordinates = new int[dimension];
 		int firstAxisCoordinate = source.getMinCoordinate(firstAxis);
 		int firstAxisMaxCoordinate = source.getMaxCoordinate(firstAxis);

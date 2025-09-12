@@ -18,7 +18,7 @@ package cellularautomata.model1d;
 
 public class IntArrayGrid1D extends ArrayGrid1D implements IntModel1D {
 	
-	private int[] values;
+	private final int[] values;
 	
 	/**
 	 * Constructs an {@code IntArrayGrid1D} with the specified bounds

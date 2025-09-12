@@ -21,7 +21,7 @@ import cellularautomata.model.Model;
 
 public class ModelAs3D<Source_Type extends Model> implements Model3D {
 
-	protected Source_Type source;
+	protected final Source_Type source;
 	
 	public ModelAs3D(Source_Type source) {
 		this.source = source;

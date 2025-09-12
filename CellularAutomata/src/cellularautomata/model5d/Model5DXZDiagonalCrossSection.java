@@ -20,9 +20,9 @@ import cellularautomata.model4d.Model4D;
 
 public class Model5DXZDiagonalCrossSection<Source_Type extends Model5D> implements Model4D {
 
-	protected Source_Type source;
-	protected int slope;
-	protected int zOffsetFromX;
+	protected final Source_Type source;
+	protected final int slope;
+	protected final int zOffsetFromX;
 	protected int crossSectionMinV;
 	protected int crossSectionMaxV;
 	protected int crossSectionMinW;

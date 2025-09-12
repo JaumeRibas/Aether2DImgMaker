@@ -18,7 +18,7 @@ package cellularautomata.model1d;
 
 public class ObjectArrayGrid1D<Object_Type> extends ArrayGrid1D implements ObjectModel1D<Object_Type> {
 	
-	private Object_Type[] values;
+	private final Object_Type[] values;
 	
 	/**
 	 * Constructs an {@code ObjectArrayGrid1D} with the specified bounds

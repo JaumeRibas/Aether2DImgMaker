@@ -20,7 +20,7 @@ import cellularautomata.Utils;
 
 public class CuboidalObjectArrayGrid<Object_Type> extends CuboidalArrayGrid implements ObjectModel3D<Object_Type> {
 	
-	private Object_Type[][][] values;
+	private final Object_Type[][][] values;
 	
 	/**
 	 * Constructs a {@code CuboidalObjectArrayGrid} with the specified bounds

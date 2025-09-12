@@ -18,19 +18,19 @@ package cellularautomata.model3d;
 
 public class SubModel3D<Source_Type extends Model3D> implements Model3D {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
 	protected int minX;
 	protected int maxX;
 	protected int minY;
 	protected int maxY;
 	protected int minZ;
 	protected int maxZ;
-	protected Integer absoluteMinX;
-	protected Integer absoluteMaxX;
-	protected Integer absoluteMinY;
-	protected Integer absoluteMaxY;
-	protected Integer absoluteMinZ;
-	protected Integer absoluteMaxZ;
+	protected final Integer absoluteMinX;
+	protected final Integer absoluteMaxX;
+	protected final Integer absoluteMinY;
+	protected final Integer absoluteMaxY;
+	protected final Integer absoluteMinZ;
+	protected final Integer absoluteMaxZ;
 	
 	public SubModel3D(Source_Type source, Integer minX, Integer maxX, Integer minY, 
 			Integer maxY, Integer minZ, Integer maxZ) {

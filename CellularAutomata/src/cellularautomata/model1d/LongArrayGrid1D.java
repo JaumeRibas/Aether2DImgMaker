@@ -18,7 +18,7 @@ package cellularautomata.model1d;
 
 public class LongArrayGrid1D extends ArrayGrid1D implements LongModel1D {
 	
-	private long[] values;
+	private final long[] values;
 	
 	/**
 	 * Constructs a {@code LongArrayGrid1D} with the specified bounds

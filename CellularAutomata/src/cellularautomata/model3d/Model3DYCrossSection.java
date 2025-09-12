@@ -20,8 +20,8 @@ import cellularautomata.model2d.Model2D;
 
 public class Model3DYCrossSection<Source_Type extends Model3D> implements Model2D {
 
-	protected Source_Type source;
-	protected int y;
+	protected final Source_Type source;
+	protected final int y;
 	
 	public Model3DYCrossSection(Source_Type source, int y) {
 		if (y > source.getMaxY() || y < source.getMinY()) {

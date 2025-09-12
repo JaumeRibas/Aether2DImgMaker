@@ -20,7 +20,7 @@ import cellularautomata.Utils;
 
 public class CuboidalIntArrayGrid extends CuboidalArrayGrid implements IntModel3D {
 	
-	private int[][][] values;
+	private final int[][][] values;
 	
 	/**
 	 * Constructs a {@code CuboidalIntArrayGrid} with the specified bounds

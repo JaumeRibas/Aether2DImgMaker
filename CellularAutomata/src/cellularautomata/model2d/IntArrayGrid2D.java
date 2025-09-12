@@ -25,7 +25,7 @@ public class IntArrayGrid2D extends ArrayGrid2D implements IntModel2D, Serializa
 	 */
 	private static final long serialVersionUID = 278226012753314721L;
 
-	private int[][] values;
+	private final int[][] values;
 	
 	/**
 	 * Constructs an {@code IntArrayGrid2D} with the specified bounds

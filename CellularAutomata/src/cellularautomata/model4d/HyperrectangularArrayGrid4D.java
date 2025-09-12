@@ -24,13 +24,13 @@ package cellularautomata.model4d;
  */
 public abstract class HyperrectangularArrayGrid4D implements Model4D {
 
-	protected int minW;
+	protected final int minW;
 	protected int maxW;
-	protected int minX;
+	protected final int minX;
 	protected int maxX;
-	protected int minY;
+	protected final int minY;
 	protected int maxY;
-	protected int minZ;
+	protected final int minZ;
 	protected int maxZ;
 	
 	/**

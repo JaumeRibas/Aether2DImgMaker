@@ -18,13 +18,13 @@ package cellularautomata.model3d;
 
 public class RegularIntGrid3D implements IntModel3D {
 	
-	protected int[][][] values;
-	protected int minX;
-	protected int maxX;
-	protected int minY;
-	protected int maxY;
-	protected int minZ;
-	protected int maxZ;
+	protected final int[][][] values;
+	protected final int minX;
+	protected final int maxX;
+	protected final int minY;
+	protected final int maxY;
+	protected final int minZ;
+	protected final int maxZ;
 
 	
 	public RegularIntGrid3D(int[][][] values, int minX, int minY, int minZ) {

@@ -21,12 +21,12 @@ import cellularautomata.PartialCoordinates;
 
 public class ModelCrossSection<Source_Type extends Model> implements Model {
 	
-	protected Source_Type source;
-	protected int crossSectionAxis;
-	protected int crossSectionCoordinate;
-	protected PartialCoordinates crossSectionCoordinates;
-	protected int sourceDimension;
-	protected int dimension;
+	protected final Source_Type source;
+	protected final int crossSectionAxis;
+	protected final int crossSectionCoordinate;
+	protected final PartialCoordinates crossSectionCoordinates;
+	protected final int sourceDimension;
+	protected final int dimension;
 	
 	public ModelCrossSection(Source_Type source, int axis, int coordinate) {
 		if (axis < 0) {

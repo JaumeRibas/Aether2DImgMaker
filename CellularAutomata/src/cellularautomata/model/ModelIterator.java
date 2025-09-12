@@ -24,12 +24,12 @@ import cellularautomata.PartialCoordinates;
 
 public abstract class ModelIterator<Source_Type extends Model, Element_Type> implements Iterator<Element_Type> {
 	
-	protected Source_Type region;
-	private int dimension;
-	private int dimensionMinusOne;
-	private int[] coords;
-	private int[] maxCoords;
-	private Integer[] partialCoords;
+	protected final Source_Type region;
+	private final int dimension;
+	private final int dimensionMinusOne;
+	private final int[] coords;
+	private final int[] maxCoords;
+	private final Integer[] partialCoords;
 	private boolean hasNext;
 	
 	public ModelIterator(Source_Type region) {

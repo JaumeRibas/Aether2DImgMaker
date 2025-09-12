@@ -21,7 +21,7 @@ import cellularautomata.model.Model;
 
 public class ModelAs2D<Source_Type extends Model> implements Model2D {
 
-	protected Source_Type source;
+	protected final Source_Type source;
 	
 	public ModelAs2D(Source_Type source) {
 		this.source = source;

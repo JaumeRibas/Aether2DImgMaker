@@ -18,7 +18,7 @@ package cellularautomata.model5d;
 
 public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 
-	protected Source_Type source;
+	protected final Source_Type source;
 	protected int minV;
 	protected int maxV;
 	protected int minW;
@@ -29,16 +29,16 @@ public class SubModel5D<Source_Type extends Model5D> implements Model5D {
 	protected int maxY;
 	protected int minZ;
 	protected int maxZ;
-	protected Integer absoluteMinV;
-	protected Integer absoluteMaxV;
-	protected Integer absoluteMinW;
-	protected Integer absoluteMaxW;
-	protected Integer absoluteMinX;
-	protected Integer absoluteMaxX;
-	protected Integer absoluteMinY;
-	protected Integer absoluteMaxY;
-	protected Integer absoluteMinZ;
-	protected Integer absoluteMaxZ;
+	protected final Integer absoluteMinV;
+	protected final Integer absoluteMaxV;
+	protected final Integer absoluteMinW;
+	protected final Integer absoluteMaxW;
+	protected final Integer absoluteMinX;
+	protected final Integer absoluteMaxX;
+	protected final Integer absoluteMinY;
+	protected final Integer absoluteMaxY;
+	protected final Integer absoluteMinZ;
+	protected final Integer absoluteMaxZ;
 
 	public SubModel5D(Source_Type source, Integer minV, Integer maxV, Integer minW, Integer maxW, 
 			Integer minX, Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {

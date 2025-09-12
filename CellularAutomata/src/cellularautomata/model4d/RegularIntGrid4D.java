@@ -19,15 +19,15 @@ package cellularautomata.model4d;
 
 public class RegularIntGrid4D implements IntModel4D {
 	
-	protected int[][][][] values;
-	protected int minW;
-	protected int maxW;
-	protected int minX;
-	protected int maxX;
-	protected int minY;
-	protected int maxY;
-	protected int minZ;
-	protected int maxZ;
+	protected final int[][][][] values;
+	protected final int minW;
+	protected final int maxW;
+	protected final int minX;
+	protected final int maxX;
+	protected final int minY;
+	protected final int maxY;
+	protected final int minZ;
+	protected final int maxZ;
 
 	
 	public RegularIntGrid4D(int[][][][] values, int minW, int minX, int minY, int minZ) {

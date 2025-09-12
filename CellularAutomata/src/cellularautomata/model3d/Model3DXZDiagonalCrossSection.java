@@ -20,9 +20,9 @@ import cellularautomata.model2d.Model2D;
 
 public class Model3DXZDiagonalCrossSection<Source_Type extends Model3D> implements Model2D {
 
-	protected Source_Type source;
-	protected int slope;
-	protected int zOffsetFromX;
+	protected final Source_Type source;
+	protected final int slope;
+	protected final int zOffsetFromX;
 	protected int crossSectionMinX;
 	protected int crossSectionMaxX;
 	protected int crossSectionMinY;

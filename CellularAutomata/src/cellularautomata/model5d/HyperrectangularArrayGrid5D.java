@@ -24,15 +24,15 @@ package cellularautomata.model5d;
  */
 public abstract class HyperrectangularArrayGrid5D implements Model5D {
 
-	protected int minV;
+	protected final int minV;
 	protected int maxV;
-	protected int minW;
+	protected final int minW;
 	protected int maxW;
-	protected int minX;
+	protected final int minX;
 	protected int maxX;
-	protected int minY;
+	protected final int minY;
 	protected int maxY;
-	protected int minZ;
+	protected final int minZ;
 	protected int maxZ;
 	
 	/**

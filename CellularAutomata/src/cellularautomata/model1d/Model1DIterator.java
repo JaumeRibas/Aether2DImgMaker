@@ -21,9 +21,9 @@ import java.util.NoSuchElementException;
 
 public abstract class Model1DIterator<Source_Type extends Model1D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
 	private int x;
-	private int maxX;
+	private final int maxX;
 	private boolean hasNext;
 	
 	public Model1DIterator(Source_Type grid) {

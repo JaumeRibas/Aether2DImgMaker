@@ -18,15 +18,15 @@ package cellularautomata.model2d;
 
 public class SubModel2D<Source_Type extends Model2D> implements Model2D {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
 	protected int minX;
 	protected int maxX;
 	protected int minY;
 	protected int maxY;
-	protected Integer absoluteMinX;
-	protected Integer absoluteMaxX;
-	protected Integer absoluteMinY;
-	protected Integer absoluteMaxY;
+	protected final Integer absoluteMinX;
+	protected final Integer absoluteMaxX;
+	protected final Integer absoluteMinY;
+	protected final Integer absoluteMaxY;
 	
 	public SubModel2D(Source_Type source, Integer minX, Integer maxX, Integer minY, Integer maxY) {
 		if (minX != null && maxX != null && minX > maxX) {

@@ -18,7 +18,7 @@ package cellularautomata.model4d;
 
 public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 
-	protected Source_Type source;
+	protected final Source_Type source;
 	protected int minW;
 	protected int maxW;
 	protected int minX;
@@ -27,14 +27,14 @@ public class SubModel4D<Source_Type extends Model4D> implements Model4D {
 	protected int maxY;
 	protected int minZ;
 	protected int maxZ;
-	protected Integer absoluteMinW;
-	protected Integer absoluteMaxW;
-	protected Integer absoluteMinX;
-	protected Integer absoluteMaxX;
-	protected Integer absoluteMinY;
-	protected Integer absoluteMaxY;
-	protected Integer absoluteMinZ;
-	protected Integer absoluteMaxZ;
+	protected final Integer absoluteMinW;
+	protected final Integer absoluteMaxW;
+	protected final Integer absoluteMinX;
+	protected final Integer absoluteMaxX;
+	protected final Integer absoluteMinY;
+	protected final Integer absoluteMaxY;
+	protected final Integer absoluteMinZ;
+	protected final Integer absoluteMaxZ;
 
 	public SubModel4D(Source_Type source, Integer minW, Integer maxW, Integer minX, 
 			Integer maxX, Integer minY, Integer maxY, Integer minZ, Integer maxZ) {

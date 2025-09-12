@@ -20,7 +20,7 @@ import cellularautomata.Utils;
 
 public class HyperrectangularIntArrayGrid4D extends HyperrectangularArrayGrid4D implements IntModel4D {
 	
-	private int[][][][] values;
+	private final int[][][][] values;
 	
 	/**
 	 * Constructs a {@code HyperrectangularIntArrayGrid4D} with the specified bounds

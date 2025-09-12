@@ -24,7 +24,7 @@ package cellularautomata.model1d;
  */
 public abstract class ArrayGrid1D implements Model1D {
 
-	protected int minX;
+	protected final int minX;
 	protected int maxX;
 	
 	/**

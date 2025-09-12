@@ -19,17 +19,17 @@ package cellularautomata.model5d;
 
 public class RegularIntGrid5D implements IntModel5D {
 	
-	protected int[][][][][] values;
-	protected int minV;
-	protected int maxV;
-	protected int minW;
-	protected int maxW;
-	protected int minX;
-	protected int maxX;
-	protected int minY;
-	protected int maxY;
-	protected int minZ;
-	protected int maxZ;
+	protected final int[][][][][] values;
+	protected final int minV;
+	protected final int maxV;
+	protected final int minW;
+	protected final int maxW;
+	protected final int minX;
+	protected final int maxX;
+	protected final int minY;
+	protected final int maxY;
+	protected final int minZ;
+	protected final int maxZ;
 
 	
 	public RegularIntGrid5D(int[][][][][] values, int minV, int minW, int minX, int minY, int minZ) {

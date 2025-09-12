@@ -24,11 +24,11 @@ package cellularautomata.model3d;
  */
 public abstract class CuboidalArrayGrid implements Model3D {
 
-	protected int minX;
+	protected final int minX;
 	protected int maxX;
-	protected int minY;
+	protected final int minY;
 	protected int maxY;
-	protected int minZ;
+	protected final int minZ;
 	protected int maxZ;
 	
 	/**

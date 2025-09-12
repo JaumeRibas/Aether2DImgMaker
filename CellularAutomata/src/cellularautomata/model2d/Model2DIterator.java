@@ -21,10 +21,10 @@ import java.util.NoSuchElementException;
 
 public abstract class Model2DIterator<Source_Type extends Model2D, Element_Type> implements Iterator<Element_Type> {
 	
-	protected Source_Type source;
+	protected final Source_Type source;
 	private int x;
 	private int y;
-	private int maxX;
+	private final int maxX;
 	private int localMaxY;
 	private boolean hasNext;
 	

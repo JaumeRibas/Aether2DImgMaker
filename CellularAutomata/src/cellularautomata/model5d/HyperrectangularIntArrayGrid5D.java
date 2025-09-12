@@ -20,7 +20,7 @@ import cellularautomata.Utils;
 
 public class HyperrectangularIntArrayGrid5D extends HyperrectangularArrayGrid5D implements IntModel5D {
 	
-	private int[][][][][] values;
+	private final int[][][][][] values;
 	
 	/**
 	 * Constructs a {@code HyperrectangularIntArrayGrid5D} with the specified bounds

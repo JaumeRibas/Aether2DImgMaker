@@ -25,7 +25,7 @@ public class LongArrayGrid2D extends ArrayGrid2D implements LongModel2D, Seriali
 	 */
 	private static final long serialVersionUID = 4476906442768367020L;
 
-	private long[][] values;
+	private final long[][] values;
 	
 	/**
 	 * Constructs a {@code LongArrayGrid2D} with the specified bounds

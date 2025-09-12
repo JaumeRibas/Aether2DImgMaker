@@ -20,7 +20,7 @@ import cellularautomata.Utils;
 
 public class CuboidalLongArrayGrid extends CuboidalArrayGrid implements LongModel3D {
 	
-	private long[][][] values;
+	private final long[][][] values;
 	
 	/**
 	 * Constructs a {@code CuboidalLongArrayGrid} with the specified bounds
