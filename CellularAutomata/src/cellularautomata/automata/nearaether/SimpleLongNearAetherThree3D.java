@@ -23,8 +23,7 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricLongModel3D;
+import cellularautomata.model3d.IsotropicCubicLongModelAsymmetricSection;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
@@ -32,7 +31,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, IsotropicCubicModelA {
+public class SimpleLongNearAetherThree3D implements IsotropicCubicLongModelAsymmetricSection {
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
@@ -249,12 +248,7 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -290,7 +284,7 @@ public class SimpleLongNearAetherThree3D implements SymmetricLongModel3D, Isotro
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue;
 	}
 }

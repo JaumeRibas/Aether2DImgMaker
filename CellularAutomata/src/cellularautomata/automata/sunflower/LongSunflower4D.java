@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model4d.IsotropicHypercubicLongArrayModel4DA;
+import cellularautomata.model4d.IsotropicHypercubicLongArrayModelAsymmetricSection4D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 4D with a single source initial configuration
@@ -29,7 +29,7 @@ import cellularautomata.model4d.IsotropicHypercubicLongArrayModel4DA;
  * @author Jaume
  *
  */
-public class LongSunflower4D extends IsotropicHypercubicLongArrayModel4DA {
+public class LongSunflower4D extends IsotropicHypercubicLongArrayModelAsymmetricSection4D {
 	
 	private final long initialValue;
 	private long step;
@@ -260,7 +260,7 @@ public class LongSunflower4D extends IsotropicHypercubicLongArrayModel4DA {
 	}
 	
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getSize() {
 		return grid.length - 1;
 	}
 
@@ -284,7 +284,7 @@ public class LongSunflower4D extends IsotropicHypercubicLongArrayModel4DA {
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/4D/" + initialValue + "/0";
 	}
 	

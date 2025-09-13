@@ -24,9 +24,9 @@ import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareBooleanArrayModelA;
+import cellularautomata.model2d.IsotropicSquareBooleanArrayModelAsymmetricSection;
 
-public class AetherInfinityTopplingAlternationCompliance2D extends IsotropicSquareBooleanArrayModelA {
+public class AetherInfinityTopplingAlternationCompliance2D extends IsotropicSquareBooleanArrayModelAsymmetricSection {
 
 	/** A 2D array representing the grid */
 	private BigFraction[][] sourceGrid;
@@ -1085,7 +1085,7 @@ public class AetherInfinityTopplingAlternationCompliance2D extends IsotropicSqua
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -1100,7 +1100,7 @@ public class AetherInfinityTopplingAlternationCompliance2D extends IsotropicSqua
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		String path = getName() + "/2D/";
 		if (!isPositive) path += "-";
 		path += "infinity";

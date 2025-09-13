@@ -26,10 +26,9 @@ import cellularautomata.Coordinates;
 import cellularautomata.Direction;
 import cellularautomata.arrays.HypercubicBooleanArray;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricBooleanModel3D;
+import cellularautomata.model3d.IsotropicCubicBooleanModelAsymmetricSection;
 
-public class SimpleLongAetherTopplingAlternationCompliance3D implements SymmetricBooleanModel3D, IsotropicCubicModelA {	
+public class SimpleLongAetherTopplingAlternationCompliance3D implements IsotropicCubicBooleanModelAsymmetricSection {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -143,8 +142,8 @@ public class SimpleLongAetherTopplingAlternationCompliance3D implements Symmetri
 					boolean toppled = false;
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
-						boolean sorted = false;
-						while (!sorted) {
+						boolean sorted;
+						do {
 							sorted = true;
 							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 								Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -154,7 +153,7 @@ public class SimpleLongAetherTopplingAlternationCompliance3D implements Symmetri
 									neighbors.add(neighborIndex, next);
 								}
 							}
-						}
+						} while (!sorted);
 						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
 						long previousNeighborValue = 0;
@@ -262,12 +261,7 @@ public class SimpleLongAetherTopplingAlternationCompliance3D implements Symmetri
 	}
 	
 	@Override
-	public boolean getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -303,7 +297,7 @@ public class SimpleLongAetherTopplingAlternationCompliance3D implements Symmetri
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue + "/toppling_alternation_compliance";
 	}
 }

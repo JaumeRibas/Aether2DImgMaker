@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import cellularautomata.Direction;
 import cellularautomata.Utils;
-import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
+import cellularautomata.model3d.IsotropicCubicIntArrayModelAsymmetricSection;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
@@ -30,7 +30,7 @@ import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
  * @author Jaume
  *
  */
-public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements Serializable {
+public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelAsymmetricSection implements Serializable {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;
@@ -323,7 +323,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return grid.length - 1;
 	}
 	
@@ -347,7 +347,7 @@ public class IntNearAetherTwo3D extends IsotropicCubicIntArrayModelA implements 
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue;
 	}
 	

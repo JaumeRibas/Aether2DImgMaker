@@ -21,9 +21,9 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model5d.IsotropicHypercubicBooleanArrayModel5DA;
+import cellularautomata.model5d.IsotropicHypercubicBooleanArrayModelAsymmetricSection5D;
 
-public class LongAetherTopplingAlternationCompliance5D extends IsotropicHypercubicBooleanArrayModel5DA {
+public class LongAetherTopplingAlternationCompliance5D extends IsotropicHypercubicBooleanArrayModelAsymmetricSection5D {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -11924,7 +11924,7 @@ public class LongAetherTopplingAlternationCompliance5D extends IsotropicHypercub
 	}
 
 	@Override
-	public int getAsymmetricMaxV() {
+	public int getSize() {
 		return maxV;
 	}
 
@@ -11968,7 +11968,7 @@ public class LongAetherTopplingAlternationCompliance5D extends IsotropicHypercub
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/5D/" + initialValue + "/toppling_alternation_compliance";
 	}
 

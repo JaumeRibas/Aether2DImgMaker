@@ -24,7 +24,7 @@ import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareNumericArrayModelA;
+import cellularautomata.model2d.IsotropicSquareNumericArrayModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a single source initial configuration of infinity
@@ -32,7 +32,7 @@ import cellularautomata.model2d.IsotropicSquareNumericArrayModelA;
  * @author Jaume
  *
  */
-public class BfAetherInfinity2D extends IsotropicSquareNumericArrayModelA<BigFraction> {
+public class BfAetherInfinity2D extends IsotropicSquareNumericArrayModelAsymmetricSection<BigFraction> {
 
 	private final boolean isPositive;
 	private long step;	
@@ -996,7 +996,7 @@ public class BfAetherInfinity2D extends IsotropicSquareNumericArrayModelA<BigFra
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -1011,7 +1011,7 @@ public class BfAetherInfinity2D extends IsotropicSquareNumericArrayModelA<BigFra
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		String path = getName() + "/2D/";
 		if (!isPositive) path += "-";
 		path += "infinity";

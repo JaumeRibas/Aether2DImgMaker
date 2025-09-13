@@ -25,8 +25,7 @@ import cellularautomata.Constants;
 import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricNumericModel2D;
+import cellularautomata.model2d.IsotropicSquareNumericModelAsymmetricSection;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -35,7 +34,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, IsotropicSquareModelA {
+public class SimpleBigIntAether2D implements IsotropicSquareNumericModelAsymmetricSection<BigInt> {
 	
 	/** 2D array representing the grid **/
 	private BigInt[][] grid;
@@ -49,7 +48,7 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 	
@@ -125,8 +124,8 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 
 				if (neighbors.size() > 0) {
 					//sort neighbors by value
-					boolean sorted = false;
-					while (!sorted) {
+					boolean sorted;
+					do {
 						sorted = true;
 						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 							Neighbor<BigInt> next = neighbors.get(neighborIndex+1);
@@ -136,7 +135,7 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 								neighbors.add(neighborIndex, next);
 							}
 						}
-					}
+					} while (!sorted);
 					//apply algorithm rules to redistribute value
 					boolean isFirst = true;
 					BigInt previousNeighborValue = null;
@@ -220,12 +219,7 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 	}
 	
 	@Override
-	public BigInt getFromAsymmetricPosition(int x, int y) {
-		return getFromPosition(x, y);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -261,7 +255,7 @@ public class SimpleBigIntAether2D implements SymmetricNumericModel2D<BigInt>, Is
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + folderName;
 	}
 }

@@ -25,8 +25,7 @@ import cellularautomata.Constants;
 import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model4d.IsotropicHypercubicModel4DA;
-import cellularautomata.model4d.SymmetricNumericModel4D;
+import cellularautomata.model4d.IsotropicHypercubicNumericModelAsymmetricSection4D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -35,7 +34,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, IsotropicHypercubicModel4DA {
+public class SimpleBigIntAether4D implements IsotropicHypercubicNumericModelAsymmetricSection4D<BigInt> {
 	
 	/** 4D array representing the grid **/
 	private BigInt[][][][] grid;
@@ -49,7 +48,7 @@ public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, Is
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 
@@ -154,8 +153,8 @@ public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, Is
 						
 						if (neighbors.size() > 0) {
 							//sort
-							boolean sorted = false;
-							while (!sorted) {
+							boolean sorted;
+							do {
 								sorted = true;
 								for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 									Neighbor<BigInt> next = neighbors.get(neighborIndex+1);
@@ -165,7 +164,7 @@ public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, Is
 										neighbors.add(neighborIndex, next);
 									}
 								}
-							}
+							} while (!sorted);
 							//divide
 							boolean isFirst = true;
 							BigInt previousNeighborValue = null;
@@ -268,14 +267,9 @@ public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, Is
 		int l = originIndex + z;
 		return grid[i][j][k][l];
 	}
-	
-	@Override
-	public BigInt getFromAsymmetricPosition(int w, int x, int y, int z) {
-		return getFromPosition(w, x, y, z);
-	}
 
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getSize() {
 		int arrayMaxW = grid.length - 1 - originIndex;
 		int valuesMaxW;
 		if (boundsReached) {
@@ -306,7 +300,7 @@ public class SimpleBigIntAether4D implements SymmetricNumericModel4D<BigInt>, Is
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/4D/" + folderName;
 	}
 	

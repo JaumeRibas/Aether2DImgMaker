@@ -19,17 +19,13 @@ package cellularautomata.automata.sunflower;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import cellularautomata.Coordinates;
-import cellularautomata.PartialCoordinates;
 import cellularautomata.arrays.AnisotropicIntArray;
-import cellularautomata.arrays.HyperrectangularArray;
 import cellularautomata.Utils;
-import cellularautomata.model.IsotropicHypercubicModelA;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model.SymmetricIntModel;
+import cellularautomata.model.IsotropicHypercubicIntModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton with a single source initial configuration
@@ -37,7 +33,7 @@ import cellularautomata.model.SymmetricIntModel;
  * @author Jaume
  *
  */
-public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicHypercubicModelA {
+public class IntSunflowerWithBackground implements IsotropicHypercubicIntModelAsymmetricSection {
 
 	private long step;
 	private final int initialValue;
@@ -106,18 +102,6 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 	}
 
 	@Override
-	public int getFromPosition(Coordinates coordinates) {
-		int[] coordsArray = coordinates.getCopyAsArray();
-		Utils.abs(coordsArray);
-		Utils.sortDescending(coordsArray);
-		if (coordsArray.length == 0 || coordsArray[0] < grid.getSide()) {
-			return grid.get(new Coordinates(coordsArray));
-		} else {
-			return backgroundValue;
-		}
-	}
-
-	@Override
 	public Boolean nextStep() throws Exception {
 		int gridDimension = grid.getDimension();
 		int side = grid.getSide();
@@ -168,11 +152,6 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 		//Return whether or not the state of the grid changed
 		return changed;
 	}
-
-	@Override
-	public Boolean isChanged() {
-		return changed;
-	}
 	
 	private boolean topplePosition(int[] indexes, AnisotropicIntArray newGrid) {
 		int gridDimension = grid.getDimension();
@@ -180,7 +159,7 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 		int gridSideMinusOne = gridSide - 1;
 		int shareCount = gridDimension * 2 + 1;
 		boolean isCurrentPositionInsideGrid = Utils.areAllPositive(indexes) && Utils.isSortedDescending(indexes);
-		int value = getFromPosition(new Coordinates(indexes));
+		int value = getFromWholeGridPosition(new Coordinates(indexes));
 		boolean changed = false;
 		if (value != 0) {
 			if (Math.abs(value) >= shareCount) {
@@ -193,10 +172,10 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 					int indexOnAxis = indexes[axis];
 					if (indexOnAxis < gridSideMinusOne) {
 						indexes[axis] = indexOnAxis + 1;
-						upperNeighborValues[axis] = getFromPosition(new Coordinates(indexes));
+						upperNeighborValues[axis] = getFromWholeGridPosition(new Coordinates(indexes));
 						if (indexOnAxis > -gridSideMinusOne) {
 							indexes[axis] = indexOnAxis - 1;
-							lowerNeighborValues[axis] = getFromPosition(new Coordinates(indexes));
+							lowerNeighborValues[axis] = getFromWholeGridPosition(new Coordinates(indexes));
 						} else {
 							lowerNeighborValues[axis] = backgroundValue; 
 						}
@@ -205,7 +184,7 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 						indexes[axis] = indexOnAxis - 1;
 						//if the grid side were one, this would be out of bounds.
 						//but since it starts at 5 and only gets bigger it's fine
-						lowerNeighborValues[axis] = getFromPosition(new Coordinates(indexes));
+						lowerNeighborValues[axis] = getFromWholeGridPosition(new Coordinates(indexes));
 					}
 					indexes[axis] = indexOnAxis;//reset index
 					boolean isCurrentUpperNeighborValueEqual = value == upperNeighborValues[axis];
@@ -278,6 +257,37 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 	}
 
 	@Override
+	public Boolean isChanged() {
+		return changed;
+	}
+
+	@Override
+	public int getFromPosition(Coordinates coordinates) {
+		return grid.get(coordinates);
+	}
+	
+	private int getFromWholeGridPosition(Coordinates coordinates) {
+		int[] coordsArray = coordinates.getCopyAsArray();
+		Utils.abs(coordsArray);
+		Utils.sortDescending(coordsArray);
+		if (coordsArray.length == 0 || coordsArray[0] < grid.getSide()) {
+			return grid.get(new Coordinates(coordsArray));
+		} else {
+			return backgroundValue;
+		}
+	}
+
+	@Override
+	public void forEach(IntConsumer consumer) {
+		grid.forEach(consumer);
+	}
+	
+	@Override
+	public int getSize() {
+		return grid.getSide() - 1;
+	}
+
+	@Override
 	public long getStep() {
 		return step;
 	}
@@ -288,7 +298,7 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/" + grid.getDimension() + "D/" + initialValue + "/" + backgroundValue;
 	}
 
@@ -309,47 +319,6 @@ public class IntSunflowerWithBackground implements SymmetricIntModel, IsotropicH
 		data.put(SerializableModelData.STEP, step);
 		data.put(SerializableModelData.CONFIGURATION_CHANGED_FROM_PREVIOUS_STEP, changed);
 		Utils.serializeToFile(data, backupPath, backupName);
-	}
-	
-	@Override
-	public void forEach(IntConsumer consumer) {
-		int gridDimension = grid.getDimension();
-		int sideMinusOne = grid.getSide() - 1;
-		int[] upperBounds = new int[gridDimension];
-		Arrays.fill(upperBounds, sideMinusOne);
-		int[] lowerBounds = new int[gridDimension];
-		Arrays.fill(lowerBounds, -sideMinusOne);
-		HyperrectangularArray.forEachIndexWithinBounds(upperBounds, lowerBounds, new Consumer<Coordinates>() {
-			
-			@Override
-			public void accept(Coordinates coordinates) {
-				consumer.accept(getFromPosition(coordinates));
-			}
-		});
-	}
-	
-	@Override
-	public int getAsymmetricMaxCoordinate(int axis) {
-		return grid.getSide() - 1;
-	}
-
-	@Override
-	public int getAsymmetricMaxCoordinate(int axis, PartialCoordinates coordinates) {
-		if (axis == 0) {
-			return grid.getSide() - 1;
-		} else {
-			return IsotropicHypercubicModelA.super.getAsymmetricMaxCoordinate(axis, coordinates);
-		}
-	}
-
-	@Override
-	public int getFromAsymmetricPosition(Coordinates coordinates) {
-		return grid.get(coordinates);
-	}
-
-	@Override
-	public void forEachInAsymmetricSection(IntConsumer consumer) {
-		grid.forEach(consumer);
 	}
 	
 }

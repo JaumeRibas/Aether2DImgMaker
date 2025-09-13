@@ -24,8 +24,7 @@ import java.util.HashMap;
 
 import cellularautomata.Utils;
 import cellularautomata.model.FileBackedModel;
-import cellularautomata.model4d.IsotropicHypercubicModel4DA;
-import cellularautomata.model4d.SymmetricLongModel4D;
+import cellularautomata.model4d.IsotropicHypercubicLongModelAsymmetricSection4D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D with a single source initial configuration
@@ -33,7 +32,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class FileBackedLongAether4D extends FileBackedModel implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {
+public class FileBackedLongAether4D extends FileBackedModel implements IsotropicHypercubicLongModelAsymmetricSection4D {
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
@@ -77,8 +76,8 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		try {
 			boolean changed = false;
 			// w = 0, x = 0, y = 0, z = 0
-			long currentValue = getFromAsymmetricPosition(0, 0, 0, 0);
-			long greaterWNeighborValue = getFromAsymmetricPosition(1, 0, 0, 0);
+			long currentValue = getFromPosition(0, 0, 0, 0);
+			long greaterWNeighborValue = getFromPosition(1, 0, 0, 0);
 			File newFile = new File(getGridFolderPath() + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
 			newGrid = new RandomAccessFile(newFile, "rw");
 			newGrid.setLength(Utils.getAnisotropic4DGridPositionCount(maxW + 4)*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
@@ -94,8 +93,8 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			long smallerWNeighborValue = currentValue;
 			currentValue = greaterWNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(2, 0, 0, 0);
-			long greaterXNeighborValue = getFromAsymmetricPosition(1, 1, 0, 0);
+			greaterWNeighborValue = getFromPosition(2, 0, 0, 0);
+			long greaterXNeighborValue = getFromPosition(1, 1, 0, 0);
 			if (topplePositionOfType2(currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -105,8 +104,8 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			long smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(2, 1, 0, 0);
-			long greaterYNeighborValue = getFromAsymmetricPosition(1, 1, 1, 0);
+			greaterWNeighborValue = getFromPosition(2, 1, 0, 0);
+			long greaterYNeighborValue = getFromPosition(1, 1, 1, 0);
 			if (topplePositionOfType3(currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -116,8 +115,8 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			long smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(2, 1, 1, 0);
-			long greaterZNeighborValue = getFromAsymmetricPosition(1, 1, 1, 1);
+			greaterWNeighborValue = getFromPosition(2, 1, 1, 0);
+			long greaterZNeighborValue = getFromPosition(1, 1, 1, 1);
 			if (topplePositionOfType4(currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -127,15 +126,15 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			long smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(2, 1, 1, 1);
+			greaterWNeighborValue = getFromPosition(2, 1, 1, 1);
 			if (topplePositionOfType5(currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
 				changed = true;
 			}
 			// w = 2, x = 0, y = 0, z = 0
-			currentValue = getFromAsymmetricPosition(2, 0, 0, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 0, 0, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(1, 0, 0, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(2, 1, 0, 0);
+			currentValue = getFromPosition(2, 0, 0, 0);
+			greaterWNeighborValue = getFromPosition(3, 0, 0, 0);
+			smallerWNeighborValue = getFromPosition(1, 0, 0, 0);
+			greaterXNeighborValue = getFromPosition(2, 1, 0, 0);
 			if (topplePositionOfType6(2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -144,10 +143,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 1, 0, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(1, 1, 0, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(2, 2, 0, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(2, 1, 1, 0);
+			greaterWNeighborValue = getFromPosition(3, 1, 0, 0);
+			smallerWNeighborValue = getFromPosition(1, 1, 0, 0);
+			greaterXNeighborValue = getFromPosition(2, 2, 0, 0);
+			greaterYNeighborValue = getFromPosition(2, 1, 1, 0);
 			if (topplePositionOfType7(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 					smallerXNeighborValue, 6, greaterYNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -157,10 +156,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 1, 1, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(1, 1, 1, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(2, 2, 1, 0);
-			greaterZNeighborValue = getFromAsymmetricPosition(2, 1, 1, 1);
+			greaterWNeighborValue = getFromPosition(3, 1, 1, 0);
+			smallerWNeighborValue = getFromPosition(1, 1, 1, 0);
+			greaterXNeighborValue = getFromPosition(2, 2, 1, 0);
+			greaterZNeighborValue = getFromPosition(2, 1, 1, 1);
 			if (topplePositionOfType8(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 4, 
 					greaterZNeighborValue, 3, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -170,19 +169,19 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 1, 1, 1);
-			smallerWNeighborValue = getFromAsymmetricPosition(1, 1, 1, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(2, 2, 1, 1);
+			greaterWNeighborValue = getFromPosition(3, 1, 1, 1);
+			smallerWNeighborValue = getFromPosition(1, 1, 1, 1);
+			greaterXNeighborValue = getFromPosition(2, 2, 1, 1);
 			if (topplePositionOfType9(2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
 			}
 			// w = 2, x = 2, y = 0, z = 0
-			currentValue = getFromAsymmetricPosition(2, 2, 0, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 0, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(2, 1, 0, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(2, 2, 1, 0);
+			currentValue = getFromPosition(2, 2, 0, 0);
+			greaterWNeighborValue = getFromPosition(3, 2, 0, 0);
+			smallerXNeighborValue = getFromPosition(2, 1, 0, 0);
+			greaterYNeighborValue = getFromPosition(2, 2, 1, 0);
 			if (topplePositionOfType10(2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -191,10 +190,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 1, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(2, 1, 1, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(2, 2, 2, 0);
-			greaterZNeighborValue = getFromAsymmetricPosition(2, 2, 1, 1);
+			greaterWNeighborValue = getFromPosition(3, 2, 1, 0);
+			smallerXNeighborValue = getFromPosition(2, 1, 1, 0);
+			greaterYNeighborValue = getFromPosition(2, 2, 2, 0);
+			greaterZNeighborValue = getFromPosition(2, 2, 1, 1);
 			if (topplePositionOfType11(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 4, 
 					greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -204,9 +203,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 1, 1);
-			smallerXNeighborValue = getFromAsymmetricPosition(2, 1, 1, 1);
-			greaterYNeighborValue = getFromAsymmetricPosition(2, 2, 2, 1);
+			greaterWNeighborValue = getFromPosition(3, 2, 1, 1);
+			smallerXNeighborValue = getFromPosition(2, 1, 1, 1);
+			greaterYNeighborValue = getFromPosition(2, 2, 2, 1);
 			if (topplePositionOfType12(2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -216,8 +215,8 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = smallerZNeighborValue;
 			greaterZNeighborValue = greaterYNeighborValue;		
-			currentValue = getFromAsymmetricPosition(2, 2, 2, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 2, 0);
+			currentValue = getFromPosition(2, 2, 2, 0);
+			greaterWNeighborValue = getFromPosition(3, 2, 2, 0);
 			if (topplePositionOfType13(2, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -227,9 +226,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 2, 1);
-			smallerYNeighborValue = getFromAsymmetricPosition(2, 2, 1, 1);
-			greaterZNeighborValue = getFromAsymmetricPosition(2, 2, 2, 2);
+			greaterWNeighborValue = getFromPosition(3, 2, 2, 1);
+			smallerYNeighborValue = getFromPosition(2, 2, 1, 1);
+			greaterZNeighborValue = getFromPosition(2, 2, 2, 2);
 			if (topplePositionOfType14(2, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -239,7 +238,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(3, 2, 2, 2);
+			greaterWNeighborValue = getFromPosition(3, 2, 2, 2);
 			if (topplePositionOfType15(2, currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
 				changed = true;
 			}
@@ -249,12 +248,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			}
 			// 03 | 02 | 00 | 00 | 19
 			// reuse values obtained previously
-			currentValue = getFromAsymmetricPosition(3, 2, 0, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 0, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 0, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 0, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(3, 1, 0, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(3, 2, 1, 0);
+			currentValue = getFromPosition(3, 2, 0, 0);
+			greaterWNeighborValue = getFromPosition(4, 2, 0, 0);
+			smallerWNeighborValue = getFromPosition(2, 2, 0, 0);
+			greaterXNeighborValue = getFromPosition(3, 3, 0, 0);
+			smallerXNeighborValue = getFromPosition(3, 1, 0, 0);
+			greaterYNeighborValue = getFromPosition(3, 2, 1, 0);
 			if (topplePositionOfType7(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, 
 					smallerXNeighborValue, 1, greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -264,12 +263,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 1, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 1, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 1, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(3, 1, 1, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(3, 2, 2, 0);
-			greaterZNeighborValue = getFromAsymmetricPosition(3, 2, 1, 1);
+			greaterWNeighborValue = getFromPosition(4, 2, 1, 0);
+			smallerWNeighborValue = getFromPosition(2, 2, 1, 0);
+			greaterXNeighborValue = getFromPosition(3, 3, 1, 0);
+			smallerXNeighborValue = getFromPosition(3, 1, 1, 0);
+			greaterYNeighborValue = getFromPosition(3, 2, 2, 0);
+			greaterZNeighborValue = getFromPosition(3, 2, 1, 1);
 			if (topplePositionOfType16(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -279,11 +278,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 1, 1);
-			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 1, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 1, 1);
-			smallerXNeighborValue = getFromAsymmetricPosition(3, 1, 1, 1);
-			greaterYNeighborValue = getFromAsymmetricPosition(3, 2, 2, 1);
+			greaterWNeighborValue = getFromPosition(4, 2, 1, 1);
+			smallerWNeighborValue = getFromPosition(2, 2, 1, 1);
+			greaterXNeighborValue = getFromPosition(3, 3, 1, 1);
+			smallerXNeighborValue = getFromPosition(3, 1, 1, 1);
+			greaterYNeighborValue = getFromPosition(3, 2, 2, 1);
 			if (topplePositionOfType17(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -293,10 +292,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = smallerZNeighborValue;
 			greaterZNeighborValue = greaterYNeighborValue;
-			currentValue = getFromAsymmetricPosition(3, 2, 2, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 2, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 2, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 2, 0);
+			currentValue = getFromPosition(3, 2, 2, 0);
+			greaterWNeighborValue = getFromPosition(4, 2, 2, 0);
+			smallerWNeighborValue = getFromPosition(2, 2, 2, 0);
+			greaterXNeighborValue = getFromPosition(3, 3, 2, 0);
 			if (topplePositionOfType8(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -306,11 +305,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 2, 1);
-			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 2, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 2, 1);
-			smallerYNeighborValue = getFromAsymmetricPosition(3, 2, 1, 1);
-			greaterZNeighborValue = getFromAsymmetricPosition(3, 2, 2, 2);
+			greaterWNeighborValue = getFromPosition(4, 2, 2, 1);
+			smallerWNeighborValue = getFromPosition(2, 2, 2, 1);
+			greaterXNeighborValue = getFromPosition(3, 3, 2, 1);
+			smallerYNeighborValue = getFromPosition(3, 2, 1, 1);
+			greaterZNeighborValue = getFromPosition(3, 2, 2, 2);
 			if (topplePositionOfType18(3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -320,9 +319,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 2, 2, 2);
-			smallerWNeighborValue = getFromAsymmetricPosition(2, 2, 2, 2);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 3, 2, 2);
+			greaterWNeighborValue = getFromPosition(4, 2, 2, 2);
+			smallerWNeighborValue = getFromPosition(2, 2, 2, 2);
+			greaterXNeighborValue = getFromPosition(3, 3, 2, 2);
 			if (topplePositionOfType9(3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -333,12 +332,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				changed = true;
 			}
 			// 03 | 03 | 02 | 00 | 27
-			currentValue = getFromAsymmetricPosition(3, 3, 2, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 3, 2, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(3, 2, 2, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(3, 3, 3, 0);
-			smallerYNeighborValue = getFromAsymmetricPosition(3, 3, 1, 0);
-			greaterZNeighborValue = getFromAsymmetricPosition(3, 3, 2, 1);
+			currentValue = getFromPosition(3, 3, 2, 0);
+			greaterWNeighborValue = getFromPosition(4, 3, 2, 0);
+			smallerXNeighborValue = getFromPosition(3, 2, 2, 0);
+			greaterYNeighborValue = getFromPosition(3, 3, 3, 0);
+			smallerYNeighborValue = getFromPosition(3, 3, 1, 0);
+			greaterZNeighborValue = getFromPosition(3, 3, 2, 1);
 			if (topplePositionOfType11(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 					greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -348,11 +347,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 3, 2, 1);
-			smallerXNeighborValue = getFromAsymmetricPosition(3, 2, 2, 1);
-			greaterYNeighborValue = getFromAsymmetricPosition(3, 3, 3, 1);
-			smallerYNeighborValue = getFromAsymmetricPosition(3, 3, 1, 1);
-			greaterZNeighborValue = getFromAsymmetricPosition(3, 3, 2, 2);
+			greaterWNeighborValue = getFromPosition(4, 3, 2, 1);
+			smallerXNeighborValue = getFromPosition(3, 2, 2, 1);
+			greaterYNeighborValue = getFromPosition(3, 3, 3, 1);
+			smallerYNeighborValue = getFromPosition(3, 3, 1, 1);
+			greaterZNeighborValue = getFromPosition(3, 3, 2, 2);
 			if (topplePositionOfType19(3, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 					smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -362,9 +361,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(4, 3, 2, 2);
-			smallerXNeighborValue = getFromAsymmetricPosition(3, 2, 2, 2);
-			greaterYNeighborValue = getFromAsymmetricPosition(3, 3, 3, 2);
+			greaterWNeighborValue = getFromPosition(4, 3, 2, 2);
+			smallerXNeighborValue = getFromPosition(3, 2, 2, 2);
+			greaterYNeighborValue = getFromPosition(3, 3, 3, 2);
 			if (topplePositionOfType12(3, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -383,14 +382,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				changed = true;
 			}
 			// 04 | 03 | 02 | 00 | 40
-			currentValue = getFromAsymmetricPosition(4, 3, 2, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(5, 3, 2, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(3, 3, 2, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(4, 4, 2, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(4, 2, 2, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(4, 3, 3, 0);
-			smallerYNeighborValue = getFromAsymmetricPosition(4, 3, 1, 0);
-			greaterZNeighborValue = getFromAsymmetricPosition(4, 3, 2, 1);
+			currentValue = getFromPosition(4, 3, 2, 0);
+			greaterWNeighborValue = getFromPosition(5, 3, 2, 0);
+			smallerWNeighborValue = getFromPosition(3, 3, 2, 0);
+			greaterXNeighborValue = getFromPosition(4, 4, 2, 0);
+			smallerXNeighborValue = getFromPosition(4, 2, 2, 0);
+			greaterYNeighborValue = getFromPosition(4, 3, 3, 0);
+			smallerYNeighborValue = getFromPosition(4, 3, 1, 0);
+			greaterZNeighborValue = getFromPosition(4, 3, 2, 1);
 			if (topplePositionOfType16(4, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -400,13 +399,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(5, 3, 2, 1);
-			smallerWNeighborValue = getFromAsymmetricPosition(3, 3, 2, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(4, 4, 2, 1);
-			smallerXNeighborValue = getFromAsymmetricPosition(4, 2, 2, 1);
-			greaterYNeighborValue = getFromAsymmetricPosition(4, 3, 3, 1);
-			smallerYNeighborValue = getFromAsymmetricPosition(4, 3, 1, 1);
-			greaterZNeighborValue = getFromAsymmetricPosition(4, 3, 2, 2);
+			greaterWNeighborValue = getFromPosition(5, 3, 2, 1);
+			smallerWNeighborValue = getFromPosition(3, 3, 2, 1);
+			greaterXNeighborValue = getFromPosition(4, 4, 2, 1);
+			smallerXNeighborValue = getFromPosition(4, 2, 2, 1);
+			greaterYNeighborValue = getFromPosition(4, 3, 3, 1);
+			smallerYNeighborValue = getFromPosition(4, 3, 1, 1);
+			greaterZNeighborValue = getFromPosition(4, 3, 2, 2);
 			if (topplePositionOfType23(4, 3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -416,11 +415,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(5, 3, 2, 2);
-			smallerWNeighborValue = getFromAsymmetricPosition(3, 3, 2, 2);
-			greaterXNeighborValue = getFromAsymmetricPosition(4, 4, 2, 2);
-			smallerXNeighborValue = getFromAsymmetricPosition(4, 2, 2, 2);
-			greaterYNeighborValue = getFromAsymmetricPosition(4, 3, 3, 2);
+			greaterWNeighborValue = getFromPosition(5, 3, 2, 2);
+			smallerWNeighborValue = getFromPosition(3, 3, 2, 2);
+			greaterXNeighborValue = getFromPosition(4, 4, 2, 2);
+			smallerXNeighborValue = getFromPosition(4, 2, 2, 2);
+			greaterYNeighborValue = getFromPosition(4, 3, 3, 2);
 			if (topplePositionOfType17(4, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -486,14 +485,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				changed = true;
 			}
 			//  w | 03 | 02 | 00 | 53
-			long currentValue = getFromAsymmetricPosition(w, 3, 2, 0);
-			long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 3, 2, 0);
-			long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 3, 2, 0);
-			long greaterXNeighborValue = getFromAsymmetricPosition(w, 4, 2, 0);
-			long smallerXNeighborValue = getFromAsymmetricPosition(w, 2, 2, 0);
-			long greaterYNeighborValue = getFromAsymmetricPosition(w, 3, 3, 0);
-			long smallerYNeighborValue = getFromAsymmetricPosition(w, 3, 1, 0);
-			long greaterZNeighborValue = getFromAsymmetricPosition(w, 3, 2, 1);
+			long currentValue = getFromPosition(w, 3, 2, 0);
+			long greaterWNeighborValue = getFromPosition(wPlusOne, 3, 2, 0);
+			long smallerWNeighborValue = getFromPosition(wMinusOne, 3, 2, 0);
+			long greaterXNeighborValue = getFromPosition(w, 4, 2, 0);
+			long smallerXNeighborValue = getFromPosition(w, 2, 2, 0);
+			long greaterYNeighborValue = getFromPosition(w, 3, 3, 0);
+			long smallerYNeighborValue = getFromPosition(w, 3, 1, 0);
+			long greaterZNeighborValue = getFromPosition(w, 3, 2, 1);
 			if (topplePositionOfType16(w, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -503,13 +502,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			long smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 3, 2, 1);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 3, 2, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, 4, 2, 1);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, 2, 2, 1);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, 3, 3, 1);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, 3, 1, 1);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, 3, 2, 2);
+			greaterWNeighborValue = getFromPosition(wPlusOne, 3, 2, 1);
+			smallerWNeighborValue = getFromPosition(wMinusOne, 3, 2, 1);
+			greaterXNeighborValue = getFromPosition(w, 4, 2, 1);
+			smallerXNeighborValue = getFromPosition(w, 2, 2, 1);
+			greaterYNeighborValue = getFromPosition(w, 3, 3, 1);
+			smallerYNeighborValue = getFromPosition(w, 3, 1, 1);
+			greaterZNeighborValue = getFromPosition(w, 3, 2, 2);
 			if (topplePositionOfType23(w, 3, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -519,11 +518,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 3, 2, 2);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 3, 2, 2);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, 4, 2, 2);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, 2, 2, 2);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, 3, 3, 2);
+			greaterWNeighborValue = getFromPosition(wPlusOne, 3, 2, 2);
+			smallerWNeighborValue = getFromPosition(wMinusOne, 3, 2, 2);
+			greaterXNeighborValue = getFromPosition(w, 4, 2, 2);
+			smallerXNeighborValue = getFromPosition(w, 2, 2, 2);
+			greaterYNeighborValue = getFromPosition(w, 3, 3, 2);
 			if (topplePositionOfType17(w, 3, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -540,14 +539,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					changed = true;
 				}
 				//  w |  x | 02 | 00 | 67
-				currentValue = getFromAsymmetricPosition(w, x, 2, 0);
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 2, 0);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 2, 0);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 0);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 0);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 0);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
+				currentValue = getFromPosition(w, x, 2, 0);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, 2, 0);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, 2, 0);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, 2, 0);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, 2, 0);
+				greaterYNeighborValue = getFromPosition(w, x, 3, 0);
+				smallerYNeighborValue = getFromPosition(w, x, 1, 0);
+				greaterZNeighborValue = getFromPosition(w, x, 2, 1);
 				if (topplePositionOfType27(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -557,13 +556,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 2, 1);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 2, 1);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 1);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 1);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 1);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 2);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, 2, 1);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, 2, 1);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, 2, 1);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, 2, 1);
+				greaterYNeighborValue = getFromPosition(w, x, 3, 1);
+				smallerYNeighborValue = getFromPosition(w, x, 1, 1);
+				greaterZNeighborValue = getFromPosition(w, x, 2, 2);
 				if (topplePositionOfType23(w, x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -573,11 +572,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 2, 2);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 2, 2);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 2);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 2);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 2);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, 2, 2);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, 2, 2);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, 2, 2);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, 2, 2);
+				greaterYNeighborValue = getFromPosition(w, x, 3, 2);
 				if (topplePositionOfType28(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 						smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -586,14 +585,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				int y = 3, yMinusOne = 2, yPlusOne = 4;
 				for (; y != xMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 					//  w |  x |  y | 00 | 67
-					currentValue = getFromAsymmetricPosition(w, x, y, 0);
-					greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 0);
-					smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 0);
-					greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 0);
-					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 0);
-					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
-					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
-					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
+					currentValue = getFromPosition(w, x, y, 0);
+					greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 0);
+					smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 0);
+					greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 0);
+					smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 0);
+					greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 0);
+					smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 0);
+					greaterZNeighborValue = getFromPosition(w, x, y, 1);
 					if (topplePositionOfType27(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerYNeighborValue, greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -603,13 +602,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
-					greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 1);
-					smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 1);
-					greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 1);
-					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 1);
-					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
-					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
-					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
+					greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 1);
+					smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 1);
+					greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 1);
+					smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 1);
+					greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 1);
+					smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 1);
+					greaterZNeighborValue = getFromPosition(w, x, y, 2);
 					if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -621,13 +620,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 						// reuse values obtained previously
 						smallerZNeighborValue = currentValue;
 						currentValue = greaterZNeighborValue;
-						greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-						smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-						greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-						smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-						greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-						smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-						greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+						greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+						smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+						greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+						smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+						greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+						smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+						greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 						if (topplePositionOfType31(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 								smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, newGrid)) {
 							changed = true;
@@ -637,13 +636,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
-					greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-					smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-					greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+					greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+					smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+					greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+					smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+					greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+					smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+					greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -654,11 +653,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
-					greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-					smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-					greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
+					greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+					smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+					greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+					smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+					greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
 					if (topplePositionOfType28(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -666,14 +665,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					}
 				}
 				//  w |  x |  y | 00 | 53
-				currentValue = getFromAsymmetricPosition(w, x, y, 0);
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 0);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 0);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 0);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 0);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
+				currentValue = getFromPosition(w, x, y, 0);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 0);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 0);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 0);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 0);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 0);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 0);
+				greaterZNeighborValue = getFromPosition(w, x, y, 1);
 				if (topplePositionOfType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -683,13 +682,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 1);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 1);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 1);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 1);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 1);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 1);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 1);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 1);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 1);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 1);
+				greaterZNeighborValue = getFromPosition(w, x, y, 2);
 				if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -701,13 +700,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
-					greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-					smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-					greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+					greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+					smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+					greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+					smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+					greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+					smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+					greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -718,13 +717,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+				greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -735,11 +734,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
 				if (topplePositionOfType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -755,14 +754,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				changed = true;
 			}
 			//  w |  x | 02 | 00 | 58
-			currentValue = getFromAsymmetricPosition(w, x, 2, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 2, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 2, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 0);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
+			currentValue = getFromPosition(w, x, 2, 0);
+			greaterWNeighborValue = getFromPosition(wPlusOne, x, 2, 0);
+			smallerWNeighborValue = getFromPosition(wMinusOne, x, 2, 0);
+			greaterXNeighborValue = getFromPosition(w, xPlusOne, 2, 0);
+			smallerXNeighborValue = getFromPosition(w, xMinusOne, 2, 0);
+			greaterYNeighborValue = getFromPosition(w, x, 3, 0);
+			smallerYNeighborValue = getFromPosition(w, x, 1, 0);
+			greaterZNeighborValue = getFromPosition(w, x, 2, 1);
 			if (topplePositionOfType16(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -772,13 +771,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 2, 1);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 2, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 1);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 1);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 1);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, x, 2, 2);
+			greaterWNeighborValue = getFromPosition(wPlusOne, x, 2, 1);
+			smallerWNeighborValue = getFromPosition(wMinusOne, x, 2, 1);
+			greaterXNeighborValue = getFromPosition(w, xPlusOne, 2, 1);
+			smallerXNeighborValue = getFromPosition(w, xMinusOne, 2, 1);
+			greaterYNeighborValue = getFromPosition(w, x, 3, 1);
+			smallerYNeighborValue = getFromPosition(w, x, 1, 1);
+			greaterZNeighborValue = getFromPosition(w, x, 2, 2);
 			if (topplePositionOfType23(w, x, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -788,11 +787,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 2, 2);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 2, 2);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 2, 2);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 2, 2);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, x, 3, 2);
+			greaterWNeighborValue = getFromPosition(wPlusOne, x, 2, 2);
+			smallerWNeighborValue = getFromPosition(wMinusOne, x, 2, 2);
+			greaterXNeighborValue = getFromPosition(w, xPlusOne, 2, 2);
+			smallerXNeighborValue = getFromPosition(w, xMinusOne, 2, 2);
+			greaterYNeighborValue = getFromPosition(w, x, 3, 2);
 			if (topplePositionOfType17(w, x, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -801,14 +800,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			int y = 3, yPlusOne = 4, yMinusOne = 2;
 			for (; y != wMinusTwo; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				//  w |  x |  y | 00 | 58
-				currentValue = getFromAsymmetricPosition(w, x, y, 0);
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 0);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 0);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 0);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 0);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
+				currentValue = getFromPosition(w, x, y, 0);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 0);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 0);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 0);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 0);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 0);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 0);
+				greaterZNeighborValue = getFromPosition(w, x, y, 1);
 				if (topplePositionOfType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -818,13 +817,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 1);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 1);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 1);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 1);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 1);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 1);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 1);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 1);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 1);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 1);
+				greaterZNeighborValue = getFromPosition(w, x, y, 2);
 				if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -836,13 +835,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
-					greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-					smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-					greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+					greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+					smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+					greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+					smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+					greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+					smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+					greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 							smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 							relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -853,13 +852,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+				greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -870,11 +869,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
 				if (topplePositionOfType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -882,14 +881,14 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				}
 			}
 			//  w |  x |  y | 00 | 40
-			currentValue = getFromAsymmetricPosition(w, x, y, 0);
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 0);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 0);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
+			currentValue = getFromPosition(w, x, y, 0);
+			greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 0);
+			smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 0);
+			greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 0);
+			smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 0);
+			greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 0);
+			smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 0);
+			greaterZNeighborValue = getFromPosition(w, x, y, 1);
 			if (topplePositionOfType16(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -899,13 +898,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 1);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, 1);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 1);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
+			greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 1);
+			smallerWNeighborValue = getFromPosition(wMinusOne, x, y, 1);
+			greaterXNeighborValue = getFromPosition(w, xPlusOne, y, 1);
+			smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 1);
+			greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 1);
+			smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 1);
+			greaterZNeighborValue = getFromPosition(w, x, y, 2);
 			if (topplePositionOfType23(w, x, y, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -917,13 +916,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-				smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-				greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+				smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+				greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+				greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 						smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 						relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -934,13 +933,13 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+			greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+			smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+			greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+			smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+			greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+			smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+			greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 			if (topplePositionOfType23(w, x, y, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 					smallerYNeighborValue, 2, greaterZNeighborValue, 2, smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 					relevantAsymmetricNeighborShareMultipliers, newGrid)) {
@@ -951,11 +950,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, y, z);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, y, z);
-			smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-			greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
+			greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+			smallerWNeighborValue = getFromPosition(wMinusOne, x, y, z);
+			greaterXNeighborValue = getFromPosition(w, xPlusOne, y, z);
+			smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+			greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
 			if (topplePositionOfType17(w, x, y, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -969,12 +968,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			x = xPlusOne;
 			for (y = 3, yMinusOne = 2, yPlusOne = 4; y != wMinusOne; yMinusOne = y, y = yPlusOne, yPlusOne++) {
 				//  w |  x |  y | 00 | 45
-				currentValue = getFromAsymmetricPosition(w, x, y, 0);
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 0);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 0);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 0);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 0);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 1);
+				currentValue = getFromPosition(w, x, y, 0);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 0);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 0);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 0);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 0);
+				greaterZNeighborValue = getFromPosition(w, x, y, 1);
 				if (topplePositionOfType24(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 						greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -984,11 +983,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, 1);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, 1);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, 1);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, 1);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, 2);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, 1);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, 1);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, 1);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, 1);
+				greaterZNeighborValue = getFromPosition(w, x, y, 2);
 				if (topplePositionOfType19(x, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 						smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -999,11 +998,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 					// reuse values obtained previously
 					smallerZNeighborValue = currentValue;
 					currentValue = greaterZNeighborValue;
-					greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-					smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-					greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-					smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-					greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+					greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+					smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+					greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+					smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+					greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 					if (topplePositionOfType30(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 							smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 							relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1014,11 +1013,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
-				smallerYNeighborValue = getFromAsymmetricPosition(w, x, yMinusOne, z);
-				greaterZNeighborValue = getFromAsymmetricPosition(w, x, y, zPlusOne);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
+				smallerYNeighborValue = getFromPosition(w, x, yMinusOne, z);
+				greaterZNeighborValue = getFromPosition(w, x, y, zPlusOne);
 				if (topplePositionOfType19(x, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 						smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1029,9 +1028,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerZNeighborValue = currentValue;
 				currentValue = greaterZNeighborValue;
-				greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, y, z);
-				smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, y, z);
-				greaterYNeighborValue = getFromAsymmetricPosition(w, x, yPlusOne, z);
+				greaterWNeighborValue = getFromPosition(wPlusOne, x, y, z);
+				smallerXNeighborValue = getFromPosition(w, xMinusOne, y, z);
+				greaterYNeighborValue = getFromPosition(w, x, yPlusOne, z);
 				if (topplePositionOfType25(x, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 						relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 						relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1051,10 +1050,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		boolean changed = false;
 		int wPlusOne = w + 1, wMinusOne = w - 1;
 		//  w | 00 | 00 | 00 | 06
-		long currentValue = getFromAsymmetricPosition(w, 0, 0, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 0, 0, 0);
-		long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 0, 0, 0);
-		long greaterXNeighborValue = getFromAsymmetricPosition(w, 1, 0, 0);
+		long currentValue = getFromPosition(w, 0, 0, 0);
+		long greaterWNeighborValue = getFromPosition(wPlusOne, 0, 0, 0);
+		long smallerWNeighborValue = getFromPosition(wMinusOne, 0, 0, 0);
+		long greaterXNeighborValue = getFromPosition(w, 1, 0, 0);
 		if (topplePositionOfType6(w, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1063,10 +1062,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerXNeighborValue = currentValue;
 		currentValue = greaterXNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 1, 0, 0);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 1, 0, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 2, 0, 0);
-		long greaterYNeighborValue = getFromAsymmetricPosition(w, 1, 1, 0);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 1, 0, 0);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 1, 0, 0);
+		greaterXNeighborValue = getFromPosition(w, 2, 0, 0);
+		long greaterYNeighborValue = getFromPosition(w, 1, 1, 0);
 		if (topplePositionOfType7(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 6, greaterYNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1076,10 +1075,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 1, 1, 0);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 1, 1, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 2, 1, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(w, 1, 1, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 1, 1, 0);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 1, 1, 0);
+		greaterXNeighborValue = getFromPosition(w, 2, 1, 0);
+		long greaterZNeighborValue = getFromPosition(w, 1, 1, 1);
 		if (topplePositionOfType8(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 3, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1089,9 +1088,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 1, 1, 1);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 1, 1, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 2, 1, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 1, 1, 1);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 1, 1, 1);
+		greaterXNeighborValue = getFromPosition(w, 2, 1, 1);
 		if (topplePositionOfType9(w, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1105,10 +1104,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
 		//  w |  x | 00 | 00 | 10
-		long currentValue = getFromAsymmetricPosition(coord, coord, 0, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, 0, 0);
-		long smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, 0, 0);
-		long greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, 1, 0);
+		long currentValue = getFromPosition(coord, coord, 0, 0);
+		long greaterWNeighborValue = getFromPosition(coordPlusOne, coord, 0, 0);
+		long smallerXNeighborValue = getFromPosition(coord, coordMinusOne, 0, 0);
+		long greaterYNeighborValue = getFromPosition(coord, coord, 1, 0);
 		if (topplePositionOfType10(coord, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1117,10 +1116,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, 1, 0);
-		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, 1, 0);
-		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, 2, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, 1, 1);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, 1, 0);
+		smallerXNeighborValue = getFromPosition(coord, coordMinusOne, 1, 0);
+		greaterYNeighborValue = getFromPosition(coord, coord, 2, 0);
+		long greaterZNeighborValue = getFromPosition(coord, coord, 1, 1);
 		if (topplePositionOfType11(coord, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 4, greaterZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1130,9 +1129,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, 1, 1);
-		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, 1, 1);
-		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, 2, 1);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, 1, 1);
+		smallerXNeighborValue = getFromPosition(coord, coordMinusOne, 1, 1);
+		greaterYNeighborValue = getFromPosition(coord, coord, 2, 1);
 		if (topplePositionOfType12(coord, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1146,10 +1145,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1;
 		boolean changed = false;
 		//  w |  x |  y | 00 | 13
-		long currentValue = getFromAsymmetricPosition(coord, coord, coord, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, 0);
-		long smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, 1);
+		long currentValue = getFromPosition(coord, coord, coord, 0);
+		long greaterWNeighborValue = getFromPosition(coordPlusOne, coord, coord, 0);
+		long smallerYNeighborValue = getFromPosition(coord, coord, coordMinusOne, 0);
+		long greaterZNeighborValue = getFromPosition(coord, coord, coord, 1);
 		if (topplePositionOfType13(coord, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1158,9 +1157,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, 1);
-		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, 1);
-		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, 2);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, coord, 1);
+		smallerYNeighborValue = getFromPosition(coord, coord, coordMinusOne, 1);
+		greaterZNeighborValue = getFromPosition(coord, coord, coord, 2);
 		if (topplePositionOfType14(coord, 1, currentValue, greaterWNeighborValue, smallerYNeighborValue, 1, greaterZNeighborValue, 1, smallerZNeighborValue, 2, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1173,9 +1172,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, z);
-			smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, z);
-			greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, zPlusOne);
+			greaterWNeighborValue = getFromPosition(coordPlusOne, coord, coord, z);
+			smallerYNeighborValue = getFromPosition(coord, coord, coordMinusOne, z);
+			greaterZNeighborValue = getFromPosition(coord, coord, coord, zPlusOne);
 			if (topplePositionOfType26(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, greaterZNeighborValue, smallerZNeighborValue, 
 					relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 				changed = true;
@@ -1185,9 +1184,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, z);
-		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, coordMinusOne, z);
-		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, coord, zPlusOne);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, coord, z);
+		smallerYNeighborValue = getFromPosition(coord, coord, coordMinusOne, z);
+		greaterZNeighborValue = getFromPosition(coord, coord, coord, zPlusOne);
 		if (topplePositionOfType14(coord, z, currentValue, greaterWNeighborValue, smallerYNeighborValue, 2, greaterZNeighborValue, 4, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1198,7 +1197,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, coord, z);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, coord, z);
 		if (topplePositionOfType15(coord, currentValue, greaterWNeighborValue, smallerZNeighborValue, newGrid)) {
 			changed = true;
 		}
@@ -1214,12 +1213,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			changed = true;
 		}
 		//  w | 02 | 00 | 00 | 32
-		long currentValue = getFromAsymmetricPosition(w, 2, 0, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 0, 0);
-		long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 0, 0);
-		long greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 0, 0);
-		long smallerXNeighborValue = getFromAsymmetricPosition(w, 1, 0, 0);
-		long greaterYNeighborValue = getFromAsymmetricPosition(w, 2, 1, 0);
+		long currentValue = getFromPosition(w, 2, 0, 0);
+		long greaterWNeighborValue = getFromPosition(wPlusOne, 2, 0, 0);
+		long smallerWNeighborValue = getFromPosition(wMinusOne, 2, 0, 0);
+		long greaterXNeighborValue = getFromPosition(w, 3, 0, 0);
+		long smallerXNeighborValue = getFromPosition(w, 1, 0, 0);
+		long greaterYNeighborValue = getFromPosition(w, 2, 1, 0);
 		if (topplePositionOfType20(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1228,12 +1227,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 1, 0);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 1, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 1, 0);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, 1, 1, 0);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, 2, 2, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(w, 2, 1, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 2, 1, 0);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 2, 1, 0);
+		greaterXNeighborValue = getFromPosition(w, 3, 1, 0);
+		smallerXNeighborValue = getFromPosition(w, 1, 1, 0);
+		greaterYNeighborValue = getFromPosition(w, 2, 2, 0);
+		long greaterZNeighborValue = getFromPosition(w, 2, 1, 1);
 		if (topplePositionOfType16(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 2, greaterYNeighborValue, 2, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1243,11 +1242,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 1, 1);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 1, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 1, 1);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, 1, 1, 1);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, 2, 2, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 2, 1, 1);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 2, 1, 1);
+		greaterXNeighborValue = getFromPosition(w, 3, 1, 1);
+		smallerXNeighborValue = getFromPosition(w, 1, 1, 1);
+		greaterYNeighborValue = getFromPosition(w, 2, 2, 1);
 		if (topplePositionOfType17(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 3, greaterYNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1257,10 +1256,10 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerYNeighborValue = smallerZNeighborValue;
 		greaterZNeighborValue = greaterYNeighborValue;		
-		currentValue = getFromAsymmetricPosition(w, 2, 2, 0);
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 2, 0);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 2, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 2, 0);
+		currentValue = getFromPosition(w, 2, 2, 0);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 2, 2, 0);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 2, 2, 0);
+		greaterXNeighborValue = getFromPosition(w, 3, 2, 0);
 		if (topplePositionOfType21(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
 			changed = true;
@@ -1269,11 +1268,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 2, 1);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 2, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 2, 1);
-		smallerYNeighborValue = getFromAsymmetricPosition(w, 2, 1, 1);
-		greaterZNeighborValue = getFromAsymmetricPosition(w, 2, 2, 2);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 2, 2, 1);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 2, 2, 1);
+		greaterXNeighborValue = getFromPosition(w, 3, 2, 1);
+		smallerYNeighborValue = getFromPosition(w, 2, 1, 1);
+		greaterZNeighborValue = getFromPosition(w, 2, 2, 2);
 		if (topplePositionOfType18(w, 2, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1283,9 +1282,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, 2, 2, 2);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, 2, 2, 2);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, 3, 2, 2);
+		greaterWNeighborValue = getFromPosition(wPlusOne, 2, 2, 2);
+		smallerWNeighborValue = getFromPosition(wMinusOne, 2, 2, 2);
+		greaterXNeighborValue = getFromPosition(w, 3, 2, 2);
 		if (topplePositionOfType22(w, 2, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1299,12 +1298,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		int xMinusOne = x - 1, xPlusOne = x + 1, wPlusOne = w + 1, wMinusOne = w - 1;
 		boolean changed = false;
 		//  w |  x | 00 | 00 | 19
-		long currentValue = getFromAsymmetricPosition(w, x, 0, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 0, 0);
-		long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 0, 0);
-		long greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 0, 0);
-		long smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 0, 0);
-		long greaterYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
+		long currentValue = getFromPosition(w, x, 0, 0);
+		long greaterWNeighborValue = getFromPosition(wPlusOne, x, 0, 0);
+		long smallerWNeighborValue = getFromPosition(wMinusOne, x, 0, 0);
+		long greaterXNeighborValue = getFromPosition(w, xPlusOne, 0, 0);
+		long smallerXNeighborValue = getFromPosition(w, xMinusOne, 0, 0);
+		long greaterYNeighborValue = getFromPosition(w, x, 1, 0);
 		if (topplePositionOfType7(w, x, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, 
 				greaterYNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1314,12 +1313,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 1, 0);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 1, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 1, 0);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 0);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, x, 1, 0);
+		smallerWNeighborValue = getFromPosition(wMinusOne, x, 1, 0);
+		greaterXNeighborValue = getFromPosition(w, xPlusOne, 1, 0);
+		smallerXNeighborValue = getFromPosition(w, xMinusOne, 1, 0);
+		greaterYNeighborValue = getFromPosition(w, x, 2, 0);
+		long greaterZNeighborValue = getFromPosition(w, x, 1, 1);
 		if (topplePositionOfType16(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1329,11 +1328,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 1, 1);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 1, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 1, 1);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 1);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, x, 1, 1);
+		smallerWNeighborValue = getFromPosition(wMinusOne, x, 1, 1);
+		greaterXNeighborValue = getFromPosition(w, xPlusOne, 1, 1);
+		smallerXNeighborValue = getFromPosition(w, xMinusOne, 1, 1);
+		greaterYNeighborValue = getFromPosition(w, x, 2, 1);
 		if (topplePositionOfType17(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 2, greaterXNeighborValue, 2, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1347,12 +1346,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		int coordMinusOne = coord - 1, coordPlusOne = coord + 1, wPlusOne = w + 1, wMinusOne = w - 1;
 		boolean changed = false;		
 		//  w |  x |  y | 00 | 22
-		long currentValue = getFromAsymmetricPosition(w, coord, coord, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, 0);
-		long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, 0);
-		long greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 0);
-		long smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 1);
+		long currentValue = getFromPosition(w, coord, coord, 0);
+		long greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, 0);
+		long smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, 0);
+		long greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, 0);
+		long smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, 0);
+		long greaterZNeighborValue = getFromPosition(w, coord, coord, 1);
 		if (topplePositionOfType8(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1362,11 +1361,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, 1);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 1);
-		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 1);
-		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 2);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, 1);
+		smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, 1);
+		greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, 1);
+		smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, 1);
+		greaterZNeighborValue = getFromPosition(w, coord, coord, 2);
 		if (topplePositionOfType18(w, coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1379,11 +1378,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
+			greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, z);
+			smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, z);
+			greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, z);
+			smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, z);
+			greaterZNeighborValue = getFromPosition(w, coord, coord, zPlusOne);
 			if (topplePositionOfType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1394,11 +1393,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
-		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
-		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, z);
+		smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, z);
+		greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, z);
+		smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, z);
+		greaterZNeighborValue = getFromPosition(w, coord, coord, zPlusOne);
 		if (topplePositionOfType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 3, greaterXNeighborValue, 2, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1409,9 +1408,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, z);
+		smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, z);
+		greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, z);
 		if (topplePositionOfType9(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, 4, greaterXNeighborValue, 2, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1424,12 +1423,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			changed = true;
 		}		
 		//  w |  x | 02 | 00 | 45
-		currentValue = getFromAsymmetricPosition(w, coord, 2, 0);
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, 2, 0);
-		long smallerXNeighborValue = getFromAsymmetricPosition(w, coordMinusOne, 2, 0);
-		long greaterYNeighborValue = getFromAsymmetricPosition(w, coord, 3, 0);
-		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, 1, 0);
-		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, 2, 1);
+		currentValue = getFromPosition(w, coord, 2, 0);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, 2, 0);
+		long smallerXNeighborValue = getFromPosition(w, coordMinusOne, 2, 0);
+		long greaterYNeighborValue = getFromPosition(w, coord, 3, 0);
+		smallerYNeighborValue = getFromPosition(w, coord, 1, 0);
+		greaterZNeighborValue = getFromPosition(w, coord, 2, 1);
 		if (topplePositionOfType24(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1439,11 +1438,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, 2, 1);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, coordMinusOne, 2, 1);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, coord, 3, 1);
-		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, 1, 1);
-		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, 2, 2);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, 2, 1);
+		smallerXNeighborValue = getFromPosition(w, coordMinusOne, 2, 1);
+		greaterYNeighborValue = getFromPosition(w, coord, 3, 1);
+		smallerYNeighborValue = getFromPosition(w, coord, 1, 1);
+		greaterZNeighborValue = getFromPosition(w, coord, 2, 2);
 		if (topplePositionOfType19(coord, 2, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 1, greaterYNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1453,9 +1452,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, 2, 2);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, coordMinusOne, 2, 2);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, coord, 3, 2);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, 2, 2);
+		smallerXNeighborValue = getFromPosition(w, coordMinusOne, 2, 2);
+		greaterYNeighborValue = getFromPosition(w, coord, 3, 2);
 		if (topplePositionOfType25(coord, 2, currentValue, greaterWNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1470,12 +1469,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		int y = coord - 1, coordMinusOne = coord - 1, coordMinusTwo = coord - 2, coordPlusOne = coord + 1, yPlusOne = y + 1, yMinusOne = y - 1;
 		boolean changed = false;
 		//  w |  x |  y | 00 | 27
-		long currentValue = getFromAsymmetricPosition(coord, coord, y, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, y, 0);
-		long smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, y, 0);
-		long greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, 0);
-		long smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, 1);
+		long currentValue = getFromPosition(coord, coord, y, 0);
+		long greaterWNeighborValue = getFromPosition(coordPlusOne, coord, y, 0);
+		long smallerXNeighborValue = getFromPosition(coord, coordMinusOne, y, 0);
+		long greaterYNeighborValue = getFromPosition(coord, coord, yPlusOne, 0);
+		long smallerYNeighborValue = getFromPosition(coord, coord, yMinusOne, 0);
+		long greaterZNeighborValue = getFromPosition(coord, coord, y, 1);
 		if (topplePositionOfType11(coord, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, 
 				greaterZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1485,11 +1484,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, y, 1);
-		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, y, 1);
-		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, 1);
-		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, 1);
-		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, 2);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, y, 1);
+		smallerXNeighborValue = getFromPosition(coord, coordMinusOne, y, 1);
+		greaterYNeighborValue = getFromPosition(coord, coord, yPlusOne, 1);
+		smallerYNeighborValue = getFromPosition(coord, coord, yMinusOne, 1);
+		greaterZNeighborValue = getFromPosition(coord, coord, y, 2);
 		if (topplePositionOfType19(coord, y, 1, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1502,11 +1501,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, y, z);
-			smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, y, z);
-			greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, z);
-			smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, z);
-			greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, zPlusOne);
+			greaterWNeighborValue = getFromPosition(coordPlusOne, coord, y, z);
+			smallerXNeighborValue = getFromPosition(coord, coordMinusOne, y, z);
+			greaterYNeighborValue = getFromPosition(coord, coord, yPlusOne, z);
+			smallerYNeighborValue = getFromPosition(coord, coord, yMinusOne, z);
+			greaterZNeighborValue = getFromPosition(coord, coord, y, zPlusOne);
 			if (topplePositionOfType19(coord, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 					smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1517,11 +1516,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, y, z);
-		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, y, z);
-		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, z);
-		smallerYNeighborValue = getFromAsymmetricPosition(coord, coord, yMinusOne, z);
-		greaterZNeighborValue = getFromAsymmetricPosition(coord, coord, y, zPlusOne);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, y, z);
+		smallerXNeighborValue = getFromPosition(coord, coordMinusOne, y, z);
+		greaterYNeighborValue = getFromPosition(coord, coord, yPlusOne, z);
+		smallerYNeighborValue = getFromPosition(coord, coord, yMinusOne, z);
+		greaterZNeighborValue = getFromPosition(coord, coord, y, zPlusOne);
 		if (topplePositionOfType19(coord, y, z, currentValue, greaterWNeighborValue, smallerXNeighborValue, 2, greaterYNeighborValue, 3, smallerYNeighborValue, 2, greaterZNeighborValue, 2, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1532,9 +1531,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(coordPlusOne, coord, y, z);
-		smallerXNeighborValue = getFromAsymmetricPosition(coord, coordMinusOne, y, z);
-		greaterYNeighborValue = getFromAsymmetricPosition(coord, coord, yPlusOne, z);
+		greaterWNeighborValue = getFromPosition(coordPlusOne, coord, y, z);
+		smallerXNeighborValue = getFromPosition(coord, coordMinusOne, y, z);
+		greaterYNeighborValue = getFromPosition(coord, coord, yPlusOne, z);
 		if (topplePositionOfType12(coord, y, currentValue, greaterWNeighborValue, smallerXNeighborValue, 3, greaterYNeighborValue, 3, smallerZNeighborValue, 1, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1552,12 +1551,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		int xMinusOne = x - 1, xPlusOne = x + 1, wPlusOne = w + 1, wMinusOne = w - 1;
 		boolean changed = false;
 		//  w |  x | 00 | 00 | 32
-		long currentValue = getFromAsymmetricPosition(w, x, 0, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 0, 0);
-		long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 0, 0);
-		long greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 0, 0);
-		long smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 0, 0);
-		long greaterYNeighborValue = getFromAsymmetricPosition(w, x, 1, 0);
+		long currentValue = getFromPosition(w, x, 0, 0);
+		long greaterWNeighborValue = getFromPosition(wPlusOne, x, 0, 0);
+		long smallerWNeighborValue = getFromPosition(wMinusOne, x, 0, 0);
+		long greaterXNeighborValue = getFromPosition(w, xPlusOne, 0, 0);
+		long smallerXNeighborValue = getFromPosition(w, xMinusOne, 0, 0);
+		long greaterYNeighborValue = getFromPosition(w, x, 1, 0);
 		if (topplePositionOfType20(w, x, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerXNeighborValue, 
 				greaterYNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1567,12 +1566,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerYNeighborValue = currentValue;
 		currentValue = greaterYNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 1, 0);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 1, 0);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 1, 0);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 0);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(w, x, 1, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, x, 1, 0);
+		smallerWNeighborValue = getFromPosition(wMinusOne, x, 1, 0);
+		greaterXNeighborValue = getFromPosition(w, xPlusOne, 1, 0);
+		smallerXNeighborValue = getFromPosition(w, xMinusOne, 1, 0);
+		greaterYNeighborValue = getFromPosition(w, x, 2, 0);
+		long greaterZNeighborValue = getFromPosition(w, x, 1, 1);
 		if (topplePositionOfType16(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerYNeighborValue, 4, greaterZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1582,11 +1581,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, x, 1, 1);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, x, 1, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, xPlusOne, 1, 1);
-		smallerXNeighborValue = getFromAsymmetricPosition(w, xMinusOne, 1, 1);
-		greaterYNeighborValue = getFromAsymmetricPosition(w, x, 2, 1);
+		greaterWNeighborValue = getFromPosition(wPlusOne, x, 1, 1);
+		smallerWNeighborValue = getFromPosition(wMinusOne, x, 1, 1);
+		greaterXNeighborValue = getFromPosition(w, xPlusOne, 1, 1);
+		smallerXNeighborValue = getFromPosition(w, xMinusOne, 1, 1);
+		greaterYNeighborValue = getFromPosition(w, x, 2, 1);
 		if (topplePositionOfType17(w, x, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerXNeighborValue, 1, greaterYNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers, 
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1601,12 +1600,12 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		int wPlusOne = w + 1, wMinusOne = w - 1;
 		boolean changed = false;
 		//  w |  x |  y | 00 | 35
-		long currentValue = getFromAsymmetricPosition(w, coord, coord, 0);
-		long greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, 0);
-		long smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, 0);
-		long greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 0);
-		long smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 0);
-		long greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 1);
+		long currentValue = getFromPosition(w, coord, coord, 0);
+		long greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, 0);
+		long smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, 0);
+		long greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, 0);
+		long smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, 0);
+		long greaterZNeighborValue = getFromPosition(w, coord, coord, 1);
 		if (topplePositionOfType21(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, 
 				greaterZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1616,11 +1615,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		long smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, 1);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, 1);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, 1);
-		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, 1);
-		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, 2);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, 1);
+		smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, 1);
+		greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, 1);
+		smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, 1);
+		greaterZNeighborValue = getFromPosition(w, coord, coord, 2);
 		if (topplePositionOfType18(w, coord, 1, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 1, greaterZNeighborValue, 1, 
 				smallerZNeighborValue, 2, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1633,11 +1632,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerZNeighborValue = currentValue;
 			currentValue = greaterZNeighborValue;
-			greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
-			smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
-			greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
-			smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
-			greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
+			greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, z);
+			smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, z);
+			greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, z);
+			smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, z);
+			greaterZNeighborValue = getFromPosition(w, coord, coord, zPlusOne);
 			if (topplePositionOfType29(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerYNeighborValue, greaterZNeighborValue, 
 					smallerZNeighborValue, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 					relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1648,11 +1647,11 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
-		smallerYNeighborValue = getFromAsymmetricPosition(w, coord, coordMinusOne, z);
-		greaterZNeighborValue = getFromAsymmetricPosition(w, coord, coord, zPlusOne);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, z);
+		smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, z);
+		greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, z);
+		smallerYNeighborValue = getFromPosition(w, coord, coordMinusOne, z);
+		greaterZNeighborValue = getFromPosition(w, coord, coord, zPlusOne);
 		if (topplePositionOfType18(w, coord, z, currentValue, greaterWNeighborValue, smallerWNeighborValue, 1, greaterXNeighborValue, 1, smallerYNeighborValue, 2, greaterZNeighborValue, 3, 
 				smallerZNeighborValue, 1, relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords, relevantAsymmetricNeighborShareMultipliers,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -1663,9 +1662,9 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 		// reuse values obtained previously
 		smallerZNeighborValue = currentValue;
 		currentValue = greaterZNeighborValue;
-		greaterWNeighborValue = getFromAsymmetricPosition(wPlusOne, coord, coord, z);
-		smallerWNeighborValue = getFromAsymmetricPosition(wMinusOne, coord, coord, z);
-		greaterXNeighborValue = getFromAsymmetricPosition(w, coordPlusOne, coord, z);
+		greaterWNeighborValue = getFromPosition(wPlusOne, coord, coord, z);
+		smallerWNeighborValue = getFromPosition(wMinusOne, coord, coord, z);
+		greaterXNeighborValue = getFromPosition(w, coordPlusOne, coord, z);
 		if (topplePositionOfType22(w, coord, currentValue, greaterWNeighborValue, smallerWNeighborValue, greaterXNeighborValue, smallerZNeighborValue, 
 				relevantAsymmetricNeighborValues, sortedNeighborsIndexes, relevantAsymmetricNeighborCoords,
 				relevantAsymmetricNeighborSymmetryCounts, newGrid)) {
@@ -4050,39 +4049,6 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 
 	@Override
 	public long getFromPosition(int w, int x, int y, int z) throws IOException {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (w < 0) w = -w;
-		//sort coordinates
-		//TODO faster sorting?
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-			if (x > w) {
-				sorted = false;
-				int swp = x;
-				x = w;
-				w = swp;
-			}
-		} while (!sorted);
-		return getFromAsymmetricPosition(w, x, y, z);
-	}
-
-	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z) throws IOException {	
 		long pos = (Utils.getAnisotropic4DGridPositionCount(w)
 				+ Utils.getAnisotropic3DGridPositionCount(x)
 				+ ((y*y-y)/2+y)+z)
@@ -4103,7 +4069,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 	}
 
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getSize() {
 		return maxW;
 	}
 
@@ -4127,7 +4093,7 @@ public class FileBackedLongAether4D extends FileBackedModel implements Symmetric
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/4D/" + initialValue;
 	}
 	

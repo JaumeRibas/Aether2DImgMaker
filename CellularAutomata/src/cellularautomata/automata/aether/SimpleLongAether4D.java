@@ -23,8 +23,7 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model4d.IsotropicHypercubicModel4DA;
-import cellularautomata.model4d.SymmetricLongModel4D;
+import cellularautomata.model4d.IsotropicHypercubicLongModelAsymmetricSection4D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 4D, with a single source initial configuration, for review and testing purposes
@@ -32,7 +31,7 @@ import cellularautomata.model4d.SymmetricLongModel4D;
  * @author Jaume
  *
  */
-public class SimpleLongAether4D implements SymmetricLongModel4D, IsotropicHypercubicModel4DA {	
+public class SimpleLongAether4D implements IsotropicHypercubicLongModelAsymmetricSection4D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
@@ -145,8 +144,8 @@ public class SimpleLongAether4D implements SymmetricLongModel4D, IsotropicHyperc
 						
 						if (neighbors.size() > 0) {
 							//sort
-							boolean sorted = false;
-							while (!sorted) {
+							boolean sorted;
+							do {
 								sorted = true;
 								for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 									Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -156,7 +155,7 @@ public class SimpleLongAether4D implements SymmetricLongModel4D, IsotropicHyperc
 										neighbors.add(neighborIndex, next);
 									}
 								}
-							}
+							} while (!sorted);
 							//divide
 							boolean isFirst = true;
 							long previousNeighborValue = 0;
@@ -252,14 +251,9 @@ public class SimpleLongAether4D implements SymmetricLongModel4D, IsotropicHyperc
 		//Note that the indexes whose value hasn't been defined have value zero by default
 		return grid[i][j][k][l];
 	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int w, int x, int y, int z) {
-		return getFromPosition(w, x, y, z);
-	}
 
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getSize() {
 		int arrayMaxW = grid.length - 1 - originIndex;
 		int valuesMaxW;
 		if (boundsReached) {
@@ -290,7 +284,7 @@ public class SimpleLongAether4D implements SymmetricLongModel4D, IsotropicHyperc
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/4D/" + initialValue;
 	}
 	

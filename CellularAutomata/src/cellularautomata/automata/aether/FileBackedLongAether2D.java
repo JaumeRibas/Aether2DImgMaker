@@ -24,8 +24,7 @@ import java.util.HashMap;
 
 import cellularautomata.Utils;
 import cellularautomata.model.FileBackedModel;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricLongModel2D;
+import cellularautomata.model2d.IsotropicSquareLongModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a single source initial configuration
@@ -33,7 +32,7 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume
  *
  */
-public class FileBackedLongAether2D extends FileBackedModel implements SymmetricLongModel2D, IsotropicSquareModelA {
+public class FileBackedLongAether2D extends FileBackedModel implements IsotropicSquareLongModelAsymmetricSection {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -79,8 +78,8 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			boolean changed = false;
 			long currentValue, greaterXNeighborValue, smallerXNeighborValue, greaterYNeighborValue, smallerYNeighborValue;
 			// x = 0, y = 0
-			currentValue = getFromAsymmetricPosition(0, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(1, 0);
+			currentValue = getFromPosition(0, 0);
+			greaterXNeighborValue = getFromPosition(1, 0);
 			File newFile = new File(getGridFolderPath() + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
 			newGrid = new RandomAccessFile(newFile, "rw");
 			long newGridXLength = (maxX + 4);
@@ -110,8 +109,8 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;
-			greaterYNeighborValue = getFromAsymmetricPosition(1, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(2, 0);
+			greaterYNeighborValue = getFromPosition(1, 1);
+			greaterXNeighborValue = getFromPosition(2, 0);
 			if (smallerXNeighborValue < currentValue) {
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -151,7 +150,7 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterXNeighborValue = getFromAsymmetricPosition(2, 1);
+			greaterXNeighborValue = getFromPosition(2, 1);
 			if (smallerYNeighborValue < currentValue) {
 				if (greaterXNeighborValue < currentValue) {
 					if (smallerYNeighborValue == greaterXNeighborValue) {
@@ -227,9 +226,9 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			relevantNeighborCount = 0;
 			// reuse values obtained previously
 			greaterYNeighborValue = greaterXNeighborValue;
-			currentValue = getFromAsymmetricPosition(2, 0);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 0);
-			smallerXNeighborValue = getFromAsymmetricPosition(1, 0);
+			currentValue = getFromPosition(2, 0);
+			greaterXNeighborValue = getFromPosition(3, 0);
+			smallerXNeighborValue = getFromPosition(1, 0);
 			if (smallerXNeighborValue < currentValue) {
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -267,9 +266,9 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterYNeighborValue = getFromAsymmetricPosition(2, 2);
-			smallerXNeighborValue = getFromAsymmetricPosition(1, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 1);
+			greaterYNeighborValue = getFromPosition(2, 2);
+			smallerXNeighborValue = getFromPosition(1, 1);
+			greaterXNeighborValue = getFromPosition(3, 1);
 			if (smallerXNeighborValue < currentValue) {
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -310,7 +309,7 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterXNeighborValue = getFromAsymmetricPosition(3, 2);
+			greaterXNeighborValue = getFromPosition(3, 2);
 			if (smallerYNeighborValue < currentValue) {
 				if (greaterXNeighborValue < currentValue) {
 					if (smallerYNeighborValue == greaterXNeighborValue) {
@@ -429,10 +428,10 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// y = 0;
 			int relevantAsymmetricNeighborCount = 0;
 			int relevantNeighborCount = 0;
-			long currentValue = getFromAsymmetricPosition(x, 0);
-			long greaterYNeighborValue = getFromAsymmetricPosition(x, 1);
-			long smallerXNeighborValue = getFromAsymmetricPosition(xMinusOne, 0);
-			long greaterXNeighborValue = getFromAsymmetricPosition(xPlusOne, 0);
+			long currentValue = getFromPosition(x, 0);
+			long greaterYNeighborValue = getFromPosition(x, 1);
+			long smallerXNeighborValue = getFromPosition(xMinusOne, 0);
+			long greaterXNeighborValue = getFromPosition(xPlusOne, 0);
 			if (smallerXNeighborValue < currentValue) {
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -469,9 +468,9 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			long smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterYNeighborValue = getFromAsymmetricPosition(x, 2);
-			smallerXNeighborValue = getFromAsymmetricPosition(xMinusOne, 1);
-			greaterXNeighborValue = getFromAsymmetricPosition(xPlusOne, 1);
+			greaterYNeighborValue = getFromPosition(x, 2);
+			smallerXNeighborValue = getFromPosition(xMinusOne, 1);
+			greaterXNeighborValue = getFromPosition(xPlusOne, 1);
 			if (smallerXNeighborValue < currentValue) {
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -515,9 +514,9 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 				// reuse values obtained previously
 				smallerYNeighborValue = currentValue;
 				currentValue = greaterYNeighborValue;
-				greaterYNeighborValue = getFromAsymmetricPosition(x, yPlusOne);
-				smallerXNeighborValue = getFromAsymmetricPosition(xMinusOne, y);
-				greaterXNeighborValue = getFromAsymmetricPosition(xPlusOne, y);
+				greaterYNeighborValue = getFromPosition(x, yPlusOne);
+				smallerXNeighborValue = getFromPosition(xMinusOne, y);
+				greaterXNeighborValue = getFromPosition(xPlusOne, y);
 				if (smallerXNeighborValue < currentValue) {
 					relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 					int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -556,9 +555,9 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterYNeighborValue = getFromAsymmetricPosition(x, yPlusOne);
-			smallerXNeighborValue = getFromAsymmetricPosition(xMinusOne, y);
-			greaterXNeighborValue = getFromAsymmetricPosition(xPlusOne, y);
+			greaterYNeighborValue = getFromPosition(x, yPlusOne);
+			smallerXNeighborValue = getFromPosition(xMinusOne, y);
+			greaterXNeighborValue = getFromPosition(xPlusOne, y);
 			if (smallerXNeighborValue < currentValue) {
 				relevantAsymmetricNeighborValues[relevantAsymmetricNeighborCount] = smallerXNeighborValue;
 				int[] nc = relevantAsymmetricNeighborCoords[relevantAsymmetricNeighborCount];
@@ -601,7 +600,7 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 			// reuse values obtained previously
 			smallerYNeighborValue = currentValue;
 			currentValue = greaterYNeighborValue;
-			greaterXNeighborValue = getFromAsymmetricPosition(xPlusOne, y);
+			greaterXNeighborValue = getFromPosition(xPlusOne, y);
 			if (smallerYNeighborValue < currentValue) {
 				if (greaterXNeighborValue < currentValue) {
 					if (smallerYNeighborValue == greaterXNeighborValue) {
@@ -1115,20 +1114,7 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 	}
 	
 	@Override
-	public long getFromPosition(int x, int y) throws IOException {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		long value;
-		if (y > x) {
-			value = getFromAsymmetricPosition(y, x);
-		} else {
-			value = getFromAsymmetricPosition(x, y);
-		}
-		return value;
-	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int x, int y) throws IOException {
+	public long getFromPosition(int x, int y) throws IOException {
 		grid.seek((((x*x-x)/2+x)+y)*POSITION_BYTES);
 		return grid.readLong();
 	}
@@ -1142,7 +1128,7 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -1166,7 +1152,7 @@ public class FileBackedLongAether2D extends FileBackedModel implements Symmetric
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue;
 	}
 	

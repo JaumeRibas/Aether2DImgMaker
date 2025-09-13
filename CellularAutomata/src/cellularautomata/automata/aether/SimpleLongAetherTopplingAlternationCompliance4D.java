@@ -26,10 +26,9 @@ import cellularautomata.Coordinates;
 import cellularautomata.Direction;
 import cellularautomata.arrays.HypercubicBooleanArray;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model4d.IsotropicHypercubicModel4DA;
-import cellularautomata.model4d.SymmetricBooleanModel4D;
+import cellularautomata.model4d.IsotropicHypercubicBooleanModelAsymmetricSection4D;
 
-public class SimpleLongAetherTopplingAlternationCompliance4D implements SymmetricBooleanModel4D, IsotropicHypercubicModel4DA {	
+public class SimpleLongAetherTopplingAlternationCompliance4D implements IsotropicHypercubicBooleanModelAsymmetricSection4D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2635249153387078803L;
@@ -153,8 +152,8 @@ public class SimpleLongAetherTopplingAlternationCompliance4D implements Symmetri
 						boolean toppled = false;
 						if (neighbors.size() > 0) {
 							//sort
-							boolean sorted = false;
-							while (!sorted) {
+							boolean sorted;
+							do {
 								sorted = true;
 								for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 									Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -164,7 +163,7 @@ public class SimpleLongAetherTopplingAlternationCompliance4D implements Symmetri
 										neighbors.add(neighborIndex, next);
 									}
 								}
-							}
+							} while (!sorted);
 							//divide
 							boolean isFirst = true;
 							long previousNeighborValue = 0;
@@ -279,14 +278,9 @@ public class SimpleLongAetherTopplingAlternationCompliance4D implements Symmetri
 		int l = originIndex + z;
 		return topplingAlternationCompliance.get(new Coordinates(i, j, k, l));
 	}
-	
-	@Override
-	public boolean getFromAsymmetricPosition(int w, int x, int y, int z) {
-		return getFromPosition(w, x, y, z);
-	}
 
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getSize() {
 		int arrayMaxW = grid.length - 1 - originIndex;
 		int valuesMaxW;
 		if (boundsReached) {
@@ -317,7 +311,7 @@ public class SimpleLongAetherTopplingAlternationCompliance4D implements Symmetri
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/4D/" + initialValue + "/toppling_alternation_compliance";
 	}
 	

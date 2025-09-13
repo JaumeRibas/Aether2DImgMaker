@@ -23,10 +23,10 @@ import java.util.Arrays;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareBooleanArrayModelA;
+import cellularautomata.model2d.IsotropicSquareBooleanArrayModelAsymmetricSection;
 import cellularautomata.numbers.BigInt;
 
-public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquareBooleanArrayModelA {
+public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquareBooleanArrayModelAsymmetricSection {
 	
 	private static final BigInt two = BigInt.valueOf(2);
 	private static final BigInt three = BigInt.valueOf(3);
@@ -44,7 +44,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 	private Boolean changed = null;
 	
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 	
@@ -1370,7 +1370,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -1394,7 +1394,7 @@ public class BigIntAetherTopplingAlternationCompliance2D extends IsotropicSquare
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + folderName + "/toppling_alternation_compliance";
 	}
 	

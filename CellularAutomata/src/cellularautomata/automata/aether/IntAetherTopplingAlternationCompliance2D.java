@@ -21,9 +21,9 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareBooleanArrayModelA;
+import cellularautomata.model2d.IsotropicSquareBooleanArrayModelAsymmetricSection;
 
-public class IntAetherTopplingAlternationCompliance2D extends IsotropicSquareBooleanArrayModelA {
+public class IntAetherTopplingAlternationCompliance2D extends IsotropicSquareBooleanArrayModelAsymmetricSection {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -1431655765;
@@ -1291,7 +1291,7 @@ public class IntAetherTopplingAlternationCompliance2D extends IsotropicSquareBoo
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -1315,7 +1315,7 @@ public class IntAetherTopplingAlternationCompliance2D extends IsotropicSquareBoo
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue + "/toppling_alternation_compliance";
 	}
 

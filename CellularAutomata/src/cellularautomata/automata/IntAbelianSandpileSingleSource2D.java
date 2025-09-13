@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
+import cellularautomata.model2d.IsotropicSquareIntArrayModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://en.wikipedia.org/wiki/Abelian_sandpile_model">Abelian sandpile</a> cellular automaton in 2D with synchronous toppling and a single source initial configuration
@@ -28,7 +28,7 @@ import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
  * @author Jaume
  *
  */
-public class IntAbelianSandpileSingleSource2D extends IsotropicSquareIntArrayModelA {
+public class IntAbelianSandpileSingleSource2D extends IsotropicSquareIntArrayModelAsymmetricSection {
 	
 	private final int initialValue;
 	private long step;
@@ -160,7 +160,7 @@ public class IntAbelianSandpileSingleSource2D extends IsotropicSquareIntArrayMod
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return grid.length - 1;
 	}
 	
@@ -184,7 +184,7 @@ public class IntAbelianSandpileSingleSource2D extends IsotropicSquareIntArrayMod
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue;
 	}
 

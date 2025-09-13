@@ -26,8 +26,7 @@ import org.apache.commons.math3.fraction.BigFraction;
 import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricNumericModel3D;
+import cellularautomata.model3d.IsotropicCubicNumericModelAsymmetricSection;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 3D, with a single source initial configuration of infinity, for review and testing purposes
@@ -35,7 +34,7 @@ import cellularautomata.model3d.SymmetricNumericModel3D;
  * @author Jaume
  *
  */
-public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFraction>, IsotropicCubicModelA {
+public class SimpleBfAetherInfinity3D implements IsotropicCubicNumericModelAsymmetricSection<BigFraction> {
 	
 	/** 3D array representing the grid **/
 	private BigFraction[][][] grid;
@@ -128,8 +127,8 @@ public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFrac
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
-						boolean sorted = false;
-						while (!sorted) {
+						boolean sorted;
+						do {
 							sorted = true;
 							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 								Neighbor<BigFraction> next = neighbors.get(neighborIndex+1);
@@ -139,7 +138,7 @@ public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFrac
 									neighbors.add(neighborIndex, next);
 								}
 							}
-						}
+						} while (!sorted);
 						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
 						BigFraction previousNeighborValue = null;
@@ -226,14 +225,9 @@ public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFrac
 		//Note that the indexes whose value hasn't been defined have value zero by default
 		return grid[i][j][k];
 	}
-
-	@Override
-	public BigFraction getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
 	
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -260,7 +254,7 @@ public class SimpleBfAetherInfinity3D implements SymmetricNumericModel3D<BigFrac
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		String path = getName() + "/3D/";
 		if (!isPositive) path += "-";
 		path += "infinity";

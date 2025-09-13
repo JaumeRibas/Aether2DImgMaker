@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
 import org.apache.commons.math3.FieldElement;
 
@@ -2797,10 +2798,9 @@ final class Test {
 	static void compareAllStepsWithOffset(LongModel3D ca1, LongModel3D ca2, int xOffset, int yOffset, int zOffset) {
 		try {
 			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
+			boolean finished1, finished2;
 			boolean equal = true;
-			while (equal && !finished1 && !finished2) {
+			do {
 //				System.out.println("Comparing step " + ca1.getStep());
 				for (int z = ca1.getMinZ(), z2 = z + zOffset; z <= ca1.getMaxZ(); z++, z2++) {
 					for (int y = ca1.getMinYAtZ(z), y2 = y + yOffset; y <= ca1.getMaxYAtZ(z); y++, y2++) {
@@ -2822,7 +2822,7 @@ final class Test {
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
-			}
+			} while (equal && !finished1 && !finished2);
 			if (equal)
 				System.out.println("Equal!");
 		} catch (Exception e) {
@@ -2830,27 +2830,31 @@ final class Test {
 		}
 	}
 	
-	static void testAsymmetricSection() {
+	static void testWholeGridDecorator() {
 		IntAether4D ae = new IntAether4D(-10000);
-		IntModel4D ns = ae.asymmetricSection();
+		IntModel4D wg = ae.wholeGrid();
 		try {
 			Boolean changed;
 			do {
 				System.out.println("Comparing step " + ae.getStep());
-				int maxW = ae.getAsymmetricMaxW();
-				for (int w = 0; w <= maxW; w++) {
-					for (int x = 0; x <= w; x++) {
-						for (int y = 0; y <= x; y++) {
-							for (int z = 0; z <= y; z++) {
-//								System.out.println("Comparing value at (" + w + ", " + x + ", " + y + ", " + z + ")");
-								if (ae.getFromAsymmetricPosition(w, x, y, z) != ns.getFromPosition(w, x, y, z)) {
-									System.err.println("Different value");
-									return;
-								}
+				wg.forEachPosition(new Consumer<Coordinates>() {
+
+					@Override
+					public void accept(Coordinates coords) {
+						int[] coordsArray = coords.getCopyAsArray();
+						Utils.abs(coordsArray);
+						Utils.sortDescending(coordsArray);
+						try {
+							if (ae.getFromPosition(new Coordinates(coordsArray)) != wg.getFromPosition(coords)) {
+								System.err.println("Different value");
+								return;
 							}
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					}
-				}
+				
+				});
 			} while ((changed = ae.nextStep()) == null || changed);
 			System.out.println("Equal!");
 		} catch (Exception e) {
@@ -2871,11 +2875,10 @@ final class Test {
 		int dimension2 = ca2.getGridDimension();
 		if (dimension == dimension2) {
 			try {
-				boolean finished1 = false;
-				boolean finished2 = false;
+				boolean finished1, finished2;
 				boolean equal = true;
 				int[] coordinates = new int[dimension];
-				while (equal && !finished1 && !finished2) {
+				do {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
 						boolean val1 = ca1.getFromPosition(coordinatesObj);
@@ -2891,7 +2894,7 @@ final class Test {
 						int[] maxCoords = new int[dimension];
 						int currentAxis = dimension - 1;
 						boolean isBeginningOfLoop = true;
-						while (currentAxis < dimension) {
+						do {
 							if (currentAxis == 0) {
 								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 								//ignore possible differences in bounds
@@ -2942,7 +2945,7 @@ final class Test {
 									currentAxis++;
 								}
 							}
-						}
+						} while (currentAxis < dimension);
 					}
 					Boolean changed;
 					finished1 = (changed = ca1.nextStep()) != null && !changed;
@@ -2952,7 +2955,7 @@ final class Test {
 						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 					}
-				}
+				} while (equal && !finished1 && !finished2);
 				if (equal)
 					System.out.println("Equal!");
 			} catch (Exception e) {
@@ -2971,11 +2974,10 @@ final class Test {
 		int dimension2 = ca2.getGridDimension();
 		if (dimension == dimension2) {
 			try {
-				boolean finished1 = false;
-				boolean finished2 = false;
+				boolean finished1, finished2;
 				boolean equal = true;
 				int[] coordinates = new int[dimension];
-				while (equal && !finished1 && !finished2) {
+				do {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
 						int val1 = ca1.getFromPosition(coordinatesObj);
@@ -2991,7 +2993,7 @@ final class Test {
 						int[] maxCoords = new int[dimension];
 						int currentAxis = dimension - 1;
 						boolean isBeginningOfLoop = true;
-						while (currentAxis < dimension) {
+						do {
 							if (currentAxis == 0) {
 								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 								//ignore possible differences in bounds
@@ -3042,7 +3044,7 @@ final class Test {
 									currentAxis++;
 								}
 							}
-						}
+						} while (currentAxis < dimension);
 					}
 					Boolean changed;
 					finished1 = (changed = ca1.nextStep()) != null && !changed;
@@ -3052,7 +3054,7 @@ final class Test {
 						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 					}
-				}
+				} while (equal && !finished1 && !finished2);
 				if (equal)
 					System.out.println("Equal!");
 			} catch (Exception e) {
@@ -3071,11 +3073,10 @@ final class Test {
 		int dimension2 = ca2.getGridDimension();
 		if (dimension == dimension2) {
 			try {
-				boolean finished1 = false;
-				boolean finished2 = false;
+				boolean finished1, finished2;
 				boolean equal = true;
 				int[] coordinates = new int[dimension];
-				while (equal && !finished1 && !finished2) {
+				do {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
 						long val1 = ca1.getFromPosition(coordinatesObj);
@@ -3091,7 +3092,7 @@ final class Test {
 						int[] maxCoords = new int[dimension];
 						int currentAxis = dimension - 1;
 						boolean isBeginningOfLoop = true;
-						while (currentAxis < dimension) {
+						do {
 							if (currentAxis == 0) {
 								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 								//ignore possible differences in bounds
@@ -3142,7 +3143,7 @@ final class Test {
 									currentAxis++;
 								}
 							}
-						}
+						} while (currentAxis < dimension);
 					}
 					Boolean changed;
 					finished1 = (changed = ca1.nextStep()) != null && !changed;
@@ -3152,7 +3153,7 @@ final class Test {
 						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 					}
-				}
+				} while (equal && !finished1 && !finished2);
 				if (equal)
 					System.out.println("Equal!");
 			} catch (Exception e) {
@@ -3171,11 +3172,10 @@ final class Test {
 		int dimension2 = ca2.getGridDimension();
 		if (dimension == dimension2) {
 			try {
-				boolean finished1 = false;
-				boolean finished2 = false;
+				boolean finished1, finished2;
 				boolean equal = true;
 				int[] coordinates = new int[dimension];
-				while (equal && !finished1 && !finished2) {
+				do {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
 						Object val1 = ca1.getFromPosition(coordinatesObj);
@@ -3191,7 +3191,7 @@ final class Test {
 						int[] maxCoords = new int[dimension];
 						int currentAxis = dimension - 1;
 						boolean isBeginningOfLoop = true;
-						while (currentAxis < dimension) {
+						do {
 							if (currentAxis == 0) {
 								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 								//ignore possible differences in bounds
@@ -3242,7 +3242,7 @@ final class Test {
 									currentAxis++;
 								}
 							}
-						}
+						} while (currentAxis < dimension);
 					}
 					Boolean changed;
 					finished1 = (changed = ca1.nextStep()) != null && !changed;
@@ -3252,7 +3252,7 @@ final class Test {
 						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 					}
-				}
+				} while (equal && !finished1 && !finished2);
 				if (equal)
 					System.out.println("Equal!");
 			} catch (Exception e) {
@@ -3275,11 +3275,10 @@ final class Test {
 		int dimension2 = ca2.getGridDimension();
 		if (dimension == dimension2) {
 			try {
-				boolean finished1 = false;
-				boolean finished2 = false;
+				boolean finished1, finished2;
 				boolean equal = true;
 				int[] coordinates = new int[dimension];
-				while (equal && !finished1 && !finished2) {
+				do {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
 						int val1 = ca1.getFromPosition(coordinatesObj);
@@ -3295,7 +3294,7 @@ final class Test {
 						int[] maxCoords = new int[dimension];
 						int currentAxis = dimension - 1;
 						boolean isBeginningOfLoop = true;
-						while (currentAxis < dimension) {
+						do {
 							if (currentAxis == 0) {
 								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 								//ignore possible differences in bounds
@@ -3346,7 +3345,7 @@ final class Test {
 									currentAxis++;
 								}
 							}
-						}
+						} while (currentAxis < dimension);
 					}
 					Boolean changed;
 					finished1 = (changed = ca1.nextStep()) != null && !changed;
@@ -3356,7 +3355,7 @@ final class Test {
 						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 					}
-				}
+				} while (equal && !finished1 && !finished2);
 				if (equal)
 					System.out.println("Equal!");
 			} catch (Exception e) {
@@ -3379,11 +3378,10 @@ final class Test {
 		int dimension2 = ca2.getGridDimension();
 		if (dimension == dimension2) {
 			try {
-				boolean finished1 = false;
-				boolean finished2 = false;
+				boolean finished1, finished2;
 				boolean equal = true;
 				int[] coordinates = new int[dimension];
-				while (equal && !finished1 && !finished2) {
+				do {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
 						long val1 = ca1.getFromPosition(coordinatesObj).longValue();
@@ -3399,7 +3397,7 @@ final class Test {
 						int[] maxCoords = new int[dimension];
 						int currentAxis = dimension - 1;
 						boolean isBeginningOfLoop = true;
-						while (currentAxis < dimension) {
+						do {
 							if (currentAxis == 0) {
 								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 								//ignore possible differences in bounds
@@ -3450,7 +3448,7 @@ final class Test {
 									currentAxis++;
 								}
 							}
-						}
+						} while (currentAxis < dimension);
 					}
 					Boolean changed;
 					finished1 = (changed = ca1.nextStep()) != null && !changed;
@@ -3460,7 +3458,7 @@ final class Test {
 						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 					}
-				}
+				} while (equal && !finished1 && !finished2);
 				if (equal)
 					System.out.println("Equal!");
 			} catch (Exception e) {
@@ -3483,11 +3481,10 @@ final class Test {
 		int dimension2 = ca2.getGridDimension();
 		if (dimension == dimension2) {
 			try {
-				boolean finished1 = false;
-				boolean finished2 = false;
+				boolean finished1, finished2;
 				boolean equal = true;
 				int[] coordinates = new int[dimension];
-				while (equal && !finished1 && !finished2) {
+				do {
 					if (dimension == 0) {
 						Coordinates coordinatesObj = new Coordinates(coordinates);
 						int val1 = ca1.getFromPosition(coordinatesObj).intValue();
@@ -3503,7 +3500,7 @@ final class Test {
 						int[] maxCoords = new int[dimension];
 						int currentAxis = dimension - 1;
 						boolean isBeginningOfLoop = true;
-						while (currentAxis < dimension) {
+						do {
 							if (currentAxis == 0) {
 								PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoordinates);
 								//ignore possible differences in bounds
@@ -3554,7 +3551,7 @@ final class Test {
 									currentAxis++;
 								}
 							}
-						}
+						} while (currentAxis < dimension);
 					}
 					Boolean changed;
 					finished1 = (changed = ca1.nextStep()) != null && !changed;
@@ -3564,7 +3561,7 @@ final class Test {
 						String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 						System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 					}
-				}
+				} while (equal && !finished1 && !finished2);
 				if (equal)
 					System.out.println("Equal!");
 			} catch (Exception e) {
@@ -3580,10 +3577,9 @@ final class Test {
 	static void compareAllStepsWithIterators(LongModel ca1, LongModel ca2) {
 		try {
 			System.out.println("Comparing...");
-			boolean finished1 = false;
-			boolean finished2 = false;
+			boolean finished1, finished2;
 			boolean equal = true;
-			while (equal && !finished1 && !finished2) {
+			do {
 				Iterator<Long> iterator1 = ca1.iterator();
 				Iterator<Long> iterator2 = ca2.iterator();
 //				System.out.println("Comparing step " + ca1.getStep());
@@ -3606,7 +3602,7 @@ final class Test {
 					String finishedCA = finished1? ca1.getClass().getSimpleName() : ca2.getClass().getSimpleName();
 					System.err.println("Different final step. " + finishedCA + " finished earlier (step " + ca1.getStep() + ")");
 				}
-			}
+			} while (equal && !finished1 && !finished2);
 			if (equal)
 				System.out.println("Equal!");
 		} catch (Exception e) {
@@ -3629,13 +3625,14 @@ final class Test {
 	static void testTotalValueConservation(LongModel ca) {
 		System.out.println("Checking total value conservation...");
 		try {
-			BigInt value = ca.getTotal(), newValue = value;
-			boolean finished = false;
-			while (value.equals(newValue) && !finished) {
+			BigInt value = ca.getTotal();
+			BigInt newValue;
+			boolean finished;
+			do {
 				Boolean changed;
 				finished = (changed = ca.nextStep()) != null && !changed;
 				newValue = ca.getTotal();
-			}
+			} while (value.equals(newValue) && !finished);
 			if (!finished) {
 				System.err.println("The total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
 			} else {
@@ -3649,13 +3646,14 @@ final class Test {
 	static <Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>> void testTotalValueConservation(NumericModel<Number_Type> ca) {
 		System.out.println("Checking total value conservation...");
 		try {
-			Number_Type value = ca.getTotal(), newValue = value;
-			boolean finished = false;
-			while (value.equals(newValue) && !finished) {
+			Number_Type value = ca.getTotal();
+			Number_Type newValue;
+			boolean finished;
+			do {
 				Boolean changed;
 				finished = (changed = ca.nextStep()) != null && !changed;
 				newValue = ca.getTotal();
-			}
+			} while (value.equals(newValue) && !finished);
 			if (!finished) {
 				System.err.println("The total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
 			} else {
@@ -3680,13 +3678,14 @@ final class Test {
 	static void testTotalValueConservation(IntModel ca) {
 		System.out.println("Checking total value conservation...");
 		try {
-			BigInt value = ca.getTotal(), newValue = value;
-			boolean finished = false;
-			while (value.equals(newValue) && !finished) {
+			BigInt value = ca.getTotal();
+			BigInt newValue;
+			boolean finished;
+			do {
 				Boolean changed;
 				finished = (changed = ca.nextStep()) != null && !changed;
 				newValue = ca.getTotal();
-			}
+			} while (value.equals(newValue) && !finished);
 			if (!finished) {
 				System.err.println("The total value changed at step " + ca.getStep() + ". Previous value " + value + ", new value " + newValue);
 			} else {

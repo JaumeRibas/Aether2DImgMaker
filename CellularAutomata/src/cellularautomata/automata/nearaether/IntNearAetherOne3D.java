@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import cellularautomata.Direction;
 import cellularautomata.Utils;
-import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
+import cellularautomata.model3d.IsotropicCubicIntArrayModelAsymmetricSection;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> to showcase its uniqueness.
@@ -30,7 +30,7 @@ import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
  * @author Jaume
  *
  */
-public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements Serializable {
+public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelAsymmetricSection implements Serializable {
 	
 	public static final int MAX_INITIAL_VALUE = Integer.MAX_VALUE;
 	public static final int MIN_INITIAL_VALUE = -858993459;
@@ -147,8 +147,8 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 					
 					if (relevantNeighborCount > 0) {
 						//sort
-						boolean sorted = false;
-						while (!sorted) {
+						boolean sorted;
+						do {
 							sorted = true;
 							for (int i = relevantNeighborCount - 2; i >= 0; i--) {
 								if (neighborValues[i] < neighborValues[i+1]) {
@@ -161,7 +161,7 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 									neighborDirections[i+1] = dirSwap;
 								}
 							}
-						}
+						} while (!sorted);
 						//divide
 						boolean isFirstNeighbor = true;
 						int previousNeighborValue = 0;
@@ -337,7 +337,7 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return grid.length - 1;
 	}
 	
@@ -361,7 +361,7 @@ public class IntNearAetherOne3D extends IsotropicCubicIntArrayModelA implements 
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue;
 	}
 	

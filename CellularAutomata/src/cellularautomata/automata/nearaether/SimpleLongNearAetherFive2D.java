@@ -23,8 +23,7 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricLongModel2D;
+import cellularautomata.model2d.IsotropicSquareLongModelAsymmetricSection;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> which produces patterns very similar to those produced by Aether.
@@ -32,7 +31,7 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume
  *
  */
-public class SimpleLongNearAetherFive2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
+public class SimpleLongNearAetherFive2D implements IsotropicSquareLongModelAsymmetricSection {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -125,8 +124,8 @@ public class SimpleLongNearAetherFive2D implements SymmetricLongModel2D, Isotrop
 				//If there are any
 				if (neighbors.size() > 0) {
 					//Sort them by value in ascending order
-					boolean sorted = false;
-					while (!sorted) {
+					boolean sorted;
+					do {
 						sorted = true;
 						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 							Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -136,7 +135,7 @@ public class SimpleLongNearAetherFive2D implements SymmetricLongModel2D, Isotrop
 								neighbors.add(neighborIndex, next);
 							}
 						}
-					}
+					} while (!sorted);
 					boolean isFirst = true;
 					long previousNeighborValue = 0;
 					//Apply the algorithm
@@ -219,12 +218,7 @@ public class SimpleLongNearAetherFive2D implements SymmetricLongModel2D, Isotrop
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y) {
-		return getFromPosition(x, y);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -255,7 +249,7 @@ public class SimpleLongNearAetherFive2D implements SymmetricLongModel2D, Isotrop
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue;
 	}
 

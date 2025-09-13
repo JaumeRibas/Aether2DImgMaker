@@ -23,10 +23,9 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricBooleanModel2D;
+import cellularautomata.model2d.IsotropicSquareBooleanModelAsymmetricSection;
 
-public class SimpleLongAetherTopplingAlternationCompliance2D implements SymmetricBooleanModel2D, IsotropicSquareModelA {
+public class SimpleLongAetherTopplingAlternationCompliance2D implements IsotropicSquareBooleanModelAsymmetricSection {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -131,8 +130,8 @@ public class SimpleLongAetherTopplingAlternationCompliance2D implements Symmetri
 				//If there are any
 				if (neighbors.size() > 0) {					
 					//Sort them by value in ascending order
-					boolean sorted = false;
-					while (!sorted) {
+					boolean sorted;
+					do {
 						sorted = true;
 						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 							Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -142,7 +141,7 @@ public class SimpleLongAetherTopplingAlternationCompliance2D implements Symmetri
 								neighbors.add(neighborIndex, next);
 							}
 						}
-					}
+					} while (!sorted);
 					boolean isFirst = true;
 					long previousNeighborValue = 0;
 					//Apply the algorithm
@@ -242,12 +241,7 @@ public class SimpleLongAetherTopplingAlternationCompliance2D implements Symmetri
 	}
 	
 	@Override
-	public boolean getFromAsymmetricPosition(int x, int y) {
-		return getFromPosition(x, y);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -278,7 +272,7 @@ public class SimpleLongAetherTopplingAlternationCompliance2D implements Symmetri
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue + "/toppling_alternation_compliance";
 	}
 

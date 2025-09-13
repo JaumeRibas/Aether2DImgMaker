@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
+import cellularautomata.model2d.IsotropicSquareIntArrayModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 2D with a single source initial configuration
@@ -30,7 +30,7 @@ import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
  * @author Jaume
  *
  */
-public class IntSunflowerWithBackground2D extends IsotropicSquareIntArrayModelA {
+public class IntSunflowerWithBackground2D extends IsotropicSquareIntArrayModelAsymmetricSection {
 	
 	private final int initialValue;
 	private final int backgroundValue;
@@ -216,7 +216,7 @@ public class IntSunflowerWithBackground2D extends IsotropicSquareIntArrayModelA 
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return grid.length - 1;
 	}
 	
@@ -244,7 +244,7 @@ public class IntSunflowerWithBackground2D extends IsotropicSquareIntArrayModelA 
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue + "/" + backgroundValue;
 	}
 

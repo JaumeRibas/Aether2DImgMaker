@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model5d.IsotropicHypercubicLongArrayModel5DA;
+import cellularautomata.model5d.IsotropicHypercubicLongArrayModelAsymmetricSection5D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D with a single source initial configuration
@@ -29,7 +29,7 @@ import cellularautomata.model5d.IsotropicHypercubicLongArrayModel5DA;
  * @author Jaume
  *
  */
-public class LongAether5D extends IsotropicHypercubicLongArrayModel5DA {
+public class LongAether5D extends IsotropicHypercubicLongArrayModelAsymmetricSection5D {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -10570,7 +10570,7 @@ public class LongAether5D extends IsotropicHypercubicLongArrayModel5DA {
 	}
 
 	@Override
-	public int getAsymmetricMaxV() {
+	public int getSize() {
 		return maxV;
 	}
 
@@ -10612,7 +10612,7 @@ public class LongAether5D extends IsotropicHypercubicLongArrayModel5DA {
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/5D/" + initialValue;
 	}
 

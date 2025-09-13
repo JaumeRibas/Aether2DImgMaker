@@ -21,7 +21,7 @@ import java.io.IOException;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model4d.IsotropicHypercubicNumericArrayModel4DA;
+import cellularautomata.model4d.IsotropicHypercubicNumericArrayModelAsymmetricSection4D;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigInt> {
+public class BigIntAether4D extends IsotropicHypercubicNumericArrayModelAsymmetricSection4D<BigInt> {
 
 	private static final BigInt two = BigInt.valueOf(2);
 	private static final BigInt three = BigInt.valueOf(3);
@@ -43,7 +43,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 	private int maxW;
 	private Boolean changed = null;
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 
@@ -4158,7 +4158,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 	}
 
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getSize() {
 		return maxW;
 	}
 
@@ -4201,7 +4201,7 @@ public class BigIntAether4D extends IsotropicHypercubicNumericArrayModel4DA<BigI
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/4D/" + folderName;
 	}
 

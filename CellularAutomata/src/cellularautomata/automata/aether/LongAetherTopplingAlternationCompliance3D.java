@@ -21,9 +21,9 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model3d.IsotropicCubicBooleanArrayModelA;
+import cellularautomata.model3d.IsotropicCubicBooleanArrayModelAsymmetricSection;
 
-public class LongAetherTopplingAlternationCompliance3D extends IsotropicCubicBooleanArrayModelA {
+public class LongAetherTopplingAlternationCompliance3D extends IsotropicCubicBooleanArrayModelAsymmetricSection {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -2173,7 +2173,7 @@ public class LongAetherTopplingAlternationCompliance3D extends IsotropicCubicBoo
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -2217,7 +2217,7 @@ public class LongAetherTopplingAlternationCompliance3D extends IsotropicCubicBoo
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue + "/toppling_alternation_compliance";
 	}
 	

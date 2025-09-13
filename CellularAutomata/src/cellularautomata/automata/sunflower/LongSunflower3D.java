@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model3d.IsotropicCubicLongArrayModelA;
+import cellularautomata.model3d.IsotropicCubicLongArrayModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 3D with a single source initial configuration.
@@ -29,7 +29,7 @@ import cellularautomata.model3d.IsotropicCubicLongArrayModelA;
  * @author Jaume
  *
  */
-public class LongSunflower3D extends IsotropicCubicLongArrayModelA {
+public class LongSunflower3D extends IsotropicCubicLongArrayModelAsymmetricSection {
 	
 	private final long initialValue;
 	private long step;
@@ -719,7 +719,7 @@ public class LongSunflower3D extends IsotropicCubicLongArrayModelA {
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -747,7 +747,7 @@ public class LongSunflower3D extends IsotropicCubicLongArrayModelA {
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue + "/0";
 	}
 

@@ -21,10 +21,10 @@ import java.io.IOException;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model4d.IsotropicHypercubicBooleanArrayModel4DA;
+import cellularautomata.model4d.IsotropicHypercubicBooleanArrayModelAsymmetricSection4D;
 import cellularautomata.numbers.BigInt;
 
-public class BigIntAetherTopplingAlternationCompliance4D extends IsotropicHypercubicBooleanArrayModel4DA {
+public class BigIntAetherTopplingAlternationCompliance4D extends IsotropicHypercubicBooleanArrayModelAsymmetricSection4D {
 	
 	private static final BigInt two = BigInt.valueOf(2);
 	private static final BigInt three = BigInt.valueOf(3);
@@ -42,7 +42,7 @@ public class BigIntAetherTopplingAlternationCompliance4D extends IsotropicHyperc
 	private int maxW;
 	private Boolean changed = null;
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 
@@ -4625,7 +4625,7 @@ public class BigIntAetherTopplingAlternationCompliance4D extends IsotropicHyperc
 	}
 
 	@Override
-	public int getAsymmetricMaxW() {
+	public int getSize() {
 		return maxW;
 	}
 
@@ -4670,7 +4670,7 @@ public class BigIntAetherTopplingAlternationCompliance4D extends IsotropicHyperc
 	}	
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/4D/" + folderName + "/toppling_alternation_compliance";
 	}
 

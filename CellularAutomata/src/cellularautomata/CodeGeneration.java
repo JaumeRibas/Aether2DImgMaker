@@ -786,7 +786,7 @@ final class CodeGeneration {
 		}
 	}
 	
-	static void printBoundsMethodsForIsotropicHypercubicGrid(int dimension) {
+	static void printBoundsMethodsForIsotropicModelAsymmetricSection(int dimension) {
 		if (dimension > 0) {
 			String[] axisLabels = new String[dimension];
 			String[] axisUpperCaseLabels = new String[dimension];
@@ -799,14 +799,10 @@ final class CodeGeneration {
 			for (int currentAxis = 0; currentAxis < dimension; currentAxis++) {
 				String currentAxisUpperCaseLabel = axisUpperCaseLabels[currentAxis];
 				System.out.println("@Override" + nl + "default int getMin" + currentAxisUpperCaseLabel 
-						+ "() { return -getAsymmetricMax" + firstAxisUpperCaseLabel + "(); }" + nl);
-				System.out.println("@Override" + nl + "default int getMax" + currentAxisUpperCaseLabel 
-						+ "() { return getAsymmetricMax" + firstAxisUpperCaseLabel + "(); }" + nl);
-				System.out.println("@Override" + nl + "default int getAsymmetricMin" + currentAxisUpperCaseLabel 
 						+ "() { return 0; }" + nl);
 				if (currentAxis != 0) {
-					System.out.println("@Override" + nl + "default int getAsymmetricMax" + currentAxisUpperCaseLabel 
-							+ "() { return getAsymmetricMax" + firstAxisUpperCaseLabel + "(); }" + nl);
+					System.out.println("@Override" + nl + "default int getMax" + currentAxisUpperCaseLabel 
+							+ "() { return getMax" + firstAxisUpperCaseLabel + "(); }" + nl);
 				}
 				int[] otherAxes = new int[dimensionMinusOne];
 				int i = 0;
@@ -856,21 +852,21 @@ final class CodeGeneration {
 							}
 							if (isThereAGreaterAxis) {
 								System.out.println("@Override" + nl 
-								+ "default int getAsymmetricMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+								+ "default int getMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
 								+ ") { return " + axisLabels[smallestGreaterAxis] + "; }" + nl);
 							} else {
 								System.out.println("@Override" + nl 
-								+ "default int getAsymmetricMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+								+ "default int getMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
 								+ ") { return 0; }" + nl);
 							}
 							if (isThereASmallerAxis) {
 								System.out.println("@Override" + nl 
-								+ "default int getAsymmetricMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+								+ "default int getMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
 								+ ") { return " + axisLabels[greatestSmallerAxis] + "; }" + nl);
 							} else {
 								System.out.println("@Override" + nl 
-								+ "default int getAsymmetricMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
-								+ ") { return getAsymmetricMax" + firstAxisUpperCaseLabel + "(); }" + nl);
+								+ "default int getMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+								+ ") { return getMax" + firstAxisUpperCaseLabel + "(); }" + nl);
 							}
 						}
 						int index = indexes[i];
@@ -898,109 +894,183 @@ final class CodeGeneration {
 					}
 					if (currentAxis == dimensionMinusOne) {
 						System.out.println("@Override" + nl 
-						+ "default int getAsymmetricMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+						+ "default int getMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
 						+ ") { return 0; }" + nl);
 					} else {
 						System.out.println("@Override" + nl 
-						+ "default int getAsymmetricMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+						+ "default int getMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
 						+ ") { return " + axisLabels[currentAxis + 1] + "; }" + nl);
 					}
 					if (currentAxis == 0) {
 						System.out.println("@Override" + nl 
-						+ "default int getAsymmetricMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
-						+ ") { return getAsymmetricMax" + currentAxisUpperCaseLabel + "(); }" + nl);
+						+ "default int getMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+						+ ") { return getMax" + currentAxisUpperCaseLabel + "(); }" + nl);
 					} else {
 						System.out.println("@Override" + nl 
-						+ "default int getAsymmetricMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+						+ "default int getMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
 						+ ") { return " + axisLabels[currentAxis - 1] + "; }" + nl);
 					}	
 				}
 			}
+			System.out.println("@Override" + nl 
+					+ "default int getMaxCoordinate(int axis) { return IsotropicHypercubicModelAsymmetricSection.super.getMaxCoordinate(axis); }" + nl + nl
+					+ "@Override" + nl 
+					+ "default int getMaxCoordinate(int axis, PartialCoordinates coordinates) { return IsotropicHypercubicModelAsymmetricSection.super.getMaxCoordinate(axis, coordinates); }" + nl + nl
+					+ "@Override" + nl 
+					+ "default int getMinCoordinate(int axis) { return IsotropicHypercubicModelAsymmetricSection.super.getMinCoordinate(axis); }" + nl + nl
+					+ "@Override" + nl 
+					+ "default int getMinCoordinate(int axis, PartialCoordinates coordinates) { return IsotropicHypercubicModelAsymmetricSection.super.getMinCoordinate(axis, coordinates); }");
 		}
 	}
 	
-	static void printBoundsMethodsForAsymmetricSection(int dimension) {
-		String[] axisLabels = new String[dimension];
+//	static void printBoundsMethodsForOffCenterIsotropicModelAsymmetricSection(int dimension) {TODO
+//		if (dimension > 0) {
+//			String[] axisLabels = new String[dimension];
+//			String[] axisUpperCaseLabels = new String[dimension];
+//			for (int axis = 0; axis < dimension; axis++) {
+//				axisLabels[axis] = Utils.getAxisLabel(dimension, axis);
+//				axisUpperCaseLabels[axis] = Utils.getUpperCaseAxisLabel(dimension, axis);
+//			}
+//			int dimensionMinusOne = dimension - 1;
+//			String firstAxisUpperCaseLabel = axisUpperCaseLabels[0];
+//			for (int currentAxis = 0; currentAxis < dimension; currentAxis++) {
+//				String currentAxisUpperCaseLabel = axisUpperCaseLabels[currentAxis];
+//				System.out.println("@Override" + nl + "default int getMin" + currentAxisUpperCaseLabel 
+//						+ "() { return 0; }" + nl);
+//				if (currentAxis != 0) {
+//					System.out.println("@Override" + nl + "default int getMax" + currentAxisUpperCaseLabel 
+//							+ "() { return getMax" + firstAxisUpperCaseLabel + "(); }" + nl);
+//				}
+//				int[] otherAxes = new int[dimensionMinusOne];
+//				int i = 0;
+//				for (; i < currentAxis; i++) {
+//					otherAxes[i] = i;
+//				}
+//				for (int j = currentAxis + 1; i < dimensionMinusOne; i = j, j++) {
+//					otherAxes[i] = j;
+//				}
+//				int otherAxesCountMinusOne = otherAxes.length - 1;
+//				for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
+//					int[] indexes = new int[indexCount];
+//					for (i = 1; i < indexes.length; i++) {
+//						indexes[i] = i;
+//					}
+//					i = indexCountMinusOne;
+//					while (i > -1) {
+//						if (i == indexCountMinusOne) {
+//							boolean isThereAGreaterAxis = false;
+//							boolean isThereASmallerAxis = false;
+//							int smallestGreaterAxis = 0, greatestSmallerAxis = 0;
+//							int otherAxis = otherAxes[indexes[0]];
+//							if (otherAxis > currentAxis) {
+//								isThereAGreaterAxis = true;
+//								smallestGreaterAxis = otherAxis;
+//							} else {
+//								isThereASmallerAxis = true;
+//								greatestSmallerAxis = otherAxis;
+//							}
+//							StringBuilder otherAxesInMethodName = new StringBuilder();
+//							StringBuilder otherAxesParams = new StringBuilder();
+//							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+//							otherAxesParams.append("int ").append(axisLabels[otherAxis]);
+//							for (int j = 1; j < indexCount; j++) {
+//								otherAxis = otherAxes[indexes[j]];
+//								if (otherAxis > currentAxis) {
+//									if (!isThereAGreaterAxis) {
+//										isThereAGreaterAxis = true;
+//										smallestGreaterAxis = otherAxis;
+//									}
+//								} else {
+//									isThereASmallerAxis = true;
+//									greatestSmallerAxis = otherAxis;
+//								}
+//								otherAxesInMethodName.append(axisUpperCaseLabels[otherAxis]);
+//								otherAxesParams.append(", int ").append(axisLabels[otherAxis]);
+//							}
+//							if (isThereAGreaterAxis) {
+//								System.out.println("@Override" + nl 
+//								+ "default int getMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+//								+ ") { return " + axisLabels[smallestGreaterAxis] + "; }" + nl);
+//							} else {
+//								System.out.println("@Override" + nl 
+//								+ "default int getMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+//								+ ") { return 0; }" + nl);
+//							}
+//							if (isThereASmallerAxis) {
+//								System.out.println("@Override" + nl 
+//								+ "default int getMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+//								+ ") { return " + axisLabels[greatestSmallerAxis] + "; }" + nl);
+//							} else {
+//								System.out.println("@Override" + nl 
+//								+ "default int getMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
+//								+ ") { return getMax" + firstAxisUpperCaseLabel + "(); }" + nl);
+//							}
+//						}
+//						int index = indexes[i];
+//						int max = otherAxesCountMinusOne - indexCountMinusOne + i;
+//						if (index < max) {
+//							index++;
+//							indexes[i] = index;
+//							i = indexCountMinusOne;
+//						} else {
+//							if (i > 0) {
+//								int newIndex = indexes[i - 1] + 2;
+//								if (newIndex < max) {
+//									indexes[i] = newIndex;
+//								}
+//							}
+//							i--;
+//						}
+//					}
+//				}
+//				if (otherAxes.length > 0) {
+//					StringBuilder otherAxesParams = new StringBuilder();
+//					otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
+//					for (i = 1; i < otherAxes.length; i++) {
+//						otherAxesParams.append(", int ").append(axisLabels[otherAxes[i]]);
+//					}
+//					if (currentAxis == dimensionMinusOne) {
+//						System.out.println("@Override" + nl 
+//						+ "default int getMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+//						+ ") { return 0; }" + nl);
+//					} else {
+//						System.out.println("@Override" + nl 
+//						+ "default int getMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+//						+ ") { return " + axisLabels[currentAxis + 1] + "; }" + nl);
+//					}
+//					if (currentAxis == 0) {
+//						System.out.println("@Override" + nl 
+//						+ "default int getMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+//						+ ") { return getMax" + currentAxisUpperCaseLabel + "(); }" + nl);
+//					} else {
+//						System.out.println("@Override" + nl 
+//						+ "default int getMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
+//						+ ") { return " + axisLabels[currentAxis - 1] + "; }" + nl);
+//					}	
+//				}
+//			}
+//			System.out.println("@Override" + nl 
+//					+ "default int getMaxCoordinate(int axis) { return Model" + dimension + "D.super.getMaxCoordinate(axis); }" + nl + nl
+//					+ "@Override" + nl 
+//					+ "default int getMaxCoordinate(int axis, PartialCoordinates coordinates) { return Model" + dimension + "D.super.getMaxCoordinate(axis, coordinates); }" + nl + nl
+//					+ "@Override" + nl 
+//					+ "default int getMinCoordinate(int axis) { return Model" + dimension + "D.super.getMinCoordinate(axis); }" + nl + nl
+//					+ "@Override" + nl 
+//					+ "default int getMinCoordinate(int axis, PartialCoordinates coordinates) { return Model" + dimension + "D.super.getMinCoordinate(axis, coordinates); }");
+//		}
+//	}
+	
+	static void printBoundsMethodsForIsotropicModel	(int dimension) {
 		String[] axisUpperCaseLabels = new String[dimension];
 		for (int i = 0; i < dimension; i++) {
-			axisLabels[i] = Utils.getAxisLabel(dimension, i);
 			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
 		}
-		int dimensionMinusOne = dimension - 1;
 		for (int i = 0; i < dimension; i++) {
 			String currentAxisUpperCaseLabel = axisUpperCaseLabels[i];
 			System.out.println("@Override" + nl + "public int getMin" + currentAxisUpperCaseLabel 
-					+ "() { return source.getAsymmetricMin" + currentAxisUpperCaseLabel + "(); }" + nl);
+					+ "() { return -asymmetricSection.getSize(); }" + nl);
 			System.out.println("@Override" + nl + "public int getMax" + currentAxisUpperCaseLabel 
-					+ "() { return source.getAsymmetricMax" + currentAxisUpperCaseLabel + "(); }" + nl);
-			int[] otherAxes = new int[dimensionMinusOne];
-			int j = 0;
-			for (; j < i; j++) {
-				otherAxes[j] = j;
-			}
-			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
-				otherAxes[j] = k;
-			}
-			int otherAxesCountMinusOne = otherAxes.length - 1;
-			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
-				int[] indexes = new int[indexCount];
-				for (j = 1; j < indexes.length; j++) {
-					indexes[j] = j;
-				}
-				j = indexCountMinusOne;
-				while (j > -1) {
-					if (j == indexCountMinusOne) {
-						StringBuilder otherAxesInMethodName = new StringBuilder();
-						StringBuilder otherAxesParams = new StringBuilder();
-						StringBuilder otherAxesCsv = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
-						otherAxesCsv.append(axisLabels[otherAxes[indexes[0]]]);
-						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
-							otherAxesCsv.append(", ").append(axisLabels[otherAxes[indexes[k]]]);
-						}
-						System.out.println("@Override" + nl 
-						+ "public int getMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
-						+ ") { return source.getAsymmetricMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesCsv + "); }" + nl);
-						System.out.println("@Override" + nl 
-						+ "public int getMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams 
-						+ ") { return source.getAsymmetricMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesCsv + "); }" + nl);
-					}
-					int index = indexes[j];
-					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
-					if (index < max) {
-						index++;
-						indexes[j] = index;
-						j = indexCountMinusOne;
-					} else {
-						if (j > 0) {
-							int newIndex = indexes[j - 1] + 2;
-							if (newIndex < max) {
-								indexes[j] = newIndex;
-							}
-						}
-						j--;
-					}
-				}
-			}
-			if (otherAxes.length > 0) {
-				StringBuilder otherAxesParams = new StringBuilder();
-				StringBuilder otherAxesCsv = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
-				otherAxesCsv.append(axisLabels[otherAxes[0]]);
-				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
-					otherAxesCsv.append(", ").append(axisLabels[otherAxes[j]]);
-				}
-				System.out.println("@Override" + nl 
-				+ "public int getMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
-				+ ") { return source.getAsymmetricMin" + currentAxisUpperCaseLabel + '(' + otherAxesCsv + "); }" + nl);
-				System.out.println("@Override" + nl 
-				+ "public int getMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams 
-				+ ") { return source.getAsymmetricMax" + currentAxisUpperCaseLabel + '(' + otherAxesCsv + "); }" + nl);	
-			}
+					+ "() { return asymmetricSection.getSize(); }" + nl);
 		}
 	}
 	
@@ -1354,75 +1424,6 @@ final class CodeGeneration {
 		}
 	}
 	
-	static void printAsymmetricBoundsMethodsForInterface(int dimension) {
-		String[] axisLabels = new String[dimension];
-		String[] axisUpperCaseLabels = new String[dimension];
-		for (int i = 0; i < dimension; i++) {
-			axisLabels[i] = Utils.getAxisLabel(dimension, i);
-			axisUpperCaseLabels[i] = Utils.getUpperCaseAxisLabel(dimension, i);
-		}
-		int dimensionMinusOne = dimension - 1;
-		for (int i = 0; i < dimension; i++) {
-			String currentAxisUpperCaseLabel = axisUpperCaseLabels[i];
-			System.out.println("int getAsymmetricMin" + currentAxisUpperCaseLabel + "();" + nl);
-			System.out.println("int getAsymmetricMax" + currentAxisUpperCaseLabel + "();" + nl);
-			int[] otherAxes = new int[dimensionMinusOne];
-			int j = 0;
-			for (; j < i; j++) {
-				otherAxes[j] = j;
-			}
-			for (int k = i + 1; j < dimensionMinusOne; j = k, k++) {
-				otherAxes[j] = k;
-			}
-			int otherAxesCountMinusOne = otherAxes.length - 1;
-			for (int indexCount = 1, indexCountMinusOne = 0; indexCount < otherAxes.length; indexCountMinusOne = indexCount, indexCount++) {
-				int[] indexes = new int[indexCount];
-				for (j = 1; j < indexes.length; j++) {
-					indexes[j] = j;
-				}
-				j = indexCountMinusOne;
-				while (j > -1) {
-					if (j == indexCountMinusOne) {
-						StringBuilder otherAxesInMethodName = new StringBuilder();
-						StringBuilder otherAxesParams = new StringBuilder();
-						otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[0]]]);
-						otherAxesParams.append("int ").append(axisLabels[otherAxes[indexes[0]]]);
-						for (int k = 1; k < indexCount; k++) {
-							otherAxesInMethodName.append(axisUpperCaseLabels[otherAxes[indexes[k]]]);
-							otherAxesParams.append(", int ").append(axisLabels[otherAxes[indexes[k]]]);
-						}
-						System.out.println("int getAsymmetricMin" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams + ");" + nl);
-						System.out.println("int getAsymmetricMax" + currentAxisUpperCaseLabel + "At" + otherAxesInMethodName + '(' + otherAxesParams + ");" + nl);
-					}
-					int index = indexes[j];
-					int max = otherAxesCountMinusOne - indexCountMinusOne + j;
-					if (index < max) {
-						index++;
-						indexes[j] = index;
-						j = indexCountMinusOne;
-					} else {
-						if (j > 0) {
-							int newIndex = indexes[j - 1] + 2;
-							if (newIndex < max) {
-								indexes[j] = newIndex;
-							}
-						}
-						j--;
-					}
-				}
-			}
-			if (otherAxes.length > 0) {
-				StringBuilder otherAxesParams = new StringBuilder();
-				otherAxesParams.append("int ").append(axisLabels[otherAxes[0]]);
-				for (j = 1; j < otherAxes.length; j++) {
-					otherAxesParams.append(", int ").append(axisLabels[otherAxes[j]]);
-				}
-				System.out.println("int getAsymmetricMin" + currentAxisUpperCaseLabel + '(' + otherAxesParams + ");" + nl);
-				System.out.println("int getAsymmetricMax" + currentAxisUpperCaseLabel + '(' + otherAxesParams + ");" + nl);
-			}
-		}
-	}
-	
 	static void printBoundsMethodsForInterface(int dimension) {
 		String[] axisLabels = new String[dimension];
 		String[] axisUpperCaseLabels = new String[dimension];
@@ -1734,7 +1735,7 @@ final class CodeGeneration {
 	static void printDiagonalCrossSectionClassContent(int dimension, int firstAxis, int secondAxis) {
 		validateDiagonalAxes(firstAxis, secondAxis);
 		String offsetName =  Utils.getAxisLabel(dimension, secondAxis) + "OffsetFrom" + Utils.getUpperCaseAxisLabel(dimension, firstAxis);
-		StringBuilder propsAndConstructor = new StringBuilder("protected Source_Type source;").append(nl).append("protected int slope;").append(nl).append("protected int ")
+		StringBuilder propsAndConstructor = new StringBuilder("protected final Source_Type source;").append(nl).append("protected final int slope;").append(nl).append("protected final int ")
 				.append(offsetName).append(';').append(nl);
 		int axis = 0;
 		for (; axis != secondAxis; axis++) {
@@ -2243,9 +2244,9 @@ final class CodeGeneration {
 	}
 	
 	static void generalize(TypeOfAnysotropicRegionVonNeumannNeighborhoodWithSymmetries generalType, TypeOfAnysotropicRegionVonNeumannNeighborhoodWithSymmetries type) {
-		for (int coord = 0; coord < type.coordinates.length; coord++) {
-			if (generalType.coordinates[coord] != type.coordinates[coord]) {
-				generalType.coordinates[coord] = null;//it doesn't repeat itself so set it to null
+		for (int axis = 0; axis < type.coordinates.length; axis++) {
+			if (generalType.coordinates[axis] != type.coordinates[axis]) {
+				generalType.coordinates[axis] = null;//it doesn't repeat itself so set it to null
 			}
 		}
 		if (type.hasSymmetries) {
@@ -2429,9 +2430,9 @@ final class CodeGeneration {
 	}
 	
 	static void generalize(TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries generalType, TypeOfAnysotropicRegionVonNeumannNeighborhoodWithBidirectionalSymmetries type) {
-		for (int coord = 0; coord < type.coordinates.length; coord++) {
-			if (generalType.coordinates[coord] != type.coordinates[coord]) {
-				generalType.coordinates[coord] = null;//it doesn't repeat itself so set it to null
+		for (int axis = 0; axis < type.coordinates.length; axis++) {
+			if (generalType.coordinates[axis] != type.coordinates[axis]) {
+				generalType.coordinates[axis] = null;//it doesn't repeat itself so set it to null
 			}
 		}
 		if (type.hasOutgoingSymmetries || type.hasIncomingSymmetries) {
@@ -2926,11 +2927,11 @@ final class CodeGeneration {
 	
 	static int getSymmetricNeighborsCount(int[] coords, int[] compareCoords) {
 		int count = 0;
-		for (int coord = 0; coord < coords.length; coord++) {
+		for (int axis = 0; axis < coords.length; axis++) {
 			int[] greaterNeighborCoords = coords.clone();
 			int[] smallerNeighborCoords = coords.clone();
-			greaterNeighborCoords[coord]++;
-			smallerNeighborCoords[coord]--;
+			greaterNeighborCoords[axis]++;
+			smallerNeighborCoords[axis]--;
 			if (!Arrays.equals(greaterNeighborCoords, compareCoords)) {
 				if (Arrays.equals(getAsymmetricCoords(greaterNeighborCoords), compareCoords)) {
 					count++;

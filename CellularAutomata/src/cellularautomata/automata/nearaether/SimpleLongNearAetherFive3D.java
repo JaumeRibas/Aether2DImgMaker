@@ -23,8 +23,7 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricLongModel3D;
+import cellularautomata.model3d.IsotropicCubicLongModelAsymmetricSection;
 
 /**
  * Implementation of a cellular automaton very similar to <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> which produces patterns very similar to those produced by Aether.
@@ -32,7 +31,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class SimpleLongNearAetherFive3D implements SymmetricLongModel3D, IsotropicCubicModelA {	
+public class SimpleLongNearAetherFive3D implements IsotropicCubicLongModelAsymmetricSection {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -3689348814741910323L;
@@ -135,8 +134,8 @@ public class SimpleLongNearAetherFive3D implements SymmetricLongModel3D, Isotrop
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
-						boolean sorted = false;
-						while (!sorted) {
+						boolean sorted;
+						do {
 							sorted = true;
 							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 								Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -146,7 +145,7 @@ public class SimpleLongNearAetherFive3D implements SymmetricLongModel3D, Isotrop
 									neighbors.add(neighborIndex, next);
 								}
 							}
-						}
+						} while (!sorted);
 						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
 						long previousNeighborValue = 0;
@@ -236,12 +235,7 @@ public class SimpleLongNearAetherFive3D implements SymmetricLongModel3D, Isotrop
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -277,7 +271,7 @@ public class SimpleLongNearAetherFive3D implements SymmetricLongModel3D, Isotrop
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue;
 	}
 }

@@ -23,8 +23,7 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricBooleanModel1D;
+import cellularautomata.model1d.IsotropicBooleanModelAsymmetricSection1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a single source initial configuration, for review and testing purposes
@@ -32,7 +31,7 @@ import cellularautomata.model1d.SymmetricBooleanModel1D;
  * @author Jaume
  *
  */
-public class SimpleLongAetherTopplingAlternationCompliance1D implements SymmetricBooleanModel1D, IsotropicModel1DA {	
+public class SimpleLongAetherTopplingAlternationCompliance1D implements IsotropicBooleanModelAsymmetricSection1D {	
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -205,12 +204,7 @@ public class SimpleLongAetherTopplingAlternationCompliance1D implements Symmetri
 	}
 	
 	@Override
-	public boolean getFromAsymmetricPosition(int x) {
-		return getFromPosition(x);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -241,7 +235,7 @@ public class SimpleLongAetherTopplingAlternationCompliance1D implements Symmetri
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/1D/" + initialValue + "/toppling_alternation_compliance";
 	}
 

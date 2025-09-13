@@ -23,7 +23,7 @@ import java.util.Arrays;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareNumericArrayModelA;
+import cellularautomata.model2d.IsotropicSquareNumericArrayModelAsymmetricSection;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -32,7 +32,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether2D extends IsotropicSquareNumericArrayModelA<BigInt> {
+public class BigIntAether2D extends IsotropicSquareNumericArrayModelAsymmetricSection<BigInt> {
 	
 	private static final BigInt two = BigInt.valueOf(2);
 	private static final BigInt three = BigInt.valueOf(3);
@@ -44,7 +44,7 @@ public class BigIntAether2D extends IsotropicSquareNumericArrayModelA<BigInt> {
 	private int maxX;
 	private Boolean changed = null;
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 	
@@ -1282,7 +1282,7 @@ public class BigIntAether2D extends IsotropicSquareNumericArrayModelA<BigInt> {
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -1306,7 +1306,7 @@ public class BigIntAether2D extends IsotropicSquareNumericArrayModelA<BigInt> {
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + folderName;
 	}
 	

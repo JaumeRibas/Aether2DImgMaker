@@ -38,67 +38,67 @@ import cellularautomata.PartialCoordinates;
 import cellularautomata.Utils;
 import cellularautomata.model.IntModel;
 import cellularautomata.model.Model;
-import cellularautomata.model.SymmetricModel;
+import cellularautomata.model.IsotropicHypercubicModelAsymmetricSection;
 import cellularautomata.model2d.BooleanModel2D;
-import cellularautomata.model2d.CustomSquareBooleanArrayModel2StepsDelta;
-import cellularautomata.model2d.CustomSquareBooleanArrayModelDelta;
-import cellularautomata.model2d.CustomSquareIntArrayModel2StepsDelta;
-import cellularautomata.model2d.CustomSquareIntArrayModelDelta;
-import cellularautomata.model2d.CustomSquareLongArrayModel2StepsDelta;
-import cellularautomata.model2d.CustomSquareLongArrayModelDelta;
-import cellularautomata.model2d.CustomSquareNumericArrayModel2StepsDelta;
-import cellularautomata.model2d.CustomSquareNumericArrayModelDelta;
+import cellularautomata.model2d.CustomIsotropicBooleanArrayModel2D2StepsDelta;
+import cellularautomata.model2d.CustomIsotropicBooleanArrayModel2DDelta;
+import cellularautomata.model2d.CustomIsotropicIntArrayModel2D2StepsDelta;
+import cellularautomata.model2d.CustomIsotropicIntArrayModel2DDelta;
+import cellularautomata.model2d.CustomIsotropicLongArrayModel2D2StepsDelta;
+import cellularautomata.model2d.CustomIsotropicLongArrayModel2DDelta;
+import cellularautomata.model2d.CustomIsotropicNumericArrayModel2D2StepsDelta;
+import cellularautomata.model2d.CustomIsotropicNumericArrayModel2DDelta;
 import cellularautomata.model2d.IntModel2D;
 import cellularautomata.model2d.IntModelAs2D;
-import cellularautomata.model2d.IsotropicSquareBooleanArrayModelA;
-import cellularautomata.model2d.IsotropicSquareIntArrayModelA;
-import cellularautomata.model2d.IsotropicSquareLongArrayModelA;
-import cellularautomata.model2d.IsotropicSquareNumericArrayModelA;
+import cellularautomata.model2d.IsotropicSquareBooleanArrayModelAsymmetricSection;
+import cellularautomata.model2d.IsotropicSquareIntArrayModelAsymmetricSection;
+import cellularautomata.model2d.IsotropicSquareLongArrayModelAsymmetricSection;
+import cellularautomata.model2d.IsotropicSquareNumericArrayModelAsymmetricSection;
 import cellularautomata.model2d.LongModel2D;
 import cellularautomata.model2d.NumericModel2D;
 import cellularautomata.model3d.BooleanModel3D;
-import cellularautomata.model3d.CustomCubicBooleanArrayModel2StepsDelta;
-import cellularautomata.model3d.CustomCubicBooleanArrayModelDelta;
-import cellularautomata.model3d.CustomCubicIntArrayModel2StepsDelta;
-import cellularautomata.model3d.CustomCubicIntArrayModelDelta;
-import cellularautomata.model3d.CustomCubicLongArrayModel2StepsDelta;
-import cellularautomata.model3d.CustomCubicLongArrayModelDelta;
-import cellularautomata.model3d.CustomCubicNumericArrayModel2StepsDelta;
-import cellularautomata.model3d.CustomCubicNumericArrayModelDelta;
+import cellularautomata.model3d.CustomIsotropicBooleanArrayModel3D2StepsDelta;
+import cellularautomata.model3d.CustomIsotropicBooleanArrayModel3DDelta;
+import cellularautomata.model3d.CustomIsotropicIntArrayModel3D2StepsDelta;
+import cellularautomata.model3d.CustomIsotropicIntArrayModel3DDelta;
+import cellularautomata.model3d.CustomIsotropicLongArrayModel3D2StepsDelta;
+import cellularautomata.model3d.CustomIsotropicLongArrayModel3DDelta;
+import cellularautomata.model3d.CustomIsotropicNumericArrayModel3D2StepsDelta;
+import cellularautomata.model3d.CustomIsotropicNumericArrayModel3DDelta;
 import cellularautomata.model3d.IntModel3D;
 import cellularautomata.model3d.IntModelAs3D;
-import cellularautomata.model3d.IsotropicCubicBooleanArrayModelA;
-import cellularautomata.model3d.IsotropicCubicIntArrayModelA;
-import cellularautomata.model3d.IsotropicCubicLongArrayModelA;
-import cellularautomata.model3d.IsotropicCubicNumericArrayModelA;
+import cellularautomata.model3d.IsotropicCubicBooleanArrayModelAsymmetricSection;
+import cellularautomata.model3d.IsotropicCubicIntArrayModelAsymmetricSection;
+import cellularautomata.model3d.IsotropicCubicLongArrayModelAsymmetricSection;
+import cellularautomata.model3d.IsotropicCubicNumericArrayModelAsymmetricSection;
 import cellularautomata.model3d.LongModel3D;
 import cellularautomata.model3d.Model3D;
 import cellularautomata.model3d.ModelAs3D;
 import cellularautomata.model3d.NumericModel3D;
-import cellularautomata.model4d.CustomHypercubicBooleanArrayModel4D2StepsDelta;
-import cellularautomata.model4d.CustomHypercubicBooleanArrayModel4DDelta;
-import cellularautomata.model4d.CustomHypercubicIntArrayModel4D2StepsDelta;
-import cellularautomata.model4d.CustomHypercubicIntArrayModel4DDelta;
-import cellularautomata.model4d.CustomHypercubicLongArrayModel4D2StepsDelta;
-import cellularautomata.model4d.CustomHypercubicLongArrayModel4DDelta;
-import cellularautomata.model4d.CustomHypercubicNumericArrayModel4D2StepsDelta;
-import cellularautomata.model4d.CustomHypercubicNumericArrayModel4DDelta;
-import cellularautomata.model4d.IsotropicHypercubicBooleanArrayModel4DA;
-import cellularautomata.model4d.IsotropicHypercubicIntArrayModel4DA;
-import cellularautomata.model4d.IsotropicHypercubicLongArrayModel4DA;
-import cellularautomata.model4d.IsotropicHypercubicNumericArrayModel4DA;
-import cellularautomata.model5d.CustomHypercubicBooleanArrayModel5D2StepsDelta;
-import cellularautomata.model5d.CustomHypercubicBooleanArrayModel5DDelta;
-import cellularautomata.model5d.CustomHypercubicIntArrayModel5D2StepsDelta;
-import cellularautomata.model5d.CustomHypercubicIntArrayModel5DDelta;
-import cellularautomata.model5d.CustomHypercubicLongArrayModel5D2StepsDelta;
-import cellularautomata.model5d.CustomHypercubicLongArrayModel5DDelta;
-import cellularautomata.model5d.CustomHypercubicNumericArrayModel5D2StepsDelta;
-import cellularautomata.model5d.CustomHypercubicNumericArrayModel5DDelta;
-import cellularautomata.model5d.IsotropicHypercubicBooleanArrayModel5DA;
-import cellularautomata.model5d.IsotropicHypercubicIntArrayModel5DA;
-import cellularautomata.model5d.IsotropicHypercubicLongArrayModel5DA;
-import cellularautomata.model5d.IsotropicHypercubicNumericArrayModel5DA;
+import cellularautomata.model4d.CustomIsotropicBooleanArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomIsotropicBooleanArrayModel4DDelta;
+import cellularautomata.model4d.CustomIsotropicIntArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomIsotropicIntArrayModel4DDelta;
+import cellularautomata.model4d.CustomIsotropicLongArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomIsotropicLongArrayModel4DDelta;
+import cellularautomata.model4d.CustomIsotropicNumericArrayModel4D2StepsDelta;
+import cellularautomata.model4d.CustomIsotropicNumericArrayModel4DDelta;
+import cellularautomata.model4d.IsotropicHypercubicBooleanArrayModelAsymmetricSection4D;
+import cellularautomata.model4d.IsotropicHypercubicIntArrayModelAsymmetricSection4D;
+import cellularautomata.model4d.IsotropicHypercubicLongArrayModelAsymmetricSection4D;
+import cellularautomata.model4d.IsotropicHypercubicNumericArrayModelAsymmetricSection4D;
+import cellularautomata.model5d.CustomIsotropicBooleanArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomIsotropicBooleanArrayModel5DDelta;
+import cellularautomata.model5d.CustomIsotropicIntArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomIsotropicIntArrayModel5DDelta;
+import cellularautomata.model5d.CustomIsotropicLongArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomIsotropicLongArrayModel5DDelta;
+import cellularautomata.model5d.CustomIsotropicNumericArrayModel5D2StepsDelta;
+import cellularautomata.model5d.CustomIsotropicNumericArrayModel5DDelta;
+import cellularautomata.model5d.IsotropicHypercubicBooleanArrayModelAsymmetricSection5D;
+import cellularautomata.model5d.IsotropicHypercubicIntArrayModelAsymmetricSection5D;
+import cellularautomata.model5d.IsotropicHypercubicLongArrayModelAsymmetricSection5D;
+import cellularautomata.model5d.IsotropicHypercubicNumericArrayModelAsymmetricSection5D;
 import cellularautomata.numbers.BigInt;
 
 public class AetherImgMaker {
@@ -417,47 +417,47 @@ public class AetherImgMaker {
 				int dimension = model.getGridDimension();
 				switch (dimension) {
 					case 2:
-						if (model instanceof IsotropicSquareBooleanArrayModelA) {
-							result = new CustomSquareBooleanArrayModelDelta((IsotropicSquareBooleanArrayModelA)model);			
-						} else if (model instanceof IsotropicSquareIntArrayModelA) {
-							result = new CustomSquareIntArrayModelDelta((IsotropicSquareIntArrayModelA)model);			
-						} else if (model instanceof IsotropicSquareLongArrayModelA) {
-							result = new CustomSquareLongArrayModelDelta((IsotropicSquareLongArrayModelA)model);
-						} else if (model instanceof IsotropicSquareNumericArrayModelA) {
-							result = new CustomSquareNumericArrayModelDelta<BigInt>((IsotropicSquareNumericArrayModelA<BigInt>)model);
+						if (model instanceof IsotropicSquareBooleanArrayModelAsymmetricSection) {
+							result = new CustomIsotropicBooleanArrayModel2DDelta((IsotropicSquareBooleanArrayModelAsymmetricSection)model);			
+						} else if (model instanceof IsotropicSquareIntArrayModelAsymmetricSection) {
+							result = new CustomIsotropicIntArrayModel2DDelta((IsotropicSquareIntArrayModelAsymmetricSection)model);			
+						} else if (model instanceof IsotropicSquareLongArrayModelAsymmetricSection) {
+							result = new CustomIsotropicLongArrayModel2DDelta((IsotropicSquareLongArrayModelAsymmetricSection)model);
+						} else if (model instanceof IsotropicSquareNumericArrayModelAsymmetricSection) {
+							result = new CustomIsotropicNumericArrayModel2DDelta<BigInt>((IsotropicSquareNumericArrayModelAsymmetricSection<BigInt>)model);
 						}
 						break;
 					case 3:
-						if (model instanceof IsotropicCubicBooleanArrayModelA) {
-							result = new CustomCubicBooleanArrayModelDelta((IsotropicCubicBooleanArrayModelA)model);
-						} else if (model instanceof IsotropicCubicIntArrayModelA) {
-							result = new CustomCubicIntArrayModelDelta((IsotropicCubicIntArrayModelA)model);
-						} else if (model instanceof IsotropicCubicLongArrayModelA) {
-							result = new CustomCubicLongArrayModelDelta((IsotropicCubicLongArrayModelA)model);
-						} else if (model instanceof IsotropicCubicNumericArrayModelA) {
-							result = new CustomCubicNumericArrayModelDelta<BigInt>((IsotropicCubicNumericArrayModelA<BigInt>)model);
+						if (model instanceof IsotropicCubicBooleanArrayModelAsymmetricSection) {
+							result = new CustomIsotropicBooleanArrayModel3DDelta((IsotropicCubicBooleanArrayModelAsymmetricSection)model);
+						} else if (model instanceof IsotropicCubicIntArrayModelAsymmetricSection) {
+							result = new CustomIsotropicIntArrayModel3DDelta((IsotropicCubicIntArrayModelAsymmetricSection)model);
+						} else if (model instanceof IsotropicCubicLongArrayModelAsymmetricSection) {
+							result = new CustomIsotropicLongArrayModel3DDelta((IsotropicCubicLongArrayModelAsymmetricSection)model);
+						} else if (model instanceof IsotropicCubicNumericArrayModelAsymmetricSection) {
+							result = new CustomIsotropicNumericArrayModel3DDelta<BigInt>((IsotropicCubicNumericArrayModelAsymmetricSection<BigInt>)model);
 						}
 						break;		
 					case 4:
-						if (model instanceof IsotropicHypercubicBooleanArrayModel4DA) {
-							result = new CustomHypercubicBooleanArrayModel4DDelta((IsotropicHypercubicBooleanArrayModel4DA)model);
-						} else if (model instanceof IsotropicHypercubicIntArrayModel4DA) {
-							result = new CustomHypercubicIntArrayModel4DDelta((IsotropicHypercubicIntArrayModel4DA)model);
-						} else if (model instanceof IsotropicHypercubicLongArrayModel4DA) {
-							result = new CustomHypercubicLongArrayModel4DDelta((IsotropicHypercubicLongArrayModel4DA)model);
-						} else if (model instanceof IsotropicHypercubicNumericArrayModel4DA) {
-							result = new CustomHypercubicNumericArrayModel4DDelta<BigInt>((IsotropicHypercubicNumericArrayModel4DA<BigInt>)model);
+						if (model instanceof IsotropicHypercubicBooleanArrayModelAsymmetricSection4D) {
+							result = new CustomIsotropicBooleanArrayModel4DDelta((IsotropicHypercubicBooleanArrayModelAsymmetricSection4D)model);
+						} else if (model instanceof IsotropicHypercubicIntArrayModelAsymmetricSection4D) {
+							result = new CustomIsotropicIntArrayModel4DDelta((IsotropicHypercubicIntArrayModelAsymmetricSection4D)model);
+						} else if (model instanceof IsotropicHypercubicLongArrayModelAsymmetricSection4D) {
+							result = new CustomIsotropicLongArrayModel4DDelta((IsotropicHypercubicLongArrayModelAsymmetricSection4D)model);
+						} else if (model instanceof IsotropicHypercubicNumericArrayModelAsymmetricSection4D) {
+							result = new CustomIsotropicNumericArrayModel4DDelta<BigInt>((IsotropicHypercubicNumericArrayModelAsymmetricSection4D<BigInt>)model);
 						}
 						break;			
 					case 5:
-						if (model instanceof IsotropicHypercubicBooleanArrayModel5DA) {
-							result = new CustomHypercubicBooleanArrayModel5DDelta((IsotropicHypercubicBooleanArrayModel5DA)model);
-						} else if (model instanceof IsotropicHypercubicIntArrayModel5DA) {
-							result = new CustomHypercubicIntArrayModel5DDelta((IsotropicHypercubicIntArrayModel5DA)model);
-						} else if (model instanceof IsotropicHypercubicLongArrayModel5DA) {
-							result = new CustomHypercubicLongArrayModel5DDelta((IsotropicHypercubicLongArrayModel5DA)model);
-						} else if (model instanceof IsotropicHypercubicNumericArrayModel5DA) {
-							result = new CustomHypercubicNumericArrayModel5DDelta<BigInt>((IsotropicHypercubicNumericArrayModel5DA<BigInt>)model);
+						if (model instanceof IsotropicHypercubicBooleanArrayModelAsymmetricSection5D) {
+							result = new CustomIsotropicBooleanArrayModel5DDelta((IsotropicHypercubicBooleanArrayModelAsymmetricSection5D)model);
+						} else if (model instanceof IsotropicHypercubicIntArrayModelAsymmetricSection5D) {
+							result = new CustomIsotropicIntArrayModel5DDelta((IsotropicHypercubicIntArrayModelAsymmetricSection5D)model);
+						} else if (model instanceof IsotropicHypercubicLongArrayModelAsymmetricSection5D) {
+							result = new CustomIsotropicLongArrayModel5DDelta((IsotropicHypercubicLongArrayModelAsymmetricSection5D)model);
+						} else if (model instanceof IsotropicHypercubicNumericArrayModelAsymmetricSection5D) {
+							result = new CustomIsotropicNumericArrayModel5DDelta<BigInt>((IsotropicHypercubicNumericArrayModelAsymmetricSection5D<BigInt>)model);
 						}
 						break;				
 				}
@@ -469,47 +469,47 @@ public class AetherImgMaker {
 			int dimension = model.getGridDimension();
 			switch (dimension) {
 				case 2:
-					if (model instanceof IsotropicSquareBooleanArrayModelA) {
-						result = new CustomSquareBooleanArrayModel2StepsDelta((IsotropicSquareBooleanArrayModelA)model);			
-					} else if (model instanceof IsotropicSquareIntArrayModelA) {
-						result = new CustomSquareIntArrayModel2StepsDelta((IsotropicSquareIntArrayModelA)model);			
-					} else if (model instanceof IsotropicSquareLongArrayModelA) {
-						result = new CustomSquareLongArrayModel2StepsDelta((IsotropicSquareLongArrayModelA)model);
-					} else if (model instanceof IsotropicSquareNumericArrayModelA) {
-						result = new CustomSquareNumericArrayModel2StepsDelta<BigInt>((IsotropicSquareNumericArrayModelA<BigInt>)model);
+					if (model instanceof IsotropicSquareBooleanArrayModelAsymmetricSection) {
+						result = new CustomIsotropicBooleanArrayModel2D2StepsDelta((IsotropicSquareBooleanArrayModelAsymmetricSection)model);			
+					} else if (model instanceof IsotropicSquareIntArrayModelAsymmetricSection) {
+						result = new CustomIsotropicIntArrayModel2D2StepsDelta((IsotropicSquareIntArrayModelAsymmetricSection)model);			
+					} else if (model instanceof IsotropicSquareLongArrayModelAsymmetricSection) {
+						result = new CustomIsotropicLongArrayModel2D2StepsDelta((IsotropicSquareLongArrayModelAsymmetricSection)model);
+					} else if (model instanceof IsotropicSquareNumericArrayModelAsymmetricSection) {
+						result = new CustomIsotropicNumericArrayModel2D2StepsDelta<BigInt>((IsotropicSquareNumericArrayModelAsymmetricSection<BigInt>)model);
 					}
 					break;
 				case 3:
-					if (model instanceof IsotropicCubicBooleanArrayModelA) {
-						result = new CustomCubicBooleanArrayModel2StepsDelta((IsotropicCubicBooleanArrayModelA)model);
-					} else if (model instanceof IsotropicCubicIntArrayModelA) {
-						result = new CustomCubicIntArrayModel2StepsDelta((IsotropicCubicIntArrayModelA)model);
-					} else if (model instanceof IsotropicCubicLongArrayModelA) {
-						result = new CustomCubicLongArrayModel2StepsDelta((IsotropicCubicLongArrayModelA)model);
-					} else if (model instanceof IsotropicCubicNumericArrayModelA) {
-						result = new CustomCubicNumericArrayModel2StepsDelta<BigInt>((IsotropicCubicNumericArrayModelA<BigInt>)model);
+					if (model instanceof IsotropicCubicBooleanArrayModelAsymmetricSection) {
+						result = new CustomIsotropicBooleanArrayModel3D2StepsDelta((IsotropicCubicBooleanArrayModelAsymmetricSection)model);
+					} else if (model instanceof IsotropicCubicIntArrayModelAsymmetricSection) {
+						result = new CustomIsotropicIntArrayModel3D2StepsDelta((IsotropicCubicIntArrayModelAsymmetricSection)model);
+					} else if (model instanceof IsotropicCubicLongArrayModelAsymmetricSection) {
+						result = new CustomIsotropicLongArrayModel3D2StepsDelta((IsotropicCubicLongArrayModelAsymmetricSection)model);
+					} else if (model instanceof IsotropicCubicNumericArrayModelAsymmetricSection) {
+						result = new CustomIsotropicNumericArrayModel3D2StepsDelta<BigInt>((IsotropicCubicNumericArrayModelAsymmetricSection<BigInt>)model);
 					}
 					break;		
 				case 4:
-					if (model instanceof IsotropicHypercubicBooleanArrayModel4DA) {
-						result = new CustomHypercubicBooleanArrayModel4D2StepsDelta((IsotropicHypercubicBooleanArrayModel4DA)model);
-					} else if (model instanceof IsotropicHypercubicIntArrayModel4DA) {
-						result = new CustomHypercubicIntArrayModel4D2StepsDelta((IsotropicHypercubicIntArrayModel4DA)model);
-					} else if (model instanceof IsotropicHypercubicLongArrayModel4DA) {
-						result = new CustomHypercubicLongArrayModel4D2StepsDelta((IsotropicHypercubicLongArrayModel4DA)model);
-					} else if (model instanceof IsotropicHypercubicNumericArrayModel4DA) {
-						result = new CustomHypercubicNumericArrayModel4D2StepsDelta<BigInt>((IsotropicHypercubicNumericArrayModel4DA<BigInt>)model);
+					if (model instanceof IsotropicHypercubicBooleanArrayModelAsymmetricSection4D) {
+						result = new CustomIsotropicBooleanArrayModel4D2StepsDelta((IsotropicHypercubicBooleanArrayModelAsymmetricSection4D)model);
+					} else if (model instanceof IsotropicHypercubicIntArrayModelAsymmetricSection4D) {
+						result = new CustomIsotropicIntArrayModel4D2StepsDelta((IsotropicHypercubicIntArrayModelAsymmetricSection4D)model);
+					} else if (model instanceof IsotropicHypercubicLongArrayModelAsymmetricSection4D) {
+						result = new CustomIsotropicLongArrayModel4D2StepsDelta((IsotropicHypercubicLongArrayModelAsymmetricSection4D)model);
+					} else if (model instanceof IsotropicHypercubicNumericArrayModelAsymmetricSection4D) {
+						result = new CustomIsotropicNumericArrayModel4D2StepsDelta<BigInt>((IsotropicHypercubicNumericArrayModelAsymmetricSection4D<BigInt>)model);
 					}
 					break;			
 				case 5:
-					if (model instanceof IsotropicHypercubicBooleanArrayModel5DA) {
-						result = new CustomHypercubicBooleanArrayModel5D2StepsDelta((IsotropicHypercubicBooleanArrayModel5DA)model);
-					} else if (model instanceof IsotropicHypercubicIntArrayModel5DA) {
-						result = new CustomHypercubicIntArrayModel5D2StepsDelta((IsotropicHypercubicIntArrayModel5DA)model);
-					} else if (model instanceof IsotropicHypercubicLongArrayModel5DA) {
-						result = new CustomHypercubicLongArrayModel5D2StepsDelta((IsotropicHypercubicLongArrayModel5DA)model);
-					} else if (model instanceof IsotropicHypercubicNumericArrayModel5DA) {
-						result = new CustomHypercubicNumericArrayModel5D2StepsDelta<BigInt>((IsotropicHypercubicNumericArrayModel5DA<BigInt>)model);
+					if (model instanceof IsotropicHypercubicBooleanArrayModelAsymmetricSection5D) {
+						result = new CustomIsotropicBooleanArrayModel5D2StepsDelta((IsotropicHypercubicBooleanArrayModelAsymmetricSection5D)model);
+					} else if (model instanceof IsotropicHypercubicIntArrayModelAsymmetricSection5D) {
+						result = new CustomIsotropicIntArrayModel5D2StepsDelta((IsotropicHypercubicIntArrayModelAsymmetricSection5D)model);
+					} else if (model instanceof IsotropicHypercubicLongArrayModelAsymmetricSection5D) {
+						result = new CustomIsotropicLongArrayModel5D2StepsDelta((IsotropicHypercubicLongArrayModelAsymmetricSection5D)model);
+					} else if (model instanceof IsotropicHypercubicNumericArrayModelAsymmetricSection5D) {
+						result = new CustomIsotropicNumericArrayModel5D2StepsDelta<BigInt>((IsotropicHypercubicNumericArrayModelAsymmetricSection5D<BigInt>)model);
 					}
 					break;				
 				}
@@ -524,8 +524,8 @@ public class AetherImgMaker {
 
 	private static Model getModelSection(Model model, Args args) {
 		//asymmetric section
-		if (args.asymmetric && model instanceof SymmetricModel) {
-			model = ((SymmetricModel)model).asymmetricSection();
+		if (!args.asymmetric && model instanceof IsotropicHypercubicModelAsymmetricSection) {
+			model = ((IsotropicHypercubicModelAsymmetricSection)model).wholeGrid();
 		}
 		CoordinateFilters filters = args.coordinateFilters;
 		if (filters != null) {
@@ -641,6 +641,7 @@ public class AetherImgMaker {
 		Model model = null;
 		if (args.model == null) {
 			if (args.backupToRestorePath == null) {
+				args.model = "Aether";
 				model = AetherFactory.create(args, messages);
 			} else {
 				System.out.println(messages.getString("model-needed-in-order-to-restore"));//TODO Add AetherImgMakerBackup class with parameters

@@ -21,8 +21,7 @@ import java.io.IOException;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricNumericModel2D;
+import cellularautomata.model2d.IsotropicSquareNumericModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 2D with a single source initial configuration of infinity
@@ -30,7 +29,7 @@ import cellularautomata.model2d.SymmetricNumericModel2D;
  * @author Jaume
  *
  */
-public class SimpleBfSunflowerInfinity2D implements SymmetricNumericModel2D<BigFraction>, IsotropicSquareModelA {	
+public class SimpleBfSunflowerInfinity2D implements IsotropicSquareNumericModelAsymmetricSection<BigFraction> {	
 	
 	/** 2D array representing the grid **/
 	private BigFraction[][] grid;
@@ -115,12 +114,7 @@ public class SimpleBfSunflowerInfinity2D implements SymmetricNumericModel2D<BigF
 	}
 	
 	@Override
-	public BigFraction getFromAsymmetricPosition(int x, int y) {
-		return getFromPosition(x, y);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -147,7 +141,7 @@ public class SimpleBfSunflowerInfinity2D implements SymmetricNumericModel2D<BigF
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/infinity";
 	}
 }

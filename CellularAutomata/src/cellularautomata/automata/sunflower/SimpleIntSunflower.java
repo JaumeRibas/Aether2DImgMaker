@@ -25,8 +25,7 @@ import java.util.function.IntConsumer;
 import cellularautomata.arrays.HypercubicIntArray;
 import cellularautomata.Utils;
 import cellularautomata.Coordinates;
-import cellularautomata.model.IsotropicHypercubicModelA;
-import cellularautomata.model.SymmetricIntModel;
+import cellularautomata.model.IsotropicHypercubicIntModelAsymmetricSection;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton, with a single source initial configuration, for review and testing purposes
@@ -34,7 +33,7 @@ import cellularautomata.model.SymmetricIntModel;
  * @author Jaume
  *
  */
-public class SimpleIntSunflower implements SymmetricIntModel, IsotropicHypercubicModelA {
+public class SimpleIntSunflower implements IsotropicHypercubicIntModelAsymmetricSection {
 
 	private int gridDimension;
 	private long step;
@@ -87,11 +86,6 @@ public class SimpleIntSunflower implements SymmetricIntModel, IsotropicHypercubi
 		coordinates.copyIntoArray(indexes);
 		Utils.addToArray(indexes, originIndex);
 		return grid.get(new Coordinates(indexes));
-	}
-
-	@Override
-	public int getFromAsymmetricPosition(Coordinates coordinates) {
-		return getFromPosition(coordinates);
 	}
 
 	@Override
@@ -247,7 +241,7 @@ public class SimpleIntSunflower implements SymmetricIntModel, IsotropicHypercubi
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/" + gridDimension + "D/" + initialValue + "/" + backgroundValue;
 	}
 
@@ -262,7 +256,7 @@ public class SimpleIntSunflower implements SymmetricIntModel, IsotropicHypercubi
 	}
 
 	@Override
-	public int getAsymmetricMaxCoordinate(int axis) {
+	public int getSize() {
 		return grid.getSide() - 1 - originIndex;
 	}
 	

@@ -24,9 +24,9 @@ import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model1d.IsotropicBooleanArrayModel1DA;
+import cellularautomata.model1d.IsotropicBooleanArrayModelAsymmetricSection1D;
 
-public class AetherInfinityTopplingAlternationCompliance1D extends IsotropicBooleanArrayModel1DA {
+public class AetherInfinityTopplingAlternationCompliance1D extends IsotropicBooleanArrayModelAsymmetricSection1D {
 
 	/** A 1D array representing the grid */
 	private BigFraction[] sourceGrid;
@@ -248,7 +248,7 @@ public class AetherInfinityTopplingAlternationCompliance1D extends IsotropicBool
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 
@@ -263,7 +263,7 @@ public class AetherInfinityTopplingAlternationCompliance1D extends IsotropicBool
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		String path = getName() + "/1D/";
 		if (!isPositive) path += "-";
 		path += "infinity";

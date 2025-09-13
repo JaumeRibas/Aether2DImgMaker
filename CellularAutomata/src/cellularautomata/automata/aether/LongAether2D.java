@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model2d.IsotropicSquareLongArrayModelA;
+import cellularautomata.model2d.IsotropicSquareLongArrayModelAsymmetricSection;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 2D with a single source initial configuration
@@ -28,7 +28,7 @@ import cellularautomata.model2d.IsotropicSquareLongArrayModelA;
  * @author Jaume
  *
  */
-public class LongAether2D extends IsotropicSquareLongArrayModelA {
+public class LongAether2D extends IsotropicSquareLongArrayModelAsymmetricSection {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -6148914691236517205L;
@@ -1203,7 +1203,7 @@ public class LongAether2D extends IsotropicSquareLongArrayModelA {
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -1227,7 +1227,7 @@ public class LongAether2D extends IsotropicSquareLongArrayModelA {
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue;
 	}
 

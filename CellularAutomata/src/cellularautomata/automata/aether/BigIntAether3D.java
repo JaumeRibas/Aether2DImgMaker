@@ -21,7 +21,7 @@ import java.io.IOException;
 import cellularautomata.Constants;
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model3d.IsotropicCubicNumericArrayModelA;
+import cellularautomata.model3d.IsotropicCubicNumericArrayModelAsymmetricSection;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -30,7 +30,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class BigIntAether3D extends IsotropicCubicNumericArrayModelA<BigInt> {
+public class BigIntAether3D extends IsotropicCubicNumericArrayModelAsymmetricSection<BigInt> {
 	
 	private static final BigInt two = BigInt.valueOf(2);
 	private static final BigInt three = BigInt.valueOf(3);
@@ -43,7 +43,7 @@ public class BigIntAether3D extends IsotropicCubicNumericArrayModelA<BigInt> {
 	private Boolean changed = null;
 	private int maxX;
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 	
@@ -2051,7 +2051,7 @@ public class BigIntAether3D extends IsotropicCubicNumericArrayModelA<BigInt> {
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -2075,7 +2075,7 @@ public class BigIntAether3D extends IsotropicCubicNumericArrayModelA<BigInt> {
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + folderName;
 	}
 	

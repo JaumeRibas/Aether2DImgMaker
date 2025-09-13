@@ -25,8 +25,7 @@ import java.util.function.IntConsumer;
 import cellularautomata.arrays.HypercubicIntArray;
 import cellularautomata.Utils;
 import cellularautomata.Coordinates;
-import cellularautomata.model.IsotropicHypercubicModelA;
-import cellularautomata.model.SymmetricIntModel;
+import cellularautomata.model.IsotropicHypercubicIntModelAsymmetricSection;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -35,7 +34,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class SimpleIntAether implements SymmetricIntModel, IsotropicHypercubicModelA {//TODO fix 1D error
+public class SimpleIntAether implements IsotropicHypercubicIntModelAsymmetricSection {//TODO fix 1D error
 
 	private final int gridDimension;
 	private long step;
@@ -90,11 +89,6 @@ public class SimpleIntAether implements SymmetricIntModel, IsotropicHypercubicMo
 		coordinates.copyIntoArray(indexes);
 		Utils.addToArray(indexes, originIndex);
 		return grid.get(new Coordinates(indexes));
-	}
-
-	@Override
-	public int getFromAsymmetricPosition(Coordinates coordinates) {
-		return getFromPosition(coordinates);
 	}
 
 	@Override
@@ -253,7 +247,7 @@ public class SimpleIntAether implements SymmetricIntModel, IsotropicHypercubicMo
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/" + gridDimension + "D/" + initialValue;
 	}
 
@@ -268,7 +262,7 @@ public class SimpleIntAether implements SymmetricIntModel, IsotropicHypercubicMo
 	}
 
 	@Override
-	public int getAsymmetricMaxCoordinate(int axis) {
+	public int getSize() {
 		return grid.getSide() - 1 - originIndex;
 	}
 	

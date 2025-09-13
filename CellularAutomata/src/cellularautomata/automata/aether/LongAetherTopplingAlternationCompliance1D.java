@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import cellularautomata.Utils;
 import cellularautomata.model.SerializableModelData;
-import cellularautomata.model1d.IsotropicBooleanArrayModel1DA;
+import cellularautomata.model1d.IsotropicBooleanArrayModelAsymmetricSection1D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
@@ -29,7 +29,7 @@ import cellularautomata.model1d.IsotropicBooleanArrayModel1DA;
  * @author Jaume
  *
  */
-public class LongAetherTopplingAlternationCompliance1D extends IsotropicBooleanArrayModel1DA {
+public class LongAetherTopplingAlternationCompliance1D extends IsotropicBooleanArrayModelAsymmetricSection1D {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -329,7 +329,7 @@ public class LongAetherTopplingAlternationCompliance1D extends IsotropicBooleanA
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -353,7 +353,7 @@ public class LongAetherTopplingAlternationCompliance1D extends IsotropicBooleanA
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/1D/" + initialValue + "/toppling_alternation_compliance";
 	}
 

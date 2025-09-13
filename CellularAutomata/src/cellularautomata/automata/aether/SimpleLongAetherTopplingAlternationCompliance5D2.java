@@ -24,10 +24,9 @@ import java.util.List;
 import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model5d.IsotropicHypercubicModel5DA;
-import cellularautomata.model5d.SymmetricBooleanModel5D;
+import cellularautomata.model5d.IsotropicHypercubicBooleanModelAsymmetricSection5D;
 
-public class SimpleLongAetherTopplingAlternationCompliance5D2 implements SymmetricBooleanModel5D, IsotropicHypercubicModel5DA {	
+public class SimpleLongAetherTopplingAlternationCompliance5D2 implements IsotropicHypercubicBooleanModelAsymmetricSection5D {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -127,8 +126,8 @@ public class SimpleLongAetherTopplingAlternationCompliance5D2 implements Symmetr
 							boolean toppled = false;
 							if (neighbors.size() > 0) {
 								//sort
-								boolean sorted = false;
-								while (!sorted) {
+								boolean sorted;
+								do {
 									sorted = true;
 									for (int i = neighbors.size() - 2; i >= 0; i--) {
 										Neighbor<Long> next = neighbors.get(i+1);
@@ -138,7 +137,7 @@ public class SimpleLongAetherTopplingAlternationCompliance5D2 implements Symmetr
 											neighbors.add(i, next);
 										}
 									}
-								}
+								} while (!sorted);
 								//divide
 								boolean isFirst = true;
 								long previousNeighborValue = 0;
@@ -294,51 +293,12 @@ public class SimpleLongAetherTopplingAlternationCompliance5D2 implements Symmetr
 	}
 
 	@Override
-	public boolean getFromPosition(int v, int w, int x, int y, int z) {	
-		if (x < 0) x = -x;
-		if (y < 0) y = -y;
-		if (z < 0) z = -z;
-		if (w < 0) w = -w;
-		if (v < 0) v = -v;
-		//sort coordinates
-		boolean sorted;
-		do {
-			sorted = true;
-			if (z > y) {
-				sorted = false;
-				int swp = z;
-				z = y;
-				y = swp;
-			}
-			if (y > x) {
-				sorted = false;
-				int swp = y;
-				y = x;
-				x = swp;
-			}
-			if (x > w) {
-				sorted = false;
-				int swp = x;
-				x = w;
-				w = swp;
-			}
-			if (w > v) {
-				sorted = false;
-				int swp = w;
-				w = v;
-				v = swp;
-			}
-		} while (!sorted);
+	public boolean getFromPosition(int v, int w, int x, int y, int z) {
 		return topplingAlternationCompliance[v][w][x][y][z];
 	}
 
 	@Override
-	public boolean getFromAsymmetricPosition(int v, int w, int x, int y, int z) {
-		return topplingAlternationCompliance[v][w][x][y][z];
-	}
-
-	@Override
-	public int getAsymmetricMaxV() {
+	public int getSize() {
 		int arrayMaxV = grid.length - 1;
 		int valuesMaxV;
 		if (boundsReached) {
@@ -369,7 +329,7 @@ public class SimpleLongAetherTopplingAlternationCompliance5D2 implements Symmetr
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/5D/" + initialValue + "/toppling_alternation_compliance";
 	}
 	

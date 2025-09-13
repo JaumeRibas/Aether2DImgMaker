@@ -19,8 +19,7 @@ package cellularautomata.automata.sunflower;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import cellularautomata.Utils;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricLongModel2D;
+import cellularautomata.model2d.IsotropicSquareLongModelAsymmetricSection;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 2D, with a single source initial configuration, for review and testing purposes
@@ -28,7 +27,7 @@ import cellularautomata.model2d.SymmetricLongModel2D;
  * @author Jaume Ribas
  *
  */
-public class SimpleLongSunflower2D implements SymmetricLongModel2D, IsotropicSquareModelA {	
+public class SimpleLongSunflower2D implements IsotropicSquareLongModelAsymmetricSection {	
 
 	/** A 2D array representing the grid */
 	private long[][] grid;
@@ -185,12 +184,7 @@ public class SimpleLongSunflower2D implements SymmetricLongModel2D, IsotropicSqu
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y) {
-		return getFromPosition(x, y);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -252,7 +246,7 @@ public class SimpleLongSunflower2D implements SymmetricLongModel2D, IsotropicSqu
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/2D/" + initialValue + "/" + backgroundValue;
 	}
 

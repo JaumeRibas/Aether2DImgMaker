@@ -23,8 +23,7 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 
 import cellularautomata.model.FileBackedModel;
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricLongModel1D;
+import cellularautomata.model1d.IsotropicLongModelAsymmetricSection1D;
 
 /**
  * Implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D with a single source initial configuration
@@ -32,7 +31,7 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class FileBackedLongAether1D extends FileBackedModel implements SymmetricLongModel1D, IsotropicModel1DA {
+public class FileBackedLongAether1D extends FileBackedModel implements IsotropicLongModelAsymmetricSection1D {
 	
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -9223372036854775807L;
@@ -77,8 +76,8 @@ public class FileBackedLongAether1D extends FileBackedModel implements Symmetric
 			boolean changed = false;
 			long currentValue, greaterXNeighborValue, smallerXNeighborValue;
 			//x = 0
-			currentValue = getFromAsymmetricPosition(0);
-			greaterXNeighborValue = getFromAsymmetricPosition(1);
+			currentValue = getFromPosition(0);
+			greaterXNeighborValue = getFromPosition(1);
 			File newFile = new File(getGridFolderPath() + File.separator + String.format(FILE_NAME_FORMAT, step + 1));
 			newGrid = new RandomAccessFile(newFile, "rw");
 			newGrid.setLength((maxX + 4)*POSITION_BYTES);//this method doesn't ensure the contents of the file will be empty
@@ -99,7 +98,7 @@ public class FileBackedLongAether1D extends FileBackedModel implements Symmetric
 			//reuse values obtained previously
 			smallerXNeighborValue = currentValue;
 			currentValue = greaterXNeighborValue;
-			greaterXNeighborValue = getFromAsymmetricPosition(2);
+			greaterXNeighborValue = getFromPosition(2);
 			if (smallerXNeighborValue < currentValue) {
 				if (greaterXNeighborValue < currentValue) {
 					if (smallerXNeighborValue == greaterXNeighborValue) {
@@ -208,12 +207,12 @@ public class FileBackedLongAether1D extends FileBackedModel implements Symmetric
 	private boolean toppleRangeBeyondX1(RandomAccessFile newGrid, int minX, int maxX) throws IOException {
 		boolean anyToppled = false;
 		int x = minX, xMinusOne = x - 1, xPlusOne = x + 1;
-		long oldSmallerXValue, oldCurrentValue = getFromAsymmetricPosition(xMinusOne), oldGreaterXValue = getFromAsymmetricPosition(x);
+		long oldSmallerXValue, oldCurrentValue = getFromPosition(xMinusOne), oldGreaterXValue = getFromPosition(x);
 		for (; x < maxX; xMinusOne = x, x = xPlusOne, xPlusOne++) {
 			//reuse values obtained previously
 			oldSmallerXValue = oldCurrentValue;
 			oldCurrentValue = oldGreaterXValue;
-			oldGreaterXValue = getFromAsymmetricPosition(xPlusOne);
+			oldGreaterXValue = getFromPosition(xPlusOne);
 			if (oldSmallerXValue < oldCurrentValue) {
 				if (oldGreaterXValue < oldCurrentValue) {
 					if (oldSmallerXValue == oldGreaterXValue) {
@@ -287,15 +286,9 @@ public class FileBackedLongAether1D extends FileBackedModel implements Symmetric
 		}
 		return anyToppled;
 	}
-	
-	@Override
-	public long getFromPosition(int x) throws IOException {	
-		if (x < 0) x = -x;
-		return getFromAsymmetricPosition(x);
-	}
 
 	@Override
-	public long getFromAsymmetricPosition(int x) throws IOException {
+	public long getFromPosition(int x) throws IOException {
 		grid.seek(x*POSITION_BYTES);
 		return grid.readLong();
 	}
@@ -309,7 +302,7 @@ public class FileBackedLongAether1D extends FileBackedModel implements Symmetric
 	}
 
 	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		return maxX;
 	}
 	
@@ -333,7 +326,7 @@ public class FileBackedLongAether1D extends FileBackedModel implements Symmetric
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/1D/" + initialValue;
 	}
 	

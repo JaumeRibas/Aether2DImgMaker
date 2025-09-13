@@ -23,8 +23,7 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricLongModel3D;
+import cellularautomata.model3d.IsotropicCubicLongModelAsymmetricSection;
 
 /**
  * Implementation of a CA that behaves the same way as the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton, but with opposite values.
@@ -32,7 +31,7 @@ import cellularautomata.model3d.SymmetricLongModel3D;
  * @author Jaume
  *
  */
-public class SimpleLongReverseAether3D implements SymmetricLongModel3D, IsotropicCubicModelA {	
+public class SimpleLongReverseAether3D implements IsotropicCubicLongModelAsymmetricSection {	
 	
 	public static final long MAX_INITIAL_VALUE = 3689348814741910323L;
 	public static final long MIN_INITIAL_VALUE = Long.MIN_VALUE;
@@ -134,8 +133,8 @@ public class SimpleLongReverseAether3D implements SymmetricLongModel3D, Isotropi
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value ascending
-						boolean sorted = false;
-						while (!sorted) {
+						boolean sorted;
+						do {
 							sorted = true;
 							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 								Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -145,7 +144,7 @@ public class SimpleLongReverseAether3D implements SymmetricLongModel3D, Isotropi
 									neighbors.add(neighborIndex, next);
 								}
 							}
-						}
+						} while (!sorted);
 						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
 						long previousNeighborValue = 0;
@@ -234,12 +233,7 @@ public class SimpleLongReverseAether3D implements SymmetricLongModel3D, Isotropi
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -275,7 +269,7 @@ public class SimpleLongReverseAether3D implements SymmetricLongModel3D, Isotropi
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + initialValue;
 	}
 }

@@ -25,8 +25,7 @@ import cellularautomata.Constants;
 import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model3d.IsotropicCubicModelA;
-import cellularautomata.model3d.SymmetricNumericModel3D;
+import cellularautomata.model3d.IsotropicCubicNumericModelAsymmetricSection;
 import cellularautomata.numbers.BigInt;
 
 /**
@@ -35,7 +34,7 @@ import cellularautomata.numbers.BigInt;
  * @author Jaume
  *
  */
-public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, IsotropicCubicModelA {
+public class SimpleBigIntAether3D implements IsotropicCubicNumericModelAsymmetricSection<BigInt> {
 	
 	/** 3D array representing the grid **/
 	private BigInt[][][] grid;
@@ -49,7 +48,7 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 	/** Whether or not the values reached the bounds of the array */
 	private boolean boundsReached;
 	/**
-	 * Used in {@link #getSubfolderPath()}.
+	 * Used in {@link #getWholeGridSubfolderPath()}.
 	 */
 	private final String folderName;
 	
@@ -138,8 +137,8 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 					
 					if (neighbors.size() > 0) {
 						//sort neighbors by value
-						boolean sorted = false;
-						while (!sorted) {
+						boolean sorted;
+						do {
 							sorted = true;
 							for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 								Neighbor<BigInt> next = neighbors.get(neighborIndex+1);
@@ -149,7 +148,7 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 									neighbors.add(neighborIndex, next);
 								}
 							}
-						}
+						} while (!sorted);
 						//apply algorithm rules to redistribute value
 						boolean isFirst = true;
 						BigInt previousNeighborValue = null;
@@ -242,12 +241,7 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 	}
 	
 	@Override
-	public BigInt getFromAsymmetricPosition(int x, int y, int z) {
-		return getFromPosition(x, y, z);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -283,7 +277,7 @@ public class SimpleBigIntAether3D implements SymmetricNumericModel3D<BigInt>, Is
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/3D/" + folderName;
 	}
 }

@@ -26,10 +26,9 @@ import org.apache.commons.math3.fraction.BigFraction;
 import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model2d.IsotropicSquareModelA;
-import cellularautomata.model2d.SymmetricBooleanModel2D;
+import cellularautomata.model2d.IsotropicSquareBooleanModelAsymmetricSection;
 
-public class SimpleAetherInfinityTopplingAlternationCompliance2D implements SymmetricBooleanModel2D, IsotropicSquareModelA {
+public class SimpleAetherInfinityTopplingAlternationCompliance2D implements IsotropicSquareBooleanModelAsymmetricSection {
 	
 	/** 2D array representing the grid **/
 	private BigFraction[][] grid;
@@ -118,8 +117,8 @@ public class SimpleAetherInfinityTopplingAlternationCompliance2D implements Symm
 				if (neighbors.size() > 0) {
 					toppled = true;
 					//sort neighbors by value
-					boolean sorted = false;
-					while (!sorted) {
+					boolean sorted;
+					do {
 						sorted = true;
 						for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 							Neighbor<BigFraction> next = neighbors.get(neighborIndex+1);
@@ -129,7 +128,7 @@ public class SimpleAetherInfinityTopplingAlternationCompliance2D implements Symm
 								neighbors.add(neighborIndex, next);
 							}
 						}
-					}
+					} while (!sorted);
 					//apply algorithm rules to redistribute value
 					boolean isFirst = true;
 					BigFraction previousNeighborValue = null;
@@ -226,12 +225,7 @@ public class SimpleAetherInfinityTopplingAlternationCompliance2D implements Symm
 	}
 	
 	@Override
-	public boolean getFromAsymmetricPosition(int x, int y) {
-		return getFromPosition(x, y);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -258,7 +252,7 @@ public class SimpleAetherInfinityTopplingAlternationCompliance2D implements Symm
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		String path = getName() + "/2D/";
 		if (!isPositive) path += "-";
 		path += "infinity";

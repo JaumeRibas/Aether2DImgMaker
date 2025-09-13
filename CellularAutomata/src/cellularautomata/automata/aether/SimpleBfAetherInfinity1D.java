@@ -26,8 +26,7 @@ import org.apache.commons.math3.fraction.BigFraction;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricNumericModel1D;
+import cellularautomata.model1d.IsotropicNumericModelAsymmetricSection1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 1D, with a single source initial configuration of infinity, for review and testing purposes
@@ -35,7 +34,7 @@ import cellularautomata.model1d.SymmetricNumericModel1D;
  * @author Jaume
  *
  */
-public class SimpleBfAetherInfinity1D implements SymmetricNumericModel1D<BigFraction>, IsotropicModel1DA {
+public class SimpleBfAetherInfinity1D implements IsotropicNumericModelAsymmetricSection1D<BigFraction> {
 	
 	/** A 1D array representing the grid */
 	private BigFraction[] grid;
@@ -169,12 +168,7 @@ public class SimpleBfAetherInfinity1D implements SymmetricNumericModel1D<BigFrac
 	}
 	
 	@Override
-	public BigFraction getFromAsymmetricPosition(int x) {
-		return getFromPosition(x);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -196,7 +190,7 @@ public class SimpleBfAetherInfinity1D implements SymmetricNumericModel1D<BigFrac
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		String path = getName() + "/1D/";
 		if (!isPositive) path += "-";
 		path += "infinity";

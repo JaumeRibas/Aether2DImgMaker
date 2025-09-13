@@ -20,8 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
-import cellularautomata.model1d.IsotropicModel1DA;
-import cellularautomata.model1d.SymmetricLongModel1D;
+import cellularautomata.model1d.IsotropicLongModelAsymmetricSection1D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Sunflower-Cellular-Automaton-Definition">Sunflower</a> cellular automaton in 1D, with a single source initial configuration, for review and testing purposes
@@ -29,7 +28,7 @@ import cellularautomata.model1d.SymmetricLongModel1D;
  * @author Jaume
  *
  */
-public class SimpleLongSunflower1D implements SymmetricLongModel1D, IsotropicModel1DA {	
+public class SimpleLongSunflower1D implements IsotropicLongModelAsymmetricSection1D {	
 
 	/** A 1D array representing the grid */
 	private long[] grid;
@@ -163,12 +162,7 @@ public class SimpleLongSunflower1D implements SymmetricLongModel1D, IsotropicMod
 	}
 	
 	@Override
-	public long getFromAsymmetricPosition(int x) {	
-		return getFromPosition(x);
-	}
-	
-	@Override
-	public int getAsymmetricMaxX() {
+	public int getSize() {
 		int arrayMaxX = grid.length - 1 - originIndex;
 		int valuesMaxX;
 		if (boundsReached) {
@@ -203,7 +197,7 @@ public class SimpleLongSunflower1D implements SymmetricLongModel1D, IsotropicMod
 	}
 	
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/1D/" + initialValue + "/" + backgroundValue;
 	}
 

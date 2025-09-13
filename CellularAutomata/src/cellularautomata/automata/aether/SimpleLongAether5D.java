@@ -23,8 +23,7 @@ import java.util.List;
 
 import cellularautomata.Direction;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model5d.IsotropicHypercubicModel5DA;
-import cellularautomata.model5d.SymmetricLongModel5D;
+import cellularautomata.model5d.IsotropicHypercubicLongModelAsymmetricSection5D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D, with a single source initial configuration, for review and testing purposes
@@ -32,7 +31,7 @@ import cellularautomata.model5d.SymmetricLongModel5D;
  * @author Jaume
  *
  */
-public class SimpleLongAether5D implements SymmetricLongModel5D, IsotropicHypercubicModel5DA {	
+public class SimpleLongAether5D implements IsotropicHypercubicLongModelAsymmetricSection5D {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -158,8 +157,8 @@ public class SimpleLongAether5D implements SymmetricLongModel5D, IsotropicHyperc
 							
 							if (neighbors.size() > 0) {
 								//sort
-								boolean sorted = false;
-								while (!sorted) {
+								boolean sorted;
+								do {
 									sorted = true;
 									for (int neighborIndex = neighbors.size() - 2; neighborIndex >= 0; neighborIndex--) {
 										Neighbor<Long> next = neighbors.get(neighborIndex+1);
@@ -169,7 +168,7 @@ public class SimpleLongAether5D implements SymmetricLongModel5D, IsotropicHyperc
 											neighbors.add(neighborIndex, next);
 										}
 									}
-								}
+								} while (!sorted);
 								//divide
 								boolean isFirst = true;
 								long previousNeighborValue = 0;
@@ -274,14 +273,9 @@ public class SimpleLongAether5D implements SymmetricLongModel5D, IsotropicHyperc
 		//Note that the indexes whose value hasn't been defined have value zero by default
 		return grid[i][j][k][l][m];
 	}
-	
-	@Override
-	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {
-		return getFromPosition(v, w, x, y, z);
-	}
 
 	@Override
-	public int getAsymmetricMaxV() {
+	public int getSize() {
 		int arrayMaxV = grid.length - 1 - originIndex;
 		int valuesMaxV;
 		if (boundsReached) {
@@ -312,7 +306,7 @@ public class SimpleLongAether5D implements SymmetricLongModel5D, IsotropicHyperc
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/5D/" + initialValue;
 	}
 	

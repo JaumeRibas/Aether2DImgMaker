@@ -24,8 +24,7 @@ import java.util.List;
 import cellularautomata.Direction;
 import cellularautomata.Utils;
 import cellularautomata.automata.Neighbor;
-import cellularautomata.model5d.IsotropicHypercubicModel5DA;
-import cellularautomata.model5d.SymmetricLongModel5D;
+import cellularautomata.model5d.IsotropicHypercubicLongModelAsymmetricSection5D;
 
 /**
  * Simplified implementation of the <a href="https://github.com/JaumeRibas/Aether2DImgMaker/wiki/Aether-Cellular-Automaton-Definition">Aether</a> cellular automaton in 5D, with a single source initial configuration, for review and testing purposes
@@ -33,7 +32,7 @@ import cellularautomata.model5d.SymmetricLongModel5D;
  * @author Jaume
  *
  */
-public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHypercubicModel5DA {	
+public class SimpleLongAether5D2 implements IsotropicHypercubicLongModelAsymmetricSection5D {	
 
 	public static final long MAX_INITIAL_VALUE = Long.MAX_VALUE;
 	public static final long MIN_INITIAL_VALUE = -2049638230412172401L;
@@ -86,44 +85,44 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 				for (int x = -1, xPlusOne = x + 1; x <= wPlusOne; x = xPlusOne, xPlusOne++) {
 					for (int y = -1, yPlusOne = y + 1; y <= xPlusOne; y = yPlusOne, yPlusOne++) {
 						for (int z = -1; z <= yPlusOne; z++) {
-							long value = getFromPosition(v, w, x, y, z);
+							long value = getFromWholeGridPosition(v, w, x, y, z);
 							List<Neighbor<Long>> neighbors = new ArrayList<Neighbor<Long>>(10);						
 							long neighborValue;
-							neighborValue = getFromPosition(v + 1, w, x, y, z);
+							neighborValue = getFromWholeGridPosition(v + 1, w, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.V_POSITIVE, neighborValue));
-							neighborValue = getFromPosition(v - 1, w, x, y, z);
+							neighborValue = getFromWholeGridPosition(v - 1, w, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.V_NEGATIVE, neighborValue));
-							neighborValue = getFromPosition(v, w + 1, x, y, z);
+							neighborValue = getFromWholeGridPosition(v, w + 1, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.W_POSITIVE, neighborValue));
-							neighborValue = getFromPosition(v, w - 1, x, y, z);
+							neighborValue = getFromWholeGridPosition(v, w - 1, x, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.W_NEGATIVE, neighborValue));
-							neighborValue = getFromPosition(v, w, x + 1, y, z);
+							neighborValue = getFromWholeGridPosition(v, w, x + 1, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.X_POSITIVE, neighborValue));
-							neighborValue = getFromPosition(v, w, x - 1, y, z);
+							neighborValue = getFromWholeGridPosition(v, w, x - 1, y, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.X_NEGATIVE, neighborValue));
-							neighborValue = getFromPosition(v, w, x, y + 1, z);
+							neighborValue = getFromWholeGridPosition(v, w, x, y + 1, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.Y_POSITIVE, neighborValue));
-							neighborValue = getFromPosition(v, w, x, y - 1, z);
+							neighborValue = getFromWholeGridPosition(v, w, x, y - 1, z);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.Y_NEGATIVE, neighborValue));
-							neighborValue = getFromPosition(v, w, x, y, z + 1);
+							neighborValue = getFromWholeGridPosition(v, w, x, y, z + 1);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.Z_POSITIVE, neighborValue));
-							neighborValue = getFromPosition(v, w, x, y, z - 1);
+							neighborValue = getFromWholeGridPosition(v, w, x, y, z - 1);
 							if (neighborValue < value)
 								neighbors.add(new Neighbor<Long>(Direction.Z_NEGATIVE, neighborValue));
 							
 							if (neighbors.size() > 0) {
 								//sort
-								boolean sorted = false;
-								while (!sorted) {
+								boolean sorted;
+								do {
 									sorted = true;
 									for (int i = neighbors.size() - 2; i >= 0; i--) {
 										Neighbor<Long> next = neighbors.get(i+1);
@@ -133,7 +132,7 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 											neighbors.add(i, next);
 										}
 									}
-								}
+								} while (!sorted);
 								//divide
 								boolean isFirst = true;
 								long previousNeighborValue = 0;
@@ -229,8 +228,7 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 		}
 	}
 
-	@Override
-	public long getFromPosition(int v, int w, int x, int y, int z) {	
+	public long getFromWholeGridPosition(int v, int w, int x, int y, int z) {	
 		if (x < 0) x = -x;
 		if (y < 0) y = -y;
 		if (z < 0) z = -z;
@@ -272,12 +270,12 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 	}
 
 	@Override
-	public long getFromAsymmetricPosition(int v, int w, int x, int y, int z) {
+	public long getFromPosition(int v, int w, int x, int y, int z) {
 		return grid[v][w][x][y][z];
 	}
 
 	@Override
-	public int getAsymmetricMaxV() {
+	public int getSize() {
 		int arrayMaxV = grid.length - 1;
 		int valuesMaxV;
 		if (boundsReached) {
@@ -308,7 +306,7 @@ public class SimpleLongAether5D2 implements SymmetricLongModel5D, IsotropicHyper
 	}
 
 	@Override
-	public String getSubfolderPath() {
+	public String getWholeGridSubfolderPath() {
 		return getName() + "/5D/" + initialValue;
 	}
 	
