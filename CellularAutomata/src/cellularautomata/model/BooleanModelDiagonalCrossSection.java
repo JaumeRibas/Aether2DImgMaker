@@ -20,8 +20,8 @@ import cellularautomata.Coordinates;
 
 public class BooleanModelDiagonalCrossSection extends ModelDiagonalCrossSection<BooleanModel> implements BooleanModel {
 	
-	public BooleanModelDiagonalCrossSection(BooleanModel grid, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		super(grid, firstAxis, secondAxis, positiveSlope, offset);
+	public BooleanModelDiagonalCrossSection(BooleanModel source, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		super(source, firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 	@Override

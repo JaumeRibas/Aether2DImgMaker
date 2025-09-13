@@ -20,8 +20,8 @@ import cellularautomata.Coordinates;
 
 public class LongModelDiagonalCrossSection extends ModelDiagonalCrossSection<LongModel> implements LongModel {
 	
-	public LongModelDiagonalCrossSection(LongModel grid, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		super(grid, firstAxis, secondAxis, positiveSlope, offset);
+	public LongModelDiagonalCrossSection(LongModel source, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		super(source, firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 	@Override

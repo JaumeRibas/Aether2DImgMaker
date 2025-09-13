@@ -21,8 +21,8 @@ import cellularautomata.PartialCoordinates;
 
 public class LongSubModel extends SubModel<LongModel> implements LongModel {
 	
-	public LongSubModel(LongModel grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		super(grid, minCoordinates, maxCoordinates);
+	public LongSubModel(LongModel source, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		super(source, minCoordinates, maxCoordinates);
 	}
 
 	@Override

@@ -23,8 +23,8 @@ import cellularautomata.PartialCoordinates;
 public class NumericSubModel<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>>
 	extends ObjectSubModel<NumericModel<Number_Type>, Number_Type> implements NumericModel<Number_Type> {
 	
-	public NumericSubModel(NumericModel<Number_Type> grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		super(grid, minCoordinates, maxCoordinates);
+	public NumericSubModel(NumericModel<Number_Type> source, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		super(source, minCoordinates, maxCoordinates);
 	}
 
 }

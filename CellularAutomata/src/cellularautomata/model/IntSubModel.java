@@ -21,8 +21,8 @@ import cellularautomata.PartialCoordinates;
 
 public class IntSubModel extends SubModel<IntModel> implements IntModel {
 	
-	public IntSubModel(IntModel grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		super(grid, minCoordinates, maxCoordinates);
+	public IntSubModel(IntModel source, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		super(source, minCoordinates, maxCoordinates);
 	}
 
 	@Override

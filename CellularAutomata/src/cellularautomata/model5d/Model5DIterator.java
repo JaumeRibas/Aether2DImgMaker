@@ -34,18 +34,18 @@ public abstract class Model5DIterator<Source_Type extends Model5D, Element_Type>
 	private int localMaxZ;
 	private boolean hasNext;
 	
-	public Model5DIterator(Source_Type grid) {
-		this.source = grid;
-		v = grid.getMinV();
-		maxV = grid.getMaxV();
-		w = grid.getMinWAtV(v);
-		localMaxW = grid.getMaxWAtV(v);
-		x = grid.getMinXAtVW(v, w);
-		localMaxX = grid.getMaxXAtVW(v, w);
-		y = grid.getMinYAtVWX(v, w, x);
-		localMaxY = grid.getMaxYAtVWX(v, w, x);
-		z = grid.getMinZ(v, w, x, y);
-		localMaxZ = grid.getMaxZ(v, w, x, y);
+	public Model5DIterator(Source_Type source) {
+		this.source = source;
+		v = source.getMinV();
+		maxV = source.getMaxV();
+		w = source.getMinWAtV(v);
+		localMaxW = source.getMaxWAtV(v);
+		x = source.getMinXAtVW(v, w);
+		localMaxX = source.getMaxXAtVW(v, w);
+		y = source.getMinYAtVWX(v, w, x);
+		localMaxY = source.getMaxYAtVWX(v, w, x);
+		z = source.getMinZ(v, w, x, y);
+		localMaxZ = source.getMaxZ(v, w, x, y);
 		hasNext = true;
 	}
 

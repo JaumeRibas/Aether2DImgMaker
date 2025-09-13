@@ -26,10 +26,10 @@ public abstract class Model1DIterator<Source_Type extends Model1D, Element_Type>
 	private final int maxX;
 	private boolean hasNext;
 	
-	public Model1DIterator(Source_Type grid) {
-		this.source = grid;
-		this.x = grid.getMinX();
-		maxX = grid.getMaxX();
+	public Model1DIterator(Source_Type source) {
+		this.source = source;
+		this.x = source.getMinX();
+		maxX = source.getMaxX();
 		hasNext = true;
 	}
 

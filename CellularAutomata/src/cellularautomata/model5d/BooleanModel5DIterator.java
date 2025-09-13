@@ -18,8 +18,8 @@ package cellularautomata.model5d;
 
 public class BooleanModel5DIterator extends Model5DIterator<BooleanModel5D, Boolean> {
 
-	public BooleanModel5DIterator(BooleanModel5D grid) {
-		super(grid);
+	public BooleanModel5DIterator(BooleanModel5D source) {
+		super(source);
 	}
 
 	@Override

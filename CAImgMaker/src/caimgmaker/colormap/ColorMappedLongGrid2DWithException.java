@@ -25,9 +25,9 @@ public class ColorMappedLongGrid2DWithException extends ColorMappedLongGrid2D {
 	protected long exceptionValue;
 	protected Color exceptionColor;
 	
-	public ColorMappedLongGrid2DWithException(LongModel2D grid, LongColorMap colorMap, 
+	public ColorMappedLongGrid2DWithException(LongModel2D source, LongColorMap colorMap, 
 			long exceptionValue, Color exceptionColor) {
-		super(grid, colorMap);
+		super(source, colorMap);
 		this.exceptionColor = exceptionColor;
 		this.exceptionValue = exceptionValue;
 	}

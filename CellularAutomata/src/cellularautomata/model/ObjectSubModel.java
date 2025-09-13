@@ -21,8 +21,8 @@ import cellularautomata.PartialCoordinates;
 
 public class ObjectSubModel<Source_Type extends ObjectModel<Object_Type>, Object_Type> extends SubModel<Source_Type> implements ObjectModel<Object_Type> {
 	
-	public ObjectSubModel(Source_Type grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		super(grid, minCoordinates, maxCoordinates);
+	public ObjectSubModel(Source_Type source, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		super(source, minCoordinates, maxCoordinates);
 	}
 
 	@Override

@@ -18,8 +18,8 @@ package cellularautomata.model5d;
 
 public class LongModel5DIterator extends Model5DIterator<LongModel5D, Long> {
 
-	public LongModel5DIterator(LongModel5D grid) {
-		super(grid);
+	public LongModel5DIterator(LongModel5D source) {
+		super(source);
 	}
 
 	@Override

@@ -25,9 +25,9 @@ public class ColorMappedBooleanGrid2DWithException extends ColorMappedBooleanGri
 	protected boolean exceptionValue;
 	protected Color exceptionColor;
 	
-	public ColorMappedBooleanGrid2DWithException(BooleanModel2D grid, BooleanColorMap colorMap, 
+	public ColorMappedBooleanGrid2DWithException(BooleanModel2D source, BooleanColorMap colorMap, 
 			boolean exceptionValue, Color exceptionColor) {
-		super(grid, colorMap);
+		super(source, colorMap);
 		this.exceptionColor = exceptionColor;
 		this.exceptionValue = exceptionValue;
 	}

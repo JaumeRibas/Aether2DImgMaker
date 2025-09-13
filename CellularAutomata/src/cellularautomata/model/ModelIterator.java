@@ -24,7 +24,7 @@ import cellularautomata.PartialCoordinates;
 
 public abstract class ModelIterator<Source_Type extends Model, Element_Type> implements Iterator<Element_Type> {
 	
-	protected final Source_Type region;
+	protected final Source_Type source;
 	private final int dimension;
 	private final int dimensionMinusOne;
 	private final int[] coords;
@@ -32,18 +32,18 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 	private final Integer[] partialCoords;
 	private boolean hasNext;
 	
-	public ModelIterator(Source_Type region) {
-		this.region = region;
-		dimension = region.getGridDimension();
+	public ModelIterator(Source_Type source) {
+		this.source = source;
+		dimension = source.getGridDimension();
 		dimensionMinusOne = dimension - 1;
 		coords = new int[dimension];
 		maxCoords = new int[dimension];
 		partialCoords = new Integer[dimension];
 		for (int axis = 0; axis < dimension; axis++) {
 			PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords);
-			int minCoord = region.getMinCoordinate(axis, partialCoordinatesObj);
+			int minCoord = source.getMinCoordinate(axis, partialCoordinatesObj);
 			coords[axis] = minCoord;
-			maxCoords[axis] = region.getMaxCoordinate(axis, partialCoordinatesObj);
+			maxCoords[axis] = source.getMaxCoordinate(axis, partialCoordinatesObj);
 			partialCoords[axis] = minCoord;
 		}
 		hasNext = true;
@@ -76,9 +76,9 @@ public abstract class ModelIterator<Source_Type extends Model, Element_Type> imp
 			axis++;
 			while (axis < dimension) {
 				PartialCoordinates partialCoordinatesObj = new PartialCoordinates(partialCoords);
-				int minCoord = region.getMinCoordinate(axis, partialCoordinatesObj);
+				int minCoord = source.getMinCoordinate(axis, partialCoordinatesObj);
 				coords[axis] = minCoord;
-				maxCoords[axis] = region.getMaxCoordinate(axis, partialCoordinatesObj);
+				maxCoords[axis] = source.getMaxCoordinate(axis, partialCoordinatesObj);
 				partialCoords[axis] = minCoord;
 				axis++;
 			}

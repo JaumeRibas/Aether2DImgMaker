@@ -20,8 +20,8 @@ import cellularautomata.Coordinates;
 
 public class ObjectModelCrossSection<Source_Type extends ObjectModel<Object_Type>, Object_Type> extends ModelCrossSection<Source_Type> implements ObjectModel<Object_Type> {
 	
-	public ObjectModelCrossSection(Source_Type grid, int axis, int coordinate) {
-		super(grid, axis, coordinate);
+	public ObjectModelCrossSection(Source_Type source, int axis, int coordinate) {
+		super(source, axis, coordinate);
 	}
 
 	@Override

@@ -28,12 +28,12 @@ public abstract class Model2DIterator<Source_Type extends Model2D, Element_Type>
 	private int localMaxY;
 	private boolean hasNext;
 	
-	public Model2DIterator(Source_Type grid) {
-		this.source = grid;
-		x = grid.getMinX();
-		maxX = grid.getMaxX();
-		y = grid.getMinY(x);
-		localMaxY = grid.getMaxY(x);
+	public Model2DIterator(Source_Type source) {
+		this.source = source;
+		x = source.getMinX();
+		maxX = source.getMaxX();
+		y = source.getMinY(x);
+		localMaxY = source.getMaxY(x);
 		hasNext = true;
 	}
 

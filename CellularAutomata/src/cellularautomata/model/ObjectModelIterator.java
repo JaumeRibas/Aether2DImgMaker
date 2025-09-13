@@ -20,13 +20,13 @@ import cellularautomata.Coordinates;
 
 public class ObjectModelIterator<Object_Type> extends ModelIterator<ObjectModel<Object_Type>, Object_Type> {
 
-	public ObjectModelIterator(ObjectModel<Object_Type> region) {
-		super(region);
+	public ObjectModelIterator(ObjectModel<Object_Type> source) {
+		super(source);
 	}
 
 	@Override
 	protected Object_Type getFromModelPosition(Coordinates coordinates) throws Exception {
-		return region.getFromPosition(coordinates);
+		return source.getFromPosition(coordinates);
 	}
 
 }

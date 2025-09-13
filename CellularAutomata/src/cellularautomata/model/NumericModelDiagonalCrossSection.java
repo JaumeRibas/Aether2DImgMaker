@@ -21,8 +21,8 @@ import org.apache.commons.math3.FieldElement;
 public class NumericModelDiagonalCrossSection<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>>
 	extends ObjectModelDiagonalCrossSection<NumericModel<Number_Type>, Number_Type> implements NumericModel<Number_Type> {
 	
-	public NumericModelDiagonalCrossSection(NumericModel<Number_Type> grid, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
-		super(grid, firstAxis, secondAxis, positiveSlope, offset);
+	public NumericModelDiagonalCrossSection(NumericModel<Number_Type> source, int firstAxis, int secondAxis, boolean positiveSlope, int offset) {
+		super(source, firstAxis, secondAxis, positiveSlope, offset);
 	}
 
 }

@@ -20,13 +20,13 @@ import cellularautomata.Coordinates;
 
 public class BooleanModelIterator extends ModelIterator<BooleanModel, Boolean> {
 
-	public BooleanModelIterator(BooleanModel region) {
-		super(region);
+	public BooleanModelIterator(BooleanModel source) {
+		super(source);
 	}
 
 	@Override
 	protected Boolean getFromModelPosition(Coordinates coordinates) throws Exception {
-		return region.getFromPosition(coordinates);
+		return source.getFromPosition(coordinates);
 	}
 
 }

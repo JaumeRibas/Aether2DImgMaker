@@ -18,8 +18,8 @@ package cellularautomata.model2d;
 
 public class LongModel2DIterator extends Model2DIterator<LongModel2D, Long> {
 
-	public LongModel2DIterator(LongModel2D grid) {
-		super(grid);
+	public LongModel2DIterator(LongModel2D source) {
+		super(source);
 	}
 
 	@Override

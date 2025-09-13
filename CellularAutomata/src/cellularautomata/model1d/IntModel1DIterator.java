@@ -18,8 +18,8 @@ package cellularautomata.model1d;
 
 public class IntModel1DIterator extends Model1DIterator<IntModel1D, Integer> {
 
-	public IntModel1DIterator(IntModel1D grid) {
-		super(grid);
+	public IntModel1DIterator(IntModel1D source) {
+		super(source);
 	}
 
 	@Override

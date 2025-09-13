@@ -18,8 +18,8 @@ package cellularautomata.model3d;
 
 public class BooleanModel3DIterator extends Model3DIterator<BooleanModel3D, Boolean> {
 
-	public BooleanModel3DIterator(BooleanModel3D grid) {
-		super(grid);
+	public BooleanModel3DIterator(BooleanModel3D source) {
+		super(source);
 	}
 
 	@Override

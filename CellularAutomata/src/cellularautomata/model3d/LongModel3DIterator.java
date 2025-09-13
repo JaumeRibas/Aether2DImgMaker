@@ -18,8 +18,8 @@ package cellularautomata.model3d;
 
 public class LongModel3DIterator extends Model3DIterator<LongModel3D, Long> {
 
-	public LongModel3DIterator(LongModel3D grid) {
-		super(grid);
+	public LongModel3DIterator(LongModel3D source) {
+		super(source);
 	}
 
 	@Override

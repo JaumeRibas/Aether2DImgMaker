@@ -18,8 +18,8 @@ package cellularautomata.model2d;
 
 public class BooleanModel2DIterator extends Model2DIterator<BooleanModel2D, Boolean> {
 
-	public BooleanModel2DIterator(BooleanModel2D grid) {
-		super(grid);
+	public BooleanModel2DIterator(BooleanModel2D source) {
+		super(source);
 	}
 
 	@Override

@@ -21,8 +21,8 @@ import cellularautomata.PartialCoordinates;
 
 public class BooleanSubModel extends SubModel<BooleanModel> implements BooleanModel {
 	
-	public BooleanSubModel(BooleanModel grid, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
-		super(grid, minCoordinates, maxCoordinates);
+	public BooleanSubModel(BooleanModel source, PartialCoordinates minCoordinates, PartialCoordinates maxCoordinates) {
+		super(source, minCoordinates, maxCoordinates);
 	}
 
 	@Override

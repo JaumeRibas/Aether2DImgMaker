@@ -25,9 +25,9 @@ public class ColorMappedObjectGrid2DWithException<Object_Type> extends ColorMapp
 	protected Object_Type exceptionValue;
 	protected Color exceptionColor;
 	
-	public ColorMappedObjectGrid2DWithException(ObjectModel2D<Object_Type> grid, ColorMap<Object_Type> colorMap, 
+	public ColorMappedObjectGrid2DWithException(ObjectModel2D<Object_Type> source, ColorMap<Object_Type> colorMap, 
 			Object_Type backgroundValue, Color backgroundColor) {
-		super(grid, colorMap);
+		super(source, colorMap);
 		this.exceptionColor = backgroundColor;
 		this.exceptionValue = backgroundValue;
 	}

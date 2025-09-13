@@ -21,8 +21,8 @@ import org.apache.commons.math3.FieldElement;
 public class NumericModelCrossSection<Number_Type extends FieldElement<Number_Type> & Comparable<Number_Type>>
 	extends ObjectModelCrossSection<NumericModel<Number_Type>, Number_Type> implements NumericModel<Number_Type> {
 	
-	public NumericModelCrossSection(NumericModel<Number_Type> grid, int axis, int coordinate) {
-		super(grid, axis, coordinate);
+	public NumericModelCrossSection(NumericModel<Number_Type> source, int axis, int coordinate) {
+		super(source, axis, coordinate);
 	}
 
 }

@@ -25,9 +25,9 @@ public class ColorMappedIntGrid2DWithException extends ColorMappedIntGrid2D {
 	protected int exceptionValue;
 	protected Color exceptionColor;
 	
-	public ColorMappedIntGrid2DWithException(IntModel2D grid, IntColorMap colorMap, 
+	public ColorMappedIntGrid2DWithException(IntModel2D source, IntColorMap colorMap, 
 			int exceptionValue, Color exceptionColor) {
-		super(grid, colorMap);
+		super(source, colorMap);
 		this.exceptionColor = exceptionColor;
 		this.exceptionValue = exceptionValue;
 	}
