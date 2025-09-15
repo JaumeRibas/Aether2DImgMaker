@@ -28,7 +28,7 @@ import cellularautomata.model4d.IsotropicHypercubicLongModelAsymmetricSection4D;
  * @author Jaume
  *
  */
-public class SimpleLongSunflower4D implements IsotropicHypercubicLongModelAsymmetricSection4D {	
+public class SimpleLongSunflowerWithBackgroud4D implements IsotropicHypercubicLongModelAsymmetricSection4D {	
 	
 	private long[][][][] grid;
 	
@@ -51,7 +51,7 @@ public class SimpleLongSunflower4D implements IsotropicHypercubicLongModelAsymme
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value at all other positions of the grid
 	 */
-	public SimpleLongSunflower4D(long initialValue, long backgroundValue) {
+	public SimpleLongSunflowerWithBackgroud4D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		int side = 5;

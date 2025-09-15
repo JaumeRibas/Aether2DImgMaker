@@ -27,7 +27,7 @@ import cellularautomata.model3d.IsotropicCubicLongModelAsymmetricSection;
  * @author Jaume
  *
  */
-public class SimpleLongSunflower3D implements IsotropicCubicLongModelAsymmetricSection {
+public class SimpleLongSunflowerWithBackgroud3D implements IsotropicCubicLongModelAsymmetricSection {
 	
 	/** 3D array representing the grid **/
 	private long[][][] grid;
@@ -51,7 +51,7 @@ public class SimpleLongSunflower3D implements IsotropicCubicLongModelAsymmetricS
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value at all other positions of the grid
 	 */
-	public SimpleLongSunflower3D(long initialValue, long backgroundValue) {
+	public SimpleLongSunflowerWithBackgroud3D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//initial side of the array, will be increased as needed

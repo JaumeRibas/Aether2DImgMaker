@@ -28,7 +28,7 @@ import cellularautomata.model1d.IsotropicLongModelAsymmetricSection1D;
  * @author Jaume
  *
  */
-public class SimpleLongSunflower1D implements IsotropicLongModelAsymmetricSection1D {	
+public class SimpleLongSunflowerWithBackgroud1D implements IsotropicLongModelAsymmetricSection1D {	
 
 	/** A 1D array representing the grid */
 	private long[] grid;
@@ -52,7 +52,7 @@ public class SimpleLongSunflower1D implements IsotropicLongModelAsymmetricSectio
 	 * @param initialValue the value at the origin at step 0
 	 * @param backgroundValue the value padding all the grid but the origin at step 0
 	 */
-	public SimpleLongSunflower1D(long initialValue, long backgroundValue) {
+	public SimpleLongSunflowerWithBackgroud1D(long initialValue, long backgroundValue) {
 		this.initialValue = initialValue;
 		this.backgroundValue = backgroundValue;
 		//Create a 1D array to represent the grid. With the initial value at the origin.

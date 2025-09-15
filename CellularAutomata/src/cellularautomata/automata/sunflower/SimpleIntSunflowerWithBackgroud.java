@@ -33,7 +33,7 @@ import cellularautomata.model.IsotropicHypercubicIntModelAsymmetricSection;
  * @author Jaume
  *
  */
-public class SimpleIntSunflower implements IsotropicHypercubicIntModelAsymmetricSection {
+public class SimpleIntSunflowerWithBackgroud implements IsotropicHypercubicIntModelAsymmetricSection {
 
 	private int gridDimension;
 	private long step;
@@ -54,7 +54,7 @@ public class SimpleIntSunflower implements IsotropicHypercubicIntModelAsymmetric
 	/** Whether or not the state of the model changed between the current and the previous step **/
 	private Boolean changed = null;
 	
-	public SimpleIntSunflower(int gridDimension, int initialValue, int backgroundValue) {
+	public SimpleIntSunflowerWithBackgroud(int gridDimension, int initialValue, int backgroundValue) {
 		this.gridDimension = gridDimension;
 		//two neighbors
 		shareCount = gridDimension * 2 + 1;
