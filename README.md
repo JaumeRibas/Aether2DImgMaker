@@ -52,3 +52,18 @@ java -jar AetherImgMaker.jar -model sunflower 20000000
 ```
 java -jar AetherImgMaker.jar -grid 3d -1925 -split-by-coordinate-parity -colormap hue -asymmetric
 ```
+
+## License
+
+This project is licensed under the GNU General Public License v3.0.  
+See the [COPYING](./COPYING) file for the full license text.
+
+### Third-Party Libraries
+
+This project uses the following third-party libraries under the Apache License 2.0:
+
+- [Apache Commons IO](https://commons.apache.org/proper/commons-io/)
+- [Apache Commons Math](https://commons.apache.org/proper/commons-math/)
+- [JCommander](http://jcommander.org/)
+
+See the [NOTICE](./NOTICE) file for attribution.
